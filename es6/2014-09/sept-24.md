@@ -967,11 +967,12 @@ DH: As long as we have a way in the future of doing something like:
     
 ```js
 class Stack extends Array {   
-new() { // overrides the create -- strawman syntax only!!     
-return [];   
-}      
-constructor() { ... } 
+  new() { // overrides the create -- strawman syntax only!!     
+    return [];   
+  }      
+  constructor() { ... }
 } 
+```
     
 DH: Gives a way to transform the args
 
