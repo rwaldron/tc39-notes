@@ -163,7 +163,7 @@ BT: You'd have to do something special to make it slow
 
 DD: Chrome has optimized Object.getOwnPropertyDescriptor over time
 
-DH: Do we have determinsm for Object.getOwnPropertyKeys?
+DH: Do we have determinism for Object.getOwnPropertyKeys?
 
 BT: Yes, it's just for-in that's nondeterministic. Work is in progress. If an ordinary object has no prototype, the for-in order is deterministic
 
