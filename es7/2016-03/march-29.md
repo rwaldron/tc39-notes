@@ -610,9 +610,3 @@ Thursday morning
 Tail calls
 
 Reference type
-
-#### 
-
-#
-
-
