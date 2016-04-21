@@ -531,7 +531,7 @@ WH: Lock-free is only a performance assertion on atomics. Atomics are atomic and
 
 LH: atomicLoad and atomicStore are atomic operations. Are you guaranteed that atomic load or store will ever need to take a lock to implement that operation
 
-MM: is it semantically a synchronizing operations rather than a racy opration?
+MM: is it semantically a synchronizing operations rather than a racy operation?
 
 LH: yes
 
