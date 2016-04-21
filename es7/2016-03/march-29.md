@@ -523,7 +523,7 @@ LH: presenting
 
 DH: did we convince ourselves that using strings instead of integers for futex codes is not too onerous for asm.js?
 
-LH: they discssed this and determined that it wasn't an issue
+LH: they discussed this and determined that it wasn't an issue
 
 MM: please unpack "int32 sots are always lock-free"?
 
