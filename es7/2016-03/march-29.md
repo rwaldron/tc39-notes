@@ -399,7 +399,7 @@ https://github.com/tc39/ecma262/issues/467
 
 BT: presenting a summary of the issue. further Discussion to be had Thursday
 
-{BT presentign slides}
+{BT presenting slides}
 
 Implementations are evaluating references multiple times
 
