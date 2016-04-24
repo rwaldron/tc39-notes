@@ -365,7 +365,7 @@ AWB: whatever the answer here, it needs to apply to both this and privates
 
 JS: we could go with lexial this and instance this. we don't know yet which one is right.  there's more utility in "this" representing instance and "super" making sense.
 
-DH: argues that we should start from the intuition at the programming model not the implementation of hte featuere.  so the "this means instance" is that intuition. they may lead to different conclusions for this vs. fields/properties.  this praticular feature is lexically scoped to the class body. 
+DH: argues that we should start from the intuition at the programming model not the implementation of the feature.  so the "this means instance" is that intuition. they may lead to different conclusions for this vs. fields/properties.  this praticular feature is lexically scoped to the class body. 
 
 AK: describing it in terms of a function call led to the confusion, but thinking in terms of instantiation avoided the confusion.
 
