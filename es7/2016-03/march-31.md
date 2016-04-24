@@ -337,7 +337,7 @@ MM: Even though there's no scoping mechanism, there is a scoping intuition. The 
 
 AWB: are there initlaizaation expressions on the public class fields?  what is the scoping and evaluation time
 
-JM: eval time is immediatley at the last stage after calling super (the proposal documents it). It is part of construction
+JM: eval time is immediately at the last stage after calling super (the proposal documents it). It is part of construction
 
 WH: this is similar to the alternate implementation of private fields?
 
