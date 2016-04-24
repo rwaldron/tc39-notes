@@ -389,7 +389,7 @@ DH: this issue comes up repeatedly because an intuition about class bodies is wr
 
 DD: but this would be the first time that we have introduced such a drastic difference in timing.
 
-MM: DD is bringing up two points. 1) wrt scoping 2) wrt execution time.  Jeff and I had previosuly talked abotu execution time.  If you accept the declaration being in teh class body, but you don't allow an initializer, then we avoid the multilayer issue. This is how it has been in Babel and people have not reported an issue.
+MM: DD is bringing up two points. 1) wrt scoping 2) wrt execution time.  Jeff and I had previously talked abotu execution time.  If you accept the declaration being in teh class body, but you don't allow an initializer, then we avoid the multilayer issue. This is how it has been in Babel and people have not reported an issue.
 
 DH: the intuition of top to bottom does not survive contact with reality. 
 
