@@ -549,7 +549,7 @@ MM: They could also create a replacer
 
 ## Draft Proposed Frozen Realm API
 
-Chip Morningstar presenting slides (TODO: CM, please add slides)
+Chip Morningstar presenting slides https://github.com/FUDCo/proposal-frozen-realms/blob/master/FrozenRealmsPresentation-2016-03-30.pdf
 
 DH: [discussing the api] the 'endowments' argument of realm.spawn() doesn't seem essential to the proposal
 
