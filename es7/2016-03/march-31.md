@@ -383,7 +383,7 @@ WH: What about `this`?
 
 MM: "this" inside an initializer evals ot the instance being initialized.
 
-DD: shows and example such that there's two differnt definitions of this at differtnt places in the class defintion.  that's super confusing.
+DD: shows and example such that there's two different definitions of this at different places in the class defintion.  that's super confusing.
 
 DH: this issue comes up repeatedly because an intuition about class bodies is wrong. People assume tha thtey are executed once. But in JS they are not.  You will always see things described in orde that will execute in a different order
 
