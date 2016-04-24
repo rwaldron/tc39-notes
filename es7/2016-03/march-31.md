@@ -64,7 +64,7 @@ EF: The spec text should say it's implementation dependent, but aspirational, to
 
 -- second part of tail calls, presented by BT
 
-BT: For Chakra, implementing tail calls is hard because of some platform constraints: the Windows ABI is strict with when we can touch stack, and our calling conventions make it so that, in an ideal case, we can approach tail calls with roughly equivalent performance, however in pathological cases (e.g., mutually recursive functions wiht varying numbers of arguments) those will be slower for the forseeable future. We are concerned that if we just turn tail calls on on the internet, many sites will be slower, because existing callsites will happen to be in tail position. We use the Windows ABI for setting up stack; we have C++ exceptions, and doing this with tail calls is hard.
+BT: For Chakra, implementing tail calls is hard because of some platform constraints: the Windows ABI is strict with when we can touch stack, and our calling conventions make it so that, in an ideal case, we can approach tail calls with roughly equivalent performance, however in pathological cases (e.g., mutually recursive functions with varying numbers of arguments) those will be slower for the forseeable future. We are concerned that if we just turn tail calls on on the internet, many sites will be slower, because existing callsites will happen to be in tail position. We use the Windows ABI for setting up stack; we have C++ exceptions, and doing this with tail calls is hard.
 
 AWB: You're using heavyweight stack frames for all calls?
 
