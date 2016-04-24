@@ -24,7 +24,7 @@ LB: to work out details on a github issue.
 
 ## Duplicate sloppy mode function in block web compatibility fix
 
-Shu-yu Guo and Daniel Ehrenberg presenting slides: https://docs.google.com/presentation/d/1E LM_X4_EMEhcmfiA_AHJ4zw0aKDM8DBxqFOmNsiMHig/edit#slide=id.p
+Shu-yu Guo and Daniel Ehrenberg presenting slides: https://docs.google.com/presentation/d/1E_LM_X4_EMEhcmfiA_AHJ4zw0aKDM8DBxqFOmNsiMHig/edit#slide=id.p
 
 AWB: The semantics in the block have to match ES6, so whatever we do to solve ["Problem #2"] must follow ES6.
 
