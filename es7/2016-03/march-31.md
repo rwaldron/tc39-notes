@@ -349,7 +349,7 @@ JM: The properties get added to whatever object super returns.
 
 WH: OK; just checking that the private and public field proposals are harmonious here, and it looks like they are.
 
-AWB: you can think about it as an anonymous fucntion that is invoked at the time of...
+AWB: you can think about it as an anonymous function that is invoked at the time of...
 
 JM: you can think of it that way.  there are edge cases that don't quite match that intuition
 
