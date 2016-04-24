@@ -387,7 +387,7 @@ DD: shows and example such that there's two different definitions of this at dif
 
 DH: this issue comes up repeatedly because an intuition about class bodies is wrong. People assume tha thtey are executed once. But in JS they are not.  You will always see things described in orde that will execute in a different order
 
-DD: but this woudl be the first time that we have introduced such a drastic difference in timing.
+DD: but this would be the first time that we have introduced such a drastic difference in timing.
 
 MM: DD is bringing up two points. 1) wrt scoping 2) wrt execution time.  Jeff and I had previosuly talked abotu execution time.  If you accept the declaration being in teh class body, but you don't allow an initializer, then we avoid the multilayer issue. This is how it has been in Babel and people have not reported an issue.
 
