@@ -412,7 +412,7 @@ MM: my proposal is that we don't allow initializers and then this issue evaporat
 
 JHD: then you lose a lot of value of the proposals.
 
-WH: in this example, statics woudl get executed only once or more than once?
+WH: in this example, statics would get executed only once or more than once?
 
 DH: only once
 
