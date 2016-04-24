@@ -409,7 +409,7 @@ WH: Note that side effects in LHS expressions are evaluated only once:
 
 doesn't increment i twice.
 
-MM: we agree that the expression is evaluted once, its the underlying reference tha tis eval'd twice.
+MM: we agree that the expression is evaluated once, its the underlying reference tha tis eval'd twice.
 
 BT: yes. 
 
