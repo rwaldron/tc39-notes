@@ -416,7 +416,7 @@ WH: in this example, statics would get executed only once or more than once?
 
 DH: only once
 
-DH: if don't allow for the idea that there can be multipel rounds of execution within a class, we will stall out class development. 
+DH: if don't allow for the idea that there can be multiple rounds of execution within a class, we will stall out class development. 
 
 JS: I need to know what concerns need to be addressed to make progress.
 
