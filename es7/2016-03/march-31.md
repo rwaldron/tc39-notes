@@ -678,7 +678,7 @@ MF: ?
 
 MM: for template literal tags that only pay attention to "raw" still see same raw content
 
-DH: quesiton is "can that be fixed", answer is no
+DH: question is "can that be fixed", answer is no
 
 MM: agree
 
