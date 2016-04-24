@@ -335,7 +335,7 @@ JM: An update on two major concerns. From Mark, public class fields in the const
 
 MM: Even though there's no scoping mechanism, there is a scoping intuition. The use of the property name is in the body of the class, and therefore the property is intuitively scoped to the class body, and should be declared in the class body rather than the constructor.
 
-AWB: are there initlaizaation expressions on the public class fields?  what is the scoping and eveluation time
+AWB: are there initlaizaation expressions on the public class fields?  what is the scoping and evaluation time
 
 JM: eval time is immediatley at the last stage after calling super (the proposal documents it). It is part of construction
 
