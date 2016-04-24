@@ -424,7 +424,7 @@ AWB:
 
 WH: We already have staged execution that doesn't follow textual order. Functions get lifted to the top of their scopes.
 
-MM: JS made the point about a bunch of data from existign users not being confuse. BT also reports users are not confused.  So that corroborates JS position that execution order is not a problem. (that's separate from scoping).  also combined with decorators that affect execution order, I retract my objection to changing execution order.
+MM: JS made the point about a bunch of data from existing users not being confuse. BT also reports users are not confused.  So that corroborates JS position that execution order is not a problem. (that's separate from scoping).  also combined with decorators that affect execution order, I retract my objection to changing execution order.
 
 DH: some options: abandoned phased execution, [... I missed the rest]
 
