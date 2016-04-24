@@ -38,7 +38,7 @@ AWB: doesn't mind saying it's implementation dependent
 
 BT: it would be preferable if the spec test calls out that if it's possible ot have the membrane crossing be a tail call, it should be.
 
-AWB: given that there's an issue inke dhere to realms, are there other non-=specified things that might be tied to calls for which the same argument shoudl be made.  "The spec says this shoudl be a tail call, but if we do then e.g., debugging information will be lost so...."
+AWB: given that there's an issue inke dhere to realms, are there other non-=specified things that might be tied to calls for which the same argument shoudl be made.  "The spec says this should be a tail call, but if we do then e.g., debugging information will be lost so...."
 
 AK: How did we arrive at consensus that this is normatively required?
 
