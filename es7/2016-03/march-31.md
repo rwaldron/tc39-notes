@@ -52,7 +52,7 @@ BT: We all fail the reference types
 
 MS: We'd rather it say that it's preferred to use proper tail calls in the cross-realm case, and it's OK to do an ordinary call as Mozilla will do
 
-EF: But that's the same, it's logcally equivalent
+EF: But that's the same, it's logically equivalent
 
 MM, BT: But there's different conntations
 
