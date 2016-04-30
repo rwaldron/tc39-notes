@@ -309,7 +309,7 @@ Fundamentally, it's that all future formatters will have *.formatToParts
 
 AWB: objectected to the long name
 
-ZB: the longer name is moslty used by libraries. Most people will just use format and so it's a good compromise
+ZB: the longer name is mostly used by libraries. Most people will just use format and so it's a good compromise
 
 DH: Naming is bikeshedding.
 
