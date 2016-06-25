@@ -421,7 +421,7 @@ FST: we could not implement the feature with cross realm without API changes. 
 
 MS: Not ability to implement, but how it slows me down.
 
-DE: I don;t think this will be revisited for much more ES2015 features. All have implemented much of these features. Some Es2015 Compat things such as TypedArrays need revisiting
+DE: I don't think this will be revisited for much more ES2015 features. All have implemented much of these features. Some ES2015 Compat things such as TypedArrays need revisiting
 
 MS: if performance is a reason to re-consider something in the spec, it is not a valid concern.
 
