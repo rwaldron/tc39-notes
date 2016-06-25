@@ -1017,6 +1017,6 @@ YK: What the stack trace looks like in PTC, What happens in the dev experience? 
 #### Conclusion/Resolution
 
 - No consensus on removing PTC
-- No consensus and no rejection to advace STC to stage 1
+- No consensus and no rejection to advance STC to stage 1
 
 Meeting ended 17:30.
