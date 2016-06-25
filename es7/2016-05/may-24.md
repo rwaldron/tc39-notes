@@ -375,7 +375,7 @@ MS: We think 0%, according to our experience and the Chrome experience.
 
 DE: Except micro-benchmarks.
 
-YK: 5% of calls are acidentally used? if we made STC opt in, would people use it?
+YK: 5% of calls are accidentally used? if we made STC opt in, would people use it?
 
 MS: STC does not resolve the performance issue, and if PTC is used, all browsers will want to optimise it.
 
