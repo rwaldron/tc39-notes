@@ -664,7 +664,7 @@ YK: Basically this feature cannot make stage 4 because it cannot be implemented 
 
 MS: It is.
 
-CM: v8 has it behing a flag. Chakra have not started it, but they have a strategy that could work for me as a user.
+CM: v8 has it behind a flag. Chakra have not started it, but they have a strategy that could work for me as a user.
 
 YK: they cannot implement it in SpiderMonkey because of cross realms issues. A serious change is needed no matter what.
 
