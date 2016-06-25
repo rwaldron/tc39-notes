@@ -632,7 +632,7 @@ MS: not implemented yet.
 
 YK: 128 frames not sufficient
 
-MS: arbitrary chosen constant, can be changed. no imlementor wants shadowchicken on all the time due to overheads.
+MS: arbitrary chosen constant, can be changed. no implementor wants shadowchicken on all the time due to overheads.
 
 MM: Regarding Error.stack and telemetry, the only thing relevant is the program counter. If you had a 128 cycle buffer with just the PC in it, it may have little overhead. Depending on the detail of Error.stack
 
