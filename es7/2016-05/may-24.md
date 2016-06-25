@@ -458,7 +458,7 @@ BT: it would also have implementation constraints. Many tools would have no idea
 
 MM: if the total number of arguments and local variables is over 1000 …
 
-DE: Math.max.apply (_large number of things_), in v8 that works up to 16k. We don't do somehting different for apply from normal.
+DE: Math.max.apply (_large number of things_), in v8 that works up to 16k. We don't do something different for apply from normal.
 
 MM: Choice of large number of arguments + locals, such it is rarely hit to exempt from TC vs completely giving up on normative TC vs accepting some kind of TC unfaithfully implemented.
 
