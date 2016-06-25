@@ -156,7 +156,7 @@ YK: I dont understand why we ... . It seems like there is a coupling of the rela
 
 DH: we were concerned about honoring the consensus process and not lightly pulling things back that were already in the spec. Instead of pulling back PTC for some "future STC", we wanted a concrete STC approach first. Maybe at some point it makes sense to separate them.
 
-YK: Are you propsosing stage 0 today or stage 1?
+YK: Are you proposing stage 0 today or stage 1?
 
 ??: It was already moved to stage 0 at last meeting.
 
