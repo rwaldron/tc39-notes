@@ -471,7 +471,7 @@ FST: No intuitive knowledge of membrane use inside SpiderMonkey by programmers, 
 DE: The argument ceiling seems very random
 MM: I wouldn't have suggested it except for Chakra. You're not obligated not to allocate.
 
-YK: If i write code using STC using V8 or JSC and I don't know about the restriction, but it blows up without my knowlede on Firefox?
+YK: If i write code using STC using V8 or JSC and I don't know about the restriction, but it blows up without my knowledge on Firefox?
 
 MM: I write call using STC, and you're calling across a membrane that is not using STC. If the implementation is good enough to do tail call optimization, it might still work.
 
