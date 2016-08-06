@@ -892,7 +892,7 @@ DH: Neither of those has anything to do with whether it's in Math. Domenic makes
 
 WH: I would have expected math library extensions to include common math functions like the gamma function. Why aren't those in here?
 
-RW: That was my long list, but I pared it down. Maybe we should be incuding a lot of functions from other standard libraries.
+RW: That was my long list, but I pared it down. Maybe we should be including a lot of functions from other standard libraries.
 
 AWB: We went through a similar process in ES2015 where we made a big spreadsheet of various languages and functions, and chose what to add to Math based on that
 
