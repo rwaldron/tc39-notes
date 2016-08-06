@@ -14,7 +14,7 @@ LHN:
     
 ### Agent Semantics
 
-Blocking: an agent can block waiting to be woken without rturning to its event loop 
+Blocking: an agent can block waiting to be woken without returning to its event loop 
 
 Web awareness: an embeddinging can deny some agents the abiluty to block (eg. browsers man thread)
 
