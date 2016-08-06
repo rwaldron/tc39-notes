@@ -634,7 +634,7 @@ WH: Using Set() is dangerous, if derived class has foo, exposes you to a super c
 
 YK: Lots of classes which are designed to be subclassed assume that they can intercept Set()s
 
-DT: Initialization in C#, Java, etc is explicitly settting up the world and invariants aren't there
+DT: Initialization in C#, Java, etc is explicitly setting up the world and invariants aren't there
 
 DD: For us it's different, because super has already returned, etc
 
