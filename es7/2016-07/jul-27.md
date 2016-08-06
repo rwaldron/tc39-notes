@@ -628,7 +628,7 @@ DD: That's a good point; people do deprecations by adding setters or getters, an
 
 MM: If the semantics of this is Set, I would ask, what is the added value of the proposal as a whole such that the proposal pulls its weight. You could get these semantics just by writing the right lines in the constructor.
 
-DE: Good from an optimizability stand point. We've been encouraging people to be explicit about properties on `this` by adding them all in the constructor, assigning `undefined` if necessary. This is a nice synaxt for that.
+DE: Good from an optimizability stand point. We've been encouraging people to be explicit about properties on `this` by adding them all in the constructor, assigning `undefined` if necessary. This is a nice syntax for that.
 
 WH: Using Set() is dangerous, if derived class has foo, exposes you to a super class that didn't have accessor foo, which is later added.
 
