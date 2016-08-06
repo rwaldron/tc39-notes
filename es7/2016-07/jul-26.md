@@ -42,11 +42,13 @@ BT: Let's go with Rick taking notes for now, since he volunteered, but long-term
 
 - Moving on, further discussion to be on github as before this meeting. Interested members are encouraged to participate there directly.
 
+## 3 Agenda Adoption
 
-## 3 Agenda Adoption 
 - Approved
+
 ## 4 May Minutes Approval
--Approved
+
+- Approved
 
 JN: Agenda?
 
