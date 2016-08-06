@@ -639,11 +639,11 @@ Slides: https://docs.google.com/presentation/d/1o31S9RqDdkoWW2zfPMNIZdPDIp25Rr0-
 DE: Expose more unicode data to RegExps
 
 - Properties with values:
-/\p{UnicodePropertyName=UnicodePropertyValue}/
+`/\p{UnicodePropertyName=UnicodePropertyValue}/`
 - Binary properties:
-/\p{LoneUnicodePropertyNameOrValue}/
+`/\p{LoneUnicodePropertyNameOrValue}/`
 - Inverse:
-\P
+`\P`
 
 Example: 
     
@@ -653,19 +653,17 @@ In text form: https://github.com/mathiasbynens/es-regexp-unicode-property-escape
 
 DE: Have full spec text, implementation in V8, tests for V8 (need to be updated for test262)
 
-BT: If ok with deviating from what’s allowed inside \u, then we can overload \u instead of \p
+BT: If ok with deviating from what’s allowed inside `\u`, then we can overload `\u` instead of `\p`
 
-(TODO: @rick we'll likely have to escape those ^^^^^ when this is published as markdown)
+DD: Are there conflicts with other languages and use of `\u`?
 
-DD: Are there conflicts with other languages and use of \u?
+WH: `\u` could be trouble if anyone comes up with classname consisting entirely of characters A-F
 
-WH: \u could be trouble if anyone comes up with classname consisting entirely of characters A-F
-
-DE: I can find out if this is an invariant that will be maintained. If it is, then we should use \u, otherwise \p. If Unicode advises us _not_ to depend on existing \u invariants, then we won't
+DE: I can find out if this is an invariant that will be maintained. If it is, then we should use `\u`, otherwise `\p`. If Unicode advises us _not_ to depend on existing `\u` invariants, then we won't
 
 DE: Stage 2?
 
-MF: Is there a syntax error when type any random character where in /\p{UnicodePropertyName=UnicodePropertyValue}/, /\p{LoneUnicodePropertyNameOrValue}/ ?
+MF: Is there a syntax error when type any random character where in `/\p{UnicodePropertyName=UnicodePropertyValue}/`, `/\p{LoneUnicodePropertyNameOrValue}/` ?
 
 DE: No UnicodePropertyName syntactic restrictions in present spec
 
@@ -673,7 +671,7 @@ Addendum by Mathias: a SyntaxError is thrown at runtime in such cases. But yeah,
 
 AWB: Need to specify the syntax
 
-WH: If we choose to use \u{}, then we must make unknown classes (or typos) into early errors because we need typos in hex numbers to be early errors. With \p{} we'd have a choice of standardizing on early or runtime errors.
+WH: If we choose to use `\u{}`, then we must make unknown classes (or typos) into early errors because we need typos in hex numbers to be early errors. With `\p{}` we'd have a choice of standardizing on early or runtime errors.
 
 
 Revisiting String.prototype.normalize specification. 
@@ -691,7 +689,7 @@ DE: Stage 1?
 #### Conclusion/Resolution
 
 - Stage 1: Approved.
-- YK wants confirmation about \u
+- YK wants confirmation about `\u`
 
 
 ## 9.ii.d Async Functions for Stage 4
