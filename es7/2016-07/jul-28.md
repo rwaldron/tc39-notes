@@ -428,7 +428,7 @@ JHD: Will identify and note if necessary
 
 DD: Could be naming, ie. "fin" for ES3?
 
-BE: promise['finally'](...)
+BE: `promise['finally'](...)`
 
 JHD: No conflict re: cancellable promises proposal
 
