@@ -489,7 +489,7 @@ MM: In favor of banning
 
 AWB: A usecase is a static method on subclasses that filters the initializers, as called from a superclass constructor. In that case, you want to call |new.target.initializerFilter()|, and so want new.target to work
 
-YK: Even though you can construct models which are consistent about which is which with new.target and arguemtns, it's equally hard to construct one that is unambiguously clear which one you are referring to
+YK: Even though you can construct models which are consistent about which is which with new.target and arguments, it's equally hard to construct one that is unambiguously clear which one you are referring to
 
 YK: This isn't a catchall; there will still be imperative cases that benefit from being written in the constructor
 
