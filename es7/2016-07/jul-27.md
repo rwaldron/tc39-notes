@@ -614,7 +614,7 @@ AK: What about developers of other languages who define fields and expect those 
 
 MM: This is just like an object literal. Writing object literals has the same problem.
 
-YK: That's different because object literals don't have superclasses. People don't use __proto__: very much
+YK: That's different because object literals don't have superclasses. People don't use `__proto__`: very much
 
 BE: What's the robust, future-proof semantics? Seems like DefinePropertyOrThrow, as Waldemar says.
 
