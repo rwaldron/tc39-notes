@@ -260,7 +260,7 @@ Generally, no.
 #### Conclusion/Resolution
 
 - Add for-var-in initializers with the old semantics to Annex B, for non-strict mode only.
-- ecma262/pull/614
+- [ecma262/pull/614](https://github.com/tc39/ecma262/pull/614)
 - Kevin will write tests for the change, based on the new policy
 
 
