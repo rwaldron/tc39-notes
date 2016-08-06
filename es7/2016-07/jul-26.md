@@ -642,8 +642,8 @@ DE: Expose more unicode data to RegExps
 /\p{UnicodePropertyName=UnicodePropertyValue}/
 - Binary properties:
 /\p{LoneUnicodePropertyNameOrValue}/
-Inverse:                                 
-- \P
+- Inverse:
+\P
 
 Example: 
     
