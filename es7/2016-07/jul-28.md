@@ -652,7 +652,7 @@ DD: The concern is about calling into a library which, you cancel the library's 
 
 DD: I'd like the committee's feedback on the full spec, which is now much smaller due to fewer modifications to promises, etc.
 
-DD: Some more ideas on making Promsies more ergonomic: Make cancellation easy in async functions.
+DD: Some more ideas on making Promises more ergonomic: Make cancellation easy in async functions.
 
 More Ideas...
 
