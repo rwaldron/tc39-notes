@@ -85,7 +85,7 @@ LHN: Yes
 
 ES is "easier" than C/C++
 - Performance demands slightly lower
-- Shared Mrmory sep. from non-shared
+- Shared Memory sep. from non-shared
 - Only flat shared memory, no pointers or objects
 
 ... see slide
