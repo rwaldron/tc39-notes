@@ -58,7 +58,7 @@ WH: I'm fine with occasional items not having backing materials — there are si
 
 WH: ECMA has a global policy (we all agreed to) that documents up for significant decisions shall be provided 2-3 weeks in advance. I'd interpret this as applying to proposals looking to advance in TC39.
 
-IS: It's 3 weeks. This is e.g. to formally move forward or approve a TC39 draft speciafication. But for things for information, to start a discussion on new items, not to strive for a formal decision anything until the meeting is allowed. But of course it is encouraged to submit and post on Github as soon as possible. 
+IS: It's 3 weeks. This is e.g. to formally move forward or approve a TC39 draft specification. But for things for information, to start a discussion on new items, not to strive for a formal decision anything until the meeting is allowed. But of course it is encouraged to submit and post on Github as soon as possible. 
 
 JN: Approval of minutes?
 
