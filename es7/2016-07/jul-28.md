@@ -1023,7 +1023,7 @@ BT: When we got async functions to Stage 3, we did spend hours talking about pos
 
 YK: The only issue is that, in the syntactic form there's a try/catch/finally, and in the method form there isn't
 
-AK: There is also a conern about using try and catch, without finally
+AK: There is also a concern about using try and catch, without finally
 
 YK: And it's just worse in Promises anyway
 
