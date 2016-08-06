@@ -90,7 +90,7 @@ IS: Submitted the ECMAScript Suite Standard (approved by the GA as Ecma 414) to 
 
 ## 8. Test 262 Status Update
 
-IS: Technical Report 104 needs to be updated. He added that all specs related to TC39 work are being downloaded very heavily (actually at  least 2/3 of all Ecma downloads are TC39 related).  The HTML version of ECMA-262 and ECMA-402 is in addition to it, and compared to full downloads that is even significantly higher.This is actually more than e.g. what is being downloaded from the ISO Shop (of course that is not free of charge...).  So automativally also TR-104 gets downloaded rather heavily. But e.g. in TR/104 the URL to the tests does not work. Also the text needs to be updated. It reflects a situation when only ES5 was covered, but  e.g. not ECMA-402. 
+IS: Technical Report 104 needs to be updated. He added that all specs related to TC39 work are being downloaded very heavily (actually at  least 2/3 of all Ecma downloads are TC39 related).  The HTML version of ECMA-262 and ECMA-402 is in addition to it, and compared to full downloads that is even significantly higher.This is actually more than e.g. what is being downloaded from the ISO Shop (of course that is not free of charge...).  So automatically also TR-104 gets downloaded rather heavily. But e.g. in TR/104 the URL to the tests does not work. Also the text needs to be updated. It reflects a situation when only ES5 was covered, but  e.g. not ECMA-402. 
 
 AWB: Propose updating TR 104 to be descriptive only?
 
