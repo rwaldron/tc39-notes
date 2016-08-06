@@ -537,7 +537,7 @@ class Derived extends Base {
 ```
 
 
-AK: Does this restrict impl ablitie to optimize away? No, we should be able to statically determine whether eval or arguments are possible.
+AK: Does this restrict impl abilities to optimize away? No, we should be able to statically determine whether eval or arguments are possible.
 
 EF: This is a simple front-end optimization.
 
