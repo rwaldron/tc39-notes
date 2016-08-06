@@ -139,7 +139,7 @@ AWB: Two other options for names: Object.global
 
 MM: I veto that as it would violate authority separation. I want to separate authority-carrying objects from non-autority-separating objects.
 
-DD: But Object.__proto__ is Function, which gives you the authority to get the global object anyway.
+DD: But `Object.__proto__` is Function, which gives you the authority to get the global object anyway.
 
 MM: Function and eval are evaluators; CSP gives you the option to turn off evaluators. Any other environment such as SES/frozen realms has to intervene in the evaluators in order to constrain the scope of the evaluation. In any such environment, the function constructor has to be sanitized.
 
