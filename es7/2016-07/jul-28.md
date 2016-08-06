@@ -44,7 +44,7 @@ Atomic access:
 - `store`
 - `add`
 - `sub`
-- `and
+- `and`
 - `or`
 - `xor`
 - `exchange`
