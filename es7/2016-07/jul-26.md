@@ -81,10 +81,7 @@ IS: Submitted the ECMAScript Suite Standard (approved by the GA as Ecma 414) to 
 - New Executive Committee, made from a combination of ECMA management and the former Coordinating Committee.
   - A change from the past is that up to two ECMA members from categories other than ordinary members may now be elected into the the Executive Committee. Nominations for that can come from anybody, but in the end the December GA will vote on the nominations. The membership in the Executive Committee is always one year, but with the possibility of reelection. 
   - All members can now participate in the General Assembly and take actively part in the discussions, not just ordinary members. However, only ordinary members can vote (that is unchanged).
-  
-  -IS also noted that TC39 is now by far the largest Ecma Group and it has grown to a size where he feels that we have to organize our structure and work better, otherwise at the face-to-face meetings there might be disappointment by some who prepare for a topic for discussion and presentation but in the shortness of time the subject is not discussed properly. Discussion on that to be continued by those who are interested on GitHub.
-  
-  
+  - IS also noted that TC39 is now by far the largest Ecma Group and it has grown to a size where he feels that we have to organize our structure and work better, otherwise at the face-to-face meetings there might be disappointment by some who prepare for a topic for discussion and presentation but in the shortness of time the subject is not discussed properly. Discussion on that to be continued by those who are interested on GitHub.
   - What IS forgot to tell, that actually with the publication of ECMAScript 2016 and ECMA-402 new Edition etc. it would be a good idea to make more PR, e.g. Press Release.
 
 
