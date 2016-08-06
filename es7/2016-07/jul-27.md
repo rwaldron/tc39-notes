@@ -175,7 +175,7 @@ JHD: I went with System.global because of the nonzero compat risk of bare 'globa
 
 YK: SES already has to care about this kind of thing.
 
-MM: We currently have a whitelist in SES. global is not one of them.]
+MM: We currently have a whitelist in SES. global is not one of them.
 
 JHD: So if you're OK with not adding a global, you don't have to do anything to SES?
 
