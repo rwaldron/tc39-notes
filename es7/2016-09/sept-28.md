@@ -753,7 +753,7 @@ https://github.com/domenic/proposal-import-function#an-actual-function
 
 https://github.com/domenic/proposal-import-function#a-new-binding-form
 
-DD: This is better than inserting <script type=module> tags dynamically because it's based directly on module specifiers, easier to use, doesn't pollute DOM, etc. Not introducing a new binding form.
+DD: This is better than inserting `<script type=module>` tags dynamically because it's based directly on module specifiers, easier to use, doesn't pollute DOM, etc. Not introducing a new binding form.
 
 DD: New embedder hook, HostFetchImportedModule (runtime equivalent of [[RequestedModules]])
 
