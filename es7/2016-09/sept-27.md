@@ -832,13 +832,13 @@ MR: Don't all these arguments apply against arrow functions in general?
 
 BE: We had ASI issues with some things, but the version that works (in the middle)
 
-- x => x + x
-- x =*> yield x + x // missing (obvious?) combination
-- async x => await x + x
+- `x => x + x`
+- `x =*> yield x + x // missing (obvious?) combination`
+- `async x => await x + x`
 
 RW: There is also: 
     
-- `* (x) => yield x;
+- `* (x) => yield x;`
 
 ... But has ASI
 
