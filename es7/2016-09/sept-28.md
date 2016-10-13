@@ -14,7 +14,7 @@ Slides: https://docs.google.com/presentation/d/1aq_QjBUQTovj9aQZQrVzS7l1aiOs3ZNl
 
 
 
-BF: We will be talking about host-dependent behavior: The Node module loading hook is specified in a way that meets ES spec requirements. There is a global and local cache <explain details>
+BF: We will be talking about host-dependent behavior: The Node module loading hook is specified in a way that meets ES spec requirements. There is a global and local cache \<explain details\>
 
 
 (from slide)
