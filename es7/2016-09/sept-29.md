@@ -50,7 +50,7 @@ https://github.com/tc39/ecma262/pull/666#issuecomment-239512646
 
 - If you have a non-configurable property on the target, and the Proxy says it's configurable, it's a violation.
 
-- If <invariant>
+- If \<invariant\>
 
 Claude went through and found a few missing invariant checks based on writing these things out exhaustively:
 
