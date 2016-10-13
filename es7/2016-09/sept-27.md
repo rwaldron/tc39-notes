@@ -353,7 +353,6 @@ DD: Some mechanism to allow host objects to "opt-in" to this check
 BT: an opt-in seems better
 - Can blacklist proxy, but then implementations have to think about how that effects
 - An additional flag?
-- 
 
 
 AWB: 
@@ -500,7 +499,6 @@ BT: From a spec perspective, it's not possible to be spec compliant in a browser
 
 - `document.all`: an object that appears to be undefined for ToBoolean, typeof, abstract equality, however it's actually an object, and if you array index it, you get properties.
 - This was born of code written to detect not-IE with `typeof document.all === "undefined"`, but still used `document.all` directly, eg. `document.all[0]`
-- 
 
 (Does someone want to put some examples?)
 
