@@ -20,17 +20,17 @@ BF: We will be talking about host-dependent behavior: The Node module loading ho
 (from slide)
 
 
-Resolve (as absolute URL) => Fetch => Parse
-1. Make Module Record
-1. Place in Global Cache using Absolute URL*
-1. Errors remove records from Global Cache*
-Traversal of import declarations recursively
-1. Ensure step 2 has been performed on the dependency
-1. Place dependency in Local Cache using Import Specifier*
-1. Link dependency to module
-1. Errors prevent any evaluation
-Evaluate in post order traversal 
-1. Errors prevent further evaluation
+1. Resolve (as absolute URL) => Fetch => Parse
+    1. Make Module Record
+    1. Place in Global Cache using Absolute URL*
+    1. Errors remove records from Global Cache*
+1. Traversal of import declarations recursively
+    1. Ensure step 2 has been performed on the dependency
+    1. Place dependency in Local Cache using Import Specifier*
+    1. Link dependency to module
+    1. Errors prevent any evaluation
+1. Evaluate in post order traversal 
+    1. Errors prevent further evaluation
 
     
 CP/YK/AWB: (There are items here that are strictly host-specific)
