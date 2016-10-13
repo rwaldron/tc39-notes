@@ -249,7 +249,7 @@ MM: (@YK) can you write a decorator to make own?
 
 YK: Anytime you make a prototype thing, you add cost.
 
-MM: cases wher eyou want g/s to show up as own property: make it own. The overhead of per-instance g/s to have it be own, seems like fair cost
+MM: cases where you want g/s to show up as own property: make it own. The overhead of per-instance g/s to have it be own, seems like fair cost
 
 FST: I might disagree, depending how common the pattern is. There is real memory overhead.
 
