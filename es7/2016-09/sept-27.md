@@ -948,9 +948,9 @@ JHD: Can we prefix with `$`?
 
 Properties: 
     
-    - length 
-    - input
-    - index
+- length 
+- input
+- index
 
 https://github.com/littledan/es-regexp-named-groups#overlapping-group-names
 
