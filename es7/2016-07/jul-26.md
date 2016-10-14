@@ -24,7 +24,7 @@ RW: If we have different note-takers, they might not follow the right format, ma
 
 DE: Let's defer to Brian when he gets back
 
-IS: Different Ecma groups do different things; there is no single solution. Some e.g. only record the subject and outcome of the discussion, but not the actual discussion itself. This has to be decided by the TC. Anyway, with the current practice, which is very similar what the W3C does, we need the support of the group. e.g. Ecma can not hire any pay for a professional technical notetaker, that has to be organized / fulfilled by TC39 members.
+IS: Different Ecma groups do different things; there is no single solution. Some e.g. only record the subject and outcome of the discussion, but not the actual discussion itself. This has to be decided by the TC. Anyway, with the current practice, which is very similar what the W3C does, we need the support of the group. e.g. ECMA can not hire any pay for a professional technical notetaker, that has to be organized / fulfilled by TC39 members.
 
 JN: Looks like some things are timeboxed
 
@@ -45,6 +45,7 @@ BT: Let's go with Rick taking notes for now, since he volunteered, but long-term
 
 ## 3 Agenda Adoption 
 - Approved
+
 ## 4 May Minutes Approval
 -Approved
 
@@ -56,7 +57,7 @@ WH: I'm fine with occasional items not having backing materials — there are si
 
 WH: ECMA has a global policy (we all agreed to) that documents up for significant decisions shall be provided 2-3 weeks in advance. I'd interpret this as applying to proposals looking to advance in TC39.
 
-IS: It's 3 weeks. This is e.g. to formally move forward or approve a TC39 draft speciafication. But for things for information, to start a discussion on new items, not to strive for a formal decision anything until the meeting is allowed. But of course it is encouraged to submit and post on Github as soon as possible. 
+IS: It's 3 weeks. This is e.g. to formally move forward or approve a TC39 draft specification. But for things for information, to start a discussion on new items, not to strive for a formal decision, anything until the meeting is allowed. But of course it is encouraged to submit and post on Github as soon as possible. 
 
 JN: Approval of minutes?
 
@@ -69,54 +70,53 @@ JN: Approval of minutes?
 
 
 
-## 5. Report from the Ecma Secretariat
+## 5. Report from the ECMA Secretariat
 
-IS: Submitted the ECMAScript Suite Standard (approved by the GA as Ecma 414) to ISO/IEC JTC1 for fast-track. This should enable not to submit anymore ECMA-262 and ECMA-402, etc. to JTC1 separately anymore. This would allow to solve the speed difference problem and the RF patent policy problem. However, JTC1 editors wanted to have more text in the standard and not only the list of normative and informative references. IS said that he will work with Allen Wirfs-Brock on that. If possible we try to beed up ECMA-414 until the September 2016 meeting that isót can be approved as new Edition in the Decemmber 2016 GA. If the plan is delayed we finish it by June 2017. 
+IS: Submitted the ECMAScript Suite Standard (approved by the GA as Ecma 414) to ISO/IEC JTC1 for fast-track. This should enable not to submit ECMA-262 and ECMA-402, etc. to JTC1 separately anymore. This would allow to solve the speed difference problem and the RF patent policy problem. However, JTC1 editors wanted to have more text in the standard and not only the list of normative and informative references. IS said that he will work with Allen Wirfs-Brock on that. If possible, we try to beef up ECMA-414 until the September 2016 meeting so that it can be approved as the new edition in the Decemmber 2016 GA. If the plan is delayed, we finish it by June 2017. 
 
-- Link IETF spec to Ecma 404 (that was already fast tracked to ISO actually before the May 2016 TC39 meeting). On that one JTC1 has not given any feedback yet. So we guess that is on track. 
-- On the issue we are in close contacts with the IETF. When we get the IETF spec number (when available) we will make a 2nd Edition of ECMA-404 and fast track that edition to JTC1. With that we want to link the Ecma Standrad with the IETF specification that they should be in full harmony.
-- Awards: BT and RW received ECMA awards for ECMA-262 7 th Edition and ECMA-402 (plus the many notetaking). Congratulations!
+- Link IETF spec to ECMA-404 (that was already fast-tracked to ISO actually before the May 2016 TC39 meeting). On that one, JTC1 has not given any feedback yet. So we guess that is on track. 
+- On the issue we are in close contacts with the IETF. When we get the IETF spec number (when available) we will make a 2nd Edition of ECMA-404 and fast-track that edition to JTC1. With that we want to link the ECMA Standard with the IETF specification that they should be in full harmony.
+- Awards: BT and RW received ECMA awards for ECMA-262 7th Edition and ECMA-402 (plus the many notetaking). Congratulations!
 - New Executive Committee, made from a combination of ECMA management and the former Coordinating Committee.
-  - A change from the past is that up to two ECMA members from categories other than ordinary members may now be elected into the the Executive Committee. Nominations for that can come from anybody, but in the end the December GA will vote on the nominations. The membership in the Executive comiittee is always one year, but with the possibility of reelection. 
-  - All members can now participate in the General Assembly and take actively part in the discussions, not just ordinary members. However, only ordinary members can vote (that is unchanged).
+  - A change from the past is that up to two ECMA members from categories other than ordinary members may now be elected into the Executive Committee. Nominations for that can come from anybody, but in the end the December GA will vote on the nominations. The membership in the Executive Committee is always one year, but with the possibility of re-election. 
+  - All members can now participate in the General Assembly and take active part in the discussions, not just ordinary members. However, only ordinary members can vote (that is unchanged).
+
+- IS also noted that TC39 is now by far the largest ECMA Group and it has grown to a size where he feels that we have to organize our structure and work better, otherwise at the face-to-face meetings there might be disappointment by some who prepare a topic for discussion and presentation but in the shortness of time the subject is not discussed properly. Discussion on that to be continued by those who are interested on GitHub.
   
-  -IS also noted that TC39 is now by far the largest Ecma Group and it has grown to a size where he feels that we have to organize our structure and work better, otherwise at the face-to-face meetings there might be disappointment by some who prepare for a topic for discussion and presentation but in the shortness of time the subject is not discussed properly. Discussion on that to be continued by those who are interested on GitHub.
-  
-  
-  - What IS forgot to tell, that actually with the publication of ECMAScript 2016 and ECMA-402 new Edition etc. it would be a good idea to make more PR, e.g. Press Release.
+- What IS forgot to tell, that actually with the publication of ECMAScript 2016 and ECMA-402 new edition etc. it would be a good idea to make more PR, e.g. Press Release.
 
 
 ## 8. Test 262 Status Update
 
-IS: Technical Report 104 needs to be updated. He added that all specs related to TC39 work are being downloaded very heavily (actually at  least 2/3 of all Ecma downloads are TC39 related).  The HTML version of ECMA-262 and ECMA-402 is in addition to it, and compared to full downloads that is even significantly higher.This is actually more than e.g. what is being downloaded from the ISO Shop (of course that is not free of charge...).  So automativally also TR-104 gets downloaded rather heavily. But e.g. in TR/104 the URL to the tests does not work. Also the text needs to be updated. It reflects a situation when only ES5 was covered, but  e.g. not ECMA-402. 
+IS: Technical Report 104 needs to be updated. He added that all specs related to TC39 work are being downloaded very heavily (actually at least 2/3 of all ECMA downloads are TC39 related).  The HTML version of ECMA-262 and ECMA-402 is in addition to it, and compared to full downloads that is even significantly higher. This is actually more than e.g. what is being downloaded from the ISO Shop (of course that is not free of charge...).  So automatically also TR-104 gets downloaded rather heavily. But e.g. in TR-104 the URL to the tests does not work. Also the text needs to be updated. It reflects a situation when only ES5 was covered, but e.g. not ECMA-402. 
 
-AWB: Propose updating TR 104 to be descriptive only?
+AWB: Propose updating TR-104 to be descriptive only?
 
 BT: Is this just a readme? Possible get rid of it?
 
-AWB: Just reduce to an abstract description of the content and motivation of test262
+AWB: Just reduce to an abstract description of the content and motivation of test262.
 
 
-DE: Should ecma site link to draft spec?
+DE: Should ECMA site link to draft spec?
 
-AWB: The draft isn't the published standard
+AWB: The draft isn't the published standard.
 
 (Suggestions to link both, with clear identifiers)
 
-Note IS: I did not say that in the meeting, but In case of TC39 actually we give links to the latest ECMAScript drafts.
+Note IS: I did not say this in the meeting, but in case of TC39 actually we give links to the latest ECMAScript drafts.
 
 
 #### Conclusion/Resolution
 
 - Bring to reflector for further discussion
-- TR104 update (or withdrawal)
+- TR-104 update (or withdrawal)
 - Linking standard and draft?
 - It's there, but some want it to be more prominent
 
-Note IS: The TC39 website pages at Ecma have always room for improvement. If anything you want to include just contact Patrick from the Secretariat who maintains the webpages. 
+Note IS: The TC39 website pages at ECMA have always room for improvement. If there is anything you want to include, just contact Patrick from the Secretariat who maintains the webpages. 
 
 
-## 6. Ecma 262 Status Update
+## 6. ECMA 262 Status Update
 
 Brian Terlson
 
@@ -172,7 +172,7 @@ BT: Champions responsible
 
 
 
-## 7. Ecma 402 Status Update
+## 7. ECMA 402 Status Update
 
 Caridy Patiño
 
@@ -203,7 +203,7 @@ TC: Need help with reviewing contributions
 - Promises
 - Yield
 
-TC: Barrier to entry quite lower based on the work that's been done in the last year. 
+TC: Barrier to entry quite low based on the work that's been done in the last year. 
 
 SP: (asking about test submission with new features)
 
@@ -251,7 +251,7 @@ AWB, WH: So we should add for-var-in initializers with the old semantics to Anne
 
 RW: (brief discussion about strict mode additions: resolved, non-issue)
 
-YK: Does this mean sloppy mode changes are always in annex b?
+YK: Does this mean sloppy mode changes are always in Annex B?
 
 Generally, no.
 
@@ -260,6 +260,8 @@ Generally, no.
 - Add for-var-in initializers with the old semantics to Annex B, for non-strict mode only.
 - ecma262/pull/614
 - Kevin will write tests for the change, based on the new policy
+
+AWB: Kevin, could you please share a PDF on the notes page, since links rot?
 
 
 ## 9.i.b Update on Async Iteration
@@ -273,8 +275,6 @@ DD: Kevin Smith has left the committee; I am taking over as champion. I did not 
 #### Conclusion/Resolution
 
 - Reviewers: Bradley Farias, Daniel Ehrenberg
-
-AWB: Going back to the previous topic, Kevin, could you please share a PDF on the notes page, since links rot?
 
 
 ## 9.i.e Trailing commas in functions 
@@ -316,7 +316,7 @@ DD: As Michael was saying, in current VMs this isn't a good idea, but maybe in a
 
 AWB: And Arrays can be sparse anyway
 
-YK: Seems like a bad idea. Use Maps here instead for spare Arrays, or TypedArrays for big Strings or Arrays. We have TextDecoder in the DOM to deal with TypedArrays that have encoded Strings.
+YK: Seems like a bad idea. Use Maps here instead for sparse Arrays, or TypedArrays for big Strings or Arrays. We have TextDecoder in the DOM to deal with TypedArrays that have encoded Strings.
 
 DD: Why not even lower?
 
@@ -350,7 +350,7 @@ YK: We can just make those things use TypedArrays. Wouldn't you want to use bina
 
 WH: We'd need to shrink TypedArrays too if we're shrinking strings; otherwise we wouldn't get the consistency that's the whole motivation of this.
 
-EF: If we don't shrink TypedArrays, we wouldn't get a level paying field.
+EF: If we don't shrink TypedArrays, we wouldn't get a level playing field.
 
 AK: What is the motivation for this change, given that JSC already limits strings to 2^31?
 
@@ -364,7 +364,7 @@ AWB: It's gotten worse with recent changes
 
 DE: We've hit the timebox limit; Add this to the end of the agenda?
 
-MS: This isn't a hill for me to die on; i think it's something we should address, but not my #1 priority
+MS: This isn't a hill for me to die on; I think it's something we should address, but not my #1 priority
 
 #### Conclusion/Resolution
 
@@ -428,7 +428,7 @@ BT: It's a grand compromise
 
 AWB: 1) Interoperability among implementations 2) Usability going forward--what would users expect? This is forward-looking, not backwards-looking.
 
-BT: That seems like a reasonable rational. Are other implementers reluctant to return a useful value for that case?
+BT: That seems like a reasonable rationale. Are other implementers reluctant to return a useful value for that case?
 
 AK: My point is a little higher-level, that if we are making normative changes, we should have a motivation for it.
 
@@ -444,7 +444,7 @@ AWB: The Date constructor has an overload for one argument, so it can't treat th
 
 #### Conclusion/Resolution
 
-- No consensus on the full change. The zero-argument change is agreed to return NaN, but disagreement about what the one-argument case
+- No consensus on the full change. The zero-argument change is agreed to return NaN, but disagreement about the one-argument case
 
 
 
@@ -463,7 +463,7 @@ DE: (presenting slides)
 - Extra canonicalization writing into a TypedArray is a perf regression (see slide for link)
 
 
-Slide: "What does ES2015 day about NaN?"
+Slide: "What does ES2015 say about NaN?"
 
 - The Number Type
 "to ECMAScript code, all NaN values are indistinguishable from each other"
@@ -473,7 +473,7 @@ Slide: "What does ES2015 day about NaN?"
 
 
 
-DE: ok with: "anytime you use SetValueInBuffer, use whatever you have"
+DE: ok with: "any time you use SetValueInBuffer, use whatever you have"
 
 "Why would property writes make a new NaN?"
 
@@ -518,7 +518,7 @@ EFT: Over the time box, no new points made
 
 MM: Don't understand the optimization in V8
 
-AK: I think this needs to be discuss offline?
+AK: I think this needs to be discussed offline?
 
 DH: (taking issue with time box)
 
@@ -547,7 +547,7 @@ MM: once an obj is not observable, ownkeys cannot give an answer that was not pr
 
 DE: Cait Potter implemented both semantics and there are no noticeable differences. 
 
-AWB: No guarantee once you get a descriptor that it remains valid to do something with it in the future - operations are unknown
+AWB: No guarantee once you get a descriptor that it remains valid to do something with in the future - operations are unknown
 
 JHD: The change is: only properties with valid property descriptors are returned.
 
@@ -582,7 +582,7 @@ DH: An example?
 
 JDD: (showing an example in lodash)
 
-STH: Can't the shim write the for in loop?
+STH: Can't the shim write the for-in loop?
 
 DD: Spec seems to treat objects as maps, but specifically objects and their prototype properties as values in the map
 
@@ -606,7 +606,7 @@ DD: Do we want to further encourage the programming model that these encourage?
 
 MM: (concurring, discussing value of such a feature)
 
-DH: A number of libraries want to use this functionality and it would be nice expose as built-in, but why not define in one library and that's that. 
+DH: A number of libraries want to use this functionality and it would be nice to expose as built-in, but why not define in one library and that's that. 
 
 AWB: Back to "inherited, enumerable things". The only definition we have is via for-in
 
@@ -666,7 +666,7 @@ DE: I can find out if this is an invariant that will be maintained. If it is, th
 
 DE: Stage 2?
 
-MF: Is there a syntax error when type any random character where in /\p{UnicodePropertyName=UnicodePropertyValue}/, /\p{LoneUnicodePropertyNameOrValue}/ ?
+MF: Is there a syntax error when type a random character anywhere in /\p{UnicodePropertyName=UnicodePropertyValue}/, /\p{LoneUnicodePropertyNameOrValue}/ ?
 
 DE: No UnicodePropertyName syntactic restrictions in present spec
 
@@ -707,7 +707,7 @@ BT: no updates, no changes
 
 YK: Worried about cancellation?
 
-DD: Cancel token integrate well with async functions
+DD: Cancel token integrates well with async functions
 
 YK: Not at stage 2 with cancellation, hard to be sure that it's compatible 
 
@@ -725,7 +725,7 @@ DD: If I had held off on Cancel tokens, this would've made it to stage 4
 
 BT: Off topic.
 
-YK: Certain assumption that one can reasonably assume that an expression that exist can become abrupt
+YK: Certain assumption that one can reasonably assume that an expression that exists can become abrupt
 
 - Have to know that X cannot throw
 - Cancellation exists, now X might throw
@@ -859,9 +859,9 @@ RW: And it's painful to install someone's bad npm library
 
 DH: We make these generic arguments about the benefits of standardizing functions, but we can't standardize all functions in npm. The argument should be, we know what the costs are, we know that we can't do it for everything, so we have to make the argument that these are extraordinarily common for important use cases.
 
-STH: Two other reasons why these functions have a strong claim: Unlike other domains, JavaScript has as reasonably strong Math standard library, for historical reasons, and so programmers expect Math.whatever to be the math standard library in a way that they don't expect for Strings or TCP connections. Second, these are things that are commonly in the standard library of other languages. Yet again, programmers expect, when they look for functions like the ones Rick is proposing, where their counterparts are in other languages.
+STH: Two other reasons why these functions have a strong claim: Unlike other domains, JavaScript has a reasonably strong Math standard library, for historical reasons, and so programmers expect Math.whatever to be the math standard library in a way that they don't expect for Strings or TCP connections. Second, these are things that are commonly in the standard library of other languages. Yet again, programmers expect, when they look for functions like the ones Rick is proposing, where their counterparts are in other languages.
 
-DD: I agree with these points, but maybe we should group these under "Units" and include time constants, also RAD PER_DEG not "TO"
+DD: I agree with these points, but maybe we should group these under "Units" and include time constants, also RAD_PER_DEG not "TO"
 
 YK: I agree that time conversions are very common.
 
