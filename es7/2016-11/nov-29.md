@@ -613,8 +613,9 @@ KG: Would it be an actual function?
 
 DD: No, needs to be a function-like form.
 Pros for function-like:
-    - Future extensibility (second argument)
-    - Ambiguity with 'import x' form in modules. You could use this from a script, and you might expect that you can write 'import x' in a script. But that would not be the same--it would create a Promise and then throw it away
+
+- Future extensibility (second argument)
+- Ambiguity with 'import x' form in modules. You could use this from a script, and you might expect that you can write 'import x' in a script. But that would not be the same--it would create a Promise and then throw it away
     
 AWB: You could require it to be parenthesized when it's in statement position, with the same logic that prohibits a function expression there
 
