@@ -769,7 +769,7 @@ Room: yes.
 
 (Daniel Ehrenberg)
 
-- [proposa](https://github.com/tc39/proposal-intl-segmenter)
+- [proposal](https://github.com/tc39/proposal-intl-segmenter)
 
 DE: Motivation: https://github.com/tc39/proposal-intl-segmenter#motivation
 
