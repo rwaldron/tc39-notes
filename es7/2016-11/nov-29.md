@@ -418,7 +418,7 @@ DE: Possible...
 - Consensus on taking the PR (aka throwing on detached typed array during iteration via ValidateTypedArray)
 - consensus example [found here](https://github.com/tc39/ecma262/issues/713#issuecomment-255878360) (the first option, "a")
 
-```js
+```
 8. If a has a [[TypedArrayName]] internal slot, then
   a. Perform ? ValidateTypedArray(a).
   b. Let len be a.[[ArrayLength]].
