@@ -564,7 +564,7 @@ AWB: We use IdentifierName in the grammar
 WH: It seems odd to have a PrivateName be a single token. The more natural way to express it would be as two tokens, `#` followed by an IdentifierName.
 
 KG: Won't that allow whitespace between `#` and IdentifierName?
-- The hash is intended to be thought of as part of the proeprty name, ie: 
+- The hash is intended to be thought of as part of the property name, ie: 
     
 ```js
 this.
