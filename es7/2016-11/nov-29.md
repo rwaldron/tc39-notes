@@ -191,7 +191,7 @@ BT: other languages have it. It's easy for Chakra to implement. Spec changes are
 
 JHD: This could start off a chain of calls to .then. To run the code on the same tick and return a Promise, so it's different from Promise.resolve().then().
 
-_DIscussion about what the semantics of the job loop are_
+_Discussion about what the semantics of the job loop are_
 
 JHD: This avoids creating an immediately invoked async function, avoids the Promise constructor, etc.
 
@@ -384,6 +384,9 @@ BT: We should either come to consensus that we don't want Promise subclassing, a
 (Daniel Ehrenberg)
 
 DE: _shows the PR_
+
+- [Issue](https://github.com/tc39/ecma262/issues/713)
+- [PR](https://github.com/tc39/ecma262/pull/724)
 
 DE: For TypedArrays we want to be consistent, same for `length`  checks.
 
