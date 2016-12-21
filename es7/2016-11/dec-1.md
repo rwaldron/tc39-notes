@@ -340,7 +340,7 @@ MM: if integration reveals issues for one and not the other? THen we can address
 
 AWB: Or drop entirely?
 
-YK/AWB/DE: (dscussion of the merging concerns, but only w/ regard to Stage 3?)
+YK/AWB/DE: (discussion of the merging concerns, but only w/ regard to Stage 3?)
 
 AWB: Concerns about separate proposals modifying the same spec algorithms. They need to be merged when we get to that level of detail.
 
