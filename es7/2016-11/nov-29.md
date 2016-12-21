@@ -125,11 +125,14 @@ DE: OK, so if I do this some time over the next two months will that be in time?
 AWB: ye
 
 DE: PRs to get into ES2018:
-    - https://github.com/tc39/ecma402/pull/84
-    - https://github.com/tc39/ecma402/pull/114
+
+- https://github.com/tc39/ecma402/pull/84
+- https://github.com/tc39/ecma402/pull/114
+
 Possible proposals at Stage 3 which may reach Stage 4 by January and be integrated:
-    - https://github.com/tc39/ecma402/issues/30
-    - https://github.com/tc39/proposal-intl-plural-rules
+
+- https://github.com/tc39/ecma402/issues/30
+- https://github.com/tc39/proposal-intl-plural-rules
 
 ## 9 ECMA404 and ECMA414 Updates
 
@@ -618,9 +621,9 @@ DH: If there's a lookahead restriction on expressions...
 
 DD, WH: There's no lookahead involved here; this is just what grammars do, and by the time you get to the reduce part of the grammar you know which form you have
 
-    - Parens are usually required anyway, e.g., if you'll then the result
-    - If we were to do `await import x`, then it would be impossible because we've already used the unary operator
-    - Another possibility (though AWB expressed dislike) is local import being hoisted, which this would disallow
+- Parens are usually required anyway, e.g., if you'll then the result
+- If we were to do `await import x`, then it would be impossible because we've already used the unary operator
+- Another possibility (though AWB expressed dislike) is local import being hoisted, which this would disallow
     
 AWB: Pros for unary operator, with a low precedence like yield:
     - We are looking at something which is not a call, it's really based on conceptual state

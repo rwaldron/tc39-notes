@@ -842,8 +842,8 @@ DE: Don't know the entire history?
 
 Terminology: 
     
-    - scramble: replace a nan with another arbitrary nan
-    - canonicalize: replace a nan with a _particular_ nan value. 
+- scramble: replace a nan with another arbitrary nan
+- canonicalize: replace a nan with a _particular_ nan value. 
 
 DE: V8 may violate the ES standard for NaN observable behavior, but I want to argue that it’s OK
 
