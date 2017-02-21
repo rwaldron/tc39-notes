@@ -1,6 +1,6 @@
 # January 25, 2017 Meeting Notes
 
-Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), James Kyle (JK), Franziska Hinkelmann (FH), Anna Henningen (AH), John Lenz (JL), Sebastian Markbage (SM), Bradley Farias (BF), Jeff Morrison (JM), Tyler Kellen (TK), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CH), Gabriel Isenberg (GI), Bert Belder (BB), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Brendan Eich (BE), Istvan Sebestyen (IS) (part-time, on conference call), Keith Miller (KM), Brendan Eich (BE), Myles Borins (MB)
+Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), James Kyle (JK), Franziska Hinkelmann (FH), Anna Henningsen (AH), John Lenz (JL), Sebastian Markbage (SM), Bradley Farias (BF), Jeff Morrison (JM), Tyler Kellen (TK), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CH), Gabriel Isenberg (GI), Bert Belder (BB), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Brendan Eich (BE), Istvan Sebestyen (IS) (part-time, on conference call), Keith Miller (KM), Brendan Eich (BE), Myles Borins (MB)
 
 ## Istvan update, items 4-10 on the agenda
 
@@ -371,13 +371,13 @@ BF: Correct. There is always the possibility of someone accidentally deleting an
 
 AWB: It adds friction in places of modules in place of scripts.
 
-DH: I don't think module adoption would fail because of this. It's a big loss of ergonomics that you there are just realistic use cases that netiher use imports or exports and they require this boilerplate. Removing this bilerplate causes the other parse goal to be used. Not saying that node to get to the place where there is no script target, but you could operate as a node user without knowing what non-module content is.
+DH: I don't think module adoption would fail because of this. It's a big loss of ergonomics that you there are just realistic use cases that neither use imports or exports and they require this boilerplate. Removing this boilerplate causes the other parse goal to be used. Not saying that node to get to the place where there is no script target, but you could operate as a node user without knowing what non-module content is.
 
-JHD: You mentioned some actual use cases for a module with no imports or exports, what ar ethey?
+JHD: You mentioned some actual use cases for a module with no imports or exports, what are they?
 
 DH: Some of them are just like, I have a module that serves only as a polyfill on standard globals. When you import it, you're just looking for side effects. Maybe it's not a polyfill, maybe it sets up the state of the DOM for your app. Basically, you're importing it for side effects, not bindings. There is also a usual workflow of programming story, it's not about here is the final artifact of what I'm delivering. The practice of programming is you open up an empty buffer and start typing. In this world, starting with an empty buffer means you writing in a different programming context until you type the boilerplate. Also, you're editing your program and you decide you don't need that last dependencies. You remove an export or import and suddenly the program operates drastically different. There are various ways in which you could unwittingly change the type of document you're working with. It's so far from what you're trying to do that it won't be top of mind.
 
-JHD: I have a clarifiying question, if that's okay. In this world, without this change, if you type import, what happens? It would still switch into a module. It's dependent on the host environment, it culd ask you what
+JHD: I have a clarifiying question, if that's okay. In this world, without this change, if you type import, what happens? It would still switch into a module. It's dependent on the host environment, it could ask you what
 
 DH: The changing of the contents of the source file don't change which file type/name you're writing to; this is completely managed out of band.
 
@@ -399,7 +399,7 @@ WH: Modules can be used for small top-level things such as a hello world program
 
 JHD: A poylfill would never use module code to do it, no browsers would support. For the next decade no polyfill will be written in module code.
 
-BF: Would any of your polyfills break if they were swapped int module grammar?
+BF: Would any of your polyfills break if they were swapped into the module grammar?
 
 JHD: The ones that were written in ES5 would break, they are intentioally in sloppy mode. The ones that are ES6 and later tend to run in strict mode and would not break/
 
@@ -441,9 +441,9 @@ DH: The idea of the pragma would be that in the core definition of the language 
 
 MM: It's easy enough to export the function and just invoke it
 
-BF: there are other usecases for a module that sets up state, there is nothing to export, we're out of time and it looks like there are people vehemetly opposed to this currently.
+BF: there are other usecases for a module that sets up state, there is nothing to export, we're out of time and it looks like there are people vehemently opposed to this currently.
 
-DH: The point I want to make to JHD is that we also have set up a world where your top level script are modules. LIke, the top of your app is a script. In those cases, you defienitely, it doesn't make sense to have exports
+DH: The point I want to make to JHD is that we also have set up a world where your top level script are modules. LIke, the top of your app is a script. In those cases, you definitely, it doesn't make sense to have exports
 
 JHD: You'd like have imports though
 

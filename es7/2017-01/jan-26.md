@@ -1,6 +1,6 @@
 # January 26, 2017 Meeting Notes
 
-Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), James Kyle (JK), Franziska Hinkelmann (FH), Anna Henningen (AH), John Lenz (JL), Sebastian Markbage (SM), Bradley Farias (BF), Jeff Morrison (JM), Tyler Kellen (TK), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CH), Gabriel Isenberg (GI), Bert Belder (BB), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Istvan Sebestyen (IS), Keith Miller (KM), Myles Borins (MBS)
+Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), James Kyle (JK), Franziska Hinkelmann (FH), Anna Henningsen (AH), John Lenz (JL), Sebastian Markbage (SM), Bradley Farias (BF), Jeff Morrison (JM), Tyler Kellen (TK), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CH), Gabriel Isenberg (GI), Bert Belder (BB), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Istvan Sebestyen (IS), Keith Miller (KM), Myles Borins (MBS)
 
 ## Looking at the proposal list
 
@@ -814,23 +814,23 @@ J: We went statement list like, but we do allow comma delimited to declare multi
 
 AWB: I undertsand, you have contacts where you have keywords where a comma separated list is very natural in the statement context. if you don't have a header on the statement context it looks like somethign else.
 
-JM: I just wanted to point out also that I know the class bodies are originally designe around statementlists. They aren't aren't that now though
+JM: I just wanted to point out also that I know the class bodies are originally designe around statementlists. They aren't that now though
 
-AWB: They are statementlist like, in particular one of the things we wanted to allow for was the potential for future inclsion of declarative satements like let/const or even function. That could have useful meaning, particularly now that we're adding lexical contours to these things.
+AWB: They are statementlist like, in particular one of the things we wanted to allow for was the potential for future inculsion of declarative statements like let/const or even function. That could have useful meaning, particularly now that we're adding lexical contours to these things.
 
 DE: This syntax wouldn't preclude any of those issues
 
 AWB: It makes the syntax less....
 
-DE: YOU have a bare thing but i tisn't followed by a brace? What's the issue?
+DE: YOU have a bare thing but it isn't followed by a brace? What's the issue?
 
-AWB: You have bare things that look like assignment statemnts;
+AWB: You have bare things that look like assignment statements;
 
 JM: You're suggesting the alternative is a keyword prefix interspersed?
 
 AWB: The alternative would be to follow the pattern we've used for essentially all other <missed it> except concise methods.
 
-DE: This is really abou tthe first point in the three (no public/private keyword)
+DE: This is really about the first point in the three (no public/private keyword)
 
 AWB: They all tie together. 
 
@@ -840,7 +840,7 @@ AWB: Common declarations would naturally follow, they already have comma separat
 
 DE: I don't know if I call public/private keywords are like var and let, they modify a declaration.
 
-MM: Allen is a a short summary of your position, no comma unless we also use the leading keyword?
+MM: Allen is a short summary of your position, no comma unless we also use the leading keyword?
 
 AWB: I think that might be less confusing if that was the case. I like comma separated lists.
 
