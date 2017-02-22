@@ -1,11 +1,12 @@
 # January 24, 2017 Meeting Notes
 
-Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), James Kyle (JK), Franziska Hinkelmann (FH), Anna Henningsen (AH), John Lenz (JL), Sebastian Markbage (SM), Bradley Farias (BF), Jeff Morrison (JM), Tyler Kellen (TK), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CH), Gabriel Isenberg (GI), Bert Belder (BB), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Mathias Bynens (MB), Leo Balter (LB)
+Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), James Kyle (JK), Franziska Hinkelmann (FH), Anna Henningsen (AH), John Lenz (JL), Sebastian Markbage (SM), Bradley Farias (BF), Jeff Morrison (JM), Tyler Kellen (TK), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CH), Gabriel Isenberg (GI), Bert Belder (BB), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Mathias Bynens (MB), Leo Balter (LB), Istvan Sebestyen (IS)
 
 ## Adopting the agenda
 
 - Start with Istvan's items to get them out of the way
 - Jeff Morrison more free on Tuesday, preferably
+
 AK: This may take less than three days.
 
 Adopted the agenda
@@ -32,7 +33,7 @@ IS: Exactly. We have a long-term archival obligation. We are trying to archive t
 
 AWB: There is room to work with ECMA to improve the infrastructure for taking notes--if someone wants to do that, everyone would probably appreciate it.
 
-I.S.: We could upload the ECMA minutes on the GitHub to the TC39 Reflector part, would that help?
+IS: We could upload the ECMA minutes on the GitHub to the TC39 Reflector part, would that help?
 
 WH: I was able to eventually somehow get the minutes.
 
@@ -44,7 +45,7 @@ WH: What's happening with es-discuss? I'm getting bounces.
 
 AWB: The list administrators of this are Brendan Eich and myself. If someone else wants to be an administrator on that list, I am sure Brendan and I would be happy about that. There isn't a lot of work but occasionally something does come in.
 
-I.S.: I think this is an example for another TC39 tool, that was popular for a few years, and maybe now is slowly disappearing. It is a real challange for us, how to archive all this for long-term.  
+IS: I think this is an example for another TC39 tool, that was popular for a few years, and maybe now is slowly disappearing. It is a real challange for us, how to archive all this for long-term.  
 
 ## ECMA262 Status Updates--countdown to ES2017
 
@@ -60,7 +61,7 @@ BT: Any needs-consensus PRs after January 31st becomes a part of ES2018 (if at a
 
 BT: For those new to the committee, we're not a technical committee, we're a royalty free task group (of the technical committee). All that means is that there is a royalty free commitment to the content we create in the specification. If you would like to patent something that is in ECMA or if you think you have a patent that is pertinent to something we are standardizing in this version. You should talk to your lawyers and potentially opt out of the royalty free agreement. you'd be the first person to do this. We've never had an opt out. Talking to Istvan, I'm not sure we even know what happens.
 
-I.S.: Brian is right. In the current TC39 RFTG everything is expected to be RF. At an "opt out" - which we did not have so far - we have to see how that part of the policy plays out. But it will be difficult because a) who decides and how if the claim for the opt out is valid? b) If valid then either an alternative method has to be found or the RF project cancelled... So, if TC39 wants also "RAND" components in the standard, maybe for some special case, options that must be done in a new, different TG working with a RAND based policy.  
+IS: Brian is right. In the current TC39 RFTG everything is expected to be RF. At an "opt out" - which we did not have so far - we have to see how that part of the policy plays out. But it will be difficult because a) who decides and how if the claim for the opt out is valid? b) If valid then either an alternative method has to be found or the RF project cancelled... So, if TC39 wants also "RAND" components in the standard, maybe for some special case, options that must be done in a new, different TG working with a RAND based policy.  
 
 WH: If someone opts out (or makes an unexpected patent claim), which happened in other TCs, then we have a standard that someone claims a patent on, then chances are we'd end up voting no on the proposal. We approve the proposal pending it not having an opt-out.
 
@@ -77,6 +78,7 @@ BT: In ES2017 is:
     - new.target and eval reform
     - Agents, SharedArrayBuffer and Atomics
     - Latest Unicode version--affects all parsers
+
 BT: Several bug fixes and minor changes. Implementors: if you do `git log` on the spec, you will see all normative changes with descriptions starting with "Normative:"
 
 AWB: Do we still have Annex E listing incompatibilities? Seems like all observable changes in. The document is the real source of truth.
@@ -89,13 +91,13 @@ MPT: Question: this is my first time here. Must the spec be an HTML document?
 
 WH: Actually no, the spec is not an HTML Document. ECMA's requirements used to be that the specs had to be a Word document. Now they also allow a PDF. The HTML is just a courtesy we provide.
 
-I.S.: TC39 is special in that area. Actually we are offering TC39 standards in HTML format too, because we see that there is a high demand for it. This is a special case, the GA is discussing if we should generally move into that direction.
+IS: TC39 is special in that area. Actually we are offering TC39 standards in HTML format too, because we see that there is a high demand for it. This is a special case, the GA is discussing if we should generally move into that direction.
 
 BT: Actually, as far as ECMA is concerned, we went through this last year; They are okay as treating the HTML document as the normative document. They updated the wording on the website for this. What you say is true for ISO, they have a spec for the spec process. They require a PDF.
 
 WH: Since our specs are now automatically ISO specs, that means that we still need to use PDF for the normative format.
 
-I.S. Actually if the Fast-Track goes through then ECMA-262, ECMA-402 will only be Ecma standards. Only ECMA-404 (JSON) and ECMA-414 (ECMAScript Suite) will be also ISO standards (with appropriate ISO numbers). Also the Test Suite remains Ecma only product.
+IS: Actually if the Fast-Track goes through then ECMA-262, ECMA-402 will only be Ecma standards. Only ECMA-404 (JSON) and ECMA-414 (ECMAScript Suite) will be also ISO standards (with appropriate ISO numbers). Also the Test Suite remains Ecma only product.
 
 BT: That means that ISO gets a lower fidelity document
 
@@ -830,7 +832,7 @@ MF: Do you think that the committee should suggest that we limit this to member 
 
 DH: I think the advice is good that we should be thinking about the over all space. Part of the strategy of getting this to success is charting a course through this space--there is a meaningful chunk we can ship/solve but that is not so path dependent so hill climbing that we end up diving into a morass of other syntaxes. I don't know the exact answer but the final answer doesn't need that we need something for every form.
 
-WH: I have the same concerns Dave has. ?. is very useful, ?.[ is useful but has awkward syntax, and ?.( is weird.
+WH: I have the same concerns Dave has. `?.` is very useful, `?.[` is useful but has awkward syntax, and `?.(` is weird.
 
 MF: I don't want to bikeshed on particular syntax issues
 
@@ -1312,7 +1314,7 @@ DE: Another argument on the contrary of why we shouldn't expect more properties,
 
 BT: Do you have a slide showing how destructuring and pattern matching differs?
 
-DE: See the explainer; it looks like `let {groups: {one, two}} = /^(?<one>.*):(?<two>.*)$/u.exec('foo:bar');`
+DE: See the explainer; it looks like `let {groups: {one, two}} = /^(?&lt;one>.*):(?&lt;two>.*)$/u.exec('foo:bar');`
 
 MM: Is there a reason -not- to use a map?
 
@@ -1406,9 +1408,9 @@ JHD: Sounds like there are just editorial issues
 
 AWB: Okay, we call this stage two
 
-AWB: Annex B regex grammar, do we fit within those constraints? The non-unicode case is pretty much what browser implementors use.
+AWB: Annex B RegExp grammar, do we fit within those constraints? The non-Unicode case is pretty much what browser implementors use.
 
-[bikeshedding about how to address this]
+(discussion about how to address this)
 
 AWB: Are you suggesting if you use the named things, that kicks you out of Annex B grammar.
 
@@ -1418,7 +1420,7 @@ AWB: Why not kick you out of Annex B?
 
 DE: I would worry that would have weird refactoring hazards, if we said that if you invoke this feature, then you step into a different RegExp grammar
 
-WH: Describing entertaining problems we'll encounter when modifying the Annex B grammar to add named capture groups: That grammar is unique among the grammars in the spec in that the grammar is highly ambiguous and the order of productions matters. The production that's listed first wins. For `\k` there'd be two productions, one for parsing `\k<id>`, and the other one being a `\k`; if the parse of the first fails, the second one would be picked, which is undesirable.
+WH: Describing entertaining problems we'll encounter when modifying the Annex B grammar to add named capture groups: That grammar is unique among the grammars in the spec in that the grammar is highly ambiguous and the order of productions matters. The production that's listed first wins. For `\k` there'd be two productions, one for parsing `\k&lt;id>`, and the other one being a `\k`; if the parse of the first fails, the second one would be picked, which is undesirable.
 
 DE: OK; we'll disable the `\k` identity production in `+N` mode in Annex B.
 

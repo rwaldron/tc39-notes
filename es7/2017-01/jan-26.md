@@ -131,13 +131,13 @@ AWB: I'm going to make a a motion that Jordan is now the official GitHub curator
 JHD: I will make a proposal template repo over the next month or so
 
 DE: Should the kind of project management that Allen mentioned be part of "curator's" job?
-    
+
 JHD: What I would say is the most efficient way to do this would be to file an issue on the repo for the proposal or go talk to them. The time between wondering what's going on with it and figuring it out should be short. The repo for the proposal should be a way to find out quickly.
-    
+
 DE: IS that the job of the curator?
-    
+
 JHD: If someone files an issue on the proposals repo to do that, I can follow up on it it seems indirect but I'm happy to do it
-    
+
 DE: This is what Allen was saying about general project management.
 
 JHD: I think if we figure out the wording for a deferred list, every few months, I or someone else checks to see what should be moved
@@ -151,7 +151,7 @@ AWB: At a minimum what might be an interesting thing to do, when we assemble the
 JHD: A month before the meeting we could post an issue on the reflector and tag all the champions and ask for an update
 
 AWB: Or just decide. You don't have to but...you know, part of this is just pushing people to think about what they, if there is something they need to do, giving them time to scurry around in the last week. Okay! So Dave, are you ready?
- 
+
 
 #### Resolution / Conclusion
   - JHD to be official curator of tc39 github
@@ -178,7 +178,7 @@ DH: So, the basic idea here is to allow more expression forms in the language, a
 
 JFB: Out of this falls out something weird, like putting a return in there, it would be the same as doing an expression
 
-DH: the philosphical justification is Tennants correspondence principal. 
+DH: the philosphical justification is Tennants correspondence principal.
 
 AWB: Out in the lobby a few of us were talking about this. One of the things this allows you do do a return in places where it is impossible currently. Most of the time that's okay but there are a few places where serious considerations are needed about the meaning (argument lists, initialzation expressions of a generator function for parameters and stuff). There is a need to do a semantic review of places this might occur and either decide what the semantics are or to decide in that context.... there are ways to syntactically handle this stuff.
 
@@ -222,9 +222,9 @@ AK: I would challenge the ease of understanding
 
 MF: I don't see a reason to allow break/continue/return in do expressions. Can you give me examples why that would be useful?
 
-DH: Yes, The way you expect it to work is that it, has the same non-local control flow effect in a statement context. Inside a loop you have a do expression and you have a break it corresponds to the do, not the loop. The reason that this is powerful is that it, the kinds of... early return patterns that you can use become richer. 
+DH: Yes, The way you expect it to work is that it, has the same non-local control flow effect in a statement context. Inside a loop you have a do expression and you have a break it corresponds to the do, not the loop. The reason that this is powerful is that it, the kinds of... early return patterns that you can use become richer.
 
-MF: I don't think that's true. 
+MF: I don't think that's true.
 
 DH: You can do them locally and not hoisted them out. If you are in a nested expression, today you have to take the whole expression and refactor it into a bunch of statements. This takes what can be concise, i'm just composing a few expressions here, one particular control flow path wants to exit early. Suddenly the rest of those parts have to become much more verbose because they have to be hoisted into local vars and statements. it would be helpful for me post a efw examples
 
@@ -314,8 +314,9 @@ DH: That is the idea I have too but i fi go there it will expand in to more conv
 (Dave Herman, co-championing with Mark Miller and Caridy Patino)
 
 [proposal](https://github.com/tc39/proposal-realms)
+[presentation](https://gist.github.com/dherman/66627aac764a9795dc3875e270f55918)
 
-DH: Realms was sitting at Stage 0; I've been looking at it with Dean, and Chip, and others. Previously worked on it through ES2015, just the core JavaScript builtins, nothing else fancy. If you create a new Realm and instantiate an Array, it's a different one. Alternatively considered, this is a reflective reification of the ECMAScript realm concept. [going over presentation at https://gist.github.com/dherman/66627aac764a9795dc3875e270f55918 ]
+DH: Realms was sitting at Stage 0; I've been looking at it with Dean, and Chip, and others. Previously worked on it through ES2015, just the core JavaScript builtins, nothing else fancy. If you create a new Realm and instantiate an Array, it's a different one. Alternatively considered, this is a reflective reification of the ECMAScript realm concept. (going over presentation linked above)
 
 DH: It forms a sort of sandbox, or you could think of it as a worker with synchronous communication.
 
@@ -355,7 +356,7 @@ MM: If you go the other way, you have to have the expense of adding and removing
 
 BT: DOM is a bit of a red herring. What about WebCrypto--shouldn't web programmers have access to it?
 
-DH: You can make a subclass that manually adds the properties from the web platform that you want to add (or remove). 
+DH: You can make a subclass that manually adds the properties from the web platform that you want to add (or remove).
 
 AK: Should init() be called somewhere in the code sample?
 
@@ -419,7 +420,7 @@ BF: The global object has a proxy
 
 MM: the Window vs WindowProxy thing is actually orthogonal from EcmaScript Proxies. It is an unfortunate name coincidence. A so-called WindowProxy is not a Proxy.
 
-BT: I'm curious what your thoughts are on what it would take to do on-the-fly transpilation. Would this be a combination of the Loader's translate hook plus 
+BT: I'm curious what your thoughts are on what it would take to do on-the-fly transpilation. Would this be a combination of the Loader's translate hook plus
 
 DH: I don't think the Loader API will be necessary on the web platform at all. I don't think I'm ready to announce that I'll stop work on the loader, but I think we can get all the benefits of the Loader with a radically simpler API. But today's not the day to talk it through.
 
@@ -459,13 +460,15 @@ WH: Yes, but we need to fix the deleted agenda lines.
 
 AWB: Yes, we'll fix those.
 
-Approved.
+#### Conclusion/Resolution
+
+Minutes are approved.
 
 
 
 ## global
 
-(JHD)
+(Jordan Harband)
 
 JHD: We faced a number of web-compatibility issues for `global`, including flikr and several enterprise JIRA intallations.  So it seems like the name `global` is dead. What should we do? Abandon this? I'd like to find another name, with global in the name
 
@@ -506,6 +509,7 @@ WH: We will have the same problem with BigNum, trying to find a web-compatible n
 MM: You said there were three approaches, so far we've run two
 
 JHD: I make a github issue, we bikeshed
+
 AWB: We do have a long afternoon here with a number of interseted parties
 
 JHD: I want to give Dan some time.
@@ -514,11 +518,9 @@ MF: I'd rather not have a public github issue on this
 
 JHD: We can do it on reflector. If there is something we can achieve today and it doesn't conflict with Dan's later presentation is good. The last option was System.global. Which namespace does it go under? One of the primary objections voiced by Domenic who isn't here today. He didn't want this to create a namespace that doesn't exist yet and may never exist otherwise. If we aren't going to have System.import every, that's a good point. Because the error stacks proposal needs a namespace, it makes sense that this could be shared. That is our third option. My expectation of the web compat for that... I'm sure people are already creating System namespaces and attaching import to it. I'm guessing the way people wrote this code they check for it before they create it. If they have written that sensible code, it won't breakif we create a System object iwth a different property. I don't expect it to be problemantic, both this and the stack proposal would need to find something web compat anyway. Regardless it would be under a namespace. Once we have a web compatible namespace, any property we add is safe
 
-DH: Can I just say, we don't need to have the discussion but I never felt convinced by the outcome of the discussion. Domenic felt really strongly and I kind of backed off. Oh wait, no, it was you that was concerned that Reflect coudln't <missed this>. I was the one who came up accidentally when I created Reflect.parse in spidermnokey years ago. It got hijacked to mean the MOP operations
+DH: Can I just say, we don't need to have the discussion but I never felt convinced by the outcome of the discussion. Domenic felt really strongly and I kind of backed off. Oh wait, no, it was you that was concerned that Reflect coudln't include things that weren't Proxy traps. I was the one who came up accidentally when I created Reflect.parse in SpiderMonkey years ago. It got hijacked to mean the MOP operations.
 
-JHD: When we removed the enumerate proxy trap we removed Reflect.enumerate
-
-All: talking over eachother
+JHD: When we removed the enumerate proxy trap we removed Reflect.enumerate, which was based on this similar idea.
 
 MM: As co-other of the proxy proposal, i don't consider that to be a constraint. The privilege separation is a serious issue
 
@@ -716,31 +718,31 @@ AK: except the one that isn't going to be a sthing?
 
 MM: I want to hold up global until the other ones got to stage 3
 
-AK: That is exactly why we need to have this discussion. It happens that for whatever reason some of these discussions around priv granting...
+AK: That is exactly why we need to have this discussion. It happens that for whatever reason some of these discussions around privilege granting will hold up global, then we can hold up global.
 
-MM: even if none of these make it, this will not be the last thing that will need to grant priv
+MM: Even if none of these make it, this will not be the last thing that will need to grant privileges.
 
-JHD: we can in a practical sense we can say in 5 years we will have this and we need to reify it.
+JHD: We can in a practical sense we can say in 5 years we will have this and we need to reify it.
 
 AK: If that was true it would be in stage 2 now.
 
-AWB: So we have been talking about System for more than 5 years, youc an't just...
+AWB: So we have been talking about System for more than 5 years, you can't just assume it won't happen.
 
-JHD: Speaking a sa champion for the stack proposal, I didn't ask for stage two, major semantics are not specified, it's not ready. I want it to be ready. I want Mark to take this up. My goal is to get that done quickly. In some number of years it will be finished and something we agreed upon will ship. it's already compat.
+JHD: Speaking as a champion for the stack proposal, I didn't ask for stage two, major semantics are not specified, it's not ready. I want it to be ready. I want Mark to take this up. My goal is to get that done quickly. In some number of years it will be finished and something we agreed upon will ship. it's already compat.
 
-AK: it may not include the stack or getstack trace. We may expose the stack trace in other ways that don't include System.  I'm partially making these arguments for Domenic.
+AK: It may not include the stack or getstack trace. We may expose the stack trace in other ways that don't include System.  I'm partially making these arguments for Domenic.
 
-JHD: I hear what you are saying. There is a slim change that getStack and getStack string will not need a priv granting object. The real question is.. if we likely will have a priv granting object, let's assume its going to happen and some stuff will be on it. At that point will we regret not putting lgobal on it?
+JHD: I hear what you are saying. There is a slim change that getStack and getStack string will not need a priv granting object. The real question is, if we likely will have a privilege-granting object, let's assume its going to happen and some stuff will be on it. At that point will we regret not putting lgobal on it?
 
-AWB: no, global doesn't need to be there, it would be perfectly fine
+AWB: No, global doesn't need to be there, it would be perfectly fine
 
 DH: A global is already always accessilble to you. The idea that we woudl take this thing that is already available and is the one major thing you need to blacklist to get attenuated power and pretend you were hiding it under a power tools namespace is silly
 
 MF: Global is not always available to you, environments without eval don't have it.
 
-AK: it is available to you there as window
+AK: It is available to you there as window
 
-JHD: Browsers with CSP there is, but there are browsers that restrict eval. AK is right, it is available as window.
+JHD: Browsers without CSP there is always access to global, but there are browsers that restrict eval. AK is right, it is available as window.
 
 DH: The top level this is available as window. The other point is that CSP is not the normal intuitive mode of JS. I'm not saying it's bad, though I have my issues with CSP. Naming is about what is the appropriate intuition for people. This makes sense in an environment where global has been censored but thats just not normal.
 
@@ -758,27 +760,27 @@ DH: you create a realm stripped of all power and giving reference to it doesn't 
 
 MM: You want to create, when you have multiple degrees of priv in the same realm they are going to see different global objects and different "System" objects, if global hangs off System you start with System.
 
-DH: You create a new realm and determine what's on ..
+DH: You create a new realm and determine what's on the global object.
 
-MM: I'm not talking about creating a new realm, i'm talking about creating a new priv level, separation, within one realm. We want to avoid the my array is not your array problem. We want multiple priv levels in one realm is to avoid these identity discontinuity problems. The plugin scenario is the problem where you don't want that identity discontinuity if there is no other reason causing you to do it.
+MM: I'm not talking about creating a new realm, I'm talking about creating a new privilege level, separation, within one realm. We want to avoid the my array is not your array problem. We want multiple priv levels in one realm is to avoid these identity discontinuity problems. The plugin scenario is the problem where you don't want that identity discontinuity if there is no other reason causing you to do it.
 
 DH: In those situations how are you censoring it? Are you deleting things?
 
-MM: No, you're.... you're creating an evaluation context for the separately trusted code such that what it sees different objects as the global object and the system object,
+MM: No, you're creating an evaluation context for the separately trusted code such that what it sees different objects as the global object and the system object,
 
-DH: you're doing this without a realm api?
+DH: You're doing this without a Realm API?
 
-MM: this goes back to the discussion of separating the realm conversations from the scope conversation. you create the evaluators in the same realm that saw a different global object at the end of their scope chain
+MM: This goes back to the discussion of separating the realm conversations from the scope conversation. You create the evaluators in the same realm that saw a different global object at the end of their scope chain
 
-DH: In both cases are you not giving them a restricted global object? the case where you have untrusted code is where you restrict global. global is no longer powerful in those case.s why do you need to censor access to it at this point?
+DH: In both cases, are you not giving them a restricted global object? The case where you have untrusted code is where you restrict global. global is no longer powerful in those cases. Why do you need to censor access to it at this point?
 
 MM: You're making Yehuda's argument, I agree.
 
-DH: I'm saying youre NOT doing. Your describing a use case where they do have access to it. The argument you made a minute ago was restricting TWO things. I claim that is false. YOu will not remove access to the .global object because it is a self reference ot this power restricted thing
+DH: I'm saying you're NOT doing. Your describing a use case where they do have access to it. The argument you made a minute ago was restricting TWO things. I claim that is false. You will not remove access to the .global object because it is a self reference ot this power restricted thing
 
 MM: In the case of the namespace, you still have a self reference which would be System.global refers to global, it's two step self reference but it's still a self reference. The... by making th self reference a separate global variable from System it simply means that you have to, when you're making this new priv thing you have to hook up both self references directly rather  than uniformly replacing it.
 
-DH: I'm saying that if you design these APIS to hook up the references. Lets talk about the realm api and you can tell me why its not going to work. one realm proposal is that it initialized the global object with "all th usual things" for this new embedded realm, but not  <mised it>. One of the things that does is hook up a global.global object and you have a power attenuated thing now, it just by default does what you want. The only thing you have to remove is still access to "System" or whatever it is called. WE could go further to say Re
+DH: I'm saying that if you design these APIs to hook up the references. Let's talk about the Realm api and you can tell me why its not going to work. One realm proposal is that it initialized the global object with "all the usual things" for this new embedded realm, but not things that provide authority. One of the things that does is hook up a global.global object and you have a power attenuated thing now, it just by default does what you want. The only thing you have to remove is still access to "System" or whatever it is called.
 
 MM: that's very interesting... I think you've changed my mind;
 
@@ -786,7 +788,7 @@ DH: That's awesome. I think I agree with Domenic's perpsective. It's nice to hav
 
 JHD: Does that then mean we have consensus and we'll bikeshed on the choice of names and once we find a webcompat on we'll use it?
 
-MM: I don't want to say consensus on the approach yet. Dave having convinced me is less than a minute old. It took me weeks to think about Yehuda's argument. I want to live with this for awhile. 
+MM: I don't want to say consensus on the approach yet. Dave having convinced me is less than a minute old. It took me weeks to think about Yehuda's argument. I want to live with this for awhile.
 
 JHD: In the meantime, are you comfortable with a reflector issue.
 
@@ -808,7 +810,7 @@ MM: Mark laughing :)
 
 DE: (Reviewing slides linked above)
 
-AWB: One of the things here you're implicitly saying as you go down this path, when we designed classes we decided in tc39 about whether class bodys were statement list like or object literal like. 
+AWB: One of the things here you're implicitly saying as you go down this path, when we designed classes we decided in tc39 about whether class bodys were statement list like or object literal like.
 
 J: We went statement list like, but we do allow comma delimited to declare multiples
 
@@ -822,17 +824,17 @@ DE: This syntax wouldn't preclude any of those issues
 
 AWB: It makes the syntax less....
 
-DE: YOU have a bare thing but it isn't followed by a brace? What's the issue?
+DE: You have a bare thing but it isn't followed by a brace? What's the issue?
 
 AWB: You have bare things that look like assignment statements;
 
 JM: You're suggesting the alternative is a keyword prefix interspersed?
 
-AWB: The alternative would be to follow the pattern we've used for essentially all other <missed it> except concise methods.
+AWB: The alternative would be to follow the pattern we've used for essentially all other declarative forms except concise methods.
 
 DE: This is really about the first point in the three (no public/private keyword)
 
-AWB: They all tie together. 
+AWB: They all tie together.
 
 DE: How?
 
@@ -868,7 +870,7 @@ DE: IS there an issue on the public repo about htat Jeff? I have feedback on the
 
 JM: I don't think there has been much discussion
 
-DE: In the private state proposal there is a whole issue of having the private keyword and the sigil ... some people are kindof supportive but most people want the whole porposal dropped. Adding the private keyword would maybe help, but ther hasn't been a lot of constructive feedback. 
+DE: In the private state proposal there is a whole issue of having the private keyword and the sigil ... some people are kindof supportive but most people want the whole porposal dropped. Adding the private keyword would maybe help, but ther hasn't been a lot of constructive feedback.
 
 AWB: I have seen people talking about this, the readability of it. Just readability
 
@@ -890,15 +892,15 @@ BF: it's not about privacy
 
 DE: the own is not about private properties
 
-AWB: own means it goes on the instance without the sigil it's a property, with ti, it's a field.
+AWB: `own` means it goes on the instance without the sigil it's a property, with it, it's a field.
 
-MM: I did misspeak before. I was confusing the concept of being per-instance vs the concept of being an own property. Private state is literally not an own property but it is a per-instance property. I think the way people understand own is the major intuition is that it is directly on that instance as opposed to being something that is inherited. I still think own is plausible and it actually fits will with the story for why we introduced static. The keyword is distinguishing which object are you declaring something about. It also fits with the idea that static could be equally orthogonal. If you said <missed it>. The idea that the sigil is orthogonal to the keyword...
+MM: I did misspeak before. I was confusing the concept of being per-instance vs the concept of being an own property. Private state is literally not an own property but it is a per-instance property. I think the way people understand own is the major intuition is that it is directly on that instance as opposed to being something that is inherited. I still think own is plausible and it actually fits will with the story for why we introduced static. The keyword is distinguishing which object are you declaring something about. It also fits with the idea that static could be equally orthogonal. The idea that the sigil is orthogonal to the keyword, where the sigil indicates public vs private and the keyword indicates the place.
 
-AWB: Things without it meaning normal concise methods are on the prototype
+AWB: Things without it meaning normal concise methods are on the prototype.
 
 DE: I have in the next slide, even more meaty issues that we haven't resoled. Maybe we're nowhere near consensus. Maybe I can go through the presentation and get to the even mor edifficult dquestions and we can come back to these afterwards.
 
-AWB: One of the reasons I pushed you on this and making this explicit across the things is that it really comes down to a basic cross-cutting thing. how are we origniing class bodies and other things we 'll have in the future?
+AWB: One of the reasons I pushed you on this and making this explicit across the things is that it really comes down to a basic cross-cutting thing. How are we maing space in class bodies for other things we'll have in the future?
 
 DE: About the crosscutting design, if you want to talk about that, having a function declaration inside a class, i think a nicer thing would be a private method.
 
@@ -906,15 +908,17 @@ AK: let's move forward with the presentation
 
 DE: comma declarations could totally be dropped to deal with these issues.
 
-DE: Fields would be added after super. We talked about maybe you should create the instance with all the fields in them up front already added regardless if they are public or private and then fill them in. IN this model whatever the upser constructor returns, that is what gets added as properties or as private state, it gets added to that thing. The last part of the semantics is that the scope is similar to the scope for a separate method except there is an early error if you include arguments. If you include arguments you get an empty arguments object... the rationale for making it like amethod is because we want stuff like this and super property access to be possible. Methods have all that stuff and this is good model. I was at some point we would want a runtime error <unable to keep up>
+DE: Fields would be added after super. We talked about maybe you should create the instance with all the fields in them up front already added regardless if they are public or private and then fill them in. IN this model whatever the upser constructor returns, that is what gets added as properties or as private state, it gets added to that thing.
 
-AWB: For built-ins or host objects that want built-in like performance, it's still possible for all the really priv fields to be allocated as part of the C struct that...
+DE: The last part of the semantics is that the scope is similar to the scope for a separate method except there is an early error if you include arguments. In a previous version, if you include arguments you get an empty arguments object, as you'd have for a method called with no arguments. The rationale for making it like a method is because we want stuff like `this` and super property access to be possible. Methods have all that stuff and this is good model. I was at some point I was thinking we would want a runtime error, but AK pointed out that an early error would be analogous to the errors for new.target.
 
-[bikeshedding]
+AWB: For built-ins or host objects that want built-in like performance, it's still possible for all the really private fields to be allocated as part of the C struct with fixed offsets.
 
-[set vs. define]
+DE: Yes, that's how it should work for base classes. Only for derived classes is the position is more dynamic, and that was the result of this proposal's attempt to maintain the properties I was talking about. However, if you don't do anything strange like dynamically modify the prototype chain or use the super return trick, maps should be stable and ICs/dynamic compilation should do a good job on field access.
 
-WH: It needs to be define. Set cannot work for const and such.
+(Set vs. Define)
+
+WH: It needs to be Define. Set cannot work for const and such.
 
 JM: There are pros/cons both ways: Users might expect to be able to call a superclass's setter by putting a field declaration in a subclass.
 
@@ -926,7 +930,7 @@ AWB: There were exploits for object literals. We had to change them from set to 
 
 MM: The thing that was already widely deployed, Dan is right, as an exploit it was narrow. There is a different way of looking at it, at the time that all this was an issue. JSONP was already in common use. JSONP loads text that presumably is in a JSON format and does or does not pass it through validation and then evals it. The issue is not when the source of the JSONp is the attacker. The issue is as dan was saying is the asme origin privacy protection. Where the origin that is loading it is the attacker and the external source is the defender. What they want to do is provide data that the.... it can't be JSONP, i'm not able ot reconstruct it, i'm sorry.
 
-DE: JSONP is already a huge sameorigin violation. 
+DE: JSONP is already a huge sameorigin violation.
 
 MM: The issue that Allen is raising, with regard to something can be labeled exploit or security hole, i think that the exploit revealed an immodularity, an anti-modular action at a distance that was surprising. this.foo = 9 is not suprising. a declarative initialization acting as an assignment is surprising. It causes a non-obvious coupling with two separate pieces of code. Being surprised that things are separated is less dangerous than being surprised that they are coupled.
 
@@ -934,7 +938,7 @@ WH: It's the same as the `with` problem. We banished `with`, it has a nasty prop
 
 AK: This particular issue has been discussed I can't count how many times in the last two years. Is there something new?
 
-DE: That is a good point. I want to figure out how we come to aconclusion on it. I think the preference of th echampions would be define? 
+DE: That is a good point. I want to figure out how we come to aconclusion on it. I think the preference of th echampions would be define?
 
 JHD: Unless we ask people to raise hands....
 
@@ -982,7 +986,7 @@ WH: No, we should not have two of these
 
 DE: We could have = for set and := for defined
 
-: the semantics i need are set, i don't want a constructor
+JHD: the semantics I need are set, and I don't want a constructor
 
 AK: The best advice I can give you Dan, choose one, go convince the people that want the other way
 
@@ -1014,13 +1018,13 @@ DH: Take people who have had opposing opinions and try to capture those opinions
 
 DE: I did this.
 
-AK: For me jordan didn't do a great job of articulating it, do you have a fully articulated version of his concerns? Is it just that = seems like assignment?
+AK: For me Jordan didn't do a great job of articulating it, do you have a fully articulated version of his concerns? Is it just that = seems like assignment?
 
 DH: That's worth engaging with. We have multiple uses of = in JS and they don't always make sense.
 
 AK: In a param list in a function it doesn't mean that
 
-MM: WheN I brought up the point of own with = i was proposing that the own be mandatory with the consequence tha tthe confusing expectations go away.
+MM: When I brought up the point of own with = I was proposing that the own be mandatory with the consequence tha tthe confusing expectations go away.
 
 JHD: That falls into the other thing I said, if we get a define semantic that isn't confused with assignment, fine. It's not ideal, I want set, if I need it I have to do it in the constructor. That isn't an obstacle to the proposal.
 
@@ -1030,35 +1034,37 @@ JHD: I'm sorry if I phrased it that way, that is subpar but I don't find it unac
 
 DH: The other part that might be helpful.
 
-CM: This kind of ties with what Jeff said. I'm concerned about our awareness of what users think. We have an availabililty bias by talking on github. Do the typical javasript developers even aware of set and define.
+CM: This kind of ties with what Jeff said. I'm concerned about our awareness of what users think. We have an availabililty bias by talking on github. Are the typical JavaScript developers even aware of Set and Define.
 
 TK/MPT: No
 
-CM: I would submit people think it is a set and end of discussion
+CM: I would submit people think it is a Set and end of discussion
 
-JM; Let's acknolwedge that we can go rounds on this speculative and subjective thing for a long time. The compelling thing for define isn't the tradeoffs that go away. There is a real future compatibility problem with const in presence of going with set, that was the convincer for me that define is the way to go. That seems like it should be stronger than these concerns that are hard to substantiate. 
+JM: Let's acknolwedge that we can go rounds on this speculative and subjective thing for a long time. The compelling thing for define isn't the tradeoffs that go away. There is a real future compatibility problem with const in presence of going with set, that was the convincer for me that define is the way to go. That seems like it should be stronger than these concerns that are hard to substantiate.
 
-DH: Jus tto follow up, set vs define is a red herring. Nobody including half the time experts of the spec are thinking at that level. They are working in the conceptual space they are in. No matter what, they have no expectation that it will trigger something up the superclas chain. As I am writing my code am I thinking at all about the fact that a field Iv'e described could be triggering a setter?
+DH: Just to follow up, Set vs Define is a red herring. Nobody including half the time experts of the spec are thinking at that level. They are working in the conceptual space they are in. No matter what, they have no expectation that it will trigger something up the superclas chain. As I am writing my code am I thinking at all about the fact that a field Iv'e described could be triggering a setter?
 
 AWB: We've seen this over and over again in writing spec text, people don't think about it.
 
 WH: This is the `with` problem once again. Users may not know the difference between set and define but don't expect their variables to be stolen by outer scopes.
 
-AK: If your'e tyring to get set behavior you'll have to go learn about it
+AK: If you're tyring to get Set behavior you'll have to go learn about it
 
-MS: A lot of the confusion goes away if there is an error
+MS: A lot of the confusion goes away if there is an error.
+
+DE: We actually had those semantics in a previous version of this proposal, where it was an error to add a field if it was there in the object. We ended up removing it as it seemed redundant, and creating an implementation burden (you need a different set of ICs, for one) but we could revisit adding it.
 
 JHD: All of the existing complaint code with the spec will have this.foo = bar in the constructor. If I try to use public fields, if I am subclassing a library using a setter on the protoype chain, that will be confusing. Maybe i'll just move stuff into my constructor, but if I do this.foo = bar brings about the problem again. The metnal model is that I think users will hold is that this is something I am taking out of the constructor and putting in the class body.
 
 WH: That argument means you can never improve the safety of the language.
 
-MM: I want to probe that intuition again
+MM: I want to probe that intuition again.
 
-JM: Refactoring expectation hazards do seem like a pretty compelling argument aginst define. However, do you really think that concern would be mitiagted by a := or a keyword? 
+JM: Refactoring expectation hazards do seem like a pretty compelling argument aginst define. However, do you really think that concern would be mitiagted by a := or a keyword?
 
 JHD: Yes, that would mean I need to learn new information and this information can describe set and define? Looking at other code that is already doing it won't show me about those differences.
 
-AWB: If you've said this.x = 5 in a constructor where you've inherited that class with a setter that isn't even creating an own field. 
+AWB: If you've said this.x = 5 in a constructor where you've inherited that class with a setter that isn't even creating an own field.
 
 JHD: it could be.
 
@@ -1066,7 +1072,7 @@ AWB: the constructor is probably setting...
 
 DE: Can we move to the next topic?
 
-DH: Can we try to actually... along the lines of what Maggie is saying, take some examples and glean from them what you think the intended meaning is. I fear we too easily get into abstract intuitions. 
+DH: Can we try to actually... along the lines of what Maggie is saying, take some examples and glean from them what you think the intended meaning is. I fear we too easily get into abstract intuitions.
 
 DE: Not clear to me
 
@@ -1136,6 +1142,8 @@ WH: No, we should not swap them. Hard private should be the default. I don't wan
 
 BF: Node wants hard private.
 
+(Class initialization evaluation order)
+
 DE: Next question, when should static initializers run--top-to-bottom, left-to-right, or afterwards as discussed in Munich?
 
 DH: We need to deal with how this will affect decorators.
@@ -1156,7 +1164,7 @@ DH: I'm just wondering if people are saying it's on the table to say that you ca
 
 DE: If you can do this, you'd be observing an unfinished version of the class. Maybe for the restricted case of just the static things, since they are properties on a single object. Maybe that's okay? If we made them visible for all the computed property names, then that would allow the computed property names to observe a very unfinished class.
 
-JM: We have talked about this in the past and agreed that the partial initialization is a little weird, but ok for static fields 
+JM: We have talked about this in the past and agreed that the partial initialization is a little weird, but ok for static fields
 
 AK: Is there anything else happening other than adding properties to the constructor?
 
@@ -1188,7 +1196,7 @@ AWB: I raised... the intuition of users looking at a class definition that expre
 
 BT: That doesn't exist.
 
-DH: I'm not sure how useful this conversation is going to be. We can start. We're about to do the same thing we did last time. In practice a lot of these expression are totaly side-effect free, like, look up this symbol. The order in which side effects appear willbe totally unobservable because there are none. If we go for the simpler evaluation, of things that in practice aren't going to have side effects (like names). The class is not in an appropriate sate to do common things you're trying to do. Many more programs will break as a result. I can't use a freeze decorator, for example, bceause I don't have access at the same time. The  multi-stage evaluation order, being the thing that allows you to do the most number of things, decorators, as well as being able to refer to the class in initializers, will let things people expect to work work. Yes you can do convoluted side effects in those expressions but I claim in practice that is going to be less common than I tried to write static epic = new Date, and something happens because it didn't get the decoration or it was in the TDZ. I was happy with the Munich plan, this allows the class to be in the right state at the right time. 
+DH: I'm not sure how useful this conversation is going to be. We can start. We're about to do the same thing we did last time. In practice a lot of these expression are totaly side-effect free, like, look up this symbol. The order in which side effects appear willbe totally unobservable because there are none. If we go for the simpler evaluation, of things that in practice aren't going to have side effects (like names). The class is not in an appropriate sate to do common things you're trying to do. Many more programs will break as a result. I can't use a freeze decorator, for example, bceause I don't have access at the same time. The  multi-stage evaluation order, being the thing that allows you to do the most number of things, decorators, as well as being able to refer to the class in initializers, will let things people expect to work work. Yes you can do convoluted side effects in those expressions but I claim in practice that is going to be less common than I tried to write static epic = new Date, and something happens because it didn't get the decoration or it was in the TDZ. I was happy with the Munich plan, this allows the class to be in the right state at the right time.
 
 AWB: As long as like thing happen in intuitive order, for example, the decorators in fact fire in order, or the own field initializers or if you have comma... as long as those things locally happen in order I think we're okay
 
@@ -1206,15 +1214,15 @@ KG: I'm not going to hold things up because I think left to right is better.
 
 DE: You're the expert in the world right now
 
-KG: Implementing it with several phases is obviously harder. I don' tthink it will be impos
+KG: Implementing it with several phases is obviously harder. I don't think it will be impossible.
 
----disconnected for approx 2 minutes---
-
-DE: So, great, we are sticking with the munich plan but I am glad to have talked thsi through, for a number of months this has been outstanding.
+DE: So, great, we are sticking with the Munich plan but I am glad to have talked this through, for a number of months this has been outstanding.
 
 JHD can you restate the plan of record?
 
-DE: As we discussed during the break, one approach would be to use a keyword to distinguish the location of where the defined thing goes: none → prototype, `own` → instance, `static` → class object. To avoid mistakes caused by forgetting `own`, for variable definitions we'd allow `own x = 5` but not `x = 5`.
+DE: The POR is to evaluate the static members afterwards
+
+DE: As an alaternative: As we discussed during the break, one approach would be to use a keyword to distinguish the location of where the defined thing goes: none → prototype, `own` → instance, `static` → class object. To avoid mistakes caused by forgetting `own`, for variable definitions we'd allow `own x = 5` but not `x = 5`.
 
 MM: Allen and I are planning to actually write up this proposal
 
@@ -1229,8 +1237,6 @@ DE: Will it be googable?
 MPT: I think that 30% of developers know what own means.
 
 MM: That is way higher than I would've expected, that's great!
-
-(folks talking over each other)
 
 MF: Did I miss it? Did we ever establish on the evaluation order is actually web compatible?
 
@@ -1290,7 +1296,7 @@ BT: Wait, there are politics around normative references?
 
 AWB: Oh yeah
 
-BT: Should I be extracting... we normatively reference unicode. should I extract tit for tat? 
+BT: Should I be extracting... we normatively reference unicode. should I extract tit for that?
 
 MF: At least some new emojis!
 

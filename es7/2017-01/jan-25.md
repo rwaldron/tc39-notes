@@ -31,7 +31,7 @@ IS: Defacto, it will be withdrawn. The usage of the word "stabilize" is very fun
 
 BT: On February 7th, the PL22 working group is voting on what to do on the 16262 document. Until now, they have been voting for reaffirmation; instead, we want them to vote for withdrawal, and in place, we are fast tracking the ECMAScript Suite document
 
-IS: [Some people, like the SC22 Chair, Rex Jaeschke] are in the loop already
+IS: (Some people, like the SC22 Chair, Rex Jaeschke) are in the loop already
 
 BT: I think there's a different group of people in this other group; I'll loop you in in an email
 
@@ -41,7 +41,7 @@ IS: In the ECMA GA, Waldemar was there, so he can fill in any details and correc
 
 ## 6.ii. Who should be the chair?
 
-IS: We discussed the TC39 leadership--we have to put into place a leadership body to ensure that it is functioning long-term; in the short-term, Allen has been very helpful, but this is a short-term solution and we need to find a new leadership structure. The best possibility is to have the chairmanship position held by an ordinary ECMA member, but ECMA bylaws also now permit other categories of ECMA members to be the chairman. We have had the strange situation in ECMA TC39 where we had a chairman who was financed by three member companies; this has finished. We also had the strange situation where the chairman did not understand much of what was going on on the technical part (this had entirely historic reasons). The chairman cannot be an impartial adjudicator of disputes if they are not following discussions, but anyway, we have a cooperative spirit on TC39. Strangely enough we did not have in TC39 a Vice Chair, which is in most Ecma TCs the case. A Vice Chair really can help in carrying out the Chairs function. IE.g. f there is a vice-chairman, and the Chair has a company proposal which he has to present then the two chairs can switch off, as one of them is acting as chairman and the other is presenting, so member companies in a chair position can still present their own ideas. So, we can have a Vice Chair, but in addition  we may also put a management layer below the chairman. TC39 has the freedom to organize its management structure. 
+IS: We discussed the TC39 leadership--we have to put into place a leadership body to ensure that it is functioning long-term; in the short-term, Allen has been very helpful, but this is a short-term solution and we need to find a new leadership structure. The best possibility is to have the chairmanship position held by an ordinary ECMA member, but ECMA bylaws also now permit other categories of ECMA members to be the chairman. We have had the strange situation in ECMA TC39 where we had a chairman who was financed by three member companies; this has finished. We also had the strange situation where the chairman did not understand much of what was going on on the technical part (this had entirely historic reasons). The chairman cannot be an impartial adjudicator of disputes if they are not following discussions, but anyway, we have a cooperative spirit on TC39. Strangely enough we did not have in TC39 a Vice Chair, which is in most Ecma TCs the case. A Vice Chair really can help in carrying out the Chairs function. IE.g. f there is a vice-chairman, and the Chair has a company proposal which he has to present then the two chairs can switch off, as one of them is acting as chairman and the other is presenting, so member companies in a chair position can still present their own ideas. So, we can have a Vice Chair, but in addition  we may also put a management layer below the chairman. TC39 has the freedom to organize its management structure.
 
 AWB: Would it be possible to have two vice chairs?
 
@@ -61,7 +61,7 @@ DE: I've been asking around for many months.
 
 AWB: I can work with you guys, but it is you guys have to collectively step up and figure out what you're doing to do. A group of 30 isn't going to do it. A group of 3 or 4 try to pull something together and bring it as a proposal to the next meeting or the meeting
 
-AK: Leo was going to ask the JS Foundation 
+AK: Leo was going to ask the JS Foundation
 
 AWB: I'm not asking for volunteers for these roles, but people to essentially be the recruiting committee. Okay, we want have a chair and tow chairs and why. Somebody to pull it together.
 
@@ -72,7 +72,7 @@ AWB: I wouldn't want to exclude anyone, so.
 ??: I could look into the JSFoundation
 (MM: This was attributed to me, but I don't remember saying it. Hence the "??". If someone remembers who did, please edit it in.)
 
-AWB: It would be helpful if someone 
+AWB: It would be helpful if someone
 
 AK: If there is a lack of pushing for it I can help. We've had trouble finding the right people for it.
 
@@ -120,13 +120,13 @@ IS: A little, I have seen two versions from Allen. One was more complicated than
 
 BT: That was the question that was coming next which is usually parts of the Code of Conduct speak to how we effectively enforce the sorts of things that the codes of conducnt say we have to do> it's unclear to me how exactly we're to enforce the document, it sounds like one suggestion is sending your complaints to IS and they'll figure itout.
 
-IS: The discussion style can come across as aggressive to newcomers. If we just tell people how TC39 works, in my opinion, yes, the way how it works and the style is acceptable. Sometimes we have aggressive and difficult discussion if we have members for certain cultures, you know then they would really need some kind of help. They are more sensitive 
+IS: The discussion style can come across as aggressive to newcomers. If we just tell people how TC39 works, in my opinion, yes, the way how it works and the style is acceptable. Sometimes we have aggressive and difficult discussion if we have members for certain cultures, you know then they would really need some kind of help. They are more sensitive
 
 WH: The policy that will be proposed includes enforcement mechanisms with the ability to eject members. How does that jive with ecma rules? Do we have such power?
 
 IS: This has happened once, maybe I don't know 15 years ago, before my time. This happened in TC31. The former Ecma SG just threw him out from the meeting. No we don't have any provisions for this type of thing. We try to talk to people but I have to tell you that also in my practice, at least in ECMA, this did not happen so far. We don't have anything on this in the bylaws or ECMA rules which is formally defined. We can expel under certain circumstances some member companies, if they do something terrible, I don't know. But nothing for individuals in a meeting.
 
-BT: If we adopt a code of conduct... it sounds like you're saying we can't just decide among ourselves that we can eject a dues paying member. If you got an email from someone on the committee saying hey this person has violated the code of conduct, in practice what will you do? 
+BT: If we adopt a code of conduct... it sounds like you're saying we can't just decide among ourselves that we can eject a dues paying member. If you got an email from someone on the committee saying hey this person has violated the code of conduct, in practice what will you do?
 
 IS: This would be a very sensitive situation, which I would try to avoid. I would just call the guy and I will just speak to him to change his behavior
 
@@ -137,7 +137,7 @@ IS: Then well at least for a specific meeting I can send him out. There are no b
 AWB: Presumably the next step would be to talk to the member org and say you're sending here a member that is violating the code of conduct can you deal with this
 
 WH: That works for large member organizations, but we also have some small organizations that are members.
-    
+ 
 TK: Typically, with a Code of Conduct, the committee sets up a group of people, elected by the committee, to investigate complaints and recommend actions.
 
 IS: That's what I'd recommend--better if we start with someone in the meeting. Please go ahead if you think that's a better solution.
@@ -262,7 +262,7 @@ WH: That's correct.
 
 JSL: Litigating any particular situation that happened at a past meeting is not going to get us anywhere. Let's focus on what we'll do moving forward. The role of the chair is to enforce the code of conduct. Let's make sure that's the way things are run. But we have to focus on what is the policy moving forward. We can't focus on previous instances or we'll get nowhere.
 
-JXF: Would it make sense to have a policy vs in meeting vs online conduct? 
+JXF: Would it make sense to have a policy vs in meeting vs online conduct?
 
 JSL: In my experience there isn't enough of a difference.
 
@@ -272,13 +272,13 @@ TK: I would agree
 
 MS: So everyone is charged with looking at and reviewing this document for march.
 
-AWB: Yes, for consideration in March. Don't wait until March. 
+AWB: Yes, for consideration in March. Don't wait until March.
 
 KG: Before we move on, we were talking about the possibility of having no standing committee. This proposal states we'll have standing committee. Should we discuss that now? I'm not committed to having that discussion.
 
 MF: I think we should also outline the specific goals we're trying to achieve with this so we can evaluate if we are accomplishing those goals.
 
-AWB: I would hope the goals would be stated in the introduction. 
+AWB: I would hope the goals would be stated in the introduction.
 
 TK: The document has six headings which describe the basic thrust. It came from the JSFoundation, and that is based on the Django CoC and other documents. It comes from pretty diverse perspectives, and so I think it's a good starting point.
 
@@ -363,7 +363,7 @@ BT: There are new tests for SharedArrayBuffer, requiring extensive API surface t
 
 [_Unambiguous Grammar Javascript_ proposal](https://github.com/bmeck/UnambiguousJavaScriptGrammar)
 
-BF: So, at the last meeting, Dave was talking about use module, and this probably that node has with detecting if a given source text is in the "script" grammar or the "module" grammar. There are certain situations where it can be ambiguous. These are somewhat rare but they do exist in the wild. We are seeking, either to disambiguate source text, or use a new file extension for loading ES modules currently in node. The vote to accept file extension as a possibility was last march or april. The vote to seek a grammar change was last august. The grammar change is a little simple, but it's not syntactic. [explanation of readme of repo]. Node would like to have a ECMA-262 blessed way of detecting the difference. The web is not supporting interop by using an attribute on a script tag. Node must support interop. I'm asking if it's feasible to ask for a parsing change.
+BF: So, at the last meeting, Dave was talking about use module, and this probably that node has with detecting if a given source text is in the "script" grammar or the "module" grammar. There are certain situations where it can be ambiguous. These are somewhat rare but they do exist in the wild. We are seeking, either to disambiguate source text, or use a new file extension for loading ES modules currently in node. The vote to accept file extension as a possibility was last march or april. The vote to seek a grammar change was last august. The grammar change is a little simple, but it's not syntactic. (explanation of readme of repo). Node would like to have a ECMA-262 blessed way of detecting the difference. The web is not supporting interop by using an attribute on a script tag. Node must support interop. I'm asking if it's feasible to ask for a parsing change.
 
 AWB: One primary concern about this is that it precludes the eventual replacement or migration to a module-only world.
 
@@ -493,7 +493,7 @@ DH: I really think you've defined the problem, uh, in a way that's unnecessarily
 
 JSL: My intuition is that there is a path forward that is reasonable, we just haven't identified it yet. We don't know.
 
-AWB: Just to be clear, the idea that there is a file extension being problematic, that's not a TC39 consensus either. 
+AWB: Just to be clear, the idea that there is a file extension being problematic, that's not a TC39 consensus either.
 
 DH: It's just not our call
 
@@ -535,15 +535,13 @@ DE: Seems like we've already heard that the answer is "no" from this discussion.
 
 JSL: If we can't come to an answer for in-band, we will need to put something out-of-band.
 
-MPT: Multiple extensions 
+MPT: Multiple extensions
 
 #### Conclusion/Resolution
 
 - Some members of the committee are strongly opposed to this particular syntax change
 - There is also some interest in various strategies for disambiguating
 - We do not have consensus to move forward rapidly on this proposal
-
-
 
 ## 15.iv Progress report and request for comments on 64-bit int support
 
@@ -567,7 +565,7 @@ WH: What do you mean by big decimal? BigInts are base-invariant.
 
 BT: I mean arbitrary precision large numbers with arbitrary numbers to decimals. I claim nothing about a specific spec I'm talking about a sepc that can represent something other than numbers.
 
-BE: I want to limit the scope to the discussion of BigInt going forward. There has been a fair argument that if you could have BigInts you can optimized well enough without Int64 and Unit64. 
+BE: I want to limit the scope to the discussion of BigInt going forward. There has been a fair argument that if you could have BigInts you can optimized well enough without Int64 and Unit64.
 
 AK: I'm hearing something that is slightly pejorative, you have to do the same optimization for Int64 as for BigInt.
 
@@ -607,12 +605,12 @@ DE: Yes, we've gotten positive feedback from other members of the team about no 
 
 AK: Yes but at least BigInts of the same size would be comparable, right?
 
-BE: No implicit conversion. 
+BE: No implicit conversion.
 
 AK: The hope that would be this island of BigInts that are compatible with each other at least
 
 DE: There are two parts to no implicit conversion; + would throw but === would return false
-    
+ 
 BE: There are fine points here, whether or we have explicit or implicit conversions, the BigInt vs Int64 step is still a question.
 
 AK: Bigints would allow you have some semblance of understandability between these different types
@@ -684,7 +682,7 @@ AK: it's not an implementation concern, it's about users
 
 BE: I heard about optimization early on on twitter, that's good to hear today. that is' really about language
 
-AK: it's big, i can't speak to the twitter conversations, the bigger issue is one of feeling that this fits better  with then language, not doing scope creep helps somewhat. 
+AK: it's big, i can't speak to the twitter conversations, the bigger issue is one of feeling that this fits better  with then language, not doing scope creep helps somewhat.
 
 BE: Everyone wants the ideal but who is gonna do the work? That is the concrete consideration that will guide our decision. Plato vs Aristotle, in the real world obviously bigints.
 
@@ -708,7 +706,7 @@ ALL: 64int
 
 MM: The use case here is obscure. It's valid, it's very valid. No matter how you slice the 64bit integer, it's an obscure use case for most of the community. Nobody is making a rallying cry for it.
 
-DE: Neither 
+DE: Neither
 
 JSL: Node would use whatever works. Our natural preference would be whatever requires the least overhead.
 
@@ -716,7 +714,7 @@ BE: I think it's quite true, they don't know what trouble they are getting into 
 
 MM: I people are clamoring for this, just ship an MVP
 
-DE: One thing you want is an MVP that evolves into what you want; I'm not sure 64-bit ints have that evolution path. I think if we can give until the next meeting ot find a new champion, 
+DE: One thing you want is an MVP that evolves into what you want; I'm not sure 64-bit ints have that evolution path. I think if we can give until the next meeting ot find a new champion,
 
 BE: I do want to work on it but I don't have time for it.
 
@@ -726,7 +724,7 @@ WH: That's just bigints.
 
 BE: The spec has to describe how it works
 
-WH: A lot of lisps have that, it works fine. 
+WH: A lot of lisps have that, it works fine.
 
 BE: You cannot parameterize division by the exponent, it doesn't work
 
@@ -782,7 +780,7 @@ BE: Just to be clear, do you mean expectations for users on int32...
 
 AK: I don't know what the details of the staging plan...
 
-BE: Does that bring up signed vs unsigned? 
+BE: Does that bring up signed vs unsigned?
 
 DE: bigints are always signed
 
@@ -794,9 +792,9 @@ BE: When we got IBM to back off on decimal as a hardcode extension. WE used the 
 
 BE: Value types are still on our agenda and we've done some work that everyone agrees with that is constructive. There are all sorts of possible uses, like for the CSSOM; also custom literal suffixes, etc.
 
-BE: Let's talk about this constant rumor that WASM will replace JS. It may happen but not for a long time. We'll have pressure for new value types. Everyone will be happy in number-land until they aren't, and then maybe they'll use bigints when they are available? To me, it almost doesn't matter. We've done enough work on Value types, pressure from the edges is big enough. I'd like use to get there so we don't have to keep hard coding. When I extended the spec, I future-proofed a meta protocol for value types. Realm specific auto wrapping of primitives in objects, that's important. I'm not going to summarize all the learnings we've had. Its useful and could be fruitful. Having been around this current wheel so long it's not worth worrying about. If we need it we can do it.
+BE: Let's talk about this constant rumor that WASM will replace JS. It may happen but not for a long time. We'll have pressure for new value types. Everyone will be happy in Number-land until they aren't, and then maybe they'll use BigInts when they are available? To me, it almost doesn't matter. We've done enough work on Value types, pressure from the edges is big enough. I'd like use to get there so we don't have to keep hard coding. When I extended the spec, I future-proofed a meta protocol for value types. Realm specific auto wrapping of primitives in objects, that's important. I'm not going to summarize all the learnings we've had. Its useful and could be fruitful. Having been around this current wheel so long it's not worth worrying about. If we need it we can do it.
 
-MM: I've been doing this now for 8 years, which I know is nothing compared to you. Leaving the door open for something to be done cleanly at such a time in the future that someone has the energy to do it. To me, that is a big deal. The difference between decimal without value types in the old days vs your proposal now: You've done the work to understand how value types could grow in such a way that what you are proposing now will be retroactively rationalized into the value type proposal. We don't know if it'll turn out that way but you've paved the way. The idea of holding the door open for something often works. If you're going to stay on the standards committee you have to play the long game. 
+MM: I've been doing this now for 8 years, which I know is nothing compared to you. Leaving the door open for something to be done cleanly at such a time in the future that someone has the energy to do it. To me, that is a big deal. The difference between decimal without value types in the old days vs your proposal now: You've done the work to understand how value types could grow in such a way that what you are proposing now will be retroactively rationalized into the value type proposal. We don't know if it'll turn out that way but you've paved the way. The idea of holding the door open for something often works. If you're going to stay on the standards committee you have to play the long game.
 
 BE: Good point. THere is some pressure with game developers with mutable vectors and matrices for operators. That's separate proposal. The committee could do operators, literals and value types. 
 
@@ -986,7 +984,7 @@ WH: I'm willing to be convinced. But signbit is not what IEEE 754 specs. Instead
 
 JHD: It's in the proposal.
 
-WH: [looks again at proposal] It isn't. The proposal isn't proposing what IEEE 754 specs.
+WH: (looks again at proposal) It isn't. The proposal isn't proposing what IEEE 754 specs.
 
 JHD: The timebox is about to run out. If nobody opposes it being stage one, let's do that.
 
@@ -1049,7 +1047,7 @@ JHD: I am not sure how that works. I'm not seeking stage three this week. I just
 
 ??: Whats the motivation for not calling it?
 
-JHD: Just so the .finally call can have less observable specs. I've been told that the V8 team <lost it>
+JHD: Just so the .finally call can have less observable specs. I've been told that the V8 team looked into it and decided it's OK to use these semantics.
 
 DE: If we look at the value of the .then method and it's the original builtin value, you can avoid allocating the closures.
 
@@ -1099,7 +1097,7 @@ MM: It's of value because the stack leaks non-local information that can be used
 
 JHD: If it is error.prototype.stack then the stack information is directly attached to the error object. That can be sent across realms. If you do not have the stack accessor and you have something like System.get.stack
 
-MM: No, you understood it except the use of Realm. If you are in different realms those could have different "Error.prototype.stack"s. For residents of one realm running with different global scopes, because of the different get stack string functions they see, they could have different views of how they map to source positions. If it is on error.prototype.stack, you cannot deny access to it diferentially across  realms. You also can virtualize differently for residents of the same realm. It's also a security concern, an adversary can look at how the stack was populated. <lost it>
+MM: No, you understood it except the use of Realm. If you are in different realms those could have different "Error.prototype.stack"s. For residents of one realm running with different global scopes, because of the different get stack string functions they see, they could have different views of how they map to source positions. If it is on error.prototype.stack, you cannot deny access to it diferentially across  realms. You also can virtualize differently for residents of the same realm. It's also a security concern, an adversary can look at how the stack was populated.
 
 MM: In all four browsers, if you create an error object and you say error.stack you'll get a string that gives you information about the call chain.
 
@@ -1303,7 +1301,7 @@ MM: Causeway, which is a postmortem debugger for distributed JavaScript. It does
 
 AK: I understand the use of working with stack traces and strings and even objects and filtering them. I'm looking for a use case online.
 
-JHD: Okay, so, the API. [Describes the spec as linked above]
+JHD: Okay, so, the API. (Describes the spec as linked above)
 
 JSL: V8 has Error.captureStackTrace.
 
@@ -1325,7 +1323,7 @@ JHD: We might want to add an API to configure that in a future proposal.
 
 BB: What would the performance impact be of having this available? {unclear}
 
-AWB: How is [[ErrorData]] represented?
+AWB: How is \[\[ErrorData]] represented?
 
 JHD: This needs to be added in a future revision
 
@@ -1391,6 +1389,7 @@ Schema https://github.com/google/caja/blob/master/src/com/google/caja/ses/debug.
 
 (MM: Since it might move, I provide a copy here with the one correction we talked about)
 
+```
 stacktrace ::= {frames: [frame*]};
 frame ::= {
     name: functionName,
@@ -1400,7 +1399,7 @@ frame ::= {
 functionName ::= STRING;
 startLine, startCol, endLine, endCol ::= INTEGER;
 source ::= STRING | frame;
-
+```
 
 MM: It's all expressible in JSON
 
@@ -1412,7 +1411,7 @@ JHD: Whatever you do now
 
 MM: For anonymous functions, what the shim does is use a question mark. I'm not suggesting we do that, I think we should decide.
 
-MS: <annonymous>? 
+MS: &lt;anonymous>? 
 
 MM: That would be fine with me
 
@@ -1420,11 +1419,11 @@ MS: What do you do when someone just wrote in the code using document.write?
 
 MM: Once again, open to suggestions. Browsers do very bizarre things that differ from each other here.
 
-JK: This is a bit of a jump. Right now this doesn't affect the stack in JS. Chrome does have an async mode of viewing stacks, to see stacks that happened async.... that async operation needs to be represented somehow? Is there room for that?
+JK: This is a bit of a jump. Right now this doesn't affect the stack in JS. Chrome does have an async mode of viewing stacks, to see stacks that happened across Promises, async/await and Web API callbacks. That async operation needs to be represented somehow. Is there room for that?
 
 JL: That isn't visible from the code
 
-MM: This format came from causeway, and causeway is all about stitching together each of those separate turns and async operations into an overall causality graph. ( https://github.com/cocoonfx/causeway http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html ) So, that's one of the reasons there is an outer object here. The identifying of what turn you're in, and then for an async operation, identifying what turn it is causing, with separately logged information, not in this schema, those are all follow-on things that i'm hoping to propose. When I took a look at overall, all the information that causeway logs that allows us to stitch this back together into a causality trace, this was definitely the place to start. As a place to start this is also the closest to all things browsers agree on. That's exactly why I've reserved some space there. FF by the way, already does deep stacks, though in a different way.
+MM: This format came from Causeway, and Causeway is all about stitching together each of those separate turns and async operations into an overall causality graph. ( https://github.com/cocoonfx/causeway http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html ) So, that's one of the reasons there is an outer object here. The identifying of what turn you're in, and then for an async operation, identifying what turn it is causing, with separately logged information, not in this schema, those are all follow-on things that i'm hoping to propose. When I took a look at overall, all the information that causeway logs that allows us to stitch this back together into a causality trace, this was definitely the place to start. As a place to start this is also the closest to all things browsers agree on. That's exactly why I've reserved some space there. FF by the way, already does deep stacks, though in a different way.
 
 JHD: Any information can be exposed in debugging tools.
 
@@ -1494,7 +1493,7 @@ MM: Good point. We need a way of rendering for virtualization. This suggests inc
   - should getStack return frozen things?
   - should implementations be prohibited to extend the `frames` array/objects?
   - should we include in this proposal an API that takes a function object and allows for eliding stack frames from within this function?
-  - what does the Error constructor text for populating [[ErrorData]] look like?
+  - what does the Error constructor text for populating \[\[ErrorData]] look like?
 
 ## Discuss non-technical long-term vision for ECMAScript
 
