@@ -198,9 +198,9 @@ BT: Yes, even non-contributors would be bound.
 
 AWB: We can kick them out any time we want, they have no rights.
 
-BT: WE don't want to start eject people for no reason
+BT: We don't want to start eject people for no reason
 
-KG: Just because we can doesn't mean it's a good idea to do it. Having the COC in place is valuable. It's better to do it via a set of rules.
+KG: Just because we can doesn't mean it's a good idea to do it. Having the CoC in place is valuable. It's better to do it via a set of rules.
 
 JHD: constraining ourselves to rules grants folks with no rights some rights,
 
@@ -796,7 +796,7 @@ BE: Let's talk about this constant rumor that WASM will replace JS. It may happe
 
 MM: I've been doing this now for 8 years, which I know is nothing compared to you. Leaving the door open for something to be done cleanly at such a time in the future that someone has the energy to do it. To me, that is a big deal. The difference between decimal without value types in the old days vs your proposal now: You've done the work to understand how value types could grow in such a way that what you are proposing now will be retroactively rationalized into the value type proposal. We don't know if it'll turn out that way but you've paved the way. The idea of holding the door open for something often works. If you're going to stay on the standards committee you have to play the long game.
 
-BE: Good point. THere is some pressure with game developers with mutable vectors and matrices for operators. That's separate proposal. The committee could do operators, literals and value types. 
+BE: Good point. There is some pressure with game developers with mutable vectors and matrices for operators. That's separate proposal. The committee could do operators, literals and value types. 
 
 DE: Literals could be done totally separately. CSSOM could actually use suffixes to construct objects
 
@@ -934,7 +934,7 @@ MM: Math.sign is understandable in terms of the mathematical numbers that are re
 
 JFB: Yes, but how you got to the zero matters. In some cases it matters to differentiate how you got there.
 
-MM: I understand that it EXISTS, the point i'm trying to elaborate, there are users that care about floating point numbers enough such that the difference between 0 and -0 is significant to them. THat's a very small population. THere is a very large population where Math.sign mapping 0 to 0 is fine.
+MM: I understand that it EXISTS, the point i'm trying to elaborate, there are users that care about floating point numbers enough such that the difference between 0 and -0 is significant to them. That's a very small population. There is a very large population where Math.sign mapping 0 to 0 is fine.
 
 JFB: That's fine.
 
@@ -1035,7 +1035,7 @@ MM: How are they checking whether the change to catch is web compatible?
 
 JHD: It would only be incompatible if someone subclassed promise and overrode then.
 
-MM: No, there are two other ways it could be incompatible. THey could replace promise.protoytype.then or they could add a then property to the promise instance
+MM: No, there are two other ways it could be incompatible. They could replace promise.protoytype.then or they could add a then property to the promise instance
 
 DE: Or you could .call the method
 
