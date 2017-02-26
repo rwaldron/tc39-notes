@@ -1035,7 +1035,7 @@ MM: How are they checking whether the change to catch is web compatible?
 
 JHD: It would only be incompatible if someone subclassed promise and overrode then.
 
-MM: No, there are two other ways it could be incompatible. They could replace promise.protoytype.then or they could add a then property to the promise instance
+MM: No, there are two other ways it could be incompatible. They could replace promise.prototype.then or they could add a then property to the promise instance
 
 DE: Or you could .call the method
 
