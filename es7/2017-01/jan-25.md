@@ -154,7 +154,7 @@ BT: Enforcement would be delegated to a subcommittee
 
 AWB: Should the chairs/vice-chairs be the enforcement subcommittee?
 
-MPT: It's typically a group of people who include minorities, because what looks offensive t one person doesn't look offensive to others. It's completely nessesary, YOu can enforce a code of conduct with a group fo white men, sorry to tell you that but it's true.
+MPT: It's typically a group of people who include minorities, because what looks offensive t one person doesn't look offensive to others. It's completely nessesary, You can enforce a code of conduct with a group fo white men, sorry to tell you that but it's true.
 
 JM: Our experiment within the node community absolutely backs it up
 
