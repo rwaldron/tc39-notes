@@ -796,7 +796,7 @@ BE: Let's talk about this constant rumor that WASM will replace JS. It may happe
 
 MM: I've been doing this now for 8 years, which I know is nothing compared to you. Leaving the door open for something to be done cleanly at such a time in the future that someone has the energy to do it. To me, that is a big deal. The difference between decimal without value types in the old days vs your proposal now: You've done the work to understand how value types could grow in such a way that what you are proposing now will be retroactively rationalized into the value type proposal. We don't know if it'll turn out that way but you've paved the way. The idea of holding the door open for something often works. If you're going to stay on the standards committee you have to play the long game.
 
-BE: Good point. There is some pressure with game developers with mutable vectors and matrices for operators. That's separate proposal. The committee could do operators, literals and value types. 
+BE: Good point. There is some pressure with game developers with mutable vectors and matrices for operators. That's a separate proposal. The committee could do operators, literals and value types. 
 
 DE: Literals could be done totally separately. CSSOM could actually use suffixes to construct objects
 
