@@ -664,7 +664,7 @@ JL: It seems like this privilege doesn't correspond to what users would think.
 
 AWB: It seems strange to say SuperPrivilegedObject.global--who'd want to say that
 
-MF: The global object isn't typically being used to say like, i for iterating over an array. It's a system level thing it is seen as a priroity.
+MF: The global object isn't typically being used to say like, i for iterating over an array. It's a system level thing it is seen as a priority.
 
 JHD: People access the global variable a lot because historically we had no module system.
 
