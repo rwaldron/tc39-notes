@@ -1054,7 +1054,7 @@ MS: A lot of the confusion goes away if there is an error.
 
 DE: We actually had those semantics in a previous version of this proposal, where it was an error to add a field if it was there in the object. We ended up removing it as it seemed redundant, and creating an implementation burden (you need a different set of ICs, for one) but we could revisit adding it.
 
-JHD: All of the existing complaint code with the spec will have this.foo = bar in the constructor. If I try to use public fields, if I am subclassing a library using a setter on the prototype chain, that will be confusing. Maybe i'll just move stuff into my constructor, but if I do this.foo = bar brings about the problem again. The metnal model is that I think users will hold is that this is something I am taking out of the constructor and putting in the class body.
+JHD: All of the existing complaint code with the spec will have this.foo = bar in the constructor. If I try to use public fields, if I am subclassing a library using a setter on the prototype chain, that will be confusing. Maybe i'll just move stuff into my constructor, but if I do this.foo = bar brings about the problem again. The mental model is that I think users will hold is that this is something I am taking out of the constructor and putting in the class body.
 
 WH: That argument means you can never improve the safety of the language.
 
