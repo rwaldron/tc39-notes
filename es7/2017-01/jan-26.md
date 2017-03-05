@@ -856,11 +856,11 @@ AWB: I will always be sad that there isn't a keyword in front of those things bu
 
 DE: I think we could defer commas. If you do put a comma it's... the real motivation is for the decorator proposal to have a more convientint syntax. Yeah, you could do this but I don't see it as being really important.
 
-AWB: YOu've had public feedback on this, right? I believe the public feedback, my sense is there has been feedback o both sides.
+AWB: You've had public feedback on this, right? I believe the public feedback, my sense is there has been feedback o both sides.
 
 DE: Most people said please stop the propsal, we can stand the sigil
 
-AWB: YOu have to have it
+AWB: You have to have it
 
 JM: To be clear, to drop the sigil is specific to private state.
 
