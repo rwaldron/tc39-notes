@@ -94,7 +94,7 @@ JL: So are we going to remove more things from the main proposals list?
 
 DH: What I am hearing is an emerging consensus around proposals into some separate file that...
 
-JHD: We already have withdrawn proposals, for things that are abandonded, rjected, etc. WE can add something for things which are potentialy still acive. It's more likely that list will contain stage 0 or 1 proposals than 2 or 3. If that is the status of the simd spec, for example, okay
+JHD: We already have withdrawn proposals, for things that are abandonded, rejected, etc. We can add something for things which are potentially still active. It's more likely that list will contain stage 0 or 1 proposals than 2 or 3. If that is the status of the simd spec, for example, okay
 
 DH: I'm unclear how backburner SIMD is.
 
