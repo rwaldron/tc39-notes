@@ -476,7 +476,7 @@ MF: How about gl0bal?
 
 MPT: globalThisPascal
 
-JHD: `Global`, `$global`, `__global__`, anyway, I'll open a bug and we can come together and make a list of possibilities.  This will take a while, since each time we try aname, we'll have to find a browser willing to try it, if it breaks, we'll have to roll it back, hope that trust hasn't been broken enough to try again. Both Safari and FF are willing to try again but I don't want to just try again every two months.
+JHD: `Global`, `$global`, `__global__`, anyway, I'll open a bug and we can come together and make a list of possibilities.  This will take a while, since each time we try a name, we'll have to find a browser willing to try it, if it breaks, we'll have to roll it back, hope that trust hasn't been broken enough to try again. Both Safari and FF are willing to try again but I don't want to just try again every two months.
 
 WH: What was the cause of the flickr breakage?
 
