@@ -858,7 +858,7 @@ DE: I think we could defer commas. If you do put a comma it's... the real motiva
 
 AWB: You've had public feedback on this, right? I believe the public feedback, my sense is there has been feedback on both sides.
 
-DE: Most people said please stop the proposal, we can stand the sigil
+DE: Most people said please stop the proposal, we can't stand the sigil
 
 AWB: You have to have it
 
