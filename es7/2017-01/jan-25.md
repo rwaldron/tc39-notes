@@ -198,7 +198,7 @@ BT: Yes, even non-contributors would be bound.
 
 AWB: We can kick them out any time we want, they have no rights.
 
-BT: We don't want to start eject people for no reason
+BT: We don't want to start ejecting people for no reason
 
 KG: Just because we can doesn't mean it's a good idea to do it. Having the CoC in place is valuable. It's better to do it via a set of rules.
 
