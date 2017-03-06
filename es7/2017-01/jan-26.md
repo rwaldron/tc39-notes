@@ -854,7 +854,7 @@ DE: You would be okay if you could do class x=1 and anew line and y=2.
 
 AWB: I will always be sad that there isn't a keyword in front of those things but I would prefer if you're going to go that route that yes, it not include commas.
 
-DE: I think we could defer commas. If you do put a comma it's... the real motivation is for the decorator proposal to have a more convientint syntax. Yeah, you could do this but I don't see it as being really important.
+DE: I think we could defer commas. If you do put a comma it's... the real motivation is for the decorator proposal to have a more convenient syntax. Yeah, you could do this but I don't see it as being really important.
 
 AWB: You've had public feedback on this, right? I believe the public feedback, my sense is there has been feedback on both sides.
 
