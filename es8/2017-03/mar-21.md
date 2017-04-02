@@ -38,7 +38,7 @@ AWB: the patent document is out for review. Members should get it to their lawye
 
 ZB: I'm not prepared for this discussion. I believe Caridy will be giving this. Will come back in a few minutes
 
-6.ii Vote to accept ECMA-262 2017 final draft and forward it to Ecma GA (approval subject to completion of RF opt-out period with no opt-outs)
+## 6.ii Vote to accept ECMA-262 2017 final draft and forward it to Ecma GA (approval subject to completion of RF opt-out period with no opt-outs)
 
 AWB: Voting on the standards is one of the few things that needs a vote.  In a minute or two, we will go around and people who actually represent ECMA members should determine who from each organization will vote. Each member will vote yes/no/abstain (where abstain is the equivalent of "no").  We're voting on the 2017 version of ECMA 262 and ECMA 402, based on the final drafts that the editors prepared, subject to the assumption that no one raises an objection during the RF opt-out period (in which case we would not be approving the standard in June, but that has never happened). After we approve it, this will go through the ECMA executive committee, onto the GA in June with the final vote.
 
@@ -88,7 +88,7 @@ AWB: Someone will count them. We got "yesses" and no "no"s.  It will be referred
 
 All: _clapping_
 
-8. Test262 Status Updates 
+## 8. Test262 Status Updates 
 
 (Leo Balter)
 
