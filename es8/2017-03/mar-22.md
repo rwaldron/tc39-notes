@@ -230,9 +230,9 @@ YK: I think it still hasn't fixed the factoring issue but it has fixed the pedag
 
 MM: It also addresses another point of controversy:  should class properties be initialized as configurable or non-configurable? I thought they should be non-configurable.  But with this orthogonal pattern, it makes more sense for them to start out configurable.  "own" means placement on the instance, and similar items start out configurable.
 
-AWB: in the current class design, when we place properties, when we say "own" we are defining a property.
+AWB: In the current class design, when we place properties, when we say "own" we are defining a property.
 
-MM: yes.  it's private though, it's not a property so configurability is not an issue.
+MM: Yes.  it's private though, it's not a property so configurability is not an issue.
 
 YK: I'm happy to accept this concession, but don't understand how you arrived at it.
 
@@ -249,7 +249,7 @@ YK: But methods are also configurable. ..... I'm happy to accept this concession
 
 MM: It's consistent because...let's take "own" followed by method syntax or "static" followed by method syntax or simply method syntax with no "own". The only difference between the three is the keyword or its absence. The only semantic difference should be the placement.
 
-YK: so the consisteny issue is between properties and methods. If you leave off the keyword, the property or method is configurable, it would be surprising if adding the "own" keyword made hte item non-configurable.
+YK: So the consisteny issue is between properties and methods. If you leave off the keyword, the property or method is configurable, it would be surprising if adding the "own" keyword made hte item non-configurable.
 
 MM: Trying to stay within spirit of orthogonality. Main value is combinatorial space of things that might get proposed. Most points don't have strong use cases. Enough would get proposed that it would create burden. We get most of the combinatorial space without burden because each element can be understood separately. We get two further benefits for the data-property-like syntax. Comma-separated list of member names with optional initializers in one declaration. And there's also thinking ahead to how this interacts with decorators and what Alan and I are proposing: if you decorate a declaration that is declaring several members, the decorator applies to each of them. 
 
@@ -275,7 +275,7 @@ MM: 3 reasons to prohibit something form the cross-product
 
 YK: So what does it mean if something has method-like syntax?
 
-AWB: a method that is a function that is defined as a poperty. Syntactically it's definig a function.
+AWB: A method that is a function that is defined as a poperty. Syntactically it's definig a function.
 
 MM: "method-like" means it's defining a function in that yoou can use "super" inside the definition and it's using method syntax.
 
@@ -287,9 +287,9 @@ AWB: Third dimension where methods occur. Two points, syntactic, what is the syn
 
 YK: What is the syntactic difference between things that are data-like—
 
-AWB: that dimension is a syntactic dimension; whether it's a binding list or a standlone single declaration.
+AWB: That dimension is a syntactic dimension; whether it's a binding list or a standlone single declaration.
 
-MM: and you can't declare an accessor method as part of a binding list.
+MM: And you can't declare an accessor method as part of a binding list.
 
 AWB: There's actually a pull request that Mark hasn't accepted yet, the paragraph on constructors is kind of bogus. Has a whole file of examples taken from some of the existing proposals recast.
 
@@ -329,9 +329,9 @@ YK: What I'm saying is ....
 
 MM: Distinguishing between rude surprises for authors versus rude surprises for readers. Readers do not have any of these non-orthogonalities. 
 
-YK: so if you don't see a prefix, it's means the prototype.
+YK: So if you don't see a prefix, it's means the prototype.
 
-MM: lots of people will ...bah humbug, lost it...
+MM: Lots of people will ...bah humbug, lost it...
 
 WH: How would you put a data property on a prototype in this proposal? I understand that this is a rare case and you don't want to allow it by accident if someone omits the keyword, but if you do fall into that rare case, how would you do it?
     
@@ -339,11 +339,11 @@ MM: You would create those imperatively, like you do now, instead of using decla
 
 AWB: An idea kicked around is possibility of static initializer in a class body, at class definition time. The logic of putting a real data property on the prototype is so rare...that it doesn't deserve having syntax.
 
-DE: at a high level I like the goals about orthogonality. Aside from tehat big developer intuition thing, I'm not sure about adding "own mehtods".  It seems a potential source of confusion and is redundant with property initializers.  They coudl end up being confusing.  The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.  
+DE: At a high level I like the goals about orthogonality. Aside from tehat big developer intuition thing, I'm not sure about adding "own mehtods".  It seems a potential source of confusion and is redundant with property initializers.  They coudl end up being confusing.  The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.  
 
-DE: there's also an example of having an "own private" method.  Maybe this would be in conjunction with lexially scoped method in class bodies.  I'm cocenred if the first private method thing that we add is "own", it woudl catch on and be hard to optimize.  Might we consider excluding that case.
+DE: There's also an example of having an "own private" method.  Maybe this would be in conjunction with lexially scoped method in class bodies.  I'm cocenred if the first private method thing that we add is "own", it woudl catch on and be hard to optimize.  Might we consider excluding that case.
 
-MM: if we decided to prohibit those cases, that woudl still be consistent with this approahc, it woudl just knock more members out of the cross-product.  I woudl consider that to be negotiable.  I also want to say that at eveyr moment ther eis something concrete being proposed.  Thus, the concrete proposal is that methods stay in the cross product but constructors are not included in the cross product.
+MM: If we decided to prohibit those cases, that woudl still be consistent with this approahc, it woudl just knock more members out of the cross-product.  I woudl consider that to be negotiable.  I also want to say that at eveyr moment ther eis something concrete being proposed.  Thus, the concrete proposal is that methods stay in the cross product but constructors are not included in the cross product.
 
 AWB: An important thing about the matrix here is understanding the orthogonality. The more holes knocked into it, the harder it is to get the concept. Private methods...the utility is low but we left it in proposal to fill in matrix as much as possible. Was hoping we'd have something like lexically-scoped ...? 
 
@@ -359,7 +359,7 @@ DT: It's useful like Dan where he's mentioning these things, let's not chase dow
 
 DE: I'm not sure what to do as the champion as the private state proposal if we decide go ahead with this.
 
-DE: there was a subproblem:  it coud lbe confusing if ou have a property declaration goes onto the instance and a method declaration goes on the prototype.  We could solve just that subproblem without introducing this entire matrix by adding the "own" keyword.  We could do that along the way to adding private methods.  The thing that's good about having public/private support explicitly rather than using lexical methods is that you don't have to change call sites (e.g., by passing "this") in order to change visibility.
+DE: There was a subproblem:  it coud lbe confusing if ou have a property declaration goes onto the instance and a method declaration goes on the prototype.  We could solve just that subproblem without introducing this entire matrix by adding the "own" keyword.  We could do that along the way to adding private methods.  The thing that's good about having public/private support explicitly rather than using lexical methods is that you don't have to change call sites (e.g., by passing "this") in order to change visibility.
 
 YK: There's a general point I want to make about if this is even an ok proposal is this an OK time for that
 
@@ -369,7 +369,7 @@ MM: This proposal cross-cuts a lot of existing proposals and the whole process a
 
 DE: Alan has raised this before but the cross-cutting discussions have been happening the whole time among the champions of decorators and public state and private state.
 
-MM: ther's been discusion of cross cutting concerns, but there hasn't been a proposal on the table whose effect is to have cross cutting impact on proposla that are e.g., farther ahead of them.
+MM: Ther's been discusion of cross cutting concerns, but there hasn't been a proposal on the table whose effect is to have cross cutting impact on proposla that are e.g., farther ahead of them.
 
 AK: Let me resttate from Dan's perspective. The fact that this comes as a seprate proposal instead of part of what's being done from those other proposals which seems like a change in process from what's already been happening with the other proposals
 
@@ -377,7 +377,7 @@ MM: There are multiple proposals that this effects. We could merge with them, bu
 
 DE: I can write up a doc for the next meeting about the state that we are at for the cross-cutting considerations.
 
-AWB: what we are asking for as this being stage 1 is really figuring out how this integrates with the othe proposals. We actually considered just filing this as issues, but it woud lget lost at the issue level for those proposals for something that is an overriding thing. Tha'ts hwy we did it in this form.
+AWB: What we are asking for as this being stage 1 is really figuring out how this integrates with the othe proposals. We actually considered just filing this as issues, but it woud lget lost at the issue level for those proposals for something that is an overriding thing. Tha'ts hwy we did it in this form.
 
 BT: I think on the recent topic of process, it seems strange to me that stage 1 means we are giving onsensus to change stage 3 proposals.  
 
@@ -398,9 +398,9 @@ AWB: To some degree both the public state and private state proposlas were stall
 
 DE: I don't think there are that many issues. At the last meeting I laid out the issues that were open, we disagree about them, but there's a small number of issues. I would like to be able to have a discussion about which syntax we like better: the one that ?? and I are championing or this one so that we can decide and we can advance one of the syntaxes.
 
-AK: this reminds me of hte dicussion of decorators and annotations.  We could have had them advancing together, racing to get the "@" symbol usage.  But that woudl have been bad.  Having multiple competing proposals seems like a bad thing.
+AK: This reminds me of hte dicussion of decorators and annotations.  We could have had them advancing together, racing to get the "@" symbol usage.  But that woudl have been bad.  Having multiple competing proposals seems like a bad thing.
 
-MM: when it's procedurally posisble, I will propose merging the proposals.
+MM: When it's procedurally posisble, I will propose merging the proposals.
 
 DE: We've discussed this multiple times in the past, and had reasons to not merge the proposals. 
 
@@ -424,19 +424,19 @@ DE: I'd like to hear from people who have actual feedback.
 
 BT: If I can get to me actual points. When you sent the mail about this proposal, I became extremely excited about it. I could see how the syntax aligned with my mental mode of the object model.  And then I went and talked to some JS developers and universally the reaction was viscerally negative.  They partly reacted to the "own" keyword. A lot of developers don't have a 
 
-MM: was it the "own" keyword or soething else?
+MM: Was it the "own" keyword or soething else?
 
-BT: the presence of  keyword was the bigget problem. coming from current programs where you can do data properties without a keyword, saying "add this keyword for your 99% use case" was not an easy sell.  there's an arguent to be made that members today and new members tomorrow have default placement that makes sense.  So allowing the implementation to place members based on the kind of member is worth more than the orthogonality.  There's other issues, e.g., per instance and per class allocation semantics.
+BT: The presence of  keyword was the bigget problem. coming from current programs where you can do data properties without a keyword, saying "add this keyword for your 99% use case" was not an easy sell.  there's an arguent to be made that members today and new members tomorrow have default placement that makes sense.  So allowing the implementation to place members based on the kind of member is worth more than the orthogonality.  There's other issues, e.g., per instance and per class allocation semantics.
 
 WH: You said you liked the "own" keyword but found users don't like it.  But at the last meeting we had users who don't like NOT having a keyword on a definition (because it makes it look too much like assignment) so we have users on both sides of this issue. How do we reconcile them?
 
-MF: wel lthere are other options like ":=".   they weren't complainign about the lack of a keyword, they were complaining about the similarity to assignment.
+MF: Wel lthere are other options like ":=".   they weren't complainign about the lack of a keyword, they were complaining about the similarity to assignment.
 
 DH: Can we forget that := was ever brought up?
 
 DH: I have a hard time believing that the similarity to assignment is actually a source of confusion.
 
-DH: there's an expectation about different constructs. When I think about a private data property, I expect that to be on the instance. To have to say that every time seems like it's too verbose for the common case.
+DH: There's an expectation about different constructs. When I think about a private data property, I expect that to be on the instance. To have to say that every time seems like it's too verbose for the common case.
 
 BT: I would submit that we have evidence to the counter, given the significant usage in the ecosystem already.
 
@@ -446,7 +446,7 @@ DH: To have to say "something else" to qualify what seems like it should be the 
 
 BT: I also want to make broader point: I'm not saying that people I talked to represent the broader community, but it behooves us to realize that we can't really evaluate benefits of orthogonality without talking to developers and making sure they can even see that there are axes in place in the first place.
 
-AWB: and when you talk to developers who have already been using some syntax to do this, that's a different sample than talking to developers who have not had a syntax.
+AWB: And when you talk to developers who have already been using some syntax to do this, that's a different sample than talking to developers who have not had a syntax.
 
 SD: From the F12 development perspective, I've had to remove the word "proto" from Intellisense when they type in `window.`...the average JavaScript developer doesn't think this deeply. We've had to remove things because people don't know this stuff.
 
@@ -520,7 +520,7 @@ MM: Would people find it acceptable today, while there are 3 people in the queue
 
 MPT: It's going to add 10 minutes.
 
-General: ok....
+General: Ok....
 
 WH: Trying to figure out what the various options are. What I see as available options are:
 
@@ -613,7 +613,7 @@ BT: It is duplicated.
 
 `Number.toFixed()`/`toPrecision`/toExponential`
 
-AWB: when i looked at it it looked like it was a superflous paragraphs with those three methods.  WHen I looked at the spec these all just looked superflous.
+AWB: When i looked at it it looked like it was a superflous paragraphs with those three methods.  WHen I looked at the spec these all just looked superflous.
 
 BT: But this...I agree with that notion, this PR amounts to deleting those extra paragraphs that you mentioned.
 
@@ -639,7 +639,7 @@ BT: I think we should consider that as part of a separate PR, Dan, if you want t
 
 WH: I would not want to remove the extra precision
 
-DE: maybe -20 to 100 [precision]
+DE: Maybe -20 to 100 [precision]
 
 YK: I had an issue tht was similar to this last week. I had a language binding and I had to decide about what a float in langauge A would be in language B.
 
@@ -659,7 +659,7 @@ AWB: Still need the language about proper behavior or a sort compareFn.
 
 BT: ...We should really be throwing TypeError early for things that are not callable. Table [in PR] shows various testcases and existing behavior.
 
-JSC: could you take a look and see if you're worried about changing behavior. Most of these align with existing behavior in Chakra/Edge.
+JSC: Could you take a look and see if you're worried about changing behavior. Most of these align with existing behavior in Chakra/Edge.
 
 AK: There's a minor possibility of breaking something here. 
 
@@ -732,7 +732,7 @@ AK: As the editor, keep an eye on that. I fear that someone will use "duplicate"
 ### #852 Move side-effecty toIndex in TA constructor to before detached check
 
 BT: Current spec won't throw when `toIndex` causes buffer to be detached
-1. add another isDetached array buffer check
+1. Add another isDetached array buffer check
 2. I think moving the toIndex further up is the correct way here
 
 AWB: Does moving it up change the order in which arguments are examined?
