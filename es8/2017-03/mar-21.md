@@ -80,7 +80,7 @@ Intel: Yes
 
 INRIA: Yes
 
-KD: PayPal: Yes
+KCD: PayPal: Yes
 
 DFV: SalesForce: Yes
 
@@ -725,7 +725,7 @@ YK: I agree with enumerating them. But this does have a list management challeng
 
 DE: It will take actual implementation work also. Practically speaking, if we can write Test262 tests and implementers are running those tests regularly, and a patch going into the spec will motivate them to do it. It's a harder sell to have them watch for a set of properties. There's a challenge with this. It's a little ad-hoc. There's one part of the spec where we can reference that say all the properties that are defined. We can't reference one section that has all of them. It's good for us to maintain a list in light of that.
 
-AWD: how long a list are we talking about?
+AWB: how long a list are we talking about?
 
 DE: A list of properties that are supported. For named ones, it's just general ??? there are 30 or so.
 
@@ -849,7 +849,7 @@ SD: does it need to go up with the Unicode changes?
 
 WH: it's orthogonal to Unicode. See above "character" definition
 
-AWD: Is there a reason this can't be stage 3?
+AWB: Is there a reason this can't be stage 3?
 
 BT: Stage 3? Anyone object? We're basing that on Waldemar's review. Based on the spec text I think we're good.
 
@@ -872,7 +872,7 @@ DE: There's a presentation for this linked in the agenda
 
 DE: So the named groups proposal also hasn't really changed.
 
-AWD: I think it's a good idea to give a review of what the proposal does... Have at it.
+AWB: I think it's a good idea to give a review of what the proposal does... Have at it.
 
 DE: the motivation is that if you want to parse something that has a bunch of pieces and you want to get them out, accessing via index is not as usable as getting them using names. This proposal takes the consensus position of "most" languages that have named groups as syntax. They are permitted in back-references, replace, Unicode and non-Unicode expressions. There was a concern with `\k`, but that's been resolved. The detail slide is missing the new resolution of that issue... The update since last time: worked out the Annex B grammar. I saw no required change. 2 other changes are discussed in the slides.
 
@@ -1205,13 +1205,13 @@ PJ: Maybe the WASM picture will be clear in a couple months. I'm not sure how fa
 
 AK: I don't think Chakra would ship this in edge and then have the committee withdraw it
 
-MTP: Nobody in this room right now really wants this. We have an obligation to the development community to signal that this isn't happening.
+MPT: Nobody in this room right now really wants this. We have an obligation to the development community to signal that this isn't happening.
 
 YK: I don't agree that nobody wants this.
 
 AK: That's why I'm saying we should withdraw it
 
-MTP: I would tend to agree with that
+MPT: I would tend to agree with that
 
 YK: That's what V8 decided.
 
@@ -1225,7 +1225,7 @@ BT: That's clear. Stage 3 is not an option
 
 YK: ??
 
-MTP: If we were to back it up a stage, I could put in a statement that says we want to see what happens with WASM before we keep pushing this.
+MPT: If we were to back it up a stage, I could put in a statement that says we want to see what happens with WASM before we keep pushing this.
 
 YK: V8 has made it clear they are betting on WASM.
 
