@@ -30,7 +30,7 @@ BT: Ready to approve the draft. Minor editorial changes are ok.
 
 BT: Printable Style sheets not working, we need to improve this. Asking browser devs to make printing support easier :)
 
-AWB: the patent document is out for review. Members should get it to their lawyers.
+AWB: The patent document is out for review. Members should get it to their lawyers.
 
 ## 7. ECMA402 Status Updates
 
@@ -58,7 +58,7 @@ AWB: We will handle that separately.
 
 AWB: Let's go around the room and have those who have voting authority make your vote. Note takers please take not of the organization who is voting.
 
-Tilde: yes
+Tilde: Yes
 
 DH: Mozilla Yes
 
@@ -100,9 +100,9 @@ LBR: I'd like to discuss removing the copyright line in test262 tests in a timeb
 
 AWB: Let's discuss TR 104
 
-LBR: there's still a draft
+LBR: There's still a draft
 
-AWB: people have probably not reviewed it adequately to vote on it yet. Post a link here for TR104.
+AWB: People have probably not reviewed it adequately to vote on it yet. Post a link here for TR104.
 
 __[link](https://github.com/tc39/test262/blob/master/Draft%20TR%20ECMA-104%202nd%20edition.doc)__
 
@@ -116,7 +116,7 @@ AWB: So get the link up there.
 
 ## Any items for the 2018 edition?
 
-AWB: we talked about the 2017 edition of the standard. Are there any items for the 2018 edition?
+AWB: We talked about the 2017 edition of the standard. Are there any items for the 2018 edition?
 
 BT: One of the big things I've been pushing this year (and plan to push in a big way next year) is machine readability. Specifically reducing the number of terms used in ECMASpeak. Specifically, I'm looking into making ECMAIDL/a subset of WebIDL.
 
@@ -140,7 +140,7 @@ MM: A question for Alan Schmitt, who's been working on automating the ECMAScript
 
 AS: I think so. If there is something you want to extract, you could easily get it out.
 
-BT: could spec readers easily consume this syntax?
+BT: Could spec readers easily consume this syntax?
 
 AS: Not sure.
 
@@ -220,11 +220,11 @@ BT: I totally agree with Dan's request for more semantic meaning to notes and th
 
 AWB: I don't see substr() as needing to be in Annex B. I looked back and couldn't figure out why it really was put there. Everyone has added it. I don't see why it needs to fall into that category. It's just a redundant. 
 
-BT: how do you see substr() as different from anything else in Annex B
+BT: How do you see substr() as different from anything else in Annex B
 
 AWB: Some of the other functions are in there because they have limited applicability or Y2K issues or some other bad aspect to them. I don't see anything that bad about substr(). The concern about creating confusion doesn't apply. it is what it is; implemented in all engines, etc.
 
-BT: what's the concern?
+BT: What's the concern?
 
 AWB: Because none of the Annex B criteria really apply to it.
 
@@ -380,7 +380,7 @@ AWB: So I noticed there are a number of agenda items related to this. I think it
 
 MM: Given we have a RegExp legacy statics proposal, currently at Stage 1, would you like to consider that as part of the group as well?
 
-AWB: if you're ready to talk about it.
+AWB: If you're ready to talk about it.
 
 MM: I can talk about it
 
@@ -406,7 +406,7 @@ AWB: Okay, so, thank you! Let's continue specifically with regex items. the next
 
 CP: Excuse me, does this mean we'll get to Ecma 402 segmenter after lunch?
 
-AWB: let's do it now since you are here.
+AWB: Let's do it now since you are here.
 
 CP: This is the ECMA 402 Proposals
 
@@ -603,7 +603,7 @@ CP: We think this could be what moment uses under the hood.
 
 DH: I'm so sorry maggie, Lunch is here. We can continue after if that makes sense.
 
-AWB: let's continue now that lunch is over.
+AWB: Let's continue now that lunch is over.
 
 ZB: I added examples ot the slides during lunch to present use cases.  Continuing on UnitFormat.  These formatters (plus one more that's in the Ecma402 github repository) are the only ones they are currently planning.  Every use case they have encountered in the last year can be covered by some one or tow of the 4 formatters.  It's not that they are trying to port all the ICU formatters to JS, but rather they have the subset that is need for the Web.  Stage 2 is that TC39 agrees that the problmes needs to be solved.  Is there a reason that we do not want a feature like that in EcmaScript.
 
@@ -611,7 +611,7 @@ WH: Those are not the only choices. We could say "come back when you have improv
 
 ZB: Sure, but let's define the API before we move or should we say "this does not belong in ECMASCript" (do we move this forward or do we not)
 
-DH: you will usually know if people think it shouldn't be in ECMASCript. That will be clear.
+DH: You will usually know if people think it shouldn't be in ECMASCript. That will be clear.
 
 YK: I think in general, that is a necessary, but not sufficient thing for stage 2. The norms of the committee is that the API is reasonably done as well as semantics.
 
@@ -625,7 +625,7 @@ YK: I think it's not ready for stage 2.
 
 BT: I don't think there's any rush for this for Stage 2 either. I'd like these to go into these as a bundle for 2018 for 402, but we have plenty of time for that.
 
-ZB: can I get clear direction form the committee whether we want to BLOCK the two formatters on duration types, or whether they can proceed without that.
+ZB: Can I get clear direction form the committee whether we want to BLOCK the two formatters on duration types, or whether they can proceed without that.
 
 AWB: We're not hearing people say it's a blocking issue, more concern that it's not adequately explored or explained yet.
 
@@ -663,7 +663,7 @@ RX: I do Intl and localization at PayPal, in globalize.js.  It's not just a matt
 
 CP: What we're saying is that that information is needed to produce the right date formatted--it could produce options that would feed back into the Intl constructors
 
-ZB: what the committee is saying is that it would be great if there was an API that would return the underlying data, and another API that would format using that.as the pattern
+ZB: What the committee is saying is that it would be great if there was an API that would return the underlying data, and another API that would format using that.as the pattern
 
 CP: Or rather options, as pattern has issues.
 
@@ -706,18 +706,18 @@ We will treat the 3 proposal independently.
 
 ## 6. Addendum to test262 item
 
-LBR: people asked me to mention. We are using an integrated test generation tool. That's why we have so many lines of code.  It has documentation on test262. I would be very happy to show this test generation tool to anyone who is interested. The automated deployment I mentioned earlier uses this tool to confirm that tests are properly generated.
+LBR: People asked me to mention. We are using an integrated test generation tool. That's why we have so many lines of code.  It has documentation on test262. I would be very happy to show this test generation tool to anyone who is interested. The automated deployment I mentioned earlier uses this tool to confirm that tests are properly generated.
 
 
 ## 10.i.c RegExp Unicode Property Escapes for Stage 3
 
-DE: there's a link from the agenda. These have barely changed. [DE talks through the slides]. The thing that has been narrowed down recently, is that the list of properties that are supported is explicitly enumerated. Previously implementations could expose anything they wanted, which would lead to needless differences between platforms.  It is implemented in V8 behind a flag.  I asked for reviewers last meeting.  The potential reviewers were Waldemar, James Gibbons, and someone from MS.
+DE: There's a link from the agenda. These have barely changed. [DE talks through the slides]. The thing that has been narrowed down recently, is that the list of properties that are supported is explicitly enumerated. Previously implementations could expose anything they wanted, which would lead to needless differences between platforms.  It is implemented in V8 behind a flag.  I asked for reviewers last meeting.  The potential reviewers were Waldemar, James Gibbons, and someone from MS.
 
-YK: are the new properties...???
+YK: Are the new properties...???
 
-DE: the preference was to be restrictive with the number of name/value properties but to include every possible random binary property. We could revisit that.
+DE: The preference was to be restrictive with the number of name/value properties but to include every possible random binary property. We could revisit that.
 
-YK: does this mean that the committee needs to routinely review the list of properties and approve them one at a time.
+YK: Does this mean that the committee needs to routinely review the list of properties and approve them one at a time.
 
 DE: I think that should be done in some place. I think the browser should be ??? about where property support is. If it's a bad idea to support a property, then we run the risk of browsers supporting bad things.
 
@@ -725,7 +725,7 @@ YK: I agree with enumerating them. But this does have a list management challeng
 
 DE: It will take actual implementation work also. Practically speaking, if we can write Test262 tests and implementers are running those tests regularly, and a patch going into the spec will motivate them to do it. It's a harder sell to have them watch for a set of properties. There's a challenge with this. It's a little ad-hoc. There's one part of the spec where we can reference that say all the properties that are defined. We can't reference one section that has all of them. It's good for us to maintain a list in light of that.
 
-AWB: how long a list are we talking about?
+AWB: How long a list are we talking about?
 
 DE: A list of properties that are supported. For named ones, it's just general ??? there are 30 or so.
 
@@ -745,7 +745,7 @@ YK: I think the bottom line is what Allan said is we should make it part of the 
 
 DE: I don't think propeties get added all the time.  Emoji properties are the hot topic now.
 
-YK: ok I withdraw my concern.
+YK: Ok I withdraw my concern.
 
 AWB: I think the general principle here is if there is some other normative spec you can  point at and say: do this. If not then we need to have a list for implementers of our spec. It sounds like you're saying it's the later we need to innumerate.
 
@@ -799,7 +799,7 @@ DE: Mathias wrote it, and I read it.
 
 BT: We want stage 2 for dotAll. There have been no changes since stage 1. It remains an extremely simple feature. For those who haven't heard of it before, it adds a new flag `s` to the expression (like other engines) literal that allows `.` to match _everything_ rather then _most everything_. There's a high-level API in [the proposal](https://github.com/mathiasbynens/es-regexp-dotall-flag).
 
-MM: why "s"
+MM: Why "s"
 
 WH/BT/BE: It's Perl, c#, Java, VB
 
@@ -811,9 +811,9 @@ BT: I think we're talking depending on the context. Without `u` we're talking ab
 
 DH: `s` is orthogonal to `u`
 
-AWB: in the regexp spec in ecma262, the word "character" specifically means "the unit you are matching".
+AWB: In the regexp spec in ecma262, the word "character" specifically means "the unit you are matching".
 
-DH: what are the historical things that dot didn't used to match.
+DH: What are the historical things that dot didn't used to match.
 
 WH: Only the line terminators: CR, formfeed, NL, etc.
 
@@ -823,11 +823,11 @@ YK: Ruby bases this on the `m` flag. If it's a multiline regex, then you want `.
 
 DH: So basically "ms" is the thing that you always want?
     
-BT: stage 2?
+BT: Stage 2?
 
-WH: sure
+WH: Sure
 
-DH: sure
+DH: Sure
 
 DT: Reviewers?
 
@@ -845,9 +845,9 @@ WH: There's nothing to do to get it to stage 3...
 
 BT: We actually have final [spec text](https://mathiasbynens.github.io/es-regexp-dotall-flag/). You'll find changes to flags, adding the `dotAll` property and the various other changes that need to happen.
 
-SD: does it need to go up with the Unicode changes?
+SD: Does it need to go up with the Unicode changes?
 
-WH: it's orthogonal to Unicode. See above "character" definition
+WH: It's orthogonal to Unicode. See above "character" definition
 
 AWB: Is there a reason this can't be stage 3?
 
@@ -874,7 +874,7 @@ DE: So the named groups proposal also hasn't really changed.
 
 AWB: I think it's a good idea to give a review of what the proposal does... Have at it.
 
-DE: the motivation is that if you want to parse something that has a bunch of pieces and you want to get them out, accessing via index is not as usable as getting them using names. This proposal takes the consensus position of "most" languages that have named groups as syntax. They are permitted in back-references, replace, Unicode and non-Unicode expressions. There was a concern with `\k`, but that's been resolved. The detail slide is missing the new resolution of that issue... The update since last time: worked out the Annex B grammar. I saw no required change. 2 other changes are discussed in the slides.
+DE: The motivation is that if you want to parse something that has a bunch of pieces and you want to get them out, accessing via index is not as usable as getting them using names. This proposal takes the consensus position of "most" languages that have named groups as syntax. They are permitted in back-references, replace, Unicode and non-Unicode expressions. There was a concern with `\k`, but that's been resolved. The detail slide is missing the new resolution of that issue... The update since last time: worked out the Annex B grammar. I saw no required change. 2 other changes are discussed in the slides.
 
 WH: What function are you talking about?
 
@@ -912,10 +912,10 @@ DE: If you have a variable instead of the regex, then you could default like you
 let {a, b} = unknownRegExp.exec("xy").groups || {}
 ```
 
-DE: for existing regexps, there's no detectable change in behavior. This fits into what would have been syntax errors. The other question is whether all the properties should be created, even if they are not matched (e.g., because they were optional). `"y" in /(?<a>x)|(?<b>y)/.exec("xy").groups`  
+DE: For existing regexps, there's no detectable change in behavior. This fits into what would have been syntax errors. The other question is whether all the properties should be created, even if they are not matched (e.g., because they were optional). `"y" in /(?<a>x)|(?<b>y)/.exec("xy").groups`  
 This could be useful in a lexer. ??? You could do this by looking at `Object.keys()`. With the current draft, I've left in place that all the properties are created. This is not a strongly-held opinion.
 
-AWB: and if one isn't matched or processed, its value is `undefined`.
+AWB: And if one isn't matched or processed, its value is `undefined`.
 
 WH: It's created with the value `undefined`
 
@@ -929,13 +929,13 @@ WH: It (a missing match) could be a hole in the arrays.
 
 DE: Say people learn to do this pattern with `Object.keys()` or `for .. in`. Then they'll be surprised. Instead, if we leave out these features then we avoid confusion for the users.
 
-AWB: my gut feel is that there's a enough difference between the two styles that you won't have a confusion.
+AWB: My gut feel is that there's a enough difference between the two styles that you won't have a confusion.
 
 WH: Yeah, but if you make a typo... I would rather be consistent with numerics
 
-MF: it's useful to get a predictable object shape coming out of `exec`
+MF: It's useful to get a predictable object shape coming out of `exec`
 
-DE: we would get a predictable object shape if we always created own-properties. That might provide a trivial perf advantage.  Things are more optimizable if the shape is consistent.
+DE: We would get a predictable object shape if we always created own-properties. That might provide a trivial perf advantage.  Things are more optimizable if the shape is consistent.
 
 BE: Yep. Sounds good
 
@@ -978,25 +978,25 @@ BE: I am so sorry...
 
 MM: The goal here is to strike the best balance between acknowledging reality and keeping things codified and nailed down in Annex B (and all that means). It's already at stage 2, as part of this general attention to moving RegExp stuff forward, I would like to bump this today.
 
-MS: was it research that all browsers do it or just some browsers
+MS: Was it research that all browsers do it or just some browsers
 
 DE: These semantics are different from what each browser ships. In terms of configurability and what happens between realms.
 
 MM: In terms of minimizing damage...
 
-DE: this was reviewed by people working on regular expressions in V8 and was thought to be Web compatible.
+DE: This was reviewed by people working on regular expressions in V8 and was thought to be Web compatible.
 
 MM: Dan's right. The properties are the properties that we gathered from browsers. I don't know whether they're union or intersection, but it's small in any case. This proposal also makes some semantic differences that we expect to be backward compatible. Nothing spooky happens in some cases. They're also configurable and delete-able
 
-AWB: and it's not just that it's structured, I assume that if you evaluate a regexp in one realm, the results are not visible in another realm.
+AWB: And it's not just that it's structured, I assume that if you evaluate a regexp in one realm, the results are not visible in another realm.
 
-MM: correct. No browser has any explicit action-at-a-distance. What coupling might there be between realms unless we outlaw it. That's the coupling that could have been ??
+MM: Correct. No browser has any explicit action-at-a-distance. What coupling might there be between realms unless we outlaw it. That's the coupling that could have been ??
 
 AWB: ??
 
 MM: This suppresses the spookiness both between realms and subclasses.
 
-DH: from the description, I can believe the changes are Web-compatible. They sound like the kind we would take a chance on.  My biggest question that I don't think affects stage 3:  what about Annex B? We need to review the goal and its role and judge what its future is.
+DH: From the description, I can believe the changes are Web-compatible. They sound like the kind we would take a chance on.  My biggest question that I don't think affects stage 3:  what about Annex B? We need to review the goal and its role and judge what its future is.
 
 MM: I enthusiastically agree
 
@@ -1006,7 +1006,7 @@ YK: +1000
 
 BE: The question is whether it should be there?
 
-DH: should Annex B be in the standard? why should it be there? That helps determine whether something should be in Annex B.
+DH: Should Annex B be in the standard? why should it be there? That helps determine whether something should be in Annex B.
 
 BE: Yeah.
 
@@ -1036,7 +1036,7 @@ DH: We need to grapple with this question. But I'm happy to leave it at that. Bu
 
 MM: The subject doesn't have to do with where (Annex B) stuff appears in the text. It means that a conforming system can omit Annex B stuff
 
-YK: the point you made about the process is a true fact of the procedure. But if the people in favor of not conforming can be clear about their actual objections, then we can address them directly rather than need to sort out the larger Annex B issues.
+YK: The point you made about the process is a true fact of the procedure. But if the people in favor of not conforming can be clear about their actual objections, then we can address them directly rather than need to sort out the larger Annex B issues.
 
 DH: You're operating under several constraints with "normative optional." I think it's important that we satisfy these constraint. We should also deal with "forked ecosystem." The normative optional construct is one that says "we're not worried about one JS ecosystem may not support this feature" and that leads to balkanization. Part of our role as a standards body is to solve and prevent problems of balkanization. We should see if there's a better way to deal with this than normative optional. I wonder if Annex B and normative optional allow us to mitigate balkanization issues.
 
@@ -1072,27 +1072,27 @@ WH: Who were the reviewers for this?
 
 DE: I was a reviewer
 
-AK: then it cannot go to stage 3 until we have another reviewer.
+AK: Then it cannot go to stage 3 until we have another reviewer.
 
 WH: There are things in there that I don't understand. Like why it has anything to do with inheritance.
 
 MM: I'm happy to clarify with you offline.
 
-MF: we also agreed that any proposal planning to advance would be available 1 or 2 weeks (I forget which) ahead of the meeting.
+MF: We also agreed that any proposal planning to advance would be available 1 or 2 weeks (I forget which) ahead of the meeting.
 
-AK: it's nice to have it advance if it could. But what we got out of it is that it needs eyes on it.
+AK: It's nice to have it advance if it could. But what we got out of it is that it needs eyes on it.
 
-MM: withdrawn from stage 3 for now.  
+MM: Withdrawn from stage 3 for now.  
 
-AWB: are you planning to present it at the next meeting?
+AWB: Are you planning to present it at the next meeting?
 
-MM: yes.
+MM: Yes.
 
 DH: Add it to the agenda for next meeting right now.
 
 #### Conclusion/Resolution 
 
-- no change in stage. Reviewers identified and it will be proposed for stage 3 next meeting.
+- No change in stage. Reviewers identified and it will be proposed for stage 3 next meeting.
 
 
 ## 10.i.f SIMD.js status update
@@ -1103,13 +1103,13 @@ DE: I'm no longer championing SIMD.js. It was pursued as the best way to provide
 
 YK: I'm interested in Brendan and DH's response.  
 
-BT/AWB: if we have a proposal that's at Stage 3, the champions shoudl write up a status report.
+BT/AWB: If we have a proposal that's at Stage 3, the champions shoudl write up a status report.
 
-YK: is Mozilla also abandoning it?
+YK: Is Mozilla also abandoning it?
 
-PJ: the main reason it's on hold is Web assembly.  They were involved with the SIMD proposal as well.  It remains to be seen with WA will fill the gap, since SIMD is not part of WA yet.  Hence maintaining the on hold status.  Also, just like in C++, when people want to do SIMD, they can use asm or intrinsics.  We'd like to see something simliar for JS, but it's a big burden on Browser developers.
+PJ: The main reason it's on hold is Web assembly.  They were involved with the SIMD proposal as well.  It remains to be seen with WA will fill the gap, since SIMD is not part of WA yet.  Hence maintaining the on hold status.  Also, just like in C++, when people want to do SIMD, they can use asm or intrinsics.  We'd like to see something simliar for JS, but it's a big burden on Browser developers.
 
-BT: is it appropriate then for V8 to delete their implementation.
+BT: Is it appropriate then for V8 to delete their implementation.
 
 PJ: Yes I do think it is, but I don't have control over V8
 
@@ -1145,17 +1145,17 @@ PJ: There are more JS developers than C++ programmers. The places where SIMD imp
 
 DT: Is there a timeframe for whether WASM solves this problem? And if it doesn't should we bring SIMD proposal back?
 
-YK: that could be addressed by moving it to stage 2: "the committee believes that JS should solve this problem". The claim that JavaScript programmers will get enough value out of the existence of WASM is as yet unproven and it's inappropriate to assume it will.
+YK: That could be addressed by moving it to stage 2: "the committee believes that JS should solve this problem". The claim that JavaScript programmers will get enough value out of the existence of WASM is as yet unproven and it's inappropriate to assume it will.
 
 MM: You're saying stage 1 rather than withdrawing it?
 
-YK: yes
+YK: Yes
 
 MM: I think it should be withdrawn if it is championless
 
 AWB: I think it's either withdrawn or it is stage 1.  But before either of those, we need documentation for why we are making the transition.  
 
-YK: yes just writing down that we think it shoudl be addressed by wasm will make it easier to address in a year.
+YK: Yes just writing down that we think it shoudl be addressed by wasm will make it easier to address in a year.
 
 AWB: I'm reluctant to say: "Dan please write up something because there's very little motivation to do the work." What I would say that: "The attempt to be withdrawn has been postponed"
 
@@ -1241,7 +1241,7 @@ BT: You will find people like that on the Chakra team as well.
 
 YK: I think V8 took the plunge.
 
-MS: just to be clear, before this meeting, we made it clear that we are not supporting SIMD.js.  Essentially: "I don't think this is appropriate for the standard, but if it becomes part of the standard we will implement it".
+MS: Just to be clear, before this meeting, we made it clear that we are not supporting SIMD.js.  Essentially: "I don't think this is appropriate for the standard, but if it becomes part of the standard we will implement it".
 
 YK: How did we get consensus at stage 3.
 
@@ -1273,7 +1273,7 @@ YK/BT: We should move this to stage 1
 
 MPT: Officially this is being moved to stage 1 because browser implementers wont like this as much as they thought they would
 
-people: no...
+people: No...
 
 AWB: No, Daniel will write up a status report to make this more clear
 
@@ -1311,7 +1311,7 @@ DE: That's a great point about getting more feedback from devs. I want to mentio
 
 BE: It's not going away? It's going to stage 1?
 
-AWB: it's Probably going to stage 1
+AWB: It's Probably going to stage 1
 
 #### Conclusion/Resolution  
 
