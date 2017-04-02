@@ -249,7 +249,7 @@ YK: But methods are also configurable. ..... I'm happy to accept this concession
 
 MM: It's consistent because...let's take "own" followed by method syntax or "static" followed by method syntax or simply method syntax with no "own". The only difference between the three is the keyword or its absence. The only semantic difference should be the placement.
 
-YK so the consisteny issue is between properties and methods. If you leave off the keyword, the property or method is configurable, it would be surprising if adding the "own" keyword made hte item non-configurable.
+YK: so the consisteny issue is between properties and methods. If you leave off the keyword, the property or method is configurable, it would be surprising if adding the "own" keyword made hte item non-configurable.
 
 MM: Trying to stay within spirit of orthogonality. Main value is combinatorial space of things that might get proposed. Most points don't have strong use cases. Enough would get proposed that it would create burden. We get most of the combinatorial space without burden because each element can be understood separately. We get two further benefits for the data-property-like syntax. Comma-separated list of member names with optional initializers in one declaration. And there's also thinking ahead to how this interacts with decorators and what Alan and I are proposing: if you decorate a declaration that is declaring several members, the decorator applies to each of them. 
 
@@ -339,7 +339,7 @@ MM: You would create those imperatively, like you do now, instead of using decla
 
 AWB: An idea kicked around is possibility of static initializer in a class body, at class definition time. The logic of putting a real data property on the prototype is so rare...that it doesn't deserve having syntax.
 
-DE at a high level I like the goals about orthogonality. Aside from tehat big developer intuition thing, I'm not sure about adding "own mehtods".  It seems a potential source of confusion and is redundant with property initializers.  They coudl end up being confusing.  The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.  
+DE: at a high level I like the goals about orthogonality. Aside from tehat big developer intuition thing, I'm not sure about adding "own mehtods".  It seems a potential source of confusion and is redundant with property initializers.  They coudl end up being confusing.  The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.  
 
 DE: there's also an example of having an "own private" method.  Maybe this would be in conjunction with lexially scoped method in class bodies.  I'm cocenred if the first private method thing that we add is "own", it woudl catch on and be hard to optimize.  Might we consider excluding that case.
 
@@ -400,13 +400,13 @@ DE: I don't think there are that many issues. At the last meeting I laid out the
 
 AK: this reminds me of hte dicussion of decorators and annotations.  We could have had them advancing together, racing to get the "@" symbol usage.  But that woudl have been bad.  Having multiple competing proposals seems like a bad thing.
 
-MML when it's procedurally posisble, I will propose merging the proposals.
+MM: when it's procedurally posisble, I will propose merging the proposals.
 
 DE: We've discussed this multiple times in the past, and had reasons to not merge the proposals. 
 
 WH: Have we resolved the cross-cutting issues with syntax?
 
-DE I believe we have.
+DE: I believe we have.
 
 WH: Does that match Mark's proposal?
 
@@ -659,7 +659,7 @@ AWB: Still need the language about proper behavior or a sort compareFn.
 
 BT: ...We should really be throwing TypeError early for things that are not callable. Table [in PR] shows various testcases and existing behavior.
 
-JSC could you take a look and see if you're worried about changing behavior. Most of these align with existing behavior in Chakra/Edge.
+JSC: could you take a look and see if you're worried about changing behavior. Most of these align with existing behavior in Chakra/Edge.
 
 AK: There's a minor possibility of breaking something here. 
 

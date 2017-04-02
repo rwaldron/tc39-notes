@@ -611,7 +611,7 @@ WH: Those are not the only choices. We could say "come back when you have improv
 
 ZB: Sure, but let's define the API before we move or should we say "this does not belong in ECMASCript" (do we move this forward or do we not)
 
-DH you will usually know if people think it shouldn't be in ECMASCript. That will be clear.
+DH: you will usually know if people think it shouldn't be in ECMASCript. That will be clear.
 
 YK: I think in general, that is a necessary, but not sufficient thing for stage 2. The norms of the committee is that the API is reasonably done as well as semantics.
 
@@ -735,7 +735,7 @@ AWB: My sense is our spec should list them and where they're defined. And if the
 
 YK: Is there a lot of code? Presumably you're talking about a RegExp engine that has those characters.
 
-DE For implementations based on using ICU, ICU has support for mapping one of these categories to a list of ranges. So I don't know how Microsoft's unicode works, i.e., whether they have something similar.
+DE: For implementations based on using ICU, ICU has support for mapping one of these categories to a list of ranges. So I don't know how Microsoft's unicode works, i.e., whether they have something similar.
 
 YK: I can believe it's ok doing this on an ad-hoc basis. In practice we'll wake up and notice that we didn't actually do it. Maybe now the committee is healthy enough that we'll actually do it.
 
@@ -894,7 +894,7 @@ BE: I would say D is the place to put it
 
 DE: I believe you. I'll move it back to there.
 
-DE The other things at the last meeting. We considered some changes to the `group` object. The `group` property is only created if there are any matches. It was proposed to always create the `group` object or share a frozen empty instance that you get on a match that doesn't use groups.
+DE: The other things at the last meeting. We considered some changes to the `group` object. The `group` property is only created if there are any matches. It was proposed to always create the `group` object or share a frozen empty instance that you get on a match that doesn't use groups.
 
 TF: Dan, can you show us again the difference in the patterns when destructuring the groups?
 
@@ -1393,7 +1393,7 @@ AK: We had a similar case in our tests. We don't have headers in our test and we
 
 MF: Are you distinguishing the test files from the source files?
 
-AK : It's just which directories they're in.
+AK: It's just which directories they're in.
 
 MF: Did your lawyer distinguish them?
 
