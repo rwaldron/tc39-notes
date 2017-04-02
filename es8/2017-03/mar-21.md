@@ -107,8 +107,11 @@ AWB: people have probably not reviewed it adequately to vote on it yet. Post a l
 __[link](https://github.com/tc39/test262/blob/master/Draft%20TR%20ECMA-104%202nd%20edition.doc)__
 
 LBR: Yes, I will post a link. We didn't have any updates on it since last year.
+
 AWB: If we can get the link posted, people should have time here before the end of the day Thursday to do a quick review of that. I'm guessing people wont have any concerns. That also requires a GA vote, so we should have that taken care of in the same package. Is that ok everyone?
+
 LBR: Yes
+
 AWB: So get the link up there.
 
 ## Any items for the 2018 edition?
@@ -888,6 +891,7 @@ DE: [describes the example]
 Should the group object be in the C or B position? [discussion ensues]
 
 BE: I would say D is the place to put it
+
 DE: I believe you. I'll move it back to there.
 
 DE The other things at the last meeting. We considered some changes to the `group` object. The `group` property is only created if there are any matches. It was proposed to always create the `group` object or share a frozen empty instance that you get on a match that doesn't use groups.
