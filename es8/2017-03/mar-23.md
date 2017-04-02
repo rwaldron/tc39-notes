@@ -367,7 +367,7 @@ WH: You are missing a declaration of #registry
 
 DH: OK I just got the details of the private field wrong.  Imagine there is a declaration.  At any given time a "registry" might want you to load new modules. So I'm taking jquery as an example of that. So you have a jquery loaded in one realm, and you want to explicitly share it to anothe rrealm.  You may want to allow mofules to realm-specific.
 
-KD: When I worked at Domo people could build little graphs on their own. And a big problem we had was that every single one of these were loading their own angular. This would be a perfect solution for that.
+KCD: When I worked at Domo people could build little graphs on their own. And a big problem we had was that every single one of these were loading their own angular. This would be a perfect solution for that.
 
 DH: Perfect, yes, I use jquery as an example, but there may be other big things. In order to have total reflective control over the whole realm, you need total reflective control over the import. I'm not confident I have everything nailed down, but the basic idea is that you cna specify a hook and by doing that you can tell the system how to resolve a name and how to provide it with a module. So here, I have a fixed set of modules in my registry, if it's not one of those, then throw a reference error, otherwise....
 
@@ -382,7 +382,7 @@ DH: One way to think about the entire realm api is that it is a privileged API. 
 DH: So top level usage of this, we create a realm, we use eval, use `import()` and that produces a promise and that gives us the module.
 
 
-KD: So what you normally get is that going to be whatever is exported from that module?
+KCD: So what you normally get is that going to be whatever is exported from that module?
 
 BF: The completion value?
 
@@ -392,7 +392,7 @@ BF: It needs to be in an expression position
 
 DH: So I'd have to put parens around the eval here (in the example)?
 
-KD: I basically want to know what's returned from a call to `eval`, is it a completion value or is there some mechanism to export something specific?
+KCD: I basically want to know what's returned from a call to `eval`, is it a completion value or is there some mechanism to export something specific?
 
 DH: I'll get to how to dynamically create modules in a real, which is a key feature, but that's separate ... There's a semantic surface we need to be able to cover in an API. But basically, the code evaluated in `eval` is a script, not a module.
 
@@ -1433,7 +1433,7 @@ BE: Remember the min-max classes? If you can find the min-max BetterDate, I susp
 
 AWB: So I think exploring the date spec here, The date APIs is something there's a clear need for me. It's not clear to me how it should be packaged up. I'm not sure it belongs in either.
 
-MTP: laughing....
+MPT: laughing....
 
 AWB: How are new APIs packaged. We've talked about built-in modules. There may be a difference between built-in and standard modules. You may be able to define a built-in module that's not part of 262 but you could import.
 

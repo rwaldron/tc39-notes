@@ -70,7 +70,7 @@ AK: The message we're trying to send here would be lost without enforcement mech
 
 MPT: If everyone thinks document is toothless without enforcement, can we add some language?
 
-AWF: I'm really uncomfortable with the whole "enforcement" idea vs. the aspirational goals of how we want to conduct ourselves. It seems to take away from the focus on how we want to behave and the focus on correct behavior.
+AWB: I'm really uncomfortable with the whole "enforcement" idea vs. the aspirational goals of how we want to conduct ourselves. It seems to take away from the focus on how we want to behave and the focus on correct behavior.
 
 LBR: If I rename it to Code of Conduct supporters, would that help?
 
@@ -480,13 +480,13 @@ MM: Feedback from users is tremendously important. You [BT] have some and I have
 
 BT: I'd love to see some investigation into these questions. I want us to take a data-driven approach to which is the more easily-learned conceptual model.
 
-MTP: I just took management of a team of 7 entry level engineers. They are actually converted network admins. Let me teach them classes next week.
+MPT: I just took management of a team of 7 entry level engineers. They are actually converted network admins. Let me teach them classes next week.
 
 MM: Please let us know ahead of the next meeting. I'd love to get the answer to that.
 
 AWB: Which version of classes will you teach them?
 
-MTP: I'll teach them classes as they exist today and then say: "If I had added this 'own' keyword, would that help you?"
+MPT: I'll teach them classes as they exist today and then say: "If I had added this 'own' keyword, would that help you?"
 
 AWB: You might try putting up two slides to show them both styles as acceptable alternatives and let them choose, that would be great.
 
