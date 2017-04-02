@@ -211,6 +211,7 @@ MS: Is static own a syntax error?
 MM: Yes
 
 YK: Is that an orthagonality violation? (making speciic rules about "static" and "own")
+
 YK: You don't tke the Smalltallk perspective that "static" is just a meta object?
 
 MM: No. It's too late for that in JS.
@@ -267,6 +268,7 @@ YK: So it looks like a method, what are the semantic consequences?
 AWB: In this proposal, we have reserved the meaning of the #constructor because we might want to have something but we're not quite sure in the future.
 
 MM: 3 reasons to prohibit something form the cross-product
+
     - it would be harmful
     - it woudl be non-sensical
     - we have not decided whether to allow but could decide later
