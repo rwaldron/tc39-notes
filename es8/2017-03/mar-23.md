@@ -48,7 +48,7 @@ AWB: It's clear that it wouldn't be very hard to make default work, but it wasn'
 
 BF: Correct.
 
-CP: It's the same, we do have the details of the binding. We have the local name for the binding, the import name for the one we're importing from. One more point is that this solution is not just for COmmonJS modules, but for any other dynamic modules (like WASM)
+CP: It's the same, we do have the details of the binding. We have the local name for the binding, the import name for the one we're importing from. One more point is that this solution is not just for COmmonJS modules, but for any other dynamic modules (like wasm)
 
 MM: What are the other possible values for the internal slot named ImportName?
 
@@ -629,7 +629,7 @@ function Add64Module(stdlib, foreign, buffer) {
 
 DE: It's not clear if we want to add support for asm.js.
 
-BE: It's hard to remove asm.js as it's just a subset. It's not like web assembly is the only way people will...
+BE: It's hard to remove asm.js as it's just a subset. It's not like WebAssembly is the only way people will...
 
 DE: If we did want integer to work with asm validation. It can work, but it's unclear if we want to make it work.
 

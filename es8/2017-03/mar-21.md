@@ -1107,7 +1107,7 @@ BT/AWB: If we have a proposal that's at stage 3, the champions shoudl write up a
 
 YK: Is Mozilla also abandoning it?
 
-PJ: The main reason it's on hold is Web assembly.  They were involved with the SIMD proposal as well.  It remains to be seen with WA will fill the gap, since SIMD is not part of WA yet.  Hence maintaining the on hold status.  Also, just like in C++, when people want to do SIMD, they can use asm or intrinsics.  We'd like to see something simliar for JS, but it's a big burden on Browser developers.
+PJ: The main reason it's on hold is WebAssembly.  They were involved with the SIMD proposal as well.  It remains to be seen with WA will fill the gap, since SIMD is not part of WA yet.  Hence maintaining the on hold status.  Also, just like in C++, when people want to do SIMD, they can use asm or intrinsics.  We'd like to see something simliar for JS, but it's a big burden on Browser developers.
 
 BT: Is it appropriate then for V8 to delete their implementation?
 
@@ -1129,23 +1129,23 @@ AWB: Sounds like it's losing stages here.
 
 YK: It sounds like there was some implementation problems with making SIMD.js performance, like developers who tried to use it would be disappointed.
 
-AK: The roadmap to get to a performance JavaScript implementation looked long and unmaintainabble. Were there a huge push from JS community we may have h=thgouth it was worth it, but with emphasis moving to web assembly it doesn't make sense anymore.
+AK: The roadmap to get to a performance JavaScript implementation looked long and unmaintainabble. Were there a huge push from JS community we may have h=thgouth it was worth it, but with emphasis moving to WebAssembly it doesn't make sense anymore.
 
-YK: Does the V8 team even believe WASM is a "real thing"?
+YK: Does the V8 team even believe wasm is a "real thing"?
 
 AK: The V8 team's perspective on asm.js has hanged over the last 3 years. The team tracks the performance of asm.js in the wild, etc.
 
 YK: I guess what makes me worried here is that we're prematurely rejecting potential future use cases.
 
-MS: Apple's point of view is we don't think SIMD.js is appropriate as an addition to JavaScript because of the perf, but also the use cases and how much work it was. We think that WASM is a better way to bring this to the web. I think in the past I made it clear that we didn't want to implement SIMD.js.
+MS: Apple's point of view is we don't think SIMD.js is appropriate as an addition to JavaScript because of the perf, but also the use cases and how much work it was. We think that wasm is a better way to bring this to the web. I think in the past I made it clear that we didn't want to implement SIMD.js.
 
-BT: I'm personally sympathetic to WASM, though there are some concerns. I have met some people that *did* get really excited about SIMD.js. I can help you find those programmers.
+BT: I'm personally sympathetic to wasm, though there are some concerns. I have met some people that *did* get really excited about SIMD.js. I can help you find those programmers.
 
 PJ: There are more JS developers than C++ programmers. The places where SIMD improves performance are typically isolated to small hot loops.   Forcing developers to bring in the whole wasm toolchain to extract better performance in those cases is a big ask.
 
-DT: Is there a timeframe for whether WASM solves this problem? And if it doesn't should we bring SIMD proposal back?
+DT: Is there a timeframe for whether wasm solves this problem? And if it doesn't should we bring SIMD proposal back?
 
-YK: That could be addressed by moving it to stage 2: "the committee believes that JS should solve this problem". The claim that JavaScript programmers will get enough value out of the existence of WASM is as yet unproven and it's inappropriate to assume it will.
+YK: That could be addressed by moving it to stage 2: "the committee believes that JS should solve this problem". The claim that JavaScript programmers will get enough value out of the existence of wasm is as yet unproven and it's inappropriate to assume it will.
 
 MM: You're saying stage 1 rather than withdrawing it?
 
@@ -1201,7 +1201,7 @@ YK: You can't reuse it in Chakra?
 
 BT: So, I'm still feeling I'm going to have to argue strongly for not deleting this code if we move it back to stage 1.
 
-PJ: Maybe the WASM picture will be clear in a couple months. I'm not sure how far along things are. From that sense it should remain at stage 3.
+PJ: Maybe the wasm picture will be clear in a couple months. I'm not sure how far along things are. From that sense it should remain at stage 3.
 
 AK: I don't think Chakra would ship this in edge and then have the committee withdraw it.
 
@@ -1225,11 +1225,11 @@ BT: That's clear. Stage 3 is not an option.
 
 YK: ??
 
-MPT: If we were to back it up a stage, I could put in a statement that says we want to see what happens with WASM before we keep pushing this.
+MPT: If we were to back it up a stage, I could put in a statement that says we want to see what happens with wasm before we keep pushing this.
 
-YK: V8 has made it clear they are betting on WASM.
+YK: V8 has made it clear they are betting on wasm.
 
-BT: I think practically speaking, based on what I have heard, it would be extremely difficult to get consensus on this even after WASM has been around for a while.
+BT: I think practically speaking, based on what I have heard, it would be extremely difficult to get consensus on this even after wasm has been around for a while.
 
 YK: Imagine a year from now, wasm fails to get traction or adoption.  Then woudl your answer be different.
 
@@ -1261,7 +1261,7 @@ AWB: Do we want to go forward exploring ??? computing hardware.
 
 WH: I have a feeling we will regret withdrawing it in a couple of years.
 
-YK: I think it's a legitimate question that we don't know how WASM will go.
+YK: I think it's a legitimate question that we don't know how wasm will go.
 
 PJ: We have tons of use cases for SIMD.
 
@@ -1291,13 +1291,13 @@ MPT: The move to stage 1 removes the community concern.
 
 BE: If the implementers and browsers don't want to implement it then there's no reason to leave it in stage 3.
 
-YK: I think there's broad consensus that it should not remain at stage 3. Even if we don't ship WASM, it's fine that...? doesn't happen. I think it's ok to communicate that we think that this will work out in WASM...versus not shipping it at all.
+YK: I think there's broad consensus that it should not remain at stage 3. Even if we don't ship wasm, it's fine that...? doesn't happen. I think it's ok to communicate that we think that this will work out in wasm...versus not shipping it at all.
 
-DE: For some broader context, a lot of the engines have shifted to focusing on other types of performance (not numerical perf) maximizing softer factors like dynamic performance. and SIMD is more in the category of numeric performance. That's what we prefer to focus on WASM rather than SIMD.
+DE: For some broader context, a lot of the engines have shifted to focusing on other types of performance (not numerical perf) maximizing softer factors like dynamic performance. and SIMD is more in the category of numeric performance. That's what we prefer to focus on wasm rather than SIMD.
 
 WH: Both kinds of performance are important.
 
-DH: I apologize that I missed this...this might be a slightly different perspective: I think that Web Assembly has changed the context in which we talk about this...
+DH: I apologize that I missed this...this might be a slightly different perspective: I think that WebAssembly has changed the context in which we talk about this...
 
 WH: I don't understand what you mean by changing the context.
 
@@ -1305,7 +1305,7 @@ LBR: We are over the timebox.
 
 AWB: We have a conclusion. We want some documentation about why that is. Dan will write it up.
 
-DH: So the point that I wanted to say was that WASM was working towards including SIMD in the spec. I think there is a possible route, where the web gets SIMD via web assembly. And then at some point that will help us understand if we need SIMD in the JS side. That gives us new signals about developer interest in this feature. I'm fine with demoting ,whatever is it that we say, let's not say that it's not possibly interesting and that it doesn't matter. They may be interested in it the future and we should leave that door open. Why prematurely tell developers that a thing you might want will never happen?
+DH: So the point that I wanted to say was that wasm was working towards including SIMD in the spec. I think there is a possible route, where the web gets SIMD via WebAssembly. And then at some point that will help us understand if we need SIMD in the JS side. That gives us new signals about developer interest in this feature. I'm fine with demoting ,whatever is it that we say, let's not say that it's not possibly interesting and that it doesn't matter. They may be interested in it the future and we should leave that door open. Why prematurely tell developers that a thing you might want will never happen?
 
 DE: That's a great point about getting more feedback from devs. I want to mention that the feedback this committee has given has been really valuable to inspiring the implementation.
 
