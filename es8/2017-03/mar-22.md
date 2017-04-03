@@ -14,7 +14,7 @@ AWB: It was a long list of objections from Japan, both editorial and larger item
 
 IS: ECMAScript Specification Suite fast track got an ISO number but hasn't started voting. Need eight weeks to start voting and working on translation to other official languages. Will start the ballot on April 12th. It will be a 3-month ballot. Istvan thinks that somebody will likely make some comments, which will necessitate a second round and disposition of comments.
 
-IS: Next ECMA General Assembly is in June. All documents are due two months in advance. We're in the RF 2-month opt-out period as of Feb 14th. Opt-out period closes on April 14th.
+IS: Next Ecma General Assembly is in June. All documents are due two months in advance. We're in the RF 2-month opt-out period as of Feb 14th. Opt-out period closes on April 14th.
 
 IS: What should we do about TC39 management structure? John hasn't been responding. AWB has been doing this temporarily.
 
@@ -34,9 +34,9 @@ LBR: The open issue is whether...
 
 ...lots of discussion..
 
-BT: You would like us to approve this document at which point we can at least get ECMA management to take a look at it and make sure there are no problems.
+BT: You would like us to approve this document at which point we can at least get Ecma management to take a look at it and make sure there are no problems.
 
-LBR: We can only move to ECMA if we have consensus.
+LBR: We can only move to Ecma if we have consensus.
 
 DH: I would certainly move to accept the document with the consensus that TC39 thinks it’s the right document ... we'd prefer feedback than having them reject it outright.
 
@@ -74,7 +74,7 @@ AWB: I'm really uncomfortable with the whole "enforcement" idea vs. the aspirati
 
 LBR: If I rename it to Code of Conduct supporters, would that help?
 
-MS: Can we add the chair and the ECMA Representative for the time being?
+MS: Can we add the chair and the Ecma Representative for the time being?
 
 LBR: We've had a discussion around an individual person, I'm not really...I don't think an individual person would be able to solve, for example, sexual harassment. If I'm chair, and someone brings an issue like this to me... I need support to help and/or talk to this person.
 
@@ -106,9 +106,9 @@ MPT: There's almost no way to pre-select the code of conduct committee. I have m
 
 MS: But recusal, if you had a committee of four, that's easier than trying to form a committee when the violation is reported.
 
-AWB: I don't know what the ECMA executive committee and the GA is likely to say, but I suspect that at the point where you talk about enforcement where they may step up and say "that's not our job".
+AWB: I don't know what the Ecma executive committee and the GA is likely to say, but I suspect that at the point where you talk about enforcement where they may step up and say "that's not our job".
 
-WH: Istvan said, we can do some things, but the process would have to be approved by them [ECMA]. We can't have a separate patent policy from other TCs. The process is something we need to coordinate with them.
+WH: Istvan said, we can do some things, but the process would have to be approved by them [Ecma]. We can't have a separate patent policy from other TCs. The process is something we need to coordinate with them.
 
 JF: Are we going to punt? Are there a set of things that we can approve on and move forward? If we can agree on 95%, we can move forward instead of punting.
 
@@ -120,9 +120,9 @@ LBR: I believe this current proposal without an enforcement sub-committee is not
 
 MPT: You will get social-media blowback if you put this out without enforcement. e.g. People on social media right now are pointing out how few women are here. Do not put that document out without an enforcement body.
 
-AWB: I wasn't suggesting putting a document out anywhere except up to ECMA for additional feedback. We can have enforcement in it, just note that they might disagree.
+AWB: I wasn't suggesting putting a document out anywhere except up to Ecma for additional feedback. We can have enforcement in it, just note that they might disagree.
 
-MPT: Can we get consensus for Istvan/ECMA to review? On the document as-is.
+MPT: Can we get consensus for Istvan/Ecma to review? On the document as-is.
 
 MF: Is this without defining any members of a sub-committee or an email address? How are they meant to review that?
 
@@ -146,9 +146,9 @@ SD: I just wanted to make a quick closing comment too. We have managed to get th
 
 AWB: What do we need to do so we have lunch?
 
-MS: Are we comfortable presenting this for ECMA [executive committee] review in their meeting in April?
+MS: Are we comfortable presenting this for Ecma [executive committee] review in their meeting in April?
 
-AWB: The ECMA executive committee.
+AWB: The Ecma executive committee.
 
 BT: Which companies are on the executive committee? Are they TC39?
 
@@ -166,7 +166,7 @@ BT: As-is, yes. OK, I move for lunch recess. Reconvene 2PM.
 
 #### Conclusion/Resolution
 
-- TC39 will present the current code of conduct proposal to ECMA's executive committee.
+- TC39 will present the current code of conduct proposal to Ecma's executive committee.
 
 ## General
 
@@ -557,25 +557,25 @@ MM: We agreed that some discussions need to happen whether or not we achieved co
 - Did not achieve consensus for stage 1.
 - Mark is going to reach out to the champions of the affected proposals for follow-up.
 
-## 8.iv. Approve TR-104 draft and forward it to ECMA GA
+## 8.iv. Approve TR-104 draft and forward it to Ecma GA
 
 AK: Can you give a two-sentence summary of this?
 
 AWB: TR-104 directs people to say "yes, test-262 consists of all of these things on GitHub. Go look at GitHub".
 
-LBR: Basically a description of test-262 with formalities and ready to bring to ECMA.
+LBR: Basically a description of test-262 with formalities and ready to bring to Ecma.
 
-AWB: Blesses ECMA 262 as official ECMA work product. Non-normative.
+AWB: Blesses ECMA-262 as official Ecma work product. Non-normative.
 
 LBR: There are a few facts. As of September 2016, test-262 consisted of over 23k test files...
 
 AK: I skimmed it. I will give it affirmative: yes. I find it hard to imagine someone objecting.
 
-AWB: I do, too, but I want to be fair. This is one of those things that ECMA as an organization: they think it's good for them.
+AWB: I do, too, but I want to be fair. This is one of those things that Ecma as an organization: they think it's good for them.
 
 #### Conclusion/Resolution
 
-- Consensus reached to approve and forward to ECMA GA
+- Consensus reached to approve and forward to Ecma GA
 
 ## 12. i. Needs-Consensus PRs
 
