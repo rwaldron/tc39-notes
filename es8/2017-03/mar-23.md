@@ -786,7 +786,7 @@ WH: It's the same ones.
 
 DH: Right, but in order to do arithmetic with the type, you have to understand how to compose this.
 
-WH: Integers form a mathematical ring. Uint64's form a finite ring. The ring of mathematical integers maps nicely to the ring of integers modulo 2⁶⁴ in the obvious way. So you can do as many of the ring computations (+, -, *) as you want using mathematical integers and do one reduction modulo 2⁶⁴ at the end, and you'll always get the same result as if you had been using Uint64 modulo arithmetic throughout.
+WH: Integers form a mathematical ring. Uint64's form a finite ring. The ring of mathematical integers maps nicely to the ring of integers modulo 2⁶⁴ in the obvious way. So you can do as many of the ring computations (+, -, \*) as you want using mathematical integers and do one reduction modulo 2⁶⁴ at the end, and you'll always get the same result as if you had been using Uint64 modulo arithmetic throughout.
 
 DH: That's great, I enjoyed abstract algebra in college.
 
@@ -937,9 +937,8 @@ WH: I am happy with it. I did a good review of it with DE. The remaining questio
 
 DE: There is an issue on that: issue #23.
 
+#### Conclusion/Resolution
 
-
-#### Conclusion
 - Stage 2 approved
 - Reviewers:
   - Waldemar
@@ -947,8 +946,7 @@ DE: There is an issue on that: issue #23.
   - Brendan
   - Michael Saboff
 
-
-## [PR: Make LocalTZA take 't' and 'isUTC' and drop DSTA(t)](https://github.com/tc39/ecma262/pull/778)
+## [PR #778: Make LocalTZA take 't' and 'isUTC' and drop DSTA(t)](https://github.com/tc39/ecma262/pull/778)
 
 (Maggie Pint and Matt Johnson)
 

@@ -579,7 +579,7 @@ AWB: I do, too, but I want to be fair. This is one of those things that Ecma as 
 
 ## 12. i. Needs-Consensus PRs
 
-### #856 Avoid Duplicate TA#fill value coercions
+### [#856 Avoid Duplicate TA#fill value coercions](https://github.com/tc39/ecma262/pull/856)
 
 BT: Issues with `.fill()` on typed arrays. Specifically the issue involves how to do coercion on the values passed into the `.fill()` argument. The fix involves calling `toNumber()` up front.
 
@@ -607,9 +607,9 @@ BT: It is duplicated.
 
 #### Conclusion/Resolution
 
-- consensus
+- consensus to accept this PR
 
-### #854 Remove Implementation-defined behavior for Number methods
+### [#854 Remove Implementation-defined behavior for Number methods](https://github.com/tc39/ecma262/pull/854)
 
 `Number.toFixed()`/`toPrecision`/`toExponential`
 
@@ -647,9 +647,9 @@ AWB: I think we should take this input as input to a future proposal or PR.
 
 #### Conclusion/Resolution
 
-- consensus
+- consensus to accept this PR
 
-### #785 Array.prototoype.sort checks for compareFn being valid
+### [#785 Array.prototoype.sort checks for compareFn being valid](https://github.com/tc39/ecma262/pull/785)
 
 Presently spec implies but does not say that the compareFn must be `undefined` or callable. PR enforces that expectation.
 
@@ -683,9 +683,9 @@ BT: Any objections to taking this pull request?
 
 #### Conclusion/Resolution
 
-- consensus
+- consensus to accept this PR
 
-### #833 Remove duplicate keys from proxies
+### [#833 Remove duplicate keys from proxies](https://github.com/tc39/ecma262/pull/833)
 
 BT:  All of the possibilities of how....
 
@@ -727,9 +727,9 @@ AK: As the editor, keep an eye on that. I fear that someone will use "duplicate"
 
 #### Conclusion/Resolution
 
-- consensus
+- consensus to accept this PR
 
-### #852 Move side-effecty toIndex in TA constructor to before detached check
+### [#852 Move side-effecty toIndex in TA constructor to before detached check](https://github.com/tc39/ecma262/pull/852)
 
 BT: Current spec won't throw when `toIndex` causes buffer to be detached.
 1. Add another isDetached array buffer check.
@@ -741,9 +741,9 @@ BT: It does not change the observable order of side effects. It should be fine t
 
 #### Conclusion/Resolution
 
-- consensus
+- consensus to accept this PR
 
-### #853 String.prototype.replace edge case alignment
+### [#853 String.prototype.replace edge case alignment](https://github.com/tc39/ecma262/pull/853)
 
 BT: Currently spec says substitution strings ($1, $2) with indexes beyond the matches groups (i.e. $5, $6, $7) is implementation-defined.
 
@@ -771,5 +771,5 @@ BT: I'm open to continuing.
 
 #### Conclusion/Resolution
 
-- consensus
+- consensus to accept this PR
 

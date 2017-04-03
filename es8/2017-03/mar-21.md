@@ -4,6 +4,8 @@ Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Michael Ficar
 
 ## 3. Adopting the agenda
 
+- [agenda](https://github.com/tc39/agendas/blob/master/2017/03.md)
+
 DT: WeakReferences. Please add 2 additional minutes.
 
 AK: Please add items 1 week in advance.
@@ -58,35 +60,39 @@ AWB: We will handle that separately.
 
 AWB: Let's go around the room and have those who have voting authority make your vote. Note takers please take note of the organization who is voting.
 
-Tilde: Yes.
+YK: Tilde Yes.
 
 DH: Mozilla Yes.
 
-WH: Google yes.
+WH: Google Yes.
 
-Shape security: Yes.
+DT: Shape security Yes.
 
-FB: Yes.
+SM: FB Yes.
 
-MS: Apple: Yes.
+MS: Apple Yes.
 
-GoDaddy: Yes.
+BF: GoDaddy Yes.
 
-BT: Microsoft: Yes.
+BT: Microsoft Yes.
 
-JSFoundation: Yes.
+MPT: JSFoundation Yes.
 
-Intel: Yes.
+PJ: Intel Yes.
 
-INRIA: Yes.
+AS: INRIA Yes.
 
-KCD: PayPal: Yes.
+KCD: PayPal Yes.
 
-DFV: SalesForce: Yes.
+DFV: SalesForce Yes.
 
 AWB: Someone will count them. We got "yesses" and no "no"s.  It will be referred to General Assembly for approval. Our work is done for last year.
 
 All: _clapping_
+
+#### Conclusion/Resolution
+
+- Resolution to submit the spec to the General Aassembly for approval.
 
 ## 8. Test262 Status Updates
 
@@ -268,7 +274,7 @@ BT: Ok.
 
 SYG: I have been told Caridy is on the call now.
 
-#### Resolution/Conclusion
+#### Conclusion/Resolution
 
 - Further discussion on Annex B
 
@@ -444,7 +450,7 @@ ZB: Return an empty string (like it does now)
 
 AWB: The fact that is extending `toLocaleString` in places *should* be noted, but ... I guess I'm interested in the background of this feature in terms of its usefulness. Are there other internationalization packages that have this thing.
 
-CP(??): Yeah, I can speak about that. We do have prior art. Java has an API for it. In terms of the user... You're seeing this in almost every social network when you have a list of people who like your tweet/facebook post, you have to list them based on the locale of the user. But we're saying for all your formatters, we need to have data to reliably list an array, the user would have to do this themselves. This just aligns with the existing formatters.
+CP: Yeah, I can speak about that. We do have prior art. Java has an API for it. In terms of the user... You're seeing this in almost every social network when you have a list of people who like your tweet/facebook post, you have to list them based on the locale of the user. But we're saying for all your formatters, we need to have data to reliably list an array, the user would have to do this themselves. This just aligns with the existing formatters.
 
 ZB: It may sound redundant. The reason we want ListFormat is that we want to format lists. And JavaScript doesn't have any support for any other kind of lists. In an effort to close the gap. It's any kind of list.
 
@@ -639,7 +645,7 @@ CP: Let's keep the proposals separate; it's easy for me to integrate them separa
 
 ZB: So ListFormat goes to stage 2 and the others stay at stage 1.
 
-ZB: The last proposal I have is a proposal that I'm seeking stage 1 for. I presented it at the last meeting. It's a proposal for simplifying the way of formatting date and times using two formats `dateStyle` and `timeStyle`. Instead of doing them separately, we would actually like to use one of the four lengths of style "short", "medium", "long" and "full". I think it's a pretty good representation. It makes it easier to use DateTimeFormat, but it also allows one more thing. It is language independent. For example, the "short date" specifiers are relative to the current locale. By using dateStyle or timeStyle, the user hands of control of the formatting to the language. We expect this will be the most common way people use DateTimeFormat.
+ZB: The last proposal I have is a proposal that I'm seeking stage 1 for. I presented it at the last meeting. It's a proposal for simplifying the way of formatting date and times using two formats `dateStyle` and `timeStyle`. Instead of doing them separately, we would actually like to use one of the four lengths of style `"short"`, `"medium"`, `"long"` and `"full"`. I think it's a pretty good representation. It makes it easier to use DateTimeFormat, but it also allows one more thing. It is language independent. For example, the "short date" specifiers are relative to the current locale. By using dateStyle or timeStyle, the user hands of control of the formatting to the language. We expect this will be the most common way people use DateTimeFormat.
 
 CP: The data part is the new thing here, to find the default settings for the locale. It should be useful. All other things that you mentioned are not very relevant because this is low level API, and can be achieved in user-land, except the default settings per locale, which is data.
 
