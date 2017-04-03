@@ -315,7 +315,7 @@ YK: For what it's worth, I have hit some variance of this bug repeatedly and I'v
 
 WH: I like this proposal.
 
-AWB: In particular, going from stage-3 to stage-4, unless we've had problems with it then we should just ask whether it meets the criteria for stage-4. So... Do we have consensus that this should be a stage-4 feature which means it's in the standard in 2018?
+AWB: In particular, going from stage 3 to stage 4, unless we've had problems with it then we should just ask whether it meets the criteria for stage 4. So... Do we have consensus that this should be a stage 4 feature which means it's in the standard in 2018?
 
 AK: Sorry, for my memory, did we expect any compatibility issues with this?
 
@@ -337,7 +337,7 @@ YK: A use case would be putting JS code into a template string for documentation
 
 There's a presentation linked from the agenda.
 
-DE: Just to recap the purpose for the proposal. This is a zero-width assertion that matches a string without consuming anything.There are both positive and negative look behinds now.  ... At the last meeting I was asking if we could go to Stage3. 
+DE: Just to recap the purpose for the proposal. This is a zero-width assertion that matches a string without consuming anything.There are both positive and negative look behinds now.  ... At the last meeting I was asking if we could go to stage 3. 
 
 (see slides for more details)
 
@@ -359,7 +359,7 @@ BT: Not thoroughly. I couldn't find any regex experts. I love it, but I suppose 
 
 MF: Kevin Gibbons is not present and was not able to provide his feedback yet at this time.
 
-AWB: We can advance it to stage 3, or keep it at stage-2 to elicit more reviewers. The first question is does anyone object to stage 3?
+AWB: We can advance it to stage 3, or keep it at stage 2 to elicit more reviewers. The first question is does anyone object to stage 3?
 
 YK: I would assume Chakra or V8 would have said something by now if they had issues.
 
@@ -373,12 +373,12 @@ MF:  I have gotten feedback from Kevin, he said it looks good. The only issues w
 
 BT: So Dan, do you want to talk more wholistically about what you think the state of RegEx will be for 2018.
 
-DE: At the last meeting, Allen said, for ES2018 wouldn't it be nice if we could send a message that shows all the nice features for RegExp. We'd have everyone's work together. We have look behind, ...., and named groups, dotall flag, and match all. So, for match all, that's currently at stage-1. I think maybe we can get it through by ES2018. I was wondering if it'd make sense to go with semantics that are analogous to the current regular expression thing similar to split where it ends up cloining the RegExp. On the other hand, we've previously discussed adding a Symbol.exec method for being the basis for subclassing RegExps. I'm more hesitant about that. But I think we could do matchAll separately from this. So I started talking with Jordan about this and hope we can get all 5 of these things through by 2018 to have a coherent story for RegExp.
+DE: At the last meeting, Allen said, for ES2018 wouldn't it be nice if we could send a message that shows all the nice features for RegExp. We'd have everyone's work together. We have look behind, ...., and named groups, dotall flag, and match all. So, for match all, that's currently at stage 1. I think maybe we can get it through by ES2018. I was wondering if it'd make sense to go with semantics that are analogous to the current regular expression thing similar to split where it ends up cloining the RegExp. On the other hand, we've previously discussed adding a Symbol.exec method for being the basis for subclassing RegExps. I'm more hesitant about that. But I think we could do matchAll separately from this. So I started talking with Jordan about this and hope we can get all 5 of these things through by 2018 to have a coherent story for RegExp.
 
 
 AWB: So I noticed there are a number of agenda items related to this. I think it would be a good thing to try to do all of the items for this as a group and then at the end of it all we could review our overall expectations for 2018.
 
-MM: Given we have a RegExp legacy statics proposal, currently at Stage 1, would you like to consider that as part of the group as well?
+MM: Given we have a RegExp legacy statics proposal, currently at stage 1, would you like to consider that as part of the group as well?
 
 AWB: If you're ready to talk about it.
 
@@ -458,7 +458,7 @@ AWB: They are the list format, unit format, and relative time format. They're al
 
 ZB: As I said Unit format, woudl benefit from list format, becuase it would allow to format compiled units. And I wanted to suggest stage 2 to Intl.ListFormat.
 
-AWB: As a reminder, stage 1 means it's exploratory. Stage 2 means we've explored it and we think this is a feature we want to see standardized even though the details are still subject to change. So a request to got to stage 2 is a require for us to reach consensus that list formatting, roughly based on this proposal, is something we should work on getting into the standard. Any objections? I don't see any. I think you got stage two on the list formatter. Let's go on to the next one.
+AWB: As a reminder, stage 1 means it's exploratory. Stage 2 means we've explored it and we think this is a feature we want to see standardized even though the details are still subject to change. So a request to got to stage 2 is a require for us to reach consensus that list formatting, roughly based on this proposal, is something we should work on getting into the standard. Any objections? I don't see any. I think you got stage 2 on the list formatter. Let's go on to the next one.
 
 BT: Should we nominate reviewers now?
 
@@ -540,7 +540,7 @@ AWB: Let's say you're working in some domain and that domain has some types you'
 
 YK: We have some questions here that it's worth looking more.
 
-ZB: Thank you for the feedback. I think we can keep it in Stage 1. ..But I will have to say. Every library out there has some kind of unit formatter, which says me that this is something that is useful. .. We have some proposal in the spec, but didn't feel comfortable proposing it yet. There is something else about combining units that we may want to use list formatter for. I'm taking this as a "let's keep this at stage 1" to think more about naming and compound units.
+ZB: Thank you for the feedback. I think we can keep it in stage 1. ..But I will have to say. Every library out there has some kind of unit formatter, which says me that this is something that is useful. .. We have some proposal in the spec, but didn't feel comfortable proposing it yet. There is something else about combining units that we may want to use list formatter for. I'm taking this as a "let's keep this at stage 1" to think more about naming and compound units.
 
 BT: I would like to add that Maggie's point on how this changes with the introduction of an actual duration type... Having some exploration of whether this changes or not based on that. What are your thoughts?
 
@@ -623,7 +623,7 @@ AWB: The relationship between this and the UnitFormat--I'd like to see more expl
 
 YK: I think it's not ready for stage 2.
 
-BT: I don't think there's any rush for this for Stage 2 either. I'd like these to go into these as a bundle for 2018 for 402, but we have plenty of time for that.
+BT: I don't think there's any rush for this for stage 2 either. I'd like these to go into these as a bundle for 2018 for 402, but we have plenty of time for that.
 
 ZB: Can I get clear direction form the committee whether we want to BLOCK the two formatters on duration types, or whether they can proceed without that.
 
@@ -637,7 +637,7 @@ YK: Work together with the Duration proposal.
 
 CP: Let's keep the proposals separate; it's easy for me to integrate them separately.
 
-ZB: So ListFormat goes to Stage 2 and the others stay at Stage 1.
+ZB: So ListFormat goes to stage 2 and the others stay at stage 1.
 
 ZB: The last proposal I have is a proposal that I'm seeking stage 1 for. I presented it at the last meeting. It's a proposal for simplifying the way of formatting date and times using two formats `dateStyle` and `timeStyle` instead of doing them separately, we would actually like to use one of the four lengths of style `"short", "medium", "long" and "full". I think it's a pretty good representation. It makes it easier to use DateTimeFormat, but it also allows one more thing. It is language independent. For example, the "short date" specifiers are relative to the current locale. By using dateStyle or timeStyle the user hands of control of the formatting to the language. We expect this will be the most common way people use DateTimeFormat.
 
@@ -700,16 +700,16 @@ We will treat the 3 proposal independently.
 - Intl.UnitFormat - remaining at stage 1
   - Issues raised by 
 
-- Intl.RelativeTimeFormat - stays at Stage 1 pending more understanding of durations.
+- Intl.RelativeTimeFormat - stays at stage 1 pending more understanding of durations.
 
-- dateStyle/timeStyle gets to Stage 1.
+- dateStyle/timeStyle gets to stage 1.
 
 ## 6. Addendum to test262 item
 
 LBR: People asked me to mention. We are using an integrated test generation tool. That's why we have so many lines of code.  It has documentation on test262. I would be very happy to show this test generation tool to anyone who is interested. The automated deployment I mentioned earlier uses this tool to confirm that tests are properly generated.
 
 
-## 10.i.c RegExp Unicode Property Escapes for Stage 3
+## 10.i.c RegExp Unicode Property Escapes for stage 3
 
 DE: There's a link from the agenda. These have barely changed. [DE talks through the slides]. The thing that has been narrowed down recently, is that the list of properties that are supported is explicitly enumerated. Previously implementations could expose anything they wanted, which would lead to needless differences between platforms.  It is implemented in V8 behind a flag.  I asked for reviewers last meeting.  The potential reviewers were Waldemar, James Gibbons, and someone from MS.
 
@@ -793,7 +793,7 @@ DE: Mathias wrote it, and I read it.
      WH reviewed it
 
 
-## 10.i.d RegExp dotAll Flag for Stage 2 
+## 10.i.d RegExp dotAll Flag for stage 2 
 
 (Brian Terlson)
 
@@ -864,7 +864,7 @@ BT: Then we're good process-wise.
   - they previously reviewed it.
 
 
-## 10.ii.b RegExp Named Groups for Stage 3
+## 10.ii.b RegExp Named Groups for stage 3
 
 AWB: The next regex item we have is named group.
 
@@ -949,7 +949,7 @@ DE: It is created now.
 
 MS: Created, but `undefined`? Just like the numbered ones are. Ok, that's the way I like it too.
 
-DE: The only change in the spec I'll be making is moving back the `replace` parameter to the last position. Given that, is this proposal ready for stage-3?
+DE: The only change in the spec I'll be making is moving back the `replace` parameter to the last position. Given that, is this proposal ready for stage 3?
 
 WH: Yes.
 
@@ -966,7 +966,7 @@ BE: Nice, thanks Dan!
 - Stage 3
 
 
-## 10.i.e RegExp Legacy Features for Stage 3
+## 10.i.e RegExp Legacy Features for stage 3
 
 (Mark Miller)
 
@@ -1103,7 +1103,7 @@ DE: I'm no longer championing SIMD.js. It was pursued as the best way to provide
 
 YK: I'm interested in Brendan and DH's response.  
 
-BT/AWB: If we have a proposal that's at Stage 3, the champions shoudl write up a status report.
+BT/AWB: If we have a proposal that's at stage 3, the champions shoudl write up a status report.
 
 YK: Is Mozilla also abandoning it?
 
@@ -1161,7 +1161,7 @@ AWB: I'm reluctant to say: "Dan please write up something because there's very l
 
 WORDS...(lol).
 
-AK: Is there any advantage to actually remove this from Stage 2?
+AK: Is there any advantage to actually remove this from stage 2?
 
 AWB: It's not withdrawn until we have the write-up that says it's withdrawn. As soon as this disappears, all sorts of people will start asking what's happened, why has this gone away? Part of our job is to document why we make decisions.
 
@@ -1289,7 +1289,7 @@ AK: Here's the thing, can we make a change sooner or later. There's no point in 
 
 MPT: The move to stage 1 removes the community concern.
 
-BE: If the implementers and browsers don't want to implement it then there's no reason to leave it in stage-3.
+BE: If the implementers and browsers don't want to implement it then there's no reason to leave it in stage 3.
 
 YK: I think there's broad consensus that it should not remain at stage 3. Even if we don't ship WASM, it's fine that...? doesn't happen. I think it's ok to communicate that we think that this will work out in WASM...versus not shipping it at all.
 
@@ -1321,7 +1321,7 @@ It is proposed that Peter and Yehuda will become caretaker champions of the high
 
 ## 10.i.h Intl.Segmenter (requesting stage 3)
 
-DE: Unicode also defines an algorithm for finding breaks between words and sentences, which CLDR tailors per locale. On [slide #4](https://docs.google.com/presentation/d/1BnVToKOybjLh7IPa6k1i1ruLysFDKIVgo5heU1qb7CM) there are new methods that allow you to jump to the next segment. Previously it provided forward or reverse iteration through a string. We decided to wait for users to ask for an improved API. So I changed the API to have preceeding and following. Also to define break type. It's at stage-2 right now and now that the API is closer to being finalized I want to ask for more reviewers.
+DE: Unicode also defines an algorithm for finding breaks between words and sentences, which CLDR tailors per locale. On [slide #4](https://docs.google.com/presentation/d/1BnVToKOybjLh7IPa6k1i1ruLysFDKIVgo5heU1qb7CM) there are new methods that allow you to jump to the next segment. Previously it provided forward or reverse iteration through a string. We decided to wait for users to ask for an improved API. So I changed the API to have preceeding and following. Also to define break type. It's at stage 2 right now and now that the API is closer to being finalized I want to ask for more reviewers.
 
 CP: I can review.
 

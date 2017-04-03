@@ -8,7 +8,7 @@ AWB: RSVP now for the NodeJS CTC meeting on the evening before the May TC39 meet
 Before the TC39 meeting, there will be a meetup with the NodeJS CTC.
 
 
-## 10.ii.a Dynamic Module Reform for Stage 2
+## 10.ii.a Dynamic Module Reform for stage 2
 
 (Caridy Patiño)
 
@@ -290,7 +290,7 @@ DH: Yes, this is what I'm saying is that we've identified a much simpler system 
 
 AK: Is any spec change required?
 
-DH: Possibly not. There's almost nothing in the spec to support dynamic modules. The combination of the work on Caridy's part combined with the feedback from Adam, we've come up with a much simpler answer. And I'd like to take the learning and apply it to the next rounds in May. I don't want to discuss whether or not this is stage-2 because I know what the next steps are and they fold into what the API for dynamic module creation is. Sorry Caridy, I just said that without asking your opinion... What do you think?
+DH: Possibly not. There's almost nothing in the spec to support dynamic modules. The combination of the work on Caridy's part combined with the feedback from Adam, we've come up with a much simpler answer. And I'd like to take the learning and apply it to the next rounds in May. I don't want to discuss whether or not this is stage 2 because I know what the next steps are and they fold into what the API for dynamic module creation is. Sorry Caridy, I just said that without asking your opinion... What do you think?
 
 CP: It is true that if we go that route it will be simpler. No changes in the spec are needed. 
 
@@ -335,7 +335,7 @@ DH: Can we discuss this offline? It's not important because we're not going to d
 
 #### Conclusion/Resolution
 
-- Remains on Stage 1
+- Remains on stage 1
 
 _Awesome work, now simplified as a result of awesome feedback.  A new version will be presented at next meeting._
 
@@ -353,7 +353,7 @@ DH: Realm are similar to an iframe on the web. Effectiely you can have 2 differe
 
 MM: Up to ES5, there was this fiction that all JS computation and executation happened in one realm, but with iframes this wasn't true.
 
-DH: On top of that node has the VM object with similar functionality. That's now (ES6) codified in the spec, but there isn't a format way to interact with them. You can create a new iframe, but it comes with all this DOM crap. The goal is the Realm API is to just create multiple realms with nothing else by default. This is useful for building frameworks and structures on top of it. It's a pretty low-level (and complicated API). This is something you do when you're implementing a transpiler or security framework. So it's ok if the surface API is a little advanced. Goals for today are to present progress and get feedback. I'm not looking for stage-2 at this point. I presented my current thinking in January and mentioned I believe we can get to a place where we don't need a registry API or loader API. We had thought we needed those. I think there are a couple of tiny hooks we want in the browser space, but most of the functionality can be done in user-land. I have some sample code. Please don't nerd-snipe me too hard. I have a plausibility argument and it's looking more and more plausible to me. The first example is the smallest I could come up with.
+DH: On top of that node has the VM object with similar functionality. That's now (ES6) codified in the spec, but there isn't a format way to interact with them. You can create a new iframe, but it comes with all this DOM crap. The goal is the Realm API is to just create multiple realms with nothing else by default. This is useful for building frameworks and structures on top of it. It's a pretty low-level (and complicated API). This is something you do when you're implementing a transpiler or security framework. So it's ok if the surface API is a little advanced. Goals for today are to present progress and get feedback. I'm not looking for stage 2 at this point. I presented my current thinking in January and mentioned I believe we can get to a place where we don't need a registry API or loader API. We had thought we needed those. I think there are a couple of tiny hooks we want in the browser space, but most of the functionality can be done in user-land. I have some sample code. Please don't nerd-snipe me too hard. I have a plausibility argument and it's looking more and more plausible to me. The first example is the smallest I could come up with.
 
 DE: Example: a tiny, fixed registry.
 
@@ -576,7 +576,7 @@ DH: Ok, thanks everyone.
 
 - Stage remains at stage 1. This was just an update.
 
-## 10.iv.a Arbitrary precision integer type for Stage 2
+## 10.iv.a Arbitrary precision integer type for stage 2
 
 [slides](https://docs.google.com/presentation/d/1lKscD8d_i1mz1w_puWJKW4LCyQLgrb0CySHVukohkLE/edit#slide=id.g1c4f05590f_0_115)
 
@@ -1212,7 +1212,7 @@ BT: We have consensus % this question of the specific wording...
 - Consensus modulo improving the language
 
 
-## 12.ii.a Date Proposal - NodaTime as a built-in Module for Stage 1
+## 12.ii.a Date Proposal - NodaTime as a built-in Module for stage 1
 
 [proposal](https://github.com/maggiepint/proposal-temporal)
 [slides]()
@@ -1481,7 +1481,7 @@ YK: I'm trying to avoid injecting random work that I did in the past into this c
 
 MPT: I would not say it's a de-facto standard.
 
-YK: I made a strong claim. Let me jump to the punch-line. There are specific details we can extract from JodaTime. I agree that we could make it in some senses like that... Stage-1 seems fine is what I'm saying...
+YK: I made a strong claim. Let me jump to the punch-line. There are specific details we can extract from JodaTime. I agree that we could make it in some senses like that... stage 1 seems fine is what I'm saying...
 
 BT: The point that I want to make more clear is that we would all like there to be a small `Date` object that would function as the kernel of date-innovation, but I'm not convinced that's possible.
 
@@ -1499,11 +1499,11 @@ YK: I don't think tie-breaking without some thought is good.
 
 MPT: Nobody's suggesting that.
 
-MF: These are well-past stage-1 concerns.
+MF: These are well-past stage 1 concerns.
 
-DH: This is obvious stage-1.
+DH: This is obvious stage 1.
 
-WH: Yeah, let's do stage-1.
+WH: Yeah, let's do stage 1.
 
 MPT: Let's start with that. Thanks!
 
