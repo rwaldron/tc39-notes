@@ -637,7 +637,7 @@ BE: Let's talk about that later.
 
 ### Slide: _Library Features_
 
-DE: For library features there's Int64Array and UInt64Array.  And functions to get these from array bufers.
+DE: For library features there's Int64Array and Uint64Array.  And functions to get these from array bufers.
 
 - Uint64Array, Int64Array
 - Integer static methods
@@ -654,7 +654,7 @@ BE: I don't think it's the name so much as the variability of the "n".
 
 MM: I was thinking you would say Integer.asInt64, rather that Integer.asIntN(64,...)
 
-BE: If you look at the ASM.js example, you can see that it's cast `asUIntN` and then ...
+BE: If you look at the ASM.js example, you can see that it's cast `asUintN` and then ...
 
 DE: Maybe we shoudl have asInt64 as a spcific thing.
 
@@ -726,11 +726,11 @@ DE: The plus issue is that IEEE754 arithmetic is well defined. When you try to c
 
 ### Slide 10: Optimization potential
 
-- Use Smi (small integer) infrastructure to optimize as int64 (sometimes)
+- Use Smi (small integer) infrastructure to optimize as Int64 (sometimes)
 - Could work with asm.js
 - Multiple browsers expressed optimism about implementing with good performance
 
-DE: For optimization potential currently across JavaScript engines there are  .... Could also be used to optimize integer as int64 (?).  We could make it work with asm.js.
+DE: For optimization potential currently across JavaScript engines there are  .... Could also be used to optimize integer as Int64 (?).  We could make it work with asm.js.
 
 MM: What's Smi?
 
@@ -770,7 +770,7 @@ DE: Until you know the types that are flowing through the program. I think a lot
 
 SYG: We are confusing two optimizations.  Int64 and BigInts are going to be the same because we need to allocate stuff. For V8 that's about the same amount of work. For SpiderMonkey, I think it will be more work, but only a little bit more.
 
-BT: That's the general message I heard as well. SLightly harder, but it's not worse enough that our first implementation will be pretty much on par with what int64 would have been.
+BT: That's the general message I heard as well. SLightly harder, but it's not worse enough that our first implementation will be pretty much on par with what Int64 would have been.
 
 BE: E.g., 1.x for some fraction. Where the variaous csat oeprations are used in asm.js etc, you could imagine have it compile to unboxed, etc. implementation. Is any implementor looking at that?
 
@@ -786,21 +786,21 @@ WH: It's the same ones.
 
 DH: Right, but in order to do arithmetic with the type, you have to understand how to compose this.
 
-WH: Integers form a mathematical ring. Uint64's form a finite ring. The ring of mathematical integers maps nicely to the ring of integers modulo 2⁶⁴ in the obvious way. So you can do as many of the ring computations (+, -, *) as you want using mathematical integers and do one reduction modulo 2⁶⁴ at the end, and you'll always get the same result as if you had been using uint64 modulo arithmetic throughout.
+WH: Integers form a mathematical ring. Uint64's form a finite ring. The ring of mathematical integers maps nicely to the ring of integers modulo 2⁶⁴ in the obvious way. So you can do as many of the ring computations (+, -, *) as you want using mathematical integers and do one reduction modulo 2⁶⁴ at the end, and you'll always get the same result as if you had been using Uint64 modulo arithmetic throughout.
 
 DH: That's great, i enjoyed abstract algebra in college.
 
 BE: It's shown in the example Dan gave for asm.js.
 
-DH: We're getting there. I'm askin ghow hard would it be to write down the list that these are the sets of operations that we can do that would a) inject you into the int64 value space and b) eject you from the int64 value space (??)
+DH: We're getting there. I'm askin ghow hard would it be to write down the list that these are the sets of operations that we can do that would a) inject you into the Int64 value space and b) eject you from the Int64 value space (??)
 
 DE: TurboFan has a great ??? for modeling those kind of ranges here. I would recommend people who really want to stay within the range to apply the cast operator after each operation. If we were going to stay into ASM.js we would require that. 
 
-WH: That's overkill. All you need is to do the reduction to uint64's of inputs. You can do as much multiplication, addition, substraction, and shifting left as you want, as long as you do one reduction at the end, before you store it into a variable that escapes. You must also do the reduction before any comparisons or divide-like operations, including shifting right.
+WH: That's overkill. All you need is to do the reduction to Uint64's of inputs. You can do as much multiplication, addition, substraction, and shifting left as you want, as long as you do one reduction at the end, before you store it into a variable that escapes. You must also do the reduction before any comparisons or divide-like operations, including shifting right.
 
 DH: Let's say I'm writing some crypto code in JS and i want it to be fast. A) how hard is it to write that code. What do I need to do to get that code to work. I'm not arguing against big ints here. I like big ints. Dan you made the claim, most of the time you don't want big ints, but it's good to look at the cases where they do and understand how hard it is to use their goals. People in node have been asking for this for years. So if we optimize for that, how hard is it (for implementors) to optimize for? And then how hard is it for the ...
 
-DE: I did talk to some people in the node communitya bout this. Some people expressed a preference for int64 over integer, however the maining worry was about possibly falling into a bad performance path if they left out the cast operator. On the other hand there were positive arguments in favor of interger over int64 in some of these use cases. ... something about hashes... With integers we can definitely build integer math faster than we could directly in javascript. We could use SIMD or similar things.
+DE: I did talk to some people in the node communitya bout this. Some people expressed a preference for Int64 over integer, however the maining worry was about possibly falling into a bad performance path if they left out the cast operator. On the other hand there were positive arguments in favor of interger over Int64 in some of these use cases. ... something about hashes... With integers we can definitely build integer math faster than we could directly in javascript. We could use SIMD or similar things.
 
 YK: One of my sad rust experiences is opeining the great int debate in the rust. You want 3 things: wrapping (Crypto), an exception if you overthrow, or you miight want a bigNum. This proposal targets where you might want a bignum case (and there are a lot of cases where that's true). If you're writing crypto.
 
@@ -832,7 +832,7 @@ YK: Does anyone believe that if they support this proposal they are not allowed 
 
 WH: That's not my position. I was on the side of Uint64 in January. At that meeting I said I'm fine with Integer for now and we achieved consensus on specifying that as the solution for now. I have no particular objections to doing Int64 in the future if it's still needed.
 
-AK: There was a discussion about should we do integer should we do UInt64. And it seemed like integer was a way forward for that and met with some significant positivity at that meeting.
+AK: There was a discussion about should we do integer should we do Uint64. And it seemed like integer was a way forward for that and met with some significant positivity at that meeting.
 
 BE: We achieved consensus on moving forward with Integer first and making sure it had the cast functions and other things to make sure it had efficient math using integers.
 
