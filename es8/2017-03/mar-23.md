@@ -14,7 +14,7 @@ Before the TC39 meeting, there will be a meetup with the NodeJS CTC.
 
 - [slides](https://github.com/tc39/proposal-dynamic-modules)
 
-YK: Even if node doesn't want this feature. 
+YK: Even if node doesn't want this feature.
 
 MF: In a previous slide you said anything you can do in node modules you should be able to do in ECMAScript modules. Can you clarify what you meant by that?
 
@@ -106,7 +106,7 @@ AK: Going back to the previous dicussion, you basically cause the module to expo
 
 MM: What is "tried to cause the module to export anything anyone tried to get from it"?
 
-AK: For ES modules they export the things they declare as exporting. For dynamic modules their set of exports is defined by their importers. I could say `import atom from underscore` and atom will now be exported from underscore. 
+AK: For ES modules they export the things they declare as exporting. For dynamic modules their set of exports is defined by their importers. I could say `import atom from underscore` and atom will now be exported from underscore.
 
 BF: I don't think that's entirely true if we go back to module declaration and instantiation, I think it's statically checked.
 
@@ -179,7 +179,7 @@ export function f() {
 }
 ```
 
-DH: Oh, the fact that the way the spec is written means it doesn't add it to the environment.  That's just a bug in the spec. 
+DH: Oh, the fact that the way the spec is written means it doesn't add it to the environment.  That's just a bug in the spec.
 
 MM: Ok, good.
 
@@ -252,7 +252,7 @@ BF: We have prototyped out exactly that. You can model it with two ES modules ri
 
 DH: Sure, perfect. And we could make that API nicely. The going assumption we had is that the only way to discover the shape was to execute it. I'm suggesting that instead of that, we could say you have to declare before you execute what the static shape is.
 
-WH: By static shape you mean "names and exports"? 
+WH: By static shape you mean "names and exports"?
 
 DH: Yes, that's the thing you declare once and for all and never changes.  You can state names before your execution.
 
@@ -292,7 +292,7 @@ AK: Is any spec change required?
 
 DH: Possibly not. There's almost nothing in the spec to support dynamic modules. The combination of the work on Caridy's part combined with the feedback from Adam, we've come up with a much simpler answer. And I'd like to take the learning and apply it to the next rounds in May. I don't want to discuss whether or not this is stage 2 because I know what the next steps are and they fold into what the API for dynamic module creation is. Sorry Caridy, I just said that without asking your opinion... What do you think?
 
-CP: It is true that if we go that route it will be simpler. No changes in the spec are needed. 
+CP: It is true that if we go that route it will be simpler. No changes in the spec are needed.
 
 DH: I'm excited, I think this is a good place to wrap things up unless anyone has feedback or questions.
 
@@ -349,7 +349,7 @@ DH: This is a recap of the work I've done on the realms API.
 
 DH: Working with Caridy, MarkM, Dean, and others.
 
-DH: Realms are similar to an iframe on the web. Effectively you can have 2 different copies of the JS world that can talk to each other. Historically this didn't exist in the spec, but it was a reality. 
+DH: Realms are similar to an iframe on the web. Effectively you can have 2 different copies of the JS world that can talk to each other. Historically this didn't exist in the spec, but it was a reality.
 
 MM: Up to ES5, there was this fiction that all JS computation and execution happened in one realm, but with iframes this wasn't true.
 
@@ -361,7 +361,7 @@ DE: They have one big switch at the top of the code that said. If the module is 
 
 CP: Another point around this is today people use Rollup which is effectively a ???? for client-side.
 
-DH: By calling super I'm subclassing the builtin realm API.  It is just a demo here. 
+DH: By calling super I'm subclassing the builtin realm API.  It is just a demo here.
 
 WH: You are missing a declaration of #registry.
 
@@ -400,7 +400,7 @@ AWB: So you've chosen to expose an eval() method that evaluates ???. You could a
 
 DH: I think it's important to expose the minimal API you need first and not mix them in with conveniences. What's the minimum set of stuff that I need? This is an EWM kind of API. It's a low-level API to begin with and people can build abstractions on top of it.
 
-AWB: If you look at it from the point of view of modeling what the language lets you do syntactically, we have two types of top level.  
+AWB: If you look at it from the point of view of modeling what the language lets you do syntactically, we have two types of top level.
 
 DH: Agreed, but allow me to proceed because there's more.
 
@@ -430,7 +430,7 @@ AK: Feel free to defer this. It seems like you're presenting a bunch of examples
 
 DH: For the time being, it's a non-goal. I think it's a much thornier space because you have all kinds of questions about what the existing environment is depending on...
 
-MM: I think a way to rationalize, to imagine how one would extend this to hook into those existing host frameworks (iframe, etc) is to imagine that this had come first and that the host frameworks were built on top of that. 
+MM: I think a way to rationalize, to imagine how one would extend this to hook into those existing host frameworks (iframe, etc) is to imagine that this had come first and that the host frameworks were built on top of that.
 
 DH: Should people have the power to modify the environment they're running in? That said, there are critical pieces to configuring my environment that will matter a lot. A lot of the loader API in the space of what you're talking about (configuring the environment in which my core API is running) is satisfied by Service Worker which can do this. Like how do we lookup module names when they're imported. I think it doesn't satisfy all of the use cases. For one, the first-run semantics (the things you can't do when you first run your app). Also what you can't...
 
@@ -524,7 +524,7 @@ MM: Yep.
 
 MM: I just want to mention that people don't read too much into the specificity here.... We are discussing some radical refactorings to this, so this may be very different in the future.
 
-AWB: For your jquery example, you're essentially showing sharing jquery across multiple realms you might want to create here. The footgun aspect of that is it would seem on the surface is that that instance of jquery you're sharing itself is going to be compiled in a different realm than the realm that you're sharing it in. 
+AWB: For your jquery example, you're essentially showing sharing jquery across multiple realms you might want to create here. The footgun aspect of that is it would seem on the surface is that that instance of jquery you're sharing itself is going to be compiled in a different realm than the realm that you're sharing it in.
 
 CP: I don't think that will be a problem. I think you are abstracting the normal jquery object. I don't think it will really matter much, you can evaluate jquery in the new realm, extract the global jquery object and use it as in the example. This jquery will somehow have to become a dynamic module.
 
@@ -562,7 +562,7 @@ MM: Yeah, they're pro-worker per agent. Not per-realm.
 
 BF: I didn't see anything about controlling promises here. Is that separate?
 
-MM: Yes, once Dave revives the old wiki.ecmascript.org pages. I can point you at a bare start at an API to try to re-ify agent. 
+MM: Yes, once Dave revives the old wiki.ecmascript.org pages. I can point you at a bare start at an API to try to re-ify agent.
 
 DH: Even though they belong in separate layers we want to make sure that they are....similar.
 
@@ -690,7 +690,7 @@ DE: The current semantics are that `Number === Integer` will return `false`.
 - `1 == 1n` is TypeError
 - `1 < 1n` is TypeError
 
-MM: I like this. With `==` I'm concerned:  what does `1n == null` do?  
+MM: I like this. With `==` I'm concerned:  what does `1n == null` do?
 
 DE: It coerces null into a Number, do the compare, and then get a TypeError.   We could discard future-proofing so we could make the comparison operators work for this case.
 
@@ -746,7 +746,7 @@ BT: I don't think that's what I heard exactly. Conversations from 2 months ago. 
 
 YK: Is the assumption that once things warm up it's the same? Or are you saying (Adam) that u64? would have the equivalent performance problems to making it fast in cold state.
 
-AK: For v8, to be really fast, you want to fit inside a Smi. 
+AK: For v8, to be really fast, you want to fit inside a Smi.
 
 MM: As long as you have any tagging at all, as long as you use nanboxing? or not to do it ...
 
@@ -794,7 +794,7 @@ BE: It's shown in the example Dan gave for asm.js.
 
 DH: We're getting there. I'm asking how hard would it be to write down the list that these are the sets of operations that we can do that would a) inject you into the Int64 value space and b) eject you from the Int64 value space (??)
 
-DE: TurboFan has a great ??? for modeling those kind of ranges here. I would recommend people who really want to stay within the range to apply the cast operator after each operation. If we were going to stay into ASM.js we would require that. 
+DE: TurboFan has a great ??? for modeling those kind of ranges here. I would recommend people who really want to stay within the range to apply the cast operator after each operation. If we were going to stay into ASM.js we would require that.
 
 WH: That's overkill. All you need is to do the reduction to Uint64's of inputs. You can do as much multiplication, addition, substraction, and shifting left as you want, as long as you do one reduction at the end, before you store it into a variable that escapes. You must also do the reduction before any comparisons or divide-like operations, including shifting right.
 
@@ -861,7 +861,7 @@ DE: I've heard interest from FinTech client of Egalia, but don't know details.
   - [Bigger](https://github.com/littledan/proposal-integer/issues/20) [standard](https://github.com/littledan/proposal-integer/issues/18) library, or save more for v2?
 - And many more! Please come on GitHub and tell me what’s wrong with the proposal​
 
-DE: There is detailed spectext. It has some color issues that I will address. It has open issues. 
+DE: There is detailed spectext. It has some color issues that I will address. It has open issues.
 
 DE: Currently in the spec there appears to be some implicit coercion between Numbers and mathematical values. Once we have multiple numeric types, we have to be more explicit about how this is accomplished.
 
@@ -897,11 +897,11 @@ MF: What is an example?
 
 MPT: Dates conversions can end up really weird. `00` vs `000` dates.
 
-DE: Next issue.  Should toString include the literal suffix "N".  The current spec doesn't put the N.  
+DE: Next issue.  Should toString include the literal suffix "N".  The current spec doesn't put the N.
 
 WH: It's analogous to asking whether string.toString() should put the quotes around it or not.
 
-MM: `toString()` should not be thought of as something to recover the source string for a programming language. What it should be doing is represent using characters something that indicates what the value is. 
+MM: `toString()` should not be thought of as something to recover the source string for a programming language. What it should be doing is represent using characters something that indicates what the value is.
 
 WH: So `toString()` of Integer 5 should return what?
 
@@ -917,7 +917,7 @@ DE: #20.
 
 DT: Is Number 0 truthy?
 
-DE: No, that's an open question. 
+DE: No, that's an open question.
 
 WH: The current proposal is that 0 is falsey and all other numbers are truthy.
 
@@ -931,11 +931,11 @@ YK: I have a question about what else we might do here. There is a place in the 
 
 DE: I think that's a good idea to think about. There's an open bug to think about JSON Integer.
 
-DE: Is this ready for stage 2? 
+DE: Is this ready for stage 2?
 
-WH: I am happy with it. I did a good review of it with DE. The remaining question for me is how this will work with Array buffers. There are some interesting questions there. 
+WH: I am happy with it. I did a good review of it with DE. The remaining question for me is how this will work with Array buffers. There are some interesting questions there.
 
-DE: There is an issue on that: issue #23. 
+DE: There is an issue on that: issue #23.
 
 
 
@@ -956,7 +956,7 @@ Matt on the phone ?? (M)
 
 MPT: Describing a slide about issues with daylight savings time in JavaScript....
 
-MPT: What we've done is said, always pick the first one. The reason is because of a scheduling context. If you have something needing to happen at 1AM and you are told the second 1AM then you're going to be mad. You get a similar thing with the spring forward transition. You get a set of local times that do not exist. Spec says move the ambiguous time by the direction. That's not predictable for the user so we define the spec to always move it forward. Because time never randomly jumps backward in real life. 
+MPT: What we've done is said, always pick the first one. The reason is because of a scheduling context. If you have something needing to happen at 1AM and you are told the second 1AM then you're going to be mad. You get a similar thing with the spring forward transition. You get a set of local times that do not exist. Spec says move the ambiguous time by the direction. That's not predictable for the user so we define the spec to always move it forward. Because time never randomly jumps backward in real life.
 
 WH: What do you mean by moving forward?
 
@@ -992,7 +992,7 @@ MPT: It wraps to April...
 
 WH: That's precedent.
 
-BT: Yeah I think in general this date object is designed not to tell you and just do *something*. 
+BT: Yeah I think in general this date object is designed not to tell you and just do *something*.
 
 YK: Is the intent here that we're always moving forward, or always moving backward?
 
@@ -1106,7 +1106,7 @@ BT: Yeah..I'd like to see.
 
 AWB: That's one of the things you'd have to evaluate on each case.
 
-DE: If you're an embedded system you only have to implement a single timezone. 
+DE: If you're an embedded system you only have to implement a single timezone.
 
 BT: But we require it for Unicode case mapping.
 
@@ -1128,7 +1128,7 @@ MJ: (reading from ECMA-262). The PR removes some of that wording and replacing i
 
 MPT: Nobody is arguing for the ambguity, but what we're at is.
 
-BT: I was just curious. In light of your concerns around IoT and requirement of data tables. Are we going to be able to move forward with a new date proposal that would require this kind of data to be available in order to have a good system? 
+BT: I was just curious. In light of your concerns around IoT and requirement of data tables. Are we going to be able to move forward with a new date proposal that would require this kind of data to be available in order to have a good system?
 
 BE: I don't know. I think it's an open issue. We should hear from the ??? folks. As usual, people innovating on certain areas don't come to this meeting, they're too busy.
 
@@ -1148,7 +1148,7 @@ BT: We all do it anyway, so it's not like there's a pressing issue here.
 
 DE: This is an important issue for Chrome, and this bug keeps getting filed on Chrome. It'll be great to get this codified.
 
-BE: You mean allowed but not required. 
+BE: You mean allowed but not required.
 
 AWB: Is there something that does not allow historically?
 
@@ -1340,7 +1340,7 @@ MJ: That's the difference between period and duration in the Noda API.
 
 MPT: So what we're saying to breaking things down... If you have a LocalDateTime type, the author made the decision that you could only do calendar computation, day or bigger. This means you circumvent this ambiguous time problem. If you want to move to hours or minutes, you'd have to convert into a ZonedDateTime.
 
-MJ: The real distinction to keep in mind is that `LocalDateTime` doesn't have a time zone reference. 
+MJ: The real distinction to keep in mind is that `LocalDateTime` doesn't have a time zone reference.
 
 RX: Ok, thank you, I understand.
 
@@ -1386,7 +1386,7 @@ BE: It's not a value type in the sense of n64.
 
 MPT: It's an object.
 
-DH: That was my first question. We were talking about an immutable object, but its `typeof` is object. 
+DH: That was my first question. We were talking about an immutable object, but its `typeof` is object.
 
 MPT: Right! Yes, sorry.
 We fight the fight on Stack Overflow about "you can use a library that works or you can do the thing you're doing." There's this set of people who are going to use the language primitives. Those people aren't making good code. It goes beyond just mutability vs immutability. Date doesn't have add methods, you have to get/set them, they bubble, and you don't have safety when you overflow a Uint.

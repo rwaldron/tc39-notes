@@ -84,11 +84,11 @@ KCD: PayPal: Yes.
 
 DFV: SalesForce: Yes.
 
-AWB: Someone will count them. We got "yesses" and no "no"s.  It will be referred to General Assembly for approval. Our work is done for last year. 
+AWB: Someone will count them. We got "yesses" and no "no"s.  It will be referred to General Assembly for approval. Our work is done for last year.
 
 All: _clapping_
 
-## 8. Test262 Status Updates 
+## 8. Test262 Status Updates
 
 (Leo Balter)
 
@@ -120,7 +120,7 @@ AWB: We talked about the 2017 edition of the standard. Are there any items for t
 
 BT: One of the big things I've been pushing this year (and plan to push in a big way next year) is machine readability. Specifically reducing the number of terms used in ECMASpeak. Specifically, I'm looking into making ECMAIDL a subset of WebIDL.
 
-YK: We should really be willing to use a webset of WebIDL. There may be something more suitable for webspecs that's more suitable for JS semantics.
+YK: We should really be willing to use a subset of WebIDL. There may be something more suitable for webspecs that's more suitable for JS semantics.
 
 BT: That's the path I'm interested in going down. Thinking of calling it JIDL.
 
@@ -218,7 +218,7 @@ AWB: We're getting into document design space. We need to get that as a cohesive
 
 BT: I totally agree with Dan's request for more semantic meaning to notes and that side of things. Ecmarkup has some [new tools] that make it easier to notice what's happening. Everyone should check out the decorators spec, because that's kind of where I've been putting my ideas. (Examples: https://tc39.github.io/proposal-decorators/#sec-runtime-semantics-makefunctionuninitialized, https://littledan.github.io/proposal-integer/)
 
-AWB: I don't see substr() as needing to be in Annex B. I looked back and couldn't figure out why it really was put there. Everyone has added it. I don't see why it needs to fall into that category. It's just a redundant. 
+AWB: I don't see substr() as needing to be in Annex B. I looked back and couldn't figure out why it really was put there. Everyone has added it. I don't see why it needs to fall into that category. It's just a redundant.
 
 BT: How do you see substr() as different from anything else in Annex B.
 
@@ -337,7 +337,7 @@ YK: A use case would be putting JS code into a template string for documentation
 
 There's a presentation linked from the agenda.
 
-DE: Just to recap the purpose for the proposal. This is a zero-width assertion that matches a string without consuming anything.There are both positive and negative look behinds now.  ... At the last meeting I was asking if we could go to stage 3. 
+DE: Just to recap the purpose for the proposal. This is a zero-width assertion that matches a string without consuming anything.There are both positive and negative look behinds now.  ... At the last meeting I was asking if we could go to stage 3.
 
 (see slides for more details)
 
@@ -373,7 +373,7 @@ MF:  I have gotten feedback from Kevin, he said it looks good. The only issues w
 
 BT: So Dan, do you want to talk more holistically about what you think the state of RegEx will be for 2018?
 
-DE: At the last meeting, Allen said, for ES2018 wouldn't it be nice if we could send a message that shows all the nice features for RegExp. We'd have everyone's work together. We have look behind, ...., and named groups, dotall flag, and match all. So, for match all, that's currently at stage 1. I think maybe we can get it through by ES2018. I was wondering if it'd make sense to go with semantics that are analogous to the current regular expression thing similar to split where it ends up cloining the RegExp. On the other hand, we've previously discussed adding a Symbol.exec method for being the basis for subclassing RegExps. I'm more hesitant about that. But I think we could do matchAll separately from this. So I started talking with Jordan about this and hope we can get all 5 of these things through by 2018 to have a coherent story for RegExp.
+DE: At the last meeting, Allen said, for ES2018 wouldn't it be nice if we could send a message that shows all the nice features for RegExp. We'd have everyone's work together. We have look behind, ...., and named groups, dotall flag, and match all. So, for match all, that's currently at stage 1. I think maybe we can get it through by ES2018. I was wondering if it'd make sense to go with semantics that are analogous to the current regular expression thing similar to split where it ends up cloning the RegExp. On the other hand, we've previously discussed adding a Symbol.exec method for being the basis for subclassing RegExps. I'm more hesitant about that. But I think we could do matchAll separately from this. So I started talking with Jordan about this and hope we can get all 5 of these things through by 2018 to have a coherent story for RegExp.
 
 
 AWB: So I noticed there are a number of agenda items related to this. I think it would be a good thing to try to do all of the items for this as a group and then at the end of it all we could review our overall expectations for 2018.
@@ -392,7 +392,7 @@ MM: I can talk about it.
 
 (Caridy Patiño)
 
-CP: So far no feedback on the 2017 draft that was published in the last month.  We haven't done any major updates, though we did small fixes and editorial work.  We expect to continue with small work in 2018.  Zibi(?) and Daniel will present a few related proposals.  Also ??? will be updated.  We keep waiting for number format, format to parts from Google.  
+CP: So far no feedback on the 2017 draft that was published in the last month.  We haven't done any major updates, though we did small fixes and editorial work.  We expect to continue with small work in 2018.  Zibi(?) and Daniel will present a few related proposals.  Also ??? will be updated.  We keep waiting for number format, format to parts from Google.
 
 DT: Your voice went out....please say that again.
 
@@ -416,7 +416,7 @@ No specific conclusion, let's review the current proposals for ECMA-402.
 
 ## 10.i.f ECMA-402 Presentation of the three formatters for stage 2
 
-(Zibi Braniecki) 
+(Zibi Braniecki)
 
 ### Intl.ListFormat
 
@@ -442,7 +442,7 @@ WH: What will it do on an empty array?
 
 ZB: Return an empty string (like it does now)
 
-AWB: The fact that is extending `toLocaleString` in places *should* be noted, but ... I guess I'm interested in the background of this feature in terms of its usefulness. Are there other internationalization packages that have this thing. 
+AWB: The fact that is extending `toLocaleString` in places *should* be noted, but ... I guess I'm interested in the background of this feature in terms of its usefulness. Are there other internationalization packages that have this thing.
 
 CP(??): Yeah, I can speak about that. We do have prior art. Java has an API for it. In terms of the user... You're seeing this in almost every social network when you have a list of people who like your tweet/facebook post, you have to list them based on the locale of the user. But we're saying for all your formatters, we need to have data to reliably list an array, the user would have to do this themselves. This just aligns with the existing formatters.
 
@@ -499,7 +499,7 @@ WH: How is it different?
 ZB: Two examples of that. We are translating the whole pattern, which may be different depending on the language. (Think "10 years" vs. YR10 or something appropriate to the language). So the symbol for kb for example, 10kb, may be different depending on the language. The intent of the formatter is to allow users to display to the software user in their language.
 
 
-MPT: I believe there are calendars other than Gregorian that will have units other than seconds. Are your units strictly Gregorian calendar units? 
+MPT: I believe there are calendars other than Gregorian that will have units other than seconds. Are your units strictly Gregorian calendar units?
 
 
 ZB: No. It's not finalized, but we will not be narrowing it down to any single system. We will want to support duration, we will want to support time & date unit for calendars.
@@ -577,7 +577,7 @@ AWB: Let's move on to relative time format.
 
 ### Intl.RelativeTimeFormat
 
-ZB: This is by far the most requested time formatter. It's basically about formatting relative time. It's intended to allow us to present a delta of time in a human-readable way. There are a few ways of doing this. A numeric way, following CLDR and a text type, which for certain values which may return a more human-readable variant (tomorrow, yesterday, now, etc). These are the kind of overlays on top of the system. There's also a short value vs. long. 
+ZB: This is by far the most requested time formatter. It's basically about formatting relative time. It's intended to allow us to present a delta of time in a human-readable way. There are a few ways of doing this. A numeric way, following CLDR and a text type, which for certain values which may return a more human-readable variant (tomorrow, yesterday, now, etc). These are the kind of overlays on top of the system. There's also a short value vs. long.
 
 WH: Are the relative values only relative to now? Are they always "N days before now", or can you ask for a translation of "N days before X" or "N minutes after X"?
 
@@ -585,7 +585,7 @@ CP: You can't do that; it's always in the present.
 
 BT: Can we put a break in our discussion? We're way over our timebox and lunch is ready.
 
-AWB: Why isn't this a category of the UnitFormat? 
+AWB: Why isn't this a category of the UnitFormat?
 
 ZB: Mostly because unit formatter is not a unit of deltas. It doesn't have the ability to format units of time. It also doesn't have the "type overlay".
 
@@ -698,7 +698,7 @@ We will treat the 3 proposals independently.
     - Daniel Ehrenberg
 
 - Intl.UnitFormat - remaining at stage 1
-  - Issues raised by 
+  - Issues raised by
 
 - Intl.RelativeTimeFormat - stays at stage 1 pending more understanding of durations.
 
@@ -793,7 +793,7 @@ DE: Mathias wrote it, and I read it.
   - WH reviewed it
 
 
-## 10.i.d RegExp dotAll Flag for stage 2 
+## 10.i.d RegExp dotAll Flag for stage 2
 
 (Brian Terlson)
 
@@ -822,7 +822,7 @@ BT: JS devs have written a RegExp that's a cryptic character class (see the prop
 YK: Ruby bases this on the `m` flag. If it's a multiline regex, then you want `.` to include multiple lines.
 
 DH: So basically "ms" is the thing that you always want?
-    
+
 BT: Stage 2?
 
 WH: Sure.
@@ -882,7 +882,7 @@ DE: replace.
 
 AWB: We need examples. [DE adds one]
 
-DE: [describes the example] 
+DE: [describes the example]
 
 ```js
 "foo".replace(/(?<a>o)/, (a, b, c, d) => { /* ... */ })
@@ -912,7 +912,7 @@ DE: If you have a variable instead of the regex, then you could default like you
 let {a, b} = unknownRegExp.exec("xy").groups || {}
 ```
 
-DE: For existing regexps, there's no detectable change in behavior. This fits into what would have been syntax errors. The other question is whether all the properties should be created, even if they are not matched (e.g., because they were optional). `"y" in /(?<a>x)|(?<b>y)/.exec("xy").groups`  
+DE: For existing regexps, there's no detectable change in behavior. This fits into what would have been syntax errors. The other question is whether all the properties should be created, even if they are not matched (e.g., because they were optional). `"y" in /(?<a>x)|(?<b>y)/.exec("xy").groups`
 This could be useful in a lexer. ??? You could do this by looking at `Object.keys()`. With the current draft, I've left in place that all the properties are created. This is not a strongly-held opinion.
 
 AWB: And if one isn't matched or processed, its value is `undefined`.
@@ -1082,7 +1082,7 @@ MF: We also agreed that any proposal planning to advance would be available 1 or
 
 AK: It's nice to have it advance if it could. But what we got out of it is that it needs eyes on it.
 
-MM: Withdrawn from stage 3 for now.  
+MM: Withdrawn from stage 3 for now.
 
 AWB: Are you planning to present it at the next meeting?
 
@@ -1090,7 +1090,7 @@ MM: Yes.
 
 DH: Add it to the agenda for next meeting right now.
 
-#### Conclusion/Resolution 
+#### Conclusion/Resolution
 
 - No change in stage. Reviewers identified and it will be proposed for stage 3 next meeting.
 
@@ -1101,7 +1101,7 @@ DH: Add it to the agenda for next meeting right now.
 
 DE: I'm no longer championing SIMD.js. It was pursued as the best way to provide to users in JS. But at this point, WebAssembly is sufficiently far enough along. It is hard to optimize sufficiently well for the non-asm.js case, so better is to simply specify it for asm.js.  The decision could be reversed, but it's currently on hold.
 
-YK: I'm interested in Brendan and DH's response.  
+YK: I'm interested in Brendan and DH's response.
 
 BT/AWB: If we have a proposal that's at stage 3, the champions should write up a status report.
 
@@ -1153,7 +1153,7 @@ YK: Yes.
 
 MM: I think it should be withdrawn if it is championless.
 
-AWB: I think it's either withdrawn or it is stage 1.  But before either of those, we need documentation for why we are making the transition.  
+AWB: I think it's either withdrawn or it is stage 1.  But before either of those, we need documentation for why we are making the transition.
 
 YK: Yes just writing down that we think it should be addressed by wasm will make it easier to address in a year.
 
@@ -1313,7 +1313,7 @@ BE: It's not going away? It's going to stage 1?
 
 AWB: It's probably going to stage 1.
 
-#### Conclusion/Resolution  
+#### Conclusion/Resolution
 
 - Stage will remain at stage 3.  DE will write up the reason for deprecation and present it.  At that point, it will transition to a lower stage (possibly withdrawn).
 It is proposed that Peter and Yehuda will become caretaker champions of the high-level goal at stage 1.
@@ -1363,7 +1363,7 @@ LBR: Every test file.
 
 AWB: I'm confident that if you go, can we get by with 1 line?
 
-BT: He doesn't want one line, he wants 0 lines. Lawyers would always want that one line. 
+BT: He doesn't want one line, he wants 0 lines. Lawyers would always want that one line.
 
 AWB: One line is the best you can get.
 
@@ -1444,7 +1444,7 @@ MM: And thank you, that makes a huge difference.
 
 DT: I'll sync up with you and we'll see where we're at. Not something we can have by May, but we'll see how far we get. There are minor tweaks to the spec. But none of them are substantial.
 
-#### Conclusion/Resolution  
+#### Conclusion/Resolution
 
 Bradley will help out and they will report back in 2+ months.
 

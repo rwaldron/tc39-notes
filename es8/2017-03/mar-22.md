@@ -78,7 +78,7 @@ MS: Can we add the chair and the Ecma Representative for the time being?
 
 LBR: We've had a discussion around an individual person, I'm not really...I don't think an individual person would be able to solve, for example, sexual harassment. If I'm chair, and someone brings an issue like this to me... I need support to help and/or talk to this person.
 
-AWB: Istvan or the chair in this case would go to the accused person and talk to them. 
+AWB: Istvan or the chair in this case would go to the accused person and talk to them.
 
 BT: What if the person involved is self-employed and company policy doesn't apply?
 
@@ -128,7 +128,7 @@ MF: Is this without defining any members of a sub-committee or an email address?
 
 AK: We can get that feedback... If it turns out that that's the sticking point, or if there are sticking points.
 
-YK: I think we should move forward with the document. 
+YK: I think we should move forward with the document.
 
 BT: It would be disastrous for this group's continued existence to not let us enforce this CoC.
 
@@ -179,9 +179,9 @@ MM: There's a strong push that when assignment happens it should look like assig
 
 MM: You can divide these into three orthogonal dimensions. You can characterize where they are along each dimension with a different syntactic indicator. You can do this in a way that is 100% upwards-compatible with classes already deployed (obviously a requirement). You can do it in a reasonably upwards-compatible to the spirit and the work gone into these particular proposals.
 
-MM: Rather than combining particular, individual proposals, syntax. 
+MM: Rather than combining particular, individual proposals, syntax.
 
-MM: One dimension is placement. All proposals add some kind of member either to class constructor object or to the class constructor prototype object. 
+MM: One dimension is placement. All proposals add some kind of member either to class constructor object or to the class constructor prototype object.
 
 MM: Three dimensions:
 
@@ -193,7 +193,7 @@ MM: Three dimensions:
   - public properties
   - private fields
 - Kind:
-  - method-like: 
+  - method-like:
     - methods (constructors, async methods, generator methods, etc)
     - accessor properties?
   - data property-like:
@@ -202,7 +202,7 @@ MM: Three dimensions:
 
 MM: Private state proposal has postponed the issue of "what does a private static state look like?" All of these other things have been postponed because use cases individually weren't strong enough. By adopting an orthogonal framework, anything you don't have a well-motivated reason to prohibit, you should allow.
 
-MM: Particulars: The placement indicator is leading keyword. 
+MM: Particulars: The placement indicator is leading keyword.
 
 MM: The presence of a leading static keyword means "put it on the constructor object." The presence of an initial "own" keyword means "put it on the instance object." I've gotten push-back on the "own" keyword, but it needs to not be "private" or "public" since that's the kind of sematics we are trying to break up into these combinations.
 
@@ -251,9 +251,9 @@ MM: It's consistent because...let's take "own" followed by method syntax or "sta
 
 YK: So the consisteny issue is between properties and methods. If you leave off the keyword, the property or method is configurable, it would be surprising if adding the "own" keyword made the item non-configurable.
 
-MM: Trying to stay within spirit of orthogonality. Main value is combinatorial space of things that might get proposed. Most points don't have strong use cases. Enough would get proposed that it would create burden. We get most of the combinatorial space without burden because each element can be understood separately. We get two further benefits for the data-property-like syntax. Comma-separated list of member names with optional initializers in one declaration. And there's also thinking ahead to how this interacts with decorators and what Alan and I are proposing: if you decorate a declaration that is declaring several members, the decorator applies to each of them. 
+MM: Trying to stay within spirit of orthogonality. Main value is combinatorial space of things that might get proposed. Most points don't have strong use cases. Enough would get proposed that it would create burden. We get most of the combinatorial space without burden because each element can be understood separately. We get two further benefits for the data-property-like syntax. Comma-separated list of member names with optional initializers in one declaration. And there's also thinking ahead to how this interacts with decorators and what Alan and I are proposing: if you decorate a declaration that is declaring several members, the decorator applies to each of them.
 
-MM: There's some points in the cross-product space that are nonsensical.  We can statically reject them without causing surprise, because all accepted programs follow the consistent semantics. 
+MM: There's some points in the cross-product space that are nonsensical.  We can statically reject them without causing surprise, because all accepted programs follow the consistent semantics.
 
 Oh, I'm sorry. One more detail: The constructor!
 
@@ -299,9 +299,9 @@ MM: Any objection?
 
 BT: I have a number of points, but let's let Dan go first.
 
-DE: My intuition is that this is one more dimension than what might be the common understanding of objects.  This dimension of "own" vs. being on the prototype is definitely there, but the way that we look at classes, we don't have to think about adding the method to the prototype.  With the public and private fields proposal, and the private methods straw-man, it sort of retains this property.  You don't have to be explicit about the prototype vs. the instance.  This is intuitive and fuzzy but seems important. Talking about "owned" vs. "notowned" gets into the weeds and will confuse people.  I'm espcially concerned about non/owned methods.  People might think they are supposed to put "owned" on everything, which would be hard to optimize.
+DE: My intuition is that this is one more dimension than what might be the common understanding of objects. This dimension of "own" vs. being on the prototype is definitely there, but the way that we look at classes, we don't have to think about adding the method to the prototype. With the public and private fields proposal, and the private methods straw-man, it sort of retains this property. You don't have to be explicit about the prototype vs. the instance. This is intuitive and fuzzy but seems important. Talking about "owned" vs. "notowned" gets into the weeds and will confuse people. I'm espcially concerned about non/owned methods. People might think they are supposed to put "owned" on everything, which would be hard to optimize.
 
-MM: I understand the point.  The philosophy I bring to language design is represented by goals 8 and 9: be understandable in a shallow and wide sense and invite understanding to become deeper and narrower.  JS is good at that now. New people learn patterns initially but then over time they can learn the deeper semantics. The dominant use cases would be the reasonable common ones. The regularities suggest to people where they can explore deeper and find additional ways to use the system.  [MM/MARKM: review and edit this]
+MM: I understand the point.  The philosophy I bring to language design is represented by goals 8 and 9: be understandable in a shallow and wide sense and invite understanding to become deeper and narrower.  JS is good at that now. New people learn patterns initially but then over time they can learn the deeper semantics. The dominant use cases would be the reasonable common ones. The regularities suggest to people where they can explore deeper and find additional ways to use the system. [MM/MARKM: review and edit this]
 
 YK: I agree completely with that philosophy.
 
@@ -319,33 +319,33 @@ MM: Static in this proposal isn't inconsistent. It doesn't have the regularity t
 
 YK: The way you get the regularity is by syntactically disallowing a field to not own .... ???
 
-AWB: Another difference between Smalltalk and JavaScript, in JavaScript I don't think a programmer, even a journeyman programmer, can live without knowing about prototypes. That entity really is part of the language where in Smalltalk, it isn't. It's a slightly different scenario. 
+AWB: Another difference between Smalltalk and JavaScript, in JavaScript I don't think a programmer, even a journeyman programmer, can live without knowing about prototypes. That entity really is part of the language where in Smalltalk, it isn't. It's a slightly different scenario.
 
-YK: I have an orthogonality spider sense here. ...... lots of comments about specific syntax ..... 
+YK: I have an orthogonality spider sense here. ...... lots of comments about specific syntax .....
 
 MM: What I'm saying is that's the non-orthogonality of the current proposals. With this proposal, those non-orthogonalities go away.
 
-YK: What I'm saying is .... 
+YK: What I'm saying is ....
 
-MM: Distinguishing between rude surprises for authors versus rude surprises for readers. Readers do not have any of these non-orthogonalities. 
+MM: Distinguishing between rude surprises for authors versus rude surprises for readers. Readers do not have any of these non-orthogonalities.
 
 YK: So if you don't see a prefix, it's means the prototype.
 
 MM: Lots of people will ...bah humbug, lost it...
 
 WH: How would you put a data property on a prototype in this proposal? I understand that this is a rare case and you don't want to allow it by accident if someone omits the keyword, but if you do fall into that rare case, how would you do it?
-    
+
 MM: You would create those imperatively, like you do now, instead of using declarative syntax.
 
 AWB: An idea kicked around is possibility of static initializer in a class body, at class definition time. The logic of putting a real data property on the prototype is so rare...that it doesn't deserve having syntax.
 
-DE: At a high level I like the goals about orthogonality. Aside from that big developer intuition thing, I'm not sure about adding "own methods".  It seems a potential source of confusion and is redundant with property initializers.  They could end up being confusing.  The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.  
+DE: At a high level I like the goals about orthogonality. Aside from that big developer intuition thing, I'm not sure about adding "own methods".  It seems a potential source of confusion and is redundant with property initializers.  They could end up being confusing.  The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.
 
 DE: There's also an example of having an "own private" method.  Maybe this would be in conjunction with lexically scoped methods in class bodies.  I'm concerned if the first private method thing that we add is "own", it would catch on and be hard to optimize.  Might we consider excluding that case?
 
 MM: If we decided to prohibit those cases, that would still be consistent with this approach, it would just knock more members out of the cross-product.  I would consider that to be negotiable.  I also want to say that at every moment there is something concrete being proposed.  Thus, the concrete proposal is that methods stay in the cross product but constructors are not included in the cross product.
 
-AWB: An important thing about the matrix here is understanding the orthogonality. The more holes knocked into it, the harder it is to get the concept. Private methods...the utility is low but we left it in proposal to fill in matrix as much as possible. Was hoping we'd have something like lexically-scoped ...? 
+AWB: An important thing about the matrix here is understanding the orthogonality. The more holes knocked into it, the harder it is to get the concept. Private methods...the utility is low but we left it in proposal to fill in matrix as much as possible. Was hoping we'd have something like lexically-scoped ...?
 
 WH: Lexical scoped function.... could you clarify what you mean?
 
@@ -379,7 +379,7 @@ DE: I can write up a doc for the next meeting about the state that we are at for
 
 AWB: What we are asking for as this being stage 1 is really figuring out how this integrates with the other proposals. We actually considered just filing this as issues, but it would get lost at the issue level for those proposals for something that is an overriding thing. That's why we did it in this form.
 
-BT: I think on the recent topic of process, it seems strange to me that stage 1 means we are giving consensus to change stage 3 proposals.  
+BT: I think on the recent topic of process, it seems strange to me that stage 1 means we are giving consensus to change stage 3 proposals.
 
 MM: I agree that's what stage 1 means.  We could propose this as an amendment to the private state proposal, but it seemed to deserve due process.
 
@@ -387,11 +387,11 @@ BT: Right, I brought this up to suggest that stage 1 is not a high bar.
 
 MS: This would subsume private state?
 
-AWB: This would probably combine with private state and public field proposals. 
+AWB: This would probably combine with private state and public field proposals.
 
 DE: I'm not sure how to proceed as the champion of the private state proposal. I think it would be reasonable to file issues within the proposals to have all of the discussion. Making it a separate proposal. How can we have multiple state proposals is a bit of a weird state to be in.
 
-DT: It seems like it's approximately both. The idea of doing this consistent thing seems good, we should discuss. There are champions of current proposals, championing their use case. We should make things consistent across the use cases. As the consolidated thing catches up, then we can decide whether or not to merge it. We don't have to couple them so strongly. 
+DT: It seems like it's approximately both. The idea of doing this consistent thing seems good, we should discuss. There are champions of current proposals, championing their use case. We should make things consistent across the use cases. As the consolidated thing catches up, then we can decide whether or not to merge it. We don't have to couple them so strongly.
 
 
 AWB: To some degree both the public state and private state proposlas were stalled at stage 2, but there were enough issues with the edge cases that they were having trouble advancing to stage 3.  Take this as an offer and approach to being able to advance them all.
@@ -402,7 +402,7 @@ AK: This reminds me of the dicussion of decorators and annotations.  We could ha
 
 MM: When it's procedurally possible, I will propose merging the proposals.
 
-DE: We've discussed this multiple times in the past, and had reasons to not merge the proposals. 
+DE: We've discussed this multiple times in the past, and had reasons to not merge the proposals.
 
 WH: Have we resolved the cross-cutting issues with syntax?
 
@@ -454,7 +454,7 @@ YK: My concern is part of the way I've been thinking about decorators. And as Da
 
 SYG: [Asks BT what objection is about "own" keyword from developers]
 
-BT: I think there's a perspective that I think might be true that default placement of a member should just depend on what kind of member it is. If we have a new member in the future we may have more ... trade-offs? 
+BT: I think there's a perspective that I think might be true that default placement of a member should just depend on what kind of member it is. If we have a new member in the future we may have more ... trade-offs?
 
 SYG: I guess the trade-off is, given that the default placement of, say, function bindings is confusingly global if you don't use ?? ...if we could go back and look at it, people would want it to be local. We want to, going forward, have default placement?
 
@@ -593,7 +593,7 @@ BT: You could argue that we don't need to re-implement the algorithm.
 
 AWB: Could this fix be applied at the Array.prototype level?
 
-BT: No, because Array.prototype.fill doesn't do the `toNumber` coercion. 
+BT: No, because Array.prototype.fill doesn't do the `toNumber` coercion.
 
 DE: It got re-factored after ... Shared Array buffers.
 
@@ -619,7 +619,7 @@ BT: But this...I agree with that notion, this PR amounts to deleting those extra
 
 AWB: It felt more like old boilerplate code, like maybe it was just some common practice to add this language.
 
-WH: Where is this language? 
+WH: Where is this language?
 
 BT: Look at `Number.prototype.toFixed()`.
 
@@ -653,7 +653,7 @@ AWB: I think we should take this input as input to a future proposal or PR.
 
 Presently spec implies but does not say that the compareFn must be `undefined` or callable. PR enforces that expectation.
 
-BT: `sort` takes a compareFn. Spec does not currently say that compareFn must be callable or undefined. Implementations disagree on handling non-callable/non-undefined. Update to throw a TypeError. 
+BT: `sort` takes a compareFn. Spec does not currently say that compareFn must be callable or undefined. Implementations disagree on handling non-callable/non-undefined. Update to throw a TypeError.
 
 AWB: Still need the language about proper behavior of a sort compareFn.
 
@@ -661,13 +661,13 @@ BT: ...We should really be throwing TypeError early for things that are not call
 
 JSC: Could you take a look and see if you're worried about changing behavior. Most of these align with existing behavior in Chakra/Edge.
 
-AK: There's a minor possibility of breaking something here. 
+AK: There's a minor possibility of breaking something here.
 
 AWB: It is something that non-interoperable.
 
 AK: I did comment on the thread. I find it pretty low value here.
 
-YK: I think some number of users will make mistakes with this. 
+YK: I think some number of users will make mistakes with this.
 
 AK: My intuition is probably that it's web compatible to change this.
 
@@ -719,7 +719,7 @@ BT: Roughly I think so yeah, you could expand that one line into a loop with exp
 
 AK: Every other use of the word "duplicate" in the spec is...not these reified objects...
 
-BT: But there's only one way to compare a string right? 
+BT: But there's only one way to compare a string right?
 
 AWB: ... symbols?
 
@@ -763,11 +763,11 @@ BT: That is excellent context and it makes me a little sad about removing this.
 
 YK: I think there is a useful discussion we should have about deprecation.
 
-BT: I will add notes with history that Waldemar provided. 
+BT: I will add notes with history that Waldemar provided.
 
 MPT: Did you want to do the needs consensus on ??
 
-BT: I'm open to continuing. 
+BT: I'm open to continuing.
 
 #### Conclusion/Resolution
 
