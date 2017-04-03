@@ -4,7 +4,7 @@ Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Michael Ficar
 
 ## General Discussion
 
-AWB: RSVP now for the NodeJS CTC meeting on the evening before the May TC39 meeting
+AWB: RSVP now for the NodeJS CTC meeting on the evening before the May TC39 meeting.
 Before the TC39 meeting, there will be a meetup with the NodeJS CTC.
 
 
@@ -26,9 +26,9 @@ CP: There's an example in the README where you can see things you can do today i
 
 DH: I just wanted to clarify that you meant that in an absolute sense, ecause there are things you are prevented from doing in ES Modules like mutating the export bindings.
 
-MF: And the module namespace object cannot be callable in ESM
+MF: And the module namespace object cannot be callable in ESM.
 
-DH: Okay, this could turn into a philosophical discussion, because umm default export looks like thing that lets you do whatever you want to do, but I don't think we need to litigate this forever
+DH: Okay, this could turn into a philosophical discussion, because umm default export looks like thing that lets you do whatever you want to do, but I don't think we need to litigate this forever.
 
 MM: I think we can just back off from what sounds like an absolute statement.
 
@@ -40,13 +40,13 @@ CP: So the actual solution that we're proposing (this is the second iteration), 
 
 AWB: In this exmple you are only using default exports.  Can it have named exports?
 
-CP: Yes, it's the same thing
+CP: Yes, it's the same thing.
 
 BF: The currently plan is to only support default exports. We're working on other things... Much like this, you ??
 
 AWB: It's clear that it wouldn't be very hard to make default work, but it wasn't clear that you could make an open-ended set of names work.
 
-BF: Correct
+BF: Correct.
 
 CP: It's the same, we do have the details of the binding. We have the local name for the binding, the import name for the one we're importing from. One more point is that this solution is not just for COmmonJS modules, but for any other dynamic modules (like WASM)
 
@@ -56,7 +56,7 @@ CP: Let's switch the spec text. it will clarify. Step12.d.3  If you go through t
 
 AK: To answer your question, the name default comes from the syntax. If you say `import a from './wherever'` that's where the `default` comes from.
 
-MM: What ar ehte othe rpossible values for that slot.
+MM: What ar ehte othe rpossible values for that slot?
 
 DH: If you use named exports ti would be whatever you asked for.
 
@@ -84,15 +84,15 @@ CP: We can go to module evaluation in the spec and you will see in step 7 right 
 
 AWB: Ok, you described this as Create Pending Binding, you resolve all these bindings and their values are available.
 
-CP: Yes
+CP: Yes.
 
-AWB: Ok, any evaluation of import modules still takes prior to any evaluation of the importing module
+AWB: Ok, any evaluation of import modules still takes prior to any evaluation of the importing module?
 
-CP: Yes
+CP: Yes.
 
 DH: Assuming you have cycles. You have to pick one to go first. So you can witness uninitialized variables, but that's the same as in any system.
 
-AWB: Ok
+AWB: Ok.
 
 DH: Do you want to say more Caridy?
 
@@ -110,7 +110,7 @@ AK: For ES modules they export the things they declare as exporting. For dynamic
 
 BF: I don't think that's entirely true if we go back to module declaration and instantiation, I think it's statically checked.
 
-CP: You can resolve to pending because you haven't evaluated the dynamic module..
+CP: You can resolve to pending because you haven't evaluated the dynamic module.
 
 BF: So if the loader does not generate a pending, does that mean it's an error?
 
@@ -118,7 +118,7 @@ CP: If you know the shape of it without evaluating it, you don't need to return 
 
 AK: If resolution is ambiguous or pending... throw a syntax error? I'm confused...In section 9b.
 
-CP: {references 9b}. It's never declared or created, because of that we throw an error
+CP: {references 9b}. It's never declared or created, because of that we throw an error.
 
 AK: Okay I need to read this new spec then, more closely I guess.
 
@@ -126,9 +126,9 @@ YK: I think it would help people to do that, maybe we can pause this.
 
 AK: It's possible it's a waste of most people's time because it si very detailed.
 
-AWB: I have what I think is a higher level question.  A lot of this is about initilaization order, so I want ot verify my understandig. If I have a module and it has 3 imports: a, b, c. using default imports. And let's assume their bodies is just a console.log and that a, b, c each don't depend on anything else. The expectation would be that wehn you  load the root module, you would see on your console: a, b, then c and anything the importing module did. Now if b is changed to be dynamic, am I correct that we'd see: a, c, b
+AWB: I have what I think is a higher level question.  A lot of this is about initilaization order, so I want ot verify my understandig. If I have a module and it has 3 imports: a, b, c. using default imports. And let's assume their bodies is just a console.log and that a, b, c each don't depend on anything else. The expectation would be that wehn you  load the root module, you would see on your console: a, b, then c and anything the importing module did. Now if b is changed to be dynamic, am I correct that we'd see: a, c, b?
 
-DH: No, the whole point of this is to preserve the original behavior
+DH: No, the whole point of this is to preserve the original behavior.
 
 AWB: Ok, then my understanding of what the pending modules works..
 
@@ -146,7 +146,7 @@ DH: That's about the whole default import syntax: `import a from 'a'`, that `a` 
 
 WH: So, is it possible not to export a default?
 
-DH: Yes it's possible not to export a default.  That's in ecmascript syntax. In a dynamic module, you can choose to name one of the imports "default"
+DH: Yes it's possible not to export a default.  That's in ecmascript syntax. In a dynamic module, you can choose to name one of the imports "default".
 
 AWB: I think I'm comfortable with what's happening here, whether the details of the spec are (perfect?) or not.
 
@@ -154,7 +154,7 @@ DH: I think Caridy did a good job talking about the goals. We can make sure the 
 
 AWB: So if .. I think the only observable difference here is that if a dynamic module is involved, there are some situations where an unresolved import binding error, where in teh current spc that woudl always be produced bfore any evaluations, there are now situations where some of those errors may occur after some eval has started, but only in the presence of dynamic modules.
 
-CP: Correct
+CP: Correct.
 
 DH: A way to make that more concrete.  a dyn module since it could hae executed before a static module, coudl dynamically ask for the module and so observe whether it's been initialize, but there are no invariants vioalted in that scenario.
 
@@ -181,9 +181,9 @@ export function f() {
 
 DH: Oh, the fact that the way the spec is written means it doesn't add it to the environment.  That's just a bug in the spec. 
 
-MM: Ok, good
+MM: Ok, good.
 
-AWB: Yeah
+AWB: Yeah.
 
 DH: It should be changed to add the lexical binding. Our goal was to not have it be possible  fo rimport binding to ever trigger side effects, including dynamic reference errors whenever they are evaluated. Adam has fuond a case where before you have started eval of top level code, it's still possible to enter into a function resolve a binding and get a dynamic error.
   We got close and "I'll take close".
@@ -192,11 +192,11 @@ YK: I think there is a different way that I would...(cut off)
 
 CP: One thing that I want to clarify is that this is only possible if you have 3 modules, where 2 are ESModules and the 3rd is a dynamic module and their is circularity with the dynamic module. The problem doesn't matter because it doesn't exist.
 
-MM: Now that Adam has identified the bug clearly, I don't understand why you are willing to live with it. Now that's it's been identified, is there anything especially hard about closing the bug.
+MM: Now that Adam has identified the bug clearly, I don't understand why you are willing to live with it. Now that's it's been identified, is there anything especially hard about closing the bug?
 
 DH: Oh, it's characterization is straightforward, but the solution is not obvious.
 
-MM: Well if the solution is not obvious that i don't understand the problem
+MM: Well if the solution is not obvious that i don't understand the problem.
 
 DH: Well, what's the obvious solution?
 
@@ -206,25 +206,25 @@ DH: Of course, oh, there's a fix for the not setting up the lexical environment 
 
 WH: So would you do a TDZ?
 
-AWB: It has to be a TDZ
+AWB: It has to be a TDZ.
 
-DH: This is effectively a TDZ
+DH: This is effectively a TDZ.
 
-YK: Yes, it needs to be a TDZ
+YK: Yes, it needs to be a TDZ.
 
 MM: If the failure is a TDZ then I'm happy, but I thought the bug was other than a TDZ.
 
-AK: I'm happy to explain why this is....it's not trivial to fix
+AK: I'm happy to explain why this is....it's not trivial to fix.
 
 YK: So I think that Dave's characterization of the goal (no side-effects, but reference errors). Referring to a variable might create a reference error, there's an invariant there. It would be fatal if we were not able to avoid it with other assignments. I had never lumped those assignments together.
 
 AK: My complaint wasn't this did an error, but that it did something very strange where it tried to access outside of the lexical environment.
 
-YK: Your point last meeting was it had side effects
+YK: Your point last meeting was it had side effects.
 
 DH: You pointed out 2 issues and we are conflating them.
 
-MM: State the one that is egregious and easy to fix
+MM: State the one that is egregious and easy to fix.
 
 DH: The one that's easily fixed is we don't even add the binding to the lexical environment first, and we can witness that, then we add it later. We add the same variable reference before and after we can be looking up an entirely different environment. That's a bug and we can fix it.
 
@@ -246,7 +246,7 @@ YK: That's only what they currently think they _might_ want to do.
 
 DH: We heard Bradly say they're investigating ways to see how you could state what you're export set is. So let's say from a user model perspective, there's something that node recognizes that allows you to specify upfront what you're fixed shape is, what that could be built on top of is a reflective layer (nothing exists for this now), but you're opting into that where you state I'm playing by new rules that say I have a fixed state that I cannot change dynamically. If you do this, then we don't need to execute to discover what that shape is. In other words, either you have that thing and you don't need to execute, in which case you have to be a default export and again we know the shape of that as well...
 
-YK: I would be happy to explore that
+YK: I would be happy to explore that.
 
 BF: We have prototyped out exactly that, You can model it with two ES modules right now.
 
@@ -258,7 +258,7 @@ DH: Yes, that's the thing you declare once and for all and never changes.  You c
 
 WH: And that would be constant, it's not computed?
 
-DH: It would be computed dynamically, but it is staged, in the sense that once you have told the system what it is, that's frozen and immutable and will never change
+DH: It would be computed dynamically, but it is staged, in the sense that once you have told the system what it is, that's frozen and immutable and will never change.
 
 WH: What does that computation have access to?  Does it have access to other modules or is it purely local?
 
@@ -284,7 +284,7 @@ AWB: They're just names.
 
 DH: From the outside it doesn't change with those things. For pre-existing systems, they'll just have the static shape of one export called `default` which is a dynamic binding that can be anything. So unless the author opts-in, they'll get the single anonymous default export. That's pretty close to what Node has planned already. We're just hypothetically creating a flexible system they could build on top of.
 
-AK: This is an intresting area of dicussion. I'm starting to wonde rthought if these dyn modules are going to be modeled as providing a static set of exports, does that reduce the amount of spec change needed to support them.
+AK: This is an intresting area of dicussion. I'm starting to wonde rthought if these dyn modules are going to be modeled as providing a static set of exports, does that reduce the amount of spec change needed to support them?
 
 DH: Yes, this is what I'm saying is that we've identified a much simpler system here.
 
@@ -296,11 +296,11 @@ CP: It is true that if we go that route it will be simpler. No changes in the sp
 
 DH: I'm excited, I think this is a good place to wrap things up unless anyone has feedback or questions.
 
-AWB: I'm going to pile on. I think that the fundamental thing her eis that if you say `import foo.js` is there a way to determien the exported names from that module without having to evaluate code.
+AWB: I'm going to pile on. I think that the fundamental thing her eis that if you say `import foo.js` is there a way to determien the exported names from that module without having to evaluate code?
 
 DH: The quickest way to explain is that Node discovered a key thing. We can make the default mode for the whole ecosystem to be `default` export and we can opt-into named export. That gives us strong backward compatility. Once you have that it's easier to see your way to semantics that makes sense. Is that right Bradly?
 
-BF: Yes
+BF: Yes.
 
 YK: One other closing the loop.  there's also AMD modules. They don't trivially have a solution. I think that having them default to default export works fine.  Because they are eval'd with an outer wrapper an an inner function, you can add to the outer wrapper pretty easily.
 
@@ -322,7 +322,7 @@ DH: Because we know the shape before any evaluation takes place.
 
 WH: Does `y.js` have a default export or not?
 
-CP: Yes
+CP: Yes.
 
 WH: If it has a default export, then what's the problem? You're importing its default binding so already know its shape. Is it because it's not the right value?
 
@@ -345,25 +345,25 @@ _Awesome work, now simplified as a result of awesome feedback.  A new version wi
 
 - [slides](https://github.com/tc39/agendas/raw/master/2017/tc39-2017-003-realms-update.pdf)
 
-DH: This is a recap of the work I've done on the realms API
+DH: This is a recap of the work I've done on the realms API.
 
-DH: Working with Caridy, MarkM, Dean, and others
+DH: Working with Caridy, MarkM, Dean, and others.
 
 DH: Realm are similar to an iframe on the web. Effectiely you can have 2 different copies of the JS world that can talk to each other. Historitically this didn't exist in the spec, but it was a reality. 
 
-MM: Up to ES5, there was this fiction that all JS computation and executation happened in one realm, but with iframes this wasn't true
+MM: Up to ES5, there was this fiction that all JS computation and executation happened in one realm, but with iframes this wasn't true.
 
 DH: On top of that node has the VM object with similar functionality. That's now (ES6) codified in the spec, but there isn't a format way to interact with them. You can create a new iframe, but it comes with all this DOM crap. The goal is the Realm API is to just create multiple realms with nothing else by default. This is useful for building frameworks and structures on top of it. It's a pretty low-level (and complicated API). This is something you do when you're implementing a transpiler or security framework. So it's ok if the surface API is a little advanced. Goals for today are to present progress and get feedback. I'm not looking for stage-2 at this point. I presented my current thinking in January and mentioned I believe we can get to a place where we don't need a registry API or loader API. We had thought we needed those. I think there are a couple of tiny hooks we want in the browser space, but most of the functionality can be done in user-land. I have some sample code. Please don't nerd-snipe me too hard. I have a plausibility argument and it's looking more and more plausible to me. The first example is the smallest I could come up with.
 
-DE: Example: a tiny, fixed registry
+DE: Example: a tiny, fixed registry.
 
-DE: They have one big switch at the top of the code that said. If the module is jquery, give them a simple version of jquery, if it was underscore, etc. And that was their entire registry. So maybe you can build a tiny fixed registry this way (using realms)
+DE: They have one big switch at the top of the code that said. If the module is jquery, give them a simple version of jquery, if it was underscore, etc. And that was their entire registry. So maybe you can build a tiny fixed registry this way (using realms).
 
-CP: Another point around this is today people use Rollup which is effectively a ???? for client-side
+CP: Another point around this is today people use Rollup which is effectively a ???? for client-side.
 
 DH: By calling super I'm subclassing the builtin realm API.  It is just a demo here. 
 
-WH: You are missing a declaration of #registry
+WH: You are missing a declaration of #registry.
 
 DH: OK I just got the details of the private field wrong.  Imagine there is a declaration.  At any given time a "registry" might want you to load new modules. So I'm taking jquery as an example of that. So you have a jquery loaded in one realm, and you want to explicitly share it to anothe rrealm.  You may want to allow mofules to realm-specific.
 
@@ -388,7 +388,7 @@ BF: The completion value?
 
 DH: The result of `eval()` is going to be the completion value of eval.  I'm forgetting the details of the import-parens syntax.
 
-BF: It needs to be in an expression position
+BF: It needs to be in an expression position.
 
 DH: So I'd have to put parens around the eval here (in the example)?
 
@@ -396,7 +396,7 @@ KCD: I basically want to know what's returned from a call to `eval`, is it a com
 
 DH: I'll get to how to dynamically create modules in a real, which is a key feature, but that's separate ... There's a semantic surface we need to be able to cover in an API. But basically, the code evaluated in `eval` is a script, not a module.
 
-AWB: So you've chosen to expose an eval() method that evaluates ???. You could also choose to expose an `import` method
+AWB: So you've chosen to expose an eval() method that evaluates ???. You could also choose to expose an `import` method.
 
 DH: I think it's important to expose the minimal API you need first and not mix them in with conveniences. What's the minimum set of stuff that I need. This is an EWM kind of API. It's a low-level API to begin with and people can build abstations on top of it.
 
@@ -412,11 +412,11 @@ CP: We have github issues for those.
 
 DH: [continuing demo] this is the registry class.  Imagine I have a @memoize decorator...  this is not the module namespace, it's a reflective API that we ned to have to do all the things you could eflect on for modules.  So I'm positing a parseModule operation.  It difffers from eval.  I want to take some source ode an get a module record that has been parsed by an engine so that, e.g., I can ask what names it depends on.  I need the ability to go meta on code to setup the environment for running it.  So this helper method is just basically to fetch all things in my graph, for this tiny demo I can just fetch them all upfront.
 
-DH: Continuing on.....by the way Caridy did you find the PDF for this.
+DH: Continuing on.....by the way Caridy did you find the PDF for this?
 
-CP: Yes
+CP: Yes.
 
-DH: The `graph` method is the one we actually saw the first class using. How do we do the linking? We have to go and fetch them asynchronously. The result of this is going to be a promise. For the module record A it basically has this not yet satisfied set of dependencies. Where it asked for the name `./b.js` I'm telling `b` is the thing that satisfies the dependency. For `b` I'm doing it imperatively. This is also at the level that's teetering toward bike shedding, so I don't want to psend that much 
+DH: The `graph` method is the one we actually saw the first class using. How do we do the linking? We have to go and fetch them asynchronously. The result of this is going to be a promise. For the module record A it basically has this not yet satisfied set of dependencies. Where it asked for the name `./b.js` I'm telling `b` is the thing that satisfies the dependency. For `b` I'm doing it imperatively. This is also at the level that's teetering toward bike shedding, so I don't want to psend that much...
 
 DT: What does `link()` do?
 
@@ -432,17 +432,17 @@ DH: For the time-being it's a non-goal. I think it's a much thornier space becau
 
 MM: I think a way to rationalize, to imagine how one would extend this to hook into those existing host frameworks (ifram, etc) is to imagine that this had come first and that the host frameworks were built on top of that. 
 
-DH: SHould peopl ehave the power to modify the environment they're running in. That said, there are critical pieces to configuring gmy environmnet that will matter a lot. A lot of the loader API in the space of what you're talking about (configuring the environmnet in which my core API is running) is satisfied by service worker which can do this. Like how do we lookup module names when they're imported. I think it doesn't satisfy all of the use cases. For one, the first-run semantics (the things you can't do when you first run your app). Also what you can't
+DH: SHould peopl ehave the power to modify the environment they're running in. That said, there are critical pieces to configuring gmy environmnet that will matter a lot. A lot of the loader API in the space of what you're talking about (configuring the environmnet in which my core API is running) is satisfied by service worker which can do this. Like how do we lookup module names when they're imported. I think it doesn't satisfy all of the use cases. For one, the first-run semantics (the things you can't do when you first run your app). Also what you can't...
 
 YK: You mean illegal URL?
 
-BF: The specifiers are different..
+BF: The specifiers are different.
 
 YK: ServiceWorker intercepts network requests, and it's unclear ??
 
 DH: It has restrictions which should be a URL and you ...??
 
-AK: That's a syntax error
+AK: That's a syntax error.
 
 DH: That's something you want to do and you can't right now. That can be solved with some fixes to service worker, and ??
 
@@ -452,7 +452,7 @@ DH: That seems like an obvious reaction to have, sorry. I'm considering these se
 
 BF: Your comment on being a recovering functional programmer. We have this already implemented and we're moving to a functional approach for reasons we can discuss.
 
-DH: I'd be happy to discuss that
+DH: I'd be happy to discuss that.
 
 MM: To elaborate on my response to Adam's question. I think there are two very clear examples. Really one example... That motivates a lot of the separation and the rationalized re-layering. One of the things you'd like to be able to do with this is in user-land create a library that would run on node, creates a multi-framed browser environment. Likewise you'd like to run a multi-vm environment in the browser. This is possible with Realm because of the required isolation.
 
@@ -464,7 +464,7 @@ WH: Trivial question... Where did `this.#jquery` come from?
 
 DH: From the constructor. That came from when the registry was instantiated. But the point is that's coming from the outerrealm and sharing that explicitly to the child realm. You never get implicit sharing. Ok, concepts. parseModule, import hook, a way to satisfy modules independently, and a way to link those modules.
 
-BF: Is there a reason we used a computed property instead of just a name
+BF: Is there a reason we used a computed property instead of just a name?
 
 DH: (new slide) Example: a dynamic loader. Here's another TinyLittleRealm class. Uses a TinlyLittleLoader class which is sharing jQuery from the outer realm to the inner realm. Referrer is used to deal with de-relativization. The loader is going to produce a custom type relative to this program. The final stage of loading this module is it's fully link and here's the finally linked module. so `linked` is a promise of the fully linked module. `module.ensureEvaluated()` ensures that if it hasn't been evaluated so far it will be evaluated now.
 
@@ -474,11 +474,11 @@ DH: Yes.
 
 BF: We can have this discussion, but with async functions...?? I don't want to talk about this now. It looks fine to me :)
 
-DH: Same top-level usage
+DH: Same top-level usage.
 
 BF: I do have a question on `ensureEvaluated` here, in the previous slide I thought `realm.import` returned an unevaluated dependency and this one looks like it ensures it's evaluated. If it's coming from something that's not evaluated, you're hoisting evaluation.
 
-DH: It's a bug in the first demo. You should just call `ensureEvaluated`
+DH: It's a bug in the first demo. You should just call `ensureEvaluated`.
 
 MM: Can module be a regular object?
 
@@ -510,7 +510,7 @@ AWB: At least in the spec, names and bindings might be mixed up. Let's be more s
 
 DH: Name is a pretty overloaded term...
 
-BF: I think there's still a little more API work to be done here (I guess we're at stage 1 so that's expected). I don't think you should expose as much of the low level hooks as you have here
+BF: I think there's still a little more API work to be done here (I guess we're at stage 1 so that's expected). I don't think you should expose as much of the low level hooks as you have here.
 
 DH: Oh, interesting.
 
@@ -520,7 +520,7 @@ CP: We do have an issue in the loader spec, so we will not utilize the name here
 
 YK: If your opinion is it's fine that the ??? module returns a promise. If you want to access the promise, we disallow you to do that.
 
-MM: Yep
+MM: Yep.
 
 MM: I just want to mention that people don't read too much into the specificity here.... We are discussing some radical refactorings to this, so this may be very different in the future.
 
@@ -554,7 +554,7 @@ DH: Domenic has been asking useful questions about this on one of the issues. We
 
 BF: In node, we don't have a proxy object for example so we just need to make sure..
 
-MM: Just need to head off the term confusion. The `WindowProxy` object cannot be modeled with an ES6 Proxy
+MM: Just need to head off the term confusion. The `WindowProxy` object cannot be modeled with an ES6 Proxy.
 
 BF: Has there been any consideration of job queues?  e.g., the promise realm is shared across realms?
 
@@ -568,7 +568,7 @@ DH: Even though they belong in separate layers we want to make sure that they ar
 
 MM: Their largely orthogonal. If you wanted job queues and enqueue things on specific job queues. None of that is written down on the agent API, but if we wanted to address them reflexively they'd go in ??
 
-AWB: Mark, the way back machine has a pretty good archive of wiki.ecma-script.org
+AWB: Mark, the way back machine has a pretty good archive of wiki.ecma-script.org.
 
 DH: Ok, thanks everyone.
 
@@ -586,11 +586,11 @@ DE: . Bsaically the strange wrap-around semantics in C is almost always a bug. A
 
 ### Slide: _How?_
 
-DE: New primitive type `Integer`
+DE: New primitive type `Integer`.
 
 MF: I wanted to point out because I didn't originally realise it myself: the `n` suffix is chosen because it's orthogonal to the base representation. You could represent binary, octal, decimal, and hex notation integers.
 
-BE: The suffix "n" is a good choice because it is the second letter in "Integer" and "I" would not be a good choice
+BE: The suffix "n" is a good choice because it is the second letter in "Integer" and "I" would not be a good choice.
 
 ```js
 // Takes a Integer as an argument and returns a Integer
@@ -629,7 +629,7 @@ function Add64Module(stdlib, foreign, buffer) {
 
 DE: It's not clear if we want to add support for asm.js.
 
-BE: It's hard to remove asm.js as it's just a subset. It's not like web assembly is the only way people will
+BE: It's hard to remove asm.js as it's just a subset. It's not like web assembly is the only way people will...
 
 DE: If we did want integer to work with asm validation. It can work, but it's unclear if we want to make it work.
 
@@ -650,7 +650,7 @@ MM: _questions about n..._
 
 DE: The current proposal is acually to use "N". Bikeshedding.
 
-BE: I don't think it's the name so much as the variability of the "n"
+BE: I don't think it's the name so much as the variability of the "n".
 
 MM: I was thinking you would say Integer.asInt64, rather that Integer.asIntN(64,...)
 
@@ -672,17 +672,17 @@ SYG: If plus integer returned an integer?
 
 BE: It's not turly backward compatible. If you mix old and new code (and we changed the semantics of `+`) then we can't change that.
 
-AWB:  This is always an issue with 
+AWB:  This is always an issue with ...
 
 WH: It's only a matter of degree. Unary + is commonly used to coerce to Numbers in existing practice. However, unary - can also be used to coerce to Numbers, but prohibiting unary - on Integers to produce Integers wouldn't fly.
 
 BE: Possibly an open issue: what to do with +
 
-DE: It's on the bug tracker (Shu filed it)
+DE: It's on the bug tracker (Shu filed it).
 
 MF: Dan do you mind going into some of the issues with comparison operators now?
 
-DE: The current semantics are the `number === integer` will return `false`
+DE: The current semantics are the `number === integer` will return `false`.
 
 ### Slide 14: Comparison semantics: current proposal
 
@@ -710,17 +710,17 @@ YK: Does `==` ever `throw` right now?
 
 WH: Yes, that's an argument for defining the values of mixed comparisons such as a`nInteger < anNumber` and `anInteger == aNumber` to their exact mathematical results instead of throwing.
 
-YK: There's a specific invariant that `== null` never throws, but `==` in other cases does  not neccessarily follow that same rule
+YK: There's a specific invariant that `== null` never throws, but `==` in other cases does  not neccessarily follow that same rule.
 
 AWB: Both `==` and `===` are defined by type enumeration of the two arguments.  Two of those types are the type null and undefined. those could be special.
 
 MM: What I'm saying is that they should be special with regard to `null` and `undefined` not with regard to other integers.
 
-DE: I think that for comparing with `undefined` and `null` the expectation is that it would return `false` and not `throw`
+DE: I think that for comparing with `undefined` and `null` the expectation is that it would return `false` and not `throw`.
 
 DE: Continuing the semantics explanation.  + would not lose precision.
 
-BE: Can you explain the plus issue again.
+BE: Can you explain the plus issue again?
 
 DE: The plus issue is that IEEE754 arithmetic is well defined. When you try to combine them you will get outside of the domain of both. There are two reasons why mixed operations are bad. 1. Is you will confuse users. The second is that you will run into bugs.
 
@@ -732,13 +732,13 @@ DE: The plus issue is that IEEE754 arithmetic is well defined. When you try to c
 
 DE: For optimization potential currently across JavaScript engines there are  .... Could also be used to optimize integer as int64 (?).  We could make it work with asm.js.
 
-MM: What's Smi
+MM: What's Smi?
 
-BE: Small integer
+BE: Small integer.
 
-YK: Fixnum
+YK: Fixnum.
 
-YK: I believe the optimizers are optimistic about optimizations. Do we expect that implementors will implement these optimizations.
+YK: I believe the optimizers are optimistic about optimizations. Do we expect that implementors will implement these optimizations?
 
 AK: They will be as good as if we implemented 64-bit integers. The main implementation feedback is that it won't be any worse than 64-bit integers.
 
@@ -756,15 +756,15 @@ AK: Our runtime code also uses the GC Heap so....you can have it on the stack su
 
 YK: I guess that's what I'm talkign about. If you know it's u64, then you can optimize it.
 
-AK: But if it's a typed array you know that already
+AK: But if it's a typed array you know that already.
 
 BE: V8 boxes still right?
 
-AK: Yep
+AK: Yep.
 
-YK: Do bignums require that you heapalloc pretty liberally.
+YK: Do bignums require that you heapalloc pretty liberally?
 
-AK: No, for 64 bits you have to heap allocate
+AK: No, for 64 bits you have to heap allocate.
 
 DE: Until you know the types that are flowing through the program. I think a lot of implementations will be heap allocating, even 64-bit integers. Because if you have a pointer? on the stack that's a 64-bit pointer, you have to keep that separate in some way from the 64-bit integer.
 
@@ -774,9 +774,9 @@ BT: That's the general message I heard as well. SLightly harder, but it's not wo
 
 BE: E.g., 1.x for some fraction. Where the variaous csat oeprations are used in asm.js etc, you could imagine have it compile to unboxed, etc. implementation. Is any implementor looking at that?
 
-SYG: SInce our asm.js is kind of ahead of time. Any engines that optimizes for asm.js has to kind of have that stuff anyway. The cast operator and the with operator...you realize it may not always be a constant, but it's not going to be a ?? big deal
+SYG: SInce our asm.js is kind of ahead of time. Any engines that optimizes for asm.js has to kind of have that stuff anyway. The cast operator and the with operator...you realize it may not always be a constant, but it's not going to be a ?? big deal.
 
-DH: If you as me to write down the type optimizations that I need for primitize types. I don't know if I could do that. But how hard is it to characterize that.
+DH: If you as me to write down the type optimizations that I need for primitize types. I don't know if I could do that. But how hard is it to characterize that?
 
 WH: There are really two obvious choices. There are only two I can think of that do reductions of an Integer x modulo 2⁶⁴: `asUintN(64, x)` and `x & 0xFFFFFFFFFFFFFFFFn`.
 
@@ -798,19 +798,19 @@ DE: TurboFan has a great ??? for modeling those kind of ranges here. I would rec
 
 WH: That's overkill. All you need is to do the reduction to uint64's of inputs. You can do as much multiplication, addition, substraction, and shifting left as you want, as long as you do one reduction at the end, before you store it into a variable that escapes. You must also do the reduction before any comparisons or divide-like operations, including shifting right.
 
-DH: Let's say I'm writing some crypto code in JS and i want it to be fast. A) how hard is it to write that code. What do I need to do to get that code to work. I'm not arguing against big ints here. I like big ints. Dan you made the claim, most of the time you don't want big ints, but it's good to look at the cases where they do and understand how hard it is to use their goals. People in node have been asking for this for years. So if we optimize for that, how hard is it (for implementors) to optimize for? And then how hard is it for the 
+DH: Let's say I'm writing some crypto code in JS and i want it to be fast. A) how hard is it to write that code. What do I need to do to get that code to work. I'm not arguing against big ints here. I like big ints. Dan you made the claim, most of the time you don't want big ints, but it's good to look at the cases where they do and understand how hard it is to use their goals. People in node have been asking for this for years. So if we optimize for that, how hard is it (for implementors) to optimize for? And then how hard is it for the ...
 
 DE: I did talk to some people in the node communitya bout this. Some people expressed a preference for int64 over integer, however the maining worry was about possibly falling into a bad performance path if they left out the cast operator. On the other hand there were positive arguments in favor of interger over int64 in some of these use cases. ... something about hashes... With integers we can definitely build integer math faster than we could directly in javascript. We could use SIMD or similar things.
 
 YK: One of my sad rust experiences is opeining the great int debate in the rust. You want 3 things: wrapping (Crypto), an exception if you overthrow, or you miight want a bigNum. This proposal targets where you might want a bignum case (and there are a lot of cases where that's true). If you're writing crypto.
 
-BE: I talked to Fedor Induttny and others about this and they want 
+BE: I talked to Fedor Induttny and others about this and they want ...
 
 YK: My point is a bit broade than the specirifcs. This proposal also says we don't want u32. We don't want many types. BigNum is the right thing. But if you look at those types there are use cases outside of BigNum.  Tl;dr there are cases where u64 is the thing you are actually talking about.
 
 BE: I agree, sometimes the type is different. Sometimes when you want the wrap around or other things, the type is the most ergonomic solution. That is the trade-off that we are giving up now in favor of other benefits.
 
-YK: I don't think we need to give up those other benefits (or options for alternative types)
+YK: I don't think we need to give up those other benefits (or options for alternative types).
 
 WH: Yes, we decided this at the last meeting.
 
@@ -818,9 +818,9 @@ WH: Yes, we decided this at the last meeting.
 
 WH: Last meeting's consensus was more than that, that we should pick one or the other. And that the one we should pick is integers. Everyone that supported unit64 decided we should go over to the side of integers in January.
 
-YK: I'm saying I don't want to object to that consensus. However, I am concerned about a discussion that happened in January, that may not mean consensus (About forclosing ever adding machine-size types in JS would be a mistake)
+YK: I'm saying I don't want to object to that consensus. However, I am concerned about a discussion that happened in January, that may not mean consensus (About forclosing ever adding machine-size types in JS would be a mistake).
 
-MPT: We're doing this for node, let's get this done (paraphrased)
+MPT: We're doing this for node, let's get this done (paraphrased).
 
 BE: I want to make progress. I view Integer as progress. I don't agree that we should foreclose machine types in the future, but I think that can and should be deferred.
 
@@ -828,15 +828,15 @@ DH: Trying to foreclose is a perfect way to make things run around in circles. I
 
 DE: We will work with people to make it futureproof.
 
-YK: Does anyone believe that if they support this proposal they are not allowed to support any other types of numbers in JavaScript in the future
+YK: Does anyone believe that if they support this proposal they are not allowed to support any other types of numbers in JavaScript in the future?
 
 WH: That's not my position. I was on the side of Uint64 in January. At that meeting I said I'm fine with Integer for now and we achieved consensus on specifying that as the solution for now. I have no particular objections to doing Int64 in the future if it's still needed.
 
 AK: There was a discussion about should we do integer should we do UInt64. And it seemed like integer was a way forward for that and met with some significant positivity at that meeting.
 
-BE: We achieved consensus on moving forward with Integer first and making sure it had the cast functions and other things to make sure it had efficient math using integers
+BE: We achieved consensus on moving forward with Integer first and making sure it had the cast functions and other things to make sure it had efficient math using integers.
 
-AK: And that is the spirit why Dan is presenting the proposal in this way
+AK: And that is the spirit why Dan is presenting the proposal in this way.
 
 DH: If there is confusion about what people are saying it's very good if we get that down. There are many discussion shwere we have multiple alternatives and we pick one of them and sometimes people take away (incorrectly) that we can't do any of the other ones as well. **It's important to get down in the minutes that we are still open to pursuing other paths (with numeric types)**. I want to make sure that's in the minutes.
 
@@ -844,7 +844,7 @@ BE: The only time the committee salted the earth and said "never will something 
 
 DE: In the discussion with people tha thad libraries, I got a snese that Integer would indeed be a significant help.
 
-DT: Does this help any users that were interested in decimal and things like financial users
+DT: Does this help any users that were interested in decimal and things like financial users?
 
 BE: I did talk with fintech people. Crypto people not use uint becaue it's the best they have access to. FinTech people want BigInts. (?)
 
@@ -873,7 +873,7 @@ MM: I'm in the opposite position. I want comparison to `undefined` and `null` to
 
 BE: You handled that in the `null` and `undefined` special cases. I agree with Mark and I got the commitee to first say they liked unit64 and then this propsoal, I think we'll do better if we keep firm on that requirement. It may be a bit tricky, but i'd rather avoid that.
 
-MF: Do you consider mixed type comparison, implicit conversion.
+MF: Do you consider mixed type comparison, implicit conversion?
 
 BE: In general yes.
 
@@ -895,7 +895,7 @@ MPT: I woudl think the community would rather see no impicit conversions vs. imp
 
 MF: What is an example?
 
-MPT: Dates conversions can end up really weird. `00` vs `000` dates
+MPT: Dates conversions can end up really weird. `00` vs `000` dates.
 
 DE: Next issue.  Should toString include the literal suffix "N".  the current spec oesn't put the N.  
 
@@ -913,7 +913,7 @@ DE: The last question is the standard library. There are a lot of things that co
 
 BE: What issue number is this?
 
-DE: #20
+DE: #20.
 
 DT: Is Number 0 truthy?
 
@@ -927,7 +927,7 @@ MM: How do you imagine 0 falsy extending to user-defined types?
 
 BE: Value types would have an examplar 0 value.
 
-YK: I have a question about what else we might do here. There is a place in the current standard library with JSON. Which is that the JSON number format technically allows you to express things that are not numbers. Perhaps it would be interesting to pursue a JSON.parse that gives you arbitrary precision integers
+YK: I have a question about what else we might do here. There is a place in the current standard library with JSON. Which is that the JSON number format technically allows you to express things that are not numbers. Perhaps it would be interesting to pursue a JSON.parse that gives you arbitrary precision integers.
 
 DE: I thnk tha's a good idea to think about. There's an open bug to think about JSON Integer.
 
@@ -962,13 +962,13 @@ WH: What do you mean by moving forward?
 
 MPT: So in the United States during this time, 2:30 AM doesn't exist. So it's going forward by the amount of the transition now.
 
-WH: We always have outages when people schedule cron-jobs at 2:45AM
+WH: We always have outages when people schedule cron-jobs at 2:45AM.
 
 MPT: It's going forward on the global timeline, not backward. 2:30 is becoming 3:30.
 
 MF: Why do want this to be valid?
 
-BT: We don't
+BT: We don't.
 
 MPT: We don't, but this already has a lot of implications, but it's better than going randomly in some direction.
 
@@ -994,7 +994,7 @@ WH: That's precedent.
 
 BT: Yeah I think in genearl this date object is designed not to tell you and just do *something*. 
 
-YK: Is the intent here that we're always moving forward, or always moving backward.
+YK: Is the intent here that we're always moving forward, or always moving backward?
 
 MPT: Forward, so this is what it _may_ currently do, this is what it was doing two years ago (slides).
 
@@ -1004,7 +1004,7 @@ YK: If you always go forward, but if you compare the date with the date that com
 
 MPT: When would that happen?
 
-YK: I don't know
+YK: I don't know.
 
 MPT: Do you mean the "Fall" case when it'll bring back ??? in UTC?
 
@@ -1022,7 +1022,7 @@ MPT: Ok, so we have consensus on this?
 
 BT: I don't think we're trying to make this incrementally better, we're trying to define behavior.
 
-MPT: This is a "needs consensus" pull request
+MPT: This is a "needs consensus" pull request.
 
 DE: That does a little bit more than this. I've seen the other bug multiple times. I can explain that if people are interested. I'm happy for this to be merged.
 
@@ -1030,23 +1030,23 @@ MPT: If you want to take that, go for it.
 
 DE: Sure, the definition of the shift for localtime is based on a daylight savings shift. Moscow times shifted historically by an hour. This patch also makes that local timezone offset a function of the time you're passing in, just like the daylight savings offset.
 
-MJ: I thought that was correct in ES6
+MJ: I thought that was correct in ES6.
 
 DE: Some things were corrected in ES6, but this part wasn't.
 
 AWB: I believe the reason this wasn't changed then was to do what you're describing requires having the historic data available. There was reluctance was to imagine having implementations (keeping the historic timezone data around)
 
-MPT: Matt, I think what you're thinking of is the soft language that says you should prefer the iana database when possible
+MPT: Matt, I think what you're thinking of is the soft language that says you should prefer the iana database when possible.
 
 MJ: Correct, I thought it was already formalized in the spec.
 
-DE: I think this pull request adds it. I'm happy for it to be added. I looked for how JS engines implement local date-time transforms and they seem to all do it by calling out to these system calls to get the local time based on unix UTC time and then for engines that implement the spec you get the localTime of now and find it's .... time based on that
+DE: I think this pull request adds it. I'm happy for it to be added. I looked for how JS engines implement local date-time transforms and they seem to all do it by calling out to these system calls to get the local time based on unix UTC time and then for engines that implement the spec you get the localTime of now and find it's .... time based on that.
 
 MPT: If I remember correctly, what happened is that it used to say you should follow the current daylight savings rules but it never codified that you should follow the iana database when possible.
 
 MJ: The other thing I was recalling was that ECMA402 ??? So this has already been implemented based on 402.
 
-DE: Really? Wait? Which article
+DE: Really? Wait? Which article?
 
 MJ: 12.3.2 in [Ecma 402](https://www.ecma-international.org/ecma-402/1.0/)
 
@@ -1056,7 +1056,7 @@ MJ: To take history into account, and modern operating systems can do that.
 
 MPT: That would only cover formatting, that would not cover date.
 
-MJ: Correct, it needs to be merged back into 262
+MJ: Correct, it needs to be merged back into 262.
 
 BF: Is this timeboxed?
 
@@ -1088,7 +1088,7 @@ MPT: I'm sympathetic to this IoT issue, so we could change the wording to say: "
 
 BE: The problem with the web is you tend to get a de-facto standard even if you don't specify it.
 
-AWB: That's ok
+AWB: That's ok.
 
 BE: It'd be ok.
 
@@ -1098,41 +1098,41 @@ BT: Yep, we're requiring everything.
 
 AWB: It came up specifically about case mapping.
 
-BT: toUpperCase and toLowerCase require the full case mapping
+BT: toUpperCase and toLowerCase require the full case mapping.
 
 MF: So we should probably do the same thing here as well.
 
-BT: Yeah..i'd like to see
+BT: Yeah..i'd like to see.
 
-AWB: That's one of the thing you'd hae to evaluate on each case
+AWB: That's one of the thing you'd hae to evaluate on each case.
 
 DE: If you're an embedded system you only have to implement a single timezone. 
 
-BT: But we require it for unicode case mapping
+BT: But we require it for unicode case mapping.
 
-DE: It doesn't take up that much space
+DE: It doesn't take up that much space.
 
 BE: It might be that they'll also show up for the appliances, and nobody wants to make appliances for each region that has the specific dates for that region.
 
-DE: Don't you actually want to have accurate dates. 
+DE: Don't you actually want to have accurate dates?
 
 MPT: You won't anyone that wants accurate dates more than me. But I don't think we can ignore that we're asking them to take on a lot of data.
 
-AWB: Seems like one of those cases where a strategic "should" is the right answer
+AWB: Seems like one of those cases where a strategic "should" is the right answer.
 
-BT: We can't use "should"
+BT: We can't use "should".
 
 AWB: Sometimes we do, it's ok.
 
-MJ: (reading from ECMA262). The PR removes some of that wording and replacing it with some examples and solidifies the ambiguity. It doesn't say you must use the full implementation
+MJ: (reading from ECMA262). The PR removes some of that wording and replacing it with some examples and solidifies the ambiguity. It doesn't say you must use the full implementation.
 
 MPT: Nobody is arguing for the ambguity, but what we're at is.
 
-BT: I was just curious. In light of your concerns around IOT and requirement of data tables. Are we going to be able to move forward with a new date proposal that would require this kind of data to be available in order to have a good system. 
+BT: I was just curious. In light of your concerns around IOT and requirement of data tables. Are we going to be able to move forward with a new date proposal that would require this kind of data to be available in order to have a good system? 
 
 BE: I don't know. I think it's an open issue. We should here from the ??? folks. As usual, people innovating on certain areas don't come to this meeting, they're too busy.
 
-AK: How much do they care about conforming exactly to the EcmaScript standard
+AK: How much do they care about conforming exactly to the EcmaScript standard?
 
 BE: It's big enough. They can't use npm, they don't want to. But they do have a standard library. We'll hear from them in May. I think it'll be interesting to talk with them about this topic then.
 
@@ -1144,15 +1144,15 @@ BE: Does that achieve the goals that you have?
 
 MPT: The main thing to me is to resolve the ambiguity issue.
 
-BT: We all do it anyway, so it's not like there's a pressing issue here..
+BT: We all do it anyway, so it's not like there's a pressing issue here.
 
 DE: This is an important issue for Chrome, and this bug keeps getting filed on Chrome. It'll be great to get this codified.
 
 BE: You mean allowed but not required. 
 
-AWB: Is there something that does not allow historically.
+AWB: Is there something that does not allow historically?
 
-MJ: In 6 it is not allowed
+MJ: In 6 it is not allowed.
 
 DE: In 6 it is allowed for ??? and disallowed for ???. This is why ?? started working on it and it's now disambiguated.???
 
@@ -1170,25 +1170,25 @@ BT: We can make sure that it doesn't require. Because I'm fully supportive of Da
 
 MPT: Ok, so we have consensus on this to be merged.
 
-BT: Any objections? We definitely want to make it optional to use historic timezone data. Using the best information on the timezones
+BT: Any objections? We definitely want to make it optional to use historic timezone data. Using the best information on the timezones.
 
 AWB: That language of "best available" is...
 
 BT: It's handwavy....
 
-MJ: We should say the best available on the operating system
+MJ: We should say the best available on the operating system.
 
-BT: But what's an operating system? ;-) Some systems don't have one
+BT: But what's an operating system? ;-) Some systems don't have one.
 
 MPT: The more restrictive the phrasing gets the worse it gets given the situation...
 
-BT: Why don't we just use "may" instead
+BT: Why don't we just use "may" instead.
 
-MJ: I think it's a "should"
+MJ: I think it's a "should".
 
 BT: I really don't want "should".
 
-DH: I don't want to go down the road of "magic feathers"
+DH: I don't want to go down the road of "magic feathers".
 
 AK: I don't think so.
 
@@ -1200,7 +1200,7 @@ BT: Umm... No. Notes cannot include normative content.
 
 BE: Dan says you want to allow it.
 
-BT: But "may" is you can if it's available
+BT: But "may" is you can if it's available.
 
 AWB: "should" if it's available and "no" if it's not.
 
@@ -1241,7 +1241,7 @@ MPT: Like how accurate should the API be? I'm hoping for nano-second precision, 
 
 WH: Super accurate time keeping runs into issues with relativity, etc. It becomes very tricky to keep track of "absolute" time beyond millisecond precision.
 
-MJ: There are plenty of scientific applications that care about nanoseconds in the data itself
+MJ: There are plenty of scientific applications that care about nanoseconds in the data itself.
 
 ### Slide: Local Time: Saturday, April 9, 2016, 9:11 AM
 
@@ -1257,9 +1257,9 @@ MPT: _Referring to a graph of all time zones_
 
 BE: I work with someone who thinks we should all just use UTC.
 
-MJ: No
+MJ: No.
 
-MPT: When is the sun out? That's a timezone
+MPT: When is the sun out? That's a timezone.
 
 _laughter_
 
@@ -1270,7 +1270,7 @@ moment('2016-01-01').add(1.5, ' hours').format('LLL) // " January 1, 2016 1:30AM
 moment('2016-01-01').add(1.5, ' days').format('LLL) // " January 3, 2016 12:00AM"
 ```
 
-MPT: More explanation of slides
+MPT: More explanation of slides.
 
 WH: What's the difference between the two times?
 
@@ -1294,7 +1294,7 @@ MPT: Steven Colburn created the JodaTime proposal. It models the problems domain
 
 MPT: If you think about time as an "instant" is a point on a timeline.
 
-MPT: The only thing you get from an instant type is a point, a point in life. From there, you have a typeflow fror zoned date type. A composition of a point on the global timeline and a timezone. And a calendar system if you want to get fancy. So now what you have is a datetime in a timezone (that's sort of the god type). Once you have all of that, then you know everything you need to know about that time. In that case a `ZonedDatetime`
+MPT: The only thing you get from an instant type is a point, a point in life. From there, you have a typeflow fror zoned date type. A composition of a point on the global timeline and a timezone. And a calendar system if you want to get fancy. So now what you have is a datetime in a timezone (that's sort of the god type). Once you have all of that, then you know everything you need to know about that time. In that case a `ZonedDatetime`.
 
 WH: Does the localtime include the current offset or not? I'm asking in the context of ambiguous local times on the fall back day which can be disambiguated by including the current UTC offset.
 
@@ -1316,7 +1316,7 @@ BT: There's also more of a text-based introduction, the NodaTime docs have a gre
 
 WH: Are dates in gregorian calendar only?
 
-MPT: That's a debate that's going on in the proposal right now
+MPT: That's a debate that's going on in the proposal right now.
 
 MJ: On that, Noda and Joda both said yes, and then Steven corrected it in Java 8 and said no. We want something that works well for ECMA402 and EcmaScript.
 
@@ -1326,7 +1326,7 @@ RX: Can I ask a basic question. I would like to understand about LocalDateTime, 
 
 MPT: It assumes no timezone because of that the API will force you to do certain conversions. Say you have a LocalDateTime and it doesn't exist and you try to convert it to a localdatetime, you'll have to specify a resolver to say which instance you pick if you have an ambiguous time.
 
-RX: It's confusing for me to understand if it's not going to have a timezone attached to it, otherwise it should be contiguous
+RX: It's confusing for me to understand if it's not going to have a timezone attached to it, otherwise it should be contiguous.
 
 MJ: `LocalDateTime` as a type, is contiguous without a timezone reference at all. If I add an hour, I add an hour, if a day, it's one contiguous day. There's no relation to a timezone.
 
@@ -1380,7 +1380,7 @@ BT: This is the biggest reason why I support this proposal over just exposing ti
 
 MPT: ??
 
-AWB: If what you're saying is
+AWB: If what you're saying is...
 
 BE: It's not a value type in the sense of n64.
 
@@ -1388,7 +1388,7 @@ MPT: It's an object.
 
 DH: Tht was my first question. We were talking about an immutable object, but it's `typeof` is object. 
 
-MPT: Right! Yes, sorry
+MPT: Right! Yes, sorry.
 We fight the fight on stack overflow about "you can use a library that works or you can do the thing you're doing." There's this set of people who are going to use the language primatives. Those people aren't making good code. It goes beyond just mutability vs immutability. Date doesn't have add methods, you have to get/set them, they bubble, and you don't have safety when you overflow a unit.
 
 MF: Does everyone agree that using date arithmetic is a common thing. If so, I think we can agree with providing a standard library to solve this common problem.
@@ -1411,7 +1411,7 @@ MJ: Another clear example of why this is neccessary. One of the biggest things t
 
 WH: Is the month number for December 11 or 12?
 
-MPT: Let's index from 1. So it's 12
+MPT: Let's index from 1. So it's 12.
 
 CP: My only feedback is that we should create an API???? There's a little overlap with the 402 proposal, I'm not sure it's connected. Either way, we plan to expose some pieces of the timezone. Maybe that's an area we can collaborate on...??
 
@@ -1423,9 +1423,9 @@ MPT: Locale-specific date format, you need CLDR data for that.
 
 AWB: I'm not sure what your ask is at this point.
 
-MPT: My ask is "do we want to move forward with this API module or do we want to simplify it"
+MPT: My ask is "do we want to move forward with this API module or do we want to simplify it?"
 
-BT: I think in light of Brendan's concern, we should decide whether we should be in the business of making more big APIs
+BT: I think in light of Brendan's concern, we should decide whether we should be in the business of making more big APIs.
 
 YK: I don't think Brendan would say there shouldn't be *some* new APIs here.
 
@@ -1457,15 +1457,15 @@ MJ: We have some quotes from Brendan about copying dates from Java :)
 
 Everyone: laughing
 
-BT: The committee is not moved by Java
+BT: The committee is not moved by Java.
 
 Everyone: laughing
 
-MPT: We cannot rev-versions. We cannot just get rid of it. Once it's in ECMA spec we cannot change in "Java 8"
+MPT: We cannot rev-versions. We cannot just get rid of it. Once it's in ECMA spec we cannot change in "Java 8".
 
 BE: The web is so big, you cannot control or deprecate things. I'd love to deprecate the date object. It can be deprecated by the community and linting tools. There's no "flag day" for the web.
 
-MJ: If you go the module route, can you rev modules
+MJ: If you go the module route, can you rev modules?
 
 BE: Modules you load from the server, so of course. But in the browser environment, no.
 
@@ -1491,7 +1491,7 @@ YK: Are you saying there may be consensus that something like this may ??
 
 BT: I'm encouraged by what you said that is totally independent of this effort for Rust that this model is a useful thing.
 
-YK: I found the operations that JodaTime and Java 8 have some footguns that I would like to avoid
+YK: I found the operations that JodaTime and Java 8 have some footguns that I would like to avoid.
 
 BT: Sure, but it seems like there's a lot of alignmnet. Seems like this is a good path. We're not just copying everything. We'll be intentionally copying just some semantics.
 
