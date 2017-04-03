@@ -18,7 +18,7 @@ Minutes approved
 
 AWB: Istvan will do this later.
 
-## 6. ECMA262 Status Updates
+## 6. ECMA-262 Status Updates
 
 (Brian Terlson)
 
@@ -32,7 +32,7 @@ BT: Printable Style sheets not working, we need to improve this. Asking browser 
 
 AWB: The patent document is out for review. Members should get it to their lawyers.
 
-## 7. ECMA402 Status Updates
+## 7. ECMA-402 Status Updates
 
 (Zibi Braniecki)
 
@@ -40,7 +40,7 @@ ZB: I'm not prepared for this discussion. I believe Caridy will be giving this. 
 
 ## 6.ii Vote to accept ECMA-262 2017 final draft and forward it to Ecma GA (approval subject to completion of RF opt-out period with no opt-outs)
 
-AWB: Voting on the standards is one of the few things that needs a vote.  In a minute or two, we will go around and people who actually represent ECMA members should determine who from each organization will vote. Each member will vote yes/no/abstain (where abstain is the equivalent of "no").  We're voting on the 2017 version of ECMA 262 and ECMA 402, based on the final drafts that the editors prepared, subject to the assumption that no one raises an objection during the RF opt-out period (in which case we would not be approving the standard in June, but that has never happened). After we approve it, this will go through the ECMA executive committee, onto the GA in June with the final vote.
+AWB: Voting on the standards is one of the few things that needs a vote.  In a minute or two, we will go around and people who actually represent Ecma members should determine who from each organization will vote. Each member will vote yes/no/abstain (where abstain is the equivalent of "no").  We're voting on the 2017 version of ECMA-262 and ECMA-402, based on the final drafts that the editors prepared, subject to the assumption that no one raises an objection during the RF opt-out period (in which case we would not be approving the standard in June, but that has never happened). After we approve it, this will go through the Ecma executive committee, onto the GA in June with the final vote.
 
 WH: No one has ever opted out of an opt-out, but we've had patent shenanigans in the General Assembly before.
 
@@ -52,7 +52,7 @@ YK: Only once a feature gets to stage 4 does it get in the spec. What we're doin
 
 AWB: I suggest we do a single vote covering both docs.
 
-LBR: We also have the ECMA TR104.
+LBR: We also have the Ecma TR104.
 
 AWB: We will handle that separately.
 
@@ -92,7 +92,7 @@ All: _clapping_
 
 (Leo Balter)
 
-LBR: Need help from ECMA for an email for use by test262 so that private emails don't need to be used.
+LBR: Need help from Ecma for an email for use by test262 so that private emails don't need to be used.
 
 LBR: In other updates. I was able to do a bug triage on more than 100 issues and pull requests in the last month. There were many many closed issues (around 50) including tests on rest and spread properties. We now have over 100k LOC for async/generator tests. For object rest/spread, we have a new JSC contributor from my country who has been very helpful with the tests. He also implemented it in JSC. We need more support--I'm glad Google is supporting me, but I need more support for test262 development.
 
@@ -162,7 +162,7 @@ BT: I think it would be pretty nice. But yeah, that's the only refactoring that'
 
 AWB: I can unerstand what you say about the IDL for properties. But I'm wondering about the other major place where there are prose descriptions for built-ins are on the arguments.  It's not clear what you could say about arguments other than "we call the first argument X".
 
-BT: WebIDL has the capability to describe function parameters. It goes further to say that if you define your function as taking in a number that implies that there's a coersion done to number. I'm not going to include this in the MVP. I don't want the syntax to describe the shape of a function. I would leave that to editorial conventions and prose. The automatic coercions... I have two minds of it. There's an issue raised in 402 where it says do all your coercions at the top, and the ECMA standard says do all coercions when you need them.
+BT: WebIDL has the capability to describe function parameters. It goes further to say that if you define your function as taking in a number that implies that there's a coersion done to number. I'm not going to include this in the MVP. I don't want the syntax to describe the shape of a function. I would leave that to editorial conventions and prose. The automatic coercions... I have two minds of it. There's an issue raised in 402 where it says do all your coercions at the top, and the Ecma standard says do all coercions when you need them.
 
 YK: The ECMAScript way is more natural.
 
@@ -273,7 +273,7 @@ SYG: I have been told Caridy is on the call now.
 - Further discussion on Annex B
 
 
-## 7. ECMA 402 status update
+## 7. ECMA-402 status update
 
 (Caridy Patiño)
 
@@ -388,7 +388,7 @@ MM: I can talk about it.
 
 - RegExp: Lookbehind is stage 3.
 
-## 7. ECMA 402 status update
+## 7. ECMA-402 status update
 
 (Caridy Patiño)
 
@@ -404,17 +404,17 @@ CP: I can work with Brian on the small details we need to update the draft and g
 
 AWB: Okay, so, thank you! Let's continue specifically with regex items. the next one is actually Dan and Brian which is property escapes.
 
-CP: Excuse me, does this mean we'll get to Ecma 402 segmenter after lunch?
+CP: Excuse me, does this mean we'll get to ECMA-402 segmenter after lunch?
 
 AWB: Let's do it now since you are here.
 
-CP: This is the ECMA 402 Proposals.
+CP: This is the ECMA-402 Proposals.
 
 #### Conclusion/Resolution
 
-No specific conclusion, let's review the current proposals for ECMA402.
+No specific conclusion, let's review the current proposals for ECMA-402.
 
-## 10.i.f ECMA402 Presentation of the three formatters for stage 2
+## 10.i.f ECMA-402 Presentation of the three formatters for stage 2
 
 (Zibi Braniecki) 
 
@@ -552,7 +552,7 @@ YK: I would love to work with you on that. I did that Duration proposal for Rust
 
 MBT: Let's talk. I have a few other things going on today, but I think we'll need a duration type.
 
-DE: Can I say something with regards to the current proposal? Some of the points here are similar to the current state of ECMA 402. For example. NumberFormat lets you format currencies and ordinary numbers. There is a list of currencies there and everything is in the options object. To me, an options object, seems like a pretty consistent design. You could still polyfill new data it by over-writing the Intl object--there's nothing special to these objects; not fundamental like built-in modules. The other thing about which units are included or how adhoc it is. There is a close connection between what's here and what's in CLDR. If we want metric units to be combinatorial, we could ask for better data in CLDR to be able to add these additional formats and things there, though this is a process that takes time. (see http://www.unicode.org/reports/tr35/tr35-general.html#perUnitPatterns )
+DE: Can I say something with regards to the current proposal? Some of the points here are similar to the current state of ECMA-402. For example. NumberFormat lets you format currencies and ordinary numbers. There is a list of currencies there and everything is in the options object. To me, an options object, seems like a pretty consistent design. You could still polyfill new data it by over-writing the Intl object--there's nothing special to these objects; not fundamental like built-in modules. The other thing about which units are included or how adhoc it is. There is a close connection between what's here and what's in CLDR. If we want metric units to be combinatorial, we could ask for better data in CLDR to be able to add these additional formats and things there, though this is a process that takes time. (see http://www.unicode.org/reports/tr35/tr35-general.html#perUnitPatterns )
 
 WH: I don't know what's in the CLDR, but I know the metric system and it does not have a lot of units. I think it's quite reasonable to include the entire metric system in this.
 
@@ -605,13 +605,13 @@ DH: I'm so sorry maggie, Lunch is here. We can continue after if that makes sens
 
 AWB: Let's continue now that lunch is over.
 
-ZB: I added examples ot the slides during lunch to present use cases.  Continuing on UnitFormat.  These formatters (plus one more that's in the Ecma402 github repository) are the only ones they are currently planning.  Every use case they have encountered in the last year can be covered by some one or tow of the 4 formatters.  It's not that they are trying to port all the ICU formatters to JS, but rather they have the subset that is need for the Web.  Stage 2 is that TC39 agrees that the problmes needs to be solved.  Is there a reason that we do not want a feature like that in EcmaScript?
+ZB: I added examples ot the slides during lunch to present use cases.  Continuing on UnitFormat.  These formatters (plus one more that's in the ecma402 github repository) are the only ones they are currently planning.  Every use case they have encountered in the last year can be covered by some one or tow of the 4 formatters.  It's not that they are trying to port all the ICU formatters to JS, but rather they have the subset that is need for the Web.  Stage 2 is that TC39 agrees that the problmes needs to be solved.  Is there a reason that we do not want a feature like that in ECMAScript?
 
 WH: Those are not the only choices. We could say "come back when you have improved it".
 
-ZB: Sure, but let's define the API before we move or should we say "this does not belong in ECMASCript" (do we move this forward or do we not)
+ZB: Sure, but let's define the API before we move or should we say "this does not belong in ECMAScript" (do we move this forward or do we not)
 
-DH: You will usually know if people think it shouldn't be in ECMASCript. That will be clear.
+DH: You will usually know if people think it shouldn't be in ECMAScript. That will be clear.
 
 YK: I think in general, that is a necessary, but not sufficient thing for stage 2. The norms of the committee is that the API is reasonably done as well as semantics.
 
@@ -1349,7 +1349,7 @@ AWB: Sounds good.
 
 LBR: This is mostly to ask to defer to discretion of lawyers (my company doesn't have any working on this). I'm trying to make Test262 a nice place for new contributors. It's already too complex for new contributors. We struggle with pull requests. We require every test file to be prefixed with two copyright lines declaring the copyright for who is contributing. But today we already have the CLA. Considering that, for new tests, without these copyright lines, we're deferring to the license that's in the Test262 project. I'm not looking for consensus now, because we need to talk to lawyers.
 
-AWB: What you need to do is refer this to ECMA ?? because there is a specific ECMA policy document that specifies that, for ECMA modules, how the software should express itself...so you have to go through Ecma.
+AWB: What you need to do is refer this to Ecma ?? because there is a specific Ecma policy document that specifies that, for Ecma modules, how the software should express itself...so you have to go through Ecma.
 
 BT: That's what he's asking for, is that policy to change. He's not going to ask for that to change until he talks to lawyers. I know what a lawyer is going to say. They'll say you need the copyright header. It makes things more clear and so people can't say they didn't know it wasn't copyrighted.
 
@@ -1373,7 +1373,7 @@ LBR: We've got a lot of contributions without the copyright lines; some of the c
 
 AWB: Strictly speaking you're not supposed to accept anything that doesn't conform to the license.
 
-MPT: When you sign the CLA, you're literally saying your lines of code belong to ECMA. You can't sign the CLA without giving the code away.
+MPT: When you sign the CLA, you're literally saying your lines of code belong to Ecma. You can't sign the CLA without giving the code away.
 
 MM: Leo, I think what we're all saying is if the reason people don't want to put the copyright lines on there is because they don't agree with the copyright, then removing the lines is not going to solve the problem.
 
@@ -1452,7 +1452,7 @@ Bradley will help out and the will report back in 2+ months.
 
 LBR: I have a link for TR104.
 
-MM: What is Ecma-104?
+MM: What is ECMA-104?
 
 AWB: Its't he Test262 PR that fundamentally ........ it points to the github.....
 

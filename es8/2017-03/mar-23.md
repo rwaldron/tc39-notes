@@ -16,7 +16,7 @@ Before the TC39 meeting, there will be a meetup with the NodeJS CTC.
 
 YK: Even if node doesn't want this feature. 
 
-MF: In a previous slide you said anything you can do in node modules you should be able to do in ecmascript modules. Can you clarify what you meant by that?
+MF: In a previous slide you said anything you can do in node modules you should be able to do in ECMAScript modules. Can you clarify what you meant by that?
 
 YK: I didn't hear him say those words.
 
@@ -146,7 +146,7 @@ DH: That's about the whole default import syntax: `import a from 'a'`, that `a` 
 
 WH: So, is it possible not to export a default?
 
-DH: Yes it's possible not to export a default.  That's in ecmascript syntax. In a dynamic module, you can choose to name one of the imports "default".
+DH: Yes it's possible not to export a default.  That's in ECMAScript syntax. In a dynamic module, you can choose to name one of the imports "default".
 
 AWB: I think I'm comfortable with what's happening here, whether the details of the spec are (perfect?) or not.
 
@@ -1044,11 +1044,11 @@ DE: I think this pull request adds it. I'm happy for it to be added. I looked fo
 
 MPT: If I remember correctly, what happened is that it used to say you should follow the current daylight savings rules but it never codified that you should follow the iana database when possible.
 
-MJ: The other thing I was recalling was that ECMA402 ??? So this has already been implemented based on 402.
+MJ: The other thing I was recalling was that ECMA-402 ??? So this has already been implemented based on 402.
 
 DE: Really? Wait? Which article?
 
-MJ: 12.3.2 in [Ecma 402](https://www.ecma-international.org/ecma-402/1.0/)
+MJ: 12.3.2 in [ECMA-402](https://www.ecma-international.org/ecma-402/1.0/)
 
 WH: So which way does 402 resolve this?
 
@@ -1124,7 +1124,7 @@ BT: We can't use "should".
 
 AWB: Sometimes we do, it's ok.
 
-MJ: (reading from ECMA262). The PR removes some of that wording and replacing it with some examples and solidifies the ambiguity. It doesn't say you must use the full implementation.
+MJ: (reading from ECMA-262). The PR removes some of that wording and replacing it with some examples and solidifies the ambiguity. It doesn't say you must use the full implementation.
 
 MPT: Nobody is arguing for the ambguity, but what we're at is.
 
@@ -1132,7 +1132,7 @@ BT: I was just curious. In light of your concerns around IOT and requirement of 
 
 BE: I don't know. I think it's an open issue. We should here from the ??? folks. As usual, people innovating on certain areas don't come to this meeting, they're too busy.
 
-AK: How much do they care about conforming exactly to the EcmaScript standard?
+AK: How much do they care about conforming exactly to the ECMAScript standard?
 
 BE: It's big enough. They can't use npm, they don't want to. But they do have a standard library. We'll hear from them in May. I think it'll be interesting to talk with them about this topic then.
 
@@ -1318,7 +1318,7 @@ WH: Are dates in gregorian calendar only?
 
 MPT: That's a debate that's going on in the proposal right now.
 
-MJ: On that, Noda and Joda both said yes, and then Steven corrected it in Java 8 and said no. We want something that works well for ECMA402 and EcmaScript.
+MJ: On that, Noda and Joda both said yes, and then Steven corrected it in Java 8 and said no. We want something that works well for ECMA-402 and ECMAScript.
 
 MPT: So Steven's argument is when you make non-gregorian ....?
 
@@ -1461,7 +1461,7 @@ BT: The committee is not moved by Java.
 
 Everyone: laughing
 
-MPT: We cannot rev-versions. We cannot just get rid of it. Once it's in ECMA spec we cannot change in "Java 8".
+MPT: We cannot rev-versions. We cannot just get rid of it. Once it's in Ecma spec we cannot change in "Java 8".
 
 BE: The web is so big, you cannot control or deprecate things. I'd love to deprecate the date object. It can be deprecated by the community and linting tools. There's no "flag day" for the web.
 
