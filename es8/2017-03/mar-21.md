@@ -337,7 +337,7 @@ YK: A use case would be putting JS code into a template string for documentation
 
 - Stage 4, our first ES2018 feature
 
-##  10.i.b Regex Look behind assertions
+## 10.i.b RegExp Lookbehind Assertions
 
 (Daniel Ehrenberg)
 
