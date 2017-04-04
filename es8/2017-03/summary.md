@@ -4,16 +4,11 @@
 - ES2017 was officially approved by the committee to be sent to the ECMA General Assembly for approval. [notes](mar-21.md#6ii-vote-to-accept-ecma-262-2017-final-draft-and-forward-it-to-ecma-ga-approval-subject-to-completion-of-rf-opt-out-period-with-no-opt-outs)
 - A [Code of Conduct][] was presented, based on an open process of feedback over the previous two months. The committee shares the goal of being open and welcoming to diversity and is working through issues of scope and enforcement. The current draft will be sent to the ECMA Executive Committee for
 review and approval.
-- There is an [alternative proposed unifying syntax][Orthogonal-Classes] for class features. [notes][Orthogonal-Classes-notes]
 - Several RegExp feature enhancements reached Stage 3; these and [more may be in store for ES2018](mar-21.md#any-items-for-the-2018-edition)
-  - stage 3:
-    - Lookbehind Assertions: [notes][lookbehind-notes], [proposal][lookbehind]
-    - Unicode property escapes: [notes][property-escapes-notes], [proposal][property-escapes]
-    - Named Capture Groups: [notes][named-groups-notes], [proposal][named-groups]
-    - `s` (dotAll) flag: [notes][dotall-flag-notes], [proposal][dotall-flag]
-  - in store for ES2018:
-    - [Legacy RegExp features][legacy-features], [notes][legacy-features-notes]
-    - [`String.prototype.matchAll`][matchAll]
+  - Lookbehind Assertions: [notes][lookbehind-notes], [proposal][lookbehind]
+  - Unicode property escapes: [notes][property-escapes-notes], [proposal][property-escapes]
+  - Named Capture Groups: [notes][named-groups-notes], [proposal][named-groups]
+  - `s` (dotAll) flag: [notes][dotall-flag-notes], [proposal][dotall-flag]
 - [Arbitrary-precision Integers][] were introduced and reached Stage 2. [notes](mar-23.md#10iva-arbitrary-precision-integer-type-for-stage-2)
 - A [new built-in Date replacement][date] reached Stage 1. [notes](mar-23.md#12iia-date-proposal---nodatime-as-a-built-in-module-for-stage-1)
 - The Stage 1 [Realms][] proposal has been solidifying, with hooks for the module loading pipeline. [notes](mar-23.md#10iic-realms-update)
@@ -21,16 +16,12 @@ review and approval.
   - [Intl.ListFormat][] reached Stage 2.
   - [dateStyle/timeStyle][] reached Stage 1.
   - Identified reviewers for [Intl.Segmenter][]. [notes](mar-21.md#10ih-intlsegmenter-requesting-stage-3)
+- There is an [alternative proposed unifying syntax][Orthogonal-Classes] for class features. [notes][Orthogonal-Classes-notes]
 - [WeakRefs][] is seeking implementations to work with and develop feedback. [notes](mar-21.md#weak-references-status-update)
 - Browsers are no longer pursuing SIMD.js, in favor of SIMD exposed by WASM. [notes](mar-21.md#10if-simdjs-status-update)
 - The role of Annex B (normative-optional, web required) specification text came up in a few topics. There's disagreement about the current role and appropriateness, to be revisited in a future meeting. [notes](mar-21.md#any-items-for-the-2018-edition)
 - Several needs-consensus pull requests reached consensus, tightening up semantics in edge cases. [notes](mar-22.md#12-i-needs-consensus-prs)
-  - [#856 Avoid Duplicate TA#fill value coercions](https://github.com/tc39/ecma262/pull/856). [notes](mar-22.md#856-avoid-duplicate-tafill-value-coercions)
-  - [#854 Remove Implementation-defined behavior for Number methods](https://github.com/tc39/ecma262/pull/854). [notes](mar-22.md#854-remove-implementation-defined-behavior-for-number-methods)
-  - [#785 Array.prototoype.sort checks for compareFn being valid](https://github.com/tc39/ecma262/pull/785). [notes](mar-22.md#785-arrayprototoypesort-checks-for-comparefn-being-valid)
-  - [#833 Remove duplicate keys from proxies](https://github.com/tc39/ecma262/pull/833). [notes](mar-22.md#833-remove-duplicate-keys-from-proxies)
-  - [#852 Move side-effecty toIndex in TA constructor to before detached check](https://github.com/tc39/ecma262/pull/852). [notes](mar-22.md#852-move-side-effecty-toindex-in-ta-constructor-to-before-detached-check)
-  - [#853 String.prototype.replace edge case alignment](https://github.com/tc39/ecma262/pull/853). [notes](mar-22.md#853-stringprototypereplace-edge-case-alignment)
+  - [#856](https://github.com/tc39/ecma262/pull/856) ([notes](mar-22.md#856-avoid-duplicate-tafill-value-coercions)), [#854](https://github.com/tc39/ecma262/pull/854) ([notes](mar-22.md#854-remove-implementation-defined-behavior-for-number-methods)), [#785](https://github.com/tc39/ecma262/pull/785) ([notes](mar-22.md#785-arrayprototoypesort-checks-for-comparefn-being-valid)), [#833](https://github.com/tc39/ecma262/pull/833) ([notes](mar-22.md#833-remove-duplicate-keys-from-proxies)), [#852](https://github.com/tc39/ecma262/pull/852) ([notes](mar-22.md#852-move-side-effecty-toindex-in-ta-constructor-to-before-detached-check)), [#853](https://github.com/tc39/ecma262/pull/853) ([notes](mar-22.md#853-stringprototypereplace-edge-case-alignment))
 
 [Code of Conduct]: https://tc39.github.io/code-of-conduct-proposal/
 [Orthogonal-Classes]: https://github.com/rwaldron/tc39-notes/pull/github.com/erights/Orthogonal-Classes
