@@ -173,7 +173,7 @@ WH: Do we have any idea as to which lexical binding when it gets created.
 
 AK: It could be global.
 
-```
+```js
 import {a} from 'a'
 export function f() {
     console.log(a)
