@@ -1265,8 +1265,8 @@ _laughter_
 ### Slide: code examples (timeline math vs. calendar math)
 
 ```js
-moment('2016-01-01').add(1.5, ' hours').format('LLL) // " January 1, 2016 1:30AM"
-moment('2016-01-01').add(1.5, ' days').format('LLL) // " January 3, 2016 12:00AM"
+moment('2016-01-01').add(1.5, ' hours').format('LLL') // " January 1, 2016 1:30AM"
+moment('2016-01-01').add(1.5, ' days').format('LLL') // " January 3, 2016 12:00AM"
 ```
 
 MPT: More explanation of slides.
