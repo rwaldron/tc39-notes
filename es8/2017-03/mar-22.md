@@ -370,7 +370,7 @@ MM: This proposal cross-cuts a lot of existing proposals and the whole process a
 
 DE: Alan has raised this before but the cross-cutting discussions have been happening the whole time among the champions of decorators and public state and private state.
 
-MM: There's been discusion of cross-cutting concerns, but there hasn't been a proposal on the table whose effect is to have cross-cutting impact on proposals that are e.g., farther ahead of them.
+MM: There's been discussion of cross-cutting concerns, but there hasn't been a proposal on the table whose effect is to have cross-cutting impact on proposals that are e.g., farther ahead of them.
 
 AK: Let me restate from Dan's perspective. The fact that this comes as a separate proposal instead of part of what's being done from those other proposals, which seems like a change in process from what's already been happening with the other proposals.
 
