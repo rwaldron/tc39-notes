@@ -399,7 +399,7 @@ AWB: To some degree both the public state and private state proposals were stall
 
 DE: I don't think there are that many issues. At the last meeting I laid out the issues that were open, we disagree about them, but there's a small number of issues. I would like to be able to have a discussion about which syntax we like better: the one that ?? and I are championing or this one so that we can decide and we can advance one of the syntaxes.
 
-AK: This reminds me of the dicussion of decorators and annotations.  We could have had them advancing together, racing to get the "@" symbol usage.  But that would have been bad.  Having multiple competing proposals seems like a bad thing.
+AK: This reminds me of the discussion of decorators and annotations.  We could have had them advancing together, racing to get the "@" symbol usage.  But that would have been bad.  Having multiple competing proposals seems like a bad thing.
 
 MM: When it's procedurally possible, I will propose merging the proposals.
 
@@ -415,7 +415,7 @@ DE: No.
 
 WH: So we haven't resolved the cross-cutting syntax issues.
 
-AWB: At the last meeting we still had intense dicussions about the syntax and we didn't have consensus.
+AWB: At the last meeting we still had intense discussions about the syntax and we didn't have consensus.
 
 DE: But we identified all the issues...
 

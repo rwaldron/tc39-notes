@@ -103,7 +103,7 @@ AK: The last time we talked about this, there was a discussion of circularity an
 
 CP: Yeah, we were doing more work on the module evaluation? phase... We settled on the idea of simply making sure all these imports can be created during evaluation and if they're not ready we throw an error. In the previous proposal we were still evaluating the importer source text and then running an extra step to make sure everything was ready. The conclusion is in node today you cannot do those things. You cannot have circular dependencies in this way because the export update hasn't been created yet. We were trying to solve a problem that wasn't really a problem.
 
-AK: Going back to the previous dicussion, you basically cause the module to export all the things that anyone tried to get from it, and then if that fails you get an error.
+AK: Going back to the previous discussion, you basically cause the module to export all the things that anyone tried to get from it, and then if that fails you get an error.
 
 MM: What is "tried to cause the module to export anything anyone tried to get from it"?
 
@@ -285,7 +285,7 @@ AWB: They're just names.
 
 DH: From the outside it doesn't change with those things. For pre-existing systems, they'll just have the static shape of one export called `default` which is a dynamic binding that can be anything. So unless the author opts-in, they'll get the single anonymous default export. That's pretty close to what Node has planned already. We're just hypothetically creating a flexible system they could build on top of.
 
-AK: This is an interesting area of dicussion. I'm starting to wonder though if these dyn modules are going to be modeled as providing a static set of exports. Does that reduce the amount of spec change needed to support them?
+AK: This is an interesting area of discussion. I'm starting to wonder though if these dyn modules are going to be modeled as providing a static set of exports. Does that reduce the amount of spec change needed to support them?
 
 DH: Yes, this is what I'm saying is that we've identified a much simpler system here.
 
@@ -1266,7 +1266,7 @@ _laughter_
 
 ```js
 moment('2016-01-01').add(1.5, ' hours').format('LLL') // " January 1, 2016 1:30AM"
-moment('2016-01-01').add(1.5, ' days').format('LLL') // " January 3, 2016 12:00AM"
+ moment('2016-01-01').add(1.5, ' days').format('LLL') // " January 3, 2016 12:00AM"
 ```
 
 MPT: More explanation of slides.
