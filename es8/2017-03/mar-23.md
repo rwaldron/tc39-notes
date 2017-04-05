@@ -920,7 +920,7 @@ DT: Is Number 0 truthy?
 
 DE: No, that's an open question.
 
-WH: The current proposal is that 0 is falsey and all other numbers are truthy.
+WH: The current proposal is that 0 is falsy and all other numbers are truthy.
 
 BE: There's precedence in the committee going back to decimal.
 
