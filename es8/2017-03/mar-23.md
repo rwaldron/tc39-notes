@@ -299,7 +299,7 @@ DH: I'm excited, I think this is a good place to wrap things up unless anyone ha
 
 AWB: I'm going to pile on. I think that the fundamental thing here is that if you say `import foo.js` is there a way to determine the exported names from that module without having to evaluate code?
 
-DH: The quickest way to explain is that Node discovered a key thing. We can make the default mode for the whole ecosystem to be `default` export and we can opt-into named export. That gives us strong backward compatility. Once you have that it's easier to see your way to semantics that makes sense. Is that right Bradley?
+DH: The quickest way to explain is that Node discovered a key thing. We can make the default mode for the whole ecosystem to be `default` export and we can opt-into named export. That gives us strong backward compatibility. Once you have that it's easier to see your way to semantics that makes sense. Is that right Bradley?
 
 BF: Yes.
 
