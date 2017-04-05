@@ -288,7 +288,7 @@ AWB: Third dimension where methods occur. Two points, syntactic, what is the syn
 
 YK: What is the syntactic difference between things that are data-like—
 
-AWB: That dimension is a syntactic dimension; whether it's a binding list or a standlone single declaration.
+AWB: That dimension is a syntactic dimension; whether it's a binding list or a standalone single declaration.
 
 MM: And you can't declare an accessor method as part of a binding list.
 
