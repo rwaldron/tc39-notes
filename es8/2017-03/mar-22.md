@@ -354,7 +354,7 @@ AWB: Since classes now have lexical scopes. There's no reason you couldn't have 
 
 WH: No reason, other than that the syntax is already taken.
 
-MM: The reason I'm resisting knocking out methods is exactly what Allen says. Once you have an orthogonal frameowrk. Once you knock it out, everything has a ....
+MM: The reason I'm resisting knocking out methods is exactly what Allen says. Once you have an orthogonal framework. Once you knock it out, everything has a ....
 
 DT: It's useful like Dan where he's mentioning these things, let's not chase down resolving particular ones. With respect to going to stage 1, these don't have to be decided now. Want to be sure we don't deep dive.
 
