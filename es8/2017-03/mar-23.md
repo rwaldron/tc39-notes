@@ -1484,7 +1484,7 @@ YK: I made a strong claim. Let me jump to the punch-line. There are specific det
 
 BT: The point that I want to make more clear is that we would all like there to be a small `Date` object that would function as the kernel of date-innovation, but I'm not convinced that's possible.
 
-MPT: To the contrary, the developer community in JavaSCript has been living with moment.js for 5 years. Moment.js is a ZonedDateTime. You can do everything you need to do with it, it just isn't pretty.
+MPT: To the contrary, the developer community in JavaScript has been living with moment.js for 5 years. Moment.js is a ZonedDateTime. You can do everything you need to do with it, it just isn't pretty.
 
 YK: Are you saying there may be consensus that something like this may ??
 
