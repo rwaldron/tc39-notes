@@ -914,7 +914,7 @@ DE: The last question is the standard library. There are a lot of things that co
 
 BE: What issue number is this?
 
-DE: #20.
+DE: [#20](https://github.com/tc39/proposal-integer/issues/20).
 
 DT: Is Number 0 truthy?
 
@@ -936,7 +936,7 @@ DE: Is this ready for stage 2?
 
 WH: I am happy with it. I did a good review of it with DE. The remaining question for me is how this will work with Array buffers. There are some interesting questions there.
 
-DE: There is an issue on that: issue #23.
+DE: There is an issue on that: [issue #23](https://github.com/tc39/proposal-integer).
 
 #### Conclusion/Resolution
 
