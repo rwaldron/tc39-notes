@@ -270,9 +270,9 @@ AWB: In this proposal, we have reserved the meaning of the #constructor because 
 
 MM: 3 reasons to prohibit something from the cross-product:
 
-    - it would be harmful
-    - it would be non-sensical
-    - we have not decided whether to allow but could decide later
+- it would be harmful
+- it would be non-sensical
+- we have not decided whether to allow but could decide later
 
 YK: So what does it mean if something has method-like syntax?
 
