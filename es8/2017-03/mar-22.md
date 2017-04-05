@@ -395,7 +395,7 @@ DE: I'm not sure how to proceed as the champion of the private state proposal. I
 DT: It seems like it's approximately both. The idea of doing this consistent thing seems good, we should discuss. There are champions of current proposals, championing their use case. We should make things consistent across the use cases. As the consolidated thing catches up, then we can decide whether or not to merge it. We don't have to couple them so strongly.
 
 
-AWB: To some degree both the public state and private state proposlas were stalled at stage 2, but there were enough issues with the edge cases that they were having trouble advancing to stage 3.  Take this as an offer and approach to being able to advance them all.
+AWB: To some degree both the public state and private state proposals were stalled at stage 2, but there were enough issues with the edge cases that they were having trouble advancing to stage 3.  Take this as an offer and approach to being able to advance them all.
 
 DE: I don't think there are that many issues. At the last meeting I laid out the issues that were open, we disagree about them, but there's a small number of issues. I would like to be able to have a discussion about which syntax we like better: the one that ?? and I are championing or this one so that we can decide and we can advance one of the syntaxes.
 
