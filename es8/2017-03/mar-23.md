@@ -936,7 +936,7 @@ DE: Is this ready for stage 2?
 
 WH: I am happy with it. I did a good review of it with DE. The remaining question for me is how this will work with Array buffers. There are some interesting questions there.
 
-DE: There is an issue on that: [issue #23](https://github.com/tc39/proposal-integer).
+DE: There is an issue on that: [issue #23](https://github.com/tc39/proposal-integer/issues/23).
 
 #### Conclusion/Resolution
 
