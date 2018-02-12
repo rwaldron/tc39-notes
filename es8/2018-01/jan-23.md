@@ -1248,7 +1248,7 @@ DD: should this censor the function name itself? What about a meta-API with a we
 
 DD: pragma variant is opt-in by author of the library, external version is opt-in by host or by user of the library. Pragma doesn't break existing code. Lots of ways to modify behavior of code included inthe app that don't edit your source text, this would add another one, apps are already making choices about whether to depend upon such things.
 
-DD: requires only mimimal preprocessing
+DD: requires only minimal preprocessing
 
 DD: precedent for out-of-band controls :CSP disallows eval(), proposed realms API is controlled externally, Node.js enables/disables i18n features with flags
 
