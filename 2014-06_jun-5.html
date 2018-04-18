@@ -1,0 +1,187 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>June 5, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#june-5-2014-meeting-notes"><h1 id="june-5-2014-meeting-notes">June 5, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terleson (BT), Dmitry Lomov (DL), Waldemar Horwat (WH), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jafar Husain (JH), Jeff Morrison (JM), Mark Honenberg (MH), Caridy Patiño (CP), Yehuda Katz (YK), Niko Matsakis (NM), Ben Newman (BN), Filip Pizlo (FP), Sebastian Markbåge (SM), Rafeal Weinstein (RWN), Jaswanth Sreeram (JS), Alex Russell (AR), István Sebestyén (IS), Simon Kaegi (SK), Arnaud Le Hors (ALH), Reid Burke (RB), Erik Arvidsson (EA), Brendan Eich (BE), Mark S. Miller (MM), Peter Jensen (PJ)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>(Agenda item 5.2 added)</p>
+<p>(István on the phone discussing non-member CLA process)</p>
+<p>AR: It sounds like we're making the process difficult for non-members simply because it's currently difficult for members. Can we change the goal to just make the process simpler for everyone?</p>
+<p>IS: We just need the process to be the same for members and non-members. That is the current process -- we need the pdf form</p>
+<p>AR: Can you take it back to the assembly(?) as a request from this TC that we'd like to simplify the process for signing the CLA to a click-through form for everyone [members and non-members]</p>
+<p>IS: Yes, I can do that</p>
+<p><strong>discussion</strong></p>
+<a href="#conclusionresolution-agenda"><h2 id="conclusionresolution-agenda">Conclusion/Resolution</h2></a><ul>
+<li>Allen will continue to work with István on this</li>
+<li>Not clear how to proceed concretely other than having members continue to push for this</li>
+<li>Current process includes printing pdf, signing it, scanning it</li>
+</ul>
+<a href="#jsdoc-jsidl-code-editors"><h2 id="jsdoc-jsidl-code-editors">JSDoc<em>, JSIDL</em>, Code Editors</h2></a><p>(Ask for slides)</p>
+<p>SK: Type inferencing is hard</p>
+<p>SK: JSDoc*, we need help from the user.</p>
+<p>SK: Standardize JSDoc?</p>
+<p>SK: JSDoc Proposal</p>
+<p>AR: We are the only group that can add syntax so we should not put semantics in the comments.</p>
+<p>AR: Interested in designing a type system</p>
+<p>DH: I'm skeptic that we can design a type system for ES.</p>
+<p>DH: Describes kinds of type systems: sound, unsound, guards</p>
+<p>WH: I tried it for ES4. Came to the conclusion that a complex static type system would not work for ES's plethora of array-like things. On the other hand, more primitive type systems for things such as strings, numbers, classes are eminently doable and useful.</p>
+<p>WH: I had a proposal for guards. These are more like a max min solution.</p>
+<p>DH: Guards are too dynamic.</p>
+<p>WH: In order for a type system to be useful, it must be enforceable in some form in order to catch erroneous or out-of-date type annotations.</p>
+<p>DH: It is about as much a green field as defining a new language. It can mean so many different things.</p>
+<p>JM: Would like to explore types for documentation at least.</p>
+<p>DH: If there is no standard there will continue to be a proliferation of tools.</p>
+<p>WH: We know this is a large space to explore. That does not mean that we should not explore it.</p>
+<p>YK: If we make this a priority it will take years and years of discussion, dropping everything else.</p>
+<p>BT: We can manage doing more than one thing at the same time.</p>
+<p>AWB: This discussion feels like the early discussions of class syntax. Yet we were able to make progress.</p>
+<p>DH: TypeScript is the strongest proposal at this point. Guards have serious problems for structural types. A sound type system (for JS) is still an academic research topic without a solution in sight.</p>
+<p>YK: TS type system is incompatible with ES6.</p>
+<p>YK: TS is a fork of ES5.</p>
+<p>WH: These problems of incompatible forking are exactly why we need to take over this work.
+f
+AR: I want this for ES7</p>
+<p>AWB: We haven't yet started to prioritize our next work items.</p>
+<p>DH: The cost is very very high and IMO there are more important thing to work on than types.</p>
+<p>WH: IMO documentable types are one of the highest priorities for us now. There is a lot of external interest as evidenced by the various external efforts.</p>
+<p>BN: Strict scrutiny (e.g. from DH) can and should come before the proposal comes before TC39.</p>
+<p>SK: Back to slides... Not proposing a type system. Implementors are interested in standardizing JSDoc..</p>
+<p>SK: JS IDL?</p>
+<p>SK: Type definition...</p>
+<a href="#conclusionresolution-jsdoc-jsidl-code-editors"><h2 id="conclusionresolution-jsdoc-jsidl-code-editors">Conclusion/Resolution</h2></a><ul>
+<li>Stage 0 to work on JSDoc</li>
+</ul>
+<a href="#closing-iterators"><h2 id="closing-iterators">Closing Iterators</h2></a><p>(Dave presenting, send slides!)
+Slides: <a href="https://speakerdeck.com/dherman/closing-iterators">https://speakerdeck.com/dherman/closing-iterators</a></p>
+<p>Notes that key stakeholders have signed off on this (Andy Wingo, Luke Hoban, ... others)</p>
+<p><strong>DH talking about breaking out of loops and calling .return() when an abrupt exit occurs in the loop</strong></p>
+<p>WH: Does a yield inside a for loop call the return method in the normal case?</p>
+<p>BN: No.</p>
+<p>WH: What if that yield then gets killed by a break in the caller?</p>
+<p>BN: Show example.</p>
+<p>WH:</p>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">a</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> x <span class="hljs-keyword">of</span> y) {
+    ...
+    yield ...
+    ...
+  }
+}
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> b <span class="hljs-keyword">of</span> a()) {
+  <span class="hljs-keyword">break</span>;
+}
+</code></pre>
+<p>** Discussing: How should abrupts inside a yield* get bubbled? **</p>
+<p>BN: Any yield on which the generator (or any nested delegate generators) are currently suspended effectively become returns, so the return value &quot;bubbles&quot; all the way out to become the result of the outermost generator.</p>
+<p>WH: (back to his code example) What does a's return method do?</p>
+<p>MM: The break in the for loop calls the generator's return method -- causes the yield to return</p>
+<p>DH: Any abrupt (but only abrupt completion) of a loop [calls .return() method?]</p>
+<p>** continues through slides **
+DH: Next issue: What if iterator, when given opportunity to stop, decides to keep going?
+(see slides for details)</p>
+<p>function* g() {
+yield;
+}
+g = g();
+g.next();
+g.return(42).value === 42;</p>
+<p>WH: where does the 42 passed to g's return method go?
+BN: It returns out of g with 42.
+WH: Is there any way for g to get at the value 42?
+DH: No.</p>
+<p>Brendan's Example</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">gen</span>(<span class="hljs-params"></span>) </span>{ 
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span>;
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-keyword">yield</span> <span class="hljs-number">2</span>;
+  }
+}
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">of</span> gen()) {
+  <span class="hljs-keyword">break</span>;
+}
+
+<span class="hljs-comment">// The for-of loop unrolls to this:</span>
+<span class="hljs-keyword">var</span> g = gen();
+g.next(); <span class="hljs-comment">// { value: 1, done: false }</span>
+g.return(<span class="hljs-number">42</span>); <span class="hljs-comment">// { value: 2, done: false }</span>
+<span class="hljs-comment">// Not executed because of the break from the loop:</span>
+g.next(); <span class="hljs-comment">// { value: undefined, done: true }</span>
+</code></pre>
+<p>AWB: Important to remember that none of the costs (e.g. checking for a &quot;return()&quot; method) happen on &quot;normal&quot; completion of the loop -- only abrupt exits from the loop</p>
+<p>DH: Let's talk bikeshedding: return() vs close()</p>
+<p>BN: close() doesn't suggest that you can pass an argument</p>
+<p>MM: .throw() is reflecting the throw construct within the generator, thus .return() makes sense</p>
+<p>AWB: [strawman idea?] What about forbidding yield in try blocks?</p>
+<p>RW: (silently, because I'm muted) Disagree with restricting use of <code>yield</code></p>
+<p>RW: Since we have an additional six months of &quot;quality control&quot; time with the spec, should we consider dealing with this directly as part of the &quot;quality control&quot; effort? Opposed to limitations on yield in try/catch/finally.</p>
+<p>AWB: that could be applied to any subject that comes up.</p>
+<p>DH: forbidding yield in try blocks is a non-starter because there would then be no way to ever do any kind of cleanup on a yield using finally</p>
+<p>BE: Python 2.5(?) added similar restrictions and then later relaxed them, which proves that there are use cases for yield in try-finally.</p>
+<p>AWB: You'd have to structure your loop with an outer try-catch, yield takes away guarantee that finally would run</p>
+<p>DH: Understand this is intended as temporary (i.e. to avoid adding complexity to generators last minute), but worst thing would be if we landed on this as a permanent semantic</p>
+<p>DH: Agreement is that this is right semantics, there's a question as to whether we can get there in time</p>
+<p>AWB: I worry about the precedent of adding changes like this now</p>
+<p>BN: I will be happy to review the changes to chapter 25 (Generators and Promises) that are necessary to capture these changes.</p>
+<p>AWB: Still worried because of the precedent this sets.</p>
+<a href="#conclusionresolution-closing-iterators"><h2 id="conclusionresolution-closing-iterators">Conclusion/Resolution</h2></a><ul>
+<li>Ratifying DH's proposal (&quot;proposal&quot; to be clarified), with the fallback (in case we run out of time, or decide to prioritize other work) of forbidding yield in try-finally blocks and making abrupt exits from for-of loops put the iterated-over generator into the GeneratorComplete state (which is a semantic change from leaving it in the GeneratorSuspendedYield state).</li>
+</ul>
+<a href="#generator-comprehensions-slides-plz"><h2 id="generator-comprehensions-slides-plz">Generator comprehensions (slides plz)</h2></a><p>Slides: <a href="https://speakerdeck.com/dherman/a-better-future-for-comprehensions">https://speakerdeck.com/dherman/a-better-future-for-comprehensions</a></p>
+<p>** Basically DH is proposing deferring comprehensions to ES7 with some minor changes to future-proof **</p>
+<p>let a = for (x of a1) for (y of a2) if (y &gt; x) {x,y};</p>
+<p>WH: What type does this return?
+?: It depends on the type of a1.
+WH: Generating an array in the proposed world is ugly. If you want an array, you now need to convert the result of the comprehension to an array.</p>
+<p>BE: The basis case doesn't work in the new design. To create a generator, you need to start with a generator. Awkward to write the first generator.</p>
+<p>BE: problem is that a1 is evaluated eagerly rather than lazily</p>
+<p>AWB: Where would we put Iterator.prototype in the Generator-related prototype object graph?
+AWB: Hardest thing about this change is LAYING OUT THE DIAGRAM ALL OVER AGAIN: <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorfunction-objects">https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorfunction-objects</a></p>
+<p>BE: Inserting a new object without populating it with any methods invites breaking changes when we do populate it with methods like .flatMap.</p>
+<p>JH: Really need to go with type-directed comprehensions (letting the iterable object determine the type of the comprehension) rather than the current syntax-directed syntax: (...) and [...].</p>
+<p>WH: Worried that we'll rat-hole on the new proposal, which is pie-in-the-sky with a number of identified deficiencies. The current proposal is solid. The perfect is the enemy of the good here.</p>
+<a href="#conclusionresolution-generator-comprehensions-slides-plz"><h2 id="conclusionresolution-generator-comprehensions-slides-plz">Conclusion/Resolution</h2></a><ul>
+<li>Defer comprehensions from ES6 to ES7 to work on the more general type-directed, method-based approach to supporting comprehensions for arbitrary iterable types (arrays, generators, streams, parallel arrays, etc.).</li>
+</ul>
+<a href="#71--status-update-from-dh"><h2 id="71--status-update-from-dh">7.1 <code>&lt;script type=module&gt;</code> status update (from DH)</h2></a><p>DH: Would really rather have <code>&lt;module&gt;import { foo } from &quot;bar&quot;; ...&lt;/module&gt;</code>, which is like `<script>`` but async, strict mode, has its own top-level scope, and can import declaratively (using ES6 module import syntax) from other (named) modules.</p>
+<p>DH: <code>&lt;module name=&quot;qux&quot;&gt;</code> creates race conditions with HTML imports (part of WebComponents).</p>
+<p>YK: People who saw named HTML module tags though you should mix html imports w named module imports
+YK: When you have packaging solution (SPDY, etc), you no longer need named modules</p>
+<p>MM: <code>&lt;script type=&quot;module&quot;&gt;</code> would inherit the special termination rules of </script>, whereas old browsers might not handle <module> the same way, since that tag name doesn't mean anything special in old browsers</p>
+<p>AR: <code>&lt;script type=&quot;module&quot;&gt;</code> means the browser won't even try to parse it as JS, which is what we want [so that we can execute the script contents as a module, via some sort of polyfill]</p>
+<p>DH: <code>&lt;script type=&quot;worker&quot;&gt;</code> might also need to have the <code>&lt;script type=&quot;module&quot;&gt;</code> semantics, and type= attribute syntax makes it hard to mix and match those attributes; maybe <code>&lt;script worker module&gt;</code> would be better? (i.e. the type attribute values become optional value-less attribute names)</p>
+<p>DH: The difference between <code>&lt;script type=&quot;module&quot;&gt;</code> and <module> is that as long as there's … you always have the option of writing <code>&lt;script&gt;System.import(&quot;main.js&quot;)&lt;/script&gt;</code>
+TODO: Get DH to clarify this point when we edit the notes.</p>
+<p>MM: The <code>&lt;module&gt;</code> tag still has HTML misparsing consequences that <code>&lt;script&gt;</code> wouldn't have.</p>
+<p>YK: The success of <code>&lt;template&gt;</code> proves that we can introduce a new <code>&lt;script&gt;</code>-like <code>&lt;module&gt;</code> tag.</p>
+<p>DH: Need to create ways of doing this with pure JS, like <code>&lt;script&gt;System.import(&quot;main.js&quot;)&lt;/script&gt;</code> and then add new HTML sugar later, like <code>&lt;script type=&quot;module&quot;&gt;</code>.</p>
+<p>AR: [note taker (BN) may be misinterpreting] The JS API remains important even when we have HTML sugar.</p>
+<a href="#conclusionresolution-71--status-update-from-dh"><h2 id="conclusionresolution-71--status-update-from-dh">Conclusion/Resolution</h2></a><ul>
+<li>Adopt <code>&lt;script type=&quot;module&quot;&gt;</code> and expect transitional code to do <code>&lt;script&gt;System.import(&quot;main.js&quot;)&lt;/script&gt;</code>.</li>
+</ul>
+<a href="#73-html-imports"><h2 id="73-html-imports">7.3 HTML Imports</h2></a><p>BE: Recast as <code>&lt;script type=&quot;import&quot;&gt;</code> rather than <code>&lt;link rel=&quot;import&quot;&gt;</code>?</p>
+<a href="#conclusionresolution-73-html-imports"><h2 id="conclusionresolution-73-html-imports">Conclusion/Resolution</h2></a><ul>
+<li>Consensus not reached.</li>
+</ul>
+<a href="#72-event-loop"><h2 id="72-event-loop">7.2 Event loop</h2></a><p>The issue is interleaving Promise response tasks with other tasks.</p>
+<p>MM: Let's just not use the term &quot;task&quot; because it's confusing with other tasks (microtasks, etc).</p>
+<p>Brainstorming names: job, tick (seems too close to <code>process.nextTick</code>), <code>slice</code>, <code>turn</code>, <code>chore</code> (lots of enthusiasm for chore!), <code>quest</code> (fits with realms!), schlep</p>
+<a href="#conclusionresolution-72-event-loop"><h2 id="conclusionresolution-72-event-loop">Conclusion/Resolution:</h2></a><ul>
+<li>Consensus not reached.</li>
+</ul>
+<a href="#two-or-three-day-tc39-meetings-in-the-future"><h2 id="two-or-three-day-tc39-meetings-in-the-future">Two or Three-day TC39 meetings in the future?</h2></a><p>AR: Breakout sessions the third day?</p>
+<p>EA: Can notes be taken in those breakout sessions?</p>
+<p>MM: Breakout sessions for the rest of today?</p>
+<a href="#modules-breakout-session"><h2 id="modules-breakout-session">Modules breakout session:</h2></a><p><a href="jun-5-modules.md">Notes</a></p>
+
+</body>

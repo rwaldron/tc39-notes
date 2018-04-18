@@ -1,0 +1,282 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 28, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-28-2015-meeting-notes"><h1 id="january-28-2015-meeting-notes">January 28, 2015 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Jonathan Turner (JT), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Jeff Morrison (JM), Erik Arvidsson (EA), Peter Jensen (PJ), Yehuda Katz (YK), Dave Herman (DH), Waldemar Horwat (WH), Dmitry Lomov (DL), Domenic Denicola (DD), Kevin Smith (KS), Andreas Rossberg (ARB), István Sebestyén (IS), Sam Tobin-Hochstadt (STH), Michael Ficarra (MF), Jordan Harband (JHD), Chip Morningstar (CM), Mark S. Miller (MM), Ben Newman (BN), Brendan Eich (BE), Adam Klein (AK), Igor Minar (IM), Miško Hevery (MHY)</p>
+<hr>
+<a href="#report-from-the-ecma-secretariat"><h2 id="report-from-the-ecma-secretariat">Report from the Ecma Secretariat</h2></a><p>(István Sebestyén)</p>
+<p>IS: Strange JSON development: The government of the Netherlands wants to get an EU recognition on IETF's JSON future standard as part of the European Commission's Multi-Stakeholder Platform. Netherlands submitted 27 IETF standards to the Multi-Stakeholder Platform, and IETF's JSON happens to be among them. Normally only long-standing in the market already proved standards should be recognized. Also no &quot;consortium specification&quot; should be recognized where appropriate International Standard (like of ISO, IEC, ITU) exists. JSON in ECMA-262 is already part of ISO/IEC 16262:2011. In addition TC39 has standardized in 2013 ECMA-404 (JSON). We had originally a TC39 decision to fast-track it to JTC1, but after discussion the GA in December 2013 has approved the possibility of a Postal Balot on the JTC1 fast track upon a new request  from TC39.  The iisue has been reported to the last Ecma GA and was worried about the situation.</p>
+<p>WH and IS: [Discussion about what the Multi-Stakeholder Platform is and its implication on governmental activities]</p>
+<p>IS: Recommend resuming the fast-track of ECMA-404 (JSON).</p>
+<p>AWB: We don't currently have an editor for the JSON spec.  Who wants to do it?</p>
+<p>CM: I volunteer!</p>
+<p>WH: Timeline? June GA?</p>
+<p>IS: Will discuss it with ECMA management. Might do it earlier via a letter ballot.</p>
+<a href="#es6-generator-issues"><h2 id="es6-generator-issues">ES6: Generator issues</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>WH, DH: Ask for presentation.</p>
+<p>AWB:</p>
+<p>DH: Earlier presentation was careful to allow try/finally to abort the return. The point was to allow infinite iterators that refuses to return.</p>
+<p>BN: Filed this bug. You could change the return method to return <code>{done: true}</code>.</p>
+<p>DH: You can have wrappers that are specific for for-of loops.</p>
+<p>AWB: THe original proposal required a falsy done value. If it wasn't falsy an error was thrown.</p>
+<p>DH: You could change the for-of loop by wrapping the iterable to not continue the iteration of the underlying</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> nats = getNats();
+<span class="hljs-keyword">for</span>(x <span class="hljs-keyword">of</span> nobreak(nats)) {
+  <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;
+  ...
+  
+  for(x <span class="hljs-keyword">of</span> nobreak(nats)) {
+    <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;    
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nobreak</span>(<span class="hljs-params">it</span>) </span>{   
+  <span class="hljs-keyword">return</span> {     
+    next(x) { <span class="hljs-keyword">return</span> it.next(x); },
+    <span class="hljs-keyword">throw</span>(x) { <span class="hljs-keyword">return</span> it.throw(x); },
+    <span class="hljs-keyword">return</span>(x) { <span class="hljs-keyword">return</span> {<span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>}; }
+  };
+}
+</code></pre>
+<p>YK: If someone asks to cleanup, by calling return, then you should clean up.</p>
+<p>KS: There should be an equivalent of an iterator with a return and without a return. (?)</p>
+<p>DL: having a nobreak is an abstraction breakage ; you have to know whether your iterator is infinite or not, or rather, has something useful to do in return</p>
+<p>WH: Why is return(x) stubbed out but not throw(x) in DH's nobreak?</p>
+<p>WH: What happens when there is a throw inside the for-of loop body. Does it call &quot;throw&quot; or &quot;return&quot;?</p>
+<p>AWB: (looks up semantics)</p>
+<p>BE: If there is a throw in the for-of, the &quot;return&quot; method is called, not the &quot;throw&quot; method.</p>
+<p>DH:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> nats = getNats();
+nats.return = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({<span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>});
+
+<span class="hljs-keyword">for</span>(x <span class="hljs-keyword">of</span> nobreak(nats)) {
+  <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;
+  ...
+  
+  for(x <span class="hljs-keyword">of</span> nobreak(nats)) {
+    <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;    
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nobreak</span>(<span class="hljs-params">it</span>) </span>{   
+  <span class="hljs-keyword">return</span> {     
+    next(x) { <span class="hljs-keyword">return</span> it.next(x); },
+    <span class="hljs-keyword">throw</span>(x) { <span class="hljs-keyword">return</span> it.throw(x); },
+    <span class="hljs-keyword">return</span>(x) { <span class="hljs-keyword">return</span> {<span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>}; }
+  };
+}
+</code></pre>
+<p>AWB: Why can't we make that an iterator that says that it is done, that it can never return <code>{done: false}</code> again?</p>
+<p>DH: Are you sayng that the default behavior should be <code>{done: false}</code>?</p>
+<p>AWB: Or that there is no default.</p>
+<p>DH: There has to be a default behavior.</p>
+<p>AWB: If there is not return method then nothing is called.</p>
+<p>DL: As far as I understand, the intent was to close the iterator for for-of loops.</p>
+<p>JT: The iterator consumer should not need to know if the iterator is infinite or not.</p>
+<p>AWB: We cannot enforce that <code>{done: true}</code> does not change to <code>{done: false}</code> in the future.</p>
+<p>DL: The contract of an iterator is that once it is closed you cannot get any more values out of the iterator.</p>
+<p>AWB: You cannot enforce that. It is up to the implementer of that abstraction.</p>
+<p>DL: Normally, you create a new iterator every time (in for-of)</p>
+<p>DL: Why is tehre a difference between finite and infinite iterators?</p>
+<p>DH: What Jafar brought to the table was that infinite iterators are not the common case. The common case is finite, like file streams etc. You want these to close by default. We should not optimize for inifinite sequences.</p>
+<p>DL: If you don't want to close then you should not use for-of.</p>
+<p>DH: That is also Jafar's view.</p>
+<p>AWB: Generators work this way. They do the right things.</p>
+<p>YK: Was persuaded by <code>{done: true}</code> meaning that I accepted your hand shake.</p>
+<p>AWB: Say that this is just a hand shake is a completely different thing than what we have.</p>
+<p>DH: Pretty persuaded that we do not have to catch this bug.</p>
+<p>DL: You could throw in the return method.</p>
+<p>DH: If you have an infinite sequence that you don't want to be able to close, throwing in return would signal that the user is using it wrong.</p>
+<p>BN: If we adopt the policy that {done: false} would throw, it is not very different from than throwing in return.</p>
+<p>EA: Using throw in your return is also a clearer intent.</p>
+<p>WH: How would AWB's original motivational example (of a reusable infinite iterator) be done?</p>
+<p>AWB/BN: The user would have to wrap the iterator and/or use try/catch</p>
+<p>BN: Do we need to consider generators and try/finally and make sure we are not missing an opportunity to prevent bugs?</p>
+<p>BN: no compelling argument to throw for iterators that do not have a return method, since they can just implement .return() to throw if they really want that behavior.</p>
+<a href="#conclusionresolution-es6-generator-issues"><h4 id="conclusionresolution-es6-generator-issues">Conclusion/resolution</h4></a><ul>
+<li>Remove the truthy check for Get(result, &quot;done&quot;) that follows the call of &quot;return&quot;. (The value continues to have to be an Object.)</li>
+<li>Relevant bug closed with the following comment: <a href="https://bugs.ecmascript.org/show_bug.cgi?id=3395#c2">https://bugs.ecmascript.org/show_bug.cgi?id=3395#c2</a></li>
+</ul>
+<a href="#45-tostringtag"><h2 id="45-tostringtag">4.5 @@toStringTag</h2></a><p>(Jordan Harband)</p>
+<p>MM: Do we check the natives before checking the symbol?</p>
+<p>AWB: Step 17b, for natives we get both and then if the tag is different a tilde is added.</p>
+<p>JHD: We could make all builtin instances have own non configurable property</p>
+<p>MM: Or skip the override for the built ins.</p>
+<p>JHD: Not looking for complete security. Just want to error if the user does crazy things.</p>
+<p>MM: In es6 classes, if you extend a RegExp the instance is going to continue to be a regexp instance.</p>
+<p>JHD: One use case is for a module that wants <code>new Boolean(false)</code> to be same as <code>false</code>. Not saying that is a good library, just explaining how it works. With ES6 and someone overrides @@toStringTag these tests no longer work.</p>
+<p>YK: If someone sets the toStringTag to Boolean they probably did that because they want to go down the Boolean code path.</p>
+<p>DD: If you want to do it the right way there are other ways. Allen posted this to es-discuss. <a href="https://esdiscuss.org/topic/tostringtag-spoofing-for-null-and-undefined#content-59">https://esdiscuss.org/topic/tostringtag-spoofing-for-null-and-undefined#content-59</a></p>
+<p>KS: There are builtin methods that throw if the internal slot is not present.</p>
+<p>WH: AWB's brand checks are optimized for the true case. That's ok for error checking (I expect x to be primitive Foo and don't care how slow the code is if it's not) but not good if you just want to reliably test if x is primitive Foo.</p>
+<p>DD: Believes that there is a method that does brand checking for all the builtins.</p>
+<p>MM: Checked Caja for brand checks. Found 5 cases. Not clear if they would be safe with alternative brand checks. I'm convinced that Allens proposal is safe enough.</p>
+<p>AWB: Then we can step 17 (the tilde case).</p>
+<p>MM: Just to be clear, there is no way to change what typeof returns.</p>
+<p>MM: Issue is ES5 libraries coexisting with ES6 clients.</p>
+<p>JHD: What if someone claims that a String is an Array.</p>
+<p>YK: Then they get an error which is what you would expect.</p>
+<p>MM: Requests that browser makers wait for at least 2 months before releasing a browser that drops step 17. The integrity of Caja is at stake.</p>
+<p>[agreed to MM's request]</p>
+<a href="#resolutionconclusion-45-tostringtag"><h4 id="resolutionconclusion-45-tostringtag">Resolution/conclusion</h4></a><ul>
+<li>Remove step 17b in the alg (the tilde prefix requirement). 19.1.3.6 Object.prototype.toString ( )</li>
+<li>Agreed to wait 2 months before releasing a browser that does this</li>
+</ul>
+<a href="#super-revisited"><h2 id="super-revisited">Super revisited</h2></a><p>YK: Happy with the outcome.</p>
+<a href="#conclusionresolution-super-revisited"><h4 id="conclusionresolution-super-revisited">Conclusion/resolution</h4></a><ul>
+<li><code>super.property</code> is available in all concise methods (including accessors) in object literals.</li>
+</ul>
+<a href="#experimental-new-directions-for-javascript-at-google"><h2 id="experimental-new-directions-for-javascript-at-google">Experimental new directions for JavaScript at Google</h2></a><p>(Andreas Rossberg)</p>
+<p>[Slides: <a href="http://www.mpi-sws.org/~rossberg/papers/JSExperimentalDirections.pdf]">http://www.mpi-sws.org/~rossberg/papers/JSExperimentalDirections.pdf]</a></p>
+<p>ARB presenting</p>
+<p>AWB: [On methods doing instance brand checking.] Why cant you make the methods non extractable instead?</p>
+<p>ARB: Then you probably need [[Invoke]] which is problematic too.</p>
+<p>WH: What about calling a funciton with too many arguments?</p>
+<p>ARB: We discussed this. People want it for API evolution. Allowing it makes sense with subtyping.</p>
+<p>DH: Does this mean that V8 would be slower for non sane js?</p>
+<p>ARB: Of course not.</p>
+<p>PJ: How is this going to make the VM code simpler.</p>
+<p>ARB: It doesn't, but it might avoid making it yet more complicated in the future.</p>
+<p>WM: The goal is to make performance more predictable.</p>
+<p>WH: Trying to probe the interaction of sane and non-sane modes. I assume that the sane mode will have strings and a string generated in non-sane mode code will be usable in sane code and behave and be typed as a string.</p>
+<p>ARB: Yes.</p>
+<p>WH: Then what happens if in sane mode I take strings s and t and call s.concat(t). Does sane mode statically determine that the result is a string (which would cause issues if String.prototype.concat is monkey-patched), or does it do the conservative thing and assume that the result of the concat call is any, in which case I can't assign it to a string variable.</p>
+<p>ARB: Use any<string></p>
+<p>DH: Better-is-better vs. worse-is-better</p>
+<p>DD: I see this as an alternative to asm.js but writable by people.</p>
+<p>DH: I see building on asm.js as an alternative way.</p>
+<p>ARB: We are talking to the asm.js team. Both valuable, goals are mostly orthogonal. user-facing vs compiler target.</p>
+<p>DH: Believe we can add parts of this in one js.</p>
+<p>WH: [In response to OneJS assertion that we should wait for us to make the entire language more optimizable instead of making high-efficiency subsets.] We've been going in the opposite direction. We are making things harder to implement and reason about in ES6. For example Proxies.</p>
+<p>DH: would prefer implementors' time be spent optimising existing JS instead of optimising this subset</p>
+<p>AR: False dichotomy: subsetting means that it <em>is</em> existing JS.</p>
+<p>BE: Think that it might be hard to pull this off but it might be informative for future JS features.</p>
+<p>STH: You cannot go from an unsound type system to the system you have in your vm.</p>
+<p>BE:</p>
+<p>STH: Unsound type systems are not usable for performance. If we want types to help the VM it is not going to happen as an evolutionary type system on top of TypeScript or Flow.</p>
+<p>BE: Concerned that it is taking resources away from other more important things.</p>
+<p>JT: Even unsound types can be used as hints to the VM.</p>
+<p>ARB: Yes, but not much more. You only save a warm-up cycle compared to the current state of affairs. The real perf issues we see is when the type assumptions we make are wrong and we get into deopt/opt cycles. It is very hard to reason about when this happens and it does happens when your application gets larger. Also, more aggressive optimisations require global invariants, which you cannot achieve without globally sound types.</p>
+<p>YK: As engines gets smarter the risk of hitting the pathological cases is getting worse.</p>
+<p>YK: We hope the engines are not changing their heuristics because we are currently targetting one heuristics.</p>
+<p>ARB: Exactly. The smarter VMs get, the less predictable performace will be. Types are the only way out we know of.</p>
+<p>YK: I hope that you are planning to write a transpiler.</p>
+<p>ARB: Yes, we start prototyping in Traceur.</p>
+<p>BE: Why was flow not consired?</p>
+<p>ARB: Flow is going in the opposite direction. It is doing more inference. It is a non starter for doing inside a VM.</p>
+<p>ARB: Typed racket great, but occurrence typing can potentially get expensive.</p>
+<p>STH: That is not accurate. There are ways that you can make things slow but there is no inherent reasons it needs to be slow.</p>
+<p>BE: If you want adoption. People will go the extra distance to get the predicable performance.</p>
+<p>YK: Can imagine a world where a language significantly compatible with JS has usages.</p>
+<p>JM: Flow would want to be compatible with whatever we develop.</p>
+<p>ARB: It is complementary. Write in Flow style and have Flow insert type annotations for you.</p>
+<p>BE: ... Java failed, ActionScript failed</p>
+<p>STH: I would not say Java failed. People like static typed languages.</p>
+<p>WH: If Java failed, then what succeeded? Objective C?</p>
+<p>JM: There are several large JS code base projects and a lot of them came to the conclusion that static types helps them manage their code.</p>
+<p>STH: The difference between Andreas' proposal is that there is a concrete plan for VM optimization.</p>
+<p>BE: Afraid that this will be designed in some corner inside Google.</p>
+<p>ARB: No. We just had a meeting between all parties interested in types for JS, presenting this. And we totally intend to continue those.</p>
+<p>YK: It is important that interested parties are part of the designing this.</p>
+<p>ARB: Someone has to make this experiment. We cannot spec a type system without a working implementation. We need to explore and validate options.</p>
+<p>DH: Interop layer. How do these things interact? How smoothly can new and old code interop? In your part of the space you need soundness and you need to drop some of the constraints. It is not an end user target. It is either a target for compilers or for code where you really need to squeeze out maximum performance. What can you do in a type system and keep it smooth.</p>
+<p>WH: This has different goals from asm.js. Asm.js does manual storage management instead of gc; this effort doesn't go that far.</p>
+<p>ARB: We did talk to asm.js people to make a version of asm that would support gc etc.</p>
+<p>STH: If someone had said 3 years ago that types would be the next big thing in js we would not have believed them. It happened (TypeScript etc)</p>
+<p>BE: Try to make it a name that impies that it is natural progression to js. You should try to deemphasize the mode.</p>
+<p>DD: Calling it &quot;sane mode of Javascript&quot; instead of &quot;sanescript&quot; would be much better.</p>
+<p>BE: What about &quot;use types&quot;?</p>
+<p>KS: It is not clear to me what the dependency is between the new mode and type?</p>
+<p>ARB: Neither am I. :)</p>
+<p>DH: What matters is how far you are diverging from the language.</p>
+<p>ARB: Some traditional patterns you do not need any more with ES6. For example Maps makes usage of Objects as a map obsolete.</p>
+<p>DH: You are better doing these things incrementally. One thing at a time. If one of these succeeds or fails it does not bring everything down or up.</p>
+<p>WH: Little incremental steps cause too much complexity due to the constant arms race to fool existing code while introducing new features. Look at the evolution of ways of defining properties.</p>
+<p>DH: We can all list flaws with JS.</p>
+<p>WH: This proposal is one of the few that reduce entropy.</p>
+<p>DH: Not true. It sits on top of the existing language.</p>
+<p>YK: Makes the way the language feels very different.</p>
+<p>DD: JS stays within the bounds. It is like a really strict linter. Don't think there are that big of a difference.</p>
+<p>AWB: Great to do experiments. New mode. Substantial different language. Skeptical to get this rolled out in the short term.</p>
+<p>ARB: One design goal is that a &quot;correct&quot; program that works in sane mode engine will work in all ES6 engines.</p>
+<p>MM: Plausible route to success. Frozen classes can be adopted. Almost identical to const classes as previously proposed. Want to bring this up after ES6. For things that do not fit that model, the train wreck you are going towards is sharing primordials. You end up duplicating all the primordials. The realm api we are working on is an alternative way to approach this.</p>
+<p>ARB: There is no intention to have to duplicate all the primordials.</p>
+<p>MM: As you continue towards this goal you will continue to duplicate more and more primordial.</p>
+<a href="#63-decorators"><h2 id="63-decorators">6.3 Decorators</h2></a><p>(Yehuda Katz, Jonathan Turner)</p>
+<p><a href="https://github.com/jonathandturner/brainstorming/blob/master/syntax.md">https://github.com/jonathandturner/brainstorming/blob/master/syntax.md</a>
+<a href="https://github.com/jonathandturner/brainstorming/blob/master/README.md">https://github.com/jonathandturner/brainstorming/blob/master/README.md</a></p>
+<p>JT: TypeScript wanted annotation/decorators. Talked to Yehuda and agreed to try to come up with a common proposal.</p>
+<p>AWB: Is using @ going to cause grammar issues with using @ for private state.</p>
+<p>EA: @ is widely used in other languages for annotations.</p>
+<p>MM: would rather talk about semantics than focusing on the token.</p>
+<p>YK: Want to resolve it now because wants to move forward. Wants to move to stage one</p>
+<p>AWB: Does not matter. There is no commitment on the syntax for stage 1.</p>
+<p>YK: We are reaching a point where people are using ES6 class syntax and run into issues where it is not expressive enough. They end up adding their own syntax.</p>
+<p>WH: There seems to be an ambiguity with the syntax for Decorator.</p>
+<pre><code class="language-js">@x <span class="hljs-keyword">instanceof</span> (y) ...
+</code></pre>
+<p>WH: is instanceof the name part of a MethodDefinition or a continuation of the decorator expression? An ambiguity like this can also cause the lexer to go off the rails if you concoct a more complex counterexample with a / inside it and you wouldn't even be able to lex to the end of it to see what follows.</p>
+<p>WH: One option to solve this is to limit decorators to primary or simple expressions. Binary operators cause issues. If you want a complex expression as a decorator, just parenthesize it.</p>
+<p>YK: So we can solve by restricting the grammar</p>
+<p>BT: Or using a delimiter like colon after the annotation</p>
+<p>YK: Basic idea of decorators is that there are 2 things that can be decorated. Classes and class methods. Give the decorator a chance to intercept. They take the same params as defineProperty and can return the descriptor that is finally installed.</p>
+<pre><code class="language-js">({
+  <span class="hljs-attr">foo</span>: observes(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  }, prop)
+})
+</code></pre>
+<p>MM: It is really just a desugaring of wrapping the defineProperty calls.</p>
+<p>MM: Do super work after the method has been decorated.</p>
+<p>YK: There is one quirk with getters and setters. They are installing a single property descriptor but there are multiple instances in the syntax.</p>
+<p>EA: We have issues with duplicates</p>
+<p>AWB: We have tried to solve this in the past (to bind the get and set pieces together).</p>
+<p>MM: The idea that you are decoratign a descriptor and not just the value is powerful.</p>
+<p>DD: You could pass in a flag.</p>
+<p>JT: Lets pop the context and get a good overview before we start diving into the details.</p>
+<p>YK: Noted that there are quirks.</p>
+<p>YK: @readonly is a simple example of decorators.</p>
+<p>IM: Annotations doc <a href="http://goo.gl/42o100">http://goo.gl/42o100</a> (requires permissions)
+Decorators vs. Annotations: <a href="https://docs.google.com/document/d/1QchMCOhxsNVQz2zNvmzy8ibDMPT46MLf79X1QiDc_fU/edit#">https://docs.google.com/document/d/1QchMCOhxsNVQz2zNvmzy8ibDMPT46MLf79X1QiDc_fU/edit#</a> (requires permissions)</p>
+<p>IM: What do we want annotations for? Collected use cases in document. For example for documentation, ORM, DI, tooling aspects</p>
+<p>WH: What is the syntax for annotations?</p>
+<p>YK: At this point it is the same as decorators.</p>
+<p>IM: Biggest difference between deocrators and annotations is that annotations support static/ahead of time tooling because it has guarantees you can build on top of.</p>
+<p>WH: Big issue is whether you use a separate sublanguage for static annotations or try to use the same language. Separate language using separate name scopes results in solutions and problems such as C's preprocessor. Using the same language causes severe time-of-evaluation issues, as seen in Lisp's eval-when or C<ins>'s template and class-vs-constexpr gotchas [example: a C</ins>11 class constexpr reference can't use static constexpr functions defined earlier in the same class]. The problem arises in doing compile-time scope lookup and variable resolution in scopes as dynamic as ECMAScripts's.</p>
+<p>MM: Do you expect to be able to have identifier expressions in your annotations? Do you expect that to look up the value in the current scope?</p>
+<p>EA: The original proposal used expressions. There has lately been talk about scaling this back to JSON so that there are no side effects.</p>
+<p>MH: Using JSON only seems like it might not be suitable enough.</p>
+<p>AWB: There is a middle ground here. Classes could expose an extensible meta-object protocol. Essentially dynamic extension points that you can hook in to. So as part of defining a new type of class definition you might add meta properties and other things. Might be quite dynamic but have a static representation in the source code.</p>
+<p>MM: If JSON is almost expressible enough, with the exception of the scope issue, and if you add IdentifierExpression</p>
+<p>IM: We might be happy with that.</p>
+<p>IM: One other reason for having these side effect free annotations is the VM perspective. Decorators needs to be dynamically invoked.</p>
+<p>DD: The performance impact would not be worse than calling the functions yourself.</p>
+<p>DH: Meta programming is generally the case where you do not need to optimize for performance because you expect there to be some penalty.</p>
+<p>MH: If you only have decorators and the common use case is annotations ????</p>
+<p>DD: If you are in a static environment you can already treat decorators as a special form.</p>
+<p>MH: The order of decorators matter. The order of annotations does not matter. Therefore it does not compose.</p>
+<p>YK: No one is saying that you cannot prevent people from using decorators for anything other than attaching meta data.</p>
+<p>MH: Looks like decorators can do anything but in practice they cannot do much without using global state.</p>
+<p>YK: Disagree. They can use the object as the coordination point.</p>
+<p>MH: Lets assume I'm creating a component.</p>
+<p>YK: You can use a weak map.</p>
+<p>MM: Can you clarify.</p>
+<p>MH: I think it is a good property that you can bootstrap the same framework multiple times. The problem is that a decorator needs to register itself with some context.</p>
+<p>YK: The decorator can add meta data. Then you call the register with the relevant context.</p>
+<p>MH: Yes. But the extra power is problematic.</p>
+<p>MH: Depends on when you are running the code. Would like to wait until the framework has enough context.</p>
+<p>AWB: Maybe have two different proposals, both at stage 0. Then try to unify them before they can progress to stage 1.</p>
+<p>MM: Having one mechanism that satisifes both needs is preferable to having two different mechanism.</p>
+<p>MM: Maybe you can have a statically verified subset of decorators and if that restriction is fulfilled your tooling can treat it as an annotation. If not it falls back to a dynamic decorator.</p>
+<p>IM: Sounds promising.</p>
+<a href="#conclusionresolution-63-decorators"><h4 id="conclusionresolution-63-decorators">Conclusion/resolution</h4></a><ul>
+<li>None?</li>
+</ul>
+
+</body>

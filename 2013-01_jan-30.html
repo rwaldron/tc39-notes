@@ -1,0 +1,581 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 30, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-30-2013-meeting-notes"><h1 id="january-30-2013-meeting-notes">January 30, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Norbert Lindenberg (NL), Allen Wirfs-Brock (AWB), Rick Waldron (RW), Waldemar Horwat (WH), Tim Disney (TD), Eric Ferraiuolo (EF), Sam Tobin-Hochstadt (STH), Erik Arvidsson (EA), Brian Terlson (BT), Luke Hoban (LH), Matt Sweeney (MS), Doug Crockford (DC), Yehuda Katz (YK), Nebojša Ćirić (NC), Brendan Eich (BE), Andreas Rossberg (ARB)</p>
+<hr>
+<a href="#function-in-block-options"><h2 id="function-in-block-options">Function In Block Options</h2></a><p>(Luke Hoban)</p>
+<p>Option #1: No let and const in non-strict mode
+Option #2: Taking the breaking change, w/ evangelism
+Option #3: Hybrid semantics for function-in-block, that still maintained semantic alignment with let and const
+Option #4: let/const anywhere in scope changes FIB semantics.</p>
+<p>LH: a combination of 1 &amp; 3 might be the best path forward.</p>
+<p>Option #3</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  bar();<span class="hljs-comment">/// throw, extended TDZ</span>
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++ ) {
+    bar(); <span class="hljs-comment">// throw, TDZ</span>
+    <span class="hljs-keyword">let</span> x = <span class="hljs-number">10</span>;
+    <span class="hljs-comment">// semantics of function in block are as though...</span>
+    <span class="hljs-comment">// 1. let bar = function() {} were inserted</span>
+    <span class="hljs-comment">// at start of block</span>
+    <span class="hljs-comment">// 2. var bar = function() {} were inserted</span>
+    <span class="hljs-comment">// at start of function</span>
+    <span class="hljs-comment">// (1) accomplishes ES5 let/const semantics,</span>
+    <span class="hljs-comment">// (2) accomplishes compat</span>
+    <span class="hljs-comment">// These are combined with an extension of the TDZ rules</span>
+    <span class="hljs-comment">// to throw on accesses to let bound variables</span>
+    <span class="hljs-comment">// whose activation block has not et been created.</span>
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-built_in">console</span>.log(x);
+    }
+    bar(); <span class="hljs-comment">// succeed</span>
+  }
+  bar(); <span class="hljs-comment">// throw, eTDZ</span>
+}
+</code></pre>
+<p>WH/ARB: if there is a let or const anywhere in the program, don't do this in sloppy mode?</p>
+<p>LH: There is an option, if you have any let or const, then function block is ES6 semantics... But I don't know how we'd define this.</p>
+<p>YK: I want to go on record that I don't support this kind of unrelated opt-in.</p>
+<p>RW: This is a language level weak inference...</p>
+<p>WH: Far less a concern than burning people for the next twenty years.</p>
+<p>BE: It's not an opt-in, it's allowing the syntax to speak for itself.</p>
+<p>Discussion re: ES6 static semantics to determine runtime semantics.</p>
+<p>LH: Option #4 is a possibility</p>
+<p>MM: For both strict and non-strict?</p>
+<p>LH: Option #4 in sloppy mode and clean up in strict mode.
+...Key thing to note: the extended TDZ.</p>
+<p>AWB: Is it compatible semantics with whats observed on the web...</p>
+<p>Discussion about compatibility of options</p>
+<p>STH: Pick one whether it works with what we want to do later</p>
+<p>AWB: What are the compatibility requirements?</p>
+<p>Discussion re: the sanity of each implementation's semantics.</p>
+<p>BE: Not sure any are worth rescuing in sloppy mode. Leaning towards strict mode to align the let, const and fix FIB semantics.</p>
+<p>LH: (Presents: <a href="http://web.archive.org/web/20120513130620/http://whereswalden.com/2011/01/24/new-es5-strict-mode-requirement-function-statements-not-at-top-level-of-a-program-or-function-are-prohibited/">http://web.archive.org/web/20120513130620/http://whereswalden.com/2011/01/24/new-es5-strict-mode-requirement-function-statements-not-at-top-level-of-a-program-or-function-are-prohibited/</a>)</p>
+<p>Mixed Discussion centered around the intersection of implementation semantics. Need to avoid creating yet a <em>new</em> set of semantics that are outside of the intersection semantics.</p>
+<p>Avoid specifying any of this in sloppy mode? BE, MM, ARB, WH agree.</p>
+<p>LH: I still think there is something that we can do to make this work.</p>
+<p>MM, BE: Avoid two identities for function declarations.</p>
+<p>AWB: Reiterates proposal: Don't hoist the initialization of the function, initialize at the point of declaration.</p>
+<p>STH: 1) define the semantics of let, const and FIB in sloppy mode and require special casing, 2) don't define let, const and FIB in sloppy mode. Define how the interact that's &quot;mostly compatible with the intersection. Or we prevent them from interacting by ruling out sloppy mode.</p>
+<p>BE: ES6 let in sloppy code makes FIB ES6 semantics</p>
+<p><strong>Option #2</strong> will be rejected by implementors</p>
+<p><strong>Option #1</strong> No let and const in non-strict mode</p>
+<p>LH: Addresses compatibility concern, Forks the language.</p>
+<p>Paths of teaching JavaScript will hinge on whether you include &quot;use strict&quot;.</p>
+<p>eg. Can't copy-paste code from blog post into script tag.</p>
+<p>MM, WH: Would like a meta tag that makes all scripts and inline JS strict-mode.</p>
+<p>LH: Recognizes the ease of copy/paste JavaScript for teaching purposed.</p>
+<p>MM: The future will all be &quot;use strict&quot;</p>
+<p>RW: In the last two days there has been two different blog posts focused on <em>removing</em> strictness from JavaScript.</p>
+<p>YK: Even if you think strict mode is ok now, but still has low uptake. We're making it an obligation for new features which is too large of change.</p>
+<p>Mixed discussion about the semantics and restrictions of strict mode.</p>
+<p>Further discussion about how simple examples and teaching JS in the future will require &quot;use strict&quot;. Recognizing the real consequences of copy/paste restrictions.</p>
+<p>LH: Concerned that Option #1 will absorb ALL new things.</p>
+<p><strong>Options</strong></p>
+<p>Option #0: No new syntax in non-strict mode
+0a. Truly no syntax (ARB) <strong>Not Alive</strong>
+0b. Allow module, but nothing else
+0c. Allow module and class, but nothing else
+0d. Allow everything with a body, but nothing else (the body is implicitly strict) <strong>Not Alive</strong></p>
+<p>Option #1: No block scoping in non-strict mode <strong>No Support</strong>
+1a. Preserves everything except let, const and FIB</p>
+<p>Option #2: Taking the breaking change <strong>No Support</strong>
+- (w/ evangelism)</p>
+<p>Option #3: Hybrid semantics for function-in-block
+3a. In both strict and non-strict <strong>No Support</strong>
+3b. In only non-strict. Strict keeps ES6 block scope functions
+3c. Absolute minimum intersection semantics supported in non-strict, else ES6 semantics</p>
+<p>Option #4: let/const anywhere in scope changes FIB semantics</p>
+<p>Option #5: No block scoping in ES6 <strong>Strong Pushback (after discussion)</strong></p>
+<p>(Note: &quot;block scoping&quot; means: let, const, class, FIB)</p>
+<p>WH:  Are the options listed about what we want to spec or what the implementations ought to <em>do</em> (leaving aside the question of whether or how the standard specs it)?
+LH: Here we're explicitly discussing what implementations should <em>do</em>.
+[general agreement that this is what we're discussing at this point.]</p>
+<p>LH: We cannot do FIB with meaningful semantics in the face of let/const</p>
+<p>AWB: If you didn't have FIB, are there still issues?</p>
+<p>LH: No.
+...To avoid any issues at all, the solution is Option #5.</p>
+<p>RW: Does that also include &quot;class&quot;?</p>
+<p>STH/LH: Option #3 is the counter point to Option #5.</p>
+<p>LH: Option #5 is only legit if Option #3 is rejected.</p>
+<p>BE: Option #5 means that class can only appear where functions can appear.</p>
+<p>MM: (reiterates belief that one the experiment of extending ES6 features into sloppy mode has failed)  ((Note to Rick: We repeatedly clarified that Dave's 1JS is not the extension of ES6 into sloppy mode. It is the earlier realization that we didn't need an additional mode switch, such as an ES6 pragma.))</p>
+<p>AWB: Working towards balancing the future... future advantages of block scoping are so large that we should be willing to find a way to make them work.</p>
+<p>BE, WH: The future is bigger then the past.</p>
+<p>ARB: Wants #0 as cleanest and easiest path forward. (list updated)</p>
+<p>BE: Option #0a is dead on arrival. (list updated)</p>
+<p>AWB: Does #0d exclude rest and spread, destructuring? (list updated)</p>
+<p>BE: Yes, Andreas and others discovered potential issues, probably not worth pushing.</p>
+<p>...Yes, going with Option #0, changes the future</p>
+<p>STH: One JS is about not having a switch to get new language features, eg. a language version etc.</p>
+<p>RW: &quot;use strict&quot; is still a big red switch.</p>
+<p>STH: Yes</p>
+<p>BE: Committee opinion on #0d?
+#0d &quot;not alive&quot; (list updated)</p>
+<p>Circular discussion about macrocodes caused by Option #1</p>
+<p>YK: What about Option #4?</p>
+<p>ARB: No.</p>
+<p>AWB: Option #4 is an extension of Option #3, because it allows you to safely shift into supporting let and const.</p>
+<p>ARB: Strongly dislike because it has a refactoring hazard.</p>
+<p>LH: If you're in strict, you already get correct semantics. Option #4 only applies to non-strict mode.</p>
+<p>ARB: Want as few component interactions as possible.</p>
+<p>WH: This is the closest we can get in the face of web compatibility.</p>
+<p>AWB: Proposes Option #3c...? In only the specific cases where a reference does not have a local declaration</p>
+<p>WH:</p>
+<p>AWB: Willing to throw out function declarations created in eval.</p>
+<p>WH: (Whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> f = ...
+function a() {
+  <span class="hljs-keyword">if</span> ( <span class="hljs-literal">false</span> ) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{}
+  }
+
+  f();
+}
+</code></pre>
+<p>WH: What do we want this to do?</p>
+<p>BE: In IE, the inner f hoists. In SpiderMonkey, no hoist. What should we do?</p>
+<p>Option #3c: Absolute minimum intersection semantics supported in non-strict, else ES6 semantics.</p>
+<p>BE: I think we can do #3c and Allen can make it work, concerned that Waldemar will poke holes and be unhappy.</p>
+<p>WH: The above must call the outer f in strict mode. In non-strict mode we shouldn't specify what this does (it becomes a moot point if we continue to outlaw nested functions in non-strict mode). For compatibility we'd want to add an informative note stating that, if the implementation extends non-strict mode with nested functions, the similar program below calls the inner f:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> f = ...
+function a() {
+  <span class="hljs-keyword">if</span> ( <span class="hljs-literal">true</span> ) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{}
+  }
+
+  f();
+}
+</code></pre>
+<p>...There is no support for #3a (list updated)</p>
+<p>LH: #3b is the bridge between compatibility and progress.</p>
+<p>AWB: #3c covers the minimum use cases for compatibility</p>
+<p>WH: #3c and 4 are similar</p>
+<p>LH: Still supporting #3b</p>
+<p>(Break for Lunch)</p>
+<p>LH: Summary of current discussion. Why is that people are concerned about any of the #3's?</p>
+<p>ARB: A lot of time for the committee to spend on identifying the sloppy mode issues. Why introduce complexity for something &quot;transitional&quot;</p>
+<p>LH: So, not really an argument <em>against</em> #3, but for #0</p>
+<p>ARB: And not creating a more complicated language</p>
+<p>AWB/EA: No.</p>
+<p>AWB: [#3] Arguably no more complicated then [#0]</p>
+<p>MM: (Uses &quot;duplicate parameters in parameter lists with defaults&quot; as example of adding complexity)</p>
+<p>AWB/MM/WH: (Discussion around complexity implications)</p>
+<p>AWB: Complexity that occurs in edge cases is not</p>
+<p>LH: We can't argue complexity... Let's look at the trade off for long term goals of the language</p>
+<p>BE: Can we get rid of Option #1?</p>
+<p>Yes. Option #1: no support. (list updated)</p>
+<p>LH: For those that support Option #0, If we couldn't get consensus on Option #0, what are the material arguments against Option #3?</p>
+<p>BE: (Makes further case for the future friendliness of #0d)</p>
+<p>LH: Reiterates the previous question...</p>
+<p>BE: Option #3c could work really well</p>
+<p>WH: If we go with #3c, there is no spec work, just implementors</p>
+<p>AWB: Yes, there is spec work...</p>
+<p>Discussion comparing the specifics of #3b &amp; #3c</p>
+<p>Support moving to #3c.</p>
+<p>AWB: If sloppy mode, here is a compatibility issue.</p>
+<p>MM/ARB: (Answering Luke's earlier question) If Option #0 is off the table, then there is no opposition to #3b or #3c.</p>
+<p><strong>Consensus</strong></p>
+<p>Allen will spec #3c static semantics with informative note for review, tentatively to fallback to #3b</p>
+<p>BE: Make an error?</p>
+<p>MM: Benefit to future implementors that want to be in conformance by making them errors?</p>
+<p>BE: Refutes</p>
+<p>MM: Retracts</p>
+<p>AWB: Sloppy mode has let, const and class grammatically and semantics</p>
+<p>Return to the bigger issue...</p>
+<p>Reiterates Kevin Smith's proposal:</p>
+<ol>
+<li>No opt-in required for new syntax, except</li>
+<li>Except: No breaking changes to sloppy mode</li>
+<li>No grammar contortions (e.g. let) to support sloppy mode</li>
+<li>All new syntax forms with code bodies are implicit strict</li>
+</ol>
+<p>BE: Appears to be stand between #0 and #3</p>
+<p>MM: Still opposed to the let issue, by creating a potential hazard.</p>
+<p>BE: At last meeting we agreed to break this... (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> <span class="hljs-keyword">let</span>;
+<span class="hljs-keyword">let</span>[x] = y;
+</code></pre>
+<p>AWB: We discussed this last meeting and agreed.</p>
+<p>MM: I changed my mind.</p>
+<p>WH: This is actually a grammar issue, which means that you must be able to parse it before you know whether or not you're in strict mode.</p>
+<p>MM: Reiterates concern about creating potential hazards</p>
+<p>LH: If we want to add new syntax, we're going to encounter these issues no matter what &quot;mode&quot; we're in... Hinging new syntax the fact that a small window reserved a few keywords won't scale (let, const, etc).</p>
+<p>AWB: There is a certain circularity in arguments that are fine with new features only in strict, but also fine with allowing a single conflicting</p>
+<p>MM: Reiterates</p>
+<p>WH: So the argument is that we're making &quot;sloppy mode&quot; too attractive?</p>
+<p>MM: Yes, avoid linguistic screw-ups.</p>
+<p>LH: A lot of us don't view as &quot;screw-ups&quot;</p>
+<p>WH: strict mode is just too complicated for user land code with many scripts on one page.</p>
+<p>MM: If we're going to continue to support &quot;sloppy mode&quot;, we need to make any use of &quot;let&quot; as a variable an error (retro-active reserve?). Cites Safari experiment of &quot;let&quot;, Firefox experiments with &quot;let&quot;.</p>
+<p>LH/BT: Get data on use of &quot;let&quot;</p>
+<p>MM: I'm back to where I was previously... I don't care enough to argue anymore.</p>
+<p>(Note: Previous discussion can be found here: <a href="https://github.com/rwldrn/tc39-notes/blob/master/es6/2012-11/nov-29.md#the-syntax-of-let">https://github.com/rwldrn/tc39-notes/blob/master/es6/2012-11/nov-29.md#the-syntax-of-let</a>)</p>
+<p>LH: Option #0 is too short sighted and based on &quot;luck&quot;... There won't be another opportunity to retro-reserve words, as there was with Strict Mode</p>
+<p>MM: Two scenarios:</p>
+<ol>
+<li>A breaking change that leaves the language in a better, more consistent state.</li>
+<li>A breaking change that mars the languages and creates something that you constantly need to be aware of...</li>
+</ol>
+<p>LH: (anecdotal C# experience)</p>
+<p>MM: Counter with sentiments re: language complexity.</p>
+<p>AWB/WH: Appear to be converging...</p>
+<p>MM: I won't block the let kludge</p>
+<p>AWB: But we need to address the larger issue of features in non-strict mode</p>
+<p>WH: If there are concrete concerns, I want them on the table, but I don't want to spend more time on abstract arguments.</p>
+<p>ARB: Concrete issues have arisen</p>
+<p>WH: What are they?</p>
+<p>AWB: We expect to have concerns.</p>
+<p>ARB: issues with destructuring in sloppy mode</p>
+<p>AWB: We have a spec for this.</p>
+<p>MM: A spec that special cases for these issues and pays an unnecessary complexity cost.</p>
+<p>AWB: Reiterates the concern that user code will not want to &quot;use strict&quot;</p>
+<p>EA: I don't want forked languages</p>
+<p>ARB/MM: Too many small breaks add up, I want to avoid introducing new breaks.</p>
+<p>AWB: Fundamentally two approaches:</p>
+<ol>
+<li>A discontinuity, resulting in multiple versions.</li>
+<li>A single version, evolves incrementally.</li>
+</ol>
+<p>LH: (Insight regarding the effects of &quot;mental forking&quot;)</p>
+<p>WH/DC: (Discussion about the inline-script problem)</p>
+<p>DC: Code has long been moving away from inline code and our goals shouldn't be to preserve that.</p>
+<p>LH: But there are still multiple scripts</p>
+<p>DC: Strict mode is the path forward, we can maintain ES3 and ES5 &quot;sloppy mode&quot;, but ES5 &quot;strict mode&quot; is the way forward.</p>
+<p>AWB/YK: Even the term &quot;sloppy mode&quot; is a pejorative.</p>
+<p>DC/YK: (Discussion about the current state of strict mode)</p>
+<p>WH/YK: We have data that 10% of uses aren't even being used correctly, where &quot;use strict&quot; isn't correctly in the prologue position.</p>
+<p>YK: Worried that people will want to use new features, but simply won't understand the requirement &quot;use strict&quot;</p>
+<p>DC: This is not hard</p>
+<p>...Continued discussion.</p>
+<p>LH: ...Interjects to resteer conversation</p>
+<p>?: The fundamental disagreement is about whether we want to make a simpler spec for the future by basing new features on strict mode only.</p>
+<p>WH: No, that's not the bone of contention. WH would also prefer to have a simpler strict-only spec for new features, but supports 3c/4 from earlier because getting into strict mode is too inconvenient. Today it's too awkward to get into strict mode in practice for web pages, although this may change in the future?. Too many (10%) web pages unknowingly get this wrong by putting a &quot;use strict&quot; somewhere other than the preamble.</p>
+<p>MM: What do you see would need to happen to make strict mode convenient enough?</p>
+<p>WH: Two requirements:</p>
+<ol>
+<li>Need a clear indication that a user's attempt to get into strict mode failed, such as having a <code>use strict</code> directive rather than overloading a string constant. It's obvious from the data that the bug that the strict mode directive doesn't go into strict mode if it's in the wrong place hits too many users.</li>
+<li>Need a way to declare that all scripts on a page are strict. That's out of our control, but this is a prerequisite to making strict mode convenient for multi-script pages (and WH is aware of the potential issues of scripts coming from different sources).</li>
+</ol>
+<p>YK: Hopefully I've made it clear that the current state of strict mode tooling is at a significant disadvantage.</p>
+<p>MM: I understand that we need to work with DOM spec writers to get means of making &quot;global&quot; strict mode a reality.</p>
+<p>Revisiting past conversations that led from ES6 being &quot;versioned&quot;, to being &quot;strict mode&quot; only, to being &quot;one js&quot;.</p>
+<p>LH: We did adopt One JS. There have been two concrete issues:</p>
+<p>MM: Terminology: &quot;one js&quot;?</p>
+<p>LH: As in, new features do not require &quot;use strict&quot; or a &quot;version&quot;... Recommend continuing in the default direction: Continue on the path we're taking.</p>
+<p>MM: That is not the meaning of &quot;one js&quot; (Rick: It's really important that we not confuse this issue with 1JS.))</p>
+<p>AWB: If we can't agree on a new position.</p>
+<p>WH: Wants to hear from others...</p>
+<p>RW: (big spiel about strict mode and new features)</p>
+<p>EF: Agrees and supports default strict mode in modules. Not enough of a historic sample to say whether what size &quot;switch&quot; and how many &quot;switches&quot; to have will be idea. We only have one real sample so far, ES3 -&gt; ES5. The new ES6 strict mode will only be the second.</p>
+<p>RW: Agrees with Eric and supports strict bodies by default.</p>
+<p>DC: Including class?</p>
+<p>RW: Yes</p>
+<p>YK: Not Arrows</p>
+<p>MM: Agree, not on that boundary.</p>
+<p>LH/MM: Closer to comfort if classes and modules have strict bodies.</p>
+<p>MM: Agreed not to hold up consensus</p>
+<p>YK/RW: No Arrows</p>
+<a href="#conclusionresolution-function-in-block-options"><h4 id="conclusionresolution-function-in-block-options">Conclusion/Resolution</h4></a><p>Consensus on...
+Stay the course on spec development approach
+Class, Modules implicitly strict.
+Arrows not strict
+Sustaining our position on the handling of let ambiguities
+(Note: this is a local consensus)</p>
+<p>MM: Declared as not holding up consensus, though not in agreement. I still think this is a terrible idea, but it looks like the best we can declare consensus on.</p>
+<p>BE: (Out of band) I think that's a good consensus, arrows can't have intrinsic names (contrast with NFEs) so arguments.callee may be wanted, so arrows should not be strict-only.</p>
+<a href="#staticclass-side-methods"><h2 id="staticclass-side-methods">Static/Class Side Methods</h2></a><p>(Yehuda Katz)</p>
+<pre><code><span class="hljs-symbol">ClassElement:</span>
+  MethodDefinition
+  <span class="hljs-string">"static"</span> MethodDefinition
+</code></pre>
+<p>Full strawman here: <a href="http://wiki.ecmascript.org/doku.php?id=strawman:class_method_syntax">http://wiki.ecmascript.org/doku.php?id=strawman:class_method_syntax</a></p>
+<p>Supported by TypeScript, Continuum, etc.</p>
+<a href="#conclusionresolution-staticclass-side-methods"><h4 id="conclusionresolution-staticclass-side-methods">Conclusion/Resolution</h4></a><p>Consensus in support of this proposal. (File spec update ticket)</p>
+<a href="#revising-the-array-subclassing-kind-issue"><h2 id="revising-the-array-subclassing-kind-issue">Revising The Array Subclassing &quot;Kind&quot; Issue</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>Reiterates the issue at hand, illustrated here:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">V</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{
+  <span class="hljs-keyword">constructor</span>(...args) {
+  <span class="hljs-keyword">super</span>(...args);
+  }
+}
+
+<span class="hljs-keyword">var</span> v, m;
+v = <span class="hljs-keyword">new</span> V(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>, );
+m = v.map(<span class="hljs-function"><span class="hljs-params">val</span> =&gt;</span> val * <span class="hljs-number">2</span>);
+<span class="hljs-built_in">console</span>.log( m <span class="hljs-keyword">instanceof</span> V ); <span class="hljs-comment">// false :(</span>
+</code></pre>
+<p>If we extend...</p>
+<p><code>Array.from( iterable ) =&gt; Array.from( iterable, mapFn )</code></p>
+<pre><code class="language-js"><span class="hljs-comment">// Add a "map" function to the class-side from method:</span>
+NodeList.from( nodelist, thing =&gt; thing );
+
+<span class="hljs-comment">// Turn an array into NodeList</span>
+NodeList.from( array, thing =&gt; thing );
+
+<span class="hljs-comment">// Turn an array of nodeNames into NodeList of nodes</span>
+NodeList.from( [<span class="hljs-string">"div"</span>], node =&gt; <span class="hljs-built_in">document</span>.createElement(node) );
+</code></pre>
+<p>MM: thisArg?</p>
+<p>EF: It's possible to lose the context if you alias the ClassMethod</p>
+<p>MM: For consistency purposes, add thisArg</p>
+<a href="#conclusionresolution-revising-the-array-subclassing-kind-issue"><h4 id="conclusionresolution-revising-the-array-subclassing-kind-issue">Conclusion/Resolution</h4></a><p>Consensus on this proposal, with the addition of thisArg per Mark's request.</p>
+<a href="#47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in"><h2 id="47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in">4.7  Fail-fast destructuring with ?-syntax for irrefutable opt-in</h2></a><p>(Brendan Eich, Andreas Rossberg)</p>
+<ol>
+<li>No ToObject(RHS).</li>
+<li>Exception on missing property selected without a ?-suffix.</li>
+<li>?-suffix allowed on any pattern, imputing undefined deeply instead of refuting.</li>
+<li>The ? is a separate lexeme from the : in long-hand patterns.</li>
+</ol>
+<p>One entry point:
+<a href="https://mail.mozilla.org/pipermail/es-discuss/2013-January/027800.html">https://mail.mozilla.org/pipermail/es-discuss/2013-January/027800.html</a></p>
+<p>Allen argues cogently against (1) but endorses (2-4).</p>
+<p>BE: (Whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> { toLocaleString, split } = <span class="hljs-string">""</span>;
+</code></pre>
+<p>The only ones that are affected: string, number, boolean.</p>
+<p>ARB: implicit conversion is future-hostile to pattern matching.</p>
+<p>STH: (Whiteboard) Example of pattern matching.</p>
+<p>switch (&quot;x&quot;) {
+match {}: return 1;
+match _: return 2;
+}</p>
+<p>You do not want implicit conversions in pattern matching, which would make this take the first branch. Similarly, if we allow matching literal strings.</p>
+<p>ARB: For consistency, would imply conversions for other pattern types, too (e.g. literals). No issue technically, but insane from practical perspective</p>
+<p>BE: Reiterates... In the case where</p>
+<p>There is no history of primitives being used on the RHS, so there is no need to support any kind of implicit ToObject.</p>
+<p>&quot;You say po-tah-to and that doesn't change tomato&quot;.</p>
+<p>...</p>
+<p>MM: Question about cover grammar.</p>
+<p>AWB: The grammar is spec'ed and in the latest draft.</p>
+<p>...</p>
+<p>YK: Wants irrefutable destructuring, ie.</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Foo</span>(<span class="hljs-params">options</span>) </span>{
+  <span class="hljs-keyword">var</span> { foo } = options;
+  <span class="hljs-comment">// if foo is not a property of options,</span>
+  <span class="hljs-comment">// just give me "foo" that's undefined</span>
+}
+</code></pre>
+<p>BE: Use the ?</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Foo</span>(<span class="hljs-params">options</span>) </span>{
+  <span class="hljs-keyword">var</span> { foo }? = options;
+}
+</code></pre>
+<p>WH: Is ? deep or shallow? i.e. what should the following do
+var { p, r }? = q;
+? answered:</p>
+<ul>
+<li>if q is null: p and r are undefined</li>
+<li>if q is {r: 7}: p is undefined, r is 7.
+WH: That means that ? is deep.</li>
+</ul>
+<p>WH: Given the discussion above [not recorded in these notes?] about doing primitive pattern matching assertions in the future, just curious what the semantics of ? ought to be so that it would interact well with such assertions. Example:
+What should ? do in these cases?
+let {p, q}? = {p:17}
+Here p gets 17 and q gets undefined because ? distributes down.
+But then what happens when we get value assertions? Without getting into syntax details, assume that x: true is a value assertion that fails unless property x exists and has the value true.
+let {p: {x: true}}? = null
+let {p: {x: true}}? = {q: null}
+let {p: {x: true}}? = {p: null}
+let {p: {x: true}}? = {p: {}}</p>
+<p>Mixed Discussion and debate, re: pattern matching examples.</p>
+<p>BE: Return to... Waldemar, are you satisfied with ? for irrefutable destructuring?</p>
+<p>WH: The question, is there a purpose of having a shallow &quot;?&quot;.</p>
+<p>BE: The common case is implied deep &quot;?&quot;</p>
+<p>AWB: More comfortable if there was a strawman of what the full language would be like in the future.</p>
+<p>BE: Dave has a proposal written, but we need to capture the latest developments.</p>
+<p>ARB will work out new pattern matching strawman based on proposed ideas.</p>
+<p>BE: (to YK) have we assuaged your concerns about irrefutable destructuring?</p>
+<p>YK: yes, as long as &quot;?&quot;</p>
+<a href="#conclusionresolution-47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in"><h4 id="conclusionresolution-47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in">Conclusion/Resolution</h4></a><ol>
+<li>No implicit ToObject(RHS). <strong>consensus</strong></li>
+<li>Exception on missing property selected without a ?-suffix. <strong>consensus</strong></li>
+<li>?-suffix allowed on any pattern, imputing undefined deeply instead of refuting. <strong>consensus</strong></li>
+<li>The ? is a separate lexeme from the : in long-hand patterns. <strong>consensus</strong></li>
+</ol>
+<p>&quot;?&quot; in combination with default values, syntax error.</p>
+<pre><code class="language-js">{ a? = <span class="hljs-number">42</span> } <span class="hljs-comment">// throws.</span>
+</code></pre>
+<p>If you write a &quot;?&quot; on a larger structure, you can have default values anywhere inside.</p>
+<pre><code class="language-js">{ <span class="hljs-attr">a</span>: b = <span class="hljs-number">42</span> }? = <span class="hljs-literal">undefined</span>
+</code></pre>
+<p>WH: Where should the ? go syntactically? In particular, should we have
+{p: q?}, {p:? q}, or {p?: q}</p>
+<p>STH:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> { p }? = <span class="hljs-literal">null</span>;  <span class="hljs-comment">// p bound to undefined</span>
+<span class="hljs-keyword">let</span> { p? } = <span class="hljs-literal">null</span>;  <span class="hljs-comment">// throws</span>
+<span class="hljs-keyword">let</span> { <span class="hljs-attr">p</span>: q }? = <span class="hljs-literal">null</span>; <span class="hljs-comment">// q bound to undefined</span>
+<span class="hljs-keyword">let</span> { p?: q } = <span class="hljs-literal">null</span>; <span class="hljs-comment">// throws</span>
+</code></pre>
+<p>WH: This is quite close to conflicting with the ternary operator but can't think of any obvious ambiguities as long as the ? in patterns is always followed by =, }, comma, or :.</p>
+<p>Dependent on patterns being fail-fast:
+ARB: Cute idea: Make <code>undefined</code> into a keyword that is also a pattern that matches only the undefined value. This way existing definitions such as
+var undefined;
+and
+var undefined = <something that evaluates to undefined>;
+and
+(function (undefined){})()
+will work, but
+var undefined = 42;
+will fail.</p>
+<p><strong>General Agreement</strong></p>
+<a href="#411-name-property-of-functions"><h2 id="411-name-property-of-functions">4.11 Name Property of Functions</h2></a><p>(Brendan Eich, with additions by Brandon Benvie)
+<a href="http://wiki.ecmascript.org/doku.php?id=strawman:name_property_of_functions">http://wiki.ecmascript.org/doku.php?id=strawman:name_property_of_functions</a></p>
+<p>BE: Early approaches...</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{}
+f.name == <span class="hljs-string">"f"</span>;
+</code></pre>
+<p>BE: (from Brandon Benvie's proposal)</p>
+<p>Justification: the usefulness of the name of function is not just for debugging. It is useful in the same ways that property names as strings are such as dispatching by name or assigning by name.</p>
+<ol>
+<li>Every function has an own &quot;name&quot; property, and this property is always a string (unless the user specifically decides to violate this norm).</li>
+<li>This name property is initialized with the value that makes sense from static semantics.</li>
+<li>Allow predefined names to be altered in cases where it makes sense.</li>
+</ol>
+<p>Semantics:</p>
+<p>The baseline descriptor for every function is the 'name' property defined as
+{ value: &quot;&quot;,
+writable: true,
+enumerable: false,
+configurable: false }</p>
+<p>For FunctionDeclarations, named FunctionExpressions, MethodDefinitions, or accessor Properties then the function's &quot;name&quot; property is set to the given identifier.</p>
+<p>In the case of the constructor method of classes, the class
+name is used instead.</p>
+<p>In the case of accessors, &quot;get&quot; or &quot;set&quot; is included.</p>
+<p>The &quot;name&quot; property is set to non-writable.</p>
+<p>Function.prototype's name is also non-writable.</p>
+<p>Anonymous FunctionExpressions and ArrowFunctionExpressions assigned in a VariableDeclaration or ObjectExpression are given the name of the variable or property they are assigned to and the name remains writable.</p>
+<p>Anonymous ClassExpressions follow the same semantics, with the name being used for the constructor method.</p>
+<p>Whenever a function's name is defined by a Symbol instead of a regular identifier then the name is the result of ToString(symbol).</p>
+<p>The name property should (probably) not have any reflection on the output of Function.prototype.toString.</p>
+<p>MM: Having the result of toString be immutable is important, agree with proposal semantics.
+...Security leakage from the name property, is the type of information that the toString method leaks. No integrity issue, just a confidentially issue.</p>
+<p>BE: We <em>could</em> make Function.prototype.toString be a getter that can be removed.</p>
+<p>MM: This is one of the aspects that I gave up attempts to secure, and it's never been an issue.</p>
+<p>BE: Make it writable?</p>
+<p>WH/MM/AWB/YK: Writable.</p>
+<p>WH: There is a slight advantage to making it non-writable. Otherwise when writing it to change the function name, you'd expect it to change the result of &quot;toString&quot;.</p>
+<p>Discussion re: history of Function.prototype.toString result.</p>
+<p>MM: Explain the divergence, toString is a reflection of the source code itself and the name is how you'd like to identify the function within tools.</p>
+<a href="#conclusionresolution-411-name-property-of-functions"><h4 id="conclusionresolution-411-name-property-of-functions">Conclusion/Resolution</h4></a><ul>
+<li>Consensus on the proposal, with { writable: true }</li>
+</ul>
+<a href="#412-typed-arrays-update"><h2 id="412-typed-arrays-update">4.12 Typed Arrays Update</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>Slides (pdf): <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_jan_29_2013&amp;cache=cache&amp;media=meetings:typedarray_status.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_jan_29_2013&amp;cache=cache&amp;media=meetings:typedarray_status.pdf</a></p>
+<p>AWB: We're absorbing control of the TypedArray specification, previously authored by Khronos.</p>
+<p>W3C has dependencies on the Khronos spec.</p>
+<p>This specification will not include any parts of the Khronos spec, but will be compatible.</p>
+<p>JN: We need to make sure we're not violating anyone's IPR, István can inquire.</p>
+<p>EA: We can have Ken (Kenneth Russell, Google) review the drafts.</p>
+<p>LH: Short term, the editors need to understand what's going on and there is no push back. The standards organizations need to know that we're now working on this specification. <strong>Agreement</strong></p>
+<p>AWB: (Proceeds to technical presentation)</p>
+<p><strong>Integrate into ES Spec</strong></p>
+<ul>
+<li>ES spec conventions and semantics not WebIDL
+<ul>
+<li>Khronos spec not necessarily tracking WebIDL</li>
+<li>eg. instanceof</li>
+</ul></li>
+<li>Lot's of implementation differences among browsers at MOP level to straighten out</li>
+<li>TypedArrays are subclassable</li>
+</ul>
+<p>LH: TypedArray implementations are incompatible in the same way that all DOM implementations are incompatible, because WebIDL is not implemented compatibly.</p>
+<p><strong>Max Length</strong></p>
+<ul>
+<li>Currently Khronos spec's all lengths as Uint32</li>
+<li>Not future friendly, especially for byte sussed element arrays
+<ul>
+<li>eg. a Uint8Array might map to a large real memory-mapped buffer bigger then 4GB.</li>
+</ul></li>
+</ul>
+<p>LH/AWB: Seems that WebIDL is the cause of this constraint.</p>
+<p>AWB: I'm going to spec the max length at Int, not Uint32</p>
+<p>LH: Should record the deltas</p>
+<p><strong>Khronos/W3C TypedArray Objects</strong>
+(Diagram)</p>
+<p>AWB: 9 prototype objects, 54 distinct method/get accessor functions per Realm.</p>
+<p>MM: How did we get 9?</p>
+<p>LH: UintClampedArray, which used to be CanvasPixelArray</p>
+<p><strong>Prototype Hierarchy Factoring</strong>
+(Diagram)</p>
+<p>AWB: 10 Prototype objects, 6 distinct method/get accessor functions per Realm.</p>
+<a href="#10-typedarrayprototype"><h1 id="10-typedarrayprototype">10, TypedArray.prototype</h1></a><ul>
+<li>[ BYTES_PER_ELEMENT: int abstract ]</li>
+<li>set() void</li>
+<li>subarray() void</li>
+<li>byteLength() int get</li>
+<li>byteOffset() int get</li>
+<li>buffer() Object get</li>
+<li>length() long get</li>
+</ul>
+<p>Int8Array (BYTES_PER_ELEMENT int=1),
+Int32Array (BYTES_PER_ELEMENT int=4),
+Uint8Array (BYTES_PER_ELEMENT int=8),
+Uint32Array (BYTES_PER_ELEMENT int=4),
+Float32Array (BYTES_PER_ELEMENT int=4),
+Float64Array (BYTES_PER_ELEMENT int=8),
+Int16Array (BYTES_PER_ELEMENT int=1),
+Uint16Array (BYTES_PER_ELEMENT int=1),
+Uint8ClampedArray</p>
+<p>MM: A Uint1Array or BooleanArray, where each element is one bit.</p>
+<p><strong>TypedArrays act like fixed length, numeric element JS Arrays</strong></p>
+<ul>
+<li>So why not even better Array integration?</li>
+<li>Class methods?
+<ul>
+<li>TypedArray.of</li>
+<li>TypedArray.from</li>
+</ul></li>
+<li>TypedArrays should be iterables?
+<ul>
+<li>@@iterator</li>
+<li>keys</li>
+<li>values</li>
+<li>entries</li>
+</ul></li>
+</ul>
+<p><strong>Even Better Array Integration</strong></p>
+<ul>
+<li>Other Array.prototype methods that will work just fine on TypedArrays
+<ul>
+<li>toString, toLocaleString, concat, join, reverse, slice, sort, indexOf, lastIndexof, every, some, forEach, map, filter, reduce, reduceRight</li>
+</ul></li>
+<li>Only 5 Array.prototype methods won't work with TypedArrays
+<ul>
+<li>push, pop, shift, unshift, splice</li>
+</ul></li>
+</ul>
+<p><strong>Add Array methods to TypedArray</strong>
+(Diagram)</p>
+<p>WH: Are TypedArrays spread by Array.prototype.concat and ...?</p>
+<p>LH: TypedArrays are a targeted tool for byte level programming.
+...Doesn't think that the generic, higher-order Array APIs should be exposed on TypedArray</p>
+<p>WH: [Repeats question]</p>
+<p>?: TypedArrays are not exotic arrays so don't get spread by Array.prototype.concat and ... . On the other hand, TypedArray.prototype.concat will spread TypedArrays only.</p>
+<p>WH: OK.</p>
+<p>[Debate about whether TypedArrays need the suite of Array methods]</p>
+<p>YK: Using TypedArrays would be a pain if they didn't already offer these array operations.</p>
+<p>WH: It would be too confusing to have gratuitously different APIs for two array-like things in the language.</p>
+<p>RW: Agree.</p>
+<p>AWB: My understanding was that we were absorbing these in order to provide the capabilities that the language provides</p>
+<p>STH/WH/YK/RW/EA: Strong Agreement.</p>
+<p>LH: Agree that there are some use-cases for these, but may not be our place to define these methods</p>
+<p>YK: (channelling Alex Russell) The reason we're taking this on, is because it's our responsibility to correct &quot;yet another array like thing that isn't an array&quot;</p>
+<p>RW: Agrees.</p>
+<p>LH: Implementation and performance issue concerns?</p>
+<p>WH: This is not a lot of work for implementations, and implementations (as opposed to users) are clearly in the better place to implement these efficiently.</p>
+<p>[STH: After the end of the official meeting, there was some discussion as to why Typed Arrays wouldn't just become genuine Arrays.  This would mean
+that they'd have all the Array methods, some of which would throw on use (those that change length). This needs discussion at a future meeting.]</p>
+<a href="#conclusionresolution-412-typed-arrays-update"><h4 id="conclusionresolution-412-typed-arrays-update">Conclusion/Resolution</h4></a><ul>
+<li>Move forward with the plan presented.</li>
+</ul>
+
+</body>

@@ -1,0 +1,351 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 27, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-27-2012-meeting-notes"><h1 id="november-27-2012-meeting-notes">November 27, 2012 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Norbert Lindenberg (NL), Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Luke Hoban (LH), Rick Waldron (RW), Eric Ferraiuolo (EF), Matt Sweeney (MS), Doug Crockford (DC), Nebojša Ćirić (NC), Yehuda Katz (YK), Erik Arvidsson (EA), Mark S. Miller (MM), Dave Herman (DH), Sam Tobin-Hochstadt (STH)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>...Welcome and introductions.JN welcomed members and introductions were made.  DC gave us facility and logistical information.  Dinner for Wednesday is set for 6 PM.</p>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>JN: Previous Meeting Minutes</p>
+<p>JN: Review and approve?</p>
+<p>RW: Confirm that l have had opportunity to review prior to submission.</p>
+<p>JN: Minutes from Sept 2012: Approved.</p>
+<p>Review and approval of agenda.  Labeled as rev42 will be sent to Patrick for publication.</p>
+<a href="#es6-feedback-via-typescript"><h2 id="es6-feedback-via-typescript">ES6 feedback via TypeScript</h2></a><p>LH: Move TypeScript feedback update to later, as part of module discussion.</p>
+<a href="#review-proposals-for-inclusion-in-es6"><h2 id="review-proposals-for-inclusion-in-es6">Review Proposals for inclusion in ES6</h2></a><p>JN/AWB: Discussion re: harmony:proposals page and status of listed items.</p>
+<a href="#spread-operation-accepting-iterables"><h2 id="spread-operation-accepting-iterables">Spread Operation accepting Iterables</h2></a><p>RW: SpiderMonkey has implemented spread to accept iterables despite the resolution from July. Would like to revisit the resolution.</p>
+<p>DH: The implementation was likely just a misunderstanding, will file a bug for these notes.</p>
+<p>EA: Let's add to the agenda for further discussion.</p>
+<a href="#agenda-discussion"><h2 id="agenda-discussion">Agenda Discussion</h2></a><p>Missing agenda items re-added.</p>
+<p>Begin Technical discussion  as item 4 on agenda</p>
+<a href="#review-of-new-draft-spec"><h2 id="review-of-new-draft-spec">Review of new draft spec</h2></a><p>AWB: Summary of changes in recent spec. drafts, including:</p>
+<ul>
+<li>Global declaration instantiation added, &quot;global object + lexical scope&quot; model.</li>
+<li>Program is now Script</li>
+<li>Set/Map size is now an accessor</li>
+<li>Set/Map clear method added</li>
+</ul>
+<p>Notably, size is the first accessor defined by the spec.</p>
+<p>DH: There will be more accessors defined in the module loader spec.</p>
+<p>EA: Ensure no prototype for methods, should behave the same as spec functions.</p>
+<p>AWB: Explains how the spec language is laid out for accessors, wherein &quot;get&quot; or &quot;set&quot; is prepended to the section item's title.</p>
+<p>RW: (agrees that it's clear to follow)</p>
+<p>AWB: This is the first rev. that brings in Proxy, which leads to the restructuring of early sections and internal methods.</p>
+<p>Section outlines...</p>
+<pre><code>6. Source
+7. Lexical Grammar
+8.<span class="hljs-built_in"> Type
+</span>Abstract Engine
+Language
+  Lex
+  Syntactic
+Vocabulary
+
+9. Helper
+10. call/return/scoping
+11. expressions
+12. statements
+13. functions
+15. Libraries
+</code></pre>
+<p>Explanation of rationale leading to the restriction and reorganization of internal methods for defining spec behaviors. Leading into the organization of...</p>
+<a href="#meta-object-protocol-aka-mop"><h3 id="meta-object-protocol-aka-mop">Meta Object Protocol, aka. MOP</h3></a><p>Discussing section on invariants and how to redefine in a reasonable way.  We need people who are interested in these invariants to make contributions to this section.</p>
+<p>8.1 Language Types
+8.2 Specification Types</p>
+<p>8.3-8.5 Will be moved to after section 10, these define the concrete types</p>
+<p>8.3 Ordinary Object - an object that uses the standard MOP semantics in 8.3. example: Objects, Function objects</p>
+<p>8.4 Exotic Objects - any object that is not an Ordinary Object, which means anything that specifies the use of something that is not in the MOP. examples: BoundFunction, Arrays, Strings</p>
+<p>Standard Object - any object defined by the specification.</p>
+<p>WH: why is BoundFunction exotic?</p>
+<p>AWB: the special semantics of [[Call]] and [[Construct]]</p>
+<p>WH: Does this mean that all built-in functions eg. Math.sin are exotic? This labeling bothers me if the user might be able to define differences between ordinary/exotic</p>
+<p>LH: Why aren't all objects exotic?</p>
+<p>AWB: initially set out to replace Host Objects, initially defined as anything that has redefined its internal methods</p>
+<p>LH: Are there any checks, &quot;is this an exotic object&quot;?</p>
+<p>AWB: No, this just simplifies and cleans up the language to that describes an object that has &quot;special&quot; semantics</p>
+<p>WH: Do you identify all built-ins as exotic?</p>
+<p>AWB: Reads back from Built-In descriptions in rev12</p>
+<p>STH: Seems like it's simply a way to ease the pains of editing the spec.</p>
+<p>AWB: [Further explanation of</p>
+<p>WH: ?</p>
+<p>AWB: Every algorithm in chapter 15 is the definition of the algorithms used when [[Call]]. In a situation where we need to reify concepts where we're not sure what the execution context currently is... eg. generators</p>
+<p>WH: How does execution context come into this discussion</p>
+<p>AWB: The spec needs to be able to discuss these semantics (gives example)</p>
+<p>NL/WH: How is this observable if the implementation may or may not be provided in ECMAScript code?</p>
+<p>AWB: Only need a means by which to explain the semantics.</p>
+<p>I need to be able to talk about the execution context of a chapter 15 function while in a chapter 15 function algorithm</p>
+<p>DH: I'm not sure this concept of an exotic object is the best way to go about this.</p>
+<p>AWB: At this point we're talking about chapter 15 issues, not specifically exotic objects.</p>
+<p>DH: I think this is good to signal to implementors that something different will have to occur.</p>
+<p>STH: This is simply a tool to aid in the editing process.</p>
+<p>DH: Not an annex, good.</p>
+<p>AWB: Correct, the different semantics are grouped where they actually belong.</p>
+<p>WH: I still don't understand why there is a grouping of these types of objects.</p>
+<p>AWB: Please review the spec... If there are any strong arguments, please share.</p>
+<p>AWB/DH: Confirm the subject matter of sections 8.3 and 8.4</p>
+<p>RW: (stated prior to beginning of meeting) This change makes reading, understanding and following the varying behaviors easier to follow.</p>
+<p>WH: Reading 8.4.6 and can't follow the description...</p>
+<p>AWB: There are issues that exist due to prior hacks (not authored by me).</p>
+<p>STH/LH: As long as this is just a spec tool, there is nothing wrong with the chosen categorizations.</p>
+<p>AWB: For those of you reading the spec, please re-familiarize yourself with the new terminology.</p>
+<p>LH:</p>
+<p>AWB: The risk for semantic change... some methods renamed, some may have different behaviors. No change to observable semantics</p>
+<p>DH: Don't remember the proto climbing refactoring</p>
+<p>AWB: Tries locally, then same operation on next level. Each step up is observable via proxies.</p>
+<p>DH: not web dependent</p>
+<p>WH: if it's not visible, why do implementations need to change?</p>
+<p>AWB: In the presence of proxies, proto climbing is visible. The difference... What [[Get]] in the old system did was loop, instead of recursion. If a prototype was a proxy, the trap would never be invoked. In the new system, it will. The property access system needed to change to support this...</p>
+<p>DH: We'll get feedback from proxy implementors</p>
+<p>AWB:</p>
+<p>MM: There are two engine based proxy implementations, SpiderMonkey and v8—let's wait to discuss the impact.</p>
+<p>BT: So there is a low risk of semantic change in 8.x? (with no regard for proxies)</p>
+<p>AWB: Should be no observable semantic change and this should be confirmable with tests and reviewers.
+...Will add a description of what should be observable and not.</p>
+<p>Another change happening in this edition, is specifying where each exception is thrown. Previously this was implicit, but is now <strong>explicit</strong>.</p>
+<p>WH/AWB: review 10.2.1.2.6 use of ReturnIfAbrupt(value)</p>
+<p>LH: was there concern of ambiguity before? Seemed clear...</p>
+<p>AWB: There were places where it was unclear where the the exception should be thrown, Mark had identified the loop in ??</p>
+<p>...Discussion about explicit exceptions</p>
+<p>DC: Need to break.</p>
+<p>WH: Throw on string concat over allowed length?</p>
+<p>...Discussion about ReturnIfAbrupt...</p>
+<p>LH: Is this a maintainability issue? If a new leaf addition is defined that uses ReturnIfAbrupt, do you have to check all call sites?</p>
+<p>AWB: The work is already done.</p>
+<p>... Discussion.</p>
+<a href="#break"><h2 id="break">Break.</h2></a><a href="#meeting-notes---publish-to-wiki"><h2 id="meeting-notes---publish-to-wiki">Meeting Notes - Publish to wiki</h2></a><p>(side discussion, but valid to document)</p>
+<a href="#conclusionresolution-meeting-notes---publish-to-wiki"><h4 id="conclusionresolution-meeting-notes---publish-to-wiki">Conclusion/Resolution</h4></a><ul>
+<li>RW to publish meeting notes to ecma wiki (in addition to publishing on es-discuss and submission to ECMA)</li>
+</ul>
+<a href="#internationalization-update"><h2 id="internationalization-update">Internationalization Update</h2></a><p>NL: (Summary of changes based on feedback) Spec document submitted to general assembly for approval. HTML version of the spec has been prepared, will be posted to ECMA site after GA approval. Demonstration of test402 (INTL spec testing) running on Firefox (special build, not in Mozilla repository yet).</p>
+<p>NC: v8 Implementation has regressed, due to clean up of defineProperty use.</p>
+<p>LH: Has an IE plugin impl., next phase is to implement directly</p>
+<p>LH: Should have discussion re: spec intention that all checks whether this is an instance Object, is this cross-realm? or this realm?</p>
+<p>AWB: Yes, let's discuss this. Clarify...</p>
+<p>NL: Any questions re: Internationalization 1.0?</p>
+<p>JN: What is the plan w/r to hosting and maintaining test402</p>
+<p>NL: Any company that wants to invest resources into contributing tests and maintaining?</p>
+<p>BT: Can't say specifically, but Microsoft will certainly be contributing tests</p>
+<p>NC: Same for google</p>
+<p>JN: Anything for submission to the GA?</p>
+<p>NL: We'll provide a technical report of some form for submission. Will provide the number of tests, (approx) and that coverage (missing and not) is understood.</p>
+<a href="#international-20"><h3 id="international-20">International 2.0</h3></a><p>(get slides from NL)</p>
+<p>(1)
+Complete Spec Sep/Nov 2013
+TC39 approval March 2014
+GA approval June 2014</p>
+<p>MM: Be aware of possible delays in ES6</p>
+<p>(2)
+Prioritization</p>
+<p>(3)
+High (Or part of ES6?)</p>
+<ul>
+<li>Unicode normalization</li>
+<li>Case Conversion</li>
+<li>Character properties in RegExp or as API</li>
+</ul>
+<p>Discussion re: unicode, changes in ES6 to RegExp re: unicode
+No changes are in draft yet.</p>
+<p>(4)
+High (cont)</p>
+<ul>
+<li>IANA timezone IDs in DateTimeFormat</li>
+<li>Chrome 24+ has impl</li>
+<li>Message Formatting, including gender and plural handling</li>
+<li>Not clear how template strings fit in</li>
+</ul>
+<p>RW/NL: agree to loop Alex Sexton into the work on message formatting specification.</p>
+<p>(5)
+Wait</p>
+<ul>
+<li>DateTimeFormat improvements</li>
+<li>Need feedback on 1.0</li>
+<li>Pattern strings, highlevel specifiers</li>
+<li>Info for date pickers</li>
+<li>Date intervals, relative dates, durations?</li>
+<li>Expose ToLocalTime?</li>
+</ul>
+<p>(6)
+Wait</p>
+<ul>
+<li>Resource Bundles</li>
+<li>Needs investigation</li>
+<li>Maybe module system can be used?</li>
+</ul>
+<p>WH: How are resource bundles different from JSON?</p>
+<p>NL: That's generally how they are stored, the challenge is loading the right bundle for the application's current locale</p>
+<p>DH: can this be stored compressed in a binary format?</p>
+<p>AWB/LH/YK: (discussion and agreement on HTML/CSS involvement in resource bundling is too browser-centric)</p>
+<p>WH: Rather than providing a method that loads a bundle from some web page (which will likely clash with how a particular web server is structured), provide utilities such as decoding a bundle from a string and selecting the right bundle (e.g. the current language's) from a list of bundle names.</p>
+<p>MM: Abstract the problem to a data loading issue</p>
+<p>EF: Whose job is it to define the information in a resource bundle?</p>
+<p>EF/NL: generally the library or application using the data has to define its structure and provide bundles for the locales it wants to support; there is an issue when third parties want to add more locales</p>
+<p>(7)
+Medium</p>
+<ul>
+<li>Text segmentation: word and line breaks</li>
+<li>Editors, offline indexing...</li>
+<li>Chrome already has impl</li>
+<li>Browsers names for languages</li>
+<li>Display names for languages, countries, scripts</li>
+<li>Number parsing - no currencies/percent/dates</li>
+</ul>
+<p>MM: Presumably there are other standards bodies that we can use the data from.</p>
+<p>WH: This gets into the political issue of what countries are called based on local law. Is Taiwan a country?</p>
+<p>(8)
+Medium/Low</p>
+<ul>
+<li>Calendar Support</li>
+<li>Info for date picker</li>
+<li>Conversion between calendars</li>
+<li>Calculations within calendar (add 3 days)</li>
+</ul>
+<p>(9)
+No</p>
+<ul>
+<li>Title case, too many house rules</li>
+<li>Language Detection, too specialized</li>
+<li>Encoding detection and conversion, value decreasing.</li>
+</ul>
+<p>(10)</p>
+<ul>
+<li>Script reording in Collator</li>
+<li>Pseudo-numbering systems in NumberFormat and DateTimeFormat</li>
+</ul>
+<p>(11)
+Approval?</p>
+<p>JN: Who is working on this?</p>
+<p>NL: First meeting had representatives from Mozilla, Google, Microsoft, Amazon.</p>
+<p>JN: Will provide minutes of meetings to ECMA?</p>
+<p>NC: Yes.</p>
+<p>JN: Despite potential operational changes from ECMA, let's move forward with this project. Continue to report as adhoc group via this group.</p>
+<a href="#conclusionresolution-internationalization-update"><h4 id="conclusionresolution-internationalization-update">Conclusion/Resolution</h4></a><p>TC39 Approves to move forward with 2.0. NL will submit slides to ECMA for minutes record.</p>
+<a href="#string-normalization"><h2 id="string-normalization">String Normalization</h2></a><p><a href="http://wiki.ecmascript.org/doku.php?id=strawman:unicode_normalization#add_normalize_method">http://wiki.ecmascript.org/doku.php?id=strawman:unicode_normalization#add_normalize_method</a></p>
+<p>NL: AWB has removed a number of references to normalization from the current spec that did not reflect reality</p>
+<p><strong>String.prototype.normalize(form)</strong></p>
+<p>MM: Any sequence of utf-16 has a valid, specific normalization?</p>
+<p>NL: Will have to check if the normalization spec has anything about unpaired surrogates.</p>
+<p>MM: Either we make the function total, in the sense that it always returns a string, or total in the sense that we define where it throws exception.</p>
+<p>NL/LH: (agree w/ always return a string)</p>
+<p>NL: Are we in agreement to spec this?</p>
+<p>MM: Requirements: (moved to resolution)</p>
+<a href="#conclusionresolution-string-normalization"><h4 id="conclusionresolution-string-normalization">Conclusion/Resolution</h4></a><ul>
+<li>Yes, requirements:
+<ul>
+<li>total,</li>
+<li>deterministic</li>
+<li>idempotent normalization (normalizing the result of normalization again will return the first result)</li>
+</ul></li>
+</ul>
+<p>WH: Note that Unicode got this wrong a while back (their normalization algorithm wasn't idempotent, and it didn't even form proper equivalence relations). They fixed it since then and now explicitly state that it's idempotent.</p>
+<a href="#string-case-conversion"><h2 id="string-case-conversion">String Case Conversion</h2></a><p><a href="http://wiki.ecmascript.org/doku.php?id=strawman:case_conversion">http://wiki.ecmascript.org/doku.php?id=strawman:case_conversion</a></p>
+<p>LH: Why isn't this in the Internationalization standard?</p>
+<p>AWB: Is there a reason this isn't in the Intl 1.0?</p>
+<p>NL: Case conversion wasn't considered in original scope for Intl 1.0; we then forgot to add it when respecifying String.prototype.localeCompare and friends.</p>
+<p>RW: There is a Case Conversion item in Intl 2.0, is this the same?</p>
+<p>NL: Correct, but these functions are in Language spec. Should this be added to ES6?</p>
+<p>AWB: Don't think that we should start moving Intl into ES, or at least not until ES7</p>
+<p>NL/LH: Not being in ES6 doesn't prevent implementation or spec authoring.</p>
+<p>LH: Doesn't need to be in the wrong spec just to move forward.</p>
+<a href="#conclusionresolution-string-case-conversion"><h4 id="conclusionresolution-string-case-conversion">Conclusion/Resolution</h4></a><ul>
+<li>Goes in Internationalization but doesn't prevent specification or implementation.</li>
+</ul>
+<a href="#eliminate-touint32-warping-on-array-access"><h2 id="eliminate-touint32-warping-on-array-access">Eliminate ToUInt32() warping on array access</h2></a><p>AWB: Sparse parameter on Array iterator constructors (eg. Array.prototype.keys/values/items that determines whether or not &quot;holes&quot; are included in the iteration.?
+Can we eliminate functions returning Reference values from the specification</p>
+<p>AWB: Arrays use ToUint32, which does modulo arithmetic.</p>
+<p>WH: Yes, but it doesn't actually warp indices. Ones larger than 2^32-2 are not array indices; they're not treated modulo 2^32.</p>
+<p>WH: Also note that strings such as &quot;0.0&quot; and &quot;007&quot; are intentionally not array indices either, even though they're within the array range. The array index code checks that the value round-trips to a number and back to the same string; this is what keeps indices over 2^32-2 from warping.</p>
+<p>MM: What are the practical benefits of this?</p>
+<p>AWB: 2 Things, we could do this at 2^53 and truncate there instead of warping</p>
+<p>MM: Is there a history of implementors that have worked out these issues?</p>
+<p>AWB: Every new array(like) operation needs to have this behavior</p>
+<p>DH: Concern that this will break the web</p>
+<p>AWB: IE had a problem for a long time that went nearly unnoticed.</p>
+<p>MM: strategic to postpone this cleanup until we have integers. Don't see a reason to make this change</p>
+<p>DH: Concerned about code that would even have arrays this large</p>
+<p>AWB: The point is to avoid craziness after 2^53</p>
+<p>MM: What is the handling of the 2^53 edge condition that this change will benefit?</p>
+<p>AWB: I have to review the spec and can follow up tomorrow.</p>
+<p>Look at 15.4 of ES5.1, when you go over the edge, results in expand properties being set on the array. Additionally, the 2^32 edge condition:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> a = [];
+a[<span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>) - <span class="hljs-number">1</span>] = <span class="hljs-literal">true</span>;
+</code></pre>
+<a href="#conclusionresolution-eliminate-touint32-warping-on-array-access"><h4 id="conclusionresolution-eliminate-touint32-warping-on-array-access">Conclusion/Resolution</h4></a><ul>
+<li>Tabled until AWB has further impact research.</li>
+</ul>
+<a href="#the-prototypeconstructor-object-model-supporting-generatorsuse-of-instanceof-with-generators-and-generator-instances"><h2 id="the-prototypeconstructor-object-model-supporting-generatorsuse-of-instanceof-with-generators-and-generator-instances">The prototype/constructor object model supporting Generators/use of instanceof with generators and generator instances</h2></a><p>AWB, presents UML diagram to illustrate...</p>
+<p>The Generator Constructor doesn't need a global name. Assume it's accessible at System.Global.</p>
+<p>Each generator function has a unique prototype object with own properties for next, send, throw, close, etc. These prototype types may share references to the built-in mplementations of those methods.</p>
+<pre><code class="language-js">g1 <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Function</span>; <span class="hljs-comment">// true</span>
+g2 <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Function</span>; <span class="hljs-comment">// true</span>
+</code></pre>
+<p>But no way to test if either g1 or g2 is a generator function rather than an ordinary function.
+...</p>
+<p>Possible Solutions:</p>
+<ol>
+<li>Make Generator a subclass of Function, allows instanceof checking (on some kind of special System object)</li>
+<li>Make a global built-in Generator constructor</li>
+<li>@@hasInstance(): void</li>
+</ol>
+<p>Anomalies...</p>
+<ol>
+<li>instanceof will be true for non Generator functions</li>
+<li>g1.constructor === &quot;Generator&quot;?</li>
+</ol>
+<p>DH: If we go against the behavior of the language we'll end up with...</p>
+<p>MM: Agree up until the reflective Generator</p>
+<p>DH: Function creates function, Generator creates generator</p>
+<p>YK: Anything other than that is pure WAT.</p>
+<p>AWB: Need to get our terminology straight.</p>
+<p>MM: Going forward, we've created this class system... Having Generators be a subclass...</p>
+<p>lost track, sorry. Hope Mark can fill this point in later.</p>
+<p>YK/MM/LH: like...</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Generator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Function</span>.<span class="hljs-title">prototype</span> </span>{}
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">g</span>* <span class="hljs-keyword">extends</span> <span class="hljs-title">Generator</span> </span>{}
+</code></pre>
+<p>DH: The way to check &quot;is this a generator?&quot;</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.getPrototypeOf(f) === <span class="hljs-string">"Generator"</span>;
+</code></pre>
+<p>MM: Of all the things we're talking about, creating Generators reflectively is the least concern. Something like...</p>
+<p>Function.makeGenerator(...); returns generator function</p>
+<p>... If that was important to provide, but likely not.</p>
+<p>MM/LH: Generator is a zero-arg, no-op.</p>
+<p>LH: Reiterates that class g* extends Generator {} clarifies thinking about the diagram
+<img src="https://dl.dropbox.com/u/3531958/tc39/generator-diagram-1.jpg"></p>
+<p>DH/LH: (Discussion of this inside Generator)</p>
+<p>MM/AWB: (Converge on diagram of inheritance relationship)</p>
+<p>DH: Which parts do we surface as public API?</p>
+<p>MM: Abstaining.</p>
+<p>DH: Important to retain Python naming to avoid WAT. Ok with not surfacing anything to public API</p>
+<p>WH: Would like to at least expose &quot;Generator&quot;. [Note: the object I was referring to got renamed to &quot;GeneratorFunction&quot; later in the discussion and further down in the notes here.]</p>
+<p>DH/WH: (Disagreement on exposure of public API)</p>
+<p>AWB: Need a value for .constructor</p>
+<p>DH: Ok, .constructor dictates the requirement.</p>
+<p>MM: Does this mean that if you call the Generator constructor with a yield?</p>
+<p>AWB/RW: Error</p>
+<p>??</p>
+<p>DC: Are we adding Generator because it qualifies as important enough to stand on its own?</p>
+<p>DH: Reflective evaluation is powerful enough to stand on its own. A huge gulf between <code>with</code></p>
+<p>MM: There is no immediate benefit...</p>
+<p>WH: It's easier to include then to exclude it, for spec benefit.</p>
+<p>MM: Agreed, only benefit is specification symmetry.</p>
+<p>WH: Function does reflection, so it makes sense.</p>
+<p>MM: Consensus on exposing GeneratorFunction via some imported module?</p>
+<p>All: Yes.</p>
+<p>MS: Can I determine if an object is a generator function?</p>
+<p>DH:</p>
+<pre><code class="language-js">f <span class="hljs-keyword">instanceof</span> GeneratorFunction;
+f.__proto__ === GeneratorFunction.prototype;
+f.__proto__ === (<span class="hljs-function"><span class="hljs-keyword">function</span> *(<span class="hljs-params"></span>) </span>{}).__proto__;
+</code></pre>
+<a href="#conclusionresolution-the-prototypeconstructor-object-model-supporting-generatorsuse-of-instanceof-with-generators-and-generator-instances"><h4 id="conclusionresolution-the-prototypeconstructor-object-model-supporting-generatorsuse-of-instanceof-with-generators-and-generator-instances">Conclusion/Resolution</h4></a><ul>
+<li>Per diagram (<a href="https://dl.dropbox.com/u/3531958/tc39/generator-diagram-1.jpg">https://dl.dropbox.com/u/3531958/tc39/generator-diagram-1.jpg</a>), but without exposing &quot;Generator&quot;</li>
+<li>&quot;GeneratorFunction&quot; exposed via a module</li>
+</ul>
+
+</body>

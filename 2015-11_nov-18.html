@@ -1,0 +1,545 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 18, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-18-2015-meeting-notes"><h1 id="november-18-2015-meeting-notes">November 18, 2015 Meeting Notes</h1></a><hr>
+<p>Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Stefan Penner (SP), Waldemar Horwat (WH), Mark S. Miller (MM), Paul Leathers (PL), Georg Neis (GN), Sebastian Markbåge (SM)</p>
+<hr>
+<a href="#regexp-buffet"><h2 id="regexp-buffet">RegExp Buffet</h2></a><p>(Brian Terlson)</p>
+<p>something about composed RegExp</p>
+<p>YK: composing regexp does not have a algebraic decomposition</p>
+<p>DD: composing multiple interpolated strings for RegExp</p>
+<p>WH: What?</p>
+<p>YK: composing regexp fragments on the fly</p>
+<p>WH: That’s only useful for structured composition. Unstructured composition (string concatenation) is too hard to reason about</p>
+<p>YK: not wanting this, seems like we are saying creating RegExp on the fly</p>
+<p>DH: this is just abstraction and composition, historically RegExp have been poor at this.</p>
+<p>WH: Whats YK’s point, why is that useful?</p>
+<p>YK: imagine a complex RegExp where deriving char classes was complex, splitting this into multiple functions and composing makes sense.</p>
+<p>WH: We are talking past each other</p>
+<p>WH: two questions:
+1. Do we want RegExp templates?
+2. Do we want to do it structured, or completely freeform?</p>
+<p>WH: I believe the freeform way is not useful or needed</p>
+<p>WH: Composition should work via the structured way</p>
+<p>YK: I may want to do this via template strings</p>
+<p>WH: The structured way already handle this</p>
+<p>M: provides example, RegExp for different locale phone numbers. Interpolation would nicely do the trick.</p>
+<p>YK: i don’t understand how Mike Samuals solution</p>
+<p>WH: Provides structured example: <code>a${foo}*</code></p>
+<ul>
+<li>In structured substitution this refers to zero or more foo sub-regexps.</li>
+<li>In unstructured substitution this repeats the last atom inside foo, or possibly the 'a' if foo is empty, or possibly the * is a literal if foo ends with a backslash. Very nasty. Too difficult to compose or reason about.</li>
+</ul>
+<p>YK: ok, it seems like these are two worlds.</p>
+<p>SP: M’s example would be a good example of interpolation</p>
+<p>WH: Structured handles this</p>
+<p>YK: at what ergomic cost</p>
+<p>WH: Example of how to do this is already on the github.</p>
+<p>BT: Should we defer free-spacing for further library exploration?</p>
+<p>YK: what are people expect from interpolation is not structured.</p>
+<p>SP: it seems like we want both, structured and interpolated. It seems like we need to further explore this, before free spacing is explored</p>
+<p>WH: We do not want unstructured. If for some bizarre reason you want to do unstructured regexp concatenation, just use + string concatenation and pass the result to the RegExp constructor. Done. We don’t need a new and different way of doing that niche case.</p>
+<p>BT: yes, we will need to explore</p>
+<p>M: what about minifiers</p>
+<p>DD: today, minifiers will not touch template strings today</p>
+<p>BT: they could become smarter</p>
+<p>BT: someone should write this</p>
+<p>… istvan’s update …</p>
+<p>WH: So ISO would make a tiny “pointer standard” that points to whatever the latest ECMA ECMAScript standard is?</p>
+<p>IS: Yes.</p>
+<p>WH: What would the ISO rules be on the references we can make from ECMA 262?</p>
+<p>[confusion; no answer after repeated questions]
+WH: What would happen to ISO 16262? Would the new ISO pointer spec replace it?</p>
+<p>IS: The pointer spec would be a new ISO standard. ISO 16262 would then be withdrawn.</p>
+<p>WH: What about the internationalization library (ECMA 402)? Would it have its own ISO pointer spec?</p>
+<p>IS: Just one ISO standard would refer to both the latest ECMA 262 and the latest ECMA 402.</p>
+<p>WH: How would contributions of ISO members interact with ECMA patent policies?</p>
+<p>BT: They’d sign the contributor agreement for any nontrivial contributions.</p>
+<p>WH: Are ISO members representing companies? Themselves as individuals? Entire countries?</p>
+<p>IS: Countries.</p>
+<p>WH: So how does the country of Japan sign an ECMA royalty-free patent agreement?</p>
+<p>BT: They’d sign the agreements as individuals or companies per normal process.</p>
+<p>JN: It will be hard to get the country representatives to sign anything like an ECMA patent policy.</p>
+<p>BT: It would be the individual or company who owns the intellectual property</p>
+<p>...............</p>
+<p>BT: mode modifiers - syntax &amp; semantics</p>
+<p>BT: related to have local case insensitivity.</p>
+<p>YK: multiline may be useful, one can imagine several such scenarios … heredoc</p>
+<p>BT: pearl regexp, has (?=m…) which limits what can be put inside.</p>
+<p>WH: I’d prefer that this be lexically scoped as well.</p>
+<p>WH: I’m ok with it for the i and m flags. I’m definitely not ok with it for the x and u flags.</p>
+<p>YK: what about U</p>
+<p>BT: likely can’t do, as it changes the lexer.</p>
+<p>DE: what does G mean for a range</p>
+<p>YK: Some flags don’t work contextually, and because of this should we invent something new? That would seem unfortunate</p>
+<p>BT: interpolation + regexp helpers with …</p>
+<p>YK: this clears up my composition/algebra question from earlier</p>
+<p>DD: this is compelling to me, it enables further composition</p>
+<p>WH: Scoping: If mode switches are block scoped, template substitutions work ok. If mode switches take effect until they’re turned off, then you get trouble with mode switches leaking out of inner substitutions:
+<code>abc${foo}*def</code>
+where foo is /xy(?i)z/
+would then turn on the i flag for the def in the outer pattern, which is bad.</p>
+<p>WH: But the block scoped one wouldn’t be an issue.</p>
+<p>?: What if foo is /xyz/i ?</p>
+<p>WH: That would turn on the i flag for just the xyz and none of the abcdef in the outer pattern. Works as expected.</p>
+<p>SP: it seems like the structured composition of regexp should handle this, Sub RegExp get there modifiers they need.</p>
+<p>YK: ruby has support for this</p>
+<p>BT: ruby has good RegExp</p>
+<p>Yk: yes oniguruma is itself a substantial project</p>
+<p>…</p>
+<p>BT: without this feature it becomes difficult to substitute</p>
+<p>WH: A more fun question is what if the template is <code>abc${foo}*def</code> (without a g modifier) and foo is /xyz/g ? Such a flag juxtaposition would be meaningless.</p>
+<p>MF: we only want I M X</p>
+<p>YK: this is what ruby does</p>
+<p>M:..</p>
+<p>BT: It sounds like we want this, it may also help us figure out interpolation/composition</p>
+<p>WH: Definitely don’t want switchable x flags. Can construct all kinds of lexical trouble with it.</p>
+<p>BT: composing with X is unknown, we may need to defer it.</p>
+<p>BT: mode modifier makes it easier to compose</p>
+<p>WH: so only the M and I flags for now</p>
+<p>BT: yes</p>
+<p>YK: sounds like an open question if we work on X</p>
+<a href="#unicode---syntax--semantics-bt"><h2 id="unicode---syntax--semantics-bt">Unicode++ - Syntax &amp; Semantics (BT)</h2></a><p>BT: unicode spec defines, many things (block scripts…)</p>
+<p>BT: an example of a block is latin/arabic etc.</p>
+<p>BT: \u allows for more ergonomic RegExp when dealing with unicode chars..</p>
+<p>YK: unicode adding stuff, will cause enumerated charsets in  RegExp to break</p>
+<p>BT: when naming a block, perl allows InArabic and IsArabic, C# does IsGreek, C# seems better</p>
+<p>MF: blocks and scripts can conflict</p>
+<p>YK: ruby has is “arabic”</p>
+<p>YK: ruby \p === script \P is negated</p>
+<p>DE: its possible ruby doesn’t support blocks</p>
+<p>YK: its possible</p>
+<p>BT: implementation concern, loading block/scripts may cause excess memory pressure.</p>
+<p>BT: i dont have a sense for how much.</p>
+<p>SP: is the memory pressure fatal, is it impossible to pay it pay as you go?</p>
+<p>BT: we would love to implement it that way, but that is work that must be done.</p>
+<p>BT: I don’t think this is fatal, but we should consider it</p>
+<p>WH: how many?</p>
+<p>BT: ~20 scripts, ~30 blocks, ~60Catogories</p>
+<p>MF: could we use FooScript, instead if IsFoo in InFoo</p>
+<p>BT: there is both a arabic script and arabic block</p>
+<p>DE: yes</p>
+<p>BT: we should avoid was C# does</p>
+<p>DE: unicode would in theory prevent a naming collision here (script/arabic)</p>
+<p>YK: … ruby only has scripts</p>
+<p>SP: can we clarify category</p>
+<p>DD: editorial information</p>
+<p>BT: category data is in all the unicode data tables</p>
+<p>DE: sounds like a quirk of the written spec, likely “Weak language”</p>
+<p>BT: should we choose script vs blocks</p>
+<p>BT: blocks contain slots of future usage</p>
+<p>BT: script has no future slots</p>
+<p>DE: its cheaper to check if a char is in a block, then in a script</p>
+<p>YK: we should likely investigate</p>
+<p>DD: deciding factor is, will implementors carry the burdon</p>
+<p>BT: so you would like to have both, assuming implementers accept the burdon</p>
+<p>DD: yes</p>
+<p>DE: the Intl Object already brings this along. Can we take that into account?</p>
+<p>YK: what is the usability with only blocks</p>
+<p>BT: You can’t write a RegExp in a future proof way</p>
+<p>YK: are there strings that contain things in them, and now they cannot be matched against</p>
+<p>BT: if my design is to match only arabic  characters, without blocks is tricky</p>
+<p>BT: e.g. does a user, writing a unicode aware RegExp do we want future characters to be taken into account</p>
+<p>YK: in what case would this be highly important</p>
+<p>DE: what doesC# do</p>
+<p>BT: it has arabic === script, inArabic == block</p>
+<p>DE: this seems most appropriate</p>
+<p>DE: expose expert feature of blocks, but encourage scripts</p>
+<p>DD: there are things in scripts that aren’t in blocks</p>
+<p>DD: seems to be missing symbols</p>
+<p>BT: category + script should cover this</p>
+<p>AK: it sounds like for stage 0, we should defer to C#, and gain more context over time,</p>
+<p>DD: We should consider being a subset of C#</p>
+<p>YK: It is not obvious that the C# choice appropriate for us, our startup constraints are pretty high.</p>
+<p>BT: In reality, there should not be startup cost (for chakra), unless such a RegExp is used.</p>
+<p>BT: the first time we load Intl, it startup time takes a hit</p>
+<p>YK: I am happy with stage 0, i think there are design choices that are not just implementation</p>
+<p>WH: Given how few scripts there are and given that a script is mostly a small number of consecutive ranges, estimate that script tables are a few kilobytes. Doesn’t seem like a lot to obsess over trying to optimize.</p>
+<p>WH: A different issue not raised yet: Some unicode characters have the “inherited” script setting, which means that they’re chameleons: their script is inherited from the script of nearby characters in whatever string they’re embedded in. How would regular expressions deal with those?</p>
+<p>DE: from combing marks</p>
+<p>YK: seems reasonable</p>
+<p>BT: how will that handle the</p>
+<p>… missed some stuff</p>
+<p>BT: how do other RegExp engines handle this</p>
+<p>MF: should this be allowed inside char classes</p>
+<p>BT: I would like to, it seems handy</p>
+<p>MK: small syntax suggestion \p matches a p according to spec. Implementations agree on that, we are not aware of usage… \u does not have this, can we change \p to \u.</p>
+<p>DD: it does mean literal u in non-unicode RegExp</p>
+<p>… music from next door disrupts flow …</p>
+<p>BT: precedence wins, unless \p is not compatible with the web.</p>
+<p>YK: both are fine, \u is extremely nice. \u flag already means unicode</p>
+<p>BT: so you hope for a compat issue</p>
+<p>YK: confirm</p>
+<p>Wasn’t there another proposal is <code>\uUNICODE_CODE</code></p>
+<p>WH: Are the \p category or block names case-sensitive?</p>
+<p>BT: Yes.</p>
+<p>WH: What about multiword script names? Spaces between words?</p>
+<p>BT: No</p>
+<p>YK: in general RegExp has lots of divergent, would people expect foriegn RegExp work</p>
+<p>BT: C# has a Ecma mode</p>
+<p>DD: we should be careful to not be trolled</p>
+<p>AK: stage 0 likely doesn’t need this level of detail yet</p>
+<p>MF: we should make sure its possible</p>
+<p>BT: I would like to write this up, so more context is better</p>
+<p>WH: We are talking about the substance.</p>
+<p>WH: The place this discussion loses value is when we start debating things in the abstract, such as should we be doing the same thing as Python/Ruby, etc., without that debate being informed by what those languages are actually doing, their advantages/disadvantages/lessons, etc.</p>
+<p>BT: ok, i guess in-order to break the deadlock. It would be useful regardless, what the compat story with escapes is.</p>
+<p>BT: im going to proceed with \p, and see how the compat story shakes out</p>
+<p>BT: this does not mean we can’t change</p>
+<p>BT: we have much data, that can be analized.</p>
+<p>BT: we should do the Other RegExp item, because Alan will call in. With slides</p>
+<p>… stepped out
+… ambient music from next door</p>
+<a href="#awb-summarizes-some-oo-concepts"><h2 id="awb-summarizes-some-oo-concepts">AWB: Summarizes some OO Concepts</h2></a><p>BT: we accept the shared vocabulary</p>
+<p>AWB: RegExp has an abstract base and a concerete base</p>
+<p>AWB: the public interface that it exposes, exec/split etc… essentially all the methods on the interface. No methods to provide a subclass interface, it is important \w match &amp; replace that any class that provides those methods be a subclass of a RegExp Object. The String object was restructed in es6, so it works with any object with that implement. RegExp has a subclass interface, and it is exec. This is very intentional, 1 kernel method is required and a subclass works. By implementing this one concrete method, the abstract algos will work.</p>
+<p>AWB: exec shows up in many places, public interface, key kernel method for subclass interface, and depends on the internal matcher algorithim.</p>
+<p>WH: How does an implementation, that does boyer moore searching work in this case.</p>
+<p>AWB: Let me rephrase, what if a subclass (or baseclass) wants to change or refine its search algorithim</p>
+<p>WH: or what if the built-in wants to change/mature the algorithim</p>
+<p>AWB: Whatever algorithim an implementation wants to use, the algo must confirm to the observable behavior defined in the spec.</p>
+<p>WH: the spec may be over constraining this, which is what we are looking at</p>
+<p>AWB: we should then look at the search algorithim and see where that is</p>
+<p>AWB: the actual algo defined, are essentially the same algo in ES5 spec</p>
+<p>DE: While that true, before ES6 I believe it was not observable to skip indexes. Unfortunately, now it is observable.</p>
+<p>AK: I believe there are some changes we could make, that would loosen this, and likely improve some performance. There is a bug in the spec that causes multiple lookups of exec in a loop; those should be factored outside the loop.</p>
+<p>YK: Can I ask a question about observability</p>
+<p>YK: Are your worried that subclass should be able to participate in boyer moor algo</p>
+<p>DE: Lets here AWB full summary</p>
+<p>AWB: Extension strategy, someone could implement a total replacement of the public interface using whatever algo they want. As long as the public interface is implemented correctly, it should work. This is possible, but likely more work then its worth. What is likely common, is a subclass that provides some minor extensions, and defers the vast complexity to the ancetors. For example, an exec method that logs. Or a scheme for memoization Relatively simple things, some construction time modifications. Etc… Which all should utilize the built-in matcher algo, calling super to exec. All the abstract algorithims should work correctly, and all the abstract algorithims and concrete interfaces should work.</p>
+<p>AWB: Another subclass, a more ambitious one which extends the built in algorithim. LIkely requiring exec and constructor overriding. You <strong>may</strong> need to override some of the other public interface.</p>
+<p>AWB: These where extension styles that we took into account when designed, any questions?</p>
+<p>WH: lets go back to the boyer moor algo example, if an implementation wants to use boyer moor it would be observable</p>
+<p>AWB: in earlier additions of ES, the algos where concrete(not abstract) and they called specific internal algorithims. In ES6, this was exposed as exec. In the past, you have exploited the knowledge to accomplish an optimization.</p>
+<p>AWB: Is that right?</p>
+<p>WH: yes, my comment is exec is too small of a kernal</p>
+<p>AWB: You can still do that. (explains an possible solution)</p>
+<p>WH: You will end up falling off a performance cliff, when following the second extension strategy on your slides</p>
+<p>AWB: Thats fine, i don’t expect such subclasses to have the same performance characteristics. If they want the performance, they can re-implement</p>
+<p>DE: that sounds like a big task for a subclass</p>
+<p>AWB: that is unfortunate, that subclasses cannot benefit from existing platform optimizations</p>
+<p>DE: to give more context. JHD is working on the ES6 shim and ran into some issues</p>
+<p>DD: multi inheritance</p>
+<p>YK: decorators etc..</p>
+<p>DE: RegExp &gt; RegExpShim &gt; UserLandRegExp subclass</p>
+<p>AWB: let me move, on i speak to something related</p>
+<p>AWB: I had heard there was misunderstanding of the original design. I want to be sure we have a common design</p>
+<p>AWB: The boyer moor example doesn’t invalidate my current thinking.</p>
+<p>AWB: Lets talk about what is an extension point, search/replace/match/split  i dont consider those extension points. They are just methods that <em>may</em> have alt implementatinos, they are just refinements of the kernel</p>
+<p>AWB: I suspect no-one is expecting those.</p>
+<p>AWB: @@ infront of the name, is abit distracting to me they are just public interfaces.</p>
+<p>DE: should i explain why i wrote the slide that way</p>
+<p>AWB: yes</p>
+<p>DE: another way the spec could habe been written</p>
+<p>AWB: it wasn’t written another way</p>
+<p>DE: well, another can currently implement the. <code>String.prototype.replace</code> could have provided this.</p>
+<p>AWB: i intentionally did not follow that design path, to leave open the design to allow subclasses to extend and optimize (how we spoke about here)</p>
+<p>AWB: if the entire abstract algorithim is in strings, we have coupled it to the class hierarchy rather then the interace. Which is just bad design</p>
+<p>DE: i see you point</p>
+<p>AWB: bug but easy to fix, the internal slots that are used to store the flag are part of the concrete built-in implementations The actual matcher algo, is only intended to access the internal slots. Part of what is going on here, in previous spec, these flags where readOnly nonconfigurable own instance property. Unfortunately, the annex B compile method specifying them the way it did violated this. As compile could change them…</p>
+<p>AWB: we had to add the accessor methods, to RegExp to explain the observable semantics across compile calls. Another way to look at it, was accessors are part of the public interface… I believe i classified them as part of the public interface. So those can be overriden by subclasses for there own purposes. When you get down to matches they should use the internal slot. So simple bug, we can fix that.</p>
+<p>DE: if we where to make a tweak with flags, <code>RegExp.prototype[@@split]</code> uses the flags accessor, instead of looking at individual flags, which is not great…</p>
+<p>AWB: we can look at that later</p>
+<p>AWB: when I look a the code, i can see the source of the the bug, The ES5 code did a get, and it wasn’t changed. So faulty refactoring. Not a big deal.</p>
+<p>AWB: calling RegExpBuiltinExec directly would require too much work from subclassers</p>
+<p>DE: I see your point</p>
+<p>AWB: regardless of what you did, your saying that the methodof the regex is not extensible. You might be able to provide an alternative implementation that is more extensive, but the object we are used to is not.</p>
+<p>WH: I withdraw my concerns because the @@ algorithms are basically thin wrappers over exec. Modifying exec is sufficient to do Boyer-Moore.</p>
+<p>DE: there are additional performance considerations</p>
+<p>AWB: I know a better way, we can talk about it.</p>
+<p>AWB: it is very important, we didn’t intend to make change to the existing algorithims. My assertion is with some relatively simple guards, you can’t continue to use the existing implementations. The guards should be similar or the same to existing guards. e.g. is the prototype a built-in or subclass, these seems reasonable. If there are unintentional spec changes that prevent this, we should correct.</p>
+<p>DE: you could imagine, users mutating the builtin RegExp (Adding props etc), for these use-cases more detailed guards are required. Cross platform guards may differ, making it hard for users to get good performance</p>
+<p>BE: DE is saying, there “may” be issues, i want to know what concrete is hard for V8 to do. I would like to hear from other implementors aswell</p>
+<p>AWB: exactly my question, it doesn’t sounds dissimilar to other tricks</p>
+<p>DE: we have tricks similar to this in Arrays, we could potentially do them here, or something similar to that.</p>
+<p>DE: this wouldn’t be an absolute blocker, it wouldn’t make it extremely bad</p>
+<p>BE: what about apple</p>
+<p>M: ya</p>
+<p>DE: concerns with overall system complexity</p>
+<p>M: another engineer has implemented this in JSC, he had to put some checks in to see or not if these are overriden. 1 guard upfront. The above flag issue would be good. He couldn’t find any big issues, other then extremely targetted benchmarks (single character matches etc) where it was demonstratably slower.</p>
+<p>BE: any chakra experience</p>
+<p>BT: I spoke to [a developer] about it. We were concerned that the exec function may make us recompile patterns in some cases. It could be addressed by making a new kernel method exec (maybe symbol) that takes lastIndex and flags as a param. split has to make a copy of the regexp to work around that.</p>
+<p>BT: we haven’t really dug in yet.</p>
+<p>AWB: when looking at it from kernal method extensiblity. It didn’t really add any additional flexibilty. It seemed to add more complexity and an additional level of indirection.</p>
+<p>AWB: I am still inclined to prefer the latest design.</p>
+<p>JHD: doing what you suggested (lastIndex related global), would help the matchAll proposal.</p>
+<p>…</p>
+<p>AWB: (couldn’t understand)</p>
+<p>DE: I wanted to say something else, although others can v8 will likely have to rely on the more brittle guard.</p>
+<p>AWB: (couldn’t understand)</p>
+<p>DE: it would be nice to cleanup.</p>
+<p>further changes on slide deck</p>
+<p>AWB: my bias is that, this complexity should be absorbed by the runtime. It shouldn’t be pushed to ES consumers</p>
+<p>AWB: I don’t know the details of your framework. This ES6 feature has been described using OO best practices, the runtimes should be able to reasonably implement.</p>
+<p>YK: I wanted to provide some histroical context from ruby. I also believe Smalltalk is similar, subclassing built-ins. Most people in ruby feel this was a mistake, kernel methods would have been more handy.</p>
+<p>YK: For example Rails re-implements Hash to support string/symbol interopt, this ended up with 200 loc etc.</p>
+<p>YK: it is true, userland can do the work, but system + userland get out of sync, and it is unfortunate</p>
+<p>YK: rubinious even added a hook hash.store to deal with the issue.</p>
+<p>AWB: the original small talk implementations were the result of people not yet being aware of these problems. Lots of coupling</p>
+<p>AWB: …there is a right way, and a wrong way.</p>
+<p>AWB: my conclusion, I don’t think we need a re-design. There are some small fixes and tweaks.</p>
+<p>JHD: Symbol.exec, i would gladly work on it with you AWB</p>
+<p>BE: A functionally pure kernel would be great.</p>
+<p>AWB: one reason i didn’t go that way, is due to some hesitation do to adding additional @@ methods.</p>
+<a href="#conclusionresolution-awb-summarizes-some-oo-concepts"><h4 id="conclusionresolution-awb-summarizes-some-oo-concepts">Conclusion/Resolution</h4></a><ul>
+<li>no major change</li>
+<li>DE/AWB will make minor changes + tweaks</li>
+<li>AWB/JHD to investigate Symbol.exec + a pure functional exec kernel</li>
+</ul>
+<p>DE: TypedArray proxy issue (from Andreas Rossberg)</p>
+<p>AWB: What if we just made an internal algorithm to do the construction, and call it from each TypedArray constructor directly, rather than having a super constructor and proto chain walk?</p>
+<p>DE, AK, BT, MM: Perfect!</p>
+<p>Resolution: Rephrase spec, a pull request for this is welcome</p>
+<p>AK: while we have you, im curious re: typedArrays and stuff that changed during ES6</p>
+<p>AK: imagine Reflect.constructor on a built-in like number, passing your own new target. There is this problem, that some of the built-in constructors have side-affects before they pull the prototype off the new topic. This yields to some wierdness</p>
+<p>AK: Will file a separate issue for this concern</p>
+<p>BT: other issues for AWB while we have him?</p>
+<p>KS:</p>
+<a href="#conclusionresolution-awb-summarizes-some-oo-concepts"><h4 id="conclusionresolution-awb-summarizes-some-oo-concepts">Conclusion/Resolution</h4></a><ul>
+<li>%TypedArray% constructor is directly called rather than having a super constructor and a proto chain walk</li>
+</ul>
+<a href="#improving-consistency-of-species"><h2 id="improving-consistency-of-species">Improving consistency of @@species</h2></a><p>(Kevin Smith)</p>
+<p>KS: on map and set, they are not used in the spec themselves, But subclasses should be able to override</p>
+<p>KS: usage patterns, instance methods, that want to return related subclass.</p>
+<p>KS: Promise.all and Promise.race are the only ones that use this</p>
+<p>YK: race/all are combinators Array.from is a custom constructors:</p>
+<p>KS: it would be good to define what the usage patterns are</p>
+<p>AWB: ..</p>
+<p>DD: I disagree, resolve/all/race is more “casting” and species should not be used.</p>
+<p>AWB: I agree the return value should be using species, as the user is specifying.</p>
+<p>DD: the argument values can be anything, and they are to be cast to the RacePromise</p>
+<p>AWB: but why</p>
+<p>DD: an example …Could be… CancellablePromise.race(arrayOfMiscPromises) likely wants cast its input.</p>
+<p>YK: those examples are dubious</p>
+<p>SP: lets us InstrumentedPromise as an example</p>
+<p>DD: ok lets use that one, InstrumentedPromise.all(mixOfPromises) casts all inputs to InstrumentPromises</p>
+<p>DD: auto-casting is the intent.</p>
+<p>AWB: that works great for the case, where you want to cast</p>
+<p>AWB: but it breaks the case where you don’t.</p>
+<p>DD: I believe it was a mistake, likely my own mis-understanding. I don’t believe it makes sense.</p>
+<p>DE: zepto took a literal array that and swaped out its constructor. If that was new’d it wouldn’t work. <code>Array['@@species']</code> create, has two checks. this.constructor if thats not an object, it goes back to the default <code>ArrayCreate['@@species']</code> of fallback. The critical original issues (based on the notes) was WebCompat</p>
+<p>YK: @@species has another precednt</p>
+<p>DD: A solution was needed, this pattern appealed to others. I believe it was misused, and misunderstood.</p>
+<p>DD: it expressed a use-case for arrays, that are hypothetically use-full.</p>
+<p>AWB: avoid nodelist instead get an array out of it.</p>
+<p>KS: I would prefer, i would not want to argue removing it. I would like understand how it ought to be used.</p>
+<p>YK: why is it on map/set</p>
+<p>AWB: someone argued it should be for the future, for example adding filter/map</p>
+<p>AWB: if we wanted to provide filter to math, a subclass to math. This would allow them to change species</p>
+<p>YK: we should add it on-demand.</p>
+<p>DD: we should move away from @@species on the promise constructor</p>
+<p>DD: we should discover a future strategy. <code>Function.prototype['@@species'] = this</code></p>
+<p>AWB: not sure why we didn’t think about this sooner</p>
+<p>DH: whats the best next step for a change like that</p>
+<p>YK/DD: PR</p>
+<p>DH: should I file a bug if i don’t have time</p>
+<p>DD/KS: bug</p>
+<p>YK: should we remove it from map</p>
+<p>DD: lets remove it from everything, and put it on <code>Function.prototype['@@species'] = this;</code></p>
+<p>AWB: it was added for array instance extensibility.</p>
+<p>DD: that would break zepto</p>
+<p>DE: <code>Object.__proto__</code> is <code>Function.prototype</code>, which have a species returning this, which breaks the web.</p>
+<p>KS: it seems like the cascade of missing species will break things.</p>
+<p>DE: we could erase species create, is the species of the constructor object, if it is fallback. Then species does what I wants to do.</p>
+<p>YK: I believe <code>Function.prototype</code> behind right about <code>Object.__proto__</code> is unfortunate.</p>
+<p>DD: i see two paths forward,</p>
+<ol>
+<li>investigate <code>Function.prototype['@@species']</code></li>
+<li>Map and Set shouldn’t have it, we should add it on-demand.</li>
+</ol>
+<p>DD: we can work out the details offline</p>
+<p>AWB: I know from email threads, we should factor in the DOM design.</p>
+<p>DD: many scenarios to flesh out.</p>
+<p>AWB: API level support would be interesting</p>
+<p>everyone: himm?</p>
+<p>AWB: for example, filter some collection, give the power to the caller.</p>
+<p>DD: shifting the burden on the user seems unfortunate.</p>
+<p>YK: filter species feels good, map feels back. mapping a nodelist, getting back a nodelist is funky</p>
+<p>DD: ya for this DOM api, it doesn’t seem good</p>
+<p>DD: it feels good for like, OrderedCollection from small talk</p>
+<p>DE: this pattern works in several scenarios</p>
+<p>BT: summarize?</p>
+<p>DD: i see two paths forward,</p>
+<ol>
+<li>investigate <code>Function.prototype['@@species']</code></li>
+<li>Map and Set shouldn’t have it, we should add it on-demand, and do no carry it forward.</li>
+</ol>
+<a href="#conclusionresolution-improving-consistency-of-species"><h4 id="conclusionresolution-improving-consistency-of-species">Conclusion/Resolution</h4></a><ul>
+<li>remove <code>@@species</code> handing from <code>Promise.all</code>/<code>Promise.race</code></li>
+<li>no decisions made on other <code>@@species</code> handling</li>
+<li>investigate <code>Function.prototype[Symbol.species]</code></li>
+</ul>
+<a href="#promise-rejection-hooks"><h2 id="promise-rejection-hooks">Promise Rejection Hooks</h2></a><p>BT: discussion on various GH threads, this should be easy.</p>
+<p>BT: the problem is that, proxy enumerate trap iterator is allowed to return w/e it wants.</p>
+<p>YK: symbols are can be enumerable but not as for in key</p>
+<p>BT: currently it can return anything</p>
+<p>BT: first proposal</p>
+<ol>
+<li>error for non string return</li>
+<li>coerce to string</li>
+</ol>
+<p>BT: proposes errata thrown error if non-strings are returned</p>
+<p>MM: is there a precedent  for this?</p>
+<p>BT: Other places where invariants are violated, we throw</p>
+<p>DD: can non descriptors be returned from the descriptor</p>
+<p>MM: no, we fixed that.</p>
+<p>DD: promise rejection handlers</p>
+<p>…</p>
+<p>MM: there is another defactor standard for JS (both node and browser) and sort fits in the same general area of purpose is console</p>
+<p>MM: console is interesting, the writing to console is exposed to JS, but the visibility is platform specific.</p>
+<p>MM: the kind of diagnostics seem to related</p>
+<p>DD: this is also meant as a way for programmers to report back to the server (for example)</p>
+<p>MM: the console can show the traceback</p>
+<p>MM: this feature is used as a programmer to find bugs, it is diagnostic. And should be gather only by code that has authority.</p>
+<p>DD: a good debugging/diagnostics proposal sounds reasonable in the future</p>
+<p>BT: improving the layering of HTML + ecma, to improve the boundaries are (internal slots, and abstract algorithims)</p>
+<p>BT: how much scrutiney should this sort of work get?</p>
+<p>DD: these sorts of changes already exist</p>
+<p>MM: I would prefer such things brought to the group.</p>
+<p>YK: it seems like we need some healthy interop between the various groups, so if webcrypto wants to add some concepts. It should be part of some inter group discussion</p>
+<p>MM: should it go through the group before it can advance outside</p>
+<p>MM: clearly the web will advance without</p>
+<p>MM: being notified early is important</p>
+<p>YK: I agree</p>
+<p>BT: should likely be an editor discretion. With github, changes are public and watchable.</p>
+<p>YK: a small process may solve, for example. The editor of a given group tags changes as potentially relevant.</p>
+<p>BT: bi-weekly changelog, with highlights called out. Grouped sections, to draw attention to various interested parties.</p>
+<a href="#conclusionresolution-promise-rejection-hooks"><h4 id="conclusionresolution-promise-rejection-hooks">Conclusion/Resolution</h4></a><ul>
+<li>promise rejection hooks are in</li>
+<li>editor may apply own discretion on further “implementation hook” proposals</li>
+<li></li>
+</ul>
+<a href="#proposal-repos-and-where-they-live--editor-update"><h2 id="proposal-repos-and-where-they-live--editor-update">Proposal Repos, and where they live + editor update</h2></a><p>BT: for people not watching the spec, let me show you what we have.</p>
+<p>BT: we have a permanently bleeding edge spec at <a href="http://tc39.github.io/ecma262/">http://tc39.github.io/ecma262/</a></p>
+<p>BT: more people using it the more bugs we can fix</p>
+<p>BT: we have a nice fuzzy searching table of contents</p>
+<p>BT: find all references (when clicking on various identifiers)</p>
+<p>BT: …</p>
+<p>SP: We can tweet every release</p>
+<p>DD: who controls @tc39</p>
+<p>JHD: I believe i gave that to DH</p>
+<p>DH: I believe i have it</p>
+<p>MM: what happened to the wiki, we should get it back</p>
+<p>YK: finding historical references etc.</p>
+<p>DH: I will try to convince mozilla ops to get it back up</p>
+<p>BT: I tried once</p>
+<p>DH: I will ask them</p>
+<p>…</p>
+<p>BT: I will provide the bi-weekly callouts, but wont come to each meeting with the delta</p>
+<p>YK: It is reasonable for others to keep up to date online, and be prepared for the next release</p>
+<p>BT: it would be nice if everything under the tc39 org is going to be archived in some way that ecma likes</p>
+<p>BT: stage 1 approval (entry critera) that the repo be on the ecma</p>
+<p>BT: but stage 0 is lost</p>
+<p>SP: we can move the repo</p>
+<p>BT: great, but moving the GH pages redirection seems to fail post move</p>
+<p>JHD: creating a new repo on the old location allows a manual gh-pages redirect, but breaks the automatic repo redirect, so please don’t do that</p>
+<p>YK: I will ask if there is a good reason for that.</p>
+<p>BT: many have stage 1+ that are not on tc39 org yet</p>
+<p>BT: it seems like there are several steps, may be labourious.</p>
+<p>BT: lets talk to istvan and see if we can give everyone owners</p>
+<p>BT: stage 1+ email me, and we will work on the repo transfer.</p>
+<p>SP: editor doing this, acts as a good filter.</p>
+<p>DE: Proxy Implementation for in issues</p>
+<a href="#conclusionresolution-proposal-repos-and-where-they-live--editor-update"><h4 id="conclusionresolution-proposal-repos-and-where-they-live--editor-update">Conclusion/Resolution</h4></a><ul>
+<li>any stage 1 or above proposal repos must be transferred to the TC39 org, as a stage 1 entry requirement</li>
+</ul>
+<a href="#trailing-commas-in-function-parameter-lists"><h2 id="trailing-commas-in-function-parameter-lists">Trailing commas in function parameter lists</h2></a><p>(Jeff Morrison)</p>
+<p>JM: stage 3?</p>
+<p>AK: does this cause problems with arrow functions</p>
+<p>BT: it may increase the complexity of parsing</p>
+<p>BT: i believe the spider monkey folks had thoughts, but I don’t know why</p>
+<p>DH: does you spec include handling of sequence expression grammar</p>
+<p>JM: no</p>
+<p>DH: then it doesn’t seem good</p>
+<p>JM: spec doesn’t have trailing commas in arrow function</p>
+<p>…</p>
+<p>JM: ok I will add arrows (pending stage 3)</p>
+<p>DD: stage 3 tomorrow?</p>
+<p>JM: yes</p>
+<a href="#conclusionresolution-trailing-commas-in-function-parameter-lists"><h4 id="conclusionresolution-trailing-commas-in-function-parameter-lists">Conclusion/Resolution</h4></a><ul>
+<li>hopefully stage 3 tomorrow after arrows are added</li>
+</ul>
+<a href="#proxy-enumerate-ocerconstrains-implementations-ak"><h2 id="proxy-enumerate-ocerconstrains-implementations-ak">Proxy [[Enumerate]] ocerconstrains implementations (AK)</h2></a><p><a href="https://github.com/tc39/ecma262/issues/161">https://github.com/tc39/ecma262/issues/161</a></p>
+<p>AK: proxies have an enumerate trap, the worry is (from us implementors) must call next at specific times. Which causes some concerns, it seems like something is underspecified…</p>
+<p>DH:</p>
+<p>AK: we want to leave it up to the implementation to eagerly fetch the keys, regardless of proxy</p>
+<p>BT: To summarize: if i am enumerating a proxy, we cannot pre-collect the keys because the call to the next is observable.</p>
+<p>BT: spreading before the loop, may have issues</p>
+<p>JHD: proxies with infinite enumeration wouldn’t work then?</p>
+<p>JHD: something like an iterator that iterators for 5 minutes and stops. (laziness)</p>
+<p>BT: …</p>
+<p>YK: Can we move from loosening, to changing to the usage to what the implementations want.</p>
+<p>YK: for example, changing the spec ahead of time</p>
+<p>YK: proxies can observe, IE has some behavior, people get used to it. If collect seems like the right thing, we should move that way.</p>
+<p>DE: lots of cross platform differences are already observable here, because for in is under specified.</p>
+<p>BT: YK I believe that will be safe from a compat standpoint</p>
+<p>BT: I would be surprised if the enumerate trap is being used</p>
+<p>YK: i believe a delegating exotic will want it.</p>
+<p>BT: only the for in code</p>
+<p>DD: for app code, unlikely</p>
+<p>YK: agree</p>
+<p>YK: its the copying protocol</p>
+<p>BT: it seems unlikely that is is an issue, we can safely make the change</p>
+<p>BT: If not, maybe we can leave it under specified?</p>
+<p>YK: I feel MM should care we shouldn’t under specify</p>
+<p>MM: we should have deterministic specs, remember our target audience is many web programmers for many websites. Reproducible behavior is important for this environment</p>
+<a href="#conclusionresolution-proxy-enumerate-ocerconstrains-implementations-ak"><h4 id="conclusionresolution-proxy-enumerate-ocerconstrains-implementations-ak">Conclusion/Resolution</h4></a><ul>
+<li>specify that [[Enumerate]] spreads before entering the loop <a href="https://github.com/tc39/ecma262/issues/161#issuecomment-157910543">https://github.com/tc39/ecma262/issues/161#issuecomment-157910543</a></li>
+<li>the committee would not agree to underspecified behavior</li>
+<li>there is a compat risk for Chakra but the assumption is that it’s not a problem until there’s data saying so</li>
+</ul>
+<a href="#functionsent-bt"><h2 id="functionsent-bt">Function.sent (BT)</h2></a><p>BT: its in babel</p>
+<p>DE: did you add internal slots</p>
+<a href="#conclusionresolution-functionsent-bt"><h4 id="conclusionresolution-functionsent-bt">Conclusion/Resolution</h4></a><ul>
+<li>deferred till tomorrow…</li>
+</ul>
+<a href="#async-await"><h3 id="async-await">Async Await</h3></a><p>BT: I did not finish the tests, but noticed some troubling things. IE ships AsyncFunction, I believe we should actually not do this</p>
+<p>SP: im curious why</p>
+<p>BT: unsure, MM?</p>
+<p>MM: these is no reason to give it a global name</p>
+<p>DD: TC39 believes the global isn’t a mess already</p>
+<p>MM: well, because of this, we should take extra care. We should not contribute to the problem</p>
+<p>MM: we discussed that modules will be a mechanism for us to prevent additional pollution.</p>
+<p>YK: yes its a risk, modules are a way out of this.</p>
+<p>MM: GeneratorFunction is not shipped, SES also wants to splice it out. Lets stay with the precedent</p>
+<p>MM: ES5 added a new global called JSON, this causes grief. Facebook had such a global,</p>
+<p>DD: Ok</p>
+<p>BT: does the fact that Edge not ship <code>%AsyncFunction.prototype%</code> at all (that <code>Object.getPrototypeOf(async function () {}) === Function.prototype</code> and should not) mean we need to wait on stage 4?</p>
+<p>(lots of discussion about whether global topology should block stage 4)</p>
+<p>…</p>
+<p>MM: for in order is different we might revert</p>
+<p>AK: is this demonstrating a problem with that staging process</p>
+<p>YK: yes</p>
+<p>AK: im talking on behave a process</p>
+<p>YK: there is a well known process, feature flags. They have a cost, but the benefit improves the integration process</p>
+<p>MM: what is it</p>
+<p>YK: isolate chunks of code (markup) that is isolated, interim work can take advantage of this.</p>
+<p>AK: the spec is too big</p>
+<p>YK: what will happen in practice, if AsyncFunction is present. Related work will be able to take into account. There is cost associated for sure.</p>
+<p>MM: there is an existing cost today, FF has an additional cost.</p>
+<p>AK: …</p>
+<p>BT: I asked the question, because I want to decide how to allocate my time tonight. I didn’t want to allocate the time, if the already presented issues blocked anyways.</p>
+<p>AK: I’ll take your word the “cost” is trivial</p>
+<p>BT: As an implementor, I need to frontload the work that the group feels appropriate</p>
+<p>DE: it would be optimal to have high quality tests, if there are issues / failing tests we can and judge the risk associated.</p>
+<p>… deciding core semantics …</p>
+<p>BT: 95% confidence interval on “core concepts” or tests related to non-trivial changes. Or issues unrelated to performance/stability.</p>
+<p>MM: populate visible primordials must be populated</p>
+<p>BT: this is a hard conversion to have</p>
+<p>BT: i will report back after tonights</p>
+<p>DE: various contextual s keywords in edge cases, may have unforeseen complexity. I would like to have this considered a core semantics.</p>
+<p>SP: risk of shipping, with bugs vs risk of lacking feedback from shipping</p>
+<p>BT: its a risk forsure</p>
+<p>AK: That is a good reason why multiple implementations are good, as it they will hope to have overlapping bugs</p>
+<a href="#conclusionresolution-functionsent-bt"><h4 id="conclusionresolution-functionsent-bt">Conclusion/Resolution</h4></a><ul>
+<li>do not add GeneratorFunction or AsyncFunction constructors to the global object</li>
+</ul>
+
+</body>

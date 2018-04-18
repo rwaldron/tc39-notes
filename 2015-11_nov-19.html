@@ -1,0 +1,551 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 19, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-19-2015-meeting-notes"><h1 id="november-19-2015-meeting-notes">November 19, 2015 Meeting Notes</h1></a><hr>
+<p>Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Stefan Penner (SP), Sebastian McKenzie (SMK), Waldemar Horwat (WH), Mark S. Miller (MM), Paul Leathers (PL), Georg Neis (GN), Sebastian Markbåge (SM), Zibi Braniecki (ZB)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>YK: i wont be giving my full presentation this time, I will provide a short update.</p>
+<p>YK: i plan to work with somepeople like dan, and evolve it</p>
+<p>YK: There was some concerns with adding free floating APIs for decorators, what we are going with (right now) is a mirror that decorators have access to, during the time that they are run.</p>
+<p>YK: this based on input from several different parties, type checkers implementors etc.</p>
+<p>DE: KS on private state</p>
+<p>YK: KS has been working on, private methods/functions</p>
+<a href="#observables-jh"><h2 id="observables-jh">Observables (JH)</h2></a><p>JH: proposals are at a reasonable mature state now, lots of iteration and evolution.</p>
+<p>BT hand delivers coffee to JH</p>
+<p>JH: current state of the proposal, is largely unchained since last time</p>
+<p>JH: we have moved away from the generator interface, partly do to ergonomics</p>
+<p>JH: return /complete confusion</p>
+<p>JH: composing generators + observables leads to some issues, so we took an adaptive path</p>
+<p>JH: a similar APi, with some changes</p>
+<p>JH: sync subscribe and sync unsubscribe, to prevent</p>
+<p>DD: Symbol.observable that does return this, caught me off</p>
+<p>YK: is the start method related to priming, or is unrelated</p>
+<p>JH: unrelated, start method drives the subscription</p>
+<p>JH: DD</p>
+<p>DD: there is no more Symbol.observe</p>
+<p>JH: oh, thank you</p>
+<p>WH: What are the question marks for after some of the methods in the Observer interface?</p>
+<p>JH: Those are optional</p>
+<p>WH: But the ones without question marks are optional too.</p>
+<p>JH: [Removes question marks from slide]</p>
+<p>WH: After an Observer receives an error or complete call, can it receive any other call?</p>
+<p>JH: No</p>
+<p>WH: What can happen while Observable.subscribe is running? Can the observation run and complete?</p>
+<p>JH: Yes</p>
+<p>MF: doesn’t a subscription unsubscribe need to take some…</p>
+<p>DD: no it doesn’t atleast not in the readonme</p>
+<p>MF: what if it wasn’t successful</p>
+<p>JH: we will talk about that shortly</p>
+<p>JH: …</p>
+<p>JH: reviews existing behavior (if anyone caught that, jump in)</p>
+<p>…</p>
+<p>WH: What is Observable.forEach?</p>
+<p>DD: what is forEach, it is an attempt to make it ergonomimc</p>
+<p>SP: is forEach being async, a hazard</p>
+<p>DD: I think, this is a change we will be seeing more.</p>
+<p>DD: an async taxonomy would be unfortunate</p>
+<p>DH: same name, doesn’t mean its the same interface.</p>
+<p>SP: so this is the start</p>
+<p>YK: start with promises, API evolves. This becomes async loops, which is natural.</p>
+<p>DD: its not really clear cut</p>
+<p>DD: one thing that catches me, where is the second thisArg to forEach.</p>
+<p>YK: its bad in async situations, thisArg entangles the lifetime</p>
+<p>DD: other constructs do already</p>
+<p>… it returns a promise</p>
+<p>JH: yes</p>
+<p>WH: Is it possible for a next to be called re-entrantly (i.e. an Observer receive a next call from within a next callback)?</p>
+<p>JH: We don’t want to allow that, but I don’t believe the spec currently guards against this</p>
+<p>JH: wk you brought this up yesterday with kevin</p>
+<p>YK: yes, a loop re-entering during iteration, seems fatal</p>
+<p>YK: in the middle of a block, jumping to the top of the block is unexpected</p>
+<p>DD: yes in a for loop, run to completion invariant should not be broken</p>
+<p>YK: if the observable has no buffering, this will just happen</p>
+<p>YK goes to write out an example.</p>
+<p>YK: i’ll assume some async for of syntax.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> { producer, consumer } = …;
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span>  (<span class="hljs-keyword">let</span> item <span class="hljs-keyword">of</span> consumer) {
+    producer.next(value)
+}
+</code></pre>
+<p>YK: there is a producer side &quot;call next&quot; on the consumer you subscribe and receive values. This is a generic statement of async loop constructs.</p>
+<p>YK: in the observable model, consumer is an observable. Producer is an observer.</p>
+<p>JH provides some quick context for some confused about producer/consumer.</p>
+<p>YK: when someone calls next on the producer, without buffering the consumer then producers, and the loop is re-entered.</p>
+<p>MM: is the producer something that calls next? Or something that gets next get called one. Lets be careful to prevent confusion</p>
+<p>YK: there is code that calls next, and code that receives next.</p>
+<p>MM: is the object</p>
+<p>YK: lets reframe</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span>  (<span class="hljs-keyword">let</span> item <span class="hljs-keyword">of</span> observable) {
+    observable.next(value)
+}
+</code></pre>
+<p>…</p>
+<p>JH: this is the classic re-entering problem, buffering is one possible solution</p>
+<p>YK: the problem now, is the observer has no buffer, next is sync. So calling next in the loop will either be dropped, or re-entrant</p>
+<p>MM: this is exactly synchronous plan interference problems</p>
+<p>YK: this is likely worse</p>
+<p>JH: if we had syntax, we would need to schedule</p>
+<p>WH: What do you mean by the synchronous plan interference problem?</p>
+<p>MM: See chapter 13 of <a href="http://erights.org/talks/thesis/markm-thesis.pdf">http://erights.org/talks/thesis/markm-thesis.pdf</a> for explanation of plan interference</p>
+<p>…</p>
+<p>MM: any sync notification will have the plan interference issue</p>
+<p>YK: this is more specific issue</p>
+<p>MM: it is up to the observable, how it deals with the re-entrancy problem.</p>
+<p>YK: unfortunately, it does not realize it is mid for of.</p>
+<p>DH: one obvious know case, is making this an error condition.</p>
+<p>YK: it could also be buffered</p>
+<p>DD: I think making this an AsyncIterable solves the issue</p>
+<p>MM: i believe it is up to the observable to make this choice</p>
+<p>DH: doesn’t there have to be an API for that then?</p>
+<p>YK: you are correct, that is a way the observable can make the differences</p>
+<p>YK: …</p>
+<p>WH: going too fast to track multiple people, lets slow down.</p>
+<p>MM: i don’t believe there is a problem the language needs to solve. It is the responsibility of the observable to deal with this case.</p>
+<p>YK: what happens if the notification does re-enter.</p>
+<p>JH: observables should not be re-entrent, we should schedule and the problem goes away</p>
+<p>YK: is this better solved by AsyncIterable</p>
+<p>DD: no-one has proposed this syntax</p>
+<p>WH: DD, what you’re saying is that this should not be used with async for?</p>
+<p>DE: there is a larger issue, it seems that this is an interlocking issue. We must consider these units has part of a single package.</p>
+<p>YK: DE, i agree with you</p>
+<p>YK: MM, i think you can agree there is design needed here</p>
+<p>MM: when you changed the syntax, I realized i had a confusion. When this is async, the problem goes away</p>
+<p>SP: yes, then the run to completion semantics we expect remain</p>
+<p>YK: i think DE was write, we likely want to add syntax in the future. If we get these primitives wrong, we may block that.</p>
+<p>DD: sorry, i mistated before. I agree</p>
+<p>DE: I agree</p>
+<p>DE: lets have JH continue, and we can continue</p>
+<p>JH: look, we want to look at how this works with AsyncIterator</p>
+<p>JH: i don’t want to propose syntax for this future (now or ever)</p>
+<p>JH: there are issues, there is no natural backpressure. Unsubscribe is the only option, but Unsub and and Sub are no the same as pause.</p>
+<p>JH: previous iterations of the proposal had some support for this.</p>
+<p>JH: we adjusted, because Observable feels like a much better event Target then we have today.</p>
+<p>WH: what happes in this example?</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> item <span class="hljs-keyword">of</span> mousemoves) {
+    <span class="hljs-keyword">await</span> somePromise;
+    mousemoves:next(<span class="hljs-keyword">new</span> MouseMove());
+}
+</code></pre>
+<p>JH: It’s bad.</p>
+<p>WH: I can see that it’s bad. But which particular bad thing happens if someone does this?</p>
+<p>AsyncIterable has a natural way to handle this, as they are more &quot;pull&quot; based. Observable can’t really do this.</p>
+<p>JH: I see Observable as a better event target, no syntax and this problem isn’t an issue.</p>
+<p>YK: should this be a DOM proposal</p>
+<p>DD: it is unclear, it isn’t unclear</p>
+<p>DH: a test, does it make sense in node?</p>
+<p>DD: promises are needed for modules</p>
+<p>YK: promises for modules tiped it this way.</p>
+<p>DD: it is ok if this is the venue.</p>
+<p>WH: So Observable should not be usable in an async for loop?</p>
+<p>JH: Should use this instead:</p>
+<pre><code class="language-js">    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">await</span> observable.forEach(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> {<span class="hljs-built_in">console</span>.log(x);});
+    }
+</code></pre>
+<p>SP: forEach has the same issue as syntax for of, it is re-entrant.</p>
+<p>JH: there are solutions, buffers.</p>
+<p>WH: What happens if someone ignores our advice and uses Obserable in an async for loop?</p>
+<p>JH: It wouldn’t work.</p>
+<p>WH: What about it wouldn’t work? What would be different about the interfaces that would make them not fit?</p>
+<p>JH: example code:</p>
+<pre><code class="language-js">interface AsyncIterator {
+    next(): <span class="hljs-built_in">Promise</span>&lt;IterationResult&gt;
+    <span class="hljs-keyword">throw</span>(): <span class="hljs-built_in">Promise</span>&lt;IterationResult&gt;
+    <span class="hljs-keyword">return</span>(): <span class="hljs-built_in">Promise</span>&lt;IterationResult&gt;
+}
+</code></pre>
+<p>The Promises prevent reentrancy.</p>
+<p>WH: Good. That explains it.</p>
+<p>…</p>
+<p>DH: You’re saying, Observable needs to be synchronous to meet most general needs, but then that causes the re-entrancy issue, inherment to synchrnous callback mechanisms. So it won’t be connected to <code>for await</code>. However, it’d be possible for individual Observables to be connected to async iterators which are connected to syntax.</p>
+<p>… [Discussion of many generic combinators to convert Observables to async iterators]</p>
+<p>YK: Stef raised an issue with forEach EIC protocal, blessed the behaviors.</p>
+<p>YK: there is code in the wild that does the</p>
+<p>DE: it would be great to capture this in the spec</p>
+<p>DH: we have traditionally avoided rationale</p>
+<p>JH: other methods aswell? map/filter/etc</p>
+<p>YK: no, EIC is focused on forEach (i believe)</p>
+<p>YK: I am also disappointed in the abstract, but we actually did this.</p>
+<p>DD: this means we cant used forEach on iterables</p>
+<p>YK: give me a compelling reason</p>
+<p>DD: this wont break</p>
+<p>YK: this will break</p>
+<p>SP: This could retain object graphs, cause different DOM code to be executed</p>
+<p>DD: Some npm packages do use foreach in an async way already. You’re only robust against types that conform to the protocol that you’re implementing</p>
+<p>YK: Using a library together with something could cause it to break</p>
+<p>DD: Making types into observables could be a bad interaction</p>
+<p>YK: Let’s think more carefully about it</p>
+<p>YK: we may want to consider abondoning the EIC protocal</p>
+<p>YK: Every collection has a forEach method, which has the same signature that it gets, so that you can write code which is generic over multiple forEach implementors</p>
+<p>WH: Define EIC.</p>
+<p>DD: forEach((element, index, collection) =&gt; {})</p>
+<p>DD: Why should asynchronicity be considered part of this? The index and collection can be passed in too.</p>
+<p>CM, JM: Why not just use a different name?</p>
+<p>DD: It would be bad for generic code if we had to use a different name.</p>
+<p>JH: Generic code should use the iteration protocol, not .forEach, when feature-testing and doing synchronous iteration</p>
+<p>DD: We’re making a gradual transition towards iteration, so we should be OK breaking the uniformity of forEach. There’s a small window for code to use generic forEach and expect it to be synchronous.</p>
+<p>YK: How could we help figure this out?</p>
+<p>DD: We could market it somehow and get people to switch to the iteration protocol</p>
+<p>YK: I think Domenic’s transitional story is good</p>
+<p>JH: So, should we advance to stage 2?</p>
+<p>YK: Dan had an objection that I agree to. We are nervous about advancing before the syntax is worked out</p>
+<p>DD: We want to have a full story with async iterators and have a single story to present to the web before pushing this forward</p>
+<p>YK: And maybe things won’t fit together if we do it piecewise</p>
+<p>WH: I share that concern</p>
+<p>JH: I think this is well-thought and we do have this all figured out. Kevin has some good drafts</p>
+<p>DD: two seperate proposal is ok, but it seems like they should be combined, advancing together as an async plural proposal</p>
+<p>YK: async loops</p>
+<p>DD: async plural includes the broader idea.</p>
+<p>YK: we should be sure the picture looks cohesive</p>
+<p>BT: what about promises + async Function</p>
+<p>YK: they were presented much earlier</p>
+<p>DE: the process has changed</p>
+<p>YK: expressions are simpler</p>
+<p>BT: likely true, im not saying we shouldn’t advance them as a group</p>
+<p>YK: DD JH and I have been working on this for some time, and it is complex. We feel without maping it out, there may be problems</p>
+<p>YK: Several champion groups, should coalesce into 1</p>
+<p>JH: who is working on these people</p>
+<p>DE: KS is working on it, and it is making progress</p>
+<p>JH: I am concered coupling this proposal</p>
+<p>JH: so we are looking at 6 to 8 months?</p>
+<p>YK: we haven’t..</p>
+<p>BT: We don’t need async Iterable to be at stage 2, to advance observables…</p>
+<p>DD: we are saying, they should be one proposal</p>
+<p>WH: I want to be able to convince myself that the two will play nice together. I don’t care as much how we go about doing that.</p>
+<p>JH: i can provide an adaptation</p>
+<p>YK: the devil is in the defaults</p>
+<p>MF: prior art to refer to</p>
+<p>JH: .net etc. has these two separate protocols that work well together</p>
+<p>YK: devil is in the details, JS !== C#</p>
+<p>DD: I believe they feel as a package, and should be presented together.</p>
+<p>YK: coalesce into 1 champion group, members must be convinced.</p>
+<p>DE: i don’t believe they need to be 1 champion group, they concepts must be cohesive.</p>
+<p>YK: In practice, it sounds like a similar</p>
+<p>M: not advancing, is blocking implementation investigation.</p>
+<p>M: we should likely advance, and block at a later time.</p>
+<p>YK: I think you are misreading the politeness. I believe some feel the observable may need dramatic changes.</p>
+<p>DE: I don’t see why we cant move to stage 1.</p>
+<p>M: its a draft</p>
+<p>YK: we do not have consensus on stage 2 entrance</p>
+<p>M: i think it will langish.</p>
+<p>…</p>
+<p>JH: i believe observation as a pattern is a thing, and has a space in the spec.</p>
+<p>MF: you care only that they overlap</p>
+<p>YK: i believe we should avoid overlap</p>
+<p>MF: so one should not entirely overlap</p>
+<p>YK: I lean in the direction that it is useful</p>
+<p>DD: i also lean in that direction, but have consumes</p>
+<p>JH: I agree with that conclusion</p>
+<a href="#resolution-observables-jh"><h4 id="resolution-observables-jh">Resolution</h4></a><p>No stage 2 for now; let’s see how async iterables turn out</p>
+<a href="#jhd-erroriserror"><h3 id="jhd-erroriserror">JHD Error.isError</h3></a><p>JHD: … brand checking, regardless of toStrings output. Error (and associated subclasses) lacks any internal way. Current done via Object.prototype.toString.</p>
+<p>JHD: Chrome/V8 may have shipped toStringTag</p>
+<p>JHD: Cross realm errors are not currently brand checkable</p>
+<p>DD: This is not useful. We shouldn’t be encouraging brand-check programming</p>
+<p>WH: What about proxies? Is there any way for a proxy to proxy an Error and make it look like an Error?</p>
+<p>YK: internal slots are cannot be trapped by a proxy so this ok.</p>
+<p>MM: This breaks the parallelism with Array.isArray, which recursively looks underneath proxies</p>
+<p>JHD: I’m fine with adding support for the paralleism with Array.isArray</p>
+<p>JHD: motivating reason, determining if a given value should be wrapped or not (to promise rejection)</p>
+<p>YK: ES5 error subclasses wont pass this.</p>
+<p>YK: Array.isArray has motivating code</p>
+<p>DD: We should use instanceof Error</p>
+<p>JHD: But that doesn’t work cross-realm</p>
+<p>DD: A cross-realm Error won’t work. Why do you want to check whether it’s a real error?</p>
+<p>JHD: what motivated Array.isArray</p>
+<p>DD: it shouldn’t have</p>
+<p>YK: Cross realm is not the only issue, node ecosystem (duping in npm) has the same issue</p>
+<p>DE: What does error give you?</p>
+<p>JHD: Stack traces, message property, name property, and people tend to stick other properties for additional payloads</p>
+<p>JHD: seems like there are two objections:</p>
+<ol>
+<li>proxy support (I will make it work)</li>
+<li>“I don’t believe that programming model should be encouraged”</li>
+</ol>
+<p>DH: really really critical use-case for Arrays.isArray, overloading function arguments and array vs non array type requires a very clear case. I don’t believe that use-case comes up for errors.</p>
+<p>YK: JHD did provide this</p>
+<p>JHD: User uses an <code>Error</code> sentinel value, which is similar to the function overloading use case.</p>
+<p>DD: Rejections should be for same realm errors</p>
+<p>DH: i suspect this may be hazardous, because of “security” and you can throw anything.</p>
+<p>YK: strings are also errors in JS…</p>
+<p>DH: Error is not a hard predicate for cleanly divide the universe. Because plenty of usecases where non errors are used as errors</p>
+<p>JHD: The same is with array, objects can mimic arrays often.</p>
+<p>DD: those in favour of brand checking where, those not did not</p>
+<p>DD: brand checking was not intentional</p>
+<p>MM: In ES5 brand checking was very intentional, maybe not in ES6. SES depends on on this.</p>
+<p>YK: what about error</p>
+<p>MM: SES does not use this</p>
+<p>DD: it is a bad precedent to make every new type exotic, to allow brand checking. Error should not be exotic.</p>
+<p>MM: general issue is, is there some guarantee that something is given a following brand</p>
+<p>DD: Spec has a note, saying this was a mistake.</p>
+<p>YK: why does this exist</p>
+<p>DD: toString fallback</p>
+<p>DD: We should remove it</p>
+<p>DH: i think i have not articulated the invariants from this usecass. Array.isArray was not intended for this, but it fit an important usecase. Specifically the overloading scenarios want a strong invariant here.</p>
+<p>DH: two array types in JS, branded arrays, and objects the obey the array interface.</p>
+<p>JHD: and methods that rely on that interface</p>
+<p>DH: I don’t believe there is a reasonable programming model that uses overloading with error. Particularly the error wrapping case for promise rejection. I feel this is going down a poor bad.</p>
+<p>DH: Possibly an alternative approach could exist</p>
+<p>YK: The problem is forgibility, but if someone forges an error is doesn’t seem important.</p>
+<p>JHD: why do we have the internal slot</p>
+<p>DD: we should not have the internal slots. Errors should not be exotic</p>
+<p>DD: map + set make use of internal slots for unobservable</p>
+<p>BT: slots don’t make an object exotic</p>
+<p>DD: You are correct, exotic is the wrong word.</p>
+<p>DH: With a well motivated programming model, i could be convinced.</p>
+<p>SB: An example would be a debugging tool. I want to be sure I do not loose this information because currently we cannot detect.</p>
+<p>SB: it is interesting for what this means in general. Observable land may not care, but does the entity may carry information for the system. Without brand checking that may be lost</p>
+<p>JM: …</p>
+<p>DD: you cannot…</p>
+<p>JHD: passing additional information between realms may not be good, but it is done.</p>
+<p>JHD: if i find further examples, would that be sufficient?</p>
+<p>DH: no, but it would help advance the conversation</p>
+<p>DH: I believe a programming model could be extracted from this. We should likely not bless emergent programming models, merely because they exist.</p>
+<p>DH: we should excercise our critical thinking, is this programming model worth standardizing.</p>
+<p>JHD: I want to gauge if this is worth engaging further</p>
+<p>DD: We should assume, error internal slot was a mistake.</p>
+<p>YK: we should avoid encouraging brand checking as a pattern.</p>
+<p>MM: SES uses instanceof Error, but not used in any security critical areas. Basically, inservice of implementing a getStack API. Case splitting between browsers, if it is an error fetch its getStack. On FF, if it is an error apply the dot stack getter property. When accessed it is wrapped in an try/catch</p>
+<p>DD: we should standardize what exists cross platform</p>
+<p>MM: it does not, a stack property exists, but the content of the stack is widly different, and could not be standardize without breaking</p>
+<p>MM: Some api should exist, which extracts a spec’d stack from an error object. non errros wont carry stacks. Which implies that an error is unique.</p>
+<p>DD: Ember.isError does not seem like the right tool</p>
+<p>MM: Maybe System.getStack could use it.</p>
+<p>YK: …</p>
+<p>JHD: Regexp is the only one?</p>
+<p>…</p>
+<p>SM: can you explain more</p>
+<p>SM: isn’t stack an anti pattern as it is branding</p>
+<p>DD: If it does not have internal structure (private data) branding should not be encouraged</p>
+<p>YK: public interfaces should be truthful</p>
+<p>SM: what about strings</p>
+<p>DD: strings, arrays, math have internal (private state)</p>
+<p>YK: Private state should not be taken in account when and outsider inspects.</p>
+<p>SM: …</p>
+<p>YK: this is daves point about overloading</p>
+<p>SM: There appears to be missing mechanism to detect tag/branding. instanceof doesn’t work across realm</p>
+<p>DH: value types should be branded, userland data-types that have unambigious testable distinctions, and pattern matching those attributes is correct. I don’t believe DD is saying that, but we need to think about how to distinguish the two.</p>
+<p>SM: ad-hoc tagging seems like a common problem</p>
+<p>DD: stringTag sounds like the feature here.</p>
+<p>DH: does flow have ad-hoc union types.</p>
+<p>SM: yes</p>
+<p>DH: so similar to typed Racket</p>
+<p>JM: yes</p>
+<p>DH: that seems like a very natural fit for JS for this programming model. Deferring this problem to the type system.</p>
+<p>DH: What is the flaw in that way</p>
+<p>SM: ad-hoc and security issue. There was an issue in react. If there was internal branding this could have been avoided</p>
+<p>SM: this is more general yes</p>
+<p>DH: should there be a more general tagging/branding mechanism.</p>
+<p>SP: WeakMap and proposed private state can do this.</p>
+<p>YK: !@#$!@#$!@#%$%^&amp; (discussing actual JS syntax)</p>
+<p>SM: toStringTag doesn’t pass between JSON,</p>
+<p>…</p>
+<p>JHD: I want to make sure doing more research isn’t a waste of time</p>
+<p>MM: there must be a motivating use-case, if there is no such use-case it is a waste of time.</p>
+<p>YK: we should be sure the motivating cases are good</p>
+<p>JHD: the risk grows the longer we wait.</p>
+<p>DD: it sounds like more information is needed.</p>
+<a href="#conclusionresolution-observables-jh"><h4 id="conclusionresolution-observables-jh">Conclusion/Resolution</h4></a><ul>
+<li>More research</li>
+</ul>
+<p>DE: can i propose I18n?</p>
+<p>… [everyone yes]</p>
+<a href="#intl"><h2 id="intl">INTL</h2></a><p>CP: todays meeting update:
+1. html version of  ECMA 402
+2. just sent to istvan
+CP: same workflow for 262</p>
+<p>CP: same tools, same flow. getting the HTML version similar (hopefully same) as 262</p>
+<p>CP: asside from that, we fixed the tutorials, and ? syntax in the spec instead of returnIfAbropt</p>
+<p>CP: new features</p>
+<p>EF: first thing usage experience:
+402 1.0 afew years ago, and has made its way into browsers. It is being used in many ways.
+Node is getting it
+Gecko’s UI is using itself
+Chromes UI is using itself
+Library level: jQuery globalize, formatjs (suite of libs) l20n from mozilla l10ns an int.js polyfil and more
+We have experience at libs, and all the new web stuff at Yahoo is using this under the hood. (For safari which doesn’t support it yet)</p>
+<p>?: Firefox OS is using intl js for all the platform level stuff.</p>
+<p>EF: any users of the intl library all have similar requests</p>
+<ol>
+<li>plurals</li>
+<li>relative Time</li>
+<li>duration</li>
+<li>unit</li>
+<li>list</li>
+<li>…</li>
+</ol>
+<p>We support in polyfills, but we need more.</p>
+<p>EF: cross implementation lack of specification for data, is tricky.</p>
+<p>CP: we are not using es discuss for this, we are using the github repo for issues.</p>
+<p>YK: seems good to me</p>
+<p>BT: we are still reading ESdiscuss, but issues seem good</p>
+<p>CP: when we want to take one of these features into consideration, we can go through esdiscuss</p>
+<p>EF: v3 clearly wants more, but we lack information. More experimenation is good. We would like to allow userland to explore further.</p>
+<p>EF: our abstract algorithims are commonly required for users to experiment. This also includes the corresponding data.</p>
+<p>EF: to encouratge experimentation (to acquire more info) we want to expose some more primitives</p>
+<p>EF: formatToParts just strings is unsufficient, order/context is hard to encode.</p>
+<p>…: Some formats are meanlingless, but important to take into account. The construction of the datetime string is very cultural</p>
+<p>EF: essentially it is lossy</p>
+<p>EF: formatToParts aims to explain how format even works.  It aims to provide an array of objects, with the relevant context. Allowing userland code to do its thing</p>
+<p>YK: changing formatToParts should change format</p>
+<p>…</p>
+<p>EF: unfortunately .format doesn’t need to be bound.</p>
+<p>ZB: lets open issues and see if we can improve this thing.</p>
+<p>YK: regardless it seems like it should still work.</p>
+<p>DD: it is unclear</p>
+<p>YK: it would be nice</p>
+<p>DD: but we understand if the previous choice may prevent this</p>
+<p>ZB: implementing the gecko patch, the formatToParts is much slower.</p>
+<p>YK: sounds like the same shape as the RegExp Problem. If its overriden, take a slow path.</p>
+<p>BT: why an array of objects</p>
+<p>EF: order would be lost.</p>
+<p>BT: it seems when I care about the subset, it is more complex</p>
+<p>CP: I actually believe, it would likely be more complicated.</p>
+<p>ZB: LTR RTL languages alsopresented some issues, this pattern worked well</p>
+<p>EF: unless it is too expensive, having abstract operations available.</p>
+<p>BT: in essense the abstract operations are likely just spec refactorings.</p>
+<p>BT: in Windows this would not be straightforward, but is probably doable, using a Windows 10 API… I’ll follow up to make sure.</p>
+<p>ZB: Windows 10 certainly does things similar to this.</p>
+<p>CP: Edge does not use the algorithm we have, just delegates to Windows for best effort?</p>
+<p>BT: yes</p>
+<p>BT: I agree this should be doable, and in general I’m not concerned. I don’t think it constraints implementations too much. Edge might need to ask Windows for a better API.</p>
+<p>EF: (next slide) &quot;How: Adding to ECMA 402&quot;</p>
+<p>DD: is it possible to move away from the bound method pattern?</p>
+<p>BT: no; not web compatible</p>
+<p>EF: (next slide) &quot;Current Status&quot;</p>
+<p>(Discussion of IE not using CLDR vs. everyone else using it.)</p>
+<p>EF: we would like to advance to stage 1, we dont have spec test. But we have draft impl + gecko imp.</p>
+<p>BT: I have to get the windows guys to sign-off to on the new API, so something concrete (spec text) would be best.</p>
+<a href="#resolution-for-exposing-abstract-operations-intl"><h3 id="resolution-for-exposing-abstract-operations-intl">Resolution: (for exposing abstract operations)</h3></a><a href="#stage-1"><h2 id="stage-1">Stage 1</h2></a><a href="#pluralrules"><h3 id="pluralrules">PluralRules</h3></a><p>EF: apps must solves this, if they want to use I18n in the UI. This is heavily requested, we have implemented it.</p>
+<p>ZB: it is hard to implement correctly, CLDR gives the required information</p>
+<p>(some visual examples)</p>
+<p>ZB: Without this, the shear amount of complexity required blocks good localized sites.</p>
+<p>ZB: two plural forms in the same sentance explodes the complexity.</p>
+<p>ZB: this nicely supports the simple case, and the complex case.</p>
+<p>EF: also good for relative times &quot;1 hour ago&quot; &quot;2 hours ago&quot;</p>
+<p>BT: is there precedent for something like this</p>
+<p>ZB: gettext for 30 years</p>
+<p>EF: Java’s plural format is built on a lower level class that is uses for plural rules and categories (I believe)</p>
+<p>EF: we would prefer this to be non optional</p>
+<p>ZB: if you cannot afford to store all the data, keep one language</p>
+<p>YK: 402 should be take it or leave it, partially support would be unfortunate</p>
+<p>YK: all features should be implemented, languages should be based on available data.</p>
+<p>M: What about an implementation that supports currency but not plural, since message formatting handles it</p>
+<p>EF: It seems like it would be cheap to then provide the real thing.</p>
+<p>M: paying for the data would be unfortunate</p>
+<p>EF: loading it for all of english, is 800bytes or so. All languages …</p>
+<p>SP: wouldn’t this be better solved by partial locale data. Implementating a subset of features seems fatal.</p>
+<p>BT: would like you all intl or none (or partial subset)</p>
+<p>YK: it is possible to imagine scenarios where it is an extreme trade-off, but that isn’t how the web works</p>
+<p>BT: the thing that is concerning me is. We need to support JS on IoT devices.</p>
+<p>YK: and your guessing what so support?</p>
+<p>BT: we need to make a choice, based on budget avilable</p>
+<p>ZB: I would like to point out, you cant support everything. There is always an edgecase, so we designed 402 APIs, by using fallbacks. By the end of the day, you will get currency. It may not be in chinese, but it will be A currency.</p>
+<p>SP: does that deal with the concer?</p>
+<p>BT: Yes it should, there is a concern though. If a platform wants to implement parts of i18n in a seperate namespace.</p>
+<p>YK: is seems like portable code has been thought about. By allowing all data</p>
+<p>M: but what if a given platform provides an alternative</p>
+<p>YK: what about eval/toString. It seems like they can provide the alternative and carry on.</p>
+<p>BT: if intl is all or nothing, some may take nothing.</p>
+<p>ZB: like SIMD, intl should always be there.</p>
+<p>DD: either 402 or not</p>
+<p>YK: i don’t believe 402 should allow piecemill.</p>
+<p>MM: what about partial data sets</p>
+<p>EF: the APIs are built for this, as they are built to fallback.</p>
+<p>WH: CLDR’s cross product of locales refering to other locales’ names, time zones, their currencies (including various plural inflections), etc. is enormous</p>
+<p>ZB: we don’t ship those, in-fact we designed the API for support this.</p>
+<p>EF: CP has written up spec text</p>
+<p>EF: we need to deal with decimals, the spec test needs to be updated</p>
+<p>CP: we need to figure it out yet</p>
+<a href="#resolutions-stage-1-stage-1"><h3 id="resolutions-stage-1-stage-1">resolutions stage 1</h3></a><a href="#abstract-locale-operations"><h2 id="abstract-locale-operations">Abstract Locale Operations</h2></a><p>EF: aspects of each of the components currently go through some abstract operations, we would like to expose them</p>
+<p>ZB: Intl.getCanonicalLocales(locales)</p>
+<p>ZB: naming suggestions are open.</p>
+<p>ZB: This is useful any time we do language negotiation, this allows us to verify. Implementing this in userland is like 4000 loc, exposing it instead has a clear advantage.</p>
+<p>DD: what are the input types</p>
+<p>EF: same as the numberFormat</p>
+<p>DD: eh. i guess consistency over design</p>
+<p>EF: We should about it yesterday, but we felt that it would be simpler this way.</p>
+<p>DD: consistency wins it for me</p>
+<p>EF: next is a Intl.getParentLocales(locale), the naive implementation would fall short as many exceptions exist. Userland implementation would likely be non-obvious</p>
+<p>ZB: for example serbian cyrillic and serbian latin don’t have obvious fallbacks</p>
+<p>ZB: We don’t just provide the final solution, the proposed the higharchy of locale inheritance</p>
+<p>ZB: We wanted to implement some userland custom code at mozilla, unfortunately we where forced to important several thousand lines of code from the internals.</p>
+<p>BT: does this require a giant table</p>
+<p>ZB: No, just as the rest of the model, additional data improves the results.</p>
+<p>YK: is there any part of the spec that requires explicit data to be loaded</p>
+<p>ZB: no</p>
+<p>ZB: the goal is, to allow (if data available) the best possible information.</p>
+<p>EF: you are allowed to do better</p>
+<p>EF: Intl.resolveLocaleInfo</p>
+<p>EF: this is an API that has a very similar signature. It will provide the best possible (based on data) resolved language.</p>
+<p>EF: the results provides a summary of available information, this will grow.</p>
+<p>MF: why not have in seperate functions</p>
+<p>EF: the number of data points grows, adding 1 method per data is unfortunate.</p>
+<p>DD: what about &quot;current system preferences&quot;</p>
+<p>(discussion about user settings/preferences)</p>
+<p>DD: This same API, could be used to get the users preferences</p>
+<p>EF: maybe, leave out the locale argument, so the default provides this.</p>
+<p>CP: user fingerprinting is a potential concern</p>
+<p>ZB: this will be happening</p>
+<p>EF: We propose stage 1</p>
+<p>… [consensus]</p>
+<p>ZB: our next step spec proposals and get feedback</p>
+<p>BT: outline is good, full spec text isn’t needed right away</p>
+<p>DD: spec text for 2</p>
+<p>BT: i would love to give feedback before to much investment in spec test.</p>
+<p>CP: it shouldn’t be to bad, largely this is extract existing abstract algs</p>
+<a href="#trailing--in-functions-arguments"><h4 id="trailing--in-functions-arguments">trailing , in functions arguments</h4></a><p>JM: fixes from yesterday (cover grammar support), MF BT looked at them.</p>
+<p>shows spec text</p>
+<p>DH: looks good!</p>
+<a href="#resolution-advance-to-stage-3-abstract-locale-operations"><h3 id="resolution-advance-to-stage-3-abstract-locale-operations">resolution: advance to stage 3</h3></a><a href="#test-262-updated"><h4 id="test-262-updated">Test 262 updated</h4></a><p>BT: not many new tests recently, except for SIMD.</p>
+<p>BT: many open issues, but nothing worth mentioning.</p>
+<p>BT: we dont have tests for some things, like tail calls.</p>
+<p>YK: is it possible</p>
+<p>BT: open question</p>
+<p>BT: destructing needs to be done</p>
+<p>DD: some work to share tests between destructing binding and assignment</p>
+<p>BT: Async functions have some more tests, and we’ll discuss it more in two months. Async functions will remain stage 3 in January.</p>
+<a href="#systemglobal-jhd"><h4 id="systemglobal-jhd">System.global (JHD)</h4></a><p>JHD: no reliable way to get the global cross platform.</p>
+<p>JHD: shims need it, but required using many tricks.</p>
+<p>DD: rationale is good, more bikeshedding on the details.</p>
+<p>SP: node-webkit is gnarly here, it belives its both node and web… many existing feature detections failed.</p>
+<p>DH: MM has many ideas here, we should be careful to involve him</p>
+<p>JHD: I spoke with MM, and tried to get his input</p>
+<p>JHD: Were can we put it. MM felt on System as along it was configurable.</p>
+<p>JHD: arguments against reifing self, may break existing code</p>
+<p>DD: the ideal way is to reuse something exist, whoever feature detection is the tricky one.</p>
+<p>DD: global.self maybe ww, global.global maybe node?</p>
+<p>JM: whats wrong with with System.global</p>
+<p>DD: its long</p>
+<p>DD: existing names are accessors, configurable with no setters ony getters, changing that sounds dubious</p>
+<p>JM: self is a common idiom.</p>
+<p>YK: self is an existing trap</p>
+<p>DD: global is my preference</p>
+<p>JM: what about System.global</p>
+<p>DD: I would not use it</p>
+<p>JHD: let me continue, we can bikeshed more</p>
+<p>JHD: it can be a windows proxy, it should be the thing new Function(&quot;this&quot;) would return.</p>
+<p>(discussion about windows observability)</p>
+<p>JHD: The goal is to use the existing spec to frame what is returned.</p>
+<p>DH: CSP concerns, for example eval is prevented.</p>
+<p>YK: sloppy CSP already gives access to the gobal</p>
+<p>DH: are they guarding from access to the global.</p>
+<p>MF: not really <a href="https://github.com/w3c/webappsec-csp/issues/2">https://github.com/w3c/webappsec-csp/issues/2</a></p>
+<p>JHD: in all reasonable platforms, the global is accessible. This merely provides a consistent solution.</p>
+<p>YK: SES is ok with this, even though they provide no global access.</p>
+<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/Resolution</h4></a><ul>
+<li>stage 1</li>
+</ul>
+<a href="#wrap-up"><h1 id="wrap-up">Wrap-up</h1></a><p>JN: thanks to paypal, for hosting the meeting lunches and breakfasts. Excellent thank you</p>
+<p>JN: Thank you to paypal and ecma for dinner</p>
+<p>JN: next meeting is January 25, 26, 27 in SF at salesforce</p>
+<p>JN: In january meeting, we must wrap up the june 2016 release.</p>
+
+</body>

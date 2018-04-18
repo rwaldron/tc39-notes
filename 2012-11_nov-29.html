@@ -1,0 +1,463 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 29, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-29-2012-meeting-notes"><h1 id="november-29-2012-meeting-notes">November 29, 2012 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Luke Hoban (LH), Rick Waldron (RW), Eric Ferraiuolo (EF), Doug Crockford (DC), Yehuda Katz (YK), Erik Arvidsson (EA), Mark S. Miller (MM), Dave Herman (DH), Sam Tobin-Hochstadt (STH), István Sebestyén (IS), Andreas Rossberg (ARB), Brendan Eich (BE), Alex Russell (AR), Matt Sweeney (MS)</p>
+<hr>
+<a href="#approval-of-ecmatc39-scope-declaration"><h2 id="approval-of-ecmatc39-scope-declaration">Approval of ECMA/TC39 Scope Declaration</h2></a><p>(John Neumann)</p>
+<p>JN: (presents scope document for approval)</p>
+<a href="#conclusionresolution-approval-of-ecmatc39-scope-declaration"><h4 id="conclusionresolution-approval-of-ecmatc39-scope-declaration">Conclusion/Resolution</h4></a><ul>
+<li>Approved.</li>
+</ul>
+<a href="#scoping-for-default-arguments-revisited"><h2 id="scoping-for-default-arguments-revisited">Scoping for default arguments revisited</h2></a><p>(Allen Wirfs-Brock)
+See Slides</p>
+<p>AWB: (Review legacy requirements)</p>
+<p><strong>Two Params, Same Name allowed (non-strict)</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x,x</span>) </span>{ <span class="hljs-built_in">console</span>.log(x); }
+f(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>); <span class="hljs-comment">// logs: 2</span>
+</code></pre>
+<p><strong>Parameter and a Var with Same name</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-keyword">var</span> x;
+  <span class="hljs-built_in">console</span>.log(x);
+}
+g(<span class="hljs-number">1</span>); <span class="hljs-comment">// logs: 1</span>
+</code></pre>
+<p><strong>Function Declarations Override Parameter Bindings</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">h</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">x</span>(<span class="hljs-params"></span>) </span>{<span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;}
+  <span class="hljs-built_in">console</span>.log(x());
+}
+h(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; }); <span class="hljs-comment">// logs: 2</span>
+</code></pre>
+<a href="#proposal-part-1"><h3 id="proposal-part-1">Proposal Part 1</h3></a><ul>
+<li>Simple ES&lt;=5.1 parameter lists introduce &quot;var bindings&quot; in the top level scope of a function</li>
+<li>All ES&lt;=5.1 rules apply
+<ul>
+<li>Duplicated parameter names</li>
+<li>Parameter names may be same as var or function Declaration</li>
+<li>(missed) see slides...</li>
+</ul></li>
+</ul>
+<p>ARB: These are simply the requirements.</p>
+<a href="#proposal-part-2"><h3 id="proposal-part-2">Proposal Part 2</h3></a><ul>
+<li>If a parameter list uses ANY parameter syntax introduced in ES6, new rules apply:
+<ul>
+<li>Destructuring Parameters</li>
+<li>Default value initializers</li>
+<li>Rest Parameters</li>
+</ul></li>
+<li>New Rules:
+<ul>
+<li>Parameter lists introduce &quot;let bindings&quot; in the top level scope of the function
+<ul>
+<li>No duplicate param names</li>
+<li>Parameter names may not be the same as any other function top-level</li>
+</ul></li>
+<li>TDZ rules apply to parameter default value initializers
+<ul>
+<li>Hoisted top-level function/var declaration are initialized after parameter initialization</li>
+</ul></li>
+<li>&quot;strict&quot; arguments object (copy of actual args, no parameter joining)</li>
+</ul></li>
+</ul>
+<p>DH/YK/LH: This is problematic for extant offending code, that is updated to use ES6 syntax. One syntax change shouldn't have adverse effects on other, not directly related, syntax.</p>
+<p>RW: If offending code exists, it would be smart to fix the issues, new syntax does new things.</p>
+<p>YK: Sympathetic, but disagrees</p>
+<p>New Rules Examples:</p>
+<pre><code class="language-js">
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x, x, ...rest</span>) </span>{}
+  Syntax <span class="hljs-built_in">Error</span>: duplicate parameter name (Rule <span class="hljs-number">1.</span>A)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x, {a:x, b:y}</span>) </span>{}
+  Syntax <span class="hljs-built_in">Error</span>: duplicate parameter name (Rule <span class="hljs-number">1.</span>A)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">[x]</span>) </span>{ <span class="hljs-keyword">let</span> x; }
+  Syntax <span class="hljs-built_in">Error</span>: redeclaration <span class="hljs-keyword">of</span> parameter x (Rule <span class="hljs-number">1.</span>B)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">[x]</span>) </span>{ <span class="hljs-keyword">var</span> x; }
+  Syntax <span class="hljs-built_in">Error</span>: redeclaration <span class="hljs-keyword">of</span> parameter x (Rule <span class="hljs-number">1.</span>B)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">[x]</span>) </span>{ {<span class="hljs-keyword">var</span> x;} }
+  Syntax <span class="hljs-built_in">Error</span>: redeclaration <span class="hljs-keyword">of</span> parameter x using hoisted <span class="hljs-keyword">var</span> (Rule <span class="hljs-number">1.</span>B)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">[x]</span>) </span>{ {<span class="hljs-keyword">let</span> x;} }
+  Valid, redeclaration is <span class="hljs-keyword">in</span> inner block
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">[x]</span>) </span>{ <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">x</span>(<span class="hljs-params"></span>)</span>{} }
+  Syntax <span class="hljs-built_in">Error</span>: redeclaration <span class="hljs-keyword">of</span> parameter x (Rule <span class="hljs-number">1.</span>B)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">[x]</span>) </span>{ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">x</span> </span>{} }
+  Syntax <span class="hljs-built_in">Error</span>: redeclaration <span class="hljs-keyword">of</span> parameter x (Rule <span class="hljs-number">1.</span>B)
+
+</code></pre>
+<p>WH/AWB/ARB: discussion about parenthesis on parameters</p>
+<p>ARB: Points out that this is why 1JS becomes a problem where we introduce micro-modes to make things work</p>
+<p>AWB: We need to have these to make these things work correctly</p>
+<p>MM: Also nervous about these micro-modes, but want to see the rest of the proposal</p>
+<p>New Rules Examples, Cont...</p>
+<pre><code class="language-js">
+function f(x, y=x) {}
+  Valid, x has been initialized when y's default value expression is evaluated.
+
+function f(x=y, y) {}
+  Runtime: ReferenceError exception y not initialized (Rule 2)
+
+const a = "A";
+function f(x=a) {}
+  Valid
+
+function f(x=a) { var a;}
+  Runtime: ReferenceError a not yet initialized (Rule 2.A)
+
+function f(x=a) { const a = "A";}
+  Runtime: ReferenceError a not yet initialized (Rule 2.A)
+
+function a() {return "A";}
+function f(x=a()) {}
+  Valid, a is initialized in surrounding scope, at time of parameter default value initialization.
+
+function f(x=a()) { function a() { return "A"; } }
+  Runtime: ReferenceError a not yet initialized (Rule 2.A)
+
+</code></pre>
+<p>MM, WH: I want to preserve:</p>
+<ol>
+<li>A Function, as soon as it's in scope is already initialized</li>
+<li>A Var variable, as soon as it's in scope is already initialized</li>
+</ol>
+<p>ARB: Agree, but these things simply should not be in scope.</p>
+<p>DH: We're making mistakes with let all around. We should wait to continue this discussion until this afternoon when all are present.</p>
+<p>MM: Luke, where does the let research stand?</p>
+<p>LH: Incomplete.</p>
+<p>AWB: If there are disagreements with these rules, then someone needs to write rules that cover all these cases.</p>
+<p>ARB: I proposed a set of rules and posted to es-discuss. Basic idea: a function with default arguments behaves as if it was a wrapper function supplying the default arguments. So initializers cannot see any definitions from the body.</p>
+<p>Simplest example:</p>
+<pre><code class="language-js"><span class="hljs-comment">// scope boundaries</span>
+-------------------------------------
+| <span class="hljs-keyword">var</span> foo = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; }
+|
+| <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bar</span>(<span class="hljs-params"> a = foo(</span>) ) </span>{
+-------------------------------------
+|  <span class="hljs-keyword">var</span> foo = <span class="hljs-literal">null</span>; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">--</span> <span class="hljs-attr">not</span> <span class="hljs-attr">in</span> <span class="hljs-attr">scope</span> <span class="hljs-attr">until</span> <span class="hljs-attr">after</span> <span class="hljs-attr">param</span>
+|      <span class="hljs-attr">default</span> <span class="hljs-attr">evaluation</span>
+| }
+
+</span></span></code></pre>
+<ul>
+<li><a href="https://mail.mozilla.org/pipermail/es-discuss/2012-October/025657.html">https://mail.mozilla.org/pipermail/es-discuss/2012-October/025657.html</a></li>
+<li><a href="https://mail.mozilla.org/pipermail/es-discuss/2012-October/025669.html">https://mail.mozilla.org/pipermail/es-discuss/2012-October/025669.html</a></li>
+<li><a href="https://mail.mozilla.org/pipermail/es-discuss/2012-September/024995.html">https://mail.mozilla.org/pipermail/es-discuss/2012-September/024995.html</a></li>
+</ul>
+<p>YK: What are observable issues with the proposal?</p>
+<p>STH: Problems where scopes aren't seen
+var declarations are not seen in parameter defaults</p>
+<p>DH/YK/STH: Multiple nested scope might work</p>
+<p>DH: If in strict mode, get errors. Not in strict mode, no errors. Resolves the refractor surprise issue.</p>
+<p>YK/DC/RW/AR: (Agree with Andreas' proposal)</p>
+<p>STH: AWB proposal has Reference Errors, ARB proposal simply says  &quot;not in scope&quot;</p>
+<p>(whiteboard)</p>
+<p>(6)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x, y = <span class="hljs-number">7</span></span>) </span>{
+  ...
+}
+
+&lt;===&gt;
+
+(<span class="hljs-number">5</span>)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x, y</span>) </span>{
+  <span class="hljs-keyword">let</span> x1 = x;
+  <span class="hljs-keyword">let</span> y1 = y ?? <span class="hljs-number">7</span>;
+
+  (<span class="hljs-number">5</span>)
+  <span class="hljs-keyword">return</span> (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x, y</span>) </span>{
+    ...
+  }).call(<span class="hljs-keyword">this</span>, x1, y1);
+}
+</code></pre>
+<p>WH: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x, x=<span class="hljs-number">7</span>, z=x</span>) </span>{
+  <span class="hljs-keyword">let</span> x1 = x;
+  <span class="hljs-keyword">let</span> x2 = x ?? <span class="hljs-number">7</span>;
+  <span class="hljs-keyword">let</span> z1 = z ?? which x?;
+}
+</code></pre>
+<p>DH/YK: Discussion re: 1JS issues w/r to strict and non-strict</p>
+<p>AWB: Recap... There are clearly issues that exist. I invite anyone here to formally specify these.</p>
+<p>DH: Andreas and I can work together, with all of these scenarios in mind (request for complete list above)</p>
+<p>RW: Available in these minutes and here <a href="https://gist.github.com/4171244">https://gist.github.com/4171244</a></p>
+<p>Discussion about how other languages enforce default parameter values and existing precedents.</p>
+<p>AWB: How does a user, that isn't familiar with JS semantics, come to understand that declarations in body... ?</p>
+<p>MM:</p>
+<p>WH: There was previously concerns with multiple scopes, which is  clear why you've gone with a single scope</p>
+<p>YK: Noted, non issue b/c {} doesn't create a scope bucket in JS today.</p>
+<p>DH: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-built_in">console</span>.log(x);
+  <span class="hljs-keyword">let</span> x = <span class="hljs-number">12</span>;
+}
+
+f(<span class="hljs-number">6</span>); ?
+</code></pre>
+<p>DH: Imagine if this wasn't a redeclaration error, what would occur?</p>
+<p>ARB: There are two errors here... there would still be a TDZ error.</p>
+<p>WH: (in response to rant about scoping of let itself) This is not on the agenda</p>
+<p>AWB/STH: This is absolutely the agenda.</p>
+<p>Devolved.</p>
+<a href="#conclusionresolution-scoping-for-default-arguments-revisited"><h4 id="conclusionresolution-scoping-for-default-arguments-revisited">Conclusion/Resolution</h4></a><ul>
+<li>Agree that Andreas will draft a proposal for next meeting.</li>
+</ul>
+<a href="#cascading-this-returns"><h2 id="cascading-this-returns">Cascading this returns</h2></a><p>(Rick Waldron)</p>
+<p>RW: returning &quot;this&quot; from
+Map.prototype.set, Set.prototype.add, WeakMap.prototype.set</p>
+<p>DC/AR/YK/EF/EA: Supporting agreement</p>
+<p>MM/AWB/RW/BE/EF: (Discussion to determine a criteria for making this API specification distinction)</p>
+<a href="#conclusionresolution-cascading-this-returns"><h4 id="conclusionresolution-cascading-this-returns">Conclusion/Resolution</h4></a><ul>
+<li>Consensus... with the criteria that these methods are not simply a set of uncoordinated side effects that happen to have a receiver in common, but a set of coordinated side effects on a specific receiver and providing access to the target object post-mutation.</li>
+</ul>
+<a href="#issues-with-eval"><h2 id="issues-with-eval">Issues With Eval</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: Existing issues with eval w/r to new declarative forms, strict mode, etc In particular, what grammar is allowed in eval.</p>
+<p>ARB: E.g. allowing module declarations in direct eval would introduce local modules. (Agreement that we don't want that)</p>
+<p>BE: But would be fine in indirect eval.</p>
+<p>DH: System.eval is a much nicer way to do indirect eval</p>
+<p>ARB: lets promote that as the &quot;correct&quot; global scope eval instead of diverging direct and indirect eval more</p>
+<p>MM: Now we have 3 evals</p>
+<p>DH: No way around 3 (1: direct, 2: indirect, 3: explicitly tied to a loader). But we can promote loader eval as the better one: direct but without ugly (0,eval)(src) syntax.</p>
+<p>AWB: what about deletable bindings?
+... All eval bindings in ES5 are deletable.</p>
+<p>DH/BE: in strict eval, you can't delete locals...</p>
+<p>AWB: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-built_in">eval</span>(<span class="hljs-string">"var x; delete x;"</span>); <span class="hljs-comment">// ?</span>
+</code></pre>
+<p>MM: if this is strict, then no.</p>
+<p>BE: let's talk about non-strict.</p>
+<p>AWB: Change to &quot;let&quot;:</p>
+<pre><code class="language-js"><span class="hljs-built_in">eval</span>(<span class="hljs-string">"let x; delete x;"</span>);
+</code></pre>
+<p>ARB/MM: Illegal.</p>
+<a href="#conclusionresolution-issues-with-eval"><h4 id="conclusionresolution-issues-with-eval">Conclusion/Resolution</h4></a><ul>
+<li>New declaration forms, even from non-strict mode eval cannot be deleted.</li>
+</ul>
+<a href="#eliminate-functions-returning-reference-values-from-the-specification"><h2 id="eliminate-functions-returning-reference-values-from-the-specification">Eliminate functions returning Reference values from the specification.</h2></a><p>AWB: Only want to remove the language from the spec, not reason to be a feature of the spec.</p>
+<p>BE: Exists from the ES1 days, for VBScript-style DOM APIs in IE</p>
+<p>LH: No objection.</p>
+<a href="#conclusionresolution-eliminate-functions-returning-reference-values-from-the-specification"><h4 id="conclusionresolution-eliminate-functions-returning-reference-values-from-the-specification">Conclusion/Resolution</h4></a><ul>
+<li>Consensus.</li>
+</ul>
+<a href="#revisit-nov-27-resolution-on-iterables-in-spread-eliminate-functions-returning-reference-values-from-the-specification"><h2 id="revisit-nov-27-resolution-on-iterables-in-spread-eliminate-functions-returning-reference-values-from-the-specification">Revisit Nov. 27 Resolution on iterables in spread.</h2></a><p>BE/RW: Recounting history, re: Array.from &amp; spread delegation</p>
+<p>BE: Changed mind about the forEach inconsistency</p>
+<p>AWB/YK: Have to maintain consistency to enumerable methods</p>
+<p>BE: Let's not remain slaves to legacy, Array.from, for-of and spread use only iterable.</p>
+<p>RW: What about pre ES6 environment?</p>
+<p>BE: Can fall back to array-like if needs.</p>
+<p>BE/MM/RW: Both iterable and array-like fallback</p>
+<p>Agreed.</p>
+<p>Discussion about ES5 code running in ES6 environments</p>
+<p>RW: Can't decorate, what then?</p>
+<p>YK/BE: The polyfill has to work harder by wrapping the arraylike</p>
+<p>BE: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-built_in">Array</span>.from: iterable -&gt; array
+
+<span class="hljs-built_in">Array</span>.from(iter(oldObj));
+</code></pre>
+<p>RW: No.</p>
+<p>Return to two step on Array.from and iterator protocol on for-of, spread.</p>
+<a href="#conclusionresolution-eliminate-functions-returning-reference-values-from-the-specification"><h4 id="conclusionresolution-eliminate-functions-returning-reference-values-from-the-specification">Conclusion/Resolution</h4></a><ul>
+<li>Add iterator protocol to arguments object (should exist on all things.</li>
+</ul>
+<p>Array.from:</p>
+<ol>
+<li>Iterator protocol</li>
+<li>Array-Like</li>
+</ol>
+<p>for-of &amp; spread:</p>
+<ol>
+<li>Iterator protocol</li>
+</ol>
+<a href="#collection-apis-review"><h2 id="collection-apis-review">Collection APIs review...</h2></a><p>AWB/BE: Mixed discussion re generalized iterator API</p>
+<p>BE: issues with values()</p>
+<p>AWB: Don't care what it's called</p>
+<p>DH: Relevant for Maps and Sets, as they've used the names keys(), values()</p>
+<p>BE: (whiteboard)</p>
+<ol>
+<li>for ( v of a )     // a has @iterator or throw</li>
+<li>for ( v of values(a) )    // this already has a meaning</li>
+<li>for ( v of myValues(a) )     // more possible ...</li>
+</ol>
+<p>...Change to a property called &quot;elements&quot; and it settles most of the argument</p>
+<p>If we have method based dispatch for <em>some</em> things, we should have it for everything.
+Here is the reference AWB was searching for at the meeting regarding why only having function forms of keys/values/items is a problem: <a href="https://mail.mozilla.org/pipermail/es-discuss/2011-November/018332.html">https://mail.mozilla.org/pipermail/es-discuss/2011-November/018332.html</a></p>
+<p>MM: can we agree on... 3 methods:</p>
+<ol>
+<li>iterable over values</li>
+<li>iterable over keys</li>
+<li>iterable over [ key, value ]</li>
+</ol>
+<p>Naming to come...soon?</p>
+<p>Do not have these on Object.prototype</p>
+<p>...MM: Map is a proper stratified properties collection. Objects are not. Arrays, when used as collections, the indices are the &quot;keys&quot;</p>
+<p>DH:</p>
+<pre><code>_Collections_
+<span class="hljs-selector-class">.keys</span>
+<span class="hljs-selector-class">.values</span>
+<span class="hljs-selector-class">.items</span>
+    -&gt; Array
+    -&gt; Map
+    -&gt; Set
+
+_Dict_
+<span class="hljs-function"><span class="hljs-title">keys</span><span class="hljs-params">(o)</span></span>
+<span class="hljs-function"><span class="hljs-title">values</span><span class="hljs-params">(o)</span></span>
+<span class="hljs-function"><span class="hljs-title">items</span><span class="hljs-params">(o)</span></span>
+
+keys    - iterable of keys
+values  - iterable of values
+items   - iterable of pairs
+</code></pre>
+<p>DH: Possible? Dict constructor, where...</p>
+<pre><code class="language-js">Dict() is shorthand <span class="hljs-keyword">for</span> <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>);
+
+
+Implements...
+
+keys(o)
+values(o)
+items(o)
+</code></pre>
+<p>And still allows .property and [&quot;property&quot;]</p>
+<p>BE: Ensure that I don't have to copy into a new Dict just to get keys, values, items</p>
+<p>DH: Won't have to.</p>
+<p>ARB: better name: 'entries', not 'items'. (agreed)</p>
+<a href="#conclusionresolution-collection-apis-review"><h4 id="conclusionresolution-collection-apis-review">Conclusion/Resolution</h4></a><ul>
+<li>Dave Herman to craft an addition to module standard library for Dict with api shown above that creates proto-less objects as Dicts and has api that can be used on all collections.</li>
+</ul>
+<p>Allen Wirfs-Brock to update existing spec language to reflect:</p>
+<pre><code class="language-js">.keys()
+.values()
+.entries()
+    -&gt; <span class="hljs-built_in">Array</span>
+    -&gt; <span class="hljs-built_in">Map</span>
+    -&gt; <span class="hljs-built_in">Set</span>
+</code></pre>
+<a href="#the-syntax-of-let"><h2 id="the-syntax-of-let">The syntax of let</h2></a><p>AWB: Making let a reserved word breaks the web.</p>
+<ul>
+<li>Removing let from non-strict?</li>
+<li>Crafting contextual syntactic</li>
+</ul>
+<p>MM: Propose that let is not a binding form in non-strict code. When we first experimented with let, we knew the consequences, but now we know the outcome.</p>
+<p>The remaining problematic code:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> <span class="hljs-keyword">let</span>;
+<span class="hljs-keyword">let</span>[x] = <span class="hljs-number">5</span>;
+</code></pre>
+<p>WH: Two ways to look at it from a syntactic point of view. It's either a problem with let syntax, or it's a problem with destructuring syntax. Restricting just one of the two to strict mode would eliminate the clash with ES5; doesn't matter which one.</p>
+<p>DH: We <em>could</em> limit destructuring to strict mode to solve this issue and this would likely encourage more migration to strict mode.</p>
+<p>(several nods of agreement)</p>
+<p>BE: This leads into the reality of strict mode and the changes to runtime semantics (gives ex. of concat issues)</p>
+<p>LH: Opposed to not restricting any new syntax to strict mode. If we just disallow this very specific example:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> <span class="hljs-keyword">let</span>;
+<span class="hljs-keyword">let</span>[x] = <span class="hljs-number">5</span>;
+</code></pre>
+<p>LH: I think we can get away with it.</p>
+<p>DH: Could refine that to only apply if 'let' not in scope as a variable.</p>
+<p>ARB: No.</p>
+<p>DH: Doesn't change the parse.</p>
+<p>AR: But how the AST is constructed afterward.</p>
+<p>BE: Back to Dave's earlier proposal, I don't think this will get us buy in, strict mode has a bad rep.</p>
+<p>LH: Just one more hack is not always bad, but in fact how progress of anything that wants to avoid breaking back compat.</p>
+<p>STH: Can we do the Apple experiment with Luke's proposal?</p>
+<p>Two proposals on table:</p>
+<ol>
+<li>All things that meet the grammar for let are let declarations and we don't reserve let. (LH)</li>
+<li>Like 1, but <code>let</code> is not reserved if there is a lexical (not top-level) variable named <code>let</code> in scope (DH)</li>
+</ol>
+<p>Leaning towards Luke's proposal, implementors not offended.</p>
+<p>MM: (whiteboards proposal)</p>
+<p>EA: No, because it kills let destructuring.</p>
+<p>BE: We're not sure how big the problem really is... We could make the change and approach addressing the breakage via evangelism.</p>
+<p>RW: My thinking is that we have ideal resources to find the uses of &quot;let&quot; in existing code and evangelize before ES6 publication.</p>
+<p>WH: That would be ideal</p>
+<p>MM for DC: Should we defer let to ES7?</p>
+<p>DH/BE/YK/AWB/WH/ARB: Disagree</p>
+<p>AWB: What if we just have const?</p>
+<p>Nope.</p>
+<p>DH: Our sense of aesthetic shouldn't get in the way of progress.</p>
+<p>STH: This isn't that gross.</p>
+<p>BE: I move that Luke's proposal be drafted for ES6</p>
+<p>LH: A search of indexed web reveals 3 uses of var let.</p>
+<p>?: Proposal to try parsing as a let statement first and fail over to an expression statement that just happens to use let as an identifier if that fails.</p>
+<p>WH: No, negative parsing rules like that are known to cause byzantine problems. Better to disambiguate on the first two tokens alone just like we disambiguate on the first { token alone to distinguish a block from an expression statement that happens to start with an object literal. The first two tokens would be let followed by either an identifier, [, or {.</p>
+<a href="#conclusionresolution-the-syntax-of-let"><h4 id="conclusionresolution-the-syntax-of-let">Conclusion/Resolution</h4></a><ul>
+<li>In non-strict code: let, with single token lookahead (where the single token is either an Identifier, &quot;[&quot;, or &quot;{&quot; ), at the start of a statement is a let declaration. (Accepted breaking change)</li>
+</ul>
+<a href="#extend-new-let-grammar-restriction"><h2 id="extend-new-let-grammar-restriction">Extend new let grammar restriction?</h2></a><pre><code class="language-js"><span class="hljs-keyword">let</span> (x) = ...
+let ?maybe = ...
+let !must = ...
+</code></pre>
+<p>Continued discussion... Do we want to preemptively disallow these: (, ?, !</p>
+<p>DH: Want to allow parentheses in or around patterns for analogy with (x) = 7.</p>
+<p>WH: That's half of the analogy, and the parentheses in that case are actually around a subexpression. Note that var (x) = 7 is not currently allowed, and I don't see any reason to permit it. Propose to continue existing behavior:</p>
+<pre><code class="language-js">(x) = <span class="hljs-number">3</span>;       <span class="hljs-comment">// allowed</span>
+({ y }) = <span class="hljs-number">3</span>;   <span class="hljs-comment">// allowed</span>
+
+<span class="hljs-keyword">var</span> (x) = <span class="hljs-number">3</span>;    <span class="hljs-comment">// disallowed</span>
+<span class="hljs-keyword">var</span> ({y}) = <span class="hljs-number">3</span>;  <span class="hljs-comment">// disallowed</span>
+</code></pre>
+<p>DH: Why are you opposed to parentheses? Not useful now, but would like to use those in the future.</p>
+<p>WH: I'm not opposed to parentheses in the pattern language in general, but there is no point in putting them in until we have some good use for them. Prefer to omit now simply to future-proof our design options.</p>
+<p>DH: OK</p>
+<a href="#conclusionresolution-extend-new-let-grammar-restriction"><h4 id="conclusionresolution-extend-new-let-grammar-restriction">Conclusion/Resolution</h4></a><ul>
+<li>Agreed to the semantics presented by the allowed/disallowed example above.</li>
+</ul>
+<a href="#extending-array-comprehension"><h2 id="extending-array-comprehension">Extending Array Comprehension</h2></a><p>(Brendan Eich on behalf of Jason Orendorff)
+Begins here: <a href="https://mail.mozilla.org/pipermail/es-discuss/2012-September/025044.html">https://mail.mozilla.org/pipermail/es-discuss/2012-September/025044.html</a></p>
+<p>BE: Originally seen in ES4 but never made it to ES6 (brief history of comprehension and rationale)</p>
+<p>(whiteboard)</p>
+<pre><code class="language-js">[ x <span class="hljs-keyword">for</span> x <span class="hljs-keyword">of</span> a ]
+[ [x,y] <span class="hljs-keyword">for</span> x <span class="hljs-keyword">of</span> a <span class="hljs-keyword">for</span> y <span class="hljs-keyword">of</span> b ]
+[ [x,y] <span class="hljs-keyword">for</span> x <span class="hljs-keyword">of</span> a <span class="hljs-keyword">for</span> y <span class="hljs-keyword">of</span> b  <span class="hljs-keyword">if</span> x % y ]
+</code></pre>
+<p>Proposal: restricted language, paren free heads, arbitrary sequences of let and if.</p>
+<p>Allows?</p>
+<pre><code class="language-js">[ w <span class="hljs-keyword">if</span> w ]
+[ z <span class="hljs-keyword">let</span> w = z * z <span class="hljs-keyword">if</span> z &gt; <span class="hljs-number">4</span> ]
+</code></pre>
+<p>Mixed discussion about necessity</p>
+<p>Discussion about also providing while clauses. Rejected for a (flawed) technical reason (incorrect claim was that they couldn't mutate a variable), but not much interest in including while clauses anyway.</p>
+<p>DH: Allow if anywhere makes it more expressive and allows for earlier outs. The let is necessary for nested loops (storing outer values for use in the inner loop)</p>
+<p>WH: To clarify proposal: No semicolons? No commas?</p>
+<p>BE: Correct.</p>
+<p>MM: All agreed, whatever is allowed here is also allowed between parens for generator comprehensions.</p>
+<p>BE: No cost, no loss, use case gains.</p>
+<a href="#conclusionresolution-extending-array-comprehension"><h4 id="conclusionresolution-extending-array-comprehension">Conclusion/Resolution</h4></a><ul>
+<li>Consensus on Jason's proposal: for, if, let, const can be interleaved. Applies to both Array Comprehensions and Generator Comprehensions</li>
+</ul>
+<a href="#yield-the-identifier"><h2 id="yield-the-identifier">yield, the identifier?</h2></a><p>AWB: yield * 5?</p>
+<p>BE: yield is reserved inside of generators</p>
+<a href="#function-poison-pill-methods-and-new-function-syntactic-forms"><h2 id="function-poison-pill-methods-and-new-function-syntactic-forms">Function Poison Pill Methods and new Function Syntactic Forms</h2></a><p>Reference: <a href="https://mail.mozilla.org/pipermail/es-discuss/2012-October/026030.html">https://mail.mozilla.org/pipermail/es-discuss/2012-October/026030.html</a></p>
+<p>AWB: Should all new function forms, in non-strict mode, all have poison-pill properties for arguments.caller, arguments.callee, Function.caller, Function.callee.</p>
+<p>WH: These are new forms, unlikely to have the bizarre engine semantics that poisoning was designed to eradicate. Why are we bothering with poisoning them at all?</p>
+<p>BE: notes that es-discuss preference was to uniformly poison</p>
+<p>MM: No security problem to have the function behave the same with respect to either strict or non-strict</p>
+<a href="#conclusionresolution-function-poison-pill-methods-and-new-function-syntactic-forms"><h4 id="conclusionresolution-function-poison-pill-methods-and-new-function-syntactic-forms">Conclusion/Resolution</h4></a><ul>
+<li>New forms are like old forms per non-strict and strict (reduce surprise factor)</li>
+</ul>
+<a href="#conventions-make-non-standard-properties-configurable"><h2 id="conventions-make-non-standard-properties-configurable">Conventions make non-standard properties configurable</h2></a><p><a href="http://wiki.ecmascript.org/doku.php?id=conventions:make_non-standard_properties_configurable">http://wiki.ecmascript.org/doku.php?id=conventions:make_non-standard_properties_configurable</a></p>
+<p>MM: The other non-standard bits that implementations add, should be configurable so SES can repair or remove it.</p>
+<p>Proposal: All non-standard properties that are put on standard built-in objects by implementations must be configurable: true and actually deletable.</p>
+<p>WH: The proposal should apply only at the surface of built-in objects. It should be perfectly fine for an implementation to create an object X with nonconfigurable properties and set b.p = X (where b is a standard built-in object) as long as b.p is configurable.</p>
+<p>MM: Agreed.</p>
+<p>WH: Note that this object tree scanning approach doesn't protect against language extensions. For example, consider an ES5 sanitizer applied to an ES6 script. The sanitizer wants to restrict the script to only the built-ins it whitelists. The sanitizer walks through the built-in objects, deleting ones it hasn't whitelisted but then is blissfully unaware that the script can get access to non-whitelisted generator classes by defining and running a generator function via language syntax instead of following object links.</p>
+<p>MM: Yes, that is a hole. In fact, we've been blocking implementations that accept E4X syntax for that very reason. However, we don't currently try to parse a script to see if it uses future syntactic constructs we don't know about.</p>
+<p>BE: Backs Mark's rationale</p>
+<a href="#conclusionresolution-conventions-make-non-standard-properties-configurable"><h4 id="conclusionresolution-conventions-make-non-standard-properties-configurable">Conclusion/Resolution</h4></a><ul>
+<li>Luke and Mark will chat offline.</li>
+</ul>
+
+</body>

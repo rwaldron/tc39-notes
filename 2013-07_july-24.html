@@ -1,0 +1,519 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 24, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-24-2013-meeting-notes"><h1 id="july-24-2013-meeting-notes">July 24, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Luke Hoban (LH), Rick Hudson (RH), Allen Wirfs-Brock (AWB), Yehuda Katz (YK), Anne van Kesteren (AVK), Jeff Morrison (JM), Sebastian Markbåge (SM), Paul Leathers (PL), Avik Chaudhuri (AC), Ian Halliday (IH), Alex Russell (AR), Dave Herman (DH), István Sebestyén (IS), Mark S. Miller (MM), Norbert Lindenberg (NL), Erik Arvidsson (EA), Waldemar Horwat (WH), Eric Ferraiuolo (EF), Matt Sweeney (MS), Doug Crockford (DC), Rick Waldron (RW), Rafeal Weinstein (RWN), Dmitry Lomov (DL), Brendan Eich (BE), Brian Terlson (BT)</p>
+<hr>
+<a href="#46-binary-data-update"><h2 id="46-binary-data-update">4.6 Binary Data Update</h2></a><p>(Dave Herman &amp; Dmitry Lomov)</p>
+<p>DH: (Introduces Binary Data) A mechanism for creating objects that guarantee a shape (Struct)</p>
+<p>Use case that has become less important, I/O</p>
+<p>Dmitry has given use cases where we still want control over endianness</p>
+<p>MM: A little surprised by this direction (not objection)</p>
+<p>If you have something like a class, do you an imagine something like an array buffer, per instance?</p>
+<p>DH: it's still possible to overlay structs over larger sections</p>
+<p>MM: if you want the instances to be gc'able...?</p>
+<p>DH: they'd have to have separate backing storage, but those could be GC'd like normal</p>
+<p>There's more work we've been doing with Rick and his group at Mozilla on parallelism patterns by describing the shape the data you're operating on. You still want the ability to do things like parallel iteration over arbitrary JS values, which means things like &quot;object&quot; and &quot;any&quot;.</p>
+<p>Those are high-fidelity drop-in replacements for JS arrays, but with no holes.</p>
+<p>DH: once you introduce pointers, you have to bifurcate the design a bit; opaqe vs. non-opaque structs. Don't want to go into details, but will put that on the wiki.</p>
+<p>MM: You can use structs to model more classical class object model where all the data is on the instance. (structural types)</p>
+<p>YK: Do you imagine people using this in regular JS?</p>
+<p>DH: Yes, but if they're writing regular JS, they'll profile and find that they want to use these sorts of structs in hot places.</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ThingBackingStore</span>(<span class="hljs-params"></span>) </span>{...}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Thing</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ThingBackingStore();
+}
+</code></pre>
+<p>... Becomes something like...</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> ThingBackingStore = StructType({
+<span class="hljs-attr">stuff</span>: <span class="hljs-keyword">new</span> ArrayType(object)
+});
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Thing</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">var</span> selfie = <span class="hljs-keyword">new</span> ThingBackingStore();
+
+selfie.stuff = ....;
+<span class="hljs-keyword">return</span> selfie;
+}
+</code></pre>
+<p>WH: What kind of fields can be had?</p>
+<p>DH: Type descriptor algebra, set of combinators. (atomic types) Uint8, Uint8Clamped, Uint16, Uint32, float32, float64, ObjectRef, StringRef, &quot;any&quot;
+new ArrayType(T), new ArrayType(T, )</p>
+<p>WH: no uint64?</p>
+<p>DH: no.</p>
+<p>BE: I'm proposing it separately</p>
+<p>WH: what's the difference between ObjectRef and any?</p>
+<p>DH: ObjectRef can be a object or null, while any can be any valid JS value.</p>
+<p>DH: SymbolRef is mostly an optimization over any.</p>
+<p>EA: What about SymbolRef?</p>
+<p>DH: Symbols should be objects. We'll have that discussion later.</p>
+<p>AWB: Why isn't there a Uint16Clamped?</p>
+<p>DH: That was just needed by canvas.</p>
+<p>MM: Only Uint8Clamped?</p>
+<p>DH: Yes, compatibility with canvas' ImageData.data.</p>
+<p>AR: Y U NO CLAMPED EVERYWHERE!?</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> Point = Struct({
+  <span class="hljs-attr">x</span>: uint32,
+  <span class="hljs-attr">y</span>: unit32
+});
+
+<span class="hljs-keyword">var</span> p = <span class="hljs-keyword">new</span> Point({ <span class="hljs-attr">x</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">12</span> });
+
+p.buffer;
+
+p.byteLength;
+</code></pre>
+<p>WH: Can you replace the <code>buffer</code>?</p>
+<p>DH: No, {[[writable]]: false, [[configurable]]: false, [[enumerable]]: false}</p>
+<p>WH: Can you write to the buffer?</p>
+<p>DH: Yes</p>
+<p>DH: V8 team also wants reflection so that they can check the type and the field offsets.</p>
+<p>WH: what if there's an object field in the buffer somewhere?</p>
+<p>DH: let me outline what I'm doing, mayble that'll clear it up</p>
+<p>if I have:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> q = <span class="hljs-keyword">new</span> Thing();
+q.buffer == <span class="hljs-literal">null</span>; <span class="hljs-comment">// true</span>
+q.byteLength == <span class="hljs-literal">undefined</span>; <span class="hljs-comment">// true</span>
+</code></pre>
+<p>One of the things we've talked about is being able to censor access to the buffer at various points.</p>
+<p>Lets say you want some computation is working on a sub-view of a buffer, we need to be able to cordon off access between these parallel things.</p>
+<p>We can imagine putting/removing things from the &quot;opaque&quot; state. p.buffer is originally some buffer object, but then I'd be able to set the opaque state. Having an access to the buffer will let me re-set that constraint later, ocap style.</p>
+<p>WH: I'd like the type itself to denote if it's buffer-backed or not.</p>
+<p>DH: once I can lock down the instances, that doesn't matter so much.</p>
+<p>WH: it's one more thing I have to write out at creation time</p>
+<p>WH: I'm looking at this as a backing store for classes</p>
+<p>DH: my feeling is that it's more type and design consistent to not have this depend on having the property</p>
+<p>AR: how do I know it's in the opaque state?</p>
+<p>DH: I'm trying to avoid competing with the namespace for property names, so I haven't solved that yet</p>
+<p>LH: I think that's weird. I don't think anything in the current draft indicates the per-instance-of struct type that goes along with the type.</p>
+<p>BE: that's been diagramed.</p>
+<p>DH: We should stratify buffer and byteLength.</p>
+<p>WH: are there any other special names besides &quot;buffer&quot; and &quot;byteLength&quot; that you're thinking of adding?</p>
+<p>DH: the other major ones are methods that do getting and setting for things like multi-hop getting that avoids intermediate alloc.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> S1 = { <span class="hljs-attr">foo</span>:     , <span class="hljs-attr">bar</span>:     }
+<span class="hljs-keyword">var</span> S2 = { ... s1: s1, ... }
+<span class="hljs-keyword">var</span> x = <span class="hljs-keyword">new</span> S2();
+x.s1.foo
+x.get(<span class="hljs-string">"s1"</span>, <span class="hljs-string">"foo"</span>)
+</code></pre>
+<p>// lots of discussion about structs, prototype chains, and confusion about how long this has been agreed</p>
+<p>AR: don't worry about so much about this object/buffer split; it's showing up because DH is enamoured of return overloading</p>
+<p>DH: the main feedback I'm hearing is that they don't want default stuff in the prototype chain</p>
+<p>// AR: what's the controversy?</p>
+<p>DH: getOwnPropertyNames() matters and should behavle as much as possible like a normal JS object that it's emulating. If it has ergonimic issues that we discover later, so be it, but that's the general approach.</p>
+<p>MM: if we find a problem, I'm happy to deal with it -- but I want to take it seriously and not as a detail.</p>
+<p>AWB: I think this is extremely promising and there are lots of ways we can leverage this. But I don't see how we can get this into the ES6 spec. So many details. So many interactions.</p>
+<p>WH: so there won't be binary data in the spec?</p>
+<p>AWB: no, there are TypedArrays.</p>
+<p>We might be able to do this as a self-contained thing after ES6.</p>
+<p>Speaking editorially, we probably need to accept we won't get this done for Dec.</p>
+<p>BE: if we're going to discuss if this is ES6 or ES7, we can have that discussion, but that's not how this started.</p>
+<p>LH: this began as a technical update.</p>
+<p>AWB: Need to explore the interaction with classes, @@create, etc. to me it's hard to separate some of the tech discussions from the schedule discussions.</p>
+<p>DH: Objection to the exxageration of &quot;newness&quot; of this conversation.</p>
+<p>BE: (Right, we've seen this)</p>
+<p>MM: First time I've understood, so first time I'm reacting. Where the buffer is used as an instance itself</p>
+<p>AR: No, not the buffer.</p>
+<p>MM: What are these called?</p>
+<p>DH: Structs, always. These examples are just to show what you can do with them</p>
+<p>MM: the idea that these things inherit from the struct-making function's prototype...was that always there?</p>
+<p>BE: I'd like to intervene. We're mixing things up still. Can I be blunt? The thing that set mark off was the &quot;I don't have a strong opinion about that&quot;.  If it's too late for ES6, it's ES7. We need details and there's sentiment in favor of stratification.</p>
+<p>...Champions should have a strong opinion about these aspects</p>
+<p>These should look like objects as much as possible</p>
+<p>DH: Fair, but these weren't on my agenda to talk about. My dismissal was out of unpreparedness for the question.</p>
+<p>WH: I would much prefer for this to be in ES6. TypedArrays without Struct seems half-baked</p>
+<p>DH: YEs, agree, but the specing of modules trumps the specing of binary data.</p>
+<p>YK: IIRC, you've said that Struct is polyfillable</p>
+<p>WH: What does &quot;polyfillable&quot; mean in this case?</p>
+<p>YK: Does not need to be in the spec for user code to use.</p>
+<p>DH: Polyfillable in the sense of perfect semantics, but not the level of performance.</p>
+<p>DH: yes, but this enables a class of optimiztions</p>
+<p>LH: it's not strictly enabling the perf optimizations...right?</p>
+<p>DH: no, you can't infer that there's an invariant that it won't change.</p>
+<p>WH: You cannot know that a property is uint8 for example. It's hard to efficiently allocate just a byte for it if you can't tell that no one will try to write a larger value to it.</p>
+<p>DH: I want to make another point which I had to learn along the way: I came to understand that there are 2 large, distinct classes of use-case:
+1.) efficient representations of memory <em>within</em> pure computation
+2.) serialization and de-serialization
+The design constraints are very different. For I/O, you want a LOT of control. And JS is expressive for those things. Doing it in a built-in library is a waste of TC39's time. Where TC39 can add something programmers can't is the memory-internal set of use-cases. Polyfilling only gets you a little bit of benefit there, but if it's built in, the optimizations can happen.</p>
+<p>BE: the typed-array use-cases motivated the structs work for efficient overlays.</p>
+<p>WH: but why would you polyfill something that doesn't perform or only has TypedArray?</p>
+<p>DH: it's better to put it in TC39 even if we don't get full-structs. I'm gonna do the best I can to get it into ES6, but it's important. No reason not to have TypedArrays if we can't get it done, though. Better for us to control the sharp corners than to leave it in Khronos.</p>
+<p>DH: I've focused on the in-memory patterns and others probably haven't thought about these as hard. But i haven't even gotten to the stuff that the V8 team brought up: for webgl, since you can have structs and they can be overlayed with buffers, what's the alignment story? TypedArrays haven't had unaligned access. The safest thing to do here is to provide a universal padding scheme that's portable.</p>
+<p>DH: gl programmers want the ability to use structs on the JS side, but on the GL side, want the ability to demonstrate exact offsets and optimize for specific systems. They want aligned fields, but they want complete control.</p>
+<p>WH: do they want holes? if we use C-padding, they can re-order fields explicitly to get the least total size.</p>
+<p>DH: I'm unclear what's specified and not in C</p>
+<p>WH: The C language spec states only that the fields must be in ascending address order. However, in order to be able to link code and have it interoperate, every ABI must spec it. As far as I know, they all specify it as &quot;naturally aligned&quot; using greedy allocation: for each field pick the next position that has the correct alignment.</p>
+<p>WH: This is sufficient control to allow users to minimize padding to the minimum possible if they want to. I sometimes do this to my C++ classes. All you need to do is to reorder your fields to avoid doing things such as interleaving bytes and float64's.</p>
+<p>DH: the proposal from dslomov's group is that the struct ctor can specify offsets:</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> ST([
+    [<span class="hljs-number">0</span>, uint32, <span class="hljs-string">"le"</span>],
+    ...
+]);
+</code></pre>
+<p>MM: dave, can you state the alignment rule?</p>
+<p>DH: every leaf type in a struct has natural alignment</p>
+<p>WH: this is like most C systems, if you make an array of structs, the elements cannot be misaligned. struct sizes are rounded up, padding them up to their largest alignment to avoid possibly putting them in a misaligned context and breaking the alignment. A struct {x: double, y:uint8} has size 16 instead of 9 so that alignment of the double field works if you create an array of such structs. On the other hand, the struct {x1:uint32, x2:uint32, y:uint8} would have size 12 instead of 9 because it only needs 4-byte alignment.</p>
+<p>MM: I heard there was soemthing about a reflective operation for obtaining the layout?</p>
+<p>DH: it's work I still ahve to do.</p>
+<p>MM: what object do you get back?</p>
+<p>DH: TBD. Tempted to say it looks like the thing you passed in originally.</p>
+<p>WH: I dont' see bool...deliberate?</p>
+<p>DH: yep.</p>
+<p>WH: let me go on record as requesting a bool field.</p>
+<p>?: Can't you use uint8 for bool?
+?: Use object type for bool.
+?: What about other types such as different kinds of objects?</p>
+<p>WH: bool is different. I am only asking for bool here. A bool stored in a single byte, so using 8 bytes for an object reference for it would be a substantial cost. A uint8 is not a suitable replacement because one of the major use cases for structs is to use them as an efficient backing store for objects, and getting 0 and 1 instead of false and true would be a really annoying impedance mismatch.</p>
+<p>MM: how many bits per bool does an array of bool's contain?</p>
+<p>BE: needs to be exactly 1 byte</p>
+<p>WH: Don't want to repeat the C++ vector<bool> mistake that tried to pack it to 1 bit/bool and ended up breaking lots of things. The C++ committtee now regrets having done this.</p>
+<a href="#9-json-continued"><h2 id="9-json-continued">9 JSON (Continued)</h2></a><p>(Doug Crockford)</p>
+<p>DC: Explaining updates made since yesterday</p>
+<ul>
+<li>Reordered Appendix</li>
+<li>Moved ECMAScript mention</li>
+</ul>
+<p>The last big change is that Rick suggested removing the security section (10) and I think I agree</p>
+<p>AWB: Those don't apply to a spec at this level</p>
+<p>DC: Agree, I don't think it belongs</p>
+<p>AWB: what's the start symbol of the grammar?</p>
+<p>DC: unspecified.</p>
+<p>RW: my suggestion was to re-order the appendix to ensure that Value comes first and that anything that is one starts the gammar</p>
+<p>AWB: I think it should specify a start symbol.</p>
+<p>DC: some uses of JSON won't want a bool at the top level</p>
+<p>AWB: ..or array, or object. All this describes is the universally valid syntax, and that has to start somewhere.</p>
+<p>DC: I don't think it does</p>
+<p>AWB: then I don't know how to parse/validate.</p>
+<p>YC: I think you do need a root symbol. I've had this exact issue.</p>
+<p>AR: C++ experience backs that up. Lots of incompat.</p>
+<p>RW: can't we just say that anything that's a value can begin the production?</p>
+<p>MM: we have a historical conflict. As I read the ES spec vs. this, we see value vs. object/array.</p>
+<p>DC: it should be value, then. How should we specify that?</p>
+<p>AWB: just say that any input that can be parsed that uses that start symbol is valid JSON text</p>
+<p>MM: we should decide if we want to be compatible with reality or the RFC. Given that we decided on value in ES, we have incompat. Shifting to value as the start symbol would be up-compat with reality and current practice.</p>
+<p>AWB: doesn't say what a &quot;reader&quot; does with this grammar, so can allow/disallow however it wants. There's no universal JSON reader.</p>
+<p>MM: JS might accept those things but not give you access to the literal content of the values</p>
+<p>NL: this should be based on Unicode code points. We don't know how to convert between things if we don't.</p>
+<p>DC: best practice might be to use Unicode, but this grammar doesn't need to.</p>
+<p>NL: I differ. We care about computing in this group.</p>
+<p>DC: if someone wants to use a 6-bit code to send JSON from a satellite, JSON is agnostic.</p>
+<p>AWB/NL: The title says &quot;interchange format&quot;, should probably just be a &quot;grammar&quot;</p>
+<p>NL: Without reference to Unicode code points, we can't decide which characters Unicode escape sequences are equivalent to, e.g.
+\uxxxx ===? ö
+\uxxxx\uxxxx ===? ö</p>
+<p>AVK/NL: current best practice is to base document formats on Unicode, e.g. HTML</p>
+<p>WH: The description of where whitespace can go is broken. Currently it's described as only being allowed before or after one of the punctuation symbols. That means that &quot;{3}␊&quot; parses but &quot;3␊&quot; does not.</p>
+<p>MM: Crock, what purpose does the document serve?</p>
+<p>DC: ... i forgot what he said</p>
+<p>MM: Comparison to RFC</p>
+<p>AVK: Refers to ECMAScript's JSON, not the RFC</p>
+<p>AWB: Wants other standards to make references to this normative standard and not some other.
+...To avoid the inclusion of anything that isn't the grammar, eg. mime type</p>
+<p>MM: The danger of the IETF is trying to go beyond the RFC.</p>
+<p>AWB: This document to have the grammar over an abstract alphabet, normative Unicode mapping to that abstract alphabet.</p>
+<p>MM: Ok, a two level grammar. Still a refactoring of the RFC and that's ok.</p>
+<p>AVK: You don't have to refactor, just define the grammar as a code point stream</p>
+<p>note differences between code points and character encodings</p>
+<p>MM: Why retreat from the RFC?</p>
+<p>DC: There is contraversy in that it tolerates unmatched surrogate pairs. Want a standard that avoid that contraversy</p>
+<p>NL: You can avoid it by talking about code points. The transfer format can outlaw unpaired surrogate, e.g. utf-8.</p>
+<p>AVK: Right, utf-8 does not allow lone surrogates, it can only encode Unicode scalar values.</p>
+<p>[After the fact note, we neglected escapes here...]</p>
+<p>BE: Try to avoid duplicating efforts</p>
+<p>DC: This is meant to be a guard against other efforts going out of bounds.</p>
+<p>BE/AWB: Need to be addressed:</p>
+<ul>
+<li>Goal symbol</li>
+<li>&quot;e&quot; production</li>
+<li>leading/trailing whitespace</li>
+<li>character sets</li>
+</ul>
+<p>NL/AVK: Without describing the character encoding</p>
+<p>Discussion about character =&gt; code point</p>
+<p>AVK: Need to define a representation you're using</p>
+<p>AWB: Define the alphabet</p>
+<p>AVK: Use the Unicode alphabet, without talking about utf-8, etc.</p>
+<p>AWB: DC might be rejecting the discussion of encoding.</p>
+<p>DH: The purpose of code point is to avoid talking about encoding.</p>
+<p>AR: Why is this so important?</p>
+<p>AVK: In order to describe the grammar, you need to define an abstract alphabet, Unicode is sufficient.</p>
+<p>MM: This differs the RFC is code units instead of code points</p>
+<p>DC: I will add a sentense in the section about JSON text, that it's a sequence of code points</p>
+<p>AWB: Unicode code points</p>
+<p>Include an informative note that it doesn't imply a specific character encoding</p>
+<p>Character sets:</p>
+<pre><code>&quot;json text is a sequence of Unicode code points that conforms to this grammar&quot;
+</code></pre>
+<p>Start symbol:</p>
+<pre><code>value
+</code></pre>
+<p>MM: Move to declare consensus?</p>
+<p>AWB/WH: Doug needs to finish an editorial pass</p>
+<a href="#consensusresolution-9-json-continued"><h4 id="consensusresolution-9-json-continued">Consensus/Resolution</h4></a><ul>
+<li>Pending the remaining edits, to be discussed for approval tomorrow.</li>
+</ul>
+<a href="#test-262-update"><h2 id="test-262-update">Test 262 Update</h2></a><p>(Brian Terlson)
+Test262-ES6.pdf</p>
+<p>Talk about moving test262 to github.</p>
+<p>BT: What do we need to make that happen?</p>
+<p>DH: Use CLA for pull requests.</p>
+<p>DH: Lets not solve this now. Lets stick to the current process that only we can only approve PR from members of TC39/ECMA</p>
+<p>Apporoved to move the source code to GitHub, keeping all the current process for approval of tests.</p>
+<p>IS: We will need to have a way to download the tests from ECMA.</p>
+<p>IS/AWB: Needs to be an update to the tech report. Describing what the different packages are good for.</p>
+<p>BT: In due course backporting will be hard, but in the ES6 timeframe it should be okay.</p>
+<p>MM: Are we anticipating backwards incompatible changes to the testing harness?</p>
+<p>BT: There migth be some, we can probably avoid it.</p>
+<p>MM: good, good.</p>
+<p>BT: In ES6 a number of tests moved location. We'll create a map and move them programmatically.</p>
+<p>AWB: I'm planning on making the reorganization within the next few weeks.</p>
+<p>BT: We'll annotate the tests with previous and new locations.</p>
+<p>BT: Norbert's proposal is to rename the folders to use English names and remove the multitude of subfolders.</p>
+<p>[Discussed moved to organization of the spec.]</p>
+<p>AWB: There could be an arbitrary number of chapters in the spec. It's somewhat convenient to be able to say &quot;chapter 15&quot;.</p>
+<p>BE: Core shouldn't depend on 15.</p>
+<p>AWB: Trying to get to that situation.</p>
+<p>MM: I don't object to a part 1 / part 2 organization, but I also don't see the point.</p>
+<p>MM: Back to tests, I want test directories to match spec chapters.</p>
+<p>BT: Agreed.</p>
+<p>BT: Contributors: <a href="http://wiki.ecmascript.org/doku.php?id=test262:coreteam">http://wiki.ecmascript.org/doku.php?id=test262:coreteam</a> Need to expand.</p>
+<p>DH: We could use github pages and make test262.ecmascript.org point to that.</p>
+<p>DH: BT, you set up a mirror for the site. I will do the DNS switch, call me, maybe.</p>
+<p>BT: Given the new algorithms, designating algorithm step is not always feasible. Proposal is to require identifying the section, and maybe the algorithm step.</p>
+<p>BT: Ensuring full coverage becomes harder.</p>
+<p>[Much discussion on algorithm step designation not minuted.]</p>
+<p>YK: This should probably be dealt with at the champion level.</p>
+<p>BT: Open issues: How to create cross-host-compatible collateral for realms and scripts?</p>
+<p>MM: ??</p>
+<p>MM: We might only be testing the slow path of JavaScript engines. Testing things in a loop will help.</p>
+<p>[Insert poison attack.]</p>
+<a href="#consensusresolution-test-262-update"><h4 id="consensusresolution-test-262-update">Consensus/Resolution</h4></a><ul>
+<li>move the repo and test262 web presence to github.com/tc39</li>
+</ul>
+<a href="#52-can-computed-properties-name-in-object-literals-produce-string-prop-names-duplicates"><h2 id="52-can-computed-properties-name-in-object-literals-produce-string-prop-names-duplicates">5.2 Can computed properties name in object literals produce string prop names? Duplicates?</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="http://esdiscuss.org/topic/on-ie-proto-test-cases#content-5">http://esdiscuss.org/topic/on-ie-proto-test-cases#content-5</a></p>
+<p>AWB: Latest revision include computed properties</p>
+<pre><code class="language-js">{ [x]: <span class="hljs-number">1</span>, [y]: <span class="hljs-number">2</span> }
+</code></pre>
+<ol>
+<li>Can x evaluate to a string or a symbol? The concern is that people hope to determine the shape of objects by looking at them (but engines also want to determine the shape statically)</li>
+</ol>
+<ol start="2">
+<li>Duplicates?</li>
+</ol>
+<p>EA: I thought we allowed any value as a computed property</p>
+<p>DH: Yes, and converted with ToPropertyKey</p>
+<p>Discussion re: duplicate computed property keys</p>
+<p>DH: Comes down to &quot;how likely are there going to be consequences</p>
+<p>WH: I draw a distinction between definition and assignment and I view this example as definition.</p>
+<p>EA: If you call defineProperty twice with the same property you do not get an exception. We should have the same semantics for define property in an object literal (and class).</p>
+<p>MM: Often enough, if you get a</p>
+<p>MM: The importance of throwing an error at the point</p>
+<p>YK:</p>
+<p>MM: If these are symbols, the programer did not intend to override a previous property.</p>
+<p>DH: JavaScript practioners consistently tell us they prefer fail-soft with opt-in. Having said that, we are deploying strict mode more widely.</p>
+<p>BE: We don't know, people will write top-level functions.</p>
+<p>DH: It's the direction we're heading in.</p>
+<p>WH:  Main motivation here is consistency. In strict mode we intentionally  made having duplicate properties such as {a: 3, a: 4} be an error. That  rule is simpler and easier to remember than a rule that constructs  another exception such as it being an error unless one of the properties  is specified using [].</p>
+<p>[debate]</p>
+<p>WH:  This has nothing to do with allegations of trying to make the language  less dynamic. I want the simplest, easiest to remember rules. Had duplicate textual properties been allowed in strict  mode, I'd be campaigning to also allow them if they're specified using  [].</p>
+<p>...</p>
+<p>Discussion re: strict mode checking vs non-strict mode checking</p>
+<p>There was an assumption that computed properties would disallow duplicates in strict mode (throw)</p>
+<p>MM: The failure will frustrate programmers, but the lack of a failure will frustrate programmers. You say some prefer fail soft, I know of some that want fail fast.</p>
+<p>DH: Static checks are easy to reason about and easy to justify. Dynamic checks are harder to justify and lead to unpredictable results.</p>
+<p>AWB: What happens when x is undefined?</p>
+<p>BE: Let's stick to duplicates</p>
+<p>It's unlikely to want duplicates</p>
+<p>The most common case is that you write two lines like the above and that's what you want</p>
+<p>We should not creep into B&amp;D language with runtime errors</p>
+<p>Quick poll:</p>
+<pre><code>- error, 7
+- no error, 6
+- abstain, 9
+</code></pre>
+<p>DH: I want to hear a response to Mark's point about being bitten by fail-soft</p>
+<p>AR: In Google Wave, you'd get notices that the application &quot;crashed&quot;... the rest of the web doesn't behave that way. Fail soft is seen be some as &quot;wrong&quot; and others as &quot;going along&quot;. I put more favor towards getting &quot;going along&quot;.</p>
+<p>AVK: In specifying web APIs, authors regularly requesting less errors. Back in 2000's, WebKit had asked for less errors...</p>
+<p>YK: Identifies committee pathology</p>
+<p>EA: Waldemar wanted symmetry with the iterable parameter to the Map constructor regarding duplicate keys.</p>
+<p>LH: Do not agree that we need symmetry here.</p>
+<p>BE: This is syntax, Map parameter is not symmetry.</p>
+<p>Recapping Waldemar's position about consistency with duplicate string keys in Objects in strict mode.</p>
+<p>Break.</p>
+<p>Post break discussion, after the points made about @@iterator and @@create</p>
+<a href="#consensusresolution-52-can-computed-properties-name-in-object-literals-produce-string-prop-names-duplicates"><h4 id="consensusresolution-52-can-computed-properties-name-in-object-literals-produce-string-prop-names-duplicates">Consensus/Resolution</h4></a><ul>
+<li>Strings allowed</li>
+<li>Strict Mode: Duplicates are an Error</li>
+<li>Non-Strict Mode: No error</li>
+</ul>
+<a href="#53-special-syntax-for-__proto__-in-an-object-literal"><h2 id="53-special-syntax-for-__proto__-in-an-object-literal">5.3 Special syntax for <code>__proto__</code> in an object literal</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB:</p>
+<pre><code class="language-js">{<span class="hljs-string">"__proto__"</span>: foo}
+</code></pre>
+<p>MM: Uncomfortable with either semantics for this issues</p>
+<p>YK: This is new syntax that looks like old syntax</p>
+<p>...quotation marks and no quotation marks should do the same thing.</p>
+<p>DH: But then there is...</p>
+<pre><code class="language-js">{ [<span class="hljs-string">"__proto__"</span>]: foo}
+</code></pre>
+<p>YK: So for dict, we want &quot;<strong>proto</strong>&quot; as a regular property?</p>
+<p>MM: Yes</p>
+<p>DH: Allows...?</p>
+<p>MM: I'm ok with either decision, because equally uncomfortable</p>
+<p>DH: What happens today?</p>
+<pre><code class="language-js">{<span class="hljs-attr">__proto__</span>: foo }
+{<span class="hljs-string">"__proto__"</span>: foo}
+</code></pre>
+<p>Same.</p>
+<p>MM: Then the quoted case should remain as is.</p>
+<p>BE: The</p>
+<p>MM: computed form:</p>
+<pre><code>- no compat hazard
+- new special case that requires checks
+</code></pre>
+<ul>
+<li>too much overhead</li>
+<li>syntactically unclear re: outcome.</li>
+</ul>
+<a href="#consensusresolution-53-special-syntax-for-__proto__-in-an-object-literal"><h4 id="consensusresolution-53-special-syntax-for-__proto__-in-an-object-literal">Consensus/Resolution</h4></a><ul>
+<li><strong>proto</strong>: magic</li>
+<li>&quot;<strong>proto</strong>&quot;: magic</li>
+<li>[&quot;<strong>proto</strong>&quot;]: no magic, just a string</li>
+<li>[&quot;<strong>&quot; + &quot;proto</strong>&quot;]: no magic, just a string</li>
+</ul>
+<a href="#54-are-typedarray-insances-born-non-extensible"><h2 id="54-are-typedarray-insances-born-non-extensible">5.4 Are TypedArray insances born non-extensible?</h2></a><p>LH: Pretty sure all are extensible.</p>
+<p>DH: I'd like them to be not extensible. There's performance benefits. No reason for expandos. Put them on another object. Gecko is not extensible.</p>
+<p>WH: Second</p>
+<p>DL: Current implementation allows them to be extensible</p>
+<p>AR: does anyone think they <em>should</em> be extensible?</p>
+<p><em>crickets</em></p>
+<p><em>tumble weed</em></p>
+<a href="#consensusresolution-54-are-typedarray-insances-born-non-extensible"><h4 id="consensusresolution-54-are-typedarray-insances-born-non-extensible">Consensus/Resolution</h4></a><ul>
+<li>TypedArray instances are not extensible.</li>
+</ul>
+<a href="#55-concat-and-typed-arrays"><h2 id="55-concat-and-typed-arrays">5.5 concat and typed arrays</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: Anything that's an exotic array (ie. Array.isArray(a) === true), will &quot;spread&quot;</p>
+<p>...Gets weird with Typed Arrays</p>
+<p>Proposing:</p>
+<pre><code>Specifically for concat, we give Typed Arrays a new special concat that auto spreads
+</code></pre>
+<p>MM: The only sensible approach has to be type compatible</p>
+<p>DH: concat is badly designed</p>
+<p>...If we have to do a new method, we shouldn't try to simulate bad behaviour</p>
+<p>Conversation leans toward:</p>
+<ul>
+<li>Two new methods that represent the two behaviours of concat, but as single operations each</li>
+<li>Names need to be added to @@unscopeable</li>
+</ul>
+<p>LH: Does not like a new method that does 90% of the same as another existing method</p>
+<p>DC: can't we just lean on the new syntax? Use &quot;...&quot; for this:</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>([...array1, ...array2]);
+</code></pre>
+<p>AWB: if this isn't heavily optimized, this is going to create a large intermediate object</p>
+<p>DH: this might create issues until people get &quot;...&quot; and engines want to stack-allocate args</p>
+<p>AWB: not an arg</p>
+<p>// agreement</p>
+<p>Mixed discussion about general purpose apis that are lacking in the language.</p>
+<p>BE: how should we settle those issues?</p>
+<p>AR: with science. Look around the world and see what's most common; then put those things in the std lib</p>
+<a href="#consensusresolution-55-concat-and-typed-arrays"><h4 id="consensusresolution-55-concat-and-typed-arrays">Consensus/Resolution</h4></a><ul>
+<li>No concat on Typed Arrays</li>
+</ul>
+<a href="#511-touint32length-and-arrayprototype-methods"><h2 id="511-touint32length-and-arrayprototype-methods">5.11 ToUint32(length) and Array.prototype methods</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> len = Get(o, <span class="hljs-string">"length"</span>);
+<span class="hljs-keyword">let</span> len = ToUint32(len);
+</code></pre>
+<p>If &quot;o&quot; is a Typed Array, this above will</p>
+<p>Can duplicate all the algorithms to handle Type Arrays</p>
+<p>Don't want to do that</p>
+<p>What is the impact of changing to:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> len = Get(o, <span class="hljs-string">"length"</span>);
+<span class="hljs-keyword">let</span> len = ToInteger(len);
+</code></pre>
+<p>53 bits</p>
+<p>DH: Wrapping around?</p>
+<p>AWB: Getting there, not done with points</p>
+<p>For regular arrays, already there, constrained to uint 32</p>
+<p>Only talking about Get, not Put</p>
+<pre><code class="language-js">[].forEach.call({ <span class="hljs-number">1</span>: <span class="hljs-number">1</span>, [<span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>) - <span class="hljs-number">2</span> ]: <span class="hljs-string">"pow"</span>, <span class="hljs-attr">length</span>: <span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>) <span class="hljs-number">-1</span> }, e =&gt; ...)
+</code></pre>
+<p>Visits only the first (nothing after, because holes)</p>
+<pre><code class="language-js">[].forEach.call({ <span class="hljs-number">1</span>: <span class="hljs-number">1</span>, [<span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>)]: <span class="hljs-string">"pow"</span>, <span class="hljs-attr">length</span>: <span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>) <span class="hljs-number">2</span> }, e =&gt; ...)
+</code></pre>
+<p>Visits the first and last (nothing in between, because holes)</p>
+<pre><code class="language-js">[].forEach.call({ <span class="hljs-number">1</span>: <span class="hljs-number">1</span>, [<span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>)]: <span class="hljs-string">"pow"</span>, <span class="hljs-attr">length</span>: <span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">32</span>) <span class="hljs-number">-1</span> }, e =&gt; ...)
+</code></pre>
+<p>Readers: That would be really slow and insane. Don't do that.</p>
+<p>Propose ToLength()</p>
+<ul>
+<li>return length &gt;= 0 ? Truncate to 2^53-1 : 0;</li>
+</ul>
+<p>WH: Note that this only applies to the length property. In other places where the Array method take positions or lengths as parameters, they already call ToInteger, not ToUint32.</p>
+<p>MM: Are there places where the operational meaning of -1 is changing?</p>
+<p>BE: There's hope to make this change, sure that the only things that will be broken will be tests.</p>
+<p>WH: [[Put]] still has a restriction?</p>
+<p>AWB: Yes</p>
+<p>Typed Arrays are not exotic arrays</p>
+<p>BE: Typed Arrays are going to use 64 bit unsigned for the length, gonna be nice.</p>
+<a href="#514-keys-entries-return-numbers-for-array-index-properties"><h2 id="514-keys-entries-return-numbers-for-array-index-properties">5.14 keys(), entries() return numbers for array index properties</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="https://bugs.ecmascript.org/show_bug.cgi?id=1560">https://bugs.ecmascript.org/show_bug.cgi?id=1560</a></p>
+<p>AWB: Arv filed a bug re: Array iterators, the keys() iterator (as well as entries()). Currently it is speced to use strings for the indexes. It would be better to use numbers.</p>
+<p>RW: Agree, the string property would be unexpected.</p>
+<p>General agreement</p>
+<a href="#consensusresolution-514-keys-entries-return-numbers-for-array-index-properties"><h4 id="consensusresolution-514-keys-entries-return-numbers-for-array-index-properties">Consensus/Resolution</h4></a><ul>
+<li>keys(), entries() use numbers for array index properties</li>
+</ul>
+<a href="#57-does-objectfreeze-need-an-extensibility-hook"><h2 id="57-does-objectfreeze-need-an-extensibility-hook">5.7 Does Object.freeze need an extensibility hook?</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> y = <span class="hljs-built_in">Object</span>.freeze([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+<span class="hljs-keyword">let</span> x = <span class="hljs-built_in">Object</span>.freeze(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]));
+</code></pre>
+<p>The second does not really freeze the underlying buffer. So, the following does not work as the array case:</p>
+<pre><code class="language-js">x[<span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;
+</code></pre>
+<p>Discussion about the operational understanding of Object.freeze, clarifications by Mark Miller.</p>
+<p>Lengthy discussion about Object.freeze</p>
+<p>AWB: Proposes the freeze hook</p>
+<p>@@freeze</p>
+<p>Called before the freeze occurs</p>
+<p>DH: I'm pro mops, but you have to be careful with thems.</p>
+<p>LH: Don't think it's wrong that the second item (from above) doesn't freeze the data, that's not what Object.freeze does.</p>
+<p>WH: Object.freeze is part of the API and should match what reading and writing properties does (at least for &quot;own&quot; properties). Having Object.freeze not freeze the data is bad design</p>
+<p>LH: Object.freeze is bad design, Typed Arrays are bad design, we're stuck with them, so what should they do.</p>
+<p>DH: (agrees)</p>
+<p>MM: Object.freeze is named badly. Other than that, there's nothing bad about its design. Its purpose is to make an object's API tamper proof</p>
+<p>LH: (agrees)</p>
+<p>AWB: Method that creates frozen data?</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.freeze(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>())
+</code></pre>
+<a href="#consensusresolution-57-does-objectfreeze-need-an-extensibility-hook"><h4 id="consensusresolution-57-does-objectfreeze-need-an-extensibility-hook">Consensus/Resolution</h4></a><ul>
+<li>No @@freeze MOP hook.</li>
+</ul>
+<a href="#54-typed-array-mop-behaviours-continued"><h2 id="54-typed-array-mop-behaviours-continued">5.4 Typed Array MOP behaviours (Continued)</h2></a><p>AWB: Talking about the descriptors of the properties of TypedArrays</p>
+<pre><code class="language-js">{<span class="hljs-attr">value</span>: ?, <span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">configurable</span>: <span class="hljs-literal">false</span>}
+</code></pre>
+<p>MM: Doing a defineProperty on a single one, should throw. Doing a freeze on the whole thing, is allowed.</p>
+<p>BE: Right now we throw from freeze</p>
+<p>MM: Making these appear like properties in the MOP, throw on individual properties changes.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> b = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+
+<span class="hljs-built_in">Object</span>.defineProperty(b, <span class="hljs-string">"1"</span>, {});
+<span class="hljs-comment">// Throws!</span>
+</code></pre>
+<p>BE: This makes sense.</p>
+<a href="#consensusresolution-54-typed-array-mop-behaviours-continued"><h4 id="consensusresolution-54-typed-array-mop-behaviours-continued">Consensus/Resolution</h4></a><ul>
+<li>Object.defineProperty on Typed Array will throw</li>
+<li>Object.freeze on Typed Array will throw</li>
+</ul>
+
+</body>

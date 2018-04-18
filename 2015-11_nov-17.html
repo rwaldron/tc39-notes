@@ -1,0 +1,363 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 17, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-17-2015-meeting-notes"><h1 id="november-17-2015-meeting-notes">November 17, 2015 Meeting Notes</h1></a><hr>
+<p>Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Stefan Penner (SP), Sebastian McKenzie (SMK), Waldemar Horwat (WH), Mark S. Miller (MM), Paul Leathers (PL)</p>
+<hr>
+<a href="#async-functions-stage-4-process-discussion-bt"><h2 id="async-functions-stage-4-process-discussion-bt">Async functions (Stage 4 Process Discussion) (BT)</h2></a><p>YK: can we order the agenda better? Lets make a template and follow it next time</p>
+<p>BT: potential ES2016 items first</p>
+<p>BT: async function process discussion, they have been stage 3 for 2 months, implemented in edge (soon FF), implemented in babel</p>
+<p>YK: babel version i</p>
+<p>DD: does babel pass test262</p>
+<p>BT: no test262 yet</p>
+<p>YK: thats a blocker</p>
+<p>DE: Is babel 100% spec compliant, we should wait until we have 2 100% spec implementations</p>
+<p>YK: does transpiling to generators make the edge cases easier to deal with?</p>
+<p>SM: I believe so</p>
+<p>YK: It seems like edge cases are always going to happen</p>
+<p>DE: if we wait for FF, we will get more implementor related input</p>
+<p>YK: we need to figure out this rule, babel “loose” mode clearly doesn’t count. Does babel trying for high fedility count?</p>
+<p>DE: browser implementations will likely have different criteria</p>
+<p>YK: high fedility simulation should be sufficent</p>
+<p>BT: edge is basically desuguring to promises + generators</p>
+<p>AK: two implementations that pass the test, should be sufficient. (tests implied as test262)</p>
+<p>BT: I believe we as a group should be able to deem that the current landscape is or is not sufficient.</p>
+<p>YK: Are we holding babel to a higher standard then browser?</p>
+<p>DD: there is a difference between bugs and missing features</p>
+<p>DE: we should wait until 2 implementations pass the tests</p>
+<p>DD: test should be approved by reviewers.</p>
+<p>BT: mainline tests must pass</p>
+<p>SP: In summary, tests approved by reviewers must have 2 implementations that pass.</p>
+<p>BT: should we update the process document, the champion comes with a set of tests for stage 4, the group uses this to +1/-1</p>
+<p>YK: source2source should be considered sufficient for “implementations’</p>
+<p>AK: stage 3 is somewhat problematic, implementations must put out there neck early.</p>
+<p>SK: sounds like a good filter, if no implementation wants to stick out their neck maybe the feature doesn’t have value</p>
+<p>DE: if there are tests, that we agree are good, any implementation should be sufficient.</p>
+<p>BT: if I come back tomorrow with mainline tests, that reviewers agree on, is babel + chakra sufficient?</p>
+<p>everyone: yup</p>
+<p>BT: babel should be considered an implementation.</p>
+<p>KS: stages are meant to signal churn risk, the only problem with babel is less likely to give churn feedback</p>
+<p>YK: churn feedback?</p>
+<p>KS: 80% implemented, 20% missing, will babel give feedback?</p>
+<p>YK: babel does provide this feature.</p>
+<p>DD: can we accept 2 user-land transpilers</p>
+<p>YK: browsers could also implement as source2source step.</p>
+<p>YK: proxies are a good example, likely input from babel isn’t as valuable. As it must make all . operations slow. Which wouldn’t be acceptable for a runtime. and also why babel doesn’t offer proxies.</p>
+<p>YK: so only cpp compilers qualify?</p>
+<p>BT: we can look at it case by case, and deem if it is sufficient or not. Some features are likely fine as source2source and others are not.</p>
+<p>YK: DD you are right to be worried</p>
+<p>DD: thanks you, we can move on.</p>
+<p>BT: time for a regexp talk ?</p>
+<a href="#conclusionresolution-async-functions-stage-4-process-discussion-bt"><h4 id="conclusionresolution-async-functions-stage-4-process-discussion-bt">Conclusion/Resolution</h4></a><p>None yet.</p>
+<a href="#objectvaluesentries"><h2 id="objectvaluesentries">Object.values/entries</h2></a><p>JHD: OK for stage 3? It got signoff
+… [general consensus]</p>
+<a href="#conclusionresolution-objectvaluesentries"><h4 id="conclusionresolution-objectvaluesentries">Conclusion/Resolution</h4></a><p>Object.values/entries approved for stage 3</p>
+<a href="#stringpadleftright"><h2 id="stringpadleftright">String.pad{Left,Right}</h2></a><p>JHD: Concerns raised on es-discuss: 1) No grapheme handling (response: then other existing things should be changed, and nothing cares about it. Every language follows native string support in its padding.)</p>
+<p>… [General consensus that that’s OK]</p>
+<p>WH: I see the choices as either doing this simple thing (measuring code units) or doing something really, really complicated that works correctly on graphemes. The simple thing is useful in practice, while implementing grapheme measurement would be too complicated and take us a long time. So I support this.</p>
+<p>JHD: 2) Naming: we sometimes use left/right, sometimes start/end, this one feels right. The language already equates left/start/index-0 and right/end/last index. In this context, RTL doesn’t apply…</p>
+<p>DD: How about padStart, padEnd?</p>
+<p>DH: Well, it’s very entrenched</p>
+<p>JHD: BiDi is really complicated</p>
+<p>DD: Eurocentric</p>
+<p>DH: How hard will we get trolled? Being willfuly different…</p>
+<p>YK: people wouldn’t expect padLeft, if the language has padLeft and it does something different. That is wrong. If we have other methods do the same thing, we are good.</p>
+<p>JHD: Only remaining objection remaining is the name</p>
+<p>padStart only makes sense if its RTL aware
+YK: saying padLeft, and meaning visual right is clearly bad.</p>
+<p>YK: any objections start/End ?</p>
+<p>CM: Remaining parallel with trimLeft/trimRight, established names?</p>
+<p>DD: Add trimStart, trimEnd and rename to padStart, padEnd as part of annex B.</p>
+<a href="#conclusionresolution-stringpadleftright"><h4 id="conclusionresolution-stringpadleftright">Conclusion/Resolution</h4></a><p>Rename to <code>padStart</code>/<code>padEnd</code>, update trimLeft/trimRight proposal to also include trimStart/trimEnd. padStart/padEnd approved for Stage 3.</p>
+<a href="#arrayprototypeincludes"><h2 id="arrayprototypeincludes">Array.prototype.includes</h2></a><p>DD: CC + FF in betas</p>
+<p>DD: test262 works</p>
+<p>DD: Safari doesn’t have TypeArray.prototype.includes</p>
+<p>DD: Stage 4?</p>
+<p>DD: should it be in unscopables?</p>
+<p>BT: if it not in unscopeables it may be ok?</p>
+<p>BT: real world with no breaks, should be good.</p>
+<p>DD: lets make it unscopable</p>
+<p>DD: stage 4?</p>
+<p>YK: yup</p>
+<a href="#conclusionresolution-arrayprototypeincludes"><h4 id="conclusionresolution-arrayprototypeincludes">Conclusion/Resolution</h4></a><p>Move to stage 4 (tomorrow when it’s added to @@unscopables)</p>
+<a href="#functionsent"><h2 id="functionsent">function.sent</h2></a><p>BT: We have not gotten any feedback at all, not from implementors, no implementations, no Babel</p>
+<p>YK: That’s scary; we need some feedback</p>
+<p>DE: Do we have reviewers?</p>
+<p>BT: It’s so tiny! It should be OK to add it. It would be almost impossible to design it  wrong.</p>
+<p>JM: But, does anybody need it?</p>
+<p><a href="https://github.com/allenwb/ESideas/blob/master/Generator%20metaproperty.md">https://github.com/allenwb/ESideas/blob/master/Generator%20metaproperty.md</a></p>
+<p>SP: Let’s defer until we have a strong advocate with use cases</p>
+<p>BT: There are use cases for it, it’s just that no one’s used it, because it’s not implemented anywhere</p>
+<p>YK: Is stage 2, only about completing the spec language? dave’s tweets say userland experiment</p>
+<p>AK: The thing we’re trying to avoid is adding something to the language that won’t be useful for anyone</p>
+<p>BT: Implementing something at Stage 2 carries quite a bit of risk</p>
+<a href="#conclusionresolution-functionsent"><h4 id="conclusionresolution-functionsent">Conclusion/Resolution</h4></a><ul>
+<li>Designated reviewers: DE and DD</li>
+<li>Side process conversation: AK, YK, BT</li>
+</ul>
+<a href="#objectobserve-update"><h2 id="objectobserve-update">Object.observe update</h2></a><p>AK: Object.observe is going to be deprecated in Chrome. I’d like to formally withdraw it from the stage process.</p>
+<p>YK: I already submitted a PR to remove it from tc39/ecma262/README.md!</p>
+<p>AK: I haven’t gotten very much negative feedback</p>
+<p>YK: Maybe the framework wars will be settled and we can revisit this question</p>
+<a href="#conclusionresolution-objectobserve-update"><h4 id="conclusionresolution-objectobserve-update">Conclusion/Resolution</h4></a><p>Object.observe is withdrawn</p>
+<a href="#should-destructuring-declarations-without-bindings-throw"><h2 id="should-destructuring-declarations-without-bindings-throw">Should destructuring declarations without bindings throw?</h2></a><pre><code class="language-js"><span class="hljs-keyword">let</span> { } = obj;
+<span class="hljs-keyword">let</span> { <span class="hljs-attr">foo</span>: {} } = obj;
+</code></pre>
+<p>BT: who is in favor if this being an error?</p>
+<p>BT: this may actually be programmer intent</p>
+<p>BT: it may be expecting side-affects, exhausting an iterator etc.</p>
+<p>YK: decomposing (commenting out large chunks of a destructing statement)</p>
+<p>BT: code-gen may not be as ergonomic</p>
+<p>YK: code-gen supporting this is simple enough, that isn’t a good reason</p>
+<p>BT: no binding identifers in any pattern or sub-pattern, should error.</p>
+<p>YK: it has to be recursively defined.</p>
+<p>DH: refactoring transformations breaking down, due to this restriction is is unfortunate</p>
+<p>DH: without a good argument, I error on the ergonomics wins composition over the error.</p>
+<p>WH: This is like trying to delete the number zero from the number line. It’s cognitively simpler to keep it than to avoid it. {} and [] are legitimate objects and shouldn’t be a special case.</p>
+<p>DH: it is the base-case of a recursive definition.</p>
+<p>YK: As I write code, I often write this, expecting to fill it in after. Only to find a parse/syntax error.</p>
+<p>DH: patterns are defined to symmetry of the structure, in JS we can define 0 or more for [] and {}.</p>
+<p>BT: is there strong support to make this an error:</p>
+<p>YK: what was the exact error</p>
+<p>BT: A user used a : instead of = when attempting to set a default during function arg destructuring.</p>
+<p>YK: This seems like a good use-case for a linter.</p>
+<p>WH: We get these kinds of errors anyway with users putting object literals into contexts where ES parses them as blocks.</p>
+<p>?: There is a use case for users whose style guides do not allow holes in arrays</p>
+<p>BT: current semantic remains?</p>
+<p>everyone: agrees</p>
+<a href="#conclusionresolution-should-destructuring-declarations-without-bindings-throw"><h4 id="conclusionresolution-should-destructuring-declarations-without-bindings-throw">Conclusion/Resolution</h4></a><p>Current semantics stand</p>
+<a href="#legacy-function-hoisting-semantics-in-sloppy-mode-de"><h2 id="legacy-function-hoisting-semantics-in-sloppy-mode-de">legacy function hoisting semantics in sloppy mode (DE)</h2></a><p><a href="https://github.com/tc39/ecma262/pull/175">https://github.com/tc39/ecma262/pull/175</a></p>
+<p>DE: self defining functions, GWT generates this whenever there is a static block</p>
+<p>BT: how many sites?</p>
+<p>DE: GWT is hundreds of thousands, FB uses etc. Quanitify the impact is hard to do.</p>
+<p>YK: BT how many sites did edge break</p>
+<p>BT: none</p>
+<p>DE: there are several things together that cause this issue.</p>
+<p>DE: try { } catch around all code, function hoisting out of try block</p>
+<p>DE: summarize, the problem is:</p>
+<ol>
+<li>sloppy mode block scope function (in a try block likely)</li>
+<li>self defining function</li>
+<li>the self defined function is called multiple times</li>
+<li>the function is not idempotent.</li>
+</ol>
+<p>DE: Google inbox broke.</p>
+<p>DE: several work-arounds, but require changing existing code.</p>
+<p>YK: IE 11 has this in prod, how have they not recieved bug reports?</p>
+<p>DE: I have a proposal that may work, you may not like it</p>
+<ol>
+<li>TL;DR making sloppy mode function declaration “host’ to a var outside the block</li>
+<li>would not change strict mode
+WH: If the outer block contains a binding with the same name as the function being defined in the inner block, will this proposal break that code?</li>
+</ol>
+<p>DE: Yes.</p>
+<p>YK: Intersection semantics, we will only support use-cases that work cross platform</p>
+<p>BT: We did aggregate large amount of data, and did not find this case.</p>
+<p>DE: Team working on Google inbox doesn’t know which way to fix inbox breakage because what’s broken by the hoisting semantics is undefined.</p>
+<p>WH: The ES2015 spec is well defined. There is nothing undefined here about how to fix Google inbox to be compatible with it.</p>
+<p>YK: we knew this is a composition breaker</p>
+<p>DD: 3 browsers support, 1 browser does not. Should we see if people update?</p>
+<p>YK: it doesn’t seem like a widespread problem, inbox is an issue but it may not be a bigger issue.</p>
+<p>BT: + 2 years of IE11 and edge (tens of millions of users)</p>
+<p>DD: the mobile web, isn’t represented here.</p>
+<p>PL: We researched the public web, looking for this. We found some issues, solve them, came to consensus</p>
+<p>WH: the issue is, this fix breaks other things</p>
+<p>DE: what does it break</p>
+<p>BE: we don’t know</p>
+<p>WH: the future is bigger then the past, lets not sacrifice the future for the now.</p>
+<p>WH: The scary part is that under this proposal the resolution of an identifier in the outer scope will change depending on whether the code is strict or not. The same code will work in both strict and non-strict mode but do completely different things. That’s terrifying because it’s easy to unintentionally move a function into strict mode or, conversely, get the use strict declaration wrong and not have it be strict even though you intended it to be.</p>
+<p>WH: this is a foot canon, not a foot gun.</p>
+<p>AK: todays practical semantics are undefined, do to current state of implementations</p>
+<p>KS: can you get more data, what is the “true’ impact</p>
+<p>YK: FF can do implement it, inbox needs to fix</p>
+<p>AK: inbox fixing it is trivial</p>
+<p>WH: if we take out block scope from sloppy, we would have to from strict.</p>
+<p>WH: lexical semantic differences, now would critically be different:</p>
+<p>DE: that is already the case.</p>
+<p>WH: This is a completely different order of magnitude. This strict-vs-non-strict scoping incompatibility would be far more common than some existing obscure differences in eval hoisting.</p>
+<p>PL: It’s true, different browsers have different audiences. I wish we made some changes in the past.</p>
+<p>YK: we knew we would break stuff here, we agreed we would only support already cross platform sites. IE11/edge shipping two years ago, should be evidence enough.</p>
+<p>YK: we intentionally changed semantics, at that time there was strong consensus.</p>
+<p>DE: I feel I don’t have strong consensus, it seems like I may need more information.</p>
+<p>DD: lets make sure we converge on two semantics</p>
+<p>BT: lets be clear EDGE/IE11 semantics are standard thing</p>
+<p>AK: the group seems to want more data</p>
+<p>YK: So a google only optional spec doc?</p>
+<p>BT: So far, inbox only broken. Fixing inbox, and implementing the spec will help uncover is the has a larger impact to the chrome specific users.</p>
+<p>BT: Chrome should make an effort to ship the standardized semantics; don’t assume the standard is broken.</p>
+<p>BT: in the past, IE discovered some issues. We took the approach of fixing all affected sites.</p>
+<p>AK: long term this seems ok, trade-offs to make around release schedules etc. Its not a goal to have a compat mode.</p>
+<p>MF: is it possible to isolate this scenario more, targeting this exact semantics</p>
+<p>DE: in addition to confusion for implementers, that will likely make it hard for users to infer the correct behavior. Complexity is future hostile.</p>
+<p>BT: it seems like even with more evidence, we would still have other, independent reasons not to make this change, such as the future is bigger than the past argument.</p>
+<p>YK: I am surprised IE + edge this.</p>
+<p>DE: do we have evidence this is common or not</p>
+<p>MM: this is just strange</p>
+<p>MM: future is strict, which doesn’t have this problem</p>
+<p>WH: That doesn’t follow. Repeats point about script authors often believing they’re in strict mode when they’re not or vice versa, which is an issue if the two modes silently resolve function identifiers to different things.</p>
+<p>DE: i don’t want sloppy mode to become overly complicated by adding a 3rd case.</p>
+<p>BE: once we made our call (assuming we did due deligence) we should risk chasing our tale by endlessly adjusting the spec…</p>
+<p>BT: we should be prescriptive. GWT should fix its emit. Inbox should fix its app. Chrome should attempt to ship standard semantics.</p>
+<a href="#conclusionresolution-legacy-function-hoisting-semantics-in-sloppy-mode-de"><h4 id="conclusionresolution-legacy-function-hoisting-semantics-in-sloppy-mode-de">Conclusion/Resolution</h4></a><p>No consensus on changing the existing Annex B semantics.</p>
+<a href="#regexp-simplication-semantics-de"><h2 id="regexp-simplication-semantics-de">RegExp simplication semantics (DE)</h2></a><p>A few extension points for RegExp subclassing.</p>
+<ul>
+<li>Symbol.{search,replace,match,split}</li>
+<li>get RegExp#unicode/multiline/etc</li>
+<li>RegExp#exec - an easy single override point
+proposal: fewer extension points.</li>
+</ul>
+<p>DE: today, the cost is both for implementators (no one implements correctly), and user extension</p>
+<p>…some talk about, why is this costly for the implementation…</p>
+<p>WH: I don’t buy the implementation costs, but I do support this proposal for user ergonomics. It makes it much clearer to users what they should implement if they want to subclass RegExp and reduces the opportunities for getting a performance surprise if they override just one thing.</p>
+<p>BE: it was added late</p>
+<p>YK: it was maybe finalized late, but around for years</p>
+<p>DE: it was added with a lack of implementation input</p>
+<p>JHD: i tried to implement on the weekend, and I dont see added value for all these overriding points.</p>
+<p>YK: alan has a motivation, and he is not present</p>
+<p>DD: I think I know, (related to promises), out of the box it should be very easy to create a fully functional subclass. There are some inconsistencies, alan said he would tweak these things. His goal was to make this super easy to make subclasses. Dans argument is, a library could handle the “super easy part’ putting less weight on the spec.</p>
+<p>BE: lets have symbol names for this, alan tried his best. But without implementor feedback, we it may not have been ideal. Since its not implemented, we have the flexibility to change.</p>
+<p>BT: alan is available right now via skype, lets pull him in</p>
+<p>WH: The bigger override kernel is helpful with efficiency. With exec overridable, if a user overrides exec then searching must necessarily call exec on each position of the string. With the bigger kernel of overridable methods, searching could use a Boyer-Moore algorithm instead.</p>
+<p>BE: should we defer this [the override features of ES2015] or take it out.</p>
+<p>BE: we screwed up, it needed more implementor feedback and further iteration.</p>
+<p>MM: lets defer this conversation for tomorrow, when Alan can call it successfully.</p>
+<a href="#conclusionresolution-regexp-simplication-semantics-de"><h4 id="conclusionresolution-regexp-simplication-semantics-de">Conclusion/Resolution</h4></a><p>defer until we can talk to Allen tomorrow</p>
+<a href="#remove-generator-return-de"><h2 id="remove-generator-return-de">Remove generator <code>.return</code>? (DE)</h2></a><ul>
+<li>overview of <code>.return</code></li>
+<li>pros of <code>.return</code>
+<ul>
+<li>signal to iterators/generators when resource is “dropped on the floor”</li>
+<li>reify abrupt completions, generators as a sink for observables, etc</li>
+</ul></li>
+<li>???</li>
+<li><code>.return</code> in the iteration protocol</li>
+<li>why reconsider <code>.return</code> for resources?
+<ul>
+<li>resource allocation mostly now for async i/o and promises</li>
+<li>try/finally pattern predominates for freeing resources</li>
+</ul></li>
+</ul>
+<p>?, WH, MM: comments that this pushes the burden to the consumer. Consumer would need to wrap each for-of loop inside a try-finally that explicity releases the resource.</p>
+<p>YK: example code in an abstraction?</p>
+<p>DE: no, this is imagined direct user code</p>
+<p>DE: Generator <code>return</code> is idempotent</p>
+<p>[Example of speculative auto-disposal syntax: finally let …</p>
+<p>WH: That approach (auto-disposal syntax as a replacement for <code>.return()</code>) either makes garbage collection visible or fails to work for the iteration use case. If you rely on the finally-let to clean up inside a generator, then either you get to run code when the generator is garbage collected or you don’t get notified when the user breaks out of a for-of loop that invoked the generator.</p>
+<p>[discussion about how to do this compatibly in the future if we were to take it out.]</p>
+<p>DH: Need to beware of implementations attaching other meanings to <code>.return()</code></p>
+<p>DH: Could work around the conflicts by using a symbol in the future.</p>
+<p>MM: That doesn’t work. The problem is that an implementation could reify an iterator, run a for-of loop on it partway, break out of the loop, and later continue iterating through it. Such usage would incompatibly break if we were to remove and later re-add a return cleanup mechanism. That was (and still is) the argument why we couldn’t postpone this in ES2015.</p>
+<p>BE: I don’t think we could remove <code>.return()</code>.</p>
+<p>YK: Why is it bad to auto-clean-up?</p>
+<p>DE: Cost of try-catch</p>
+<p>YK: Expect try-catch to be irreducibly expensive in implementations?</p>
+<p>DH: Want sync and async to be as close to each other as is practical.</p>
+<p>YK: Want try-finally to always run finally inside a generator if the generator is used in the common case of using it in a for-of loop. Yes, there are other cases where generators are used in other ways, but this invariant should hold at least for the for-of loop.</p>
+<p>DH: Generators won’t be used for async code (in favor of async functions) and generators will be used primarily for for-of loop.</p>
+<p>DE: Make users explicitly clean up after for-of loops.</p>
+<p>DH: for-of is the only construct in the language that implicitly creates one of these iterators out of the iterable. That’s why it’s different. There is no way to get a hold of one of these to explicitly dispose it.</p>
+<p>DH: We had and resolved those debates before. We shouldn’t be revisiting this and focus on things we didn’t already discuss when debating ES2015.</p>
+<p>DD: we can seperate iterator and retainment.</p>
+<p>MM: combining open a file, and iteration causes the conflation. Preventing a handle to the file from being available.</p>
+<p>YK:</p>
+<p>DE: if we encourage, generators shouldn’t own the resource instead the resource is passed to the generator.</p>
+<p>DH: having syntax for disposal is then misleading</p>
+<p>BE: I don’t think we can walk back from this</p>
+<p>BE: We didn’t add <code>.return()</code> without use cases. Don’t discount those. One initial usecase for implicit <code>return</code> is yielding from the try.</p>
+<p>DH: Don’t want to relitigate the use of try-finally in the language. Disagree with the claim that it’s ok that finally wouldn’t work in generators.</p>
+<p>MM: Allow redundant <code>.return()</code> calls, which are ignored. This way a user can manually iterate and wrap the iteration inside a try-finally that unconditionally calls <code>.return()</code> on the iterable from the finally.</p>
+<a href="#regexp-buffet"><h2 id="regexp-buffet">RegExp Buffet</h2></a><p>BT: if we have multiple proposals, I would propose we attempt to advance them together. I am hoping to get an idea from the group, what the initial RegExp proposal should include.</p>
+<ul>
+<li>look behinds</li>
+<li>Named Capture groups</li>
+<li>Comments</li>
+<li>Free-spacing</li>
+<li>mode modifiers</li>
+<li>Unicode Categories, Blocks, and Scripts</li>
+</ul>
+<p>BT: look behind, is like look ahead but looks behind… <code>(?&lt;=pattern)</code> or <code>(?&lt;!pattern)</code></p>
+<p>BT: both positive and negative variants</p>
+<p>BT: most potent when considering replacements.</p>
+<p>BT: do we follow perl style static lookbehinds, or c# style quantifiers.</p>
+<p>BT: dynamic quantifiers \w capture groups can yield to some unexpected gotchas</p>
+<p>YK: ruby has a pretty big RegExp buffet, and does not support this feature</p>
+<p>BT: does ruby support lookahead?</p>
+<p>YK: will investigate… yes</p>
+<p>YK: lookbehinds run backwards, which makes it somewhat confusing.</p>
+<p>BT: my mind is poisoned, as its to comfortable with implementation details</p>
+<p>WH: Note that the fixed-length and variable-length lookbehind variants are incompatible with each other. They’ll differ on what gets captured by <code>(?&lt;=(.){3})</code></p>
+<p>BT: this feature has been brought up before, MS is working with Nozomu Katō to make this a reality. Is there general interest?</p>
+<p>… [positive thoughts]</p>
+<p>DE: how do you plan to handle backreferences \w look behinds</p>
+<p>WH: What’s the problem? This is no harder than in lookaheads.</p>
+<p>BT: Numbering of capture groups is the ordering of the opening parentheses, regardless of whether they are in a lookbehind or not.</p>
+<p>WH: Strongly support this, in particular the variable length lookbehinds variant of the proposal.</p>
+<p>WH: backtracking behavior should behave to match forward captures. ECMA ones do, perl does not.</p>
+<p>BT: any other items on look behinds?</p>
+<p>BT: stage  0?</p>
+<p>… [yup]</p>
+<p>BT: FYI: twitter poll indicated, people are upset about this…</p>
+<p>BT: Next feature, Named Capture groups <code>(?&lt;name&gt;)…</code></p>
+<p>BT: result.matches { name: value, otherName: value} vs merging with result.</p>
+<p>WH: Would prefer that named captures capture only using named properties but not also duplicate them under both numbers and names.</p>
+<p>YK: May be easier to refactor because adding a name doesn’t shift numbers of following captures.</p>
+<p>WH: That’s nothing new. You do this all the time in existig regexps when inserting a new capture into the middle of the regexp.</p>
+<p>WH: Easier to refactor with named captures that do not alias to numeric properties and introduce new numbers. Can insert and delete those without affecting numbering of other captures. That’s the same simplicity and advantage that ?: provides.</p>
+<p>MM: what can appear in the <code>&lt;&gt;</code></p>
+<p>BT: JS identifier</p>
+<p>BT: we can discuss tightening</p>
+<p>MM: what about numeric identifier?</p>
+<p>BT: we must disallow numeric names and <code>length</code>; we should probably put the named captures on a .matches property of the result</p>
+<p>BT: What syntax to use to backreference to named capture groups?</p>
+<p>C#: <code>\k&lt;name&gt;</code>, perl: <code>(?P=name)</code></p>
+<p>MF: why <code>\k</code> over <code>\&lt;</code></p>
+<p>WH: \ is an identity escape for punctuation symbols. We had reserved it for letters, but engines were excessively permissive, so \ followed by letters other than n, w, etc., might be used in the wild.</p>
+<p>YK: we should likely not move away from existing syntax</p>
+<p>YK: looks like <code>/\k&lt;&gt;/</code> currently escapes <code>\k</code></p>
+<p>BT: this would be a compat issue then</p>
+<p>WH: It may be surmountable. We had the analogous compat situation when we first defined \u.</p>
+<p>BT: We have significant data on regexp, we can run analysis</p>
+<p>SP: it sounds like we should base the choice on your data analysis.</p>
+<p>MF: unicode?</p>
+<p>DE: unicode regexp might have different performance properties</p>
+<p>BT: don’t think thats true for us (MS)</p>
+<p>M: neither for us (Apple)</p>
+<p>DE: oh, ok.</p>
+<p>WH: Named backreferences and unicode are orthogonal concepts. Unicode regexps are not a substitute for traditional regexps; both are useful.</p>
+<p>MF: would you be ok with back-reference and named not being combined?</p>
+<p>WH: that would be unfriendly to users</p>
+<p>BT: Named replacement syntax in the replacement strings? <code>&quot;${name}&quot;</code> or <code>&quot;\\g&lt;name&gt;&quot;</code></p>
+<p>Various: Do it!</p>
+<p>BT: tweeted about this, majority of users were sad.</p>
+<p>BT: I tweeted an example of destructuring and named capturing groups, its now my most retweeted tweet.</p>
+<p>BT: Next feature, Comments &amp; Free-spacing syntax &amp; related semantics:</p>
+<p>BT: The difficulty is how to do this without modifying the /regexp/ literal.</p>
+<p>BT: can we do this in a backwards compatible way?</p>
+<p>MM: Template string tag is the right approach to handle this. Something we can ship. This avoids the parsing problems because template string literals’ lexing wouldn’t need to change.</p>
+<p>MM: lots of issues with parsing related to RegExp, this may keep it from growing in complexity.</p>
+<p>DH: we are already in a situation, lexing is already complicated.</p>
+<p>WH: Extensions that overcomplicate lexing, which this would do, are dangerous. If the a web page goes through a white-lister that lexes it one way and then run through an engine that lexes it in another way, it can sneak things past the while-lister.</p>
+<p>BT: can someone more familiar with the lexing speak to this complexity?</p>
+<p>WH: It’s undecidable in Perl. It guesses what you mean.</p>
+<p>YK: can you explain</p>
+<p>…</p>
+<p>SP: it seems like we can explore this further as a templateString, if it really feels poor we can explore grammar based variant.</p>
+<p>BT: Comments: <code>/(?# this is a comment)a*/</code></p>
+<p>BT: Annoying to use</p>
+<p>WH: At least it’s not problematic from a lexing point of view, as long as comments can’t contain newlines, slashes, closing parentheses, or such.</p>
+<p>BT: stage 0?</p>
+<p>M: lets pick this up tomorrow</p>
+<p>BT: preview for tomorrow:
+- mode modifiers
+- unicode categories
+- blocks &amp; scripts</p>
+<p>BT previews us some syntax for tomorrow.</p>
+
+</body>

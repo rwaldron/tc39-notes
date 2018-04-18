@@ -1,0 +1,465 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 29, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-29-2013-meeting-notes"><h1 id="january-29-2013-meeting-notes">January 29, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Norbert Lindenberg (NL), Allen Wirfs-Brock (AWB), Rick Waldron (RW), Waldemar Horwat (WH), Tim Disney (TD), Eric Ferraiuolo (EF), Sam Tobin-Hochstadt (STH), Erik Arvidsson (EA), Brian Terlson (BT), Luke Hoban (LH), Matt Sweeney (MS), Doug Crockford (DC), Yehuda Katz (YK), Nebojša Ćirić (NC), Brendan Eich (BE)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>JN: ...Welcome and introduction, agenda. Discussion of TG/TC procedural changes. Please review and feedback.</p>
+<p>...Adoption of the Agenda.</p>
+<p>WH: All of the initial agenda items are missing references. Can't figure out what some of them are referring to from just their titles.
+WH, JN: Please put proposal links (or other references) into agenda items like we did in the past.</p>
+<p>AWB: Are there items that need to be discussed that aren't yet on the agenda?</p>
+<p>STH: Will provide an update on Modules</p>
+<a href="#added-414-modules-update"><h2 id="added-414-modules-update">Added: 4.14 Modules Update</h2></a><p>AWB: Discussion about Proxy?</p>
+<p>STH: A lot of discussion about the interaction of Proxy and Private Names</p>
+<p>...Should we wait for Mark Miller?</p>
+<p>AWB: Nowhere near consensus on any point of discussion from the mailing list.</p>
+<a href="#added-415-proxy-issues"><h2 id="added-415-proxy-issues">Added: 4.15 Proxy Issues</h2></a><p>LH: (to AWB) did you want to give an update on the spec?</p>
+<a href="#added-416-spec-status-update"><h2 id="added-416-spec-status-update">Added: 4.16 Spec Status Update</h2></a><p>JN: We should have a discussion regarding the list of items that will actually end up in ES6 and determine exact ES6 additions.</p>
+<p>RW: Let's set this as an agenda item for the next meeting and try to reduce the number of submitted agenda items. This allows everyone the opportunity to prepare for the large scale discussion.</p>
+<p>JN: Will add an agenda item for March.</p>
+<p>...Brief discussion about features that may or may not be ready; STH identifies: event loop (dependency of modules, Object.observe)</p>
+<p>AWB: Two issues: Semantic completeness of the designs and what does it take to implement these into the language.</p>
+<p>WH: Are proxies ready?
+AWB: Not yet.</p>
+<p>Mixed discussion.</p>
+<p>JN summarizes as part of 4.16 discussion</p>
+<a href="#agenda-approved"><h2 id="agenda-approved">Agenda Approved</h2></a><a href="#november-2012-minutes-approved"><h2 id="november-2012-minutes-approved">November 2012 Minutes Approved</h2></a><a href="#416-spec-status-update"><h2 id="416-spec-status-update">4.16 Spec Status Update</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: Revisits Nov 22, <a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts</a></p>
+<p>Discussion re: instanceof.</p>
+<p>EA: Checks and changes to implementations that use instanceof</p>
+<p>STH: Expect slow down from use of instanceof?</p>
+<p>AWB/EA: yes.</p>
+<p>WH: Concerns, how do you tell if a regex is a regex</p>
+<p>YH: Not with instanceof, use Object.prototype.toString</p>
+<p>AWB: Shouldn't use instanceof</p>
+<p>EA: This hook makes instanceof behave they way you expect it.</p>
+<p>AWB: Revisits Dec 21, 2012 Draft changes</p>
+<p>Mixed discussion re: keeping up to date with the spec drafts, request for more technical-focused reviews.</p>
+<a href="#__proto__"><h2 id="__proto__"><code>__proto__</code>.</h2></a><p>LH: Begins with raised points about <code>__proto__</code>...</p>
+<p>Mixed discussion about <code>__proto__</code> semantics.</p>
+<p>AWB: There is an underlying feeling that we don't like this and we need to get over that.</p>
+<p>LH/YK: Agree.</p>
+<p>DC, WH: Disagree.</p>
+<p>YK, DC: Discussion about <code>__proto__</code> reality.</p>
+<p>YK: We need consistency.</p>
+<p>DC: We should not standardize and leave as is.</p>
+<p>Impasse.</p>
+<p>LH: Similar issues with block scoped function declaration incompatibilities.</p>
+<p>WH: We should give up on <code>__proto__</code> in the same way that we gave up on &quot;with&quot;</p>
+<p>EA: IE is implementing for web compatibility</p>
+<p>AWB: The defacto standard for mobile web uses <code>__proto__</code></p>
+<p>EA: IF we could go back, we would do it differently</p>
+<p>YK: We just need compatibility</p>
+<p>LH: We need to just suck it up and standardize</p>
+<p>Mixed discussion re: user code and <code>__proto__</code></p>
+<p>AWB: (clarifies) Luke is requesting that we pin down the <code>__proto__</code> details as soon as possible.</p>
+<p>WH/DC: (have concerns, against standardizing <code>__proto__</code>)</p>
+<p>YK/BE: Discussion re: interop with current implementations.</p>
+<p>BE: (Review of latest changes to <code>__proto__</code> in Firefox)</p>
+<p>EA: Matches Safari</p>
+<p>BE: <code>__proto__</code> is configurable (can be deleted), accessor (getter and setter throw), reflection does not leak.</p>
+<p>AWB: Involves magic</p>
+<p>BE: Yes, but minimal. (Confirms that latest <code>__proto__</code> is out in wild, Firefox)</p>
+<p>WH: Clarify &quot;poisoning&quot;?</p>
+<p>BE: When you call it, it throws.</p>
+<p>WH: So how does it know when not to throw? (If it always throws then it won't work.)</p>
+<p>EA: Throws if called with object and setter coming from different realms</p>
+<p>...Discussion re: MOP semantics with <code>__proto__</code></p>
+<p>BE: Proxy has to stratify the MOP.</p>
+<p>AWB: Another issue... Objects that are non-extensible, can you change <code>__proto__</code>? Specifically, now that we're talking about being able to change <code>__proto__</code>, what type of objects can be changed?</p>
+<p>BE: Wait for Mark?</p>
+<p>YK?: Changing <code>__proto__</code> is a write, not adding a property, so it should not be affected by extensibility.</p>
+<p>AWB: Agree.</p>
+<p>Hold until Mark Miller is present.</p>
+<p>EA: ES5 requires [[Prototype]] to be read only when the object is non extensible.?</p>
+<p>(Further discussion)</p>
+<p>BE: Let's get back to this with Mark present and come to a conclusion.</p>
+<a href="#41-isisnt-operators"><h2 id="41-isisnt-operators">4.1 is/isnt operators</h2></a><p>(Allen Wirfs-Brock)
+<a href="http://wiki.ecmascript.org/doku.php?id=harmony:egal">http://wiki.ecmascript.org/doku.php?id=harmony:egal</a></p>
+<p>AWB: The plan of record on the wiki is that there is an &quot;is&quot; and &quot;isnt&quot; operator. There are various discussions on the mailing list that refer to this, but also to Object.is and Object.isnt. We need a <em>final</em> decision on the operator form.</p>
+<p>YK: The discussion was to move the world from ==?</p>
+<p>YK: The differences between === and is are significantly small.</p>
+<p>BE: On behalf of Dave Herman and Jason Orendorff... Syntax needs to be worth the expense and there options.</p>
+<p>General agreement.</p>
+<p>WH: (question about new type NaNs)</p>
+<p>AWB: No spec provisions, currently...</p>
+<p>WH: Hypothetical discussion about new &quot;decimal&quot; type with a &quot;decimal  NaN&quot; and the implications of NaN equality. The issue that would arise would be that a decimal NaN would be unequal to itself but would be distinguishable from the regular Number NaN. Therefore the example code for how <em>users</em> could implement <code>is</code> wouldn't work. However, if <code>is</code> is a language feature, then an implentation can fix it up to behave correctly when it adds additional primitive types such as Decimal, just as it would fix up the behavior of ==, etc.</p>
+<a href="#conclusionresolution-41-isisnt-operators"><h4 id="conclusionresolution-41-isisnt-operators">Conclusion/Resolution</h4></a><p>Consensus on <strong>No operator</strong></p>
+<p>Do we want API? <strong>Yes.</strong></p>
+<p>What is the name? <strong>Object.is(x, y)</strong>
+(NOT Object.isnt, ! is sufficient for negation)</p>
+<p>If it's &quot;all discriminating&quot;, should it discriminate +0/-0? <strong>Yes</strong></p>
+<p>NaN is <em>not</em> different from NaN (all NaNs are equated).</p>
+<p>Every observable value &quot;is&quot; itself and nothing else.</p>
+<a href="#44-is-there-are-need-for-numberisnan-if-we-have-objectis-available"><h2 id="44-is-there-are-need-for-numberisnan-if-we-have-objectis-available">4.4 Is there are need for Number.isNaN if we have Object.is available?</h2></a><p>BE: Keep the concerns separate.</p>
+<p>AWB: If we have Object.is, we don't actually need Number.isNaN</p>
+<p>DC: Object.is is sufficient.</p>
+<p>BE: (Whiteboard example)</p>
+<p>RW: Punt on Number.isNaN for ES6, defer to ES7 hinging on need based on potential emergent library code.</p>
+<p>WH: Number.isNaN is analogous to other Number functions such as Number.isFinite and Number.isInteger. It should stay.</p>
+<p>(toInteger was mistakenly changed to toInt, discussion leads to revisiting March 29th 2012 notes where no rationale was recorded. <a href="https://mail.mozilla.org/pipermail/es-discuss/2012-March/021919.html">https://mail.mozilla.org/pipermail/es-discuss/2012-March/021919.html</a>)</p>
+<p>Given the existence of the other Number.is* functions, several people flip their views.</p>
+<a href="#conclusionresolution-44-is-there-are-need-for-numberisnan-if-we-have-objectis-available"><h4 id="conclusionresolution-44-is-there-are-need-for-numberisnan-if-we-have-objectis-available">Conclusion/Resolution</h4></a><p>Overturn the Number.toInteger=&gt;toInt change. Restore as toInteger. (Brendan, can you fill in the rationale for this?)</p>
+<p>Number.isNaN remains in ES6</p>
+<a href="#42-samevalue-for-mapset-equivalence"><h2 id="42-samevalue-for-mapset-equivalence">4.2 SameValue for Map/Set equivalence?</h2></a><a href="#43-parameterize-the-equivalence-operator-for-mapset"><h2 id="43-parameterize-the-equivalence-operator-for-mapset">4.3 Parameterize the equivalence operator for Map/Set?</h2></a><p>AWB: For ES6, only specify a limited set of comparison operators?</p>
+<p>Discussion re: arbitrary comparisons?</p>
+<p>Hash Codes?</p>
+<p>STH, WH, several others: Need to support strict (<code>is</code>) equality at a minimum.</p>
+<p>YK: If the goal is to avoid whole new design issues, stick to strict equality.</p>
+<p>BE: Reminder that adding hash codes now is too late in the game.</p>
+<p>YK/AWB: Concerns that maps with strict equality will trip people  up.</p>
+<p>YK: Typically, Maps have custom equality capabilities.</p>
+<p>AWB: (Reminder of hash code pitfalls) But <em>only</em> strict equality will be a disaster, but can't introduce hash codes at this stage.</p>
+<p>AWB: [if we support both strict and other kinds of equality] suggest the default: +0/-0 are the same; NaN is a value, that is equal to itself for Map/Set equivalence.</p>
+<p>Assuming we have a mechanism to override...</p>
+<p>Ideally, we'd want to set this in the constructor, but there is already a single optional initializer argument.</p>
+<p>BE: Let's find a champion to work this out over the next two days.</p>
+<p>AWB: I can do this.</p>
+<a href="#conclusionresolution-43-parameterize-the-equivalence-operator-for-mapset"><h4 id="conclusionresolution-43-parameterize-the-equivalence-operator-for-mapset">Conclusion/Resolution</h4></a><p>To revisit, pending proposal from AWB. (See Jan 31 notes)</p>
+<p>Must address the minimal requirements on the wiki</p>
+<a href="#6-second-edition-of-ecma-402-internationalization"><h2 id="6-second-edition-of-ecma-402-internationalization">6 Second Edition of ECMA-402 (Internationalization)</h2></a><p>Last Update: <a href="https://github.com/rwldrn/tc39-notes/blob/master/es6/2012-11/nov-27.md#internationalization-update">https://github.com/rwldrn/tc39-notes/blob/master/es6/2012-11/nov-27.md#internationalization-update</a></p>
+<p>NC: Approved to continue work. APIs covered, people assigned to write strawman. Have API changes to be written into the spec, based on use cases that have emerged.</p>
+<p>NL: Normalization in the language specification: talked about 2 additional normalization forms.</p>
+<ol>
+<li>CF, Case folding</li>
+<li>NFKC_CF, Normalization form, Compatibility Decomposition,
+followed by Canonical Composition, combined with case folding</li>
+</ol>
+<p>NL: Chrome 24 shipped with the first implementation of Edition 1, not prefixed any longer</p>
+<p>NC: Overrode the old methods String.prototype.localeCompare, Date/Number.prototype.toLocaleString</p>
+<p>BE: Good so far?</p>
+<p>NC: Have some bugs with performance, but can address.</p>
+<p>EA: No issues with actual semantics?</p>
+<p>NC: No complaints.</p>
+<p>JN: Schedule? On track?</p>
+<p>NC/NL: So far, but rely on ES6.</p>
+<p>Discussion about overlapping schedule. Current plan for Intl 2 is for approval in June 2014, but ES6 may slip to the same date. NL wondering whether TC 39 can review two specs at the same time; AWB thinks that should be OK.</p>
+<p>Notes from NL/NC:</p>
+<p>December 12: Ecma GA approves ECMA-402
+<a href="http://ecma-international.org/publications/standards/Ecma-402.htm">http://ecma-international.org/publications/standards/Ecma-402.htm</a></p>
+<p>January 10: Google shipped first implementation without prefix in Chrome 24</p>
+<p>December 14: Internationalization ad-hoc met</p>
+<ul>
+<li>discussed scope in more detail, assigned strawman writing</li>
+</ul>
+<p>Since then: Strawmen written, but not reviewed yet:</p>
+<ul>
+<li><p>number parsing
+<a href="http://wiki.ecmascript.org/doku.php?id=globalization:numberparsing">http://wiki.ecmascript.org/doku.php?id=globalization:numberparsing</a></p></li>
+<li><p>text segmentation
+<a href="http://wiki.ecmascript.org/doku.php?id=globalization:text_segmentation">http://wiki.ecmascript.org/doku.php?id=globalization:text_segmentation</a></p></li>
+<li><p>message formatting
+<a href="http://wiki.ecmascript.org/doku.php?id=globalization:messageformatting">http://wiki.ecmascript.org/doku.php?id=globalization:messageformatting</a></p></li>
+</ul>
+<p>Strawmen assigned, but not written yet:</p>
+<ul>
+<li>character properties (regex or API?)</li>
+<li>display names</li>
+<li>time duration formatting</li>
+<li>alphabetic index</li>
+</ul>
+<p>API changes to be written up:</p>
+<ul>
+<li>normalization (language spec - add CF and NFKC_CF)</li>
+<li>case conversion</li>
+<li>time zone support</li>
+<li>script reordering in Collator</li>
+<li>pseudo-numbering systems in NumberFormat</li>
+</ul>
+<a href="#45-why-standardizing-on-__proto__-and-not-__definegsetter__-__lookupgsetter__"><h2 id="45-why-standardizing-on-__proto__-and-not-__definegsetter__-__lookupgsetter__">4.5 Why standardizing on <code>__proto__</code> and not <code>__define(G|S)etter__</code>, <code>__lookup(G|S)etter__</code>?</h2></a><p>(Based on a recent es-discuss thread)</p>
+<p>Why <code>__proto__</code> normative mandatory in ES6 but no <code>__define/lookup...</code> is:</p>
+<ol>
+<li><code>__proto__</code> much more used on the mobile (iOS WebKit-first) web, no equivalent interop pressure for __d/l.</li>
+<li>ES5 is in all new/evergreen browsers and it has standard APIs supplanting <code>__d/l</code> but nothing for writing to <code>__proto__</code>.</li>
+</ol>
+<p>Therefore <code>__proto__</code> gets standardized, <code>__d/l</code> do not.</p>
+<p>Rationale for not adding Object.setPrototypeOf
+<a href="https://mail.mozilla.org/pipermail/es-discuss/2012-May/022904.html">https://mail.mozilla.org/pipermail/es-discuss/2012-May/022904.html</a></p>
+<a href="#conclusionresolution-45-why-standardizing-on-__proto__-and-not-__definegsetter__-__lookupgsetter__"><h4 id="conclusionresolution-45-why-standardizing-on-__proto__-and-not-__definegsetter__-__lookupgsetter__">Conclusion/Resolution</h4></a><p>Consensus that <code>__define(G|S)etter__</code>, <code>__lookup(G|S)etter__</code> will not be standardized, nor added to an Appendix.</p>
+<a href="#48-refactored-new-operator-and-the-create-method"><h2 id="48-refactored-new-operator-and-the-create-method">4.8 Refactored new operator and the @@create method</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>Slides (pdf): <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_jan_29_2013&amp;cache=cache&amp;media=meetings:subclassing_builtins.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_jan_29_2013&amp;cache=cache&amp;media=meetings:subclassing_builtins.pdf</a></p>
+<p>The Basic Issue:</p>
+<ul>
+<li>Object Allocation and object initialization are separable issues.</li>
+<li>Subclassable abstractions require program level control...</li>
+</ul>
+<p>Why Doesn't this work?</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Vector</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{
+  <span class="hljs-keyword">constructor</span>(...args) {
+    <span class="hljs-keyword">super</span>(...args);
+  }
+}
+
+<span class="hljs-keyword">let</span> a = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>();
+<span class="hljs-keyword">let</span> v = <span class="hljs-keyword">new</span> Vector();
+
+a[<span class="hljs-number">5</span>] = v[<span class="hljs-number">5</span>] = <span class="hljs-number">5</span>;
+
+a.length; <span class="hljs-comment">// 6</span>
+v.length; <span class="hljs-comment">// 0</span>
+</code></pre>
+<p><strong>Because...</strong></p>
+<ul>
+<li><p>Array uses a special exotic object representation that changes the semancs of [[DefineOwnProperty]].</p></li>
+<li><p>The object that new Vector creates and passes to the Vector constructor is an ordinary object, not an exotic Array object.</p></li>
+<li><p>Even with the super call, the Array constructor doesn’t transform its this object into an exotic Array</p></li>
+</ul>
+<p><strong>First Solution</strong></p>
+<ul>
+<li>Use normal [[Construct]] for built-­‐ins.
+<ul>
+<li>Move magic ini1aliza1on (internal data proper1es  and internal methods) into the constructor func1on,  post object alloca1on.</li>
+</ul></li>
+<li>Internal data proper1es need to be expandos  (probably based upon private symbols)</li>
+<li>Built-­‐in methods use internal data property sniffing  instead of [[Class]] brand check.</li>
+</ul>
+<p><strong>Objections</strong></p>
+<p>Ollie's Objections:</p>
+<ul>
+<li>Doesn't want internal data properties to be expandos</li>
+<li>Implementors want to allocate different machine/C level data structures for different kinds of built-ins.</li>
+</ul>
+<p>Allen's Objections:</p>
+<ul>
+<li>What about internal method conflicts?</li>
+</ul>
+<p>WH: Jason's Objections:</p>
+<ul>
+<li>More than one magic constructor can be applied to an object</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> d = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+<span class="hljs-built_in">Map</span>.call(d);
+<span class="hljs-built_in">console</span>.log(d.getYear()); <span class="hljs-comment">// 2013</span>
+<span class="hljs-built_in">Map</span>.prototype.set.call(d,”month”, “January”);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Map</span>.prototype.get.call(d,”Month”)) <span class="hljs-comment">// January</span>
+</code></pre>
+<p><strong>What do other dynamic OO languages do?</strong></p>
+<ul>
+<li>Separate object allocation and initialization into separate phases.</li>
+<li>The &quot;shape&quot; and special characteristics of an object are fixed during the object allocation  phase.
+–  Kind of like what [[Construct]] does, but...</li>
+<li>The allocation phase is defined as a separate  class method
+–  Can be inherited, or over-ridden, or super-invoked by  subclasses.</li>
+</ul>
+<p><strong>Sounds Good, Let’s see if it works for JavaScript</strong></p>
+<ul>
+<li>@@create is a well known symbol that when used as a property of  a constructor provides the alloca1on method for that constructor.</li>
+<li>New definition of the ordinary [[Construct]] :
+<ol>
+<li>Let creator be [[Get]] of this constructors @@create property</li>
+<li>If creator is not undefined, then
+a. Let obj be the result of calling creator with this constructor as its this value.</li>
+<li>Else, fallback implementation
+a. Let obj be a new ordinary object with its [[Prototype]] initialized from this constructor's “prototype” property.</li>
+<li>Call this constructor with obj as the this value and the original argument list.</li>
+<li>Return obj.</li>
+</ol></li>
+</ul>
+<p>BE, EA, YK, WH, others: Get rid of the fallback implementation and just throw if there is no @@create. It's unnecessary complexity.</p>
+<ul>
+<li>Most constructors just inherit Function.prototype[@@create]  which allocates a new ordinary object with its [[Prototype]]  initialized from this.prototype (the constructor’s “prototype”  property).</li>
+<li><code>new Foo() &lt;=&gt; Foo.call(Foo[@@create]())</code></li>
+</ul>
+<p>TODO: Copy slide text to notes?</p>
+<p>Discussion re: <code>class Foo extends ??</code> semantics discussed in July, <a href="https://github.com/rwldrn/tc39-notes/blob/master/es6/2012-07/july-26.md#maxmin-class-semantics">https://github.com/rwldrn/tc39-notes/blob/master/es6/2012-07/july-26.md#maxmin-class-semantics</a></p>
+<p>WH: What happens when you do Number[@@create]?</p>
+<p>AWB/EA: Creates a new wrapped Number object.</p>
+<p>BE: <code>new Number()</code> &lt;=&gt; <code>Number.call(Number[@@create]())</code></p>
+<p>AWB: Built-in @@create methods are non-writable, non-configurable. Just like built-in &quot;prototype&quot; properties (From slides).</p>
+<p>... Back to slides.</p>
+<p><strong>@@create Also Useful for Application Classes</strong></p>
+<ul>
+<li>DIY Branding</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> $$create ...;
+<span class="hljs-keyword">const</span> $fooBrand = <span class="hljs-built_in">Symbol</span>(<span class="hljs-literal">true</span>); <span class="hljs-comment">// or use a WeakMap</span>
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+  isFoo() {
+    <span class="hljs-keyword">return</span> !!<span class="hljs-keyword">this</span>[$fooBrand];
+  }
+}
+
+<span class="hljs-built_in">Object</span>.mixin( Foo, {
+  [$$create]() {
+    <span class="hljs-keyword">let</span> obj = <span class="hljs-keyword">super</span>();
+    <span class="hljs-built_in">Object</span>.defineProperty( obj, $fooBrand, {
+      <span class="hljs-attr">value</span>: <span class="hljs-literal">true</span>
+    });
+    <span class="hljs-keyword">return</span> obj;
+  }
+});
+</code></pre>
+<p>(note: <code>$$</code> sigil for illustration purpose only)</p>
+<p>WK: The @@create could be hijacked and used to brand some other object with my object's brand.</p>
+<p>AWB: No different from hijacking from an Array or Date...</p>
+<p>WK: Good for branding case, not for security</p>
+<p>AWB: (Gives example of how you might make it work). Explanation of creating Proxy based instances with @@create (see slides)</p>
+<p><strong>ES5 Built-In Branding</strong></p>
+<p>Consider ES5+ Reality:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">T</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> obj = [];
+  obj.<span class="hljs-string">`__proto__`</span> = T.prototype;
+  <span class="hljs-keyword">return</span> obj;
+};
+
+<span class="hljs-keyword">var</span> t = <span class="hljs-keyword">new</span> T();
+t[<span class="hljs-number">5</span>] = <span class="hljs-number">5</span>;
+
+t.length; <span class="hljs-comment">// 6</span>
+<span class="hljs-built_in">Array</span>.isArray(t); <span class="hljs-comment">// true</span>
+t.toString(); <span class="hljs-comment">// [object Array]</span>
+</code></pre>
+<p>Built-in branding is based on the shape and capabilities of the actual instance object.</p>
+<p><strong>ES6: @@create Determines Branding</strong></p>
+<ul>
+<li>Array.isArray will report true for subclass instances that are built-in exotic Array objects. These are allocated using Array[@@create];</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> v = <span class="hljs-keyword">new</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{};
+<span class="hljs-built_in">Array</span>.isArray(v); <span class="hljs-comment">// true</span>
+</code></pre>
+<ul>
+<li>Unless over-ridden using the <code>@@toStringTag</code>, <code>{}.toString</code> will report the legacy [[Class]] for built-in subclass instances if they are allocated using a built-in @@create method.</li>
+</ul>
+<p>WH: If you're call isArray and it returns true, you'd expect to call Array.prototype methods.</p>
+<p>AWB: No guarantees about the prototype chain</p>
+<p>MM: Even if Array is frozen, the Array.prototype is mutable and I can add my own malicious push, pop, join.</p>
+<p>MM, AWB, WH: (Discussion of security concerns)</p>
+<p>Agreement that none of this weakens any existing invariants.</p>
+<p><strong>No Need for [[Class]] or [[BuiltinBrand]]</strong></p>
+<ul>
+<li>These are really just specification devices for talking about specific forms of objects.</li>
+<li>Spec has always also used language like &quot;an Array object&quot; or &quot;a RegExp instance&quot;</li>
+<li>In ES6 spec. all [[Class]] uses uses can replaced with language like:
+- &quot;is an exotic array object&quot; &lt;=&gt; [[Class]]<mark>&quot;Array&quot;
+- &quot;has a [[Match]] internal data property&quot; &lt;=&gt; [[Class]]</mark>&quot;RegExp&quot;</li>
+</ul>
+<p>File:
+[[Match]] =&gt; [[RegExpMatch]]</p>
+<p><strong>Testing the |this| value almost works</strong></p>
+<p>(See slides for code example)</p>
+<a href="#conclusionresolution-48-refactored-new-operator-and-the-create-method"><h4 id="conclusionresolution-48-refactored-new-operator-and-the-create-method">Conclusion/Resolution</h4></a><p>Consensus on @@create, allocation and initialization decoupling.</p>
+<p><strong>Constructors need to be able to recognize initialized instances</strong></p>
+<ul>
+<li>Built-ins can do this via existing internal properties</li>
+<li>User code could roll its own</li>
+</ul>
+<p><strong>Probably better to formalize initialized state as part of ES object model</strong></p>
+<ul>
+<li>Add one bit of state to every object: initialized/unitialized.</li>
+<li>Built-in @@create methods set new object state to uninitialized.</li>
+<li><code>Object.call(uninitObj)</code> and other built-in constructors set initialized this objects to initialized state.</li>
+<li><code>Object.isInitialized(obj)</code> is a new method that only returns false if obj is an object that is in the initialized state.</li>
+<li>Object.create(), {}, [] and various built-in functions create objects that are already initialized (backwards compat)</li>
+</ul>
+<p><strong>Semantics...</strong></p>
+<pre><code class="language-js"><span class="hljs-comment">// Decoupling allocation and initialization:</span>
+<span class="hljs-comment">// Calling new X()...</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">X</span> </span>{         <span class="hljs-comment">// 1. X[@@create](), allocation</span>
+  <span class="hljs-keyword">constructor</span>() { <span class="hljs-comment">// 2. Initialization</span>
+    <span class="hljs-keyword">super</span>();
+    <span class="hljs-keyword">this</span>.state = <span class="hljs-string">"ready"</span>;
+  }
+}
+</code></pre>
+<p>EA: Worth the additional bit? Is the need common enough to address with new language API surface?</p>
+<p>What about @call?</p>
+<p>MM: @construct? If one is specified, otherwise ... super call vs. super construct (Mark—Sorry, I had trouble following this—can you fill this in? Thanks!)</p>
+<p>MM: Are there any objections to the parallel @construct entry point.</p>
+<p>YK: It makes less sense in the ES6 context, since classes are focused around defining a constructor...</p>
+<p>MM: I see, then call is the odd-ball. Agree with the objection.</p>
+<p>YK: @call makes sense in the class case, @construct makes sense in the function case.</p>
+<p>AWB/YK: Need statics to make the @call</p>
+<p>Mixed discussion regarding &quot;static&quot;</p>
+<p>Yehuda will draft a static strawman for tomorrow.</p>
+<p>(Break)</p>
+<p>YK: All functions have a call and construct property, I propose to expose them</p>
+<p>AWB: All functions are constructible, when a function is &quot;newer&quot;, something happens before the function is invoked.</p>
+<p>AWB/YK: (Discussion re: existing semantics of function call and construct)</p>
+<p>BE: The idea of having state in objects for initialization...</p>
+<p>WH: The main point of the discussion was that many are uncomfortable with adding an extra bit of state to objects to define whether they're initialized or not and, worse, that state is not a reliable indicator of whether a function was called via Foo() or new Foo(). Someone could forget to set the initialized bit (in a variety of ways) and disrupt further code at a low level. The consensus seemed to be to get rid of that state and instead use either separate call and construct code or some way to detect whether code was called as a function or as a constructor, although we hadn't decided on the details</p>
+<p>[STH: conclusion/resolution: no new bit of state (IOW, I agree with WH)]</p>
+<p><strong>Various Oddities/Backward Compat Issues, 1</strong></p>
+<p>...Missed first slide...</p>
+<p><strong>Various Oddities/Backward Compat Issues, 2</strong></p>
+<ul>
+<li>Array.prototype.concat
+<ul>
+<li>Currently always creates Array instance, for subclasses usually want subclass instance
+<ul>
+<li>Change to use subclass constructor to create subclass instances but only when this object is tagged as array subclass</li>
+</ul></li>
+<li>Currently auto-spreads Array instance arguments
+<ul>
+<li>Similar to above, auto-spread tagged array subclass args.</li>
+</ul></li>
+</ul></li>
+<li>Must compatibly support this idiom:
+<ul>
+<li><code>[].concat.apply(Array.prototype, arguments);</code></li>
+</ul></li>
+<li>Precomputing result length will support use with TypedArrays</li>
+<li>Similar result object handling for slice, splice, map, filter(?)</li>
+</ul>
+<p>(Re: Bullet 1)
+WH: Concerned about the proliferation of &quot;types of an object&quot;... class, prototype, type... species?</p>
+<p>(Re: Bullet 2)
+Discussion focuses around built-ins whose prototype property are first-born instances of that object, eg. <code>Array.prototype</code> is an <code>Array</code>. The desire was to remove this from ES6, however there a slew of issues that are not specifically edge cases rise to the surface.</p>
+<p><strong>Conclusion/Resolution, Bullet 2</strong></p>
+<p>Brendan to experiment with changing the prototype properties of Boolean, Number and String away from first born instances into ordinary object ([object Object]).</p>
+<p>(Re: Bullet 4)
+Discussion focuses on what type (&quot;species&quot;) of object should be created by these methods when subclassing.</p>
+<p>AWB: All of them, &quot;species&quot; is what you want, except in the case of map. For slice, splice and filter, you always want to operate on and return the &quot;species&quot; calling.</p>
+<p>?: Want to customize it differently for different methods.</p>
+<p>WH: (Doesn't want another &quot;type&quot; thing)</p>
+<p>YK: (Doesn't think it's a problem)</p>
+<p>AWB: You can always cast your object back into the type of your class with <code>this.constructor</code>.</p>
+<p>Illustrating Bullet 4:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">V</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{
+  <span class="hljs-keyword">constructor</span>(...args) {
+    <span class="hljs-keyword">super</span>(...args);
+  }
+}
+
+<span class="hljs-keyword">var</span> v, m;
+v = <span class="hljs-keyword">new</span> V(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>, );
+m = v.map(<span class="hljs-function"><span class="hljs-params">val</span> =&gt;</span> val * <span class="hljs-number">2</span>);
+<span class="hljs-built_in">console</span>.log( m <span class="hljs-keyword">instanceof</span> V ); <span class="hljs-comment">// false :(</span>
+</code></pre>
+<p><strong>Various Oddities/Backward Compat Issues, 3</strong></p>
+<ul>
+<li>String.prototype.match, replace, search, split.
+<ul>
+<li>Currently spec'ed to directly use RegExp internal APIs which limit the ability to use them with RegExp subclasses that use alternative engines that don't expose those APIs</li>
+<li>Refactor into public operations upon RegExp subclass</li>
+<li>String methods delegate to RegExp methods</li>
+</ul></li>
+</ul>
+<p>MM: Confirm that any symbols defined only need to be unique, not private?</p>
+<p>AWB: Yes.</p>
+<a href="#410-data-collectionanalysis-function-in-block-duplicate-parameter-names-const-strict-mode-var-letletx1-and-maybe-more"><h2 id="410-data-collectionanalysis-function-in-block-duplicate-parameter-names-const-strict-mode-var-letletx1-and-maybe-more">4.10 Data collection/analysis: Function-in-block, duplicate parameter names, const, strict mode, var let/let[x]=1, and maybe more</h2></a><p>(Brian Terlson)</p>
+<p>Slides (pdf): <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_jan_29_2013&amp;cache=cache&amp;media=meetings:real-world-js-code.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_jan_29_2013&amp;cache=cache&amp;media=meetings:real-world-js-code.pdf</a></p>
+<p>1.85% of scripts make use of function hoisting intersection semantics. Almost all of these are due to functions defined inside arms of an if statement. Few examples of defining functions inside loops.
+No scripts do let[x].
+10% of &quot;use strict&quot; directives are incorrect because they're not in the prologues.</p>
+<p>Mixed discussion regarding the actual expectation of these cases.</p>
+<p>Can the tests be expanded beyond the top 10k?</p>
+<p>BE: w/r to FIB, should we go with strict mode standardization?</p>
+<p>YK: Does it always leak the identifier?</p>
+<p>MM: In different ways.</p>
+<p>Discussion regarding language forking.</p>
+<p>LH: (Identifies a dark future that hinges on &quot;use strict&quot;)</p>
+<p>MM: That should be the future.</p>
+<p>...
+YK: Are there intersections of existing implementations that can be spec'ed?</p>
+<p>Mixed discussion.</p>
+<p>Table discussion until tomorrow.</p>
+
+</body>

@@ -1,0 +1,186 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 28, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-28-2014-meeting-notes"><h1 id="january-28-2014-meeting-notes">January 28, 2014 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Yehuda Katz (YK), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Rick Hudson (RH), Matt Sweeney (MS), Dmitry Soshnikov (DS), Sebastian Markbåge (SM), Ben Newman (BN), Jeff Morrison (JM), Reid Burke (RB), Waldemar Horwat (WH), Doug Crockford (DC), Mark S. Miller (MM), Brian Terlson (BT), Luke Hoban (LH), Andreas Rossberg (ARB), István Sebestyén (IS), Niko Matsakis (NM), Brendan Eich (BE), Rick Waldron (RW), Sam Tobin-Hochstadt (STH), Simon Kaegi (SK), Dave Herman (DH)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>IS: Talk about the royalty free task group</p>
+<p>JN: Approved, 9 in favor. 0 opposed. 0 abstains.
+We are now operating as a Royalty Free Task Group</p>
+<p>JN: Netflix and Apple haven't returned the paper work.</p>
+<p>IS: Neither from Brown University. (and a bunch of other universities that are not active any more)</p>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>JN: Agenda approved <a href="https://github.com/tc39/agendas/blob/master/2014/01.md">https://github.com/tc39/agendas/blob/master/2014/01.md</a></p>
+<p>JN: Minutes from Nov meetings also approved. (<a href="https://github.com/rwaldron/tc39-notes/tree/master/es6/2013-11">https://github.com/rwaldron/tc39-notes/tree/master/es6/2013-11</a>)</p>
+<a href="#spec-status-update"><h2 id="spec-status-update">Spec Status update</h2></a><p>AWB: Latest draft (Rev22) is the &quot;almost feature complete&quot; version. (Discussion about process troubles). Spec now uses a master document and is split into multiple files.</p>
+<p>AWB: Still some work to do on Direct Proxies.
+Update spec for C-style for-let.
+Loaders and Realms are integrated into the spec draft. Lots of review needed.</p>
+<p>EA: Standard modules were deferred at last F2F</p>
+<p>LH:  We agreed on globally reachable names for all pre-modules APIs last September.  New names for module loaders APIs need similar design.</p>
+<p>AWB: Loader and Realm are speced as %Loader% and %Realm% since we haven't talked about their public names.</p>
+<p>DH: Where does Reflect go?</p>
+<p>AWB: Use a global.</p>
+<p>DH: Realm can go in Reflect since it is a very reflective thing.</p>
+<p>DH: We can probably defer System too.</p>
+<p>YK: We need an entry point and a global named System seems to be good.</p>
+<p>DH: Loader can go in Reflect too.</p>
+<p>AWB: Need to update the spec draft to match the scoping rules we agreed to before.</p>
+<a href="#resolution-spec-status-update"><h4 id="resolution-spec-status-update">Resolution</h4></a><a href="#aside-on-detecting-module-vs-script-see-httpesdiscussorgtopicdetecting-js-language-mode-for-tools"><h2 id="aside-on-detecting-module-vs-script-see-httpesdiscussorgtopicdetecting-js-language-mode-for-tools">Aside on detecting Module vs. Script (see <a href="http://esdiscuss.org/topic/detecting-js-language-mode-for-tools">http://esdiscuss.org/topic/detecting-js-language-mode-for-tools</a>)</h2></a><p>Debate about whether it's required (partial agreement that it is since they are clearly distinct)</p>
+<p>WH: Even though they're distinct, doesn't mean that they must be ambiguous with each other at the source text level. We could easily say that a module has to start with some syntax that designates it as a module.</p>
+<p>AWB: Spec doesn't necessarily need to address this (why?) but we should consider setting the direction here. If we're fine with the community coming up with something here we can lean on that too.</p>
+<p>LH: This process has to happen, there will be lots of solutions, we might not pick the best one.</p>
+<p>Potential solutions:</p>
+<ul>
+<li>YK: Bower uses metadata for packages that say they're ES6 module</li>
+<li>DH: Possibly do nothing, we live in this world already today</li>
+<li>DH: Come up with some kind of syntactical distinction
+<ul>
+<li>DH: This sucks, modules should not require additional boilerplate to be valueable</li>
+</ul></li>
+<li>Possibly use file extensions...</li>
+</ul>
+<a href="#conclusionresolution-aside-on-detecting-module-vs-script-see-httpesdiscussorgtopicdetecting-js-language-mode-for-tools"><h4 id="conclusionresolution-aside-on-detecting-module-vs-script-see-httpesdiscussorgtopicdetecting-js-language-mode-for-tools">Conclusion/resolution:</h4></a><ul>
+<li>DH to do the work?</li>
+</ul>
+<a href="#task-and-tasks-queues"><h2 id="task-and-tasks-queues">Task and Tasks Queues</h2></a><p>Postponed until tomorrow when Raf is here.</p>
+<a href="#process-for-ratifying-es6"><h2 id="process-for-ratifying-es6">Process for ratifying ES6?</h2></a><p>LH:  We have now effectively met the &quot;feature complete draft&quot; requirement we were targetting.  Are there any process requirements this group is placing on progressing the spec to ratifica</p>
+<p>BE: Have nothing, same as ES5.
+(Discussion about whether we can be strict)</p>
+<p>LH: For example, do we have &quot;multiple compatibile implementations&quot; requirements?  Or &quot;test262 coverage&quot; requirements?  Our ES7 process proposal has these, but do we want/need some limitied version of this for ES6?</p>
+<p>AWB: We just need to ship it and get to the stricter process for ES7.</p>
+<p>MM: We can always postpone features to ES7 if they seem to be problematic.</p>
+<p>BE: For example, there is unlikely to be an implementation of proper tail calls before we send ES6 to the GA, then to ISO. I don't think we should defer them on that basis, but it's a fact. We should not slip ES6's schedule.</p>
+<p>LH: If by the time we ratify ES7 and there are still ES6 features that have not yet been implemented by anyone, we should re-evaluate if we can remove them.</p>
+<a href="#resolution-process-for-ratifying-es6"><h4 id="resolution-process-for-ratifying-es6">Resolution</h4></a><p>The commitee is putting no blocking requirements of implementations or tests on standardization of ES6.</p>
+<a href="#concise-methods-and-enumerability"><h2 id="concise-methods-and-enumerability">Concise methods and Enumerability</h2></a><p>YK: People have object literals today and use these objects with for-in loops to find the properties and if they change to non enumerable consise methods things will break.</p>
+<p>AWB: Concise methods were initially non-enumerable. This was to match the built-in classes, like Date, Array etc. One possibility is to make methods in classes non enumerable but concise methods in object literals enumerable.</p>
+<p>RW: The same issue happens when people use object literals as the prototype.</p>
+<p>AWB: Should Map and Set methods be enumerable then?</p>
+<p>RW: The spec should be consistent with itself.</p>
+<p>WH: User-defined classes should be consistent with built-in classes. Classes are new in ES6. The question is whether it's the class that turns off enumerability or the concise method that turns off enumerability.</p>
+<p>WH: My preference is for the consise method syntax to turn off enumerability. In the rare cases that you want an enumerable method in a prototype, you can define it the longer way.</p>
+<p>YK: Refactoring should be simple and not have side effects like these.</p>
+<p>RW: hasOwnProperty solves the problem of filtering out class methods inherited from the prototype, so we don't need to make them non-enumerable.</p>
+<p>BE: people don't use hasOwnProperty</p>
+<p>YK: enumerability is broken, we should not discuss the Platonic ideal form of enumerability</p>
+<p>BE: According to Neo-Platonic Mystics, the material world was created by the evil Demiurge, not by Sophia (wisdom). Enumerability and 'for-in' are from the Demiurge.</p>
+<p>BE: Enumerating options:
+* Concise methods and class methods are enumerable
+* Current es6 draft state
+* Split the difference, concise methods enumerable, class methods non-enumerable.
+* can't refactor between es5 object literal and es6 class/concise methods depending on which is non-enumerable
+* Make both non-enumerable (Waldemar supports)
+* same refactoring hazard, possibly not desirable
+* Some tilde-based or better syntax to allow developers to pick, but go with option 1</p>
+<p>YK: Hope that we can use annotations in ES.Future that can control this kind of details.</p>
+<p>BE: Agree, so fourth option above.</p>
+<p>YK/LH: High bar to make a change, does this meet the bar?</p>
+<a href="#conclusionresolution-concise-methods-and-enumerability"><h4 id="conclusionresolution-concise-methods-and-enumerability">Conclusion/Resolution</h4></a><ul>
+<li>Status quo. Keep concise methods enumerable.</li>
+</ul>
+<a href="#more-on-tomethod"><h2 id="more-on-tomethod">More on toMethod</h2></a><p>AWB: Function.prototype.toMethod(superBinding, methodName = undefined)
+Footgun to put this on Function.prototype.</p>
+<p>MM: potential suprise: in the absence of toMethod, super's interpretation can't change, but now people have to account for possibility of shifting interpretation, which requires them to know about toMethod (not sure if I'm getting this right- BN)</p>
+<p>AWB: The footgun is that we do not propagate any properties.</p>
+<p>AWB: Suggest moving toMethod to Reflect</p>
+<p>DH: Needs to be renamed then.</p>
+<p>?: Suggests renaming to bindSuper.</p>
+<p>WH: We've discussed all of this before and reached consensus. bindSuper is a bad name because it intentionally doesn't commute with bind.</p>
+<p>WH: [reviews consensus from past meeting]</p>
+<p>AWB: expect people to define Object.defineMethod in terms of toMethod, with copying of properties</p>
+<p>DS: do we also need toStaticMethod?</p>
+<p>AWB: no, you can just use toMethod with the constructor function as the superBinding / home object</p>
+<p>BN: are static/class methods inherited?</p>
+<p>AWB: yes</p>
+<p>AWB: should we copy .name and/or .length to the new function object?</p>
+<p>MM: use bind as a precedent to decide what to copy (mixed messages though: bind does copy .length, minus the number of curried arguments, and (in SpiderMonkey at least) copies the .name, though V8 gives the bound function an empty string .name)</p>
+<p>AWB: What should happen if toMethod is called on a non ECMAScipt function object (built-in)</p>
+<p>MM: How about just returning a clone of the function. You could even even delegate in a similar way as bind.</p>
+<p>AWB: Only allow toMethod on unbound methods?</p>
+<p>MM: to preserve possibility of transparent monkey-patching, either make toMethod return something that can't be toMethod-ed again, or allow built-in (non-ECMAScript Function Object) functions to be cloned, which requires an additional path in the internal CloneMethod operation (because it currently asserts that the clonee is an ESFO)</p>
+<a href="#conclusionresolution-more-on-tomethod"><h4 id="conclusionresolution-more-on-tomethod">Conclusion/Resolution</h4></a><ul>
+<li>Allen to take it back to the lab. To get it to work with bound functions and built-ins.
+<ul>
+<li>Make it match old concensus <code>func.bind().toMethod(...)</code> should throw</li>
+<li>Does not work on proxies</li>
+</ul></li>
+</ul>
+<a href="#clz-count-leading-zeros"><h2 id="clz-count-leading-zeros">Clz (count leading zeros)</h2></a><p>WH: Don't like deliberately introducing anachronisms a la 1900-origin getYear into the language. Would prefer to have it be origin-0 instead of origin-32 (i.e. return 0 instead of 32 when called on 0) to avoid hardwiring a machine word size. However, understand that we want this to compile to an efficient low-level primitive, so it would still have the toUInt32 as part of its semantics. In that case we should call it clz32 instead of clz so that later we can do clz64 (that would call a future toUInt64) or other variants.</p>
+<p>BE: Want it to map to one single machine instruction</p>
+<p>BE: Mislocated, should be on Math</p>
+<p>BE: (missed the third point)</p>
+<p>BE:  CLZ - for cases when you're doing DSP-level hacking, and want to count  the number of populated bits. Also important for native-to-js compilers,  there is an intrinsic for this in GCC and Clang.
+BE: Math.clz32 wins.</p>
+<a href="#conclusionresolution-clz-count-leading-zeros"><h4 id="conclusionresolution-clz-count-leading-zeros">Conclusion/Resolution</h4></a><ul>
+<li>Rename to Math.clz32 (rename and move from Number.prototype)</li>
+</ul>
+<a href="#arrayfrom"><h2 id="arrayfrom">Array.from</h2></a><p>AWB: What should happen with <code>Array.from(undefined)</code>?</p>
+<p>EA: <code>Array.from</code> is a likely replacement for <code>Array.prototype.slice.call</code> and the array generics do <code>ToObject</code>.</p>
+<p>AWB: Array with holes would lead to to a dense array.</p>
+<p>YK: Want to keep the holes.</p>
+<p>BE: &quot;Holes are from the devil&quot;</p>
+<a href="#conclusionresolution-arrayfrom"><h4 id="conclusionresolution-arrayfrom">Conclusion/Resolution</h4></a><p>Keep as spec'ed.</p>
+<ul>
+<li><code>Array.from</code> will throw on <code>undefined</code> and <code>null</code></li>
+<li><code>Array.from</code> will return <code>[]</code> for <code>3</code></li>
+<li><code>Array.from([0, , 2])</code> =&gt; <code>[0, undefined, 2]</code></li>
+</ul>
+<a href="#test-262"><h2 id="test-262">Test 262</h2></a><p>BT: Up on GitHub. <a href="https://github.com/tc39/test262">https://github.com/tc39/test262</a>. Conversion from Mercurial done by Brandon Benvie.</p>
+<p>BT: AttendedTest the web forward. Got a lot of PR (22).</p>
+<p>BT: Pending contributor guidelines.</p>
+<p>BT: Going to work on style guidelines since the PRs are inconsistent.</p>
+<p>IS: Getting CLA working is highest prioroty.</p>
+<p>BT: Do we need any test coverage before approving ES6?</p>
+<p>BT: For ES7 we agreed that we need tests before final spec.</p>
+<p>BT: Instead of using numbered section plan to use the HTML anchor names from the HTML version of the spec.</p>
+<a href="#yield-and-its-precendence"><h2 id="yield-and-its-precendence">Yield and its precendence</h2></a><p>Code Samples: <a href="https://gist.github.com/lukehoban/8678463">https://gist.github.com/lukehoban/8678463</a></p>
+<p>LH: Presents code samples. All but &quot;yield 1+2&quot; seem strange. Any time you have a generator that pumps values in you want good expression semantics.</p>
+<p>WH: Points to yield 1+2 alternatives in LH's code samples; one makes it mean (yield 1)+2, the other makes it mean yield(1+2). Strongly prefers the latter.</p>
+<p>BE: Have to make a choice that yield should be high precedence or low precedence. yield x + y must be yield(x + y) without parens, the rest follows by the grammar.</p>
+<p>LH: concede</p>
+<p>:: conversation about whether implementing iterators is more common or taskjs-like scenarios are more common ::</p>
+<p>BN: Status quo causes more errors but errors encourage parenthesization, and enables <code>yield 1 + 2</code> to yield the value 3</p>
+<p>LH: For the async use case, important to have high precendence, but willing to concede that <code>yield</code> should remain low precenedence due to iterators use cases.  Async use cases could have new &quot;await&quot; syntax with high precendence.</p>
+<p>YK: task.js requires (yield a) + (yield b) paren style</p>
+<p>BE: revenge of Lisp, you get used to it</p>
+<a href="#conclusionresolution-yield-and-its-precendence"><h4 id="conclusionresolution-yield-and-its-precendence">Conclusion/Resolution</h4></a><ul>
+<li>Status Quo</li>
+</ul>
+<a href="#newborn-generator-behavior"><h2 id="newborn-generator-behavior">Newborn generator behavior</h2></a><p>(Ben)</p>
+<p>See issue here: <a href="https://github.com/tc39/agendas/pull/25">https://github.com/tc39/agendas/pull/25</a></p>
+<p>DH: Intention was for generators to be composable.</p>
+<p>BN: Proposal: generator with yield* doesn't throw when receiving a value</p>
+<p>DH: Breaks correspondance between yield* and for-of desugaring. Also... wrappers are not equivalent unless both wrapper and wrapped are newborn.</p>
+<p>BN: Can be fixed... but is hairy. Presents updated wrapper code... Proposal is that we remove the type error for passing in a value to an unborn generator. Then, if the first yield we encounter is a yield *, pass in the value that was passed to the unborn generator.
+:: Concerns with proposal (please fill?) ::</p>
+<p>DH: Possibly other alternatives to fix this?</p>
+<p>WH: There are two problems here:</p>
+<ol>
+<li>A function* can't capture the first value passed to the 'next' that invoked it. Instead, it currently requires it to be undefined.</li>
+<li>No way to pass an initial 'next' value to <code>yield *</code>. This means that manually doing the first yield followed by a <code>yield *</code> wouldn't help because the problem would then reappear on the second yield.</li>
+</ol>
+<p>WH: The proposal is proposing a hidden channel (a la Perl's $_) that ties 1 to 2 here. Would prefer mechanisms to do those separately and more explicitly.</p>
+<p>BN: <code>yield</code> syntax that says delegate but don't care about value?</p>
+<p>DH: Let's think about it more...</p>
+<p>DH: Went through the mental excercise to do an implicit yield upon calling the generator. Leads to a lot of other issues.</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">first</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">yield</span>* push(first, delegate);
+}
+</code></pre>
+<a href="#concensusresolution-newborn-generator-behavior"><h4 id="concensusresolution-newborn-generator-behavior">Concensus/Resolution</h4></a><ul>
+<li>BN: Have to go back and think more about this. Maybe a helper function can be created.</li>
+</ul>
+<a href="#ecma-404-and-ietf-interactions"><h2 id="ecma-404-and-ietf-interactions">ECMA-404 and IETF interactions</h2></a><p>AWB: IETF is not comfortable referencing ECMA.</p>
+<p>IS: IETF includes ECMA-404 as an informative reference (?)</p>
+<p>AWB: Proposed doing a second edition if IETF wanted to work with ECMA.
+:: Discussion about IETF participation, general dissatisfaction with the process and end result ::
+See <a href="http://www.ietf.org/mail-archive/web/json/current/threads.html#02131">http://www.ietf.org/mail-archive/web/json/current/threads.html#02131</a> and look for &quot;R S&quot; (Rob Sayre) fighting the good fight</p>
+
+</body>

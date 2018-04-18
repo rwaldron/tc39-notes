@@ -1,0 +1,285 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 23, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-23-2012-meeting-notes"><h1 id="may-23-2012-meeting-notes">May 23, 2012 Meeting Notes</h1></a><hr>
+<p>This pre-dates the recording of a complete attendees list.</p>
+<hr>
+<a href="#override-mistake-allen-wirfs-brock-mark-miller"><h2 id="override-mistake-allen-wirfs-brock-mark-miller">Override Mistake (Allen Wirfs-Brock, Mark Miller)</h2></a><p>AWB:</p>
+<ul>
+<li>The correct people are not here for this discussion, defer to next meeting</li>
+</ul>
+<a href="#414-unicode-norbert-lindenderg"><h2 id="414-unicode-norbert-lindenderg">4.14, Unicode (Norbert Lindenderg)</h2></a><p>NL:</p>
+<ul>
+<li>Regular expressions</li>
+<li>Certain unclear, discuss with Unicode Consortium
+see:
+<a href="http://norbertlindenberg.com/2012/05/ecmascript-supplementary-characters/index.html">http://norbertlindenberg.com/2012/05/ecmascript-supplementary-characters/index.html</a></li>
+</ul>
+<p><a href="http://norbertlindenberg.com/2012/05/ecmascript-supplementary-characters/full-unicode-in-ecmascript.pdf">http://norbertlindenberg.com/2012/05/ecmascript-supplementary-characters/full-unicode-in-ecmascript.pdf</a></p>
+<p>AWB:</p>
+<ul>
+<li>Concretely, should supplementary characters gain coverage in the currently developing draft.</li>
+</ul>
+<p>MM:</p>
+<ul>
+<li>Mention of spec modularity</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Implication for strings etc.</li>
+</ul>
+<p>NL, LH, MM:</p>
+<ul>
+<li>Any objections? No.</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Canonicalize everything to full unicode grammar</li>
+<li>Don't think this will change implementation rules</li>
+</ul>
+<p>LH:</p>
+<ul>
+<li>Asks for confirmation</li>
+</ul>
+<p>NL, AWB:</p>
+<ul>
+<li>Confirms no difference.</li>
+</ul>
+<p>Resolution: Promoted unanimously to harmony status</p>
+<a href="#411-daylight-savings-luke-hoban"><h2 id="411-daylight-savings-luke-hoban">4.11, Daylight Savings (Luke Hoban)</h2></a><p>Move to remove/reword:</p>
+<pre><code>    15.9.1.8 &quot;An implementation of ECMAScript is expected to determine the daylight saving time algorithm.&quot;
+</code></pre>
+<p>AWB:</p>
+<ul>
+<li>There needs to be a specification of some sort, as other aspects of the standard rely on this.</li>
+</ul>
+<p>more discussion.</p>
+<p>Some locales do change</p>
+<p>LH:</p>
+<ul>
+<li>Operating systems and browser do have disagreements</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Either NL or LH can draft replacement text for
+15.9.1.6 and 15.9.1.8</li>
+</ul>
+<p>more discussion.</p>
+<p>Resolution: Remove the spec text, new additions will be considered as new proposal</p>
+<p><em>Not</em> errata.</p>
+<a href="#410-objectobserve-rafeal-weinstein"><h2 id="410-objectobserve-rafeal-weinstein">4.10 Object.observe (Rafeal Weinstein)</h2></a><p>Rafeal Weinstein:</p>
+<ul>
+<li>Introduction to proposal</li>
+</ul>
+<p>See: <a href="http://wiki.ecmascript.org/doku.php?id=strawman:observe">http://wiki.ecmascript.org/doku.php?id=strawman:observe</a></p>
+<p>MM:</p>
+<ul>
+<li>In favor of spec'ing an event loop</li>
+</ul>
+<p>Alex Russel:</p>
+<ul>
+<li>This doesn't actually change anything in the spec today</li>
+</ul>
+<p>MM:</p>
+<ul>
+<li>Run program code to completion, etc.</li>
+</ul>
+<p>LH:</p>
+<ul>
+<li>last execution context</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Currently no concept of &quot;last execution context&quot;</li>
+</ul>
+<p>YK:</p>
+<ul>
+<li>It's implicit</li>
+</ul>
+<p>LH:</p>
+<ul>
+<li>Agrees, needs to be specified</li>
+</ul>
+<p>OH:</p>
+<ul>
+<li>What happens if the object is mutated before the callback delivers?</li>
+</ul>
+<p>Explanation of side-channel communication of objects.</p>
+<p>YK:</p>
+<ul>
+<li>Explains the idea, needs of observing an entire object.</li>
+</ul>
+<p>Discussion about object safety.</p>
+<p>Discussion about frozen object safety.</p>
+<p>Discussion about non-configurable, non-writable property change delivery.</p>
+<p>MM:</p>
+<ul>
+<li>Will adding the text &quot;Any non-frozen&quot; change the operational behaviour?</li>
+</ul>
+<p>YK:</p>
+<ul>
+<li>No, frozen objects should probably not deliver a property changes</li>
+</ul>
+<p>Erik Arvidsson:</p>
+<ul>
+<li>Deferring to MM</li>
+</ul>
+<p>MM:</p>
+<ul>
+<li>Observe proxy?</li>
+</ul>
+<p>EA:</p>
+<ul>
+<li>Non-issue, the traps only the final property</li>
+</ul>
+<p>LH:</p>
+<ul>
+<li>More explanation of Proxy property trap behaviour</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>There is too much going on at low level with this proposal</li>
+</ul>
+<p>Discussion about importance</p>
+<p>BE:</p>
+<ul>
+<li>Important does not mean &quot;it's in&quot;</li>
+</ul>
+<p>RWeinstein:</p>
+<ul>
+<li>What if this didn't apply to Proxy?</li>
+</ul>
+<p>BE:</p>
+<ul>
+<li>The DOM...</li>
+</ul>
+<p>More discussion regarding security, naivety of proposal</p>
+<p>BE:</p>
+<ul>
+<li>Let's have Tom Van-Cutsem take a look at this and iron out</li>
+</ul>
+<p>RWeinstein:</p>
+<ul>
+<li>Asking for blessing to prototype in v8: approved.</li>
+</ul>
+<p>Resolution: Needs more exploration</p>
+<a href="#spec-issues"><h2 id="spec-issues">Spec Issues</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><em>Object.isObject</em></p>
+<p>Misses the mark on actual needs.</p>
+<p>BE:</p>
+<ul>
+<li>Possibly, Object.typeOf()?</li>
+</ul>
+<p>Doug Crockford:</p>
+<ul>
+<li>Need to re-address this for reality.</li>
+</ul>
+<p>YK:</p>
+<ul>
+<li>Will write strawman for review at next meeting.</li>
+</ul>
+<p>Resolution: Consensus to remove from draft</p>
+<p><em>super</em></p>
+<p>LH:</p>
+<ul>
+<li>This may be too confusing for the common user</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Asserts that super is defined correctly for classes
+(explanation)</li>
+</ul>
+<p>Should super be allowed in all function forms or restricted to classes?</p>
+<p>Resolution: Defer super outside of classes</p>
+<p><em>Concise Methods</em></p>
+<p>Resolution: In favor</p>
+<p><em>Concise Body</em></p>
+<p>Resolution: Only for ArrowFunction</p>
+<p><em>Property Assignment Shorthand</em></p>
+<p>eg.
+function point(x, y) {
+return { x, y };
+}</p>
+<p>{ x: x, y: y }</p>
+<p>This is too unclear
+w/r to destructuring: both, or nothing.
+Plenty of opposition based on clarity.</p>
+<p>Resolution: Nothing, no change.</p>
+<p><em>Triangle</em></p>
+<p>Is capable of giving up private names</p>
+<p>If people have <strong>proto</strong> they will not use &lt;|.</p>
+<p>MM:</p>
+<ul>
+<li>From a security perspective, I'd like to move <strong>proto</strong> out of annex B and into normative body</li>
+</ul>
+<p>BE:</p>
+<ul>
+<li>If MS puts <strong>proto</strong> in IE, then it becomes defacto standard and we might as well put it in the standard.</li>
+</ul>
+<ol>
+<li><strong>proto</strong></li>
+<li>grawlix</li>
+</ol>
+<a href="#conclusionresolution-spec-issues"><h4 id="conclusionresolution-spec-issues">Conclusion/Resolution</h4></a><ul>
+<li>Indefinite postpone</li>
+</ul>
+<a href="#moustache"><h2 id="moustache">Moustache</h2></a><p>o.{ p: v }</p>
+<p>BE:</p>
+<ul>
+<li>Propose that moustache is kept, but still consider Object.extend</li>
+</ul>
+<p>MM:</p>
+<ul>
+<li>Would like to consider both moustache and Object.extend</li>
+</ul>
+<p>How about... both?
+= assign
+: define</p>
+<p>ie.</p>
+<p>o.{
+p1: &quot;to define&quot;,
+p2 = &quot;to assign&quot;
+};</p>
+<p>Positions:</p>
+<p>Just Define
+Just Assign
+Both Define and Assign
+Alone
+Applied to object literals</p>
+<a href="#conclusionresolution-moustache"><h4 id="conclusionresolution-moustache">Conclusion/Resolution</h4></a><ul>
+<li>Return to strawman for revision, needs own wiki page.</li>
+</ul>
+<a href="#computed-keys"><h2 id="computed-keys">Computed Keys</h2></a><p>Erik Arvidsson:</p>
+<ul>
+<li>Today, properties are static and knowable, computed keys are not knowable.</li>
+</ul>
+<a href="#conclusionresolution-computed-keys"><h4 id="conclusionresolution-computed-keys">Conclusion/Resolution</h4></a><ul>
+<li>Deferred.</li>
+</ul>
+<a href="#sealedobjectliteral"><h2 id="sealedobjectliteral">SealedObjectLiteral</h2></a><p>See: <a href="https://bugs.ecmascript.org/show_bug.cgi?id=362">https://bugs.ecmascript.org/show_bug.cgi?id=362</a></p>
+<a href="#conclusionresolution-sealedobjectliteral"><h4 id="conclusionresolution-sealedobjectliteral">Conclusion/Resolution</h4></a><ul>
+<li>Postponed until ES7.</li>
+</ul>
+<a href="#stringprototypetoarray"><h2 id="stringprototypetoarray">String.prototype.toArray</h2></a><a href="#conclusionresolution-stringprototypetoarray"><h4 id="conclusionresolution-stringprototypetoarray">Conclusion/Resolution</h4></a><ul>
+<li>Removal from draft.</li>
+</ul>
+<a href="#weak-refs"><h2 id="weak-refs">Weak Refs</h2></a><p>Yehuda Katz:</p>
+<ul>
+<li>Use case: observers</li>
+</ul>
+<a href="#conclusionresolution-weak-refs"><h4 id="conclusionresolution-weak-refs">Conclusion/Resolution</h4></a><ul>
+<li>Continued, due to lack of time.</li>
+</ul>
+<a href="#value-objects"><h2 id="value-objects">Value Objects</h2></a><p>Brendan demos, explanation of the implementation and operator overloading</p>
+<a href="#conclusionresolution-value-objects"><h4 id="conclusionresolution-value-objects">Conclusion/Resolution</h4></a><ul>
+<li>none</li>
+</ul>
+
+</body>

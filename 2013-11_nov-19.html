@@ -1,0 +1,426 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 19, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-19-2013-meeting-notes"><h1 id="november-19-2013-meeting-notes">November 19, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Yehuda Katz (YK), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Rick Hudson (RH), Matt Sweeney (MS),  Rafeal Weinstein (RWN), Alex Russell (AR),  Rick Waldron (RW), Dmitry Soshnikov (DS), Jeff Morrison (JM), Sebastian Markbåge (SM), Ben Newman (BN), Reid Burke (RB), Waldemar Horwat (WH),  Doug Crockford (DC), Tom Van-Cutsem (TVC), Mark S. Miller (MM)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>JN: (Introductions)</p>
+<p>DC: (Logistics)</p>
+<p>JN: ...updating status of RFTG
+...Adopt agenda?</p>
+<p>Unanimous approval</p>
+<p>JN: Approval of Sept Minutes?</p>
+<p>Unanimous approval</p>
+<a href="#es6-status"><h2 id="es6-status">ES6 Status</h2></a><p>AWB: (presenting Luke's spreadsheet with remaining features that need attention)
+<a href="https://skydrive.live.com/view.aspx?resid=704A682DC00D8AAD!59602&amp;app=Excel&amp;authkey=!AAMixsO0TuyPYwc">https://skydrive.live.com/view.aspx?resid=704A682DC00D8AAD!59602&amp;app=Excel&amp;authkey=!AAMixsO0TuyPYwc</a></p>
+<p>...Function.prototype.toString still needs attention</p>
+<p>BE: Mark is to write spec, in this case under-specify</p>
+<p>AWB:</p>
+<ul>
+<li>Refutable pattern matching is deferred</li>
+<li>still need specification for enumerate / getOwnPropertyKeys/Symbols in various places</li>
+<li>Proxy handlers, cut</li>
+<li>C-style for-let</li>
+</ul>
+<p>BE: We agreed on semantics</p>
+<p>AWB: We agreed on outer capture, but won't try to update per iteration. Need per iteration binding.</p>
+<p>YK: This is the consensus I recall</p>
+<p>AWB:</p>
+<ul>
+<li>Modules, static semantics complete</li>
+<li>No loader/runtime semantics yet.</li>
+<li>Dave will have a complete spec this meeting</li>
+</ul>
+<p>YK: (confirms that it's complete)</p>
+<p>AWB: Yes, but not yet in the spec.</p>
+<ul>
+<li>Standard Modules deferred.</li>
+</ul>
+<p>(TVC dials in)</p>
+<a href="#44-finalizing-the-proxy-api-for-es6"><h2 id="44-finalizing-the-proxy-api-for-es6">4.4 Finalizing the Proxy API for ES6</h2></a><p>(Presented by Tom Van Cutsem)</p>
+<p>TVC: First three relate to es-discuss threads, re: simplifying Proxy. Jason Orendorff expressed concerns.</p>
+<ul>
+<li>hasOwn()</li>
+<li>invoke()</li>
+</ul>
+<p>WH:</p>
+<p>AWB: Looked for traps for call</p>
+<p>BE: Total traps?</p>
+<p>AWB: Now 14 traps.</p>
+<p>BE: Cool. Not including hasOwn()?</p>
+<p>AWB: Not including</p>
+<p>TVC: The next is <code>invoke()</code> trap. Leave out for now to avoid inconsistencies with <code>get()</code>?</p>
+<p>YK: How do you implement virtual objects? ie. an object whose <code>this</code> object is always the proxy. Can't do it reliably without invoke.</p>
+<p>WH: Still not reliable, even with invoke.</p>
+<p>YK: So what are the cases?</p>
+<p>AWB: Can still implement a virtual object or full membrane, or thin wrapper.</p>
+<p>YK: Not the use case. Want to make an object where <code>this</code> is the proxy and not the target.</p>
+<p>TVC: Are you arguing that <code>this</code> should remain bound to the proxy object upon forwarding? If yes, this is the default.</p>
+<p>YK: As long as maintaining equivalence between <code>foo.bar()</code> and <code>bar.call(foo)</code></p>
+<p>AWB: yes.</p>
+<p>TVC: Regarding Handler API: not enough motivating use cases for proxy handlers without community use. Propose to defer.</p>
+<p>AWB: Let's publish the library code
+TVC: It's already on github, as part of my shim. I will publish it as a separate project to make it more accessible.</p>
+<p>TVC: <code>Proxy</code> as a constructor? Currently, no <code>new</code> throws TypeError</p>
+<p>AWB: Not really a &quot;class&quot;</p>
+<p>AR: You create new ones?</p>
+<p>AWB: No prototype</p>
+<p>AR: Gives an instance, why not &quot;new&quot;</p>
+<p>AWB: Would need an @@create</p>
+<p>YK: Then shouldn't be capitalized</p>
+<p>BE: We can do &quot;proxy&quot;</p>
+<p>AWB: (to Tom) the concern is: if it's not &quot;new-able&quot;, should it be little-p proxy?</p>
+<p>TVC: Given choice between little-p proxy and requiring <code>new</code>, I prefer <code>new</code></p>
+<p>RW: Agree with Alex, <code>new Proxy()</code> creates new Proxies, so allow <code>new</code></p>
+<p>AR: Let's not duck the charge on @@create.</p>
+<p>WH: Proxy is not a class.</p>
+<p>YK: ...But has allocation</p>
+<p>WH: I would hate to specify what happens when subclassing from Proxy</p>
+<p>AWB: Must create a special constructor</p>
+<p>TVC: @@create doesn't make sense here</p>
+<p>BE: Is Proxy a class?</p>
+<p>(General: no)</p>
+<p>TVC:</p>
+<p>DS: What is typeof and instanceof</p>
+<p>AWB/BE: object</p>
+<p>BE: Capital P</p>
+<p>AWB: Ca???</p>
+<p>DS: Whatever Proxy creates?</p>
+<p>BE: That depends on what is created.</p>
+<p>DS: By default?</p>
+<p>BE: typeof depends if there is a call trap. instanceof depends on the prototype chain. All in the spec, so can create any object (apart from private state issues)</p>
+<p>AWB: Ok, into the future... would value objects allow <code>new</code>?</p>
+<p>BE: (int64 example)</p>
+<p>...back to why should <code>new</code> throw on Proxy constructor.</p>
+<p>BE: Seems counter intuitive: Proxy constructs objects. <code>int64</code> creates a value. callables construct objects</p>
+<p>[ inaudible ]</p>
+<p>BE: these are object constructor functions, which is what people want to do with &quot;new&quot;</p>
+<p>AWB: this is somewhere in the middle between newing a class and a random function that returns an object</p>
+<p>BE: in either case, it returns a new object and proxies are factories for object</p>
+<p>AWB: yeah, I agree...spec currently calls them &quot;proxy factory functions&quot;</p>
+<p>BE: pretty weird not to have &quot;new&quot; on this.. feels natural</p>
+<p>YK: Intuitively, the difference between returning an object and not a value</p>
+<p>AWB: we can do it...need to make it an exotic object with a special [[Construct]]</p>
+<p>AR: agree. Making it exotic is good.</p>
+<p>TVC: what's the summary?</p>
+<p>AWB: we allow new, we do it by making it exotic.</p>
+<p>EA: Do we REQUIRE &quot;new&quot;?</p>
+<p>WH: what does Map do without <code>new</code>?</p>
+<p>EA: Throws</p>
+<p>BE: Why are we requiring <code>new</code> again?</p>
+<p>RW: Needed for subclassing</p>
+<p>AWB: my objection is that we're trying to tell a story about objects, classes, and @@create... this confuses the story</p>
+<p>YK: there's already a weird split...saying you have to use <code>new</code> avoids the confusion</p>
+<p>AR/RW: agree</p>
+<p>AWB: we could go either way, and it's subtle, but most people won't see the subtlety</p>
+<p>RW/BE: the conservative thing to do is to throw now and we can walk it back later</p>
+<p>AWB: agree</p>
+<p>JM: Removing the throw might change control flows?</p>
+<p>BE: non-issue, rare.</p>
+<a href="#consensusresolution-44-finalizing-the-proxy-api-for-es6"><h4 id="consensusresolution-44-finalizing-the-proxy-api-for-es6">Consensus/Resolution</h4></a><ul>
+<li>Drop <code>hasOwn()</code></li>
+<li>Drop <code>invoke()</code></li>
+<li>Postpone proxy handlers API</li>
+<li>REQUIRE <code>new Proxy</code> by making Proxy an exotic function that has it's own internal construct. (this is only &quot;action&quot; item)</li>
+</ul>
+<a href="#es6-status-cont"><h2 id="es6-status-cont">ES6 Status (cont)</h2></a><p>AWB:
+- Symbols in place
+- Binary data deferred
+- RegExp look behind deferred</p>
+<p>WH: No comprehensive specification of which variant of RegExp lookbehind was wanted. Followed up on es-discuss and got no good answer to questions.</p>
+<p>AWB: No one has stepped up, deferred to ES7</p>
+<ul>
+<li>Completion reform has bugs, but that's just work for me</li>
+<li>Global scope, Dave has some possible changes he wants to discuss at this meeting</li>
+<li>Eval scope, now simplified because can't eval a module</li>
+<li>function scope, needs spec some design issues still open</li>
+<li>Promises, Domenic has a complete delta, just needs to be added</li>
+<li>Internal Method Invariants. If we're going to keep this section, someone needs to provide spec ready text.</li>
+</ul>
+<p>MM: If Tom will collaborate with me on this, I will commit to producing this.</p>
+<p>AWB: I can live without this section</p>
+<p>MM: ES5 had that section, I will talk to Tom about creating this for ES6</p>
+<p>...</p>
+<p>AWB: For the end of this year, we need a feature complete spec. Essentially a &quot;candidate spec&quot;. This means all the features there are sufficiently specified to allow an implementor to implement. I think we have a shot at it. There is work to do. Questions remain in modules, but Dave can update us. Dave and Jason (Orendorff) have been working like crazy to finish modules, including a reference implementation.</p>
+<p>MM: The spec we want to be feature complete includes modules?</p>
+<p>AWB: Yes.</p>
+<p>MM: The loader stuff as well?</p>
+<p>AWB: Yes.
+... Over the next 6-9 months, we need implementors to work and provide feedback. We should push forward with what he have now (this includes modules)</p>
+<a href="#41-review-latest-specification-draft"><h2 id="41-review-latest-specification-draft">4.1 Review Latest Specification Draft</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>(request slides)</p>
+<p>Discussion re: arguments.caller, arguments.callee in non-strict and strict mode.</p>
+<p>Discussion re: default param aliasing</p>
+<p>BE: (tries aliasing on SM)</p>
+<p>YK: Issues with arguments.caller, arguments.callee in framework uses.</p>
+<p>BE: Do we want three types of arguments?</p>
+<p>YK: It's not really three types</p>
+<p>...</p>
+<p>BE: Fair to say there are three observably different kinds of arguments</p>
+<ul>
+<li></li>
+</ul>
+<p>YK:</p>
+<p>MM: Adopt some semantics where aliasing</p>
+<p>BE: Deep aliasing of destructured parameters is bad</p>
+<p>AR: Walk back poisoning entirely?</p>
+<p>MM: No.</p>
+<p>MM: Any simple parameter is aliased and any new style parameter is not
+... on defaults I could go either way.</p>
+<p>AWB: Back to scheduling</p>
+<p>BE: If there is destructuring, no deep aliasing.</p>
+<p>WH: Easier to explain if the rules are compositional.</p>
+<a href="#consensusresolution-41-review-latest-specification-draft"><h4 id="consensusresolution-41-review-latest-specification-draft">Consensus/Resolution</h4></a><ul>
+<li>Parameter issues</li>
+<li>default params, alias is independent</li>
+<li>destructuring has no name for top level object, no aliasing</li>
+<li>rest has no aliasing</li>
+<li>non-strict mode arguments have unpoisoned caller and callee</li>
+</ul>
+<p>... Continue discussion re: do Arrow Functions have an arguments object?</p>
+<a href="#43-should-arguments-in-an-arrow-body-be-from-nearest-outer-defining-scope-or-early-error"><h4 id="43-should-arguments-in-an-arrow-body-be-from-nearest-outer-defining-scope-or-early-error">4.3 Should 'arguments' in an arrow body be from nearest outer defining scope, or early error?</h4></a><p>(Brendan Eich)</p>
+<p>AWB: Arrows don't have an arguments object, but <code>arguments</code> is a keyword inside arrow functions.</p>
+<p>WH: <code>let arguments = ...</code>?</p>
+<p>not allowed, recapping ES5 strict rules that were applied to new forms in ES6.</p>
+<p>questions about conditionally reserved words</p>
+<p>AWB: what if the outer function <em>does</em> say <code>let arguments = ...;</code>, what is it in the arrow function?</p>
+<p>MM: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> <span class="hljs-built_in">arguments</span> = <span class="hljs-number">1</span>;
+
+  [<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>].forEach(<span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> v + <span class="hljs-built_in">arguments</span>);
+}
+</code></pre>
+<p>YK: <code>this</code>, <code>super</code>, <code>arguments</code> should refer to its outer.</p>
+<p>WH: 11.6.2.2 and 13.2.1.1 are inconsistent. The former omits keywords such as &quot;arguments&quot;, while claiming to be based on the latter.</p>
+<a href="#consensusresolution-41-review-latest-specification-draft"><h4 id="consensusresolution-41-review-latest-specification-draft">Consensus/Resolution</h4></a><ul>
+<li><code>arguments</code> is lexically captured by arrow functions</li>
+<li>11.6.2.2 and 13.2.1.1 are inconsistent (file a bug)</li>
+<li>yield cannot mean &quot;yield to the outer&quot;</li>
+</ul>
+<p>AWB/BE: yield just follows the rules for yield</p>
+<p>MM: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> <span class="hljs-keyword">yield</span> = <span class="hljs-number">8</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">yield</span> baz();
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">baz</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">yield</span>;
+    }
+  }
+}
+
+<span class="hljs-keyword">var</span> f = foo();
+
+<span class="hljs-built_in">console</span>.log(f().next().value);
+
+<span class="hljs-comment">// 8</span>
+</code></pre>
+<a href="#awb-computed-property-keys-no-dynamic-checking-for-duplicate-computed-property-name-in-object-literals-or-classes"><h4 id="awb-computed-property-keys-no-dynamic-checking-for-duplicate-computed-property-name-in-object-literals-or-classes">AWB: ...Computed property keys: No dynamic checking for duplicate computed property name in object literals or classes</h4></a><pre><code class="language-js">{
+  [expr1]: <span class="hljs-number">1</span>,
+  [expr2]: <span class="hljs-number">2</span>
+}
+<span class="hljs-comment">// Does not check if expr1 === expr2</span>
+</code></pre>
+<p>MM: Cannot statically repeat properties in object literals</p>
+<p>AWB: This isn't a static object literal</p>
+<p>MM: ...</p>
+<p>YK: The most common usage will by for symbols, eg. @@iterator</p>
+<p>AWB: We don't have a mechanism for runtime checks like this and shouldn't be adding such checks</p>
+<p>MM: The create and overwrite paths are very different (define v. assign)</p>
+<p>WH: Pick one or the other. If we're going to do static checking, do it consistently. Either always check or never check</p>
+<p>AWB: The complications I ran into were in gets and sets, it's not just &quot;does this property exist&quot;...</p>
+<p>BE: We do want computed property gets and sets
+...We should do checks.</p>
+<p>AWB: It's not that non-strict doesn't check...</p>
+<p>MM: given that we do dynamic checks in strict mode, you prefer NOT doing them in sloppy mode?</p>
+<p>AWB: I don't like the dynamic checks either way</p>
+<p>MM: that wasn't the question</p>
+<p>AWB: the precedent in ES5 for object literals is that strict mode has &quot;more&quot; static checks.</p>
+<p>AWB: &quot;from a language design perspective&quot;, we should have them the same in both cases</p>
+<p>BE: I'm w/ WH and ARB, we want the check in strict mode</p>
+<p>AWB: so you don't want the check in sloppy mode?</p>
+<p>BE: I don't think there is only one consistent position, and I'm ok with no dynamic check in non-strict mode</p>
+<p>... discussion of the current static checks in non-strict mode ...</p>
+<a href="#consensusresolution-41-review-latest-specification-draft"><h4 id="consensusresolution-41-review-latest-specification-draft">Consensus/Resolution</h4></a><ul>
+<li>No change, this is the semantics:</li>
+</ul>
+<pre><code><span class="hljs-keyword">var</span> name = <span class="hljs-string">"x"</span>;
+<span class="hljs-keyword">var</span> o = {x:<span class="hljs-number">42</span>, x:<span class="hljs-number">45</span>}, <span class="hljs-comment">// static strict error</span>
+    o2 = {x:<span class="hljs-number">42</span>, <span class="hljs-function"><span class="hljs-keyword">get</span> <span class="hljs-title">x</span>(<span class="hljs-params"></span>)}, <span class="hljs-comment">// static error</span>
+    o3 </span>= {x:<span class="hljs-number">42</span>, [name]:<span class="hljs-number">45</span> }, <span class="hljs-comment">// dynamic strict error</span>
+    o4 = {x:<span class="hljs-number">42</span>, <span class="hljs-keyword">get</span> [name]() {}}; <span class="hljs-comment">// dynamic error</span>
+</code></pre>
+<p>AWB: the consensus is that for dynamically computed property names we will dynamically check the things we would have statically checked.</p>
+<p>WH: Pop quiz. What does the following parse as?</p>
+<pre><code class="language-js">baz = ...
+function foo() {
+  <span class="hljs-keyword">var</span> <span class="hljs-keyword">yield</span> = <span class="hljs-number">8</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">yield</span>
+        baz
+    <span class="hljs-keyword">yield</span>
+        * baz
+    <span class="hljs-keyword">yield</span> (baz) =&gt; <span class="hljs-keyword">yield</span> * baz
+  }
+}
+</code></pre>
+<p>[Almost nobody guessed all of these right.]</p>
+<p>Current answer, with all optional semicolons inserted:</p>
+<pre><code class="language-js">baz = ...
+function foo() {
+  <span class="hljs-keyword">var</span> <span class="hljs-keyword">yield</span> = <span class="hljs-number">8</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">yield</span>;  <span class="hljs-comment">// The yield expression rule has a [no LineTerminator here]</span>
+        baz;
+    <span class="hljs-keyword">yield</span> <span class="hljs-comment">// The yield * expression rule doesn't. No optional semicolon here!</span>
+        * baz;
+    <span class="hljs-keyword">yield</span> (baz) =&gt; <span class="hljs-keyword">yield</span> * baz; <span class="hljs-comment">// The * here is a product of two variables</span>
+  }
+}
+</code></pre>
+<a href="#consensusresolution-41-review-latest-specification-draft"><h4 id="consensusresolution-41-review-latest-specification-draft">Consensus/Resolution</h4></a><ul>
+<li>Update <code>yield * [Lexical goal InputElementRegexp]</code> =&gt; <code>yield [no LineTerminator here] * [Lexical goal InputElementRegexp]</code></li>
+</ul>
+<a href="#classoptional-yield-arg-ambiguity"><h2 id="classoptional-yield-arg-ambiguity">Class/optional yield arg ambiguity</h2></a><pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> *<span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">foo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">yield</span> </span>{} <span class="hljs-comment">// is that an object or the class body?</span>
+  {}
+}
+</code></pre>
+<p>Proposed solutions:</p>
+<ul>
+<li>Disallow trailing yield in extends clause</li>
+<li>Requires an extra parameter to Expression and AssignmentExpression</li>
+<li>extends LeftHandSideExpression</li>
+<li>would be only place an expression isnt explicitly Expression or AssignmentExpression</li>
+</ul>
+<p>BE: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-comment">// Don't want to require these parens:</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> (<span class="hljs-title">A</span> + <span class="hljs-title">B</span>) </span>{
+
+}
+</code></pre>
+<p>BE: Should have no trailing yield, as a static error</p>
+<p>... lost track here...</p>
+<p>WH: (whiteboard) Counterexample to claim about never requiring parentheses in expressions that would be unambiguous without them:</p>
+<pre><code class="language-js">a = b * (<span class="hljs-keyword">yield</span> c)
+</code></pre>
+<p>WH: Think of &quot;extends&quot;  as having the same precedence as assignment operators. That's why class C extends (A + B) would require parentheses.</p>
+<a href="#consensusresolution-classoptional-yield-arg-ambiguity"><h4 id="consensusresolution-classoptional-yield-arg-ambiguity">Consensus/Resolution</h4></a><ul>
+<li>extends LeftHandSideExpression</li>
+<li>would be only place an expression isnt explicitly Expression or AssignmentExpression</li>
+</ul>
+<a href="#cross-realm-symbol-registration"><h2 id="cross-realm-symbol-registration">Cross-Realm Symbol Registration</h2></a><p>(need slide)</p>
+<p>AWB:</p>
+<pre><code class="language-js"><span class="hljs-comment">// key is a string</span>
+<span class="hljs-built_in">Symbol</span>.for(key) =&gt; aSymbol <span class="hljs-comment">// creates a new Symbol if key is not registered</span>
+
+<span class="hljs-built_in">Symbol</span>.keyFor(aSymbol) =&gt; key
+</code></pre>
+<ul>
+<li>Where for all strings S: <code>Symbol.keyFor(Symbol.for(S)) === S</code></li>
+<li>the use case for <code>Symbol.keyFor</code> is serialization</li>
+</ul>
+<p>Revisiting discussion from last meeting, re: Symbol.</p>
+<p>Discussion regarding the value, or lack of, registered Symbols over Strings.</p>
+<p>DH: Is it necessary to be <code>Symbol.keyFor()? What about</code>Symbol.prototype.key`</p>
+<p>DS: Is there direct correspondance between <code>Symbol</code> and <code>toString</code>?</p>
+<p>DH: If the symbol is registered, <code>toString</code> does the same as <code>Symbol.keyFor</code></p>
+<p>AWB: is this good?</p>
+<p>DH: What does <code>Symbol.keyFor</code> return if the symbol is unregistered?</p>
+<p>undefined</p>
+<a href="#consensusresolution-cross-realm-symbol-registration"><h4 id="consensusresolution-cross-realm-symbol-registration">Consensus/Resolution</h4></a><ul>
+<li>Agree on proposed API.</li>
+<li>If the symbol is unregistered: <code>Symbol.keyFor(unregistered symbol)</code> returns <code>undefined</code></li>
+<li><code>Symbol.keyFor(not a symbol)</code> throws</li>
+</ul>
+<p>AWB: An issue about Symbols not being usable as WeakMap keys...
+...which is ok...</p>
+<p>This lead to discussion about (re)naming of WeakMap. It's possible that WeakMap may be renamed SideTable</p>
+<a href="#introduce-a-prototype-object-that-contains-sloppy-arguments-object-iterator-function"><h2 id="introduce-a-prototype-object-that-contains-sloppy-arguments-object-iterator-function">Introduce a Prototype object that contains sloppy arguments object @@iterator function?</h2></a><p>Discussion re:</p>
+<ul>
+<li><code>arguments</code> prototype</li>
+<li><code>arguments.prototype.constructor</code></li>
+</ul>
+<p>AWB/MM: instanceof is generally misused</p>
+<p>AWB: Current spec: all built-in iterators. Self hostable</p>
+<p>MM: Issues are with consistency.</p>
+<p>BE: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-built_in">Array</span>.prototype[<span class="hljs-built_in">Symbol</span>.iterator] !== (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">arguments</span>[<span class="hljs-built_in">Symbol</span>.iterator];
+})();
+</code></pre>
+<p>MM: ...future JS programmers learning classes without understanding prototypes. Let's not unnecessarily introduce new abstractions that can't be understood within these semantics.</p>
+<p>(meta discussion)</p>
+<p>AWB: (describing a spec that used class inheritance for all new inherited objects, eg. <code>Array.Iterator</code>)</p>
+<p>BE: Return to the question... should <code>arguments</code> be iterable, and how?</p>
+<p>AWB/MM: (discussion re:</p>
+<a href="#consensusresolution-introduce-a-prototype-object-that-contains-sloppy-arguments-object-iterator-function"><h4 id="consensusresolution-introduce-a-prototype-object-that-contains-sloppy-arguments-object-iterator-function">Consensus/Resolution</h4></a><p>...?</p>
+<a href="#conventions-for-ignore-over-ride-of-iterator"><h2 id="conventions-for-ignore-over-ride-of-iterator">Conventions for ignore over-ride of @@iterator</h2></a><p>MM: Why is this a spec issue?</p>
+<p>AWB: @@iterator is bad example, @@toStringTag is better</p>
+<p>BE: Use <code>undefined</code>, not &quot;falsey&quot;</p>
+<p>AWB: re: <code>new Map(?, &quot;is&quot;)</code></p>
+<p>BE/RW: <code>new Map(undefined, &quot;is&quot;)</code> defaults to empty list</p>
+<p>AWB: Happy with undefined.</p>
+<a href="#consensusresolution-conventions-for-ignore-over-ride-of-iterator"><h4 id="consensusresolution-conventions-for-ignore-over-ride-of-iterator">Consensus/Resolution</h4></a><ul>
+<li>Just use <code>undefined</code></li>
+</ul>
+<a href="#function-foo-bindxname"><h2 id="function-foo-bindxname">(function Foo() {}).bind(x).name?</h2></a><p>See: <a href="http://wiki.ecmascript.org/doku.php?id=harmony:function_name_property">http://wiki.ecmascript.org/doku.php?id=harmony:function_name_property</a></p>
+<p>AWB: What about anonymous function expressions?</p>
+<p>RW: No name is made</p>
+<p>AWB: What about bound anonymous function expressions?</p>
+<p>RW: Same, no name.</p>
+<p>DS: Could bound functions delegate their name? Do we want to do that?</p>
+<p>BE: Might be interesting to find out, can chat with Brandon about this.</p>
+<a href="#consensusresolution-function-foo-bindxname"><h4 id="consensusresolution-function-foo-bindxname">Consensus/Resolution</h4></a><ul>
+<li>&quot;bind&quot; wins over &quot;bound&quot;</li>
+<li>Brandon needs to review the spec.</li>
+</ul>
+<a href="#9-ecma-404-w3c-tag--tpac-report"><h2 id="9-ecma-404-w3c-tag--tpac-report">9 ECMA 404 W3C TAG / TPAC report</h2></a><p>(Alex Russell)</p>
+<p>AR: (recapping JSON specification leading to 404)
+... There are people at the IETF that want more restrictions, eg. a number types, character encoding.</p>
+<p>WH/MM: what does that mean?</p>
+<p>AWB: Let's avoid doing what they're doing.</p>
+<p>AR: They want to restrict all the things, that we're simply not willing to do.
+... The draft revision includes non-normative &quot;advice&quot;. They've also diverged on what is &quot;valid JSON&quot;.</p>
+<p>RW: Specifically, they've changed JSON so that JSONValue is not the top level grammar production, using JSONText instead. This means only &quot;{}&quot; and &quot;[]&quot;, which is incompatible with Ecma-404.</p>
+<p>AR: (proposal to work together)</p>
+<p>STH: 3 levels.</p>
+<ol>
+<li>Bytes on the wire. For example reject UTF-32</li>
+<li>Sequence of unicode code points that make up a valid JSON sequence. This is covered by ECMA 404.</li>
+<li>Semantics of this structure. For example, reject numbers with a thousand digits.</li>
+</ol>
+<a href="#consensusresolution-9-ecma-404-w3c-tag--tpac-report"><h4 id="consensusresolution-9-ecma-404-w3c-tag--tpac-report">Consensus/Resolution</h4></a><ul>
+<li>Alex will draft statement to send to IETF last call, due Thursday</li>
+</ul>
+<a href="#49-reconsidering-objectis"><h2 id="49-reconsidering-objectis">4.9 Reconsidering Object.is</h2></a><p>(Dave Herman)</p>
+<p>DH: Object.is might be a mistake</p>
+<p>AWB:  Could be trying to fill one of two purposes:</p>
+<ul>
+<li>the finest distinction possible</li>
+<li>what you really wish triple equal was</li>
+</ul>
+<p>For general use, you want -0 and +0 to be equated, NaN to equal NaN</p>
+<p>MM, WH: Multiple NaNs are not visible in JavaScript</p>
+<p>AWB, DH: Different NaNs are distinguishable if aliased via TypedArrays</p>
+<p>AWB: Hence Object.is does not discriminate as finely as possible</p>
+<p>WH: That would be a mistake. ES1-5 clearly state that the NaN values are indistinguishable, and some implementations rely on that for NaN-boxing. Object.is should consider all NaNs to be the same.</p>
+<p>[ discussion ]</p>
+<p>AWB: NaNs are technically still not distinguishable in ECMAScript because an implementation has the freedom to write any quiet NaN bit pattern into a TypedArray, not necessarily the one that generated the NaN; in fact, writing the same NaN twice might generate different bit patterns.</p>
+<p>Discussion about equating NaN values (<a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-01/jan-29.md#conclusionresolution">https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-01/jan-29.md#conclusionresolution</a>)</p>
+<p>MM: The spec allows 0/0 to be written to a TypedArray twice with different actual bit pattern.</p>
+<p>More discussion re: IEEE NaN</p>
+<a href="#consensusresolution-49-reconsidering-objectis"><h4 id="consensusresolution-49-reconsidering-objectis">Consensus/Resolution</h4></a><ul>
+<li>Status Quo</li>
+</ul>
+
+</body>

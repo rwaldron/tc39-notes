@@ -1,0 +1,445 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 29, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-29-2014-meeting-notes"><h1 id="july-29-2014-meeting-notes">July 29, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Dmitry Lomov (DL), Waldemar Horwat (WH), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jafar Husain (JH), Jeff Morrison (JM), Mark Honenberg (MH), Caridy Patiño (CP), Sebastian Markbåge (SM), István Sebestyén (IS), Erik Arvidsson (EA), Brendan Eich (BE), Mark S. Miller (MM), Sam Tobin-Hochstadt (STH), Domenic Denicola (DD), Peter Jensen (PJ), John McCutchan (JMC), Paul Leathers (PL), Eric Toth (ET), Abhijith Chatra (AC), Jaswanth Sreeram (JS), Yehuda Katz (YK), Dave Herman (DH), Brendan Eich (BE), John-David Dalton (JDD)</p>
+<hr>
+<a href="#introduction"><h2 id="introduction">Introduction</h2></a><p>JN: (Welcome and host details)</p>
+<p>Introductions.</p>
+<p>Agenda: <a href="https://github.com/tc39/agendas/blob/master/2014/07.md">https://github.com/tc39/agendas/blob/master/2014/07.md</a></p>
+<p>JN: Agenda approval?</p>
+<p>Approved.</p>
+<p>JN: Minutes from June 2014 approval?</p>
+<p>Approved.</p>
+<a href="#41-review-latest-draft"><h2 id="41-review-latest-draft">4.1 Review Latest Draft</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/rev26-summary.pdf">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/rev26-summary.pdf</a></p>
+<p>AWB:</p>
+<p>Slide 1</p>
+<ul>
+<li>&quot;Task&quot; =&gt; &quot;Job&quot;</li>
+<li>Generator oject return method/for-of/in loops use return method on generatorsGetMethod, now treats null and indefined equiv as meaning no method available</li>
+<li>Eliminated the ability of Proxy handlers to extend the set of property descriptor attributes thet expose vis [[GetOwnProperty]]</li>
+<li>Added invariant checks for Proxy [[OwnPropertyNames]] internal method</li>
+<li>Added an informative generator function based definiton for ordinary object [[Enumerate]]</li>
+<li>Another round of updates to 9.2.13 FunctionDeclarationInstantiation to fix various scoping bugs.</li>
+<li>Eliminated duplicate property name restrictions ob object literals and class definitions</li>
+<li>Revisited @@unscopabe support in Object Environment Records</li>
+</ul>
+<p>RW: Clarification about #3</p>
+<p>MM: Prevent the ability to lie about decriptor values; prevent leak
+&quot;time of check to time of use&quot; (ToCToU) vulnerability</p>
+<p>(re: #5)
+WH: Informative implementation may cause readers to incorrectly assume that anything that doesn't conform to to that informative implementation is wrong. In particular, worried about users assuming that implementation behaviors that the informative implementation doesn't do can't happen.</p>
+<p>(discussion re: normative vs informative prose in spec)</p>
+<p>WH: &quot;Note&quot; sections?</p>
+<p>AWB: Sections marked &quot;Note&quot; are informative, making them normative would be redundant</p>
+<p>WH: Too many &quot;Note&quot; sections appear to be normative rephrasings of other normative text, which we labelled as informative only because we're afraid of redundancy. Then when we have one which describes something that behaves quite differently from the normative text, it can be misleading.</p>
+<p>Slide 2</p>
+<ul>
+<li>For-of now throws if iterable value is null or undefined (also reverted comprehension to throwing for that case)</li>
+<li><code>Date.prototype.toString</code> now uses NaN as its time value when applied to an object without a [[DateValue]]</li>
+<li>Function poison pill caller and arguments properties are now configurable</li>
+</ul>
+<p>General concern about whether you could take the sloppy-mode and add it to a strict-mode function via reflective APIs.</p>
+<p>Turns out that the sloppy mode behavior is implemented in all current engines as a magic value property, so this will not be possible (phew!).</p>
+<ul>
+<li><code>await</code> is a FutureReservedWord when parsing and the syntactic grammar goal symbol is Module</li>
+<li>Better integration of <code>Object.prototype.toLocaleString</code> and <code>String.prototype.toLocaleString</code> with ECMA-402</li>
+<li>Added <code>name</code> property for bound functions in <code>Function.prototype.bind</code>. Fixed bugs in generating length property in <code>Function.prototype.bind</code></li>
+<li>Tweaked Script GlobalDeclarationInstantiations to deal with error situations that could arise from misusing proxies for the global object.</li>
+<li>Changed handling of NaN from a sort comparefn to match web reality (<a href="http://bugs.ecmascript.org/show_bug.cgi?id=2978">http://bugs.ecmascript.org/show_bug.cgi?id=2978</a>)</li>
+</ul>
+<p>MM: (re: #6) What is the bound name?</p>
+<p>AWB: &quot;bound ...&quot;</p>
+<p>(per previous resolution—find and link)</p>
+<p>AWB: (re: #8, sort behavior when comparison function returns NaN) the change adds:
+&quot;If v is NaN, then return +0. &quot;</p>
+<p>WH: Note that that bug contains other examples where sort would still be inconsistent.
+WH: The issue here is that +∞ - +∞ is NaN, which means that using a-b as a sort function allows you to compare +∞ with -∞, but +∞ is not equal to itself.
+WH: I wrote this wording in ES3 and I'm fine with this change. It will fix the behavior of sorting arrays containing ±∞ but not NaN's. With NaN's you'll still get an inconsistent sort order (because the ordering relation is not transitive) and hence implementation-defined behavior.</p>
+<p>MM: Worried that implementation-defined behavior could do bad things such as violate memory safety. Should state that it doesn't.</p>
+<p>MM: (filing bug to make language more specific to avoid memory safety violations)</p>
+<p>AWB: There was never a concern about violating memory safety because we don't define memory safety</p>
+<p>WH: I tried to formalize it in ES3 but it was too much trouble.  I wanted  to state that the sort always produces a permutation, but that doesn't  apply to sorting oddball input objects containing things such as holes with prototype properties showing through, read-only properties,  getters/setters, proxies, ....  Can't write &quot;sort doesn't violate memory  safety&quot; without formalizing what memory safety is.</p>
+<p>MM: Will write concrete suggestion for handling and submit as part of bug</p>
+<p><a href="https://bugs.ecmascript.org/show_bug.cgi?id=3089">https://bugs.ecmascript.org/show_bug.cgi?id=3089</a></p>
+<p>Slide 3</p>
+<ul>
+<li>Updated Symbol conversions:
+<ul>
+<li><code>aSym == &quot;not a symbol&quot;</code> produces false.</li>
+<li><code>var s = Symbol(); s == Object(s)</code> produces true.</li>
+<li><code>&quot;foo&quot; + aSymbol</code> or <code>aSymbol + &quot;foo&quot;</code> throws TypeError.</li>
+<li>Symbol <code>@@toPrimitive</code> returns the wrapped symbol value.</li>
+<li><code>ToNumber(aSymbol)</code> throws.</li>
+</ul></li>
+<li>Spread now works on strings <code>var codeUnits = [...&quot;this is a string&quot;]</code></li>
+<li><code>yield *</code> now works with strings: <code>function * getchars(str) {yield * str}</code></li>
+<li>Annex B support for function declarations in IfStatementClauses</li>
+<li>Annex B (and 13.12) support for legacy labelled FunctionDeclarations</li>
+<li>Updated Annex C (strict mode summary) WRT ES6 changes and extensions</li>
+</ul>
+<p>EA: (re: #2) Removed the Object check?</p>
+<p>BE: Andreas didn't want values on the right of a destructuring (number, etc)</p>
+<p>EA: Definitely want to spread strings</p>
+<p>BE: Agreed, we should revisit.</p>
+<p>(Added: <a href="https://github.com/tc39/agendas/commit/370e3029d01659620e0ca03bf370eb5beefca45e">https://github.com/tc39/agendas/commit/370e3029d01659620e0ca03bf370eb5beefca45e</a> )</p>
+<p>Re: #4, the resolution: <a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-06/jun-6.md#block-scoping-issues">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-06/jun-6.md#block-scoping-issues</a></p>
+<p>BE:</p>
+<pre><code class="language-js">(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(g);
+  L: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{};
+})();
+</code></pre>
+<p>DH: The grammar: inside a LabelledStatement, can't start with &quot;function&quot;</p>
+<p>BE/AWB: Clarification of Statement and Declaration</p>
+<p>DH: Suggest: we can deal with this post-ES6. It's a useless thing that happens to parse and not worth our immediate attention.</p>
+<p>AWB: We need to decide if this is a function declaration, does it hoist?</p>
+<p>DH: But won't affect the web, existing can't be relied on. The existing work has been done, but no additional work</p>
+<p>WH: Treat this the same as function declarations inside of statements: ie. <code>if (true) function f() {}</code>. Do we allow <code>while (true) function f() {}</code> ?</p>
+<p>YK/BE: Let's take this offline.</p>
+<p>WH: Let's keep it as it is in ES5</p>
+<p>AWB: Whoever maintains web specs...?</p>
+<p>BE: Not all browsers do the same:</p>
+<p>(results of above code)</p>
+<ul>
+<li>SpiderMonkey: ReferenceError</li>
+<li>V8: function g() {}</li>
+<li>JSC: function g() {}</li>
+<li>Chakra: function g() {}</li>
+</ul>
+<p>AWB: Spec is up to date, without the modules work.</p>
+<a href="#46-unscopables"><h2 id="46-unscopables">4.6 Unscopables</h2></a><p>(Erik Arvidsson)</p>
+<p><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/es6-unscopables.pdf">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/es6-unscopables.pdf</a></p>
+<p>(<a href="https://bugs.ecmascript.org/show_bug.cgi?id=1908#c14">https://bugs.ecmascript.org/show_bug.cgi?id=1908#c14</a>)</p>
+<p><strong>Object instead of Array</strong></p>
+<pre><code class="language-js"><span class="hljs-built_in">Array</span>.prototype[<span class="hljs-built_in">Symbol</span>.unscopables] = {
+  ...  
+};
+</code></pre>
+<p>(with null prototype)</p>
+<p><strong>Walk The [[Prototype]] Chain</strong></p>
+<p>For</p>
+<ul>
+<li>HasBinding</li>
+<li>GetBindingValue</li>
+</ul>
+<p>But nor for:</p>
+<ul>
+<li>SetMutableBinding</li>
+</ul>
+<p>AWB: essentially replicating the prototype lookup algorithm in two additional places. Realized a third.</p>
+<p>EA: ...</p>
+<p><strong>Setter Issue</strong></p>
+<p>SetMutableBinding ignores @@unscopables so we can get a mismatch:</p>
+<pre><code class="language-js"><span class="hljs-keyword">with</span> (object) {
+  x = <span class="hljs-number">1</span>;
+  assert(x === <span class="hljs-number">1</span>); <span class="hljs-comment">// can fail</span>
+}
+</code></pre>
+<p>YK: Needs to be written?</p>
+<p>AWB: More that wasn't considered. Proxy issues in bug (above)</p>
+<p>EA: The problems arise when your prototype has getter or setter or proxy. The result of HasBinding can return true for a property further down the prototype chain, but then Set got invoked using a setter that was black listed in HasBinding.</p>
+<p>AWB: Proposal is, do what we've done and leave setting as is.</p>
+<p>Only apply unscopable at the local level, don't walk the prototype chain</p>
+<p>Any binding resolution operation, on a <code>with</code> env record:</p>
+<ol>
+<li>looks up unscopables, doesn't matter where in the prototype</li>
+<li>checks the <code>name</code> against unscopables (has, not hasOwn)</li>
+<li>if found continue up to the next level</li>
+</ol>
+<p>Only applies to &quot;with environments&quot;</p>
+<p>STH: Should unscopables affect things in the prototype chain</p>
+<p>WH: Does it apply to both reads and writes?</p>
+<p>AWB: Yes</p>
+<p>STH: Looks only at the object with unscopables as own property?</p>
+<p>AWB: No, it's on the prototype, to not own</p>
+<p>STH: Should this apply to all spec algorithms?</p>
+<p>YK: Everyone agrees?</p>
+<p>STH: AWB's proposal says no</p>
+<p>AWB: Only object environment records for <code>with</code></p>
+<p>STH: it <em>should</em> apply to SetMutableBinding?</p>
+<p>AWB: Yes.</p>
+<p>EA: The reason for not doing [[Get]] was because you might have instance properties on the object</p>
+<p>YK: Can link the unscopables</p>
+<p>EA: Agreed. And don't do hasOwn</p>
+<p>STH: can break existing programs that use instance properties</p>
+<p>BT/AWB: Discussion about compatibility.</p>
+<p>EA: What about Globals &amp; unscopables? The global object is an ObjectEnvironment too. Do we plan on adding unscopables?</p>
+<p>Generally, no.</p>
+<p>YK: Are we sure there is no case to use unscopables on the global object</p>
+<p>RW: Could we specify no unscopables on global now and relax it later?</p>
+<p>EA: for ES7</p>
+<p>AWB: If this only applies to <code>with</code> environments, then that's not part of the global object</p>
+<p>MM: Unless you do: <code>with(global object) {...}</code></p>
+<p>Confirm.</p>
+<p>AWB: Is this a function of <code>with</code> or the environment?</p>
+<a href="#conclusionresolution-46-unscopables"><h4 id="conclusionresolution-46-unscopables">Conclusion/Resolution</h4></a><ul>
+<li>@@unscopables only works inside of <code>with</code> object environment records, not global object environment records.</li>
+<li>Revert to the previous algorithm:
+<ol>
+<li>looks up unscopables, doesn't matter where in the prototype</li>
+<li>checks the <code>name</code> against unscopables (HasProperty, not HasOwnProperty)</li>
+<li>if found continue up to the next scope level</li>
+</ol></li>
+</ul>
+<a href="#48-consider-if-objectassign-should-silently-ignore-nullundefined-sources"><h2 id="48-consider-if-objectassign-should-silently-ignore-nullundefined-sources">4.8 Consider if Object.assign should silently ignore null/undefined sources</h2></a><p>(Sebastian Markbage)</p>
+<p>(Request slides)</p>
+<p>SM:</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.assign({}, <span class="hljs-literal">undefined</span>);
+</code></pre>
+<p>This throws, but propose that it shouldn't.</p>
+<p>SM/AWB: <code>Object.keys</code> was relaxed</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.assign(<span class="hljs-literal">undefined</span>, {});
+</code></pre>
+<p>This should still throw</p>
+<p>DH: undefined and null are probably treated the same by ==</p>
+<p>Do we want to treat null and undefined the same? Probably not.</p>
+<p>DD: The mental model should be for-of + default arguments, not for-in</p>
+<p>MM: use case for tolerating the null is in JSON data. JSON has no way to represent undefined, except for null</p>
+<p>JH: or omission</p>
+<p>SM: Covered existing libraries to use <code>Object.assign</code>, feedback almost always included the undefined case.</p>
+<p>JM: Did you distinguish null and undefined?</p>
+<p>SM: No</p>
+<p>YK: We should distinguish or we have two nulls</p>
+<a href="#conclusionresolution-48-consider-if-objectassign-should-silently-ignore-nullundefined-sources"><h4 id="conclusionresolution-48-consider-if-objectassign-should-silently-ignore-nullundefined-sources">Conclusion/Resolution</h4></a><ul>
+<li>do not throw on undefined</li>
+<li>will throw on null</li>
+</ul>
+<a href="#short-discussion-about-making-generatorreturn-throw-a-special-exception"><h2 id="short-discussion-about-making-generatorreturn-throw-a-special-exception">Short discussion about making generator.return() throw a special exception.</h2></a><p>DH: Want to bring up Andy Wingo's preference (discussed on es-discuss) for modeling return() as an exception rather than a return.</p>
+<p>General opposition.</p>
+<a href="#conclusionresolution-short-discussion-about-making-generatorreturn-throw-a-special-exception"><h4 id="conclusionresolution-short-discussion-about-making-generatorreturn-throw-a-special-exception">Conclusion/resolution</h4></a><ul>
+<li>keep as is: return() method produces a return control flow, not an exception</li>
+</ul>
+<a href="#undefined"><h2 id="undefined"></h2></a><p>AWB: In the process of for-of, if a throw occurred, does that turn into a throw to the iterator?</p>
+<p>NO.</p>
+<a href="#yield-"><h2 id="yield-">Yield *</h2></a><p>AWB: Does an internal throw</p>
+<p>When a <code>generator.throw()</code> is called and the generator has a yield* the spec currently calls <code>throw</code> in the yield* expression</p>
+<p>DH: Call return() on the outer generator, delegates calling return() to the delegated <code>yield *</code></p>
+<p>BE:</p>
+<pre><code class="language-js">
+<span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">yield</span>* h();
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-number">42</span>);
+}
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">h</span>(<span class="hljs-params">bound</span>) </span>{
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">of</span> range(bound)) {
+      <span class="hljs-keyword">yield</span> i;
+    }
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"h returned"</span>);
+  }
+}
+
+<span class="hljs-keyword">let</span> it = g();
+
+it.next();  <span class="hljs-comment">// returns {value: 0, done: false}</span>
+it.throw(); <span class="hljs-comment">// </span>
+
+</code></pre>
+<p>AWB: If <code>it.return()</code> we would send a return to the <code>h</code> instance.</p>
+<p>Confirm.</p>
+<p>AWB: if <code>it.throw()</code> do we send a return to the <code>h</code> instance?</p>
+<p>MM: we would do a <code>throw</code>?</p>
+<p>AWB: we wouldn't. Think of the <code>yield*</code> as a for-of. h() doesn't know what its client is.</p>
+<p>The problem:</p>
+<p>the resumption from the yield is throw, back in the <code>yield*</code>, what to call on <code>h()</code></p>
+<p>DH: Propagate, that's the point of <code>yield*</code>, it should behave as if the inner generator is inline and anything it does propagates.</p>
+<p>AWB: My mental model of <code>yield*</code> is that it expands to a for-of { ... yield ... }</p>
+<p>MM: You should not think of it that way.</p>
+<p>DH: You should not base your mental model off of an expansion; you should base it off of what <code>yield*</code> is meant to be used for.</p>
+<p>The desugaring into for-of is not at all straightforward.</p>
+<p>AWB: the desugaring in the algorithms in the spec is not actually that complex...</p>
+<p>DH: the way to think about this is to directly inline the body of <code>h</code> into the body of <code>g</code>, not as a generator equivalent. This is the generator analogue of beta-equivalence.</p>
+<p>AWB: why don't you do that for any function then?</p>
+<p>DH: well, if we had TCP, we would have beta-equivalence.</p>
+<p>YK: (Saw that one coming...)</p>
+<p>DH: the important refactoring property to have is that you can extract out some generator logic into a helper function and then call it with <code>yield*</code>. Ben Newman was talking about a similar/related thing. It is very important that the throw to the outer generator get delegated as a throw through the inner generator.</p>
+<p>MM: What is the model that the user has: who is the <code>throw</code> complaining to?</p>
+<p>AWB: And who has control? Is the generator calling out and getting something back or into another generator.</p>
+<p>DH: for-of and <code>yield*</code> diff roles: for-of is a consumer and generator stops there. <code>yield*</code> is consuming and producing by composition.</p>
+<p>JH: Two models: consuming and emitting. <code>yield*</code> is a stream fusion,</p>
+<p>STH: <code>yield*</code> compensates for the shallowness of yield</p>
+<p>DH: It allows composition of generators</p>
+<p>JS: You could expand these to for-of</p>
+<p>YK: Those that work in C# find this to be a natural way to think of this, but others may not</p>
+<p>JS: My concerns are speed</p>
+<p>DD: Think about how you could desugar and see where it falls down</p>
+<p>YK: disagreement</p>
+<p>DH: Fall over in more cases</p>
+<p>MM: Would it be plausible to have the <code>throw</code> propagate to the inner generator as well?</p>
+<p>DH: check out <a href="http://legacy.python.org/dev/peps/pep-0380/#formal-semantics">PEP-380</a>. The desugaring is mind-bogglingly complex, but the refactoring principle is very straightforward. Refactoring should not introduce corner cases where it behaves differently.</p>
+<p>MM: consensus that yield* delegates throw?</p>
+<p>JS: no objection</p>
+<a href="#conclusionresolution-yield-"><h4 id="conclusionresolution-yield-">Conclusion/Resolution</h4></a><ul>
+<li><code>yield*</code> delegates <code>next()</code>, <code>return()</code> and <code>throw()</code></li>
+<li>for-of propagates abrupt completion outward, calls the iterator's <code>return()</code></li>
+</ul>
+<p>AWB: Another question... when we do the <code>return</code>, that may return a value and currently throwing that value away. There is no way to override the normal loop termination.</p>
+<p>DH: If we do a throw that causes us to call <code>return()</code> on a generator, and that returns a value, the value is dropped on the floor, which is consistent.</p>
+<p>AWB: If the <code>return</code> call on the iterator is an abrupt return (normally means an exception)...</p>
+<p>MM: The call to <em>return</em> itself completes abruptly?</p>
+<p>AWB: Yes</p>
+<p>MM: it's &quot;finally-like&quot;, that supersedes</p>
+<p>AWB: In one sense, a dropped exception</p>
+<p>BE: Let's have a smaller group with the champions look at the final specific details.</p>
+<a href="#411-consider-adding-attribute-event-handlers-to-annex-b"><h2 id="411-consider-adding-attribute-event-handlers-to-annex-b">4.11 Consider adding &quot;attribute event handlers&quot; to ANNEX B</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: Add to Annex B the semantics of defining an attribute handler so that the HTML spec can get out of the business of spec'ing a distinct form of ES function.</p>
+<p>MM: An internal function for other specs?</p>
+<p>AWB: If you're implementing a browser, you'd follow this specification.</p>
+<p>YK: Isn't this just <code>with</code>?</p>
+<p>DD: No, there is more there (see <a href="http://kangax.github.io/domlint/#5">http://kangax.github.io/domlint/#5</a> for details)</p>
+<p>EA: Why can't this be in the HTML living spec?</p>
+<p>AWB: That's the problem, Hixie is using internal APIs, in some cases incorrectly.</p>
+<p>MM: Is this for ES6?</p>
+<p>BE: Not important enough for ES6</p>
+<p>AWB: not a lot of work.</p>
+<p>No support for ES6</p>
+<p>DD: I don't think we should push for ES6</p>
+<p>RW: Last meeting pushed back 6 months, this isn't that valuable.</p>
+<a href="#conclusionresolution-411-consider-adding-attribute-event-handlers-to-annex-b"><h4 id="conclusionresolution-411-consider-adding-attribute-event-handlers-to-annex-b">Conclusion/Resolution</h4></a><ul>
+<li>Scheduled for ES7 Annex B</li>
+</ul>
+<a href="#49-argumentscaller-poisoning-on-new-syntactic-forms---arrows-generators"><h2 id="49-argumentscaller-poisoning-on-new-syntactic-forms---arrows-generators">4.9 Arguments/caller poisoning on new syntactic forms - Arrows, Generators</h2></a><p>(Brian Terlson)</p>
+<p>BT: All function-like things agree on having arguments object</p>
+<p>DH: What's wrong with having the poison properties?</p>
+<p>BT: The motivation for having those properties may not apply to those new syntactic forms.</p>
+<p>MM: Keep them and they are there and configurable, or mandate w/o caller and arguments properties</p>
+<p>EA: Too much weight on edge cases</p>
+<p>MM: Born without extra properties would be fine</p>
+<p>AWB: Do we even need poison pills?</p>
+<p>BT: Can we get rid of it?</p>
+<p>AWB: Can't add properties called &quot;caller&quot; and &quot;arguments&quot; to strict mode functions</p>
+<p>MM: New forms, the properties are absent.</p>
+<p>AWB: Are these properties implemented as own properties or inherited?</p>
+<p>MM: And we agreed that <code>Function.prototype</code> remains a function</p>
+<a href="#conclusionresolution-49-argumentscaller-poisoning-on-new-syntactic-forms---arrows-generators"><h4 id="conclusionresolution-49-argumentscaller-poisoning-on-new-syntactic-forms---arrows-generators">Conclusion/Resolution</h4></a><ul>
+<li>Get rid of all poisoned caller and arguments, except for the poisoned caller and arguments on Function.prototype</li>
+<li>All functions born of non-legacy function syntactic forms do not have caller and arguments properties</li>
+</ul>
+<a href="#410-signaling-stability-of-existing-features"><h2 id="410-signaling-stability-of-existing-features">4.10 Signaling stability of existing features</h2></a><p>(Domenic Denicola and Yehuda Katz)</p>
+<p>YK: Problem: ES6 signaling is too fuzzy. ES6 is a monolithic thing. Three stages:</p>
+<ol>
+<li>Seeking the happy-path semantics</li>
+<li>Find the happy-path semantics</li>
+<li>Finalize edge cases, done.</li>
+</ol>
+<p>Need to</p>
+<p>AWB: What are we doing that sends the wrong message?</p>
+<p>YK: eg. when we said were pushing for a 6 month extension, people assume this means all features are unstable</p>
+<p>RW: (relaying additional experience re: above)</p>
+<p>DD: Proposed stages:</p>
+<ol>
+<li><p>Locked</p></li>
+<li><p>Stable</p></li>
+<li><p>Almost Stable</p></li>
+<li><p>Stabilizing</p></li>
+<li></li>
+</ol>
+<p>(need to fill in descriptions from proposal document)</p>
+<p>AWB: The problem is that some things that are &quot;locked&quot; become &quot;unstable&quot;</p>
+<p>JM: It's possible to be &quot;unstable&quot; until spec is published</p>
+<p>STH: And publication isn't even the end either.</p>
+<p>WH: Any time someone proposes something like this, I want to ask if this would've correctly predicted the results had we done it some time ago. For example, had we done this, say, in January then comprehensions would have been in the Locked stage, but then we took them out.</p>
+<p>WH: Math functions are listed in the Locked stage in your proposal but at the same time we have important discussions at this meeting about their precision.</p>
+<p>?: Math function precision could be a different feature.</p>
+<p>WH: That's weasel wording — when you want to change some aspect of a feature, you just move the goalposts to make that aspect a separate feature.</p>
+<p>DD: &quot;we're&quot; not good a the PR of specification churn</p>
+<p>MM: Not sure what this proposal is really addressing. The community has a way exxagerated sense of instability, and over-reacts to any change. So what?</p>
+<p>JM: Won't implement modules at FB because of churn.</p>
+<p>AWB: Does this change the model for ES7?</p>
+<p>DD/YK: No.</p>
+<p>AWB: So this is for the next 5 months of ES6?</p>
+<p>MM: Not enough community feedback because the feedback is limited to only those that are willing to accept churn?</p>
+<p>YK: Yes</p>
+<p>DH: Priorities: getting feedback for ES6 is low, because it's too late in the game. Focus feedback priority on ES7. Despite the inclusion of more practitioners in the TC, there are still broad misunderstandings about TC39 and ES6.</p>
+<p>DD: The perception is that ES6 is the new ES4, except that we all know this isn't true.</p>
+<p>AWB: Two things... concerns about how you're defining these stages. Who is going to do this work? I don't want to say 5 months from now that the spec is &quot;unstable&quot; in its entirety.</p>
+<p>Mixed discussion about implementor opinion of feature.</p>
+<p>AWB: We don't want uninformed feedback that we have to filter</p>
+<p>DH: It's really bad to not talk to the community, because people think the worst.</p>
+<p>YK: A vast majority of ES6 is stable</p>
+<p>MM: How we should be messaging as individuals. TC39 should not be spending time</p>
+<p>PL: This is all too hard to quantify and assess because change <em>will</em> happen.</p>
+<p>DH: Stability chart is</p>
+<a href="#conclusionresolution-410-signaling-stability-of-existing-features"><h4 id="conclusionresolution-410-signaling-stability-of-existing-features">Conclusion/Resolution</h4></a><ul>
+<li>Individual evangelism, feedback and outreach</li>
+</ul>
+<a href="#postpone-realm-api-to-es7"><h2 id="postpone-realm-api-to-es7">Postpone Realm API to ES7</h2></a><p>MM: Can we?</p>
+<p>DH: I'm ok with this, but don't want to be in a situation where we're permanently postponed while waiting for a security review. Let's reach out to other security reviewers.</p>
+<p>DD: I can implement a draft implementation in node for the purpose of review.</p>
+<p>AWB: The modules spec depends on realms</p>
+<p>DH: Only the ability specify the Realm in user code needs to be removed.</p>
+<p>MM: let's pull Realm from ES6, if there are issues we can address them.</p>
+<p>AWB: The Realm API cleaned up how you go about eval'ing things.</p>
+<p>DH: This clean ups can stay as-is, now ready for the reflection to come in ES7</p>
+<p>AWB: Not going to have anyway for user code to eval in Loader.</p>
+<p>DH: w/o Realm no ability to virtualize eval. Doesn't effect utility of Loader. The specification is detailed and complete, should continue moving forward.</p>
+<p>MM: And any issues that are encountered can be addressed.</p>
+<p>DH/YK: Agreement that test implementation in node is ideal (vs. browser)</p>
+<p>Discussion re: security issues created by implementations in browsers.</p>
+<p>MM: The security implications and risks are greater for Realm because this <em>is</em> the sandbox api.</p>
+<p>DH: Agree.</p>
+<a href="#conclusionresolution-postpone-realm-api-to-es7"><h4 id="conclusionresolution-postpone-realm-api-to-es7">Conclusion/Resolution</h4></a><ul>
+<li>Realm postponed to ES7</li>
+</ul>
+<a href="#revisit-objectassign"><h2 id="revisit-objectassign">Revisit Object.assign()</h2></a><p>JDD: The issue currently: if we allow <code>undefined</code> then <code>null</code> is the only value not allowed. I don't see anything distinguishing.
+It's strange that <code>null</code> is singled out like this. When <code>null</code> is used correctly, it makes sense here.</p>
+<p>DD: Then the argument is that it should also throw</p>
+<p>JDD: No, it shouldn't throw.</p>
+<p>YK: Should throw on numbers, booleans, etc.</p>
+<p>JDD: Should affect <code>Object.keys</code> as well</p>
+<p>YK: Doesn't have to</p>
+<p>JDD: There shouldn't be special casing for null and undefined</p>
+<p>DD: <code>undefined</code> triggers the default parameter, <code>null</code> doesn't.</p>
+<p>YK: The mental model is: <code>undefined</code> is missing, <code>null</code> is not</p>
+<p>AWB: Mentions the relaxation of rules for <code>Object.keys</code></p>
+<p>YK: We should enforce the difference between <code>null</code> and <code>undefined</code></p>
+<p>SB: (details about a study in FB code re: how <code>null</code> and <code>undefined</code> are being used)</p>
+<p>DH: We need to decide whether there is a useful programming model for these cases: <code>null</code> and <code>undefined</code></p>
+<p>JDD: I think the boolean, number, string values are a side effect because they are just treated as empty. Propose to treat <em>both</em> <code>null</code> and <code>undefined</code> the same way.</p>
+<p>JM: Sounds like a better argument against boolean, number, string.</p>
+<p>AWB: (example of a number object to be extended)</p>
+<p>SB: The differnce is target vs. source, <code>null</code> and <code>undefined</code> throw for target.</p>
+<p>Mixed Discussion</p>
+<p>DH: To avoid rehashing, guiding principle:</p>
+<ul>
+<li><code>null</code> represents the no-object object, just like NaN represents the no-number number</li>
+<li><code>undefined</code> represents the no-value value</li>
+</ul>
+<a href="#conclusionresolution-revisit-objectassign"><h4 id="conclusionresolution-revisit-objectassign">Conclusion/Resolution</h4></a><ul>
+<li>Overriding previous resolution:
+<ul>
+<li><code>Object.assign</code> does not throw on <code>null</code> or <code>undefined</code></li>
+</ul></li>
+<li>Adhere to the guiding principle stated above</li>
+</ul>
+<a href="#test-262-update"><h2 id="test-262-update">Test 262 Update</h2></a><p>(Brian Terlson)</p>
+<p>BT: CLA is now online, fully electronic. Lots of contributions, specifically awesome help from Sam Mikes.</p>
+<ul>
+<li>Improvements to the test harness</li>
+<li>Repeat contributors</li>
+<li>Converting ES5 to ES6</li>
+<li>Converting Promise test inbound</li>
+<li>Massive refactoring commit</li>
+</ul>
+<p>Discussion about Promise testing</p>
+<p>JN: Work with István to write a press release for this?</p>
+<p>BT: Yes.</p>
+<p>DD: Node runner?</p>
+<p>BT: MS has been using a node runner internally, I've pulled out the useful pieces and pushed to github: <a href="https://github.com/bterlson/test262-harness">https://github.com/bterlson/test262-harness</a></p>
+<a href="#conclusionresolution-test-262-update"><h4 id="conclusionresolution-test-262-update">Conclusion/Resolution</h4></a><ul>
+<li>announcement effort</li>
+</ul>
+
+</body>

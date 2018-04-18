@@ -1,0 +1,760 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 21, 2017 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-21-2017-meeting-notes"><h1 id="march-21-2017-meeting-notes">March 21, 2017 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Dave Herman (DH),  Kent C. Dodds (KCD), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), Sebastian Markbåge (SM), Bradley Farias (BFS), Maggie Pint (MPT), Jamund Ferguson (JXF), Myles Borins (MBS), Logan Smyth (LS), Sarah D'Onofrio (SDO), Alan Schmitt (AS), Dean Tribble (DT), Peter Jensen (PJ), Mark S. Miller (MM), Leo Balter (LBR), Zibi Braniecki (ZB), Rafael Xavier (RX), Yehuda Katz (YK), Caridy Patiño (CP), Diego Ferreiro Val (DFV), Brendan Eich (BE), Lyza Gardner (LG), Mathias Bynens (MB)</p>
+<hr>
+<a href="#3-adopting-the-agenda"><h2 id="3-adopting-the-agenda">3. Adopting the agenda</h2></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2017/03.md">agenda</a></li>
+</ul>
+<p>DT: WeakReferences. Please add 2 additional minutes.</p>
+<p>AK: Please add items 1 week in advance.</p>
+<p>Agenda adopted</p>
+<a href="#4-adopting-the-minutes"><h2 id="4-adopting-the-minutes">4. Adopting the minutes</h2></a><p>Minutes approved</p>
+<a href="#5-report-from-the-ecma-secretariat"><h2 id="5-report-from-the-ecma-secretariat">5. Report from the Ecma Secretariat</h2></a><p>AWB: István will do this later.</p>
+<a href="#6-ecma-262-status-updates"><h2 id="6-ecma-262-status-updates">6. ECMA-262 Status Updates</h2></a><p>(Brian Terlson)</p>
+<p>BT: Spec is now frozen to any normative changes.</p>
+<p>BT: Most new things will go into ES2018.</p>
+<p>BT: Ready to approve the draft. Minor editorial changes are ok.</p>
+<p>BT: Printable Style sheets not working, we need to improve this. Asking browser devs to make printing support easier :)</p>
+<p>AWB: The patent document is out for review. Members should get it to their lawyers.</p>
+<a href="#7-ecma-402-status-updates"><h2 id="7-ecma-402-status-updates">7. ECMA-402 Status Updates</h2></a><p>(Zibi Braniecki)</p>
+<p>ZB: I'm not prepared for this discussion. I believe Caridy will be giving this. Will come back in a few minutes.</p>
+<a href="#6ii-vote-to-accept-ecma-262-2017-final-draft-and-forward-it-to-ecma-ga-approval-subject-to-completion-of-rf-opt-out-period-with-no-opt-outs"><h2 id="6ii-vote-to-accept-ecma-262-2017-final-draft-and-forward-it-to-ecma-ga-approval-subject-to-completion-of-rf-opt-out-period-with-no-opt-outs">6.ii Vote to accept ECMA-262 2017 final draft and forward it to Ecma GA (approval subject to completion of RF opt-out period with no opt-outs)</h2></a><p>AWB: Voting on the standards is one of the few things that needs a vote.  In a minute or two, we will go around and people who actually represent Ecma members should determine who from each organization will vote. Each member will vote yes/no/abstain (where abstain is the equivalent of &quot;no&quot;).  We're voting on the 2017 version of ECMA-262 and ECMA-402, based on the final drafts that the editors prepared, subject to the assumption that no one raises an objection during the RF opt-out period (in which case we would not be approving the standard in June, but that has never happened). After we approve it, this will go through the Ecma executive committee, onto the GA in June with the final vote.</p>
+<p>WH: No one has ever opted out of an opt-out, but we've had patent shenanigans in the General Assembly before.</p>
+<p>MM: Have we had any patent shenanigans regarding ECMAScript?</p>
+<p>WH: One of the companies decided to say that they might have patents regarding every standard that was up for a vote.</p>
+<p>YK: Only once a feature gets to stage 4 does it get in the spec. What we're doing now is technically a formality.</p>
+<p>AWB: I suggest we do a single vote covering both docs.</p>
+<p>LBR: We also have the Ecma TR104.</p>
+<p>AWB: We will handle that separately.</p>
+<p>AWB: Let's go around the room and have those who have voting authority make your vote. Note takers please take note of the organization who is voting.</p>
+<p>YK: Tilde Yes.</p>
+<p>DH: Mozilla Yes.</p>
+<p>WH: Google Yes.</p>
+<p>DT: Shape security Yes.</p>
+<p>SM: FB Yes.</p>
+<p>MS: Apple Yes.</p>
+<p>BFS: GoDaddy Yes.</p>
+<p>BT: Microsoft Yes.</p>
+<p>MPT: JSFoundation Yes.</p>
+<p>PJ: Intel Yes.</p>
+<p>AS: INRIA Yes.</p>
+<p>KCD: PayPal Yes.</p>
+<p>DFV: SalesForce Yes.</p>
+<p>AWB: Someone will count them. We got &quot;yesses&quot; and no &quot;no&quot;s.  It will be referred to General Assembly for approval. Our work is done for last year.</p>
+<p>All: <em>clapping</em></p>
+<a href="#conclusionresolution-6ii-vote-to-accept-ecma-262-2017-final-draft-and-forward-it-to-ecma-ga-approval-subject-to-completion-of-rf-opt-out-period-with-no-opt-outs"><h4 id="conclusionresolution-6ii-vote-to-accept-ecma-262-2017-final-draft-and-forward-it-to-ecma-ga-approval-subject-to-completion-of-rf-opt-out-period-with-no-opt-outs">Conclusion/Resolution</h4></a><ul>
+<li>Resolution to submit the spec to the General Aassembly for approval.</li>
+</ul>
+<a href="#8-test262-status-updates"><h2 id="8-test262-status-updates">8. Test262 Status Updates</h2></a><p>(Leo Balter)</p>
+<p>LBR: Need help from Ecma for an email for use by test262 so that private emails don't need to be used.</p>
+<p>LBR: In other updates. I was able to do a bug triage on more than 100 issues and pull requests in the last month. There were many many closed issues (around 50) including tests on rest and spread properties. We now have over 100k LOC for async/generator tests. For object rest/spread, we have a new JSC contributor from my country who has been very helpful with the tests. He also implemented it in JSC. We need more support--I'm glad Google is supporting me, but I need more support for test262 development.</p>
+<p>LBR: I'd like to discuss removing the copyright line in test262 tests in a timebox.</p>
+<p>AWB: Let's discuss TR 104.</p>
+<p>LBR: There's still a draft.</p>
+<p>AWB: People have probably not reviewed it adequately to vote on it yet. Post a link here for TR104.</p>
+<p><strong><a href="https://github.com/tc39/test262/blob/master/Draft%20TR%20ECMA-104%202nd%20edition.doc">link</a></strong></p>
+<p>LBR: Yes, I will post a link. We didn't have any updates on it since last year.</p>
+<p>AWB: If we can get the link posted, people should have time here before the end of the day Thursday to do a quick review of that. I'm guessing people wont have any concerns. That also requires a GA vote, so we should have that taken care of in the same package. Is that ok everyone?</p>
+<p>LBR: Yes.</p>
+<p>AWB: So get the link up there.</p>
+<a href="#any-items-for-the-2018-edition"><h2 id="any-items-for-the-2018-edition">Any items for the 2018 edition?</h2></a><p>AWB: We talked about the 2017 edition of the standard. Are there any items for the 2018 edition?</p>
+<p>BT: One of the big things I've been pushing this year (and plan to push in a big way next year) is machine readability. Specifically reducing the number of terms used in ECMASpeak. Specifically, I'm looking into making ECMAIDL a subset of WebIDL.</p>
+<p>YK: We should really be willing to use a subset of WebIDL. There may be something more suitable for webspecs that's more suitable for JS semantics.</p>
+<p>BT: That's the path I'm interested in going down. Thinking of calling it JIDL.</p>
+<p>WH: What's the context for making the spec machine-readable?</p>
+<p>BT: WebIDL is a web interface description language that the web uses to define the shape of APIs. It's a specific language for describing interfaces.</p>
+<p>MM: It IS NOT straightforward (laughter)</p>
+<p>WH: How much of this is meant to be machine readable? Are you proposing replacing the prose definition of the sort function with a machine-readable algorithm?</p>
+<p>BT: Today if you want to see what properties exist on intrinsics (for example) you have to read a bunch of prose. I want something that's easier to be read by spec readers. I'm not talking about the algorithms, but specifically properties and their attributes, and not even coercions. It would be a straightforward small syntax. This way, we could get rid of text like, &quot;and this property has these attributes&quot;.</p>
+<p>BT: This is not going to replace the prose of the algorithms like the sort function.</p>
+<p>MM: A question for Alan Schmitt, who's been working on automating the ECMAScript spec: Is there something that could be extracted from text in this form?</p>
+<p>AS: I think so. If there is something you want to extract, you could easily get it out.</p>
+<p>BT: Could spec readers easily consume this syntax?</p>
+<p>AS: Not sure.</p>
+<p>BT: Let's talk, then.</p>
+<p>YK: I think that this would significantly improve the spec.</p>
+<p>DT: Are you also looking at refactoring parts of the spec. For example <code>eval</code> would be good to extract out and parameterize. Are you looking at that sort of thing?</p>
+<p>BT: Yes. There is a proposal to add a structured header to clauses that say things like &quot;this defines this method and takes these parameters&quot; That would help with tooling. That's definitely a road I'm going down. I haven't given much thought to any other refactorings.</p>
+<p>AWB: In what?</p>
+<p>BT: Possibly inline Annex B, although that's controversial.</p>
+<p>WH: Yes, that's controversial!</p>
+<p>BT: I think it would be pretty nice. But yeah, that's the only refactoring that's on my radar. I'm totally interested in refactorings. But I've been in this document so much that I'm resistant to do any more significant refactorings.</p>
+<p>AWB: I can understand what you say about the IDL for properties. But I'm wondering about the other major place where there are prose descriptions for built-ins are on the arguments.  It's not clear what you could say about arguments other than &quot;we call the first argument X&quot;.</p>
+<p>BT: WebIDL has the capability to describe function parameters. It goes further to say that if you define your function as taking in a number that implies that there's a coercion done to number. I'm not going to include this in the MVP. I don't want the syntax to describe the shape of a function. I would leave that to editorial conventions and prose. The automatic coercions... I have two minds of it. There's an issue raised in 402 where it says do all your coercions at the top, and the Ecma standard says do all coercions when you need them.</p>
+<p>YK: The ECMAScript way is more natural.</p>
+<p>BT: I don't like the WebIDL way of doing all coercions up front. There isn't much value in describing the types of coercions....</p>
+<p>YK: The current spec has arguments because function.length matters sometimes.</p>
+<p>AWB: The current spec has prose that describes how function length is given.</p>
+<p>BT: We do have language in the spec that describes that the function's length is the number of params given.</p>
+<p>YK: Given that is a thing in the spec (and it's convention). I think it would be fine to have something that was to solve that particular problem.</p>
+<p>BT: I think we'll get there eventually. I'm trying to take babysteps. The structured header for clauses is going to be a [big one?]. I am continuing to push the tooling side of things. I have some features planned.</p>
+<p>YK: +1</p>
+<p>BT: And then I do plan to continue pushing the tooling side of things. I have some features planned. Before I can do that I need to fix printing. But after that I plan to finally have the ECMarkup tooling to have: &quot;Given any clause...&quot; Wouldn't it be sweet to click on a clause and for any given clause it'll show all dependencies? That is now possible. There's also a VSCode extension one of my colleagues has been working on and I'm working on refactoring to support that as well. And I think that's all I have on my end. There's probably more that I'm glossing over having not prepared anything. Wish list items?</p>
+<p>MF: Support for proposals would make everyone's proposal writing lives better.</p>
+<p>BT: So I don't need to manually integrate all the proposals?</p>
+<p>MF: Yes.</p>
+<p>BT: That sounds great.</p>
+<p>YK: I would like that as well.</p>
+<p>BT: I have not talked to a single implementer that prefers having Annex-B separate.</p>
+<p>MM: I would like Annex B to be separate.</p>
+<p>BT: If I have the elements for the diff-spec stuff, I think I could add a checkbox to separate them.</p>
+<p>YK: I think there are some places you need to monkey-patch things.</p>
+<p>BT: And one of the other things I want to solve is this refers to step 6 and step 7.</p>
+<p>YK: You want labels.</p>
+<p>YK: I would love someone who believes strongly in this to give a presentation on this in the future (not now).</p>
+<p>DE: One other thing is color in the spec. In other specs they make a lot of use of color which makes the document more readable and less boring. What if we use more color? And add (to the draft spec) examples. If we have a bug that partains to the draft spec we can have this to cross-reference and have it highlighted red or something.</p>
+<p>WH: Color is useful for notes, identifiers, keywords, grammar productions, etc. If we were to use different colors for Annex B and everything, it could require too many colors and get really confusing.</p>
+<p>DE: I'm talking about background color.</p>
+<p>YK: Take a look at the decorate proposal which does this well. One thing I'd say about color is there's an accessibility issue with color. We should have someone who has an intuition about this (ideally someone who has a11y needs) review our work to make sure that we choose good colors.</p>
+<p>AWB: We're getting into document design space. We need to get that as a cohesive whole, not just one step as a time.</p>
+<p>BT: I totally agree with Dan's request for more semantic meaning to notes and that side of things. Ecmarkup has some [new tools] that make it easier to notice what's happening. Everyone should check out the decorators spec, because that's kind of where I've been putting my ideas. (Examples: <a href="https://tc39.github.io/proposal-decorators/#sec-runtime-semantics-makefunctionuninitialized">https://tc39.github.io/proposal-decorators/#sec-runtime-semantics-makefunctionuninitialized</a>, <a href="https://littledan.github.io/proposal-integer/">https://littledan.github.io/proposal-integer/</a>)</p>
+<p>AWB: I don't see substr() as needing to be in Annex B. I looked back and couldn't figure out why it really was put there. Everyone has added it. I don't see why it needs to fall into that category. It's just a redundant.</p>
+<p>BT: How do you see substr() as different from anything else in Annex B.</p>
+<p>AWB: Some of the other functions are in there because they have limited applicability or Y2K issues or some other bad aspect to them. I don't see anything that bad about substr(). The concern about creating confusion doesn't apply. It is what it is; implemented in all engines, etc.</p>
+<p>BT: What's the concern?</p>
+<p>AWB: Because none of the Annex B criteria really apply to it.</p>
+<p>YK: What are the criteria.</p>
+<p>AWB: Things that have issues with them.</p>
+<p>YK: I think that we should merge Annex B into the spec. There's a strong sentiment among people (including implementers) on this point and I think we should have someone come with a prepared presentation on this subject.</p>
+<p>BT: Step 1 is inline it.</p>
+<p>YK: The answer is not &quot;it is normative&quot;.</p>
+<p>BT: It is not normative. It is in the clause that...</p>
+<p>AWB: I was having a discussion with someone about Node using normal sloppy mode using normal function semantics. And I asked &quot;Why is that?&quot; And it's because that's what V8 does. Because you should never actually see that.</p>
+<p>YK: There's a lot of JavaScript in the world and implementers all need to implement Annex B.</p>
+<p>WH: That's throwing in the towel. Don't want to make Annex B normative.</p>
+<p>AWB: In the web you have lots of code that nobody can maintain. That's not the case on Node.js.</p>
+<p>AK: In the interest of moving along, I think it'd be good for us to end this conversation for now and push it on to another time.</p>
+<p>YK: Can I say one more thing? I think that if people want to advocate for not throwing in the towel, then we should come up with the goals for this.</p>
+<p>AWB: This would require evangelizing implementations to say &quot;you would have to switch&quot;.</p>
+<p>MM: That's not required for my goals. I wouldn't mind a switch, but none of the main implementations needs to have a switch in order to meet my goals.</p>
+<p>AWB: That would be required if you say these things have to switch.</p>
+<p>MM: None of this would be required with the goals I have in mind.</p>
+<p>BT: I'm coming at it from an implementer's standpoint.</p>
+<p>MM: We should just have a face-to-face conversation Brian to talk it out.</p>
+<p>BT: Ok.</p>
+<p>SYG: I have been told Caridy is on the call now.</p>
+<a href="#conclusionresolution-any-items-for-the-2018-edition"><h4 id="conclusionresolution-any-items-for-the-2018-edition">Conclusion/Resolution</h4></a><ul>
+<li>Further discussion on Annex B</li>
+</ul>
+<a href="#7-ecma-402-status-update"><h2 id="7-ecma-402-status-update">7. ECMA-402 status update</h2></a><p>(Caridy Patiño)</p>
+<p>AWB: We already have the vote to approve the final draft. Hopefully you will tell us that it's ready to be approved. <em>chuckling</em></p>
+<p>DFV: Having issues hearing him. He's joining now.</p>
+<p>DH: I am pinging him now. Some issues with audio setup. Is that Diego?</p>
+<p>DFV: ...</p>
+<p>DH: Our sound person says you are showing up as self-muted.</p>
+<p>CP: ...</p>
+<p>DFV: I'd say you should move on and try again.</p>
+<p>AWB:  We'll go ahead and move on to the 15-minute items.</p>
+<a href="#10ia-template-literal-updates"><h2 id="10ia-template-literal-updates">10.i.a. Template Literal Updates</h2></a><p>(Tim Disney)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-template-literal-revision">https://github.com/tc39/proposal-template-literal-revision</a></li>
+</ul>
+<p>TD: Lifting the escape sequence revision to tagged template literals. It is in multiple browsers (Chrome behind a flag and Firefox), Test 262, no recent changes, asking for stage 4.</p>
+<p>YK: TL;DR: It makes things easier to implement overall.</p>
+<p>WH: Has anything changed in the proposal lately?</p>
+<p>TD: No.</p>
+<p>AK: The owner of our scanner didn't love how it was layered between the parser and the scanner. And the real question is do we really have folks that want to do things with this?</p>
+<p>TD: I have things I would want to do with it.</p>
+<p>MF: The violations of the escape sequences that are not uncommon sequences is justification enough.</p>
+<p>YK: For what it's worth, I have hit some variance of this bug repeatedly and I've always been: &quot;Oh, I'm glad we're fixing this.&quot;</p>
+<p>WH: I like this proposal.</p>
+<p>AWB: In particular, going from stage 3 to stage 4, unless we've had problems with it then we should just ask whether it meets the criteria for stage 4. So... Do we have consensus that this should be a stage 4 feature which means it's in the standard in 2018?</p>
+<p>AK: Sorry, for my memory, did we expect any compatibility issues with this?</p>
+<p>TD: No compatibility issues because you'd have to be relying on a parse error.</p>
+<p>AK: For cases where there might be compatibility issues, I'd say maybe hold back, but I don't think we have to worry about it.</p>
+<p>AWB: Ok. Consensus? This is our first ECMAScript 2018 feature.</p>
+<p>YK: A use case would be putting JS code into a template string for documentation.</p>
+<a href="#conclusionresolution-10ia-template-literal-updates"><h4 id="conclusionresolution-10ia-template-literal-updates">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4, our first ES2018 feature</li>
+</ul>
+<a href="#10ib-regexp-lookbehind-assertions"><h2 id="10ib-regexp-lookbehind-assertions">10.i.b RegExp Lookbehind Assertions</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-lookbehind">https://github.com/tc39/proposal-regexp-lookbehind</a></li>
+</ul>
+<p>There's a presentation linked from the agenda.</p>
+<p>DE: Just to recap the purpose for the proposal. This is a zero-width assertion that matches a string without consuming anything.There are both positive and negative look behinds now.  ... At the last meeting I was asking if we could go to stage 3.</p>
+<p>(see slides for more details)</p>
+<p>WH: It would be helpful to know what has changed, because I've reviewed this before.</p>
+<p>DE: The only thing I changed since the last meeting was updating the explainer to make a correction to the explanation of the numbers in the groups. The spec always said the groups were numbered left to right, now the explainer explains this also. Other than that, nothing has changed since the last meeting.</p>
+<p>WH: In that case I'm happy with it.</p>
+<p>DE: We have two implementations. One in V8 and one in the Dart VM. It's not a JS implementation, but it does implement this feature.</p>
+<p>AWB: 2 implementations are not required for stage 3 anyway.</p>
+<p>LBR: Writing a test for this (test262) would be the best thing to review the proposed syntax.</p>
+<p>DE: We would love your help in writing tests!! There are some tests already on github, but we would love and plan to do work on these tests, but having started porting them to test262.  .... Okay, I think we had a few reviewers, trying to find the notes from the last meeting to be sure. So the reviewers were: someone from Microsoft, Kevin Gibbons, WH. Did anyone from the Microsoft team look at this?</p>
+<p>BT: Not thoroughly. I couldn't find any regex experts. I love it, but I suppose it should get a proper review.</p>
+<p>MF: Kevin Gibbons is not present and was not able to provide his feedback yet at this time.</p>
+<p>AWB: We can advance it to stage 3, or keep it at stage 2 to elicit more reviewers. The first question is does anyone object to stage 3?</p>
+<p>YK: I would assume Chakra or V8 would have said something by now if they had issues.</p>
+<p>BT: This is not at all concerning. This is a well understood feature that exists in other regex implementations.</p>
+<p>AWB: In the absence of objections, we should consider advancing this to stage 3.</p>
+<p>YK: I think V8 is happy with the ??? I assume V8 is ok with those changes.</p>
+<p>MF:  I have gotten feedback from Kevin, he said it looks good. The only issues were typos.</p>
+<p>BT: So Dan, do you want to talk more holistically about what you think the state of RegEx will be for 2018?</p>
+<p>DE: At the last meeting, Allen said, for ES2018 wouldn't it be nice if we could send a message that shows all the nice features for RegExp. We'd have everyone's work together. We have look behind, ...., and named groups, dotall flag, and match all. So, for match all, that's currently at stage 1. I think maybe we can get it through by ES2018. I was wondering if it'd make sense to go with semantics that are analogous to the current regular expression thing similar to split where it ends up cloning the RegExp. On the other hand, we've previously discussed adding a Symbol.exec method for being the basis for subclassing RegExps. I'm more hesitant about that. But I think we could do matchAll separately from this. So I started talking with Jordan about this and hope we can get all 5 of these things through by 2018 to have a coherent story for RegExp.</p>
+<p>AWB: So I noticed there are a number of agenda items related to this. I think it would be a good thing to try to do all of the items for this as a group and then at the end of it all we could review our overall expectations for 2018.</p>
+<p>MM: Given we have a RegExp legacy statics proposal, currently at stage 1, would you like to consider that as part of the group as well?</p>
+<p>AWB: If you're ready to talk about it.</p>
+<p>MM: I can talk about it.</p>
+<a href="#conclusionresolution-10ib-regexp-lookbehind-assertions"><h4 id="conclusionresolution-10ib-regexp-lookbehind-assertions">Conclusion/Resolution</h4></a><ul>
+<li>RegExp: Lookbehind is stage 3.</li>
+</ul>
+<a href="#7-ecma-402-status-update"><h2 id="7-ecma-402-status-update">7. ECMA-402 status update</h2></a><p>(Caridy Patiño)</p>
+<p>CP: So far no feedback on the 2017 draft that was published in the last month.  We haven't done any major updates, though we did small fixes and editorial work.  We expect to continue with small work in 2018.  Zibi(?) and Daniel will present a few related proposals.  Also ??? will be updated.  We keep waiting for number format, format to parts from Google.</p>
+<p>DT: Your voice went out....please say that again.</p>
+<p>CP: We want to give updates on 2 fronts. the formatToParts? on Intl.NumberFormat.prototype.formatToParts, some Google update would be good on that. The other thing is the CLDR. Brian will be giving us some update this week. We will wait for decision until we make some adjustments on 402 spec.</p>
+<p>AWB: Well, we actually have the thought. We approved the draft to approve the GA (?).</p>
+<p>CP: I can work with Brian on the small details we need to update the draft and get it out.</p>
+<p>AWB: Okay, so, thank you! Let's continue specifically with regex items. the next one is actually Dan and Brian which is property escapes.</p>
+<p>CP: Excuse me, does this mean we'll get to ECMA-402 segmenter after lunch?</p>
+<p>AWB: Let's do it now since you are here.</p>
+<p>CP: This is the ECMA-402 Proposals.</p>
+<a href="#conclusionresolution-7-ecma-402-status-update"><h4 id="conclusionresolution-7-ecma-402-status-update">Conclusion/Resolution</h4></a><p>No specific conclusion, let's review the current proposals for ECMA-402.</p>
+<a href="#10ig-ecma-402-presentation-of-the-three-formatters-for-stage-2"><h2 id="10ig-ecma-402-presentation-of-the-three-formatters-for-stage-2">10.i.g ECMA-402 Presentation of the three formatters for stage 2</h2></a><p>(Zibi Braniecki)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1ddnQB8oUYyv7qtsmRFgcsScAI4uHTj8z9z_cPJxlOe4/edit">https://docs.google.com/presentation/d/1ddnQB8oUYyv7qtsmRFgcsScAI4uHTj8z9z_cPJxlOe4/edit</a></li>
+</ul>
+<a href="#intllistformat"><h3 id="intllistformat">Intl.ListFormat</h3></a><p>ZB: There are three formatters that we believe now are ironed out enough to request a stage 3. The first one is called Intl.ListFormat. It closes the gap with localized JavaScript data structures.</p>
+<p>ZB: (makes presentation).  I believe it's mature enough to propose stage 2.  Stage 2 requested.</p>
+<p>WH: I'm still looking at this.</p>
+<p>AWB: What's the use case that this is supporting?</p>
+<p>ZB: There are multiple use cases. The most common one is sort of lists. Default is to separate lists from left to write separated by commas. This would support right to left languages as well. Another common example is listing days of the week or names. Another example is a building block for future formatters, which is a listing of numbers or a listing of units. ...</p>
+<p>WH: I was looking at the slideshow of the detailed internationalization spec which is quite dense. What I couldn't find is the specification of this from a user's point of view. What kind of things can you put in these things. I'm looking for documentation that someone who would call these things would read to find out what they support.</p>
+<p>ZB: Are you talking about options that are supported? Or the values that go in the Array?</p>
+<p>WH: If you go back to the Intl.ListFormat slide, what does this last example do?</p>
+<p>ZB: We have an Intl formatter which is Intl.NumberFormat. And you can also override <code>toLocaleString</code>. This formatter could also be the same for arrays.</p>
+<p>WH: What will it do on an empty array?</p>
+<p>ZB: Return an empty string (like it does now)</p>
+<p>AWB: The fact that is extending <code>toLocaleString</code> in places <em>should</em> be noted, but ... I guess I'm interested in the background of this feature in terms of its usefulness. Are there other internationalization packages that have this thing.</p>
+<p>CP: Yeah, I can speak about that. We do have prior art. Java has an API for it. In terms of the user... You're seeing this in almost every social network when you have a list of people who like your tweet/facebook post, you have to list them based on the locale of the user. But we're saying for all your formatters, we need to have data to reliably list an array, the user would have to do this themselves. This just aligns with the existing formatters.</p>
+<p>ZB: It may sound redundant. The reason we want ListFormat is that we want to format lists. And JavaScript doesn't have any support for any other kind of lists. In an effort to close the gap. It's any kind of list.</p>
+<p>WH: Why is weather measured in kilobits?</p>
+<p>AWB: So there are several formatters here. Potentially we could advance these separately.</p>
+<p>ZB: That's what I was thinking.</p>
+<p>AWB: They are the list format, unit format, and relative time format. They're all fairly different. They're not connected to each other.</p>
+<p>ZB: As I said Unit format, would benefit from list format, because it would allow to format compiled units. And I wanted to suggest stage 2 to Intl.ListFormat.</p>
+<p>AWB: As a reminder, stage 1 means it's exploratory. Stage 2 means we've explored it and we think this is a feature we want to see standardized even though the details are still subject to change. So a request to go to stage 2 is a request for us to reach consensus that list formatting, roughly based on this proposal, is something we should work on getting into the standard. Any objections? I don't see any. I think you got stage 2 on the list formatter. Let's go on to the next one.</p>
+<p>BT: Should we nominate reviewers now?</p>
+<p>AWB: Is there something to review?</p>
+<p>ZB: I think that's for stage 3.</p>
+<p>DE: We nominate reviewers at stage 3.</p>
+<p>JXF: I know the folks at PayPal were working on something similar and would probably like to review this.</p>
+<p>ZB: It really depends on ...???? They are separate spec proposals. I don't think the spec is finalized for them. How about we have ListFormat advance to stage 2 and get interest on the others later.</p>
+<p>AWB: Yes, let's do that.</p>
+<p>ZB: So PayPal said they may be interested in helping review this?</p>
+<p>JXF: Yeah, I think we should be able to help out.</p>
+<a href="#intlunitformat"><h3 id="intlunitformat">Intl.UnitFormat</h3></a><p>AWB: So let's go to UnitFormat.</p>
+<p>ZB: It's an interesting formatter. We see a high demand for it. But it's a little tricky to figure out what kind of data should be inside it and what kind should not be. What I can say is that we're looking into a very plain formatter. So we'd expect users of the API to specify the unit. But we think it would be very powerful to turning JavaScript into a powerful platform that can internationalize user interfaces. It can be any unit of measure.</p>
+<p>WH: Question. You mentioned that you were intenationalizing celsius and fahrenheit. Do you mean translating the word &quot;Celsius&quot; to their language or do you mean converting celsius to fahrenheit if their locale indicates that temperatures should be shown in fahrenheit?</p>
+<p>ZB: Absolutely not doing any conversion from the actual number for the unit. It will mean displaying the word Celsius in their language, depending on their script. Same happens with kilobytes.</p>
+<p>CP: We don't want to do any transformation of the value. That should happen in user-land. They provide the value and we format it.</p>
+<p>WH: So you're just doing a word-translation service?</p>
+<p>CP: Not just a translation. It's more complicated than that.</p>
+<p>WH: How is it different?</p>
+<p>ZB: Two examples of that. We are translating the whole pattern, which may be different depending on the language. (Think &quot;10 years&quot; vs. YR10 or something appropriate to the language). So the symbol for kb for example, 10kb, may be different depending on the language. The intent of the formatter is to allow users to display to the software user in their language.</p>
+<p>MPT: I believe there are calendars other than Gregorian that will have units other than seconds. Are your units strictly Gregorian calendar units?</p>
+<p>ZB: No. It's not finalized, but we will not be narrowing it down to any single system. We will want to support duration, we will want to support time &amp; date unit for calendars.</p>
+<p>MPT: Ok.</p>
+<p>WH: I'm looking at the list and my main issue with what you're providing in the list is very ad hoc. You have terabytes but not petabytes, kilobytes but not kibibytes, meters per second but not kilometers per second, etc. etc.</p>
+<p>CP: That's stage 3 right? We need to finalize the list of options.</p>
+<p>WH: The problem is very pervasive, I'd like to see these defined more generically instead of the few cases which you have selected.</p>
+<p>ZB: Ok, that's good feedback. If you look at the proposal itself, it lists the proposal of units that we'd like to offer in the first draft. I honestly think the list is negotiable. And we can discuss this later. Skipping that part, it has a list of units we'd like to offer as part of UnitFormat. I consider the list of units that we would offer a negotiable thing. I would like to get to the point where implementation can choose what scope of units they can support. I don't know how optional it would be. I think the user can determine what the runtime supports, maybe if the implementation doesn't support petabytes, gigabytes will be the highest level of measure they can use.</p>
+<p>WH: The premise of the metric system is that this is you should not need to do this with each one. An ad hoc list of which combinations are supported and which aren't is too hard to use. The metric system allows arbitrary combinations of prefixes and base units, and there aren't that many of them. Find a generic solution that supports that.</p>
+<p>AWB: Why are these together? I feel like they should be separate. Can you explain the logic behind this?</p>
+<p>ZB: It's the same operation regardless of what unit you're using. Are you suggesting a separate formatter?</p>
+<p>AWB: I'm wondering why you don't have a DurationFormatter, a MemoryFormatter, other formatters...</p>
+<p>MPT: I'm definitely going to put a proposal for a duration type. And if you propose something for time in units it would be good to have these together. That's hard to deal with itself.</p>
+<p>AWB: By it being just an option, and the options object, I just have a gut feel that makes it easier for implementations to vary. Adding a new option type seems like lighter-weight and maybe it shouldn't be. Similar concern to when you saying implementations will be able to choose which they support allows for interoperability issues we don't want to have.</p>
+<p>CP: Polyfilling in the future is definitely something we'll have to look at in the future.</p>
+<p>ZB: Would you like us to stay on stage 1 and rethink the naming? Or are you ok with us going to stage 2 and rethink the naming?</p>
+<p>AWB: I think we need more stage 1 exploration.</p>
+<p>CP: I agree, we could probably spend more time thinking about this.</p>
+<p>YK: I have a general question. I could be wrong, but it appears that while the metric system itself is orthogonal, it might be dependant... It seems that more complicated cases mean the decision of how to format something may be domain-specific.</p>
+<p>AWB: Let's say you're working in some domain and that domain has some types you'd like to introduce. You're going to want to supply formatters that do that, it's unclear how those would plug into this UnitFormat stuff. And people would expect that UnitFormat is how you would do that.</p>
+<p>YK: We have some questions here that it's worth looking more.</p>
+<p>ZB: Thank you for the feedback. I think we can keep it in stage 1. ..But I will have to say. Every library out there has some kind of unit formatter, which says me that this is something that is useful. .. We have some proposal in the spec, but didn't feel comfortable proposing it yet. There is something else about combining units that we may want to use list formatter for. I'm taking this as a &quot;let's keep this at stage 1&quot; to think more about naming and compound units.</p>
+<p>BT: I would like to add Maggie's point on how this changes with the introduction of an actual duration type... Having some exploration of whether this changes or not based on that. What are your thoughts?</p>
+<p>ZB: I think it should not change. But we may want to have a <code>toLocaleString</code> on that type. I don't know if we'd want to have DurationFormat because it seems to me that would not require any computation. One of the specific things about number format is that there are a number of computations that are being performed internally. ... As I said I'm very happy to keep it at stage 1 and see the duration proposal and see if we evolve our thinking in that time.</p>
+<p>MBT: I don't have a duration proposal for this meeting, but the more I look at this Intl stuff, the more I think I need to put a duration proposal in for July.</p>
+<p>YK: I would love to work with you on that. I did that Duration proposal for Rust and would love to work with you on that.</p>
+<p>MBT: Let's talk. I have a few other things going on today, but I think we'll need a duration type.</p>
+<p>DE: Can I say something with regards to the current proposal? Some of the points here are similar to the current state of ECMA-402. For example. NumberFormat lets you format currencies and ordinary numbers. There is a list of currencies there and everything is in the options object. To me, an options object, seems like a pretty consistent design. You could still polyfill new data it by over-writing the Intl object--there's nothing special to these objects; not fundamental like built-in modules. The other thing about which units are included or how ad hoc it is. There is a close connection between what's here and what's in CLDR. If we want metric units to be combinatorial, we could ask for better data in CLDR to be able to add these additional formats and things there, though this is a process that takes time. (see <a href="http://www.unicode.org/reports/tr35/tr35-general.html#perUnitPatterns">http://www.unicode.org/reports/tr35/tr35-general.html#perUnitPatterns</a> )</p>
+<p>WH: I don't know what's in the CLDR, but I know the metric system and it does not have a lot of units. I think it's quite reasonable to include the entire metric system in this.</p>
+<p>ZB: We've seen this pain a lot in operating systems. So we can stand on the shoulders of giants with MeasureFormat and learn from them. This is what I'm doing for the proposal. Happy to stay on stage 1. We can continue conversation in the GitHub repo for UnitFormat. I also agree we can wait until the duration proposal comes up as well.</p>
+<p>WH: Let's say you're translating things into Greek and you're translating to a shortform. Do you use English letters or Greek letters? It depends. Are you using colloquial or scientific usage?</p>
+<p>CP: I believe we'd use Greek letters...</p>
+<p>WH: That's not necessarily the correct thing to do.</p>
+<p>RX: You can define different numbering systems. You can change the numbering system, but not the language. Is that clear? For example, Chinese using wide numbering system, it could be used the locale zh-u-nu-wide.
+(Clarifying this point after the meeting: It's possible to use Intl.UnitFormat to display the unit in one language, but the digits in a different numbering system. For example, <code>new Intl.UnitFormat(&quot;ar-EG&quot;, {category: &quot;digital&quot;}).format(100, &quot;kilobyte&quot;) =&gt; &quot;١٠٠ كيلوبت&quot;</code> (Arabic using Arabic digits), or <code>new Intl.UnitFormat(&quot;ar-EG-u-nu-latn&quot;, {category: &quot;digital&quot;}).format(100, &quot;kilobyte&quot;) -&gt; &quot;100 كيلوبت&quot;)</code>.</p>
+<p>WH: No, this is not a question about the numbering system, this is a question about the translation of prefixes.</p>
+<p>CP: Normally what we do is give the tools so they can decide how they want to format something. If we want to allow them to format in the case you decided, we just need to expose the tools. I'm not sure this proposal is not supporting that.</p>
+<p>YK: Allen is right, there's an extensibility issue. I think it's plausible for medical apps to render some things differently and I think this should be extensible so the committee doesn't have to answer all the questions.</p>
+<p>AWB: Let's move on to relative time format.</p>
+<a href="#intlrelativetimeformat"><h3 id="intlrelativetimeformat">Intl.RelativeTimeFormat</h3></a><p>ZB: This is by far the most requested time formatter. It's basically about formatting relative time. It's intended to allow us to present a delta of time in a human-readable way. There are a few ways of doing this. A numeric way, following CLDR and a text type, which for certain values which may return a more human-readable variant (tomorrow, yesterday, now, etc). These are the kind of overlays on top of the system. There's also a short value vs. long.</p>
+<p>WH: Are the relative values only relative to now? Are they always &quot;N days before now&quot;, or can you ask for a translation of &quot;N days before X&quot; or &quot;N minutes after X&quot;?</p>
+<p>CP: You can't do that; it's always in the present.</p>
+<p>BT: Can we put a break in our discussion? We're way over our timebox and lunch is ready.</p>
+<p>AWB: Why isn't this a category of the UnitFormat?</p>
+<p>ZB: Mostly because unit formatter is not a unit of deltas. It doesn't have the ability to format units of time. It also doesn't have the &quot;type overlay&quot;.</p>
+<p>YK: I assume there are some languages where it's not so simple as adding &quot;ago&quot; to the end of the number.</p>
+<p>AWB: What I'm more getting at here is...is this the way we want to define these? Before moving past stage 1, do we need to further resolve the issue of how to address these types of things?</p>
+<p>ZB: No we should not hold off. We've spent a lot of time.</p>
+<p>MPT: As someone from moment.js. This is starting to catch up to what we have. This is not the common use case. I do have some concerns between the difference between Calendar math and Timeline math. 8 hours ago can be yesterday. As far as different units, twitter is a good example. People want to know how to do things like &quot;1d ago&quot;  or just &quot;3d&quot; for example for saying something is 3 days old.</p>
+<p>ZB: In the spec proposal there are issues that we are still working out. Please anyone come and help with the proposal. We've been in stage 1 a year ago.....there is an open issue for relative time for unit formatter.</p>
+<p>CP: We think this could be what moment uses under the hood.</p>
+<p>DH: I'm so sorry Maggie, lunch is here. We can continue after if that makes sense.</p>
+<p>AWB: Let's continue now that lunch is over.</p>
+<p>ZB: I added examples to the slides during lunch to present use cases.  Continuing on UnitFormat.  These formatters (plus one more that's in the ecma402 GitHub repository) are the only ones they are currently planning.  Every use case they have encountered in the last year can be covered by some one or two of the 4 formatters.  It's not that they are trying to port all the ICU formatters to JS, but rather they have the subset that is need for the web.  Stage 2 is that TC39 agrees that the problems need to be solved.  Is there a reason that we do not want a feature like that in ECMAScript?</p>
+<p>WH: Those are not the only choices. We could say &quot;come back when you have improved it&quot;.</p>
+<p>ZB: Sure, but let's define the API before we move or should we say &quot;this does not belong in ECMAScript&quot; (do we move this forward or do we not)</p>
+<p>DH: You will usually know if people think it shouldn't be in ECMAScript. That will be clear.</p>
+<p>YK: I think in general, that is a necessary, but not sufficient thing for stage 2. The norms of the committee is that the API is reasonably done as well as semantics.</p>
+<p>AWB: I was going to comment earlier. When the consensus is not to advance, it does not mean that it might pass in the future (without changes), it just means that people aren't ready to move along as it currently is. It might simply be a matter of coming back with more complete information.</p>
+<p>ZB: We are reviewing the proposal to move RelativeTimeFormat to stage 2.</p>
+<p>AWB: The relationship between this and the UnitFormat--I'd like to see more exploration of that. Are we going to do things with time types and duration types, and what might the impact of that be? These questions make me wonder whether this is ready for stage 2.</p>
+<p>YK: I think it's not ready for stage 2.</p>
+<p>BT: I don't think there's any rush for this for stage 2 either. I'd like these to go into these as a bundle for 2018 for 402, but we have plenty of time for that.</p>
+<p>ZB: Can I get clear direction form the committee whether we want to BLOCK the two formatters on duration types, or whether they can proceed without that.</p>
+<p>AWB: We're not hearing people say it's a blocking issue, more concern that it's not adequately explored or explained yet.</p>
+<p>ZB: What would be the recommendation, should I try to present a refined proposal separately or keep them as a bundle?</p>
+<p>WH: Whichever you do, some people will want the other, so do what makes sense.</p>
+<p>YK: Work together with the Duration proposal.</p>
+<p>CP: Let's keep the proposals separate; it's easy for me to integrate them separately.</p>
+<p>ZB: So ListFormat goes to stage 2 and the others stay at stage 1.</p>
+<p>ZB: The last proposal I have is a proposal that I'm seeking stage 1 for. I presented it at the last meeting. It's a proposal for simplifying the way of formatting date and times using two formats <code>dateStyle</code> and <code>timeStyle</code>. Instead of doing them separately, we would actually like to use one of the four lengths of style <code>&quot;short&quot;</code>, <code>&quot;medium&quot;</code>, <code>&quot;long&quot;</code> and <code>&quot;full&quot;</code>. I think it's a pretty good representation. It makes it easier to use DateTimeFormat, but it also allows one more thing. It is language independent. For example, the &quot;short date&quot; specifiers are relative to the current locale. By using dateStyle or timeStyle, the user hands of control of the formatting to the language. We expect this will be the most common way people use DateTimeFormat.</p>
+<p>CP: The data part is the new thing here, to find the default settings for the locale. It should be useful. All other things that you mentioned are not very relevant because this is low level API, and can be achieved in user-land, except the default settings per locale, which is data.</p>
+<p>AWB: This sounds plausible, but most of us are not familiar with all the Intl functions.  I would find it useful to see &quot;here's what you have to say today&quot; and &quot;with this proposal, here's what you say instead&quot;.</p>
+<p>YK: There's something that's been bugging me.  I suspect that if the entire library existed, it would be used to get at some underlying primitives that are not exposed.  I say this as someone who worked on the rails intl library because it's so hard to make the high level story good for all domains.</p>
+<p>CP: Maybe an API that gives you access to all the setting for your locale.</p>
+<p>AWB: Part of the requirement is that the surface API needs to accomodate different underlying intl libraries.</p>
+<p>BE: This is the extensible web manifesto. We might do OK if we design a high-level library, but we might get it wrong, and putting in low-level primitives.</p>
+<p>MPT: We want the CLDR data without having to pack it.  What would save our lives would be CLDR data accessible through the browser.</p>
+<p>YK: That might be tricky because Edge doesn't have CLDR data.</p>
+<p>BT: If you are just talking about exposing the underlying data, Windows does use CLDR extensively so we could potentially expose underlying data. I'm not ready to commit to standardizing on CLDR, though.</p>
+<p>RX: I do Intl and localization at PayPal, in globalize.js.  It's not just a matter of roping a lower-level API into a higher-level one.  For example, when you say Date.short, so let the engine to figure things out in the specifics about the language/locale.  So it's more than grouping things together--it has localization smarts under that.</p>
+<p>CP: What we're saying is that that information is needed to produce the right date format--it could produce options that would feed back into the Intl constructors.</p>
+<p>ZB: What the committee is saying is that it would be great if there was an API that would return the underlying data, and another API that would format using that as the pattern.</p>
+<p>CP: Or rather options, as pattern has issues.</p>
+<p>ZB: One problem is that CLDR is not frozen. Not just in the data, but in the key paths and the way the data is organized. We could either expose something very unstable, or put a stability layer on top. For that reason, I think we have to expose some abstraction of CLDR.</p>
+<p>YK: I totally agree. I actually don't think we're going to design a good API on the fly. Exposing the API that's in the browser is not the goal. A shim-layer is the goal. The thing you said about exposing a pattern and then a formatter is one possible primitive factoring, there may be others. Looking at globalize.js and moment.js, the issue is that they're too big. Why don't we first ask: &quot;What could we do to make moment smaller?&quot;</p>
+<p>ZB: Our end goal should be to try to make creating libraries like moment easier.</p>
+<p>MPT: Can I get a call with 402 and the moment team and we can work some of this out?</p>
+<p>ZB: To wrap up this. Are we not willing to move this to stage 1 and we want to keep it stage 0?</p>
+<p>YK: No, let's move it to stage 1.</p>
+<p>AWB: I think moving to stage 1 is fine.</p>
+<p>YK: Stage 1 is: we want to move this to solutions space.</p>
+<p>ZB: One other problem that this solves is that we encountered a problem where a user manually changes their local OS clock. There is some conversation about trying to map OS formats to the JS environment and get access to the OS clock style (for example). CLDR is similar. If we have this kind of option, &quot;short&quot;, &quot;medium&quot;, etc. We can fine tune it with all of the data from the user's OS.</p>
+<p>AWB: I think we've covered this. One take-away, as this library grows, there's interest in the whole TC39 for understanding this problem space. Thank you!</p>
+<a href="#conclusionresolution-10ig-ecma-402-presentation-of-the-three-formatters-for-stage-2"><h4 id="conclusionresolution-10ig-ecma-402-presentation-of-the-three-formatters-for-stage-2">Conclusion/Resolution</h4></a><p>We will treat the 3 proposals independently.</p>
+<ul>
+<li><p>Intl.ListFormat</p>
+<ul>
+<li>advanced to stage 2</li>
+<li>Reviewers:
+<ul>
+<li>PayPal</li>
+<li>Daniel Ehrenberg</li>
+</ul></li>
+</ul></li>
+<li><p>Intl.UnitFormat - remaining at stage 1</p>
+<ul>
+<li>Issues raised by</li>
+</ul></li>
+<li><p>Intl.RelativeTimeFormat - stays at stage 1 pending more understanding of durations.</p></li>
+<li><p>dateStyle/timeStyle gets to stage 1.</p></li>
+</ul>
+<a href="#6-addendum-to-test262-item"><h2 id="6-addendum-to-test262-item">6. Addendum to test262 item</h2></a><p>LBR: People asked me to mention. We are using an integrated test generation tool. That's why we have so many lines of code.  It has documentation on test262. I would be very happy to show this test generation tool to anyone who is interested. The automated deployment I mentioned earlier uses this tool to confirm that tests are properly generated.</p>
+<a href="#10ic-regexp-unicode-property-escapes-for-stage-3"><h2 id="10ic-regexp-unicode-property-escapes-for-stage-3">10.i.c RegExp Unicode Property Escapes for stage 3</h2></a><p><a href="https://github.com/tc39/proposal-regexp-unicode-property-escapes">https://github.com/tc39/proposal-regexp-unicode-property-escapes</a></p>
+<p>DE: There's a link from the agenda. These have barely changed. [DE talks through the slides]. The thing that has been narrowed down recently, is that the list of properties that are supported is explicitly enumerated. Previously implementations could expose anything they wanted, which would lead to needless differences between platforms.  It is implemented in V8 behind a flag.  I asked for reviewers last meeting.  The potential reviewers were Waldemar, James Gibbons, and someone from MS.</p>
+<p>YK: Are the new properties...???</p>
+<p>DE: The preference was to be restrictive with the number of name/value properties but to include every possible random binary property. We could revisit that.</p>
+<p>YK: Does this mean that the committee needs to routinely review the list of properties and approve them one at a time?</p>
+<p>DE: I think that should be done in some place. I think the browser should be ??? about where property support is. If it's a bad idea to support a property, then we run the risk of browsers supporting bad things.</p>
+<p>YK: I agree with enumerating them. But this does have a list management challenge.</p>
+<p>DE: It will take actual implementation work also. Practically speaking, if we can write Test262 tests and implementers are running those tests regularly, and a patch going into the spec will motivate them to do it. It's a harder sell to have them watch for a set of properties. There's a challenge with this. It's a little ad hoc. There's one part of the spec where we can reference that say all the properties that are defined. We can't reference one section that has all of them. It's good for us to maintain a list in light of that.</p>
+<p>AWB: How long a list are we talking about?</p>
+<p>DE: A list of properties that are supported. For named ones, it's just general ??? there are 30 or so.</p>
+<p>WH: There's a list in the proposal.</p>
+<p>AWB: My sense is our spec should list them and where they're defined. And if there are new ones, it seems like a reasonable thing to adding new ones.</p>
+<p>YK: Is there a lot of code? Presumably you're talking about a RegExp engine that has those characters.</p>
+<p>DE: For implementations based on using ICU, ICU has support for mapping one of these categories to a list of ranges. So I don't know how Microsoft's Unicode works, i.e., whether they have something similar.</p>
+<p>YK: I can believe it's ok doing this on an ad hoc basis. In practice we'll wake up and notice that we didn't actually do it. Maybe now the committee is healthy enough that we'll actually do it.</p>
+<p>DE: I don't really understand the theory of change where we wake up and we want these things in browsers and don't have a process to get them in there. Otherwise we are waiting on multiple browser vendors to add this stuff.</p>
+<p>YK: I think the bottom line is what Allen said is we should make it part of the process of annual review. If there's no hook like that people will forget to do it.</p>
+<p>DE: I don't think propeties get added all the time.  Emoji properties are the hot topic now.</p>
+<p>YK: Ok I withdraw my concern.</p>
+<p>AWB: I think the general principle here is if there is some other normative spec you can  point at and say: do this. If not then we need to have a list for implementers of our spec. It sounds like you're saying it's the latter we need to enumerate.</p>
+<p>DE: The current spec doesn't enumerate these properties.</p>
+<p>WH: I couldn't find some of them. I could find a few. But I couldn't find <code>any</code> for example.</p>
+<p>DE: <code>any</code> is in Unicode Technical Annex.</p>
+<p>WH: I was looking at TR44. It's not in there.</p>
+<p>DE: Sorry, UTR-18. I'm not sure it's very useful...</p>
+<p>WH: Just searched for all uses of the word 'any' in UTR-18. It's not in that document either.</p>
+<p>AWB: I ran around that list a while ago and &quot;any&quot; seemed not clearly defined.</p>
+<p>DE: I posted a link in the tc39-delegates channel. I agree with you Allen, each one of these deserves a definition. I'll fix that up by the next meeting. Timebox check. Should this go to stage 3 or should I get more clarity about these properties before going to stage 3?</p>
+<p>MB: <code>Any</code> is defined here: <a href="http://unicode.org/reports/tr18/#General_Category_Property">http://unicode.org/reports/tr18/#General_Category_Property</a> Agreed that the Unicode specs could be clearer — there is not a single/obvious source for a list of all binary properties, for example.</p>
+<p>AWB: The property seems like a minor refinement you'd expect to be worked out in stage 3.</p>
+<p>WH: I'm fine with stage 3, but I want clarity on some of these things.</p>
+<p>BT: I have ideas on what we could do to track these properties.</p>
+<p>AWB: Sounds like no objections to stage 3.</p>
+<p>MM: Any change to reviewers?</p>
+<p>BT: I guess we still need to get this reviewed.</p>
+<p>DE: Presumably it has been reviewed.</p>
+<p>BT: <em>Presumably</em>.</p>
+<p>WH: I have reviewed it.</p>
+<p>DE: Mathias wrote it, and I read it.</p>
+<a href="#conclusionresolution-10ic-regexp-unicode-property-escapes-for-stage-3"><h4 id="conclusionresolution-10ic-regexp-unicode-property-escapes-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 approved.
+<ul>
+<li>WH reviewed it</li>
+</ul></li>
+</ul>
+<a href="#10id-regexp-dotall-flag-for-stage-2"><h2 id="10id-regexp-dotall-flag-for-stage-2">10.i.d RegExp dotAll Flag for stage 2</h2></a><p>(Brian Terlson)</p>
+<ul>
+<li><a href="https://github.com/mathiasbynens/es-regexp-dotall-flag">https://github.com/mathiasbynens/es-regexp-dotall-flag</a></li>
+</ul>
+<p>BT: We want stage 2 for dotAll. There have been no changes since stage 1. It remains an extremely simple feature. For those who haven't heard of it before, it adds a new flag <code>s</code> to the expression (like other engines) literal that allows <code>.</code> to match <em>everything</em> rather then <em>most everything</em>. There's a high-level API in <a href="https://github.com/mathiasbynens/es-regexp-dotall-flag">the proposal</a>.</p>
+<p>MM: Why &quot;s&quot;?</p>
+<p>WH/BT/BE: It's Perl, c#, Java, VB.</p>
+<p>DH:  I know you've presented this before. And I noticed you use the word &quot;character&quot; before and it's not necessarily meaningful. Are you talking about &quot;code points&quot;?</p>
+<p>WH: Without &quot;u&quot; it is referring to code units. With &quot;u&quot; it is referring to characters.</p>
+<p>BT: I think we're talking depending on the context. Without <code>u</code> we're talking about code units.</p>
+<p>DH: <code>s</code> is orthogonal to <code>u</code>.</p>
+<p>AWB: In the regexp spec in ecma262, the word &quot;character&quot; specifically means &quot;the unit you are matching&quot;.</p>
+<p>DH: What are the historical things that dot didn't used to match?</p>
+<p>WH: Only the line terminators: CR, formfeed, NL, etc.</p>
+<p>BT: JS devs have written a RegExp that's a cryptic character class (see the proposal examples). Horrible hacks and we don't want to do them anymore.</p>
+<p>YK: Ruby bases this on the <code>m</code> flag. If it's a multiline regex, then you want <code>.</code> to include multiple lines.</p>
+<p>DH: So basically &quot;ms&quot; is the thing that you always want?</p>
+<p>BT: Stage 2?</p>
+<p>WH: Sure.</p>
+<p>DH: Sure.</p>
+<p>DT: Reviewers?</p>
+<p>WH: I've reviewed this before. Unless it's changed and I missed that, I'm happy to say I've reviewed it.</p>
+<p>BT: I would be very surprised if we find changes to this proposal.</p>
+<p>AWB: Review really becomes important as we approach final spec text.</p>
+<p>WH: This is essentially final spec text.</p>
+<p>??: What makes this not stage 3?</p>
+<p>WH: There's nothing to do to get it to stage 3...</p>
+<p>BT: We actually have final <a href="https://mathiasbynens.github.io/es-regexp-dotall-flag/">spec text</a>. You'll find changes to flags, adding the <code>dotAll</code> property and the various other changes that need to happen.</p>
+<p>SDO: Does it need to go up with the Unicode changes?</p>
+<p>WH: It's orthogonal to Unicode. See above &quot;character&quot; definition.</p>
+<p>AWB: Is there a reason this can't be stage 3?</p>
+<p>BT: Stage 3? Anyone object? We're basing that on Waldemar's review. Based on the spec text I think we're good.</p>
+<p>LBR: I've actually reviewed it as well.</p>
+<p>BT: Then we're good process-wise.</p>
+<a href="#conclusionresolution-10id-regexp-dotall-flag-for-stage-2"><h4 id="conclusionresolution-10id-regexp-dotall-flag-for-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 approved.</li>
+<li>Reviewers: WH, LB
+<ul>
+<li>they previously reviewed it.</li>
+</ul></li>
+</ul>
+<a href="#10iib-regexp-named-groups-for-stage-3"><h2 id="10iib-regexp-named-groups-for-stage-3">10.ii.b RegExp Named Groups for stage 3</h2></a><p>AWB: The next regex item we have is named group.</p>
+<p>DE: There's a presentation for this linked in the agenda.</p>
+<p>DE: So the named groups proposal also hasn't really changed.</p>
+<p>AWB: I think it's a good idea to give a review of what the proposal does... Have at it.</p>
+<p>DE: The motivation is that if you want to parse something that has a bunch of pieces and you want to get them out, accessing via index is not as usable as getting them using names. This proposal takes the consensus position of &quot;most&quot; languages that have named groups as syntax. They are permitted in back-references, replace, Unicode and non-Unicode expressions. There was a concern with <code>\k</code>, but that's been resolved. The detail slide is missing the new resolution of that issue... The update since last time: worked out the Annex B grammar. I saw no required change. 2 other changes are discussed in the slides.</p>
+<p>WH: What function are you talking about?</p>
+<p>DE: replace.</p>
+<p>AWB: We need examples. [DE adds one]</p>
+<p>DE: [describes the example]</p>
+<pre><code class="language-js"><span class="hljs-string">"foo"</span>.replace(<span class="hljs-regexp">/(?&lt;a&gt;o)/</span>, (a, b, c, d) =&gt; { <span class="hljs-comment">/* ... */</span> })
+</code></pre>
+<p>Should the group object be in the C or B position? [discussion ensues]</p>
+<p>BE: I would say D is the place to put it.</p>
+<p>DE: I believe you. I'll move it back to there.</p>
+<p>DE: The other things at the last meeting. We considered some changes to the <code>group</code> object. The <code>group</code> property is only created if there are any matches. It was proposed to always create the <code>group</code> object or share a frozen empty instance that you get on a match that doesn't use groups.</p>
+<p>TF: Dan, can you show us again the difference in the patterns when destructuring the groups?</p>
+<p>DE: Sure, I'll write it on the slide...</p>
+<p><em>writes on the slide</em></p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> {a, b} = <span class="hljs-regexp">/(?&lt;a&gt;x)(?&lt;b&gt;y)/</span>.exec(<span class="hljs-string">"xy"</span>).groups
+</code></pre>
+<p>DE: If you have a variable instead of the regex, then you could default like you do with anything else in JavaScript (so it would be overkill to create a groups property regardless of whether there are groups in the RegExp):</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> {a, b} = unknownRegExp.exec(<span class="hljs-string">"xy"</span>).groups || {}
+</code></pre>
+<p>DE: For existing regexps, there's no detectable change in behavior. This fits into what would have been syntax errors. The other question is whether all the properties should be created, even if they are not matched (e.g., because they were optional). <code>&quot;y&quot; in /(?&lt;a&gt;x)|(?&lt;b&gt;y)/.exec(&quot;xy&quot;).groups</code>
+This could be useful in a lexer. ??? You could do this by looking at <code>Object.keys()</code>. With the current draft, I've left in place that all the properties are created. This is not a strongly-held opinion.</p>
+<p>AWB: And if one isn't matched or processed, its value is <code>undefined</code>.</p>
+<p>WH: It's created with the value <code>undefined</code>.</p>
+<p>AWB: I think that's less useful than leaving it out.</p>
+<p>WH: I agree with Allen that it's a judgment call. Leaving it out allows one to use <code>'in'</code> to test it; on the other hand, the numeric properties are always created and get the value <code>undefined</code> if they don't participate in the match. It's easier for users if we're consistent with them.</p>
+<p>AWB: You need the numerics because you have to count to get the position.</p>
+<p>WH: It (a missing match) could be a hole in the arrays.</p>
+<p>DE: Say people learn to do this pattern with <code>Object.keys()</code> or <code>for .. in</code>. Then they'll be surprised. Instead, if we leave out these features then we avoid confusion for the users.</p>
+<p>AWB: My gut feel is that there's a enough difference between the two styles that you won't have a confusion.</p>
+<p>WH: Yeah, but if you make a typo... I would rather be consistent with numerics.</p>
+<p>MF: It's useful to get a predictable object shape coming out of <code>exec</code>.</p>
+<p>DE: We would get a predictable object shape if we always created own-properties. That might provide a trivial perf advantage.  Things are more optimizable if the shape is consistent.</p>
+<p>BE: Yep. Sounds good.</p>
+<p>DE: Brian and I have been talking about this issue for a while. I could go either way. I feel weakly this way, others feel weakly the other way.</p>
+<p>WH: I like it the way you have it now.</p>
+<p>MS: It isn't created right now?</p>
+<p>DE: It is created now.</p>
+<p>MS: Created, but <code>undefined</code>? Just like the numbered ones are. Ok, that's the way I like it too.</p>
+<p>DE: The only change in the spec I'll be making is moving back the <code>replace</code> parameter to the last position. Given that, is this proposal ready for stage 3?</p>
+<p>WH: Yes.</p>
+<p>BT: Seconded.</p>
+<p>BE: Great.</p>
+<p>AWB: Hearing no objections.</p>
+<p>BE: Nice, thanks Dan!</p>
+<a href="#conclusionresolution-10iib-regexp-named-groups-for-stage-3"><h4 id="conclusionresolution-10iib-regexp-named-groups-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+</ul>
+<a href="#10ie-regexp-legacy-features-for-stage-3"><h2 id="10ie-regexp-legacy-features-for-stage-3">10.i.e RegExp Legacy Features for stage 3</h2></a><p>(Mark Miller)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-legacy-features">https://github.com/tc39/proposal-regexp-legacy-features</a></li>
+</ul>
+<p>AWB: That was the last RegExp item. Anyone have more to say about that?</p>
+<p>MM: These are things like <code>RegExp.leftContext</code> and a bunch of weird static properties on the RegExp constructor itself that have spooky effects. If I could just get rid of these, but of course I can't. There's an agreement between browsers, so we're better off codifying it than not.</p>
+<p>BE: I am so sorry...</p>
+<p>MM: The goal here is to strike the best balance between acknowledging reality and keeping things codified and nailed down in Annex B (and all that means). It's already at stage 2, as part of this general attention to moving RegExp stuff forward, I would like to bump this today.</p>
+<p>MS: Was it research that all browsers do it or just some browsers?</p>
+<p>DE: These semantics are different from what each browser ships. In terms of configurability and what happens between realms.</p>
+<p>MM: In terms of minimizing damage...</p>
+<p>DE: This was reviewed by people working on regular expressions in V8 and was thought to be web-compatible.</p>
+<p>MM: Dan's right. The properties are the properties that we gathered from browsers. I don't know whether they're union or intersection, but it's small in any case. This proposal also makes some semantic differences that we expect to be backward compatible. Nothing spooky happens in some cases. They're also configurable and delete-able.</p>
+<p>AWB: And it's not just that it's structured, I assume that if you evaluate a regexp in one realm, the results are not visible in another realm.</p>
+<p>MM: Correct. No browser has any explicit action-at-a-distance. What coupling might there be between realms unless we outlaw it. That's the coupling that could have been ??</p>
+<p>AWB: ??</p>
+<p>MM: This suppresses the spookiness both between realms and subclasses.</p>
+<p>DH: From the description, I can believe the changes are web-compatible. They sound like the kind we would take a chance on.  My biggest question that I don't think affects stage 3:  what about Annex B? We need to review the goal and its role and judge what its future is.</p>
+<p>MM: I enthusiastically agree.</p>
+<p>BT: Motion to append Annex B discussion to the agenda.</p>
+<p>YK: +1000</p>
+<p>BE: The question is whether it should be there?</p>
+<p>DH: Should Annex B be in the standard? Why should it be there? That helps determine whether something should be in Annex B.</p>
+<p>BE: Yeah.</p>
+<p>DH: Earlier this morning we had a discussion about the mechanics about the spec document itself with regard to Annex B. That discussion bled into the purpose of Annex B. Should Annex B be there?</p>
+<p>WH: You just asked &quot;should Annex B be there.&quot; The answer is &quot;no&quot; but we <em>have</em> to have it for web-compatibility.</p>
+<p>DH: I didn't mean, &quot;should that material disappear from the spec?&quot;, I'm saying &quot;should it be differentiated?&quot;</p>
+<p>WH: Ok.</p>
+<p>BE: Ok, right.</p>
+<p>DH: To be clear, I'm not arguing for anything. (We shouldn't do that right now.) I'm just saying that we need to find clarity around this question. There are mismatches in different people’s heads here.</p>
+<p>BE: I want to frame this question. Part of this seems to hinge on an empirical question: &quot;How much is required for web-compatibility?&quot;</p>
+<p>MM: That is orthogonal... Oh, I see what you're saying...</p>
+<p>WH: It's not what was implemented, but you need to figure out how much of this Legacy RegExp stuff is required for compatibility. This distinction arose in the very proposal you're presenting now.</p>
+<p>MM: Many of the things in Annex B were admitted to Annex B only with the understanding that they normative-optional. Everything in Annex B needs to go through the entire process again to determine if they're normative-optional... ???</p>
+<p>BT: We are diverging.</p>
+<p>DH: We need to grapple with this question. But I'm happy to leave it at that. But my question is: &quot;Does Legacy RegExp go all the way through stage 4&quot; and then we deal with this Annex B stuff at that point?</p>
+<p>MM: The subject doesn't have to do with where (Annex B) stuff appears in the text. It means that a conforming system can omit Annex B stuff.</p>
+<p>YK: The point you made about the process is a true fact of the procedure. But if the people in favor of not conforming can be clear about their actual objections, then we can address them directly rather than need to sort out the larger Annex B issues.</p>
+<p>DH: You're operating under several constraints with &quot;normative optional.&quot; I think it's important that we satisfy these constraints. We should also deal with &quot;forked ecosystem.&quot; The normative optional construct is one that says &quot;we're not worried about one JS ecosystem may not support this feature&quot; and that leads to balkanization. Part of our role as a standards body is to solve and prevent problems of balkanization. We should see if there's a better way to deal with this than normative optional. I wonder if Annex B and normative optional allow us to mitigate balkanization issues.</p>
+<p>MM: I don't think anything we've discussed affects whether we should proceed to stage 3.</p>
+<p>DH: The point of order is that I would like us to have a plan to address this.</p>
+<p>MM: I think we're agreed on that.</p>
+<p>AWB: I think it's clear that today Annex B is the place we have to put it. There's an orthogonal issue of: what do we want to do with Annex B (whatever's in that bucket). ??</p>
+<p>DH: I don't know what the criteria are for Annex B.</p>
+<p>BE/WH: Let's have the discussion at the proper time.</p>
+<p>BE: We can assume a good outcome and if something goes bad we can discuss.</p>
+<p>MM: Dynamically scoped is also spooky action-at-a-distance. Any objections to stage 3?</p>
+<p>BE: I'm so sorry.</p>
+<p>DE: There's one point I want to make about it. The subclasses restrictions. There are some regex classes in the wild. XRegExp is an example, which is an old-style subclass instance <code>of RegExp</code>, so it doesn't really get touched by the detection in this proposal which doesn't modify <code>new target</code>, but it seems a little bit odd... The justification for restricting it from subclasses is that it would give bad answers for specific subclasses for example… it might leak implementation details. XRegExp will get past that because it won't get detected.</p>
+<p>AWB: Well it doesn't not get detected, it just doesn't meet the definition of what we call a subclass.</p>
+<p>DE: Well, but this document mentions certain concerns which XRegExp should qualify for. And it could leak implementation details in these dollar sign things (special variables)... maybe it could cause unexpected behavior.</p>
+<p>MM: I think the trade-off is highly in favor of doing with Claude codifying (preventing of sub-classing of spooky...). Are you objecting on this basis?</p>
+<p>DE: No, I'm not objecting on this basis.</p>
+<p>WH: Who were the reviewers for this?</p>
+<p>DE: I was a reviewer.</p>
+<p>AK: Then it cannot go to stage 3 until we have another reviewer.</p>
+<p>WH: There are things in there that I don't understand. Like why it has anything to do with inheritance.</p>
+<p>MM: I'm happy to clarify with you offline.</p>
+<p>MF: We also agreed that any proposal planning to advance would be available 1 or 2 weeks (I forget which) ahead of the meeting.</p>
+<p>AK: It's nice to have it advance if it could. But what we got out of it is that it needs eyes on it.</p>
+<p>MM: Withdrawn from stage 3 for now.</p>
+<p>AWB: Are you planning to present it at the next meeting?</p>
+<p>MM: Yes.</p>
+<p>DH: Add it to the agenda for next meeting right now.</p>
+<a href="#conclusionresolution-10ie-regexp-legacy-features-for-stage-3"><h4 id="conclusionresolution-10ie-regexp-legacy-features-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>No change in stage. Reviewers identified and it will be proposed for stage 3 next meeting.</li>
+</ul>
+<a href="#10if-simdjs-status-update"><h2 id="10if-simdjs-status-update">10.i.f SIMD.js status update</h2></a><p>(Daniel Ehrenberg)</p>
+<p>DE: I'm no longer championing SIMD.js. It was pursued as the best way to provide to users in JS. But at this point, WebAssembly is sufficiently far enough along. It is hard to optimize sufficiently well for the non-asm.js case, so better is to simply specify it for asm.js.  The decision could be reversed, but it's currently on hold.</p>
+<p>YK: I'm interested in Brendan and DH's response.</p>
+<p>BT/AWB: If we have a proposal that's at stage 3, the champions should write up a status report.</p>
+<p>YK: Is Mozilla also abandoning it?</p>
+<p>PJ: The main reason it's on hold is WebAssembly.  They were involved with the SIMD proposal as well.  It remains to be seen whether WA will fill the gap, since SIMD is not part of WA yet.  Hence maintaining the 'on hold' status.  Also, just like in C++, when people want to do SIMD, they can use asm or intrinsics.  We'd like to see something simliar for JS, but it's a big burden on browser developers.</p>
+<p>BT: Is it appropriate then for V8 to delete their implementation?</p>
+<p>PJ: Yes I do think it is, but I don't have control over V8.</p>
+<p>SYG: We still have the code available at Mozilla, but the main people working on it have moved to working on WebAssembly, and basically the JS code for SIMD.js is basically dead.</p>
+<p>BT: I'm getting a feeling that there's an unstated position of the V8 team that SIMD in JavaScript is untenable and will not go forward.</p>
+<p>AK: V8 does not conclude that SIMD.js makes sense at this point.</p>
+<p>BT: I don't see a path forward for consensus on this point.</p>
+<p>DE: That's a good point. Perhaps I should switch this to withdrawing.</p>
+<p>BT: I'm just getting this out there. I do think that stage 3 is not the right thing for this.</p>
+<p>AWB: Sounds like it's losing stages here.</p>
+<p>YK: It sounds like there was some implementation problems with making SIMD.js performant, like developers who tried to use it would be disappointed.</p>
+<p>AK: The roadmap to get to a performance JavaScript implementation looked long and unmaintainable. Were there a huge push from JS community we may have thought it was worth it, but with emphasis moving to WebAssembly it doesn't make sense anymore.</p>
+<p>YK: Does the V8 team even believe wasm is a &quot;real thing&quot;?</p>
+<p>AK: The V8 team's perspective on asm.js has changed over the last 3 years. The team tracks the performance of asm.js in the wild, etc.</p>
+<p>YK: I guess what makes me worried here is that we're prematurely rejecting potential future use cases.</p>
+<p>MS: Apple's point of view is we don't think SIMD.js is appropriate as an addition to JavaScript because of the perf, but also the use cases and how much work it was. We think that wasm is a better way to bring this to the web. I think in the past I made it clear that we didn't want to implement SIMD.js.</p>
+<p>BT: I'm personally sympathetic to wasm, though there are some concerns. I have met some people that <em>did</em> get really excited about SIMD.js. I can help you find those programmers.</p>
+<p>PJ: There are more JS developers than C++ programmers. The places where SIMD improves performance are typically isolated to small hot loops.   Forcing developers to bring in the whole wasm toolchain to extract better performance in those cases is a big ask.</p>
+<p>DT: Is there a timeframe for whether wasm solves this problem? And if it doesn't should we bring SIMD proposal back?</p>
+<p>YK: That could be addressed by moving it to stage 2: &quot;the committee believes that JS should solve this problem&quot;. The claim that JavaScript programmers will get enough value out of the existence of wasm is as yet unproven and it's inappropriate to assume it will.</p>
+<p>MM: You're saying stage 1 rather than withdrawing it?</p>
+<p>YK: Yes.</p>
+<p>MM: I think it should be withdrawn if it is championless.</p>
+<p>AWB: I think it's either withdrawn or it is stage 1.  But before either of those, we need documentation for why we are making the transition.</p>
+<p>YK: Yes just writing down that we think it should be addressed by wasm will make it easier to address in a year.</p>
+<p>AWB: I'm reluctant to say: &quot;Dan please write up something because there's very little motivation to do the work.&quot; What I would say is that: &quot;The attempt to be withdrawn has been postponed&quot;.</p>
+<p>WORDS...(lol).</p>
+<p>AK: Is there any advantage to actually remove this from stage 2?</p>
+<p>AWB: It's not withdrawn until we have the write-up that says it's withdrawn. As soon as this disappears, all sorts of people will start asking what's happened, why has this gone away? Part of our job is to document why we make decisions.</p>
+<p>MM: The notes from this meeting are made public so people will see why we did this.</p>
+<p>AWB: These notes are not a coherent presentation of the reason for the transition.</p>
+<p>AK: I think there should be an announcement. When I did something similar it got picked up in es-discuss.</p>
+<p>AWB: I'm suggesting to wait because the champions should do the work to write-up something.</p>
+<p>DE: I'll write something up whether or not there's procedural pressure.</p>
+<p>YK: If someone asks for stage 3 they should do a write-up. I think Dan is doing the right thing.</p>
+<p>AWB: I do know that pressure goes away and people have other things to do.</p>
+<p>MM: The amount of new information is sufficiently low that we should move onto the next topic.</p>
+<p>YK: We should find someone who could champion it at stage 1.</p>
+<p>PJ: We would like to see it go to stage 4, but I can be a caretaker champion.</p>
+<p>DT: You're owning up to asking the questions in 6 months to know whether we address it again.</p>
+<p>DE: If we decide to reintroduce it, it can go straight to stage 3 or stage 4 if appropriate.</p>
+<p>AWB: Probably not.</p>
+<p>PJ: It has been reviewed. If it is picked up, I don't see why not.</p>
+<p>YK: The withdraw claim is quite a strong claim.</p>
+<p>BT: If we do withdraw it, the code will be removed from Chakra very quickly.</p>
+<p>YK: You can't reuse it in Chakra?</p>
+<p>BT: So, I'm still feeling I'm going to have to argue strongly for not deleting this code if we move it back to stage 1.</p>
+<p>PJ: Maybe the wasm picture will be clear in a couple months. I'm not sure how far along things are. From that sense it should remain at stage 3.</p>
+<p>AK: I don't think Chakra would ship this in Edge and then have the committee withdraw it.</p>
+<p>MPT: Nobody in this room right now really wants this. We have an obligation to the development community to signal that this isn't happening.</p>
+<p>YK: I don't agree that nobody wants this.</p>
+<p>AK: That's why I'm saying we should withdraw it.</p>
+<p>MPT: I would tend to agree with that.</p>
+<p>YK: That's what V8 decided.</p>
+<p>AK: You're guessing that's what happened.</p>
+<p>YK: There seems to be diversity among engines. I didn't mean to imply that V8 had a nefarious position.</p>
+<p>AWB: It seems clear that this is no longer a stage 3 feature.</p>
+<p>BT: That's clear. Stage 3 is not an option.</p>
+<p>YK: ??</p>
+<p>MPT: If we were to back it up a stage, I could put in a statement that says we want to see what happens with wasm before we keep pushing this.</p>
+<p>YK: V8 has made it clear they are betting on wasm.</p>
+<p>BT: I think practically speaking, based on what I have heard, it would be extremely difficult to get consensus on this even after wasm has been around for a while.</p>
+<p>YK: Imagine a year from now, wasm fails to get traction or adoption.  Then would your answer be different?</p>
+<p>BT: I think that's an interesting question.</p>
+<p>AK: I get the impression from people at Mozilla that they're not excited about SIMD.js either.</p>
+<p>BT: You will find people like that on the Chakra team as well.</p>
+<p>YK: I think V8 took the plunge.</p>
+<p>MS: Just to be clear, before this meeting, we made it clear that we are not supporting SIMD.js.  Essentially: &quot;I don't think this is appropriate for the standard, but if it becomes part of the standard we will implement it&quot;.</p>
+<p>YK: How did we get consensus at stage 3.</p>
+<p>MS: ?</p>
+<p>YK: You're basically saying that we've never had consensus for stage 3.</p>
+<p>DE: Michael was very consistent on this the whole time.</p>
+<p>MPT: Regardless of the past, I'm looking at two implementers who say they wont do this. We need to decide from here.</p>
+<p>MS: If this does become part of the standard, we will implement it.</p>
+<p>BT: Withdrawal is more reflective of the likelihood that we'll get consensus on this feature.</p>
+<p>AWB: Do we want to go forward exploring ??? computing hardware.</p>
+<p>WH: I have a feeling we will regret withdrawing it in a couple of years.</p>
+<p>YK: I think it's a legitimate question that we don't know how wasm will go.</p>
+<p>PJ: We have tons of use cases for SIMD.</p>
+<p>YK: It seems like engines are withdrawing their interest in it. Engines are making a statement.</p>
+<p>DT: I think what we want to do is get a new consensus and the presentation should be &quot;what is the ?? we should get to.&quot; ...</p>
+<p>YK/BT: We should move this to stage 1.</p>
+<p>MPT: Officially this is being moved to stage 1 because browser implementers won't like this as much as they thought they would.</p>
+<p>people: No...</p>
+<p>AWB: No, Daniel will write up a status report to make this more clear.</p>
+<p>DE: I'll write up a status report and we'll talk about it next meeting.</p>
+<p>AWB: Put it on the agenda for the next meeting.</p>
+<p>AWB:  If you're a person coming back in two years and you say &quot;here's a thing that TC39 is working on and put it on a shelf—why is it being revived?&quot;</p>
+<p>DE: Right, so I'll write a document explaining that.</p>
+<p>AK: Here's the thing, can we make a change sooner or later? There's no point in holding devs in a state where they think something's happening, but it's not.</p>
+<p>MPT: The move to stage 1 removes the community concern.</p>
+<p>BE: If the implementers and browsers don't want to implement it then there's no reason to leave it in stage 3.</p>
+<p>YK: I think there's broad consensus that it should not remain at stage 3. Even if we don't ship wasm, it's fine that...? doesn't happen. I think it's ok to communicate that we think that this will work out in wasm...versus not shipping it at all.</p>
+<p>DE: For some broader context, a lot of the engines have shifted to focusing on other types of performance (not numerical perf) maximizing softer factors like dynamic performance. and SIMD is more in the category of numeric performance. That's why we prefer to focus on wasm rather than SIMD.</p>
+<p>WH: Both kinds of performance are important.</p>
+<p>DH: I apologize that I missed this...this might be a slightly different perspective: I think that WebAssembly has changed the context in which we talk about this...</p>
+<p>WH: I don't understand what you mean by changing the context.</p>
+<p>LBR: We are over the timebox.</p>
+<p>AWB: We have a conclusion. We want some documentation about why that is. Dan will write it up.</p>
+<p>DH: So the point that I wanted to say was that wasm was working towards including SIMD in the spec. I think there is a possible route, where the web gets SIMD via WebAssembly. And then at some point that will help us understand if we need SIMD in the JS side. That gives us new signals about developer interest in this feature. I'm fine with demoting, whatever it is that we say, let's not say that it's not possibly interesting and that it doesn't matter. They may be interested in it in the future and we should leave that door open. Why prematurely tell developers that a thing you might want will never happen?</p>
+<p>DE: That's a great point about getting more feedback from devs. I want to mention that the feedback this committee has given has been really valuable to inspiring the implementation.</p>
+<p>BE: It's not going away? It's going to stage 1?</p>
+<p>AWB: It's probably going to stage 1.</p>
+<a href="#conclusionresolution-10if-simdjs-status-update"><h4 id="conclusionresolution-10if-simdjs-status-update">Conclusion/Resolution</h4></a><ul>
+<li>Stage will remain at stage 3.  DE will write up the reason for deprecation and present it.  At that point, it will transition to a lower stage (possibly withdrawn).
+It is proposed that Peter and Yehuda will become caretaker champions of the high-level goal at stage 1.</li>
+</ul>
+<a href="#10ih-intlsegmenter-requesting-stage-3"><h2 id="10ih-intlsegmenter-requesting-stage-3">10.i.h Intl.Segmenter (requesting stage 3)</h2></a><p>DE: Unicode also defines an algorithm for finding breaks between words and sentences, which CLDR tailors per locale. On <a href="https://docs.google.com/presentation/d/1BnVToKOybjLh7IPa6k1i1ruLysFDKIVgo5heU1qb7CM">slide #4</a> there are new methods that allow you to jump to the next segment. Previously it provided forward or reverse iteration through a string. We decided to wait for users to ask for an improved API. So I changed the API to have preceeding and following. Also to define break type. It's at stage 2 right now, and now that the API is closer to being finalized I want to ask for more reviewers.</p>
+<p>CP: I can review.</p>
+<p>JXF: I think I can get someone from PayPal to review.</p>
+<p>DE: Any thoughts on the change in the design?</p>
+<p>AWB: It wasn't clear to me from what's on the current slide what the actual change was.</p>
+<p>DE: Oh. There used to be that segment iterators had an internal slot ...forward or reverse segment interators...you could call segmenter...? You can jump to a point, going to either the preceding or the following position. You can access the index and break type getters to figure out what that segment was. That's the new API: It's more expressive. You still have the ergonomic iterator (segment iterators) and you can do for...of. So it doesn't change that simple use case. Glad to have reviewers; thanks.</p>
+<p>AWB: OK, so we're not actually advancing to stage 3; we're just preparing by having reviewers?</p>
+<p>DE: Yeah, I hadn't previously asked for reviewers because I was unsure about this aspect of the API design. So yeah, still at stage 2.</p>
+<p>AWB: Sounds good.</p>
+<a href="#conclusion-10ih-intlsegmenter-requesting-stage-3"><h4 id="conclusion-10ih-intlsegmenter-requesting-stage-3">Conclusion</h4></a><ul>
+<li>Remains at stage 2. Stage 3 reviewers identified:
+<ul>
+<li>Caridy</li>
+<li>TBD from PayPal</li>
+</ul></li>
+</ul>
+<a href="#10ii-test262-using-root-license-as-default-for-files"><h2 id="10ii-test262-using-root-license-as-default-for-files">10.i.i Test262: using root license as default for files</h2></a><p>LBR: This is mostly to ask to defer to discretion of lawyers. (My company doesn't have any working on this.) I'm trying to make Test262 a nice place for new contributors. It's already too complex for new contributors. We struggle with pull requests. We require every test file to be prefixed with two copyright lines declaring the copyright for who is contributing. But today we already have the CLA. Considering that, for new tests, without these copyright lines, we're deferring to the license that's in the Test262 project. I'm not looking for consensus now, because we need to talk to lawyers.</p>
+<p>AWB: What you need to do is refer this to Ecma ?? because there is a specific Ecma policy document that specifies that, for Ecma modules, how the software should express itself...so you have to go through Ecma.</p>
+<p>BT: That's what he's asking for, is that policy to change. He's not going to ask for that to change until he talks to lawyers. I know what a lawyer is going to say. They'll say you need the copyright header. It makes things more clear and so people can't say they didn't know it was copyrighted.</p>
+<p>AWB: But that's OK. With appropriate pushing, we've done this stuff before.</p>
+<p>WH: You need the header where?</p>
+<p>BT: At the top of the file.</p>
+<p>LBR: Every test file.</p>
+<p>AWB: I'm confident that if you go, can we get by with 1 line?</p>
+<p>BT: He doesn't want one line, he wants 0 lines. Lawyers would always want that one line.</p>
+<p>AWB: One line is the best you can get.</p>
+<p>BT: Having it at all is the difficulty. We've had people push back because they don't want their real name on the test.</p>
+<p>LBR: We've got a lot of contributions without the copyright lines; some of the contributions say I can agree on a copyright as long as I have a CC ShareAlike...</p>
+<p>AWB: Strictly speaking you're not supposed to accept anything that doesn't conform to the license.</p>
+<p>MPT: When you sign the CLA, you're literally saying your lines of code belong to Ecma. You can't sign the CLA without giving the code away.</p>
+<p>MM: Leo, I think what we're all saying is if the reason people don't want to put the copyright lines on there is because they don't agree with the copyright, then removing the lines is not going to solve the problem.</p>
+<p>BT: So I think that there is a reasonable argument that it's really annoying to put that thing in every test, having written thousands of tests myself. I've seen the friction it causes, not from philosophical opposition to BSD licenses. I know what lawyers are going to say, I suspect.</p>
+<p>MPT: As far as the real name thing goes, if it's a concern of anonymity on the internet, there are ways around having your real name on something.</p>
+<p>BT: That's not the major issue here. The major issue is ease of writing tests. We want people to contribute as many tests as possible, so the fewer roadblocks as possible.</p>
+<p>LBR: Yes.</p>
+<p>BT: We recognize that the copyright header is potentially useful, but is not a requirement for copyright. We just have to make...if we have consensus, the burden of having to put that in every file. [Risk of] not having it in every file is extremely unlikely...</p>
+<p>AWB: If the Microsoft lawyers will represent your opinion on this... If you can..</p>
+<p>AK: We had a similar case in our tests. We don't have headers in our test and we're keeping it that way.</p>
+<p>MF: Are you distinguishing the test files from the source files?</p>
+<p>AK: It's just which directories they're in.</p>
+<p>MF: Did your lawyer distinguish them?</p>
+<p>AK: We didn't ask the lawyer to change the policy on source files.</p>
+<p>MS: Our tests do not have the headers and the source files do.</p>
+<p>BT: No one here has objections to removing the copyright header: is that the case?</p>
+<p>AWB: I don't believe we have the authority to say that.</p>
+<p>BT: I'm not saying we have the power to change it. I'm saying we're agreeing that asking for a change is a good idea.</p>
+<p>LBR: If I have an objection here, I'm not going to move this forward. I want to confirm: I don't have an objection, so I'm going to move forward.</p>
+<p>AWB: I can help you explain that to him if you need to.</p>
+<p>MB: In node land, we recently had to reinstate headers in our files (including tests) because we removed them before talking to lawyers. Because we did this without talking to lawyers, it's been really painful. So talking to lawyers is a really good idea.</p>
+<p>WH: Can you explain why?</p>
+<p>MB: When the io.js fork happened, all the headers were removed, and it turns out... there are laws... We just landed this about a week ago. If you go check the Node repo right now...the first round of the headers took us about a year.</p>
+<p>AWB: We have to go through a committee of lawyers.</p>
+<a href="#conclusion-10ii-test262-using-root-license-as-default-for-files"><h4 id="conclusion-10ii-test262-using-root-license-as-default-for-files">Conclusion</h4></a><p>There was no objection from the committee to removing the headers, and Leo will escalate this with István.</p>
+<a href="#weak-references-status-update"><h2 id="weak-references-status-update">Weak References status update</h2></a><p>DT: I did the first round and started a draft. It was left at most people liking it but concerns about what it would be like in practice. Turns out the requires being in large C++ environments. Not a lot of progress has happened there. I'm looking for someone else to pair with me who can do the C++ side so I can focus on what I intended which is the JS side. That will really help in getting an implementation in V8 and node so people can play with it.</p>
+<p>MM: Given what you're asking for there's no reason to limit it to those two.</p>
+<p>DT: That's true.</p>
+<p>MM: Any open source engine.</p>
+<p>DT: If there's an engine that's less production and simpler to add this kind of prototyping.</p>
+<p>MM: So you're looking for someone who can volunteer to help with it.</p>
+<p>BFS: I can help, but I'm only going to help with V8, because that's what I know.</p>
+<p>MM: And thank you, that makes a huge difference.</p>
+<p>DT: I'll sync up with you and we'll see where we're at. Not something we can have by May, but we'll see how far we get. There are minor tweaks to the spec. But none of them are substantial.</p>
+<a href="#conclusionresolution-weak-references-status-update"><h4 id="conclusionresolution-weak-references-status-update">Conclusion/Resolution</h4></a><p>Bradley will help out and they will report back in 2+ months.</p>
+<a href="#day-ending"><h2 id="day-ending">Day ending.....</h2></a><p>LBR: I have a link for TR104.</p>
+<p>MM: What is ECMA-104?</p>
+<p>AWB: It's the Test262 PR that fundamentally ........ it points to the github.....</p>
+<p>AWB: We don't have any more 15 minute items. So we should call it a day.</p>
+<p>AWB: There are hats in a box.</p>
+
+</body>

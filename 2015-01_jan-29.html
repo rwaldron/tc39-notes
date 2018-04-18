@@ -1,0 +1,127 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 29, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-29-2015-meeting-notes"><h1 id="january-29-2015-meeting-notes">January 29, 2015 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Jonathan Turner (JT), Allen Wirfs-Brock (AWB), John Neumann (JN), Jeff Morrison (JM), Erik Arvidsson (EA), Dave Herman (DH), Waldemar Horwat (WH), Domenic Denicola (DD), Kevin Smith (KS), Michael Ficarra (MF), Jordan Harband (JHD), Chip Morningstar (CM), Adam Klein (AK), Igor Minar (IM), Miško Hevery (MHY), István Sebestyén (IS), Rick Waldron (RW), Ben Newman (BN), Yehuda Katz (YK)</p>
+<hr>
+<a href="#es6-introduction-text"><h2 id="es6-introduction-text">ES6 Introduction text</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>[Ask for slides]</p>
+<p>AWB: The spec has an introduction text. We need to write what ES6 is adding to the picture. Right now it is empty.</p>
+<p>AWB: Asked for volunteers and no one has done that yet.</p>
+<p>Possible new text</p>
+<p>ECMAScript is now one of the world’s most widely used programming languages; it has been adopted not just by browsers but also for servers and embedded applications, and has become a compilation target for other languages.
+The 6th edition provides the most extensive set of enhancements to ECMAScript since the 1st edition.</p>
+<p>It is now a comprehensive general purpose programming language.</p>
+<p>Some of the major enhancements provided by the 6th edition include modules, class declarations, lexical block scoped declarations, iterators and generators, promises for asynchronous programming, destructuring patterns, and proper tail calls.</p>
+<p>The ECMAScript library of built-ins has been expanded to support additional data abstractions including maps, sets, and arrays of binary numeric values as well as additional support for the Unicode supplemental characters in strings and regular expressions. The built-in library is now extensible via subclassing.</p>
+<p>New uses and requirements for ECMAScript continue to emerge. The sixth edition provides the foundation for regular, incremental language and library enhancements.</p>
+<a href="#list-of-contributors"><h2 id="list-of-contributors">List of contributors?</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: In ES5 there is a list of people who contributed to the spec. For ES6 the list is really large and I'm afraid of leaving someone out. Suggests not having a list of contributors.</p>
+<p>IS: Non normative. Non mandatory. ECMA leaves it entire to TC39 if they want to have a personal and/or organizational recognition of those who have significatntly contributed to the standard. This can be from case to case different. E.g. in ECMA-402 (ECMASCript Internationalization) all contributors and those who even commented were acknowledged, but of course that standard has a much more focused scope. So it is up to TC39. If there is a risk of forgetting someone who has significantly contributed to the work on ES6 maybe it is better to leave it out.</p>
+<p>BT: Is anyone asking for this?</p>
+<p>JM: Does anyone oppose to leave this out?</p>
+<p>DD: It feels nice to get acknowledged, and we should consider doing it in the future. Especially for e.g. ES2016 when we're on GitHub and can just look at the contributors list. But it's just not feasible for ES2015.</p>
+<p>AWB: Suggests not having the list of contributors.</p>
+<p>BT: Seconded.</p>
+<p>JN: Would it make sense to list the companies that contributed.</p>
+<p>WH: That would be worse.</p>
+<p>EA: Agreed.</p>
+<p>IS: He noted that in the past in Ecma we even had a few cases when companies have been acknowledged, or persones (with their companies in bracket). Up to the TCs how they want to handle this, because this part goes into an informational part of standard anyway.</p>
+<a href="#conclusionresolution-list-of-contributors"><h4 id="conclusionresolution-list-of-contributors">Conclusion/resolution</h4></a><ul>
+<li>ES6 will not have a list of contributors.</li>
+</ul>
+<a href="#march-meeting"><h2 id="march-meeting">March meeting</h2></a><p>(John Newman)</p>
+<p>JN: Next meeting is in Paris. Today is the last chance to object.</p>
+<p>WH: Objecting, but will not veto it.</p>
+<a href="#conclusionresolution-march-meeting"><h4 id="conclusionresolution-march-meeting">Conclusion/resolution</h4></a><ul>
+<li>The Paris meeting has been confirmed</li>
+</ul>
+<p>IS: note after the meeting: We have to take into account that like in the SF meeting there will be members who will want to attend remotely via conferencing facilities.
+Therefore the host should be prepared for that and should provide a well functioning remote conferencing facilities. In the SF TC39 meeting the video part and the remote audio participation worked well, but the audio from the conference room could only be understood if one person alone close to the mic spoke.</p>
+<a href="#const-in-sloppy-mode"><h2 id="const-in-sloppy-mode">const in sloppy mode</h2></a><p>(Brian Terlson)</p>
+<p>BT: Found one site that depends on the legacy const semantics.</p>
+<p>YK: One site?</p>
+<p>BT: It is also a demo site.</p>
+<p>BT: While it is true that a site might serve different code to IE and Chrome.</p>
+<p>DH: Let me talk to Jason Orendorff (SpiderMonkey engineer) and see what he thinks.</p>
+<p>AK: At the moment you cannot use let in sloppy mode.</p>
+<p>BT: It is worrying that Google thinks that this is not web compatible and that it has not been brought up before.</p>
+<p>BT: We could change the semantics and make const in sloppy mode scoped like vars.</p>
+<p>AWB: I would be opposed to that. I'd rather drop it.</p>
+<p>DH: Opera used to treat const exactly like var.</p>
+<p>WH: What is the issue?</p>
+<p>EA: In legacy Chrome and Firefox (sloppy mode) const has the same scoping rules as var.</p>
+<p>AWB: If we run into a brick wall we can revise the spec in the future.</p>
+<p>BT: Time is of the essence. The longer you hold out the higher the risk is that IE would fall back to the legacy behavior.</p>
+<p>BT: IE11 shipped the correct ES6 semantics for over a year and only encountered one problem report.</p>
+<p>BT: Want to see plan to turn on proper sloppy mode semantics from Chrome and Firefox within the next few months.</p>
+<p>EA: We'll make a plan on how to get to standards compliant const in sloppy mode.</p>
+<a href="#conclusionresolution-const-in-sloppy-mode"><h4 id="conclusionresolution-const-in-sloppy-mode">Conclusion/resolution</h4></a><ul>
+<li>Google and Mozilla will move towards a standards compliant const in sloppy mode.</li>
+</ul>
+<a href="#objectobserve"><h2 id="objectobserve">Object.observe</h2></a><p>(Erik Arvidsson)</p>
+<p>(Presents slides)
+<a href="https://docs.google.com/presentation/d/1VHdL37sZSLBZuizzSfiiSd9zSy9zNYXiNEjDJeTjOSA/edit?usp=sharing">https://docs.google.com/presentation/d/1VHdL37sZSLBZuizzSfiiSd9zSy9zNYXiNEjDJeTjOSA/edit?usp=sharing</a></p>
+<p>AWB: Is &quot;types&quot; the right word in &quot;acceptTypes&quot;? These are actions, not types.</p>
+<p>EA: These correspond to the &quot;type&quot; field, but agree that, if we're adding types to the language, also using the term &quot;type&quot; in this way would be not so good.</p>
+<p>[...discussion of skipRecords: what should be passed to the observer callback in that case? undefined or null?...] (Domenic to file a bug)</p>
+<p>YK: Advance to stage 3?</p>
+<p>EA: Not just yet.</p>
+<p>YK: I would decouple Array.observe from Object.observe</p>
+<p>YK: I would like to get more implementation feedback (which would help prioritize it in libraries), but don't necessarily think that should block Stage 3 forever.</p>
+<p>EA: Still details to be worked out over scheduling of observer callbacks</p>
+<p>DD: ECMAScript-wise, just creating a job and enqueuing it should be sufficient</p>
+<p>YK: That doesn't seem like enough, because the callbacks still need to run at end-of-microtask</p>
+<p>DH: This sounds like maybe a seperable work-item</p>
+<p>DD: Not clear whose court this is in, between Web specs and ES</p>
+<p>YK: It seems like a small, self-contained note somewhere explaining the interaction of ES Jobs and HTML/DOM event queues</p>
+<p>DH: It sounds like a WebIDL thing</p>
+<p>AWB: 2 things:
+1) Relative ordering of observe notification jobs.</p>
+<p>Arv: The ordering is well-defined.</p>
+<p>AWB: 2) Any ordering dependencies between your spec and promises. In ES6, promises have a well-defined ordering but other job queues can interleave between promises. So if you expect to have a defined ordering between observe and promise then you probably need to use the same queue.</p>
+<p>YK: Needs a user-facing API for managing job queues.</p>
+<p>AWB: Yes, quite useful.</p>
+<p>MM: Why is Array.observe a separate API? Shouldn't the default be to observe splices when arrays are Object.observed?</p>
+<p>AWB: Then you have to define what the extensibility story for other types.</p>
+<p>MM: Understood.</p>
+<p>Discussion of decoupling Object.observe and Array.observe</p>
+<p>MM: You wouldn't want to ship Object.observe without Array.observe, though having two waves of specs is a separate issue</p>
+<a href="#conclusions-objectobserve"><h4 id="conclusions-objectobserve">Conclusions</h4></a><ul>
+<li>null is preferred over undefined, more explicitly representing an absence of records</li>
+<li>No stage 3</li>
+</ul>
+<p>BT: I have no idea what is going on, for the record.</p>
+<a href="#ecmarkup"><h2 id="ecmarkup">ecmarkup</h2></a><p>(Brian Terlson)</p>
+<p>BT: <a href="https://github.com/bterlson/ecmarkup">https://github.com/bterlson/ecmarkup</a></p>
+<p>AWB: what is the difference between ecmarkup and ecmarkdown?</p>
+<p>BT: Ecmarkup is HTML markup, such as <code>&lt;emu-clause&gt;</code>, <code>&lt;emu-alg&gt;</code> etc</p>
+<p>BT: Ecmarkdown is a markdown syntax for specifying algorithms steps. Ecmarkup uses ecmarkdown inside <code>&lt;emu-alg&gt;</code> and a few other elements.</p>
+<p>BT: <a href="http://bterlson.github.io/ecmarkup/">http://bterlson.github.io/ecmarkup/</a></p>
+<p>BT: abstract operations from external specifications may be referenced</p>
+<p>EA: There currently is no way to write BNF. We should add that.</p>
+<p>WH: I have built tools for validating grammars</p>
+<p>BT: I believe Allen would like to continue using Word</p>
+<p>DH: No, we want to get away from that</p>
+<p>AWB: ISO requires the document to be submitted in Word</p>
+<p>DH: Jason has a tool for converting some spec sources to Word</p>
+<p>DH: it is important to me that we work in markdown on github for the next version of the spec</p>
+<p>DH: we may be able to leverage academics that want to represent semantics of JS in a similar way to the spec</p>
+<p>BT: html imports are used, so a document may be split up into pieces</p>
+<a href="#interfacing-with-the-loader-spec"><h2 id="interfacing-with-the-loader-spec">Interfacing with the Loader Spec</h2></a><p>(David Herman)</p>
+<p>[Link to slides]</p>
+<p>AWB: How do you get a module record from a different realm unless you are using imperative APIs?</p>
+<p>DH: I expect this to be pretty nitty gritty code. It is not going to be common to get cross realm modules.</p>
+<p>DH: The basic idea is that every loader belongs to a realm and that when it process modules it uses that realms policies.</p>
+<p>AWB: Why can't the records have all the fields but the fields are not filled in yet?</p>
+<p>DH: Some of these fields make no sense for reflective modules.</p>
+<p>DH: Reflective/dynamic modules are always leaves. Makes things a</p>
+
+</body>

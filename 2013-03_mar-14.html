@@ -1,0 +1,606 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 14, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-14-2013-meeting-notes"><h1 id="march-14-2013-meeting-notes">March 14, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Norbert Lindenberg (NL), Allen Wirfs-Brock (AWB), Rick Waldron (RW), Waldemar Horwat (WH), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Luke Hoban (LH), Matt Sweeney (MS), Doug Crockford (DC), Yehuda Katz (YK), Brendan Eich (BE), Sam Tobin-Hochstadt (STH), Alex Russell (AR), Dave Herman (DH), Adam Klein (AK), Bernd Mathiske (BM), John Pampuch (JP), Avik Chaudhuri (AC), Theresa O'Connor (TOC), Rick Hudson (RH), Andreas Rossberg (ARB), Rafeal Weinstein (RWN), Mark S. Miller (MM), Reid Burke (RB),</p>
+<hr>
+<a href="#48-objectobserve-implementation-report"><h2 id="48-objectobserve-implementation-report">4.8 Object.observe Implementation Report</h2></a><p>(Adam Klein, on behalf of Rafael Weinstein)</p>
+<p>See: <a href="http://wiki.ecmascript.org/doku.php?id=harmony:observe">http://wiki.ecmascript.org/doku.php?id=harmony:observe</a></p>
+<p>Slides (PDF, will prompt download): <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:object.observe_implementation_report.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:object.observe_implementation_report.pdf</a></p>
+<p>(Slide 1)</p>
+<hr>
+<ul>
+<li>Results are encouraging</li>
+<li>Two Google projects are pleanning to deploy run-time support</li>
+<li>Use cases
+?</li>
+</ul>
+<hr>
+<p>(Slide 2)</p>
+<hr>
+<ul>
+<li>Spec fully implemented (behind flag)</li>
+<li>Mostly self hosted: changRecord allocation, enqueing and delivery is in JS</li>
+<li>Mutation sites of observed objects deoptimize. Observed arrays are alwas slow mode</li>
+<li>Biggest perf bottleneck is feting changeRecords; plan to speed up Object.freeze()</li>
+</ul>
+<hr>
+<p>YK: Concern about changeRecord spam (build up of changes
+delivered at the end of the turn)</p>
+<p>AK: There are places were large numbers of changeRecords are a concern</p>
+<p>AWB: (missed question)</p>
+<p>AK: We could define the properties as non-configurable, this is orthogonal to the isFrozen check.</p>
+<p>AWB: Even if there isn't a specified state for a frozen object</p>
+<p>EA: With proxies, that becomes observable</p>
+<p>AK: There are changes to the spec since last brought to the committee...</p>
+<p>(Slide 3)</p>
+<hr>
+<ul>
+<li><code>Object.deliverChangeRecords()</code> continues delivery until pending</li>
+<li>Added <code>{ type: &quot;prototype&quot; }</code> changeRecord which reports changes to <code>__proto__</code></li>
+<li>Minor changes to changeRecord generation to enforce consistency invariants</li>
+</ul>
+<hr>
+<p>DC: Does that cause the turn to never end?</p>
+<p>AK: Yes, same as recursive calls</p>
+<p>ARB: Just another footgun in that respect</p>
+<p>(Slide 4)</p>
+<hr>
+<p><strong>ChangeSummary JS Library</strong></p>
+<ul>
+<li><p>Supports dirty-checking and Object.observe (polyfill to fast/safe object observation)</p></li>
+<li><p>Exposes semantics for a &quot;diffing summary (Tn -&gt; Tn+1 changes)</p></li>
+<li><p>Observe</p>
+<ul>
+<li>&quot;Values at a path&quot; eg. <code>var foo = { bar: { baz: &quot;...&quot; } }; observe.observePath(foo, &quot;bar.baz&quot;);</code></li>
+<li>Entire Objects</li>
+<li>Array splice</li>
+</ul></li>
+<li><p>??</p></li>
+</ul>
+<hr>
+<p>WH: What is &quot;values at a path&quot;</p>
+<p>AK: If you have:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> foo = { <span class="hljs-attr">bar</span>: { <span class="hljs-attr">baz</span>: <span class="hljs-string">"..."</span> } };
+
+observe.observePath(foo, <span class="hljs-string">"bar.baz"</span>);
+</code></pre>
+<p>?: Observing paths leaks objects if we only have weak maps, not weak references</p>
+<p>WH: Please explain</p>
+<p>?: Path observers observe mutations anywhere on an object path a.b.c.d.  Without weak refs these will leak a if d is still alive but a wouldn't otherwise be.</p>
+<p>(Slide 5)</p>
+<hr>
+<p><strong>Per Analysis (dirty checking vs Object.observe)</strong></p>
+<ul>
+<li>Results not surprising (this is good!)</li>
+<li><em>nothing-changed</em> case is overwhelming win
+<ul>
+<li>Discovering that nothing changed only incurs the cost of de-optimizing observed objects</li>
+</ul></li>
+<li>Object.oberse case never needs to keep a copy of observed data</li>
+<li>Object.observe appears to observed properties have changed (depending on observation &quot;type&quot;)</li>
+<li>Arrays encourage &quot;hidden&quot; everything-changed cases eg. <code>unshift();</code></li>
+</ul>
+<hr>
+<p>AK: One of the worst cases is observing Arrays</p>
+<p>WH: If you do that, do you get one record for the array, or one for all properties?</p>
+<p>AK: One for every index and length</p>
+<p>?: Which then can get (inefficiently) summarized back to one change record for the array if you use a summarizing adaptor.</p>
+<p>EA: We knew about this from the very beginning, but decided to address it after we had implementation experience.</p>
+<p>(Slide 6)</p>
+<hr>
+<p>Adding Support for Array &quot;splice mutations&quot;</p>
+<ul>
+<li>Report on changes to Array elements (isUInt32(propertyName)) as &quot;splice mutations&quot;</li>
+<li>Degrade to &quot;normal&quot; property mutations if...
+<ul>
+<li>!Array.isArray(array)</li>
+<li>array has non-data index properties</li>
+<li>array has non-writable or non-configurable index properties</li>
+<li>operation will affect indices &gt; UInt32</li>
+</ul></li>
+</ul>
+<hr>
+<p>WH: What happens when you observe a WeakMap?</p>
+<p>AK: It's an object, but nothing interesting happens, because there are no exposed properties that will be changed. We could have synthetic events for Map, Set etc.</p>
+<p>LH: We would have to specify these synthetic events ahead of time</p>
+<p>AK: The requirement for Map and Set would be to come up with new types.</p>
+<p>WH: Observers make changes between properties and getters/setters (such as what we're doing to regexp flags to support the compile method) uncomfortably likely to break user code that observes such objects.</p>
+<p>LH: But these can already use synthetic events</p>
+<p>WH: What are synthetic events?</p>
+<p>LH: (explains the synthetic events api)</p>
+<p>AR: We may want a declarative way to &quot;squelch&quot; certain event types.</p>
+<p>AK: ...discussion of the cost of notifying for all changes</p>
+<p>YK: As we add more &quot;types&quot; there will absolutely need to be a way filter the types you care about.</p>
+<p>RW: It would be nice to specify the &quot;type&quot;, similar to registering handlers for specific event types. eg. <code>Object.observe(o, &quot;type:prototype&quot;, ...)</code> gives me only changes to the prototype. etc.</p>
+<p>YK/AK: ...more discussion about complexity of adding the feature now or later.</p>
+<p>AR: If you have filtering, users can choose the level of changes they are shown, without taking away any of the low level type notifications.</p>
+<p>STH: What is the consequence of changing the system now? Can't we just do the right thing here for arrays?</p>
+<p>LH: It introduces new complexity</p>
+<p>AK: ...discussion of failure cases</p>
+<p>AR: Fixing the Array thing for ES7 is a reasonable thing. But this is an example of something we will want to do in the future. This is also a chance to get the filtering feature and maintain upward compatibility.</p>
+<p>YK: An array as an identity map</p>
+<p>LH: An array as a tuple, its an object data type.</p>
+<p>YK: Arrays used in Ember, specifically for numeric indices</p>
+<p>...</p>
+<p>YK: Do exceptions bubble up?</p>
+<p>AK: There are many issues.</p>
+<p>...May be better to special case splices</p>
+<p>YK: ...discussion about spamming of changeRecords at the end of the turn and the sync behavior.</p>
+<p>STH: If you're counting typing speed, you want all of the changeRecords</p>
+<p>ARB: What happens when there are new observers or removed observers during a changeRecord delivery.</p>
+<p>YK: I'm happy with the current implementation, but it would be nice to be able to squelch certain types of changeRecords</p>
+<p>AK: Let's take this offline and look into ways of making this possible.</p>
+<p>BE: (to ARB) are you ok with staying off the fast path?</p>
+<p>ARB/YK/AK: ...Discussion about the possibility of a fast path for properly implemented Arrays</p>
+<p>AWB: What happens if the object is implemented via Proxy, and doesn't have the normal representation of properties.</p>
+<p>ARB: Treated the same as accessors</p>
+<p>AR: To clarify, we call this the &quot;slow path&quot;, but for apps that are going to use this, it's demonstrably preferable to existing art.</p>
+<a href="#46-symbols"><h2 id="46-symbols">4.6 Symbols</h2></a><p>(Andreas Rossberg)</p>
+<p>ARB: Update on implementation of (unique) symbols in V8: mostly finished, and as efficient as strings as property names.
+But symbols don't fully behave like objects yet, as would be required by current spec.</p>
+<p>ARB: Propose two changes to the proposal:</p>
+<ol>
+<li>Make symbol a primitive type</li>
+<li>Change toString behavior to avoid hazard</li>
+</ol>
+<p>Problem with 1: extending typeof</p>
+<p>AWB: Symbols as objects allows for useful operations like toString</p>
+<p>ARB: Can be solved the same way as for other primitive types: wrapper object</p>
+<p>AWB: From a spec perspective, making them not an object is more pervasive</p>
+<p>ARB: Very different for implementations. You can use them in context of string or object, but you can pick only one representation. Chose string-like context because that's more important to optimize. But makes special-casing all object contexts costly</p>
+<p>DH: Would have to do this if we made this a primitive type as well.</p>
+<p>ARB: it would just fall into similar cases as other primitive types (in v8 at least)</p>
+<p>AWB: ...compares to primitive and object wrapper classes</p>
+<p>DH: And we would have to provide wrapper class</p>
+<p>AWB/DH: We should have a new typeof type</p>
+<p>DH: Real implementations have other typeof types, eg. IE</p>
+<p>STH/BE: ...recalling prior discussion that had no definitive conclusion re: new typeof types.</p>
+<p>ARB: Can we really afford precluding new typeof results for all eternity?</p>
+<p>DH: If we can get away with this, then it supports adding new types for future additions, eg. int 64</p>
+<p>BE: This is important:</p>
+<pre><code class="language-js"><span class="hljs-keyword">typeof</span> x == <span class="hljs-keyword">typeof</span> y &amp;&amp; x == y
+            &lt;=&gt;
+          x === y
+</code></pre>
+<p>...: The proposal from AR preserves this.</p>
+<p>STH/DH: Giving the switch(typeof...) example</p>
+<p>YK/RW: When would symbols be passed to this code anyway?</p>
+<p>YK: It's a fuzzy case that is already broken, because <code>null</code> can't be checked</p>
+<p>BE: We should just do it and that'll learn 'em. ;)</p>
+<p>DH: A new type in typeof is good and we should just do it.</p>
+<p>General agreement.</p>
+<p>DH: Now that these are essentially primitives, we need ways to discern private and unique</p>
+<p>STH/YK: Committed to a new global because we use <code>Symbol</code> to construct them.</p>
+<p>AWB: <code>Symbol</code> is a factory that creates symbols, <code>new Symbol</code> creates instance of the wrapper class. (same as Number)</p>
+<p>BE: Value objects allow &quot;new&quot;</p>
+<p>AWB: I can define the <code>Symbol[@@create]</code> to throw</p>
+<p>ARB: The current spec has a toString for implicit conversion, which makes it too easy to convert the symbol to a string accidentally without realizing.</p>
+<p>STH: Have a name property, and a toString that throws</p>
+<p>ARB: Or simply no toString. But <code>{}.toString.call</code> still works.</p>
+<p>EA: String conversion already throws for null-prototype objects</p>
+<p>DH: That's fair, it makes senses to have some sort of infallible   stringify.</p>
+<p>DH: Proto-less dictionaries will become more widely used</p>
+<p>AWB: ...recalling existing specification of ToString conversion</p>
+<p>...Mixed discussion about ToString</p>
+<a href="#conclusionresolution-46-symbols"><h4 id="conclusionresolution-46-symbols">Conclusion/Resolution</h4></a><ul>
+<li>New addition to typeof table
+<ul>
+<li><code>typeof symbol === &quot;symbol&quot;</code></li>
+</ul></li>
+<li><a href="symbol">[ToString]</a> =&gt; throws
+<ul>
+<li>therefore <code>symbol + &quot;&quot;</code> =&gt; fails w/ error</li>
+</ul></li>
+<li><code>Object.prototype.toString.call(symbol)</code> =&gt; &quot;[object Symbol]&quot;
+(ARB: or rather something else, given that we just decided symbols shouldn't be objects)</li>
+</ul>
+<a href="#417-legacy-compatibility-for-block-level-function-declarations"><h2 id="417-legacy-compatibility-for-block-level-function-declarations">4.17 Legacy Compatibility for Block Level Function Declarations</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>See: <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:legacyblockfunctiondcl2.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:legacyblockfunctiondcl2.pdf</a> (This is a PDF that will initiate a download!)</p>
+<p>(Copied from PDF)</p>
+<p>Prior to the Sixth Edition, the ECMAScript specification did not define the occurrence of a <em>FunctionDeclaration</em> as an element of a Block statement’s <em>StatementList</em>. However, support for that form of <em>FunctionDeclaration</em> was an allowable extension and most browser-hosted ECMAScript implementations permitted them. Unfortunately, the semantics of such declarations differ among those implementations. Because of these semantic differences, existing web ECMAScript code that uses Block level function declarations is only portable among browser implementation if the usage only depends upon the semantic intersection of all of the browser implementations for such declarations. The following are the use cases that fall within that intersection semantics:</p>
+<ol>
+<li>A function is declared and only reference within a single block:</li>
+</ol>
+<ul>
+<li>A function declaration with the name f is declared exactly once within the function code of an enclosing function g and that declaration is nested within a Block.</li>
+<li>No other declaration of f that is not a var declaration occurs within the function code of g</li>
+<li>All references to f occur within the <em>StatementList</em> of the Block containing the declaration of f.</li>
+</ul>
+<ol start="2">
+<li>A function is declared and possibly used within a single block but also referenced within subsequent blocks.</li>
+</ol>
+<ul>
+<li>A function declaration with the name f is declared exactly once within the function code of an enclosing function g and that declaration is nested within a Block.</li>
+<li>No other declaration of f that is not a var declaration occurs within the function code of g</li>
+<li>References to f may occur within the <em>StatementList</em> of the Block containing the declaration of f.</li>
+<li>References to f occur within the function code of g that lexically follows the Block containing the declaration of f.</li>
+</ul>
+<ol start="3">
+<li>A function is declared and possibly used within a single Block but also referenced by an inner function definition that is not contained within that same Block.</li>
+</ol>
+<ul>
+<li>A function declaration with the name f is declared exactly once within the function code of an enclosing function g and that declaration is nested within a Block.</li>
+<li>No other declaration of f that is not a var declaration occurs within the function code of g</li>
+<li>References to f occur within another function h that is nested within g and no other declaration of f shadows the references to f from within h.</li>
+<li>All invocations of h occur after the declaration of f has been evaluated.</li>
+</ul>
+<p>Use cases 2 and 3 for a given function declaration f might occur within the same function.</p>
+<p>The first use case is interoperable with the inclusion of Block level function declarations in the sixth edition. Any pre-existing ECMAScript code that employees that use case will operate using the Block level function declarations semantics defined by clauses 10 and 13 of this specification.</p>
+<p>LH: Has to be a statically verifiable approach</p>
+<p>DH: We can statically declare a conservation class of blocks</p>
+<p>AWB: Most blocks are conditional in some form.</p>
+<p>WH: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span>) {
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>)</span>{}
+  } <span class="hljs-keyword">else</span> {
+    g();
+  }
+  g();
+}
+</code></pre>
+<p>WH: This example illustrates that #2 is not interoperable. It's not even clear to me what #2 means.</p>
+<ul>
+<li>Does the first call to g (in the else close) lexically follow the inner definition of g?</li>
+<li>Regardless of the answer, the second call to g is not in the intersection semantics (the inner g is never defined due to the if false) yet is treated by #2 as though it were.</li>
+</ul>
+<p>AWB: A fix for this case: Add an additional clause that says the subsequent</p>
+<p>AWB: The semantics we want, for non-legacy cases, in non-strict mode are the ES6 semantics.</p>
+<p>DH: Not compatibility with reality.</p>
+<p>...</p>
+<p>Sixth edition interoperability for the second and third use cases requires the following extensions to the clauses 10 and 13 semantics. These extensions are applied to a non-strict mode functions g if the above pre-conditions of use cases 2 and/or 3 exist at the time of static semantic analysis of g. However, the last pre-condition of use case 3 is not included in this determination and the determination is only applied to function declarations that are nested within syntactic constructs that are specified in the Fifth edition of this specification.</p>
+<ol>
+<li>Let B be environment record for the construct within g that introduces a new environment contour and which most closely encloses the declaration of f, all function code references to f, and the definitions of all nested functions that contain syntactically unshadowed references to f. This syntactic construct may be the definition of g itself, in which case B is the function environment record for g.</li>
+</ol>
+<ol start="2">
+<li><p>As part of the instantiation of        B, its CreateMutableBinding concrete method is called with arguments &quot;f&quot; (the string name of the function) and false. This creates an unitialised binding for the name f. Any reference that resolves to that binding prior to step 3 below will throw a ReferenceError exception.</p></li>
+<li><p>When the InitializeBinding concrete method is used to initialise the binding for the function declaration f also invoke InitializeBind on B using the same arguments.</p></li>
+</ol>
+<p>If an ECMAScript implementation has a mechanism that produces diagnostic warning messages, a warning should be produced for each function g for which the above steps are performed.</p>
+<p>WH: #1 is a circular definition. Some references to g will go to the outer g in the example. It is up to us to define which definition points to which.</p>
+<p>AC: It would be beneficial to look at examples and then apply the fix rules and allow that inform the direction.</p>
+<p>AWB: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-comment">// A dynamic ReferenceError.</span>
+<span class="hljs-comment">// There is no binding to g()</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+ {
+    <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span>) {
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+    }
+    g();
+  }
+}
+</code></pre>
+<p>AWB: The interoperable fix:</p>
+<ul>
+<li>As if there was a <code>let g;</code> at the top of the inner
+block...</li>
+<li>the g() reference points to the g() declaration in the same scope</li>
+</ul>
+<p>WH: ok, put back the outer g()</p>
+<p>AWB: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+ {
+    <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span>) {
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+    }
+    g();
+  }
+}
+</code></pre>
+<p>...Didn't take into account this case, will need time to consider.</p>
+<p>AWB: Could be two inner blocks, with declaration of g()...</p>
+<p>WH: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  {
+    g();
+    <span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+    }
+  }
+}
+</code></pre>
+<p>WH: What happens when the first g() is called?</p>
+<p>AWB: the first g() is bound to the outer g(), then a new g() is defined.</p>
+<p>WH: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  {
+    g();
+    <span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{}
+    }
+    g();
+  }
+}
+</code></pre>
+<p>WH: Now what happens?</p>
+<p>AWB: Per the proposed rules, both calls to g() are bound to the inner definition via the phantom let binding [presumably with the first one encountering a dead zone?].</p>
+<p>[MM walks into the room and expresses speechless incredulity when he learns that adding the second call to g in this example changes which g the first call to g is referring to.]</p>
+<p>AC: There is merit to avoid being clever. Benefit to preserving any existing semantics.</p>
+<p>BM: There should be a vision for a desired semantics goal</p>
+<p>STH/LH: Two goals, which are competing:</p>
+<ol>
+<li>We must remain compatibility with the web</li>
+<li>Introduce block scope bindings</li>
+</ol>
+<p>BM: Bad that an outer binding can change</p>
+<p>AC: ...correlates to AS</p>
+<p>STH: We have sensible semantics for ES6/strict mode</p>
+<p>AWB: We have sensible semantics for both modes</p>
+<p>AC: Confident that we might be able cover all existing use cases. But what happens when someone discovers a case that was covered?</p>
+<p>STH: Easy to come up with sensible rules from other languages</p>
+<p>AC: All practical purposes</p>
+<p>[? trying to start a meta-discussion about getting sidetracked on theoretical rather than practical problems]</p>
+<p>WH: We are discussing because we know this is a real, practical problem based on research demonstrated at the previous meeting.</p>
+<p>STH: The only guiding principle is to avoid breaking the web.</p>
+<p>AWB: Where we're at, is the hypothesis that we can identify and fix the cases that break the 1% of sites that have code that violates. Introduce a declaration that spans the point of declaration and the point of reference</p>
+<p>STH: ...clarifies the subset semantics definition</p>
+<p>AC: Two cases:</p>
+<ol>
+<li>What to do?</li>
+<li>Identify that subset.</li>
+</ol>
+<p>STH: Yes</p>
+<p>AWB: This conversation only applies to the 1% of code that exists that must be dealt with in a way that matches the 99% semantics</p>
+<p>LH: ...recapping</p>
+<p>AWB: JavaScript programmers will have two learn that non-strict mode always uses odd-ball semantics in addition to the strict mode semantics. If we make this work, there is one semantics to learn.</p>
+<p>DH: Inclined to agree with Allen. A worse semantics, easy to explain vs. a better semantics that serves the 99% but loses the 1%... and we'll lose the 1% in a deep dark hole.
+...Arguing for:</p>
+<ol>
+<li>One set of rules, that is weird and less pleasant</li>
+<li>Carve out heuristics for identifying ... giving the good semantics to 99%</li>
+</ol>
+<p>BM: Missing analysis?</p>
+<p>STH: Presented at last meeting</p>
+<p>DH: Arguing for #2 (99%)</p>
+<p>WH: Want to see the semantics of strict mode in non-strict mode as often as possible. Don't want to legitimize new quirks, even if that means that the transition rules are more complex. Hope that in a few years the strange semantics can be eliminated in favor of what strict mode is doing.</p>
+<p>LH: This is exactly Allen's point. If Allen's point achievable? If it is, then I support it, but I don't think it's achievable.</p>
+<p>AWB: This is a first draft.</p>
+<p>YK: Function in block is oddball already. If we have a semantics for non-strict FIB and different from strict mode, it will make it hard to upgrade to strict mode.</p>
+<p>Note: AC/BM please send Allen any materials that might be useful for specifying the semantics for FIB.</p>
+<a href="#conclusionresolution-417-legacy-compatibility-for-block-level-function-declarations"><h4 id="conclusionresolution-417-legacy-compatibility-for-block-level-function-declarations">Conclusion/Resolution</h4></a><ul>
+<li>All (esp. AWB) to continue working through known issues in the 1% cases</li>
+</ul>
+<a href="#81-comments-from-istvan-stated-by-john-neumann"><h2 id="81-comments-from-istvan-stated-by-john-neumann">8.1 Comments from István, stated by John Neumann</h2></a><ul>
+<li><p>The ECMAscript trademark is rather through. We have it in the most important countries, incl. US and EU.</p></li>
+<li><p>The EU formal recognition for ECMA-402 and TR/104 is progressing. We are now in the evaluation phase by a small group. They asked me to make a first draft for evalutation, which I did. Informally I have one &quot;yes&quot; so far, and no &quot;no&quot; yet. If the small group gives an ok, then the member countries have to vote. The process will take a few months more (but I do not know how long, because this is the first experience with the new EU policy).</p></li>
+<li><p>Regarding the IPR Adhoc. We are progressing. I think I can distribute an updated package to TC39 at the end of March. GA vote is planned for June 2013. Comments back to the IPR Adhoc, GA, or GA members. Just as last time.</p></li>
+</ul>
+<p>WH: ECMA's TC39 email reflector is incompatible with gmail. If a gmail user sends an email to the reflector, non-gmail users will receive it but no other gmail user will receive it in his inbox. It will always arrive in the spam folder due to some SPF issue.</p>
+<p>[Various people checking their spam folders now and discovering TC39 emails in there.]</p>
+<a href="#410-array-extras"><h2 id="410-array-extras">4.10 Array Extras</h2></a><p>(Rick Waldron)
+(notes from EA)</p>
+<p>RW: Wrote spec (using spec prose) Array.prototype.find and Array.prototype.findIndex. Found in most PL and JS libraries</p>
+<pre><code class="language-js"><span class="hljs-built_in">Array</span>.prototype.find( predicate [ , thisArg ] )
+</code></pre>
+<p><a href="https://gist.github.com/rwaldron/5079436">https://gist.github.com/rwaldron/5079436</a></p>
+<pre><code class="language-js"><span class="hljs-built_in">Array</span>.prototype.findIndex( predicate [ , thisArg ] )
+</code></pre>
+<p><a href="https://gist.github.com/rwaldron/5079427">https://gist.github.com/rwaldron/5079427</a></p>
+<p>MM: What about start indedx? Does it go before the thisArg or not?</p>
+<p>RW: None of the existing languages supports passing a start index.</p>
+<p>RW: Not sure if this is for ES6 or Harmony</p>
+<p>AWB: Feature creep</p>
+<p>DH: Common, makes sense.</p>
+<a href="#conclusionresolution-410-array-extras"><h4 id="conclusionresolution-410-array-extras">Conclusion/Resolution</h4></a><ul>
+<li>Exception being made. Approved for ES6.</li>
+</ul>
+<a href="#415-template-strings"><h2 id="415-template-strings">4.15 Template Strings</h2></a><p>(Adam Barth [present], Mike Samuel [phone] guests from Google)</p>
+<p>BE: What can we do to template strings to make them secure by default and not an XSS hazard.</p>
+<ul>
+<li>tagless?</li>
+<li>a default tag?</li>
+</ul>
+<p>AWB: They're useful for making strings.</p>
+<p>BE: (reiterating) The obvious problem: using backticks with no prefix/tag, you  create potential for xss.</p>
+<p>DH: Ok, so we've outlined the security argument, but important to note that tagless are useful and the security fix is still not enough to &quot;fix&quot; the bug picture security problems.</p>
+<p>DC: No placeholders in tagless?</p>
+<p>BE: Possible</p>
+<p>YK: ...recalling discussion with Mark where the rabbit hole became extremely deep when trying to avoid accidentally coercing to a string.</p>
+<p>MM: String.prototype.trim apply to delayed template string, which turns it into a string.
+...Delayed template string inherits from template string</p>
+<p>YK: Implicit coercions.</p>
+<p>MM: This is one option</p>
+<p>BE: Make the default case somehow not present, or neutered</p>
+<p>AWB: Remember for &quot;+&quot; and explicit coercion cases, we're falling into the DefaultValue mechanism, which has a unique Symbol hook (in ES6), which means that what is sent to the object initially does not have a toString. The DefaultValue for the delayed template string is...
+...DefaultValue applied in concatenation could throw,</p>
+<p>MM: ...specifically the deferred template string. Specifically for the tagless template string case.</p>
+<p>(RW: some terminology issues addressed)</p>
+<p>WH: Understand the utility of tagged template strings, with possibly a default tag that does string concatenation, but what's the rationale for deferred template strings?</p>
+<p>[some discussion, with no answer to WH's question]</p>
+<p>MM: If the behavior is for the DefaultValue to throw, reject the implicit coercion. However, if you're writing a REPL and want to  stringify, you can explicitly call toString</p>
+<p>STH: This is insane</p>
+<p>DH: This is destroying the usefulness of tagless template strings.</p>
+<p>YK: It's not clear how taking a nice feature and making it harder to use will fix a security issue, the problem will still exist with string concatenation.</p>
+<p>DH/RW: Agree</p>
+<p>Mixed discussion re: security issues in the DOM.</p>
+<p>AR: Security issues revolve around reasoning about data and behavior which you'd like to think is benign, but combining them create abilities that they shouldn't have.</p>
+<p>DH: By calling out template strings, we're effectively blaming &quot;strings&quot; for these security issues.</p>
+<p>AR: innerHTML</p>
+<p>STH: That's the problem</p>
+<p>AR: This isn't about hard-and-fast, right-and-wrong. Security is about doing the right thing more often. Security bugs are just a subclass of bugs that bite very hard. The biggest thing any system can do to improve the security situation is to set the economics of doing the right vs. wrong thing in such a way that it's &quot;cheaper&quot; to do the right thing. So we can't pretend that this is about some perfect answer; it's about the economics of designing a solution that leads to doing the right thing more often, and that's a question about probabilities and psychology. We want to build a honeypot for doing it the right way.</p>
+<p>MM: Key, either get rid of tagless template string or make them unpleasant; have we created a situation where developers would or would not have used the feature...</p>
+<p>AR: What is the reality that adding a no-op tag? What does it actually provide? Stopping developers from using tagless by giving them a tag that does interpolation.</p>
+<p>DH: Strings are the most used data structure in all programming. Yes, they are used heavily in secure code construction.
+...Then there is the pitchforks and torches cost of making this harder.</p>
+<p>MM: Also, the cost of companies that will be screaming about being bit by a security issue</p>
+<p>RW: But these are no different then the existing security issues today.</p>
+<p>AR: That's not a fair argument to discussion.</p>
+<p>MM: The screaming over vulnerabilities is probably more costly then developer hardship.
+...If you use a tagless template string in particular context, you can have a an autoescaped context.</p>
+<p>BE: So, you could change innerHTML setter to check if the RHS was a tagless template string</p>
+<p>MS: (phone) If you don't try applying the string concatenation operators to the tagless template string, you get secure auto escaping.
+innerHTML</p>
+<p>MM: Let's call that &quot;Mike's Original Proposal&quot;</p>
+<p>STH: (listing)</p>
+<ol>
+<li>Current status with default handler that interpolates</li>
+<li>No tagless template strings</li>
+<li>tagless template strings with no interpolation</li>
+<li>tagless template strings produce delayed template string objects, with toString</li>
+<li>tagless template strings produce delayed template string w/ special handling that coerces</li>
+<li>tagless template strings produce delayed template string w/ special handling that throws</li>
+<li>Allow overloading of the default handler for the tagless template strings</li>
+</ol>
+<p>MM: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DelayedQ</span> </span>{
+  <span class="hljs-keyword">constructor</span>(callSiteId, ...args) {
+    <span class="hljs-keyword">this</span>.force = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">handler</span>) </span>{
+      <span class="hljs-keyword">return</span> handler(callSiteId, ...args);
+    };
+    <span class="hljs-keyword">this</span>.toString = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">return</span> stringer(callSiteId, ...args);
+    }
+  }
+}
+</code></pre>
+<pre><code class="language-js">html<span class="hljs-string">`&lt;script&gt;
+  "<span class="hljs-subst">${...}</span>"
+&lt;/script&gt;`</span>
+
+</code></pre>
+<p>WH:</p>
+<pre><code class="language-js">html<span class="hljs-string">`&lt;script&gt;
+  "<span class="hljs-subst">${foo()}</span>"
+&lt;/script&gt;`</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`...`</span>;
+}
+</code></pre>
+<p>WH: Using a tagless template string to construct an english sentence and I stick it into html, what do I get out of that?</p>
+<p>AWB: You'll probably get garbage, because the innerHTML parser rules will be applied.</p>
+<p>WH: How does foo in the example know how its deferred template will be interpreted? It becomes a really sneaky part of the API, where foo can return different things depending on the context it's called in -- can be string concatenation, various kinds of escaping, etc. This is too brittle and dangerous.</p>
+<p>LH: innerHTML should've been forced to apply cleansing on all strings.</p>
+<p>BM: How about immediately constructing and scrubbing?</p>
+<p>STH: Same issue with E4H</p>
+<p>DC: Don't forget about the off-browser cases.</p>
+<p>YK: So the socket API should check strings that are created in Node?</p>
+<p>AB: Yes</p>
+<p>YK: Ok, I said this to be ludicrous.</p>
+<p>AB: If you eagerly coerce to a string, you lose the structure of the object: which part of was a template and which part was data.</p>
+<p>WH: We have no way to tell which part is which. [In the example above, if foo returns a deferred quasi, it's like it returns a bag of stuff that it wants joined together but it doesn't say what the stuff is (individual characters? names? rows in a table? entities? script statements? HTML elements?) or how it should be joined. It's not clear to anyone reading foo's code how what the semantics of the bag of stuff is. This is too brittle.]</p>
+<p>STH: The point Yehuda is making, is that people make code and ship it out over the wire.</p>
+<p>AB: ...describes the way Ruby server programs create outbound blobs that from templates and data that are flatten just before sending.</p>
+<p>YK: I wrote that.</p>
+<p>...Discussion about JavaScript developers, use of strings vs. DOM authors creating APIs that can handle template strings</p>
+<p>AR: This is a new string of a different type</p>
+<p>YK: We'll need to blacklist all strings if this is the case.</p>
+<p>MM: ...introduces Mike Samuel's work</p>
+<p>BM: Summarizing...</p>
+<ol>
+<li>Adam: We control all user code</li>
+<li>Yehuda: We control no user code</li>
+</ol>
+<p>AK: Specifically, Yehuda refers to all existing code that follows a form where:
+<code>&quot;string...&quot; + &quot; is concatenated&quot;;</code>
+and used to assign to innerHTML (or similar)</p>
+<p>MS: Able to successfully migrate a codebase from ad hoc work-arounds. This used closure templates. Statically compiled version of templates.</p>
+<p>STH: Is the argument leaning towards tagless or tagged, or is that not relevant?</p>
+<p>MS: The system worked with nested script, css and html. In cases where developers needed, they circumvented the system.</p>
+<p>YK: ...recalling hardships of Rails upgrading for a similar auto-escape system.</p>
+<p>...</p>
+<p>YK: Happy with current system + html default handler provided by the browser(*)</p>
+<p>DH: Template strings are useful for other reasons: multiline strings, etc.</p>
+<p>MM: Yehuda's suggestion (*) is good</p>
+<p>STH: Established that we wanted a delay handler, which produced a delayed template string per Mark's suggestion</p>
+<p>MM:</p>
+<ol>
+<li>Immediate String interpolation</li>
+<li>Delayed Template String</li>
+</ol>
+<p>(Summarized from 1 &amp; 4 from the list above)</p>
+<p>LH: This delayed template string concept is now a second string type in the language and I'd be afraid to use them because they I can't rely on them.</p>
+<p>MM: Is anyone opposed to #1? (Adam)</p>
+<p>RW: Will any of the implementors here remove the template string  feature or tagless template string handler.</p>
+<p>No?</p>
+<p>LH: I was not comfortable with &quot;quasis&quot; when they required a tag, and even less if they produce a delayed thing.
+...This forks the string &quot;type&quot;
+WH: That's exactly what I was trying to say earlier. Deferred quasis are too brittle.</p>
+<p>MM: Can process based on context</p>
+<p>WH: This is just another bug. Makes the problem far worse if you have a function that returns a template string.</p>
+<p>DC: The reason we went with template string over String.prototype.format was because this was safer.</p>
+<p>MM: (to Mike) Do you find #1 &amp; #4 acceptable?</p>
+<p>MS: Yes.</p>
+<p>AB: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> firstName = ...
+var lastName = ...
+elem.innerHTML = <span class="hljs-string">`&lt;h1&gt;Hi <span class="hljs-subst">${firstName}</span> <span class="hljs-subst">${lastName}</span>&lt;/h1&gt;`</span>;
+elem.innerHTML = <span class="hljs-string">"&lt;h1&gt;Hi "</span> + firstName + <span class="hljs-string">" "</span> + lastName + <span class="hljs-string">"&lt;/h1&gt;"</span>;
+</code></pre>
+<p>LH &amp; AB: ...discussing the value of #1 &amp; #4</p>
+<p>STH: Reviving #2 &amp; #3</p>
+<ol>
+<li>Drop template strings</li>
+<li>Current status with default handler that interpolates</li>
+<li>No tagless template strings</li>
+<li>tagless template strings with no interpolation</li>
+<li>tagless template strings produce delayed template string objects, with toString</li>
+</ol>
+<p>AR: Leaning on #2 or #3</p>
+<p>YK: Nobody wants #2 or #3</p>
+<p>WH: I want #2</p>
+<p>DH: If we go with #2 or #3, we should just take it out of ES6</p>
+<p>Discussion about a provided tag, called &quot;s&quot;</p>
+<p>RW: Which means we now have a binding &quot;s&quot; and minifiers and existing code conflicts.</p>
+<p>MM: Argument for #3...</p>
+<p>DH: This is a tremendous failure of our duty.</p>
+<p>MM: My preferred option is that we agree on something
+...#2 does not subtract value</p>
+<p>BE: Opportunity cost</p>
+<p>MS: (Arguments for the current system.)</p>
+<p>WH: Some browsers used to have a behavior that allowed regexp to be called without exec, and called directly—should we be able to take that out?</p>
+<p>STH: Should a programming language not be allowed to have a feature that all other languages have?</p>
+<p>AB: I'm not a programming language designer, I can't answer that</p>
+<p>STH: That's a cop-out, because that's what you're asking us to do.</p>
+<p>DH: (disdain)</p>
+<p>WH: Originally, I wanted #1, now I want #2 because its too easy for people to forget to add &quot;html``&quot;</p>
+<p>BM: #0 and #1 are the best cases, #0 adds no additional security risks. #1 is the pure option. #2 changes because you add to the boilerplate. The rest are a new thing.
+...I'm for #1 because either you do it or you don't.</p>
+<p>STH: Answer this...
+Is this something that all languages should do? Or just JavaScript because it's bound to the web?</p>
+<p>AR: Yes, we have to pay the cost for the good of the web and yes other languages should've done this (ie, not had the equivalent of untagged template strings).
+...wants #3</p>
+<p>RB: re: #3, important to have to think about what kind of handler need you need to use.</p>
+<p>YK: That might work for your case, but the wider world will just use the interpolation tag.</p>
+<p>...</p>
+<p>DH: We're flailing. We should just go #2 and just move on, because I'm failing to make my case.</p>
+<p>WH: I like #1 and #2, which are similar, but prefer #2 purely for a couple of practical considerations:</p>
+<ul>
+<li>Forgetting the html in html<code>...</code> causes a syntax error instead of introducing a security hole.</li>
+<li>s<code>...</code> is preferable to <code>...</code> because it's practical to search for s<code>in general-purpose editors, while it's not practical to search for only the occurrences of</code> that do string concatenation.</li>
+</ul>
+<p>AC: If using this feature and just want to use string interpolation, why should I have to think about &quot;raw&quot; when &quot;raw&quot; doesn't really even reflect what I want.</p>
+<p>(Allen leaving. 4, 1, 3, 2)</p>
+<p>AR/AC: ...continued discussion</p>
+<p>Beginning to devolve.</p>
+<p>YK/STH: arguing that it's not the language's job to hand hold</p>
+<p>AR/AK/AB: ...disagree</p>
+<p>WH: (whiteboard)</p>
+<pre><code class="language-js">AT&amp;amp;amp;amp;T
+</code></pre>
+<p>(illustrating the dangers of blindly coding with html`` concatenations everywhere)</p>
+<p>(Running out of time)</p>
+<p>MM: What is the intersection?</p>
+<p>DH: We're headed the wrong way, forcing into a design approach that we don't do.</p>
+<p>RW: Should we table?</p>
+<p>DH: Yes, that's where I'm heading.</p>
+<p>AC: We may never get consensus</p>
+<p>DH: We won't give up, we've gained consensus under worse duress.</p>
+<a href="#conclusionresolution-415-template-strings"><h4 id="conclusionresolution-415-template-strings">Conclusion/Resolution</h4></a><ul>
+<li>Tabled.</li>
+</ul>
+
+</body>

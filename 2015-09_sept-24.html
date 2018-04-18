@@ -1,0 +1,511 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 24, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-24-2015-meeting-notes"><h1 id="september-24-2015-meeting-notes">September 24, 2015 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
+<p>Remote:
+Mark S. Miller (MM), István Sebestyén (IS)</p>
+<hr>
+<a href="#exponentiation-operator"><h2 id="exponentiation-operator">Exponentiation Operator</h2></a><p>RW: BE suggested option 4 yesterday (throw when unary negative is used without parens)</p>
+<p>(whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-comment">// Ok</span>
+<span class="hljs-keyword">let</span> z = K - x ** y;
+
+<span class="hljs-comment">// No Ok</span>
+<span class="hljs-keyword">let</span> z = -x ** y; <span class="hljs-comment">// Syntax Error</span>
+
+<span class="hljs-comment">// Must be: </span>
+-(x ** y)
+
+<span class="hljs-comment">// Enforced by grammar change, just a SyntaxError</span>
+</code></pre>
+<p>RW: BE wrote up option 4 and a summary and emailed to esdiscuss</p>
+<p>RW: <em>similar to TDZ: an error when something ambiguous happens</em></p>
+<p>RW: AWB + MM switches 1 vote to 4, RW switches 2 vote to 4.</p>
+<p>RW: question to group: do we have consensus on stage 3 with option 4?</p>
+<p>AK: i think this sucks for users</p>
+<p>RW: only when the user does something ambiguous</p>
+<p>AK: we already have Math.pow which is unambiguous. why add another way that has ambiguity concerns? it looks confusing to me as a user.</p>
+<p>AWB: it requires that you put in parens, what a careful developer would already put in parens</p>
+<p>RW: considering your feedback (a syntax error would be a bummer) are you willing to block consensus?</p>
+<p>DH: I will push spidermonkey team to display a better error in this case</p>
+<p>AK: i think it's just fine to choose one (ie option 2 or 3) and i chose option 2</p>
+<p>DH: that's just going to be a bug farm</p>
+<p>BT: like it is in every other language?</p>
+<p>DH: yes.</p>
+<p>YK: there's bugs in every other language, but we don't have to copy those bugs into JS</p>
+<p>RW: this is sufficiently useful to the end-developer</p>
+<p>DH: Here's another way of looking at it: there is a natural ambiguity between two historical precedents, reasonable to expect it to go one way or the other. Don't just pick one because it will confuse people who expect the other. Making it an early error to avoid the ambiguity is good software engineering practice</p>
+<p>AK: why do you think other langs (with exp operator) don't make this an error?</p>
+<p>YK: they cargo-culted it.</p>
+<p>AWB: some of them actually have negative numeric literals (option 3) baked in to the language.</p>
+<p>DH: so -1 actually ends up doing the right thing...</p>
+<p>AK: I'm not the only one who thinks this, Waldemar might think this too</p>
+<p>RW: I don't think so; Waldemar supported requiring parens early on</p>
+<p>DH: very recent precedent for exactly this kind of decision when andreas proposed that &quot;use strict&quot; implications for parameter lists were ambiguous; we decided to make all of the ambiguous cases SyntaxErrors to avoid confusing people one way or another. That was a good decision, this is similar. Let's not knowingly create an ambiguity where both are reasonable interpretations.</p>
+<p>MM: in agreement with Dave, avoid misinterpration where the consequence is the program proceeding without diagnostic that defies user expectation</p>
+<p>MM: ... proceeds without a diagnostic that violates user expectations.</p>
+<p>AWB: if we're wrong about this and get tons of complaints, we can always remove the SyntaxError and select options 2 or 3 later.</p>
+<p>DH: Oh, python has the same error... -1**2 == -1</p>
+<p>AWB: maybe Matlab...</p>
+<p>RW: concerns enough to block consensus?</p>
+<p>MS: i agree with AK; i don't like option 4. we'll implement the spec but I think it's unnecessary complications given other languages.</p>
+<p>BT: I think it is unnecessary, but I don't care</p>
+<p>YK: Do you agree, if we pick 2 or 3 there are some users who will pick the wrong one</p>
+<p>BT: yes, but that's true for everything that includes precedence. We don't make all things an error where precedence is ambiguous.</p>
+<p>YK: there are different kinds of confusion, mixing operator classes is an especially bad kind of confusion</p>
+<p>AK: use strict in parameter list is different -- had implementor concern as well
+(discussion of &quot;use strict&quot; w/ parameter list, comparison with this case)</p>
+<p>YK: BT, your point about general operator precedence is valid. I wondre why the difference from the normal precedence... why is changing the precedence in a precedence class not a red flag?</p>
+<p>BT: I'm not sure people talk about operators in terms of precedence classes</p>
+<p>DH: I think people do -- I do. I don't remember factoring rules for BNF, I think of it terms of whitespace and &quot;tightness&quot; or &quot;looseness&quot;</p>
+<p>AK: it was useful to see the thoughts yesterday. another straw poll would help me see if i'm an outlier or not.</p>
+<p>YK: option 5 of &quot;i don't care&quot; please</p>
+<p>RW/YK: let's say: 1 is &quot;do nothing&quot;. inaction.</p>
+<p>BT: I violently don't care</p>
+<p>MF: let me remind the room; option 4 doesn't prevent options 2 or 3 later.</p>
+<p>[poll]</p>
+<ol>
+<li>Dropped                                                    0</li>
+<li>Hold @ current proposal  (-5 ** 2 =&gt; 25)  3</li>
+<li>Orig Proposal (-5 ** 2 =&gt; -25)                   0</li>
+<li>BE syntax                                                11</li>
+<li>IDGAF                                                       3</li>
+</ol>
+<p>RW: we can still relax the syntax error</p>
+<p>AK: rare enough case that it likely won't happen</p>
+<p>DH: I'll prototype a good error in my own parser</p>
+<a href="#conclusionresolution-exponentiation-operator"><h4 id="conclusionresolution-exponentiation-operator">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3, with the provision that option 4 goes in</li>
+<li><a href="http://jsbin.com/baquqokujo/1/edit?output">http://jsbin.com/baquqokujo/1/edit?output</a></li>
+</ul>
+<a href="#8-test262-update"><h2 id="8-test262-update">8. Test262 Update</h2></a><p>(Gorkem Yakin)</p>
+<p>GY: (General update on status of ES6/ES2015 support in test262)</p>
+<p>BT: previously we decided it was important to have clear delineation between test artifacts at specific spec versions, but that's hard.</p>
+<p>YK: It stops making so much sense now. Can I suggest a feature flag thing?
+(discussion about how to handle old tests that break with a new version)</p>
+<p>YK: at any point in time, take a snapshot of all stage 4 features and that's what we give to ECMA</p>
+<p>AWB: strictly speaking, only yearly releases approved by GA that are final</p>
+<p>AWB: nothing becomes stage 4 until version of the spec they're in is approved
+(more discussion about stage 4 vs. stage 5)</p>
+<p>BT: I see it this way. for implementors, there is value in having tests checked in to test262 when they're working on the features, ~ stage 2/3. Only consideration here is what implemetors find useful</p>
+<p>YK: ok stage 3 seems fine</p>
+<p>BT: if things break, git has tools for this. going forward let's not have branches, just say test262 is living</p>
+<p>AK: I say stage 3</p>
+<p>(RW agree, this aligns with implementation step)</p>
+<p>YK: I think stage 2 criteria is test262 tests. For me, as spec author this is valuable</p>
+<p>AWB: during stage 2, I expect these to change a lot. These are part of the artifacts</p>
+<p>DE: for the SIMD tests, we went through a lot of churn. it makes sense to have them outside of test262, now we're stage 3, we're ok with test262</p>
+<p>YK: I think that implementors should have commit access to test262 while they're working on it</p>
+<p>BT: difficulty mentioned by DE is real</p>
+<p>YK: not intractable to make this frictionless</p>
+<p>BT: I don't think this is too bad, having written thousands myself. Not frictionless, but surmountable</p>
+<p>YK: this sounds like a real blocker. proposal: I think you should be able to put all tests for a feature in a file, people who are working on stage2 and up features should have commit access</p>
+<p>BT/DE: we should use pull request model</p>
+<p>AK: nice for implementor to know these are stable, stage 3 is nice</p>
+<p>(discussing whether we need to use pull requests vs. direct commit access)</p>
+<p>DE: problem with stage 2 is that the API is not stable, so it doesn't provide value</p>
+<p>DH: having tests are similar to having spec, helpful to make it clear to people how the feature works</p>
+<p>AK: we have automated process pulling test262, we don't want to have to triage unstable changes</p>
+<p>YK: feature flags should solve this problem</p>
+<p>BT: difficulty is that numerous different test262 harnesses, I understand Google has their own</p>
+<p>_ general agreement that test262 tests should be stage 3 _</p>
+<p>DE: YK and others are going to look into adding feature flags to implementors test262 harnesses</p>
+<p>BT: difficult to test features in isolation, they are often cross-cutting</p>
+<p>_ discussion about difficulty of implementing feature flags _</p>
+<p>AWB: what is the plan of record for user-facing test page?</p>
+<p>BT: someone has to fund this work. Someone in Microsoft working part-time on this, build scripts to package the tests into a site. Maybe get UI guy to spend some time on it</p>
+<p>MF: why do we want this?</p>
+<p>BT: useful as a marketing feature, show how accurate your browser is</p>
+<p>AWB: original motivation: valuable to have vendor-independent neutral test, not subject to gaming</p>
+<p>JHD: easy to test in browser with a web link, harder with a harness</p>
+<p>AWB: if we think it's valuable to have a website where users can run tests against multiple browsers, then some members have to step up and do the work or foot the bill. Otherwise take away the website</p>
+<p>BT: money problem right now. accomplished webdev, about a month of effort</p>
+<a href="#conclusionresolution-8-test262-update"><h4 id="conclusionresolution-8-test262-update">Conclusion/Resolution</h4></a><ul>
+<li>Test262 is &quot;living&quot;</li>
+</ul>
+<a href="#56-proposal-call-constructor"><h2 id="56-proposal-call-constructor">5.6 Proposal: call constructor</h2></a><p>(Yehuda Katz)</p>
+<p>YK: (from proposal)</p>
+<ul>
+<li>ES5 constructors had a dual-purpose: they got invoked both when the constructor was newed (<code>[[Construct]]</code>) and when it was called (<code>[[Call]]</code>).
+This made it possible to use a single constructor for both purposes, but required constructor writers to defend against consumers accidentally <code>[[Call]]</code>ing the constructor.</li>
+<li>ES6 classes do not support <code>[[Call]]</code>ing the constructor at all, which means that classes do not need to defend themselves against being inadvertantly <code>[[Call]]</code>ed.</li>
+<li>In ES6, if you want to implement a constructor that can be both <code>[[Call]]</code>ed and <code>[[Construct]]</code>ed, you can write the constructor as an ES5 function, and use <code>new.target</code> to differentiate between the two cases.</li>
+</ul>
+<p>Motivating Example</p>
+<p>The &quot;callable constructor&quot; pattern is very common in JavaScript itself, so I will use <code>Date</code> to illustrate how you can use an ES5 function to
+implement a reliable callable constructor in ES6.</p>
+<pre><code class="language-js"><span class="hljs-comment">// these functions are defined in the appendix</span>
+<span class="hljs-keyword">import</span> { initializeDate, ToDateString } <span class="hljs-keyword">from</span> <span class="hljs-string">'./date-implementation'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Date</span>(<span class="hljs-params">...args</span>) </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">new</span>.target) {
+    <span class="hljs-comment">// [[Construct]] branch</span>
+    initializeDate(<span class="hljs-keyword">this</span>, ...args);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// [[Call]] branch</span>
+    <span class="hljs-keyword">return</span> ToDateString(clockGetTime());
+  }
+}
+</code></pre>
+<p>This works fine, but it has two problems:</p>
+<ol>
+<li>It requires the use of ES5 function as constructors. In an ideal world, new classes would be written using class syntax.</li>
+<li>It uses a meta-property, <code>new.target</code> to disambiguate the two paths, but its meaning is not apparent to those not familiar with the meta-property.</li>
+</ol>
+<p>This proposal proposes new syntax that allows you to express &quot;callable constructor&quot; in class syntax.</p>
+<p>Semantics</p>
+<ul>
+<li>The presence of a <code>call constructor</code> in a class body installs the call constructor function in the <code>[[Call]]</code> slot of the constructed class.</li>
+<li>It does not affect subclasses, which means that subclasses still have a throwing <code>[[Call]]</code>, unless they explicitly define their own call constructor (subclasses do not inherit calling behavior by default).</li>
+<li>As in methods, <code>super()</code> in a call constructor is a static error, future-proofing us for a potential context-sensitive <code>super()</code> proposal.</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { initializeDate, ToDateString } <span class="hljs-keyword">from</span> <span class="hljs-string">'./date-implementation'</span>;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Date</span> </span>{
+  <span class="hljs-keyword">constructor</span>(...args) {
+    initializeDate(<span class="hljs-keyword">super</span>(), ...args);
+  }
+
+  call <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">return</span> ToDateString(clockGetTime());
+  }
+}
+</code></pre>
+<p>AWB: This is an exceptional example, most cases just defer to <code>new</code>, where this goes off on some other operation.</p>
+<p>RW:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">this</span>.aProp = <span class="hljs-number">1</span>;
+  }
+}
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">this</span>.bProp = <span class="hljs-number">1</span>;
+  }
+  call <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> B();
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">B</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">this</span>.cProp = <span class="hljs-number">1</span>;
+  }
+}
+
+<span class="hljs-keyword">let</span> b = B();
+
+b.aProp === <span class="hljs-number">1</span>; <span class="hljs-comment">// true</span>
+b.bProp === <span class="hljs-number">1</span>; <span class="hljs-comment">// true</span>
+
+<span class="hljs-keyword">let</span> c = C(); <span class="hljs-comment">// throws! there is no call constructor here</span>
+</code></pre>
+<p>AWB: Think about it, not as a property added to the prototype, but as an alternative to the <code>constructor</code></p>
+<p>MM: interaction with Proxy call trap?</p>
+<p>AWB: class with a call constructor get a distinct <code>[[Call]]</code> that knows how to dispatch to the user defined behavior.
+...no proposal yet for reflection
+...no toString yet.</p>
+<p>MM: toString the constructor, you get the entire class</p>
+<p>JHD: currently unspecified in ES6; some engines give the &quot;class&quot;, some give the constructor, some give a function that has no indication it was a &quot;class&quot;</p>
+<p>YK: Then it would be included.</p>
+<p>YK: <em>shows <code>call constructor() {}</code> vs <code>() {}</code> inside a &quot;class&quot;</em></p>
+<p>Mark's Alternative:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { initializeDate, ToDateString } <span class="hljs-keyword">from</span> <span class="hljs-string">'./date-implementation'</span>;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Date</span> </span>{
+  <span class="hljs-keyword">constructor</span>(...args) {
+    initializeDate(<span class="hljs-keyword">super</span>(), ...args);
+  }
+  () {
+    <span class="hljs-keyword">return</span> ToDateString(clockGetTime());
+  }
+}
+</code></pre>
+<p>AWB: i don't like it because you could forget the method name</p>
+<p>YK: also conflicting with square bracket syntax and arrow functions
+<em>lots of agreement that this is confusing</em></p>
+<p>MM: happy to drop it; glad to have a reaction.</p>
+<p>DH: only thing that gives me pause is Stroustrup's principle: new stuff, people want long syntax; later, people want short syntax.</p>
+<p>MF: May want a decorator augmenting a call constructor (Michael, I missed the tail end of this, can you fill in?)</p>
+<p>YK:</p>
+<p>MS: would this allow you to omit the <code>constructor</code>?</p>
+<p>YK: class would create a default <code>constructor</code>, but otherwise behave like a function</p>
+<p><em>discussion about callable non-constructable classes; general consensus is that you should use a function for this</em></p>
+<p>DH: Like this b/c it matches built-ins and defines a clear separation of semantics</p>
+<p>AWB: <em>discussing built-ins that create wrappers</em>
+... Don't need to add sloppy mode semantics for built-ins, eg. SIMD</p>
+<p>JHD: it's an axiom that <code>Object(x) === x</code> if it's an object, and not if it's a primitive. This must be preserved.</p>
+<p>MM: Object.prototype.toValue, auto-wraps <code>this</code>.</p>
+<p>AWB: Then unwraps</p>
+<p>JHD: Every JS value must be wrapped when pass through <code>Object</code>.</p>
+<p>AWB: Not saying &quot;no wrapper&quot;, needs wrapper to do method lookup</p>
+<p>DE: Sounds like two versions of ToObject?</p>
+<p>JHD: in a sloppy mode function, if i do <code>this.foo = &quot;bar&quot;;</code>, and <code>this</code> isn't <code>undefined</code>, it <em>always</em> sets the property such that <code>this.foo</code> can be retrieved immediately after. If <code>this</code> is a primitive, this isn't the case. If we change the auto-wrapping behavior of &quot;this&quot; in sloppy mode, for <strong>any value</strong>, then this will break existing code.</p>
+<p>AK: Not going to add reflection here?</p>
+<p>YK: No, but reflection is needed.</p>
+<p>AK: Will it &quot;grow&quot; reflection?</p>
+<p>AWB: We hope to advance this to ES2016</p>
+<p>YK: Reflection is needed along side decorators and this proposal, but don't want to block this on decorators.</p>
+<p>AWB: No reflective way to change a function with toString, but can see it's whole body.
+...tweak toString, for class with a call constructor, include it in the toString representation</p>
+<p>MM: Should be the entire class definition</p>
+<p>DH: ??</p>
+<p>AWB: That position is contraversial</p>
+<p>MM: Thought we agreed?</p>
+<p>YK: Bigger toString issue.</p>
+<p>AWB: For 2016, toString should at least include call constructor body</p>
+<p>MF: Want added restrictions before 2016, we can limit the reform proposal to buy time.</p>
+<p><em>This can be implemented in terms of <code>new.target</code>.</em></p>
+<p>AWB: Nec. in support of decorators:</p>
+<ul>
+<li>If you want decorators to be able to create call constructors, there needs to be some reflective way to install them.</li>
+</ul>
+<p>AK/BT: <em>discussion potential implementation details</em></p>
+<a href="#conclusionresolution-56-proposal-call-constructor"><h4 id="conclusionresolution-56-proposal-call-constructor">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 Approval</li>
+<li>toString includes call constructor body in output</li>
+<li>Goal for Stage 3 next meeting.</li>
+</ul>
+<a href="#secretariat"><h2 id="secretariat">Secretariat</h2></a><p>IS:</p>
+<ul>
+<li>Only Ecma-404 will be fast tracked.</li>
+<li>Bugs in Ecma-402 need to be addressed.</li>
+<li>ES2016, 17, 18, etc. might cause issues?</li>
+</ul>
+<p>I can't really understand most of what's being said over the polycom.</p>
+<p>Sounds like ES6 has a lot of downloads</p>
+<a href="#meeting-schedule"><h2 id="meeting-schedule">Meeting Schedule</h2></a><p>JN:</p>
+<ul>
+<li>November 17 - 19, 2015 (San Jose - Paypal)</li>
+<li>January 26 - 28, 2016 (San Francisco - Salesforce)</li>
+<li>March 29-31, 2016 (San Francisco - Google)</li>
+<li>May 24 - 26, 2016 (Europe)</li>
+<li>July 26 - 28, 2016 (Redmond - Microsoft)</li>
+<li>September 27 - 29, 2016 (Los Gatos - Netflix)</li>
+<li>November 29 - 30 - December 1, 2016 (Menlo Park - Facebook)</li>
+</ul>
+<a href="#conclusionresolution-meeting-schedule"><h4 id="conclusionresolution-meeting-schedule">Conclusion/Resolution</h4></a><ul>
+<li>Need to confirm Munich in May</li>
+<li>Rick, Dave will figure out March</li>
+</ul>
+<a href="#513-updates-on-rest-properties-proposal"><h2 id="513-updates-on-rest-properties-proposal">5.13 Updates on rest properties proposal</h2></a><p>(Sebastian Markbage)</p>
+<p><a href="https://github.com/sebmarkbage/ecmascript-rest-spread">https://github.com/sebmarkbage/ecmascript-rest-spread</a></p>
+<p>SM:</p>
+<p><a href="https://github.com/sebmarkbage/ecmascript-rest-spread/commit/f4cb9c0ff9f4509854d5d30f4517a23b1a7d7e98">https://github.com/sebmarkbage/ecmascript-rest-spread/commit/f4cb9c0ff9f4509854d5d30f4517a23b1a7d7e98</a></p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> o = <span class="hljs-built_in">Object</span>.create({ <span class="hljs-attr">x</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">2</span> });
+o.z = <span class="hljs-number">3</span>;
+
+<span class="hljs-keyword">var</span> x, y, z;
+
+<span class="hljs-comment">// Destructuring assignment allows nested object</span>
+({ x, ...{ y, z } } = o);
+
+x; <span class="hljs-comment">// 1</span>
+y; <span class="hljs-comment">// undefined</span>
+z; <span class="hljs-comment">// 3</span>
+</code></pre>
+<p>AWB: Object pattern destructuring doesn't check enumerability, just goes by property name</p>
+<p>DH: The <code>...</code> means &quot;I'm enumerating the names&quot;</p>
+<p>SM: ie. getting the keys</p>
+<p>AK: What about in the binding case?</p>
+<p>SM: Consistency. The BindingRestElement only allows an identifier.</p>
+<p>SM: I will write a proposal to fix BindingRestElement to allow nested BindingPatterns.</p>
+<a href="#conclusionresolution-513-updates-on-rest-properties-proposal"><h4 id="conclusionresolution-513-updates-on-rest-properties-proposal">Conclusion/Resolution</h4></a><ul>
+<li>No stage change</li>
+</ul>
+<a href="#6-updates-on-loader"><h2 id="6-updates-on-loader">6. Updates on Loader</h2></a><p>(Dave Herman)</p>
+<p><a href="https://github.com/whatwg/loader/">https://github.com/whatwg/loader/</a>
+<a href="https://github.com/whatwg/loader/blob/master/roadmap.md">https://github.com/whatwg/loader/blob/master/roadmap.md</a></p>
+<p>DH: <em>introduction</em></p>
+<p>BT: crass question: will we have something to implement soon?</p>
+<p>DH: all you need to get started implementing is a basic understanding of what the really core name resolution is going to look like.</p>
+<p>BT: and that's done?</p>
+<p>DH: it's done <em>enough</em> that you could be hacking on this now. not written in the spec yet.</p>
+<p>BT: Concerns that if spec is not written and we implement, it might be useless. Stuck in holding pattern.</p>
+<p>DH: Should start hacking on this.</p>
+<p>DH: we will get you stage 0 stuff written as soon as we can.</p>
+<p>BT: (wants estimate to communicate to Edge team)</p>
+<p>DH: We can promise name resolution drafted in the spec by the next TC39 meeting.</p>
+<p>JM: How are relative urls resolved? Relative to what? (toplevel document? importing module url?)</p>
+<p>DH: &quot;referrer&quot; used for relative, &quot;/&quot;?</p>
+<p>DH: <em>explains how &quot;module src&quot; will respect base url, but imports inside the module will not</em></p>
+<p>MM: Loader constructor has no concept of URLs, just name resolution.</p>
+<p>DH: Loader class is generic. Specific default Loader has to be host specific, there is a spec.</p>
+<p>AK: Who are the experts working on the Loader spec? Anne? Dimitri (Glazkov)?</p>
+<p>DH: Both have reached out. Let's have a meeting with those people.</p>
+<p>AK: Dimitri is quite busy, so...</p>
+<p>YK: I think it's important for Anne to be involved here.</p>
+<p>DH: script type = module should have roughly defer semantics, asynchronous but ordered.</p>
+<p>YK: before doc ready, content loaded</p>
+<p>DH: We have to asynchronously load the deps, do we have to complete the compile phase of first script type = module, or ... execution phase as well</p>
+<p>YK: argument for deferring evaluation at all, first is ... if you move on to second, your script didn't get a chance to configure...</p>
+<p>... you cannot start download script type = module imports before ...</p>
+<p>AK: this is all about what script tags do right now</p>
+<p>YK: you need to have one block. this block is for configuring my loader, I don't want any scripts to load before this is done. Not good to block loading modules before all scripts are loaded</p>
+<p>DH: if semantics of type=module is only that one has to precede the compilation of the other, forces you to use legacy script.</p>
+<p>YK: there's a worse problem, path for legacy script =&gt; legacy blocking script, or use legacy defer script, and now you have to decide order between them. Another option is loader config, that has to run before, but not other scripts</p>
+<p>DH: a narrow case? Could have a syntax instead of reusing form?</p>
+<p>YK: if you try to make other scripts ordered, you have to speculate whether one is a loader</p>
+<p>DH: Another Q: Allow completed subgraphs to execute early? Hold the line on deterministic top level execution.</p>
+<p>Issue: module system forces sequentiality</p>
+<p>Ie.</p>
+<ul>
+<li>download</li>
+<li>get deps</li>
+<li>download</li>
+<li>then start compiling</li>
+</ul>
+<p>Probs</p>
+<ul>
+<li>May create latency</li>
+<li>Could a subgraph that was completed start executing?</li>
+</ul>
+<p>MM: what would be the definition of a completed subgraph that distinguishes it?</p>
+<p>DH: for example, toplevel module main, requires foo and bar, foo requires jquery, bar requires 100 modules. While bar is downloading dependencies, foo is downloaded jquery, waiting to compile and run. In that case, schedule foo and jquery's top levels to run, more concurrent semantics, less deterministic</p>
+<p>MM: makes sense, introduces new element. optionally breaking toplevel module execution into separate turns. multiple modules part of 1 dependency graph may be executed in separate turns</p>
+<p>YK: middle ground: start executing subgraphs in the order they've been specified. gives you determinstic ordering</p>
+<p>AWB: in terms of modules, there is only one syntactially type of module. two types written: script type modules, root of execution, import other things. OTOH, module-like modules have exports and imports and logically are doing useful work if people import them. I thought that module-like module would never be initialized if someone didn't import it. In theory, a script tag that names a module-like module, doesn't have to be executed unless a script-like module imports a module-like module.</p>
+<p>DH: no interest in inline-named modules</p>
+<p>AWB: not relevant to this discussion.</p>
+<p>AWB: script-like module: used like a script, doesn't have exports, does have imports, written for effect</p>
+<p>DH: either are there, b/c in a script tag, or not.</p>
+<p>AWB: so you write a script tag, name a script-like module, that needs to execute as soon as the deps are available.</p>
+<p>JM: has to wait for deps?</p>
+<p>AWB: it can't run until it's script is available. Here is code I want to execute. If you name the script whose exist to export it, but nobody uses it. What does a module script tag mean, this gets to the deferred semantics. Here is the script, I want to evaluate this, even if nobody depends on it.</p>
+<p>DH: No. Cannnot express the former in HTML. The module doesn't have name, cannot be depended on.</p>
+<p>DH/YK: they have source but they don't have name.</p>
+<p>AWB: Anything in a script tag is the root, execute directly. Assume ordered?</p>
+<p>DH: <em>confirms</em>. Intentional order of execution. Code directly or indirectly depended on has to execute immediately. Does all that have to happen in a single event turn? Or across several? If the subgraph has completed, can execute?</p>
+<p>MM: bottom-up execution constraint. clearly doesn't imply any type of suspended caller. If all module execution is executed in single turn, then starts and ends with empty stack.
+implementations can do whatever they feel like to do other jobs</p>
+<p>DH: (explaining options between single job vs. multi-job loading. if multi-job, then decision between total ordering and partial ordering)</p>
+<ol>
+<li>single job
+2.a. total ordering of modules N jobs
+2.b. partial ordering of modules</li>
+</ol>
+<p>YK: module imports are declarative, so gives clear dependency order, effectively a set of jobs, deterministic. Another set of jobs exist...</p>
+<p>...modules want to initialize state, using set of promises. dependency ordering that is opaque to module execution order, benefit of that is we can have synchronous 1-shot path through module execution...</p>
+<p>YK: problem with 2.a...</p>
+<p>JM: we've used 2.a. for a long time and it has worked well</p>
+<p>YK: ... other things in the dependency graph is opaque, to repair that, we need toplevel await</p>
+<p>AWB: my concern with 2a. only comes up with circular module deps, a set of dependent modules isn't fully initialized until you circle around, each module has been given a chance to initialize and execute through entire body. If you start doing other jobs, somewhere along that path, are there going to be potential observable....</p>
+<p>DH: difference between observable and likely. We shouldn't care about reflectively being able to observe that things are complete. Ignoring the reflective stuff, just declarative, initializing these in dep order, outside of cycles you can't have a problem. Even within a cycle, early reference to something that hasn't executed yet, but that can happen synchronously too.</p>
+<p>YK: there is a toplevel cycle problem already</p>
+<p>MM: I think there is an adjustment to 2a and 2b to avoid cycle problem. adjustment is strongly-connected cycle is atomic, if we allow interleavings, only between strongly connected cycles.</p>
+<p>AWB: then you'd have to identify these</p>
+<p>...</p>
+<p><em>discussion about N job module loading -&gt; toplevel await</em></p>
+<p>DH: <em>describing the problem with toplevel await and node.js</em>
+... people want to use synchronous functions in module initialization, but this forks functionality between async/sync variants...
+... toplevel await gives you a way to prevent module use before initialization. in node.js currently people often just race between initialization and use.</p>
+<p>MM: question: node modules is loaded via require? If someone calls require in a later turn, the module is loaded later. [ everyone confirms ] so toplevel modules can already be run over multiple turns? [ confirms ]</p>
+<p>YK: their concern is that introducing await for require will change the behavior of require in a confusing way</p>
+<p>JM: But it's backward compatibile and not a breaking change, right?</p>
+<p><em>no</em></p>
+<p>MM: why isn't toplevel await something that can be written already?</p>
+<p>YK: you can desugar that already, but they still don't want it</p>
+<p>AK: They just don't want the feature.</p>
+<p>SP: Bad experience when tried to do this the first time.</p>
+<p><em>confirmed</em></p>
+<p>YK: they say, once you start using async, everything leaks. And that's true</p>
+<p>DH: sounds bad, but there is a reasonable solution. allow toplevel await, asynchronous loader spec, and node won't use it. any modules that have toplevel await will be incompatible with node</p>
+<p>YK: syntax errors, or run to first <code>await</code> and done</p>
+<p>DH: they can do whatever they want here, if it becomes popular on the web, maybe that will change their opinion</p>
+<p>MM: If toplevel await is equivalent to something users can write anyway...</p>
+<p>YK: I just realized that it is plausible to do what async function does, if await appears at toplevel the export is a promise</p>
+<p>DH: Yes.</p>
+<ul>
+<li>require is zalgo-ish</li>
+<li>may block severely</li>
+</ul>
+<p>MM: that to me, disqualifies it. But we're not talking about require, but import</p>
+<p>DH: all node packages expect to start with toplevel synchronous main and require</p>
+<p>MM: would expect to interface between two systems, what you obtain is a require immediately returns</p>
+<p>DH: two things that you want for evolutionary path: require an es6 module that awaits, thing you get back is a promise rather than module. Other part is an alternative entry point for node: execution semantics at toplevel is es6 loader program, everything runs through async pipeline, with imports instead of require</p>
+<p>YK: await, import at toplevel could trigger that</p>
+<p>DH: maybe inferred rather than opt-in</p>
+<p>MM: i don't see how this forces you to require as suspension point for caller</p>
+<p>YK: browser does not want require that sometimes returns value, sometimes promise. legacy purposes, require returns value.</p>
+<p>MM: require has to return what the required module exports</p>
+<p>DH: could say: all ES6 modules provide a promise</p>
+<ul>
+<li>Agreement on 2A semantics</li>
+</ul>
+<p>2A: Modules execute in the order that they appear textually (same order as ES6 semantics), but may run across multiple turns.</p>
+<p>Moving on.</p>
+<p>DH: Need stage 0 for  module metadata</p>
+<p><a href="https://gist.github.com/dherman/c35e968991b67ae98423">https://gist.github.com/dherman/c35e968991b67ae98423</a></p>
+<p>MM: there's a defacto spec in JS: source maps. very specific about what type of information is mappable. I think this corresponds to filename/dirname...</p>
+<p>( discussion of import.context )
+EF: why import and not export?
+(module would be better, but it isn't a keyword)</p>
+<p>DH: import.context.lineno, callno?</p>
+<p>MM: my point is: if template strings actually created a sourcemap on the template object, as part of the extended definition, you'd have all the information by that mechanism, including where the individual thing in the source
+...</p>
+<p>DH: the competition here is __filename, __dirname, etc. import.context ergonomics is pretty close, are you talking about something worse?</p>
+<p>MM: there is an overlap of functionality with sourcemaps and template strings -- we should coordinate these.</p>
+<p>( question about this exposing a new execution context for module system )</p>
+<p>DH: this was always the case with modules.</p>
+<p>MM: can't you just create an error, throw and catch it to get the information for the filename, line, etc. how is the info on import.context different?</p>
+<p>CP: just one concern about import.context compared to <code>import local from this module;</code> proposal, we need a new way/channel to ask loader for such as information, before it was just a synthetic module that relying on the loader semantics to do the bindings.</p>
+<p><em>extended discussion about what information would be stored on import.context -- is it source name, dir name? or is this too node-specific?</em></p>
+<p>Dynamic Relative Loading</p>
+<ul>
+<li>Dynamically load a relative module when it's only needed rarely:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-comment">// lib/index.js</span>
+configButton.onclick = <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// corresponds to: `import { readFile, writeFile } from 'fs';`</span>
+  <span class="hljs-keyword">let</span> { readFile, writeFile } = <span class="hljs-keyword">await</span> <span class="hljs-keyword">import</span>.named(<span class="hljs-string">'fs'</span>);
+  <span class="hljs-comment">// corresponds to: `import config from './config.js';`</span>
+  <span class="hljs-keyword">let</span> config = <span class="hljs-keyword">await</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./config.js'</span>);
+  <span class="hljs-comment">// ...</span>
+};
+</code></pre>
+<p>DH: Dynamic scope tricks you into thinking that you can abstract normally (say, by moving outside), but you can't</p>
+<p>Need: static syntax to communicate information so that we can dfkjnsdkfbjv ;skdfjblskdjfnbvlksdjfbsdfv</p>
+<p><em>discussion about import(...) and import.named(...) being meta operators</em></p>
+<p>AWB: make it not an operator: meta property whose value is a closure</p>
+<p>MM: could be closed over the data from import.context</p>
+<p><em>discussion about ambiguity of syntax</em></p>
+<p>DH: syntax needs work, not complete/final</p>
+<p>MS: because dynamic, needs a new API. Don't like the properties on keywords.</p>
+<p>DH: <em>re-explains everything that lead to current design</em></p>
+<p><em>Discussion re: <code>import(...</code></em></p>
+<p>DH: &quot;out of band&quot; in a subexpression and need additional data</p>
+<p>AK: Assumed import dynamically, methods on a loader instance?</p>
+<p>DH: Missing ability to do relative dynamic loading, needs context otherwise need to write information in your code about where the file lives.</p>
+<p>AK: need some syntax that says &quot;where am i?&quot;</p>
+<p>DH: we want the smallest number of constructs, there is benefit to users for this. However, inband vs. outband is real ergonomics issue. Ability to correspond syntatic forms between declarative and imperative forms has value</p>
+<p>DH: Moving on. Need global APIs here, reflective API for dynamically creating a module instance. I want Reflect.Module (or something living under Reflect), DD wants...</p>
+<p>tl;dr: Spec defines a module namespace exotic object, need a way to create these. Custom loaders need to make these.</p>
+<p>AWB: can other modules import those? [ others say yes]</p>
+<p>DH: reflective vs. source text module objects...</p>
+<ul>
+<li>Module Records, not Module Namespace Exotic Object</li>
+<li>need something for that</li>
+<li>needs to go somewhere</li>
+<li>DD says WHATWG shouldn't be monkey patching onto Reflect object</li>
+<li>Loader spec lives on a bridge</li>
+<li>Not specific to WhatWG</li>
+<li>Belongs in Reflect</li>
+</ul>
+<p><em>Agreement</em></p>
+<p>MM: <em>talking about <code>System</code></em></p>
+<p>DH: This will block stages of Loader.</p>
+<p>AK/DH: Milestone 0, not Stage 0</p>
+<p>DH: milestone 0 doesn't depend on this syntax, but milestone 1 does, and we don't want to hold that up, so people can start building the ecosystem</p>
+<a href="#conclusionresolution-6-updates-on-loader"><h4 id="conclusionresolution-6-updates-on-loader">Conclusion/Resolution</h4></a><ul>
+<li>Stage 0 granted for dynamic relative loading</li>
+<li>Module Record thing goes in Reflect, full-stop. (&quot;Reflect.Module&quot;, perhaps)</li>
+<li><code>Reflect.Loader</code>, <code>Reflect.Module</code></li>
+</ul>
+
+</body>

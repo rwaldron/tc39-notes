@@ -1,0 +1,367 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 13, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-13-2013-meeting-notes"><h1 id="march-13-2013-meeting-notes">March 13, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Norbert Lindenberg (NL), Allen Wirfs-Brock (AWB), Rick Waldron (RW), Waldemar Horwat (WH), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Luke Hoban (LH), Matt Sweeney (MS), Doug Crockford (DC), Yehuda Katz (YK), Brendan Eich (BE), Sam Tobin-Hochstadt (STH), Alex Russell (AR), Dave Herman (DH), Adam Klein (AK), Bernd Mathiske (BM), John Pampuch (JP), Avik Chaudhuri (AC), Theresa O'Connor (TOC), Rick Hudson (RH), Andreas Rossberg (ARB), Rafeal Weinstein (RWN), Mark S. Miller (MM), Reid Burke (RB), Edward Yang (EY), Dan Stefan (DS)</p>
+<hr>
+<a href="#414-make-new-datedateobj"><h2 id="414-make-new-datedateobj">4.14 Make new Date(dateObj)</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>See: <a href="https://bugs.ecmascript.org/show_bug.cgi?id=1257">https://bugs.ecmascript.org/show_bug.cgi?id=1257</a></p>
+<p>AWB: Propose to fix this by spec'ing the Date constructor to special case date object arguments and produce an accurate copy of the date object.</p>
+<p>DC: Produces a clone?</p>
+<p>AWB: Yes.</p>
+<p>DC: a Issues with toString?</p>
+<p>AWB: No</p>
+<p>NL: Bug mixes ES5/ES6 spec language: DefaultValue/DateValue?</p>
+<p>AWB: Not an issue</p>
+<a href="#conclusionresolution-414-make-new-datedateobj"><h4 id="conclusionresolution-414-make-new-datedateobj">Conclusion/Resolution</h4></a><ul>
+<li>When date object is passed to the Date constructor, it makes an accurate copy of the date object.</li>
+</ul>
+<a href="#44-spec-update"><h2 id="44-spec-update">4.4 Spec Update</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts</a></p>
+<a href="#regexp-global-ignorecase-multiline-source-sticky-are-now-prototype-accessor-properties-rather-than-instance-own-data-properties"><h3 id="regexp-global-ignorecase-multiline-source-sticky-are-now-prototype-accessor-properties-rather-than-instance-own-data-properties">RegExp global, ignoreCase, multiline, source, sticky are now prototype accessor properties rather than instance own data properties.</h3></a><p>AWB: WH's question, &quot;why are the flags now accessor properties?&quot; (re: RegExp global, ignoreCase, multiline, source, sticky) is necessary to support a web compatible &quot;compile&quot; method. The web reality takes an existing instance and reinitializes a new instance.</p>
+<p>MM: SES doesn't whitelist &quot;compile&quot;, but could we specify &quot;compile&quot; to be SES whitelistable. Freeze, no longer modifiable by compile</p>
+<p>Example:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> re = <span class="hljs-regexp">/abc/</span>;
+
+re.compile(<span class="hljs-string">"changed"</span>);
+<span class="hljs-built_in">console</span>.log(re);
+<span class="hljs-comment">// &gt; /changed/</span>
+
+<span class="hljs-built_in">Object</span>.freeze(re);
+
+re.compile(<span class="hljs-string">"again"</span>);
+<span class="hljs-built_in">console</span>.log(re);
+<span class="hljs-comment">// &gt; /again/</span>
+
+<span class="hljs-comment">// oops</span>
+</code></pre>
+<p>DC: What is the history of &quot;compile&quot;?</p>
+<p>AWB: Not sure, but I believe it was JScript</p>
+<a href="#arraybuffer-and-typedarray-object-length-no-longer-restricted-to-232-limit"><h3 id="arraybuffer-and-typedarray-object-length-no-longer-restricted-to-232-limit">ArrayBuffer and TypedArray object length no longer restricted to 2^32 limit</h3></a><p>DH: We should talk offline about making sure this is future proof</p>
+<p>MM: is the new length 2^53? If it goes over, there will be a length that can't be represented</p>
+<p>...Mixed discussion about the length limitations of existing arrays.</p>
+<p>AWB: Isn't really an issue, just allows the length of arrays to be sufficiently large. I believe this is the future proof solution</p>
+<p>ARB: Is it inconceivable that you might want to create a TypedArray backed by a large mapped memory?</p>
+<p>DH: Not inconceivable.
+...Regardless of whether you want something 2^53 or above</p>
+<p>YK: Agree with Allen that this is probably sufficient.</p>
+<p>DH/AR: (brief discussion about ownership of TypedArray spec)</p>
+<p>AWB: Can't use the same methods as Array, because they use 2^32 length.</p>
+<p>MM: And are all generic, so really work on &quot;array likes&quot;</p>
+<p>AWB: It's not clear that they <em>should</em> work and it may not make sense to have these methods. There are possible solutions</p>
+<p>WH: An example of non backwards compatible?</p>
+<p>MM: Sparse array that's not populated up to the limit and push on it? What happens?</p>
+<p>WH: Calls ToUint32 on it?</p>
+<p>AWB: Yes</p>
+<p>WH: Doesn't consider those array like?</p>
+<p>AWB: Array spec, gets and sets, does its own Uint32
+...Need to look at each of these methods and see what can be done to make these compatible.</p>
+<p>BE/AWB: (mixed discussion about historic compatibility issues)</p>
+<p>BE: We can try it and the first sign of trouble, back off.</p>
+<p>MM/AWB/BE: (agreement)</p>
+<p>WH: The main use I see of ToUint32 is to call it on the existing length.  Indices passed in as arguments are generally processed via ToInteger.  As such, getting rid of the ToUint32 in generic Array methods applied to non-Array objects shouldn't present much difficulty (when they're applied to Array objects the change would be invisible because Array length can't reach 2^32).</p>
+<p>AWB: But it doesn't have to be an array
+...We should move on.</p>
+<a href="#45-private-symbols-weakmaps-and-relationships"><h2 id="45-private-symbols-weakmaps-and-relationships">4.5 Private Symbols, WeakMaps, and Relationships</h2></a><p>(Mark Miller)</p>
+<p>Slides (PDF, will prompt download): <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:relationships.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:relationships.pdf</a></p>
+<p>MM: Concerned about the overlap in functionality between WeakMaps and private Symbols.</p>
+<p>...WeakMap named with the word &quot;Map&quot; inverts the thinking.</p>
+<p>...Allen noted that WeakMaps are about a Relationship, between two objects.</p>
+<p>Legend:</p>
+<p><strong>base</strong> is <strong>key</strong>
+<strong>field</strong> is <strong>map</strong></p>
+<p>(Slide 2)</p>
+<hr>
+<p><strong>&quot;Map&quot; inverts thinking</strong>
+(the use of &quot;&gt;&gt;&quot; signifies the that the item on the LEFT is usually better for most purposes then the RIGHT)</p>
+<p>Syntax: base@field &gt;&gt; map.get(key)
+...Describes the relationship more accurately</p>
+<p>GC: impl(base)[field] &gt;&gt; impl(map)[key]
+...A better implementation on the LEFT, despite most implementing the RIGHT</p>
+<p>Lookup: Inherited props &gt;&gt; own props</p>
+<p>Intuition: Relationship &gt;&gt; Symbol &gt;&gt; Map</p>
+<p>Unique Symbols ok.</p>
+<hr>
+<p>STH: Weak hash tables are found in programming languages and people want them in JS, but they historically fall in the RIGHT. Why can't we declare victory and go home?</p>
+<p>MM: I feel like we can declare victory, but more work to do.</p>
+<p>WH: Let's avoid a meta discussion.</p>
+<p>(Slide 3)</p>
+<hr>
+<p><strong>ES6 Encapsulation Mechanisms</strong></p>
+<p>Closures hide lexical state (ES5)</p>
+<p>Modules hide non-exports</p>
+<p>Direct Proxies hide handler and target</p>
+<p>WeakMaps hide keys, do rights-amplification</p>
+<p>Private Symbols</p>
+<hr>
+<p>(Slide 4)</p>
+<hr>
+<p><strong>GC: base@field = value</strong>
+...Not discoverable given &quot;base&quot;. Have to have both &quot;base&quot; and &quot;field&quot; to get value.</p>
+<p>Abstract heap maps(base, field) =&gt; value
+base <em>and</em> field reachable -&gt; value reachable</p>
+<p>...Introduces an &quot;and&quot; into the previously only &quot;or&quot; GC map</p>
+<p>Obvious representations:</p>
+<ol>
+<li><p>impl(base)[field] =&gt; value
+better when field lives longer
+...When base dies early, it will take the association with it,
+by regular GC and without needing ephemeral</p></li>
+<li><p>impl(field)[base] =&gt; value
+better when base lives longer
+...When field dies earlier, it will take the association with it, by regular GC and without needing ephemeral</p></li>
+</ol>
+<hr>
+<p>(Slide 5)</p>
+<hr>
+<p><strong>GC by use case</strong></p>
+<p>When base is known to live longer
+<em>Just use a map</em> (per Yehuda)</p>
+<p>oo private field <strong>is known</strong> to live longer.
+Just use representation #1</p>
+<p>Most remaining WeakMap use cases
+would do better with representation #1 (untested claim)</p>
+<p>(From a GC perspective)</p>
+<hr>
+<p>MM: The GC cost is significant. If you chose the wrong implementation, every object that gets trademarked is retained by the WeakMap until you invoke the ephemeron collection algorithm.</p>
+<p>ARB: It's worse in v8 because it has an incremental GC that currently can only run that on full collections</p>
+<p>MM: w/r to normal access, I believe it's a wash</p>
+<p>AWB: I don't think it's a wash, case 1 requires an index, case 2 requires a hash code</p>
+<p>(Slide 6)</p>
+<hr>
+<p><strong>GC by use case</strong></p>
+<p>Only need ephemeron collection when</p>
+<ul>
+<li>you guessed wrong relative longevity</li>
+<li>you care about the memory pressure</li>
+</ul>
+<p>Felix's O(N) algorithm is affordable
+with inverted representation</p>
+<p>Examples: Membranes</p>
+<hr>
+<p>MM: Membranes are an example where you still need the ephemeron collection algorithm</p>
+<p><strong>b</strong> is base object
+<strong>f</strong> is field</p>
+<p><strong>L</strong> is left side
+<strong>R</strong> is right side</p>
+<p><strong>T</strong> is target
+<strong>P</strong> is proxy</p>
+<p>(Slide 7)</p>
+<hr>
+<p><strong>Transparency vs Privacy</strong>
+...Membrane:</p>
+<p>Test:
+bL@fL = vL    bR@fR === vR</p>
+<p>...see slide</p>
+<hr>
+<p>[Whiteboard Example, get image from Sam]</p>
+<p>MM: Propose changing the name of WeakMap and changing the way we specify and describe them for implementors to think about.</p>
+<p>AWB: Last meeting, we discussed cases... eg. when you invoke a method whose this object expects access to the private state, but it receives a proxy, it will break. I believe the solution might solve the problem</p>
+<p>YK: |this| binding issues are orthogonal to this issue</p>
+<p>BE: (Agree)</p>
+<p>MM: (refutes)</p>
+<p>WH: I challenge on this, there is a claim that we don't need private symbols and that they're broken, but we need to do things that private symbols are for. So why can't private symbols work the same way?</p>
+<p>MM: This accomplishes things that we needed private symbols to accomplish, if you want to propose changing the name of w</p>
+<p>WH: I want to see common uses of private symbols and how you would replace them.</p>
+<p>MM: I haven't shown the broken solutions...</p>
+<p>STH: I think that would've been much more helpful then showing what works today and that you wouldn't change.</p>
+<p>MM: I believe this is an acid test to prove the transparency</p>
+<p>WH: Implement private symbols in terms of whatever you're proposing.</p>
+<p>MM: <code>fT</code> is a private symbol</p>
+<p>WH: ...</p>
+<p>MM: I'm trying to answer your question</p>
+<p>WH: What would I need to do differently and why, using your glorified new approach.</p>
+<p>MM: In the expansion of a class that uses a private symbol, for each declared private instance variable, there will be a private  symbol per instance variable.</p>
+<p>WH: I think you'll need to write it down.</p>
+<p>MM: (describes semantics, based on Slide 8)</p>
+<p>WH: You're saying private symbols work if they adopt this semantics</p>
+<p>WH/STH: What are the changes?</p>
+<p>STH:</p>
+<ol>
+<li>There is no trapping on writes and reads of proxies, passes through</li>
+<li>proxy a private symbol and write sets and gets, trapped to the handler that has that private symbol.</li>
+</ol>
+<p>...In Mark's defense, this is a substantial change to how we think about private symbols</p>
+<p>AWB: It's a new type of access on an object, with a new type of state. A new, different operation with separate behaviors</p>
+<p>YK: Will the vast majority of JavaScript programmers have to understand this? This is the most important question for me</p>
+<p>ARB: ...?</p>
+<p>TVC: Don't need to change proxies in anyway</p>
+<p>YK: Not actually my concern</p>
+<p>STH: Need to think of these as something more then properties</p>
+<p>MM: Thinking of them as properties is what caused me to gravitate towards addressing</p>
+<p>(Slide 9)</p>
+<hr>
+<p><strong>Desugaring Private Relationships</strong></p>
+<pre><code class="language-js">
+base@field              base@field = value
+field.get(base)         field.set(base, value)
+
+</code></pre>
+<hr>
+<p>(Slide 10)</p>
+<hr>
+<p><strong>What about symbols and strings?</strong></p>
+<pre><code class="language-js">
+base@field              base@field = value
+-field.get(base)-       -field.set(base, value)-
+field[@geti](base)      field[@seti](base, value)
+
+
+<span class="hljs-built_in">String</span>.prototype[@geti] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">base</span>) </span>{
+  <span class="hljs-keyword">return</span> base[<span class="hljs-keyword">this</span>];
+};
+
+<span class="hljs-built_in">String</span>.prototype[@seti] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">base, value</span>) </span>{
+  base[<span class="hljs-keyword">this</span>] = value;
+};
+
+</code></pre>
+<hr>
+<p>MM: Don't want to use string name &quot;get&quot; and &quot;set&quot; for the invocation, I want to use a symbol</p>
+<p>WH: What is the implementation of @geti?</p>
+<p>MM: The semantics of WeakMap's get, with exception that if the key isn't found, it tries the object the key inherits from (i.e., follows the prototype chain) until it finds a key or fails. In other words, it implements the inheritance semantics we expect of accessing properties. Given the use of representation #1, this can reuse the existing optimizations for inherited property lookup.</p>
+<p>...?</p>
+<p>MM: Private symbols, not discoverable</p>
+<p>AWB: You've transformed it into a alternate MOP level operation, but you could've transformed it into a new MOP level operation... (missed this before Waldemar interrupted)</p>
+<p>WH: This was my proposal 3 years ago...</p>
+<p>MM: Explanation...</p>
+<p>WH: Not allowing these things to have normal descriptor rules is a bug.</p>
+<p>STH: Exactly, the existing proposal reuses the mental model of JavaScript programmers that we should continue to use. Same is true for encapsulation at the property level and GC mappings.</p>
+<p>AWB: If you want true privacy</p>
+<p>WH: ... You need</p>
+<p>AWB: You can't proxy anything that has private state. Cant proxy any built-ins, or anything with private symbols.</p>
+<p>BE: Asking TVC to address Waldemar's concern</p>
+<p>WH: When the issue of membranes vs private symbols first came up, I showed an inversion approach, instead of asking the object's proxy to look up, you'd ask the private symbol's proxy. This had been intended to solve the proxy privacy leak problem (don't want object proxies to see the objects' private state), but it's essentially the same issue and solution.</p>
+<p>TVC: Having property access by the private symbol</p>
+<p>STH: Mark is proposing something that has similar semantics, without a new meta operation, but pays for that by making it less like true properties</p>
+<p>WH: So which is it?</p>
+<p>MM: If the definition of WeakMaps is something you &quot;stick things into&quot;, then the answer is private symbols.</p>
+<p>WH: Please show an example how we'd actually use this and how it would interact with a proxy</p>
+<p>(break for lunch)</p>
+<p>MM:</p>
+<p><strong>private</strong> is a pseudo-syntax mechanism</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  <span class="hljs-keyword">constructor</span>(private x, private y) {}
+
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;<span class="hljs-subst">${<span class="hljs-keyword">this</span>@x}</span>, <span class="hljs-subst">${<span class="hljs-keyword">this</span>@y}</span>&gt;`</span>;
+  }
+  add(point) {
+    <span class="hljs-keyword">return</span> Point(<span class="hljs-keyword">this</span>@x + point@x, <span class="hljs-keyword">this</span>@y + point@y);
+  }
+}
+</code></pre>
+<p>Desugars to...</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> Point = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> x = Rel();
+  <span class="hljs-keyword">const</span> y = Rel();
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Point</span>(<span class="hljs-params">x, y</span>) </span>{
+    <span class="hljs-keyword">this</span>@x = x;
+    <span class="hljs-keyword">this</span>@y = y;
+  }
+
+  Point.prototype = {
+    toString() {
+      <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;<span class="hljs-subst">${<span class="hljs-keyword">this</span>@x}</span>, <span class="hljs-subst">${<span class="hljs-keyword">this</span>@y}</span>&gt;`</span>;
+    }
+    add(point) {
+      <span class="hljs-keyword">return</span> Point(<span class="hljs-keyword">this</span>@x + point@x, <span class="hljs-keyword">this</span>@y + point@y);
+    }
+  };
+})();
+</code></pre>
+<p>YK: If you're calling add through a proxy?</p>
+<p>MM: If you're calling one Point proxy from another Point proxy,
+the</p>
+<p>YK: Use case, I want the |this| binding to be the proxy</p>
+<p>MM: Call add() method on a proxy of a Point
+If the right operand is a proxy,</p>
+<p>BM: a proxy to a point doesn't have an x</p>
+<p>AWB: Specifically, a proxy to a point isn't registered in x</p>
+<p>...Concern: if you had done toString simply as a get access</p>
+<p>YK/STH: If Proxies are going to fit into the language, with any sort of concept of private state, then we need to solve the problem, and this doesn't solve the problem.</p>
+<p>MM: Use membranes.</p>
+<p>WH: If you come up against this problem many times and each time the answer is membranes, then we need to add membranes, not proxies.</p>
+<p>General Agreement.</p>
+<p>STH: Until we decide which side of the solution we want: either transparently proxying objects with private state should work, or private state can indicate that something is a genuine not-a-proxy instance of an abstraction (such as Date), then we can't possible have a solution.</p>
+<p>YK: Hiding implementation details that manage private state that can't be proxies.</p>
+<p>AWB: Virtual object vs Caretaker</p>
+<p>BE: Not going to make unstratified traps</p>
+<p>YK: only need a small amount of traps: get and set</p>
+<p>...Can't go down this road.</p>
+<p>(going in circles now)</p>
+<p>BM: Notes that the next logical step is interfaces, where you define an interface and proxies implement against this.</p>
+<p>BE: Can't apply an interface to already born objects.</p>
+<p>BM: if you pre-plan that the object is inline with the interface then security is under control</p>
+<p>BE: We should defer private symbols</p>
+<p>AWB: If we do that, then there is no private branding <em>on</em> the object</p>
+<p>STH: Doesn't solve the problem for &quot;what does proxy for dates do&quot;?</p>
+<p>More discussion about the general flaw of proxies wherein... objects that have some form of internally implemented &quot;private&quot; state cannot be observed and therefore not subject to trapping.</p>
+<p>MM: Can we agree that transparency through membranes is a requirement?</p>
+<p>AWB/STH/YK: Agree its important, but there are a lot of requirements.</p>
+<p>MM: A champion group should go and solve these problems. Retaining WeakMaps, deferring private symbols very closely matches the proposal.</p>
+<p>STH: ...</p>
+<p>MM: Just want to consolidate the issues</p>
+<p>STH: Bad idea to postpone WeakMaps, which useful and are already shipping in browsers. Bad idea to postpone anything based on a particular issue with Proxies. A separate issue with regard to the design of private symbols. None of these are solved by adding &quot;@&quot; to represent a WeakMap.</p>
+<p>WH: It seems like @ for WeakMap makes sense</p>
+<p>BE: Too much for ES6</p>
+<p>MM: Regardless of the syntax/API, the slides show that we should encourage implementers to hang the state off the key, not the base.</p>
+<p>AWB: The WeakMap abstraction we have is fine as is. If an implementation wants to invert its handling of keys and the map, then that's fine too.</p>
+<p>WH: (some comment about private state?)</p>
+<p>STH: That's not related</p>
+<p>AWB: (re-iterates)</p>
+<p>MM: The inverted representation is the better one.</p>
+<p>YK: So, what is your proposal?</p>
+<p>MM:</p>
+<ul>
+<li><strong>My proposal is the private symbols get postponed to ES7</strong></li>
+<li><strong>WeakMap gets renamed to reflect the inverted thinking</strong></li>
+<li>If we adopt the @ syntax in ES6, I want to be able to use a WeakMap on the right side</li>
+</ul>
+<p>...Don't care so much about the renaming, but feel that it could add clarity to the feature</p>
+<p>RW: (Disagree based on experience teaching the concept)</p>
+<p>WH: no consensus on class without private symbols</p>
+<p>MM: Rick, can you find the history of this?</p>
+<p>RW: (recounts two meetings where Waldemar was not present, but a general consensus existing with the understanding that Waldemar would still have something to say. At Northeasten, Allen presented @-names, in which Waldemar found to sufficiently meet his privacy requirement for classes)</p>
+<p>...Discussion around class private state as a whole.</p>
+<p>BE: We need to synthesize what's going into ES6. Waldemar claims this must include some way of adding class private state.</p>
+<p>STH: I would like to stop this conversation and allow myself time to think about this.</p>
+<p>BE: Done.</p>
+<a href="#conclusionresolution-45-private-symbols-weakmaps-and-relationships"><h4 id="conclusionresolution-45-private-symbols-weakmaps-and-relationships">Conclusion/Resolution</h4></a><ul>
+<li>Sam, Mark and Allen to work on &quot;relationships&quot; and varied representation in ES6.</li>
+</ul>
+<a href="#43-proxy"><h2 id="43-proxy">4.3 Proxy</h2></a><p>BE: We've had prototype implementations for some time, we made it through the change of API. We use them extensively.</p>
+<a href="#416-current-status-of-es6"><h2 id="416-current-status-of-es6">4.16 Current Status of ES6</h2></a><p>(Luke Hoban)</p>
+<p>Spreadsheet: <a href="http://sdrv.ms/Z9pQxs">http://sdrv.ms/Z9pQxs</a></p>
+<iframe width="700" height="900" frameborder="0" scrolling="no" src="https://skydrive.live.com/embed?cid=704A682DC00D8AAD&resid=704A682DC00D8AAD%2159602&authkey=AHfDYaQdL8Sz2wM&em=2&wdAllowInteractivity=False&Item=Table1&wdHideGridlines=True&wdDownloadButton=True"></iframe>
+<p>AWB: Based on this review, we should shoot for December 2014</p>
+<p>Discussion of time tables for completed spec reviews</p>
+<p>NL: Also need to look at progress on implementations.</p>
+<p>NL: Concerned about impact on Internationalization API 2.0 – need to evaluate whether to base on ES5 or slip to December 2014.</p>
+<a href="#conclusionresolution-416-current-status-of-es6"><h4 id="conclusionresolution-416-current-status-of-es6">Conclusion/Resolution</h4></a><ul>
+<li>November 2013, Final review draft</li>
+<li>June 2014, Editorially complete
+(STH: we said June in the meeting, but July makes more sense, since we don't have to submit to the GA until September, IIUC)</li>
+<li>December 2014, ECMA approval</li>
+</ul>
+<a href="#47-runtime-costs-of-the-override-mistake"><h2 id="47-runtime-costs-of-the-override-mistake">4.7 Runtime costs of the override mistake</h2></a><p>(Mark Miller)</p>
+<p>Override Mistake
+<a href="http://wiki.ecmascript.org/doku.php?id=strawman:fixing_override_mistake">http://wiki.ecmascript.org/doku.php?id=strawman:fixing_override_mistake</a></p>
+<p>(Request spreadsheet)</p>
+<p>RW: Would like to see the most minimal piece of code required to illustrate the operation, measured by executing the operation in several rounds with MAX number of executions calculated to a mean value. Also, there is use of an <code>in</code> operation which will skew the results between Firefox (a bit faster) and Chrome (slow)</p>
+<p>WH: I'd like to see comparisons of non-frozen vs. frozen to see whether the two order of magnitude Chrome slowdown is caused by freezing or inherent slowness of push and pop.</p>
+<p>Varying, lengthy discussions around SES techniques and the implications of the override mistake.</p>
+<p>Non-issue for code that doesn't freeze.</p>
+<a href="#conclusionresolution-47-runtime-costs-of-the-override-mistake"><h4 id="conclusionresolution-47-runtime-costs-of-the-override-mistake">Conclusion/Resolution</h4></a><ul>
+<li>Investigate instrumentation when silently fails non-writable prototype properties.</li>
+</ul>
+
+</body>

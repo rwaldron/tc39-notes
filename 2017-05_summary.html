@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>Summary for the 58th meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="#summary-for-the-58th-meeting-of-ecma-tc39"><h1 id="summary-for-the-58th-meeting-of-ecma-tc39">Summary for the 58th meeting of Ecma TC39</h1></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2017/05.md">Agenda</a></li>
+<li>The Code of Conduct received positive feedback and support from the Ecma's Executive Committee and the Ecma General Assembly may eventually use it Ecma-wide. TC39 is talking with the Executive Committee and the Ecma's Secretariat to make sure everyone is on the same page along with the proposal. <a href="2017-05_may-25.html#18i-code-of-conduct-follow-up">Notes</a></li>
+<li>New Leadership Status. TC39 is looking for a new Chairperson, Allen Wirfs-Brock was the interim Chair for the first semester of 2017 and Leo Balter will be acting Chair for the next meeting. TC39 will invite Rex Jaeschke - from TC49, C# - for the next meeting as a candidate. <a href="2017-05_may-25.html#tc39-leadership-status">notes</a></li>
+<li>Long and productive discussion on BigInt, not advancing to Stage 3 yet, but found new improvements and reviewers, <a href="2017-05_may-24.html#15iv-bigint-towards-stage-3">notes</a></li>
+<li>The RegExp Legacy Features proposal advanced to Stage 3, <a href="2017-05_may-25.html#15ia-regexp-legacy-features-for-stage-3">notes</a>, <a href="https://github.com/tc39/proposal-regexp-legacy-features">proposal</a></li>
+<li>The Class Field proposals - private and public - are now merged in a single proposal, <a href="2017-05_may-25.html#15iiib-updates-on-class-field-proposals-both-public-and-private">notes</a>, <a href="https://drive.google.com/file/d/0B-TAClBGyqSxWHpyYmg2UnRHc28/view">slides</a></li>
+<li>The behavior of <code>yield</code> on Async Generator was reviewed and improved, the proposal remains on Stage 3. <a href="2017-05_may-25.html#15iva-revisiting-async-generator-yield-behavior">notes</a>, <a href="https://github.com/tc39/proposal-async-iteration/issues/93">issue</a>, <a href="https://docs.google.com/presentation/d/1U6PivKbFO0YgoFlrYB82MtXf1ofCp1xSVOODOvranBM/edit#slide=id.g223fba4116_0_235">slides</a></li>
+<li>Consensus to disallow object and array patterns in the Binding Rest parameter - <code>...[</code> and <code>...{</code> - for Object properties destructuring, <a href="2017-05_may-23.html#16ih-why-allow-bindingpattern-for-bindingrestparameter-for-object-rest-maybe-we-should-just-allow-identifiers">notes</a></li>
+<li>Modules:
+<ul>
+<li>TC39 discussed implementing options for Module import, not advancing to Stage 1 yet. <a href="2017-05_may-23.html#16iib-module-import-options-discussion-potentially-for-stage-1">notes</a></li>
+<li>See also the <a href="2017-05_may-23.html#16iic-importing-modules-which-failed-evaluation">notes</a> for importing modules which failed evaluation.</li>
+<li><code>import.meta</code> to access host-specific module metadata from inside a module, now on Stage 2 <a href="2017-05_may-23.html#16iiia-accessing-host-specific-module-metadata-from-inside-a-module">notes</a>, <a href="2017-05_may-25.html#15iif-importmeta-for-stage-2">notes+</a>, <a href="https://github.com/tc39/proposal-import-meta">proposal</a></li>
+</ul></li>
+<li>Advancing to Stage 1:
+<ul>
+<li><code>Atomics.waitNonBlocking</code>, name is going to be reviewed, <a href="2017-05_may-23.html#16iia-atomicswaitnonblocking-for-stage-1">notes</a> and <a href="https://github.com/lars-t-hansen/moz-sandbox/blob/master/sab/waitNonblocking.md">more info</a></li>
+<li>Numeric separators - <code>1_000_000</code>, <a href="2017-05_may-23.html#16iie-advance-numeric-separators-proposal-to-stage-1">notes</a>, <a href="https://github.com/samuelgoto/proposal-numeric-separator">proposal</a></li>
+<li>Float16 for TypedArrays and DataView, <a href="2017-05_may-23.html#16ig-float16-on-typedarrays-dataview-mathhfround-for-stage-1">notes</a></li>
+</ul></li>
+<li>Presentations:
+<ul>
+<li>Towards Trustworthy Verification of JavaScript, Philippa Gardner, <a href="2017-05_may-24.html#14i-towards-trustworthy-verification-of-javascript">notes</a></li>
+<li>ECMAScript design process, Kevin Gibbons and Tim Disney, <a href="2017-05_may-24.html#14ii-shape-security">notes</a>, <a href="https://docs.google.com/presentation/d/1CPAusyG_TRgQ4gy5pw_RzH4JWWmxfDU8AeqaDCa3mJw/edit#slide=id.p">slides</a></li>
+<li>Follow the user, Daniel Ehrenberg, <a href="2017-05_may-24.html#14ii-daniel-ehrenberg">notes</a>, <a href="https://docs.google.com/presentation/d/1jgHPsSqCP0aAYcyvYBRYw3db1jUm0pyu7Vj88DHUOGg/edit#slide=id.p">slides</a></li>
+<li>Moddable on ES6 in 48K of RAM, Patrick Soquet and Peter Hoddie, <a href="2017-05_may-24.html#14iii">notes</a></li>
+<li>Role of Babel in JS, Henry Zhu, <a href="2017-05_may-24.html#14iv-role-of-babel-in-js">notes</a>, <a href="https://github.com/hzoo/role-of-babel-in-js">slides</a></li>
+<li>TC39/ECMAScript: The Next 20 Years, Allen Wirfs-Brock, <a href="2017-05_may-24.html#14v-tc39ecmascript-the-next-20-years">notes</a>, <a href="https://github.com/tc39/agendas/blob/master/2017/ES-next20.pdf">slides</a></li>
+</ul></li>
+<li>Several needs-consensus pull requests on the Ecma262 project reached consensus, tightening up semantics in edge cases. They are on track through the <a href="https://github.com/tc39/ecma262/pulls?q=is%3Aopen+is%3Apr+label%3A%22needs+consensus%22">need consensus</a> label.</li>
+</ul>
+
+</body>

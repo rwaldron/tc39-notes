@@ -1,0 +1,510 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 19, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-19-2014-meeting-notes"><h1 id="november-19-2014-meeting-notes">November 19, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Taylor Woll (TW), Jordan Harband (JHD), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jeff Morrison (JM), Sebastian Markbåge (SM), Erik Arvidsson (EA), Peter Jensen (PJ), Eric Toth (ET), Yehuda Katz (YK), Dave Herman (DH), Brendan Eich (BE), Ben Newman (BN), Forrest Norvell (FN), Waldemar Horwat (WH), Alan Schmitt (AS), Michael Ficarra (MF), Jafar Husain (JH), Lee Byron (LB), Dmitry Lomov (DL), Arnaud Le Hors (ALH), Chip Morningstar (CM), Caridy Patiño (CP), Domenic Denicola (DD), Mark S. Miller (MM), Yehuda Katz (YK), Dmitry Soshnikov (DS), Kevin Smith (KS)</p>
+<hr>
+<a href="#6-test-262-status"><h2 id="6-test-262-status">6. Test 262 Status</h2></a><p>(Brian Terlson)</p>
+<p>BT:</p>
+<ul>
+<li>Lots of activity happening on Github</li>
+<li>Harness improvements ongoing, unblocking usage by polyfill authors is a top priority</li>
+<li>Missing collateral for ES6 features</li>
+<li>Move all tests to folders based on feature name</li>
+<li>Improves use and navigation</li>
+<li>Problem is that 15k tests need to be assigned to folders</li>
+<li>10k are categorized so far</li>
+</ul>
+<p>AWB: How will we know when we have enough tests that cover a reasonably minimal amount</p>
+<p>BT: Existance tests?</p>
+<p>DD: When all implementors submit their suites</p>
+<p>AWB: Focus on edge cases?</p>
+<p>...</p>
+<a href="#411-performance-issue-objectdefineproperties-objectcreate-objectassign"><h2 id="411-performance-issue-objectdefineproperties-objectcreate-objectassign">4.11 Performance issue: <code>Object.defineProperties</code>, <code>Object.create</code>, <code>Object.assign</code>.</h2></a><p>(revisit)</p>
+<p>AWB: (Recap)</p>
+<p>MM: After consideration of the issue at hand, and in keeping with principle of least surprise: there is no other place where the spec defines similar behaviour. All other speced action before propagating a throw, such as the &quot;return&quot; from for-of loops, is cleanup action rather than continuation of the original operation. Given that the order in which the properties are tried is deterministic and with the balance of the other arguments, I agree that the first error should throw at the point of exception.</p>
+<a href="#conclusionresolution-411-performance-issue-objectdefineproperties-objectcreate-objectassign"><h4 id="conclusionresolution-411-performance-issue-objectdefineproperties-objectcreate-objectassign">Conclusion/Resolution</h4></a><ul>
+<li>Remove pendingException semantics</li>
+<li>Error throws at point of exception</li>
+</ul>
+<a href="#412-should-weakmapweakset-have-a-clear-method-markm"><h2 id="412-should-weakmapweakset-have-a-clear-method-markm">4.12 Should WeakMap/WeakSet have a .clear method? (MarkM)</h2></a><p>(Mark Miller)</p>
+<p>MM: In the absense of clear, we have a security property: the mapping from weakmap/key pair value can only be observed or affected by someone who has both the weakmap and the key. With clear(), someone with <em>only</em> the WeakMap would've been able to affect the WeakMap-and-key-to-value mapping.</p>
+<a href="#conclusionresolution-412-should-weakmapweakset-have-a-clear-method-markm"><h4 id="conclusionresolution-412-should-weakmapweakset-have-a-clear-method-markm">Conclusion/Resolution</h4></a><ul>
+<li>Remove <code>clear</code> from WeakMap and WeakSet</li>
+</ul>
+<a href="#47-clarify-the-syntax-reserved"><h2 id="47-clarify-the-syntax-reserved">4.7 Clarify the syntax reserved?</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: What did we reserve?</p>
+<p>WH: Like this but curious about how it's done.</p>
+<p>WH, BE: (discussion re: specifics of BindingIdentifier grammar)</p>
+<p>WH: Will validate the grammar by January</p>
+<p>AWB: The colon-less form of object literal</p>
+<p>Various: Discussion of the annoying ambiguities in using colons to add types to destructuring patterns.</p>
+<a href="#conclusionresolution-47-clarify-the-syntax-reserved"><h4 id="conclusionresolution-47-clarify-the-syntax-reserved">Conclusion/Resolution</h4></a><ul>
+<li>No colon after BindingIdentifier</li>
+<li>Jeff Morrison and Brian Terlson to chamption refinements</li>
+</ul>
+<a href="#58-mapprototypemap-and-mapprototypefilter-spec--set"><h2 id="58-mapprototypemap-and-mapprototypefilter-spec--set">5.8 Map.prototype.map and Map.prototype.filter (spec) + Set</h2></a><p>(Dmitry Soshnikov)</p>
+<p><a href="./Map.prototype-extensions.pdf">Map.prototype-extensions.pdf</a></p>
+<p>DS: Map.prototype extensions</p>
+<ul>
+<li>map</li>
+<li>filter</li>
+<li>more...</li>
+</ul>
+<p>These exist on Arrays, hopefully this is straight forward</p>
+<p>Proposed spec: <a href="https://gist.github.com/DmitrySoshnikov/a218700746b2d7a7d2c8">https://gist.github.com/DmitrySoshnikov/a218700746b2d7a7d2c8</a></p>
+<p>MM: Similar to parallel js, lets keep an eye on the higher order operations to ensure that operations remain parallelizable</p>
+<p>Design Choices</p>
+<ul>
+<li>Directly on Map.prototype</li>
+<li>On generic &quot;map-like&quot;? %CollectionPrototype%</li>
+<li>Binding <code>::</code> operator on iter tools?</li>
+</ul>
+<p>User-level API</p>
+<ol>
+<li>Simple value map:</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>([[<span class="hljs-string">"x"</span>, <span class="hljs-number">10</span>], [<span class="hljs-string">"y"</span>, <span class="hljs-number">20</span>]]).map(<span class="hljs-function">(<span class="hljs-params">v, k, m</span>) =&gt;</span> {
+  <span class="hljs-keyword">return</span> v * <span class="hljs-number">2</span>;
+});
+=&gt; [[<span class="hljs-string">"x"</span>, <span class="hljs-number">20</span>], [<span class="hljs-string">"y"</span>, <span class="hljs-number">40</span>]]
+</code></pre>
+<ol start="2">
+<li>Entries map:</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>([[<span class="hljs-string">"x"</span>, <span class="hljs-number">10</span>], [<span class="hljs-string">"y"</span>, <span class="hljs-number">20</span>]]).map(<span class="hljs-function">(<span class="hljs-params">v, k, m</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (k == <span class="hljs-string">"x"</span>) <span class="hljs-keyword">return</span> [<span class="hljs-string">"z"</span>, v];
+  <span class="hljs-keyword">return</span> [k, v * <span class="hljs-number">2</span>];
+});
+
+=&gt; [[<span class="hljs-string">"z"</span>, <span class="hljs-number">10</span>], [<span class="hljs-string">"y"</span>, <span class="hljs-number">10</span>]]
+</code></pre>
+<p>WH: Common Lisp has a menagerie of map-like functions. One of the most useful ones is one that allows the per-element function to decide to skip an element instead of always producing one.</p>
+<p>YK/DD: (discussion re: Ruby style map operations)</p>
+<p>MM: If you want to get the default, without being verbose</p>
+<p>DD: Put a symbol on the map this[@@collectionConstructor] to find the right constructor</p>
+<p>AWB: Smalltalk uses an abstract above that has a species property to determine what to create.</p>
+<p>Discussion of lazy mode</p>
+<p>YK: Lazy: do not accumulate intermediaries. Non-lazy: accumulate</p>
+<p>YK/DD: Not important to determine this right now.</p>
+<p>WH: How would you directly turn a map into an array, i.e. provide a mapping function that takes a (key, value, m) and produces array values?</p>
+<p>?: Array.from(m.entries.map(...)) instead of new Map(m.entries.map(...))</p>
+<p>WH: But that wouldn't work if, as was just being discussed, we got rid of the outer new Map by making it implicit.</p>
+<ul>
+<li>Prototcol design choices</li>
+</ul>
+<p>Re: %CollectionProtocol% <a href="https://esdiscuss.org/topic/map-filter-map-and-more#content-33">https://esdiscuss.org/topic/map-filter-map-and-more#content-33</a></p>
+<p>AWB: Want to avoid intermediary collection creation</p>
+<p>Possibly?</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { map } <span class="hljs-keyword">from</span> <span class="hljs-string">"itertools"</span>;
+
+<span class="hljs-keyword">var</span> nmap = omap::map(<span class="hljs-function">(<span class="hljs-params">k, v</span>) =&gt;</span> [k + <span class="hljs-number">1</span>, v + <span class="hljs-number">1</span>]);
+</code></pre>
+<p>DD: we have the IteratorPrototype</p>
+<ul>
+<li>Overall</li>
+<li>To correlate with <code>map.forEach</code> better to be <code>map.map</code> and <code>map.filter</code>, not <code>map::map</code></li>
+<li>Direct <code>Map.prototype</code> or <code>%CollectionPrototype%</code> - to be discussed</li>
+</ul>
+<p>YK/DD/DS: (discussion of need for additions to Map.prototype)
+Concern about forEach as stopgap for transition to for-of
+DH/others: transition still ongoing
+BE: transition means &quot;stopgap&quot; code on web endures
+BE: anyway we want high-order &quot;interior&quot; iteration forever
+BE: JS is a TIMTOWtDI language</p>
+<p>RW: These can be made generic enough for both Map and Set if <code>map</code> defaults to the thing that <code>mapEntries</code> is doing. Then works the same for both.</p>
+<p>YK: No consensus on a map-specific solution.</p>
+<p>DD: Don't think we should put anything else on <code>Map.prototype</code>, it should be on <code>map.entries()</code>?</p>
+<ul>
+<li>Not consistent in each case</li>
+</ul>
+<p>DH: Disagree. Most common case gets the position of being default. Methods on class get to be the domininant, default case.</p>
+<ul>
+<li>We have keys, values, entries and need iterator</li>
+</ul>
+<p>DD: This example seems to have values as the default</p>
+<p>DH/YK/RW: Which is wrong.</p>
+<p>MM: map vs mapEntries is differentiating in what it does with the callback's return value. These do not differ on the arguments they provide to the callback.</p>
+<p>DD: Entries is the default</p>
+<p>YK/DH/RW: Agree.</p>
+<p>DS: Remove forEach?</p>
+<p>WH: Why? I don't see anything wrong with it, and it's analogous to the other mappers.</p>
+<p>BE: forEach is not just transitional. We need it.</p>
+<p>RW: This isn't a trade.</p>
+<p>DH/YK: (discussion re: adding a new CollectionPrototype to the chain?)</p>
+<p>BE: Someone needs to do the work to see if this can be done. We want batteries included interators, higher order operations etc.</p>
+<p>DH: Might be that we have several inheritance heirarchies? Similar or same methods?</p>
+<p>YK: Can have a higher class that gets delegated to.</p>
+<p>WH: (itemizes each of the cases: map, filter and forEach)</p>
+<ul>
+<li>How do you turn on type into another?</li>
+</ul>
+<p>YK: This is what we were discussing re: the symbol</p>
+<p>[several discussions at once]</p>
+<p>AWB: An iterator that wraps another that says &quot;iterate, but of a specific type&quot;.</p>
+<p>BE: Need slides, DD doing that.</p>
+<pre><code class="language-js"><span class="hljs-built_in">Map</span>.prototype.entries = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> MapIterator({ <span class="hljs-attr">collectAs</span>: <span class="hljs-keyword">this</span>.constructor[<span class="hljs-built_in">Symbol</span>.species] });
+};
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MapIterator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Iterator</span> </span>{
+  <span class="hljs-keyword">constructor</span>({ collectAs }) {
+    <span class="hljs-keyword">super</span>();
+    <span class="hljs-keyword">this</span>[<span class="hljs-built_in">Symbol</span>.collectAs] = collectAs;
+  }
+}
+
+Iterator.prototype.collect = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>[<span class="hljs-built_in">Symbol</span>.collectAs].from(...);
+};
+
+myMap.entries()                      <span class="hljs-comment">// proposal: you can remove .entries()</span>
+  .filter(<span class="hljs-function">(<span class="hljs-params">[k, v]</span>) =&gt;</span> k % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>)
+  .map(<span class="hljs-function">(<span class="hljs-params">[k, v]</span>) =&gt;</span> [k * <span class="hljs-number">2</span>, v])
+  .forEach(...);
+  <span class="hljs-comment">// or .reduce(...) also forces</span>
+  <span class="hljs-comment">// or for-of</span>
+  <span class="hljs-comment">// or .collectAs(Array)</span>
+  <span class="hljs-comment">// or .collect(), which uses [Symbol.collectAs] as a default</span>
+</code></pre>
+<p>(mixed discussion)</p>
+<p>MM/DH: classic lazyness, &quot;force&quot; means done building up the lazy stuff and want to actually force it to execute and get a result now</p>
+<p>WH: Not convinced, what goes in the ... on line 13? (i.e. does the collectAs constructor get passed values or [key, value] pairs? This makes the difference between getting the result ['x', 'y', 'z'] and [[0: 'x'], [1: 'y'], [2: 'z']].)</p>
+<p>DH: collectAs is the the way to go from one final thing to another final thing.</p>
+<p>Confirmed.</p>
+<p>DD: call keys, you get keys, call values, you get values, call entries, get entries.</p>
+<p>WH: Very confusing. In for loops &quot;entries&quot; means the format of your input, not what you'll eventually output.</p>
+<p>DH: That's just our established terminology for items in Map or Set</p>
+<p>WH: Yes, but it's used <em>on the input</em> to specify the kind of the output instead of the kind of the input.</p>
+<p>Domenic adds to example: &quot;Proposal: you can remove <code>entries()</code>&quot;</p>
+<pre><code class="language-js">myMap.entries()
+  .filter(<span class="hljs-function">(<span class="hljs-params">[k, v]</span>) =&gt;</span> k % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>)
+  .map(<span class="hljs-function">(<span class="hljs-params">[k, v]</span>) =&gt;</span> [k * <span class="hljs-number">2</span>, v])
+  .map(<span class="hljs-function">(<span class="hljs-params">[k, v]</span>) =&gt;</span> v)
+  .collectAs(<span class="hljs-built_in">Array</span>)   
+</code></pre>
+<p>To generate example that collects just the values (not the pairs) into an array.</p>
+<p>WH: To clarify, this doesn't collapse the intermediate results into any maps, so there would be no issues with .map(([k, v]) =&gt; v) duplicates getting undesirably coalesced?</p>
+<p>DD: Right.</p>
+<p>KS: Want to transform one interator into another, but dont want to use the defined function, want to use my own. How does this propagate this through?</p>
+<p>DH: Syntax doesn't give you a nice way to do this, generator is just a function that takes an argument</p>
+<p>KS: Yes.</p>
+<p>DH: No <code>collectAs</code>?</p>
+<p>YK: Provide a default</p>
+<p>DH: But as Kevin says, this couldn't be implemented with Generators</p>
+<p>AWB: Need to explore this, but the subclassability of generators comes into play here. Need to work through it .</p>
+<p>DH: Can't instantiate a subclass of generator as a generator</p>
+<p>...</p>
+<p>MM: Agree that lack of map and filter is a point of confusion.</p>
+<p>YK/DH: We all agree with this.</p>
+<p>YK: If all in agreement, then we're in consensus to at least do <em>something</em>, but not sure what that is.</p>
+<ul>
+<li>Also needs to be subclassable</li>
+</ul>
+<p>MF: have a reservation about the entire premise. What about the</p>
+<ul>
+<li>Non-empty list in? Guarantee out?</li>
+</ul>
+<p>DH: If input type of filter is</p>
+<p>MF: Two functor laws:</p>
+<ol>
+<li>If map the id function over a functor, the functor that we get back should be the same as the original functor.</li>
+<li>Composing two functions and then mapping the resulting function over a functor should be the same as first mapping one function over the functor and then mapping the other one.</li>
+</ol>
+<p>(break)</p>
+<a href="#conclusionresolution-58-mapprototypemap-and-mapprototypefilter-spec--set"><h4 id="conclusionresolution-58-mapprototypemap-and-mapprototypefilter-spec--set">Conclusion/Resolution</h4></a><ul>
+<li>Needs work.</li>
+<li>Sufficient issues</li>
+<li>Iterator prototype first</li>
+<li>How does that translate to the collection api proposal itself.</li>
+</ul>
+<a href="#59-revisit-set-api-possible-exclusion-of-entries-and-keys"><h2 id="59-revisit-set-api-possible-exclusion-of-entries-and-keys">5.9 Revisit Set API (possible exclusion of entries and keys)</h2></a><p>(Dmitry Soshnikov)</p>
+<p>DS: (proposes removal of second arg to set.forEach)</p>
+<p>RW: The matching arguments in map.forEach and set.forEach were designed to match array.forEach for consistency.</p>
+<p>JM: Is there any code that would rely on this?</p>
+<p>AWB: If set only has value iterator, how do you create a map without keys or entries?</p>
+<ul>
+<li>If you remove this from ES6, how do we create a map from a set?</li>
+</ul>
+<p>JM: Not pleasant.</p>
+<p>AWB: Correct.</p>
+<p>RW: What is the actual value of removal?</p>
+<p>AWB/LB: There is value in consistency</p>
+<a href="#conclusionresolution-59-revisit-set-api-possible-exclusion-of-entries-and-keys"><h4 id="conclusionresolution-59-revisit-set-api-possible-exclusion-of-entries-and-keys">Conclusion/Resolution</h4></a><ul>
+<li>No removal of argument to <code>set.forEach</code></li>
+</ul>
+<a href="#abstract-references-as-a-solution-to-ltr-composition-and-private-state"><h2 id="abstract-references-as-a-solution-to-ltr-composition-and-private-state">Abstract references as a solution to LTR composition and private state</h2></a><p>(Kevin Smith)</p>
+<p>KS: Abstract referemces, gives a way to provide an abstraction for the records base component, for that record. Antoher way to think about it is virtual properties.</p>
+<p><em>Using the IteratorPrototype Problem to illustrate</em></p>
+<ul>
+<li>We want iterator methods!</li>
+<li>Left to Right composition</li>
+<li>Userland FTw</li>
+</ul>
+<p><em>Conflicting goals</em></p>
+<ul>
+<li>Don't want users to extend built-in prototypes</li>
+<li>Don't want to wait for TC39</li>
+</ul>
+<p><em>A General Problem?</em></p>
+<p>The user has an object.
+The user has a function
+But...</p>
+<p>There's no convenient way to all the function as a method of the object.
+Have to use right-to-left. All chains to the left.</p>
+<p><em>A (More) General Problem?</em></p>
+<p>The user has an object L
+The user has a function R</p>
+<p><em>A General Solution</em></p>
+<p>L :: R</p>
+<p>base = L
+referenced name = R</p>
+<p>AWB: Are you evaluating R?</p>
+<p>MM: R is an expression. Only the value it evaluates to is significant. In this regard, it is more similar to square bracket indexing than it is to dot.</p>
+<p><em>Dereferencing behaviour is delegated to the <em>referenced</em> <em>name</em> object.</em></p>
+<ul>
+<li><code>Symbol.referenceGet</code></li>
+<li><code>Symbol.referenceSet</code></li>
+<li><code>Symbol.referenceDelete</code></li>
+</ul>
+<p><em>Examples</em></p>
+<pre><code>/<span class="hljs-bullet">* gets evaluated approximately like *</span>/
+L::R
+R[<span class="hljs-string">Symbol.referenceGet</span>](<span class="hljs-link">L</span>)
+
+L::R = expr 
+  R[<span class="hljs-string">Symbol.referenceSet</span>](<span class="hljs-link">L</span>)
+  
+L::R()
+R[<span class="hljs-string">Symbol.referenceGet</span>](<span class="hljs-link">L</span>).call(L)
+</code></pre>
+<p>WH: Asks clarifying question about what goes into the base, name, and strict slots of the generated Reference object.</p>
+<p>[KS flips to the semantics slide]</p>
+<p>WH: Does this mean that the call fails whenever L === undefined?</p>
+<p>MM/KS: Yes.</p>
+<p>WH: Which is the base?</p>
+<p>MM/KS: The base is L</p>
+<p>WH: In your examples above, it's R</p>
+<p>MM: In the desugaring, the references</p>
+<p>MM: The value L is the reference's base. The value of R is the reference's &quot;name&quot;</p>
+<p>MM: The semantics is normative in the proposal, not the desuraring.</p>
+<p>WH: The desugaring is not helpful because it misleads to wrong conclusions about the proposal, such as the base and the behavior when L === undefined.</p>
+<p><em>Built-In Support: Maps</em></p>
+<p>Maps have inherent virtual property semantics:
+(need to copy from slides)</p>
+<p><em>Private State</em></p>
+<pre><code class="language-js"><span class="hljs-comment">// Because the Map has "get", "set", and "delete"</span>
+<span class="hljs-keyword">const</span> X = <span class="hljs-keyword">new</span> PrivateMap();
+<span class="hljs-keyword">const</span> Y = <span class="hljs-keyword">new</span> PrivateMap();
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    <span class="hljs-keyword">this</span>::X = x;
+    <span class="hljs-keyword">this</span>::Y = y;          
+  }
+}
+
+<span class="hljs-comment">// Private State + Sugar</span>
+private X, Y;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    <span class="hljs-keyword">this</span>::X = x;
+    <span class="hljs-keyword">this</span>::Y = y;          
+  }
+}
+</code></pre>
+<p>YK: (question about inheritance, Yehuda can fill that in?)</p>
+<p>MM: If you want protected state (visible through inheritance), you can define that.</p>
+<p>MM: Think of <code>::</code> as more like &quot;base[&quot;</p>
+<p>YK: FWIW, some explicit private state syntax is desirable.</p>
+<p><em>Weaknessess</em></p>
+<p>The user must bring the virtual property object into scope as a variable. Fortunately, we now have better tools to manage scope:</p>
+<ul>
+<li>Modules</li>
+<li>Lexical Declarations</li>
+<li>Destructuring</li>
+</ul>
+<p><em>More Information</em></p>
+<ul>
+<li><a href="https://github.com/zenparsing/es-abstract-refs">https://github.com/zenparsing/es-abstract-refs</a></li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><a href="https://gist.github.com/zenparsing/611b8788ff8ffcfcc20e">https://gist.github.com/zenparsing/611b8788ff8ffcfcc20e</a></li>
+</ul>
+<p>DD: This doesn't work outside of certain cases, the symbols are added</p>
+<p>BE: T</p>
+<p>DD: Wouldn't unreified private state, by analogy to spec-internal properties, have the same non-transparency across proxies that spec-internal properties do?</p>
+<p>MM: The only non-transparency in both cases is over non-membrane uses of proxies, whose ad hoc nature cause many necessary non-transparencies. For example, applying Date.prototype.getYear to a proxy for a Date. But in a full membrane scenario, you'd apply a proxy for getYear to a proxy for Date, which turns into applying the real getYear to the real Date on the other side of the membrane. Non-reified private state would avoid the membrane tranparency issues in the same way. These issues only arise once you reify the designator into something first class which enables access to that private state.</p>
+<p>YK: The only real disagreement is whether the mental model is private state or the model that [Mark just described]</p>
+<p>MM: Lead to Relationships: impossible to each &quot;private state designator.get state bearing object&quot; (meta-mm: Rick, I don't understand what you recorded here and it doesn't ring any bells. If no one else remembers, please delete it as uninformative noise. Thanks.)</p>
+<p>YK: everybody agrees on the private state semantics, but the argument is whether we need a special-case syntax for private state, or a general-purpose extraction that everyone will need to learn</p>
+<p>AWB: Generalization that :: can have use on both sides.</p>
+<p>JM: When you see the call example it makes more sense.</p>
+<p>DD: But you're not &quot;calling&quot;, you're &quot;symbol.referenceGet&quot;ing</p>
+<ul>
+<li>Ill serving private state</li>
+<li>Ill serving the bind</li>
+</ul>
+<p>MM: Non reifable private state, such as in Java, pure textual. No transparency across membrange problem. The issue cannot arise becase theure is no ability to reify the designator of that slot.</p>
+<ul>
+<li>Nice conservative starting point because it directly reflects internal slots.</li>
+</ul>
+<p>YK: There's a curse of expert knowledge in the room, need to step back and think of it in simpler / easier terms</p>
+<p>MM: Given reification of the designator, we're only transparent across membranes if the access invokes the reified state designator with the state bearing object as argument, rather than vice versa.</p>
+<p>DD: would work just as well, if this :: only worked with private maps. The generalization that :: can intercept an object with get, set,</p>
+<p>MM: (Added after discussion) Only transparent across membranes if :: also works with proxies for these maps. There's no need to make a special rule for proxies to these maps vs other proxies, so we shouldn't. If we don't then it also doesn't make sense to impose a private-map-only restriction in the first place.</p>
+<p>WH: Main objection is to choice of the particular syntax used. :: would be more naturally used for either type annotations (due to the existing usage of : in object literals and destructuring) or namespace-like qualifiers (like in C++).</p>
+<p>WH: (other than choice of syntax): interesting, but not fully investigated. fear of locking ourselves into using weak-maps-like mechanism for private state. This of course lets you stick &quot;X&quot; onto anything with <code>::</code>, not just objects of your own class.</p>
+<p>AWB: But weakmaps have essentially grown into a thing that provides a separate set of &quot;private slots&quot;, keyed on whatever object.</p>
+<p>RW: Yes. We're using this pattern significantly in hardware abstractions, where the key is the instance respresnting some device and the &quot;private state&quot; contains the raw readings from the physical device. Keeps this data at hand, but away from user muddling.</p>
+<p>CM: In practice, there will be a profusion of extended objects and people won't realize that they're using this <code>::</code> vs. ?</p>
+<p>DD:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  private X, Y; <span class="hljs-comment">// desugars to </span>
+  <span class="hljs-comment">// new PrivateMap(Point) ?</span>
+  
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    <span class="hljs-keyword">this</span>::X = x;
+    <span class="hljs-keyword">this</span>::Y = y;    
+    
+  X.set(foo, bar);
+  }
+  method(o) {
+    <span class="hljs-attr">o</span>::X = <span class="hljs-string">"foo"</span>; <span class="hljs-comment">// X.set(o, "foo");   </span>
+  }        
+}
+
+</code></pre>
+<p>WH's objection, as presented by MM: method(o) can be called on any o, not just Points, and can be used to pollute other objects. This leads to issues via various confused deputy integrity bugs.</p>
+<p>?: May want to attach private properties to any object.</p>
+<p>MM/WH: Sure, fine to allow that case too, but it should require an affirmative step by the programmer. The path of least resistance should be simple private.</p>
+<p>DD: What if <code>private</code> means that the map will only accept an instance of Point?</p>
+<p>MM: In the</p>
+<p>DH: There is a lot we want to achieve with &quot;private&quot; and I don't think we even have consensus on what we want to &quot;private&quot; to be. There is a lot machinery in this proposal. Missing a natural correspondance ot an existing mental model</p>
+<p>YK: Or another language</p>
+<p>MM: ? re: non-reified private state</p>
+<p>DD: (updates)</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  private X, Y; <span class="hljs-comment">// causes constructor to do</span>
+  <span class="hljs-comment">// X.set(this, undefined); Y.set(this, undefined);</span>
+  
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    <span class="hljs-keyword">this</span>::X = x;
+    <span class="hljs-keyword">this</span>::Y = y;    
+    
+  X.set(foo, bar);
+  }
+  method(o) {
+    <span class="hljs-attr">o</span>::X = <span class="hljs-string">"foo"</span>;
+    <span class="hljs-comment">// if (!X.has(o)) {</span>
+    <span class="hljs-comment">//   throw new TypeError();</span>
+    <span class="hljs-comment">// }</span>
+    <span class="hljs-comment">// X.set(o, "foo");    </span>
+  }        
+}
+</code></pre>
+<p>DH: Hypothetically: if <code>::</code> was only usable for private. No generalization. Throwing this extra baggage nto class private is doubling down on private being only usable with class. I</p>
+<p>Should be a requirement: usable outside of classes.</p>
+<p>MM: accessor not be reified AND be usable outside of classes?</p>
+<p>DH: Hypothetically, not reified.</p>
+<p>MM: Non reified privacy indicator outside of classes?</p>
+<p>DH:</p>
+<p>MM: Doesn't reify? It should work</p>
+<p>AWB: not class specific, you can put private in object literal.</p>
+<p>DH: Not confident we have agreement of what private outside of class should do or look like.
+examples:</p>
+<p>(whiteboard image)</p>
+<p>DH: If we decide second class, then additional set of concerns</p>
+<p>MM: In the absense of reifying, we can faithfully explain what's going on in terms of static semantics.</p>
+<p>DH: if first class, allows use as a general mechanism</p>
+<p>MM: Proposes that private sugar (for declaring private properties) be defined only within classes. The language already has plenty of mechanisms to define it ad hoc in other contexts. On the other hand, the :: usage sugar would be usable throughout the language.</p>
+<p>It's basically impossible to follow (rapid topic-hopping, analogous to frequency-hopping radios :) )</p>
+<p>When members review the contents of this discussion, they will have to fill in their own summaries.</p>
+<p>BE: for this proposal, take the @ vs :: objection to heart, separate &quot;privacy&quot; from the L-to-R order.</p>
+<a href="#conclusionresolution-abstract-references-as-a-solution-to-ltr-composition-and-private-state"><h4 id="conclusionresolution-abstract-references-as-a-solution-to-ltr-composition-and-private-state">Conclusion/Resolution</h4></a><ul>
+<li>Resolve the existing issues</li>
+<li>Separate &quot;privacy&quot; from left to right</li>
+</ul>
+<p>Meta MM: Rick -- These conclusions do not reflect anything I remember being concluded from the discussion. As far as I remember, we all came to a much better joint understanding, but there was no attempt to articulate an agreed overall conclusion from the discussion.</p>
+<a href="#57-can-security-monitors-reliably-detect-monkey-patching-of-primordials"><h2 id="57-can-security-monitors-reliably-detect-monkey-patching-of-primordials">5.7 Can security monitors reliably detect monkey-patching of primordials?</h2></a><p>(Brendan, Michael Ficarra [invited expert])</p>
+<p>MF: The problem space: &quot;How can the developer be more confident in how their code will evaluate in any arbitrary environment&quot;</p>
+<ul>
+<li>&quot;First Class Realms&quot;</li>
+</ul>
+<p>DH: Sorry to interrupt, that work is done. It's part of ES7: Realms.</p>
+<ul>
+<li>Allows to execute a string of code.</li>
+<li>Completely isolated</li>
+<li>Creator can setup it's environment as they like</li>
+</ul>
+<p>Can think of it similar to a DOM-less iframe or Worker.</p>
+<p>(Questions about the analogy)</p>
+<p>Synchronous, unmediated. Owner can reach in, etc.</p>
+<p>DH: We should take this offline and compare notes.</p>
+<p>MF: Envisioned as a function that has a directive, can cast values from the outside. Cannot reuse. Intended to run as an IIB</p>
+<p>DH: What happens if there lexical references?</p>
+<p>MF: Any lexical references are resolved.</p>
+<p>DD: What if you have <code>[[Global]]Array === [[Realm]]Array</code>, which Array?</p>
+<p>MM: Concern, if an adversary's code has run first. No code that runs after can know that it didn't run first.</p>
+<p>DH:</p>
+<p>MF: you can't rely on the trusted version of a built-in</p>
+<p>MM: Code hosted on a server in a different domain, served in response to HTTP GET, not carrying the header <code>ACCESS-CONTROL-ALLOW-ORIGIN</code>
+(does not allow cross-origin get). Script tag can still read the results of a cross origin get, without access-control header, but xhrs cannot.</p>
+<p>MF: Hoping that the security benefits are better for spec analysis. Developer sanity, alleviate working around issues. Performance <em>may</em> be a benefit, but I won't go into that.</p>
+<p>MF: The benefit of this proposal over Dave's is that you're not doing string programming and have access to things around you.</p>
+<p>DH: Operating under two assumptions:
+Mine: assume cannot operate under an &quot;pwned&quot; environment
+Other: assume can operate under an &quot;pwned&quot; environment</p>
+<p>Only accident you have worry about is someone trashing <code>Reflect.Realm</code>. At that point, its game over anyway. If malice is the concern, then there is nothing you can do and we can't design that way.</p>
+<p>MM: I agree in practice. There is a very narrow threat model in which the advesary can run first, but in which it cannot rewrite the defender's code. If the defender's code is hosted on a server in a different domain, and served -- in response to an HTTP GET -- without the ACCESS-CONTROL-ALLOW-ORIGIN, and if the adversay <em>has no other server of its own on the network</em> that can issue the HTTP GET to the defender's server. However, this is such a narrow and impractical threat model that we should not add any mechanism that support only it.</p>
+<p>DH: Can't comment, it's out of my wheelhouse</p>
+<ul>
+<li>Dislike the proposal in that it creates a false security.</li>
+</ul>
+<p>MM: Relies on assumption with no malicious server.</p>
+<p>MF: Our motivation is to protect our customer's users.</p>
+<p>MM: Assuming adversary code is already running in a browser that your bank software is about to load, the adversary can reach out from an adversary server, which fetches the code from the defender, and sends that code, via xhr say, to the adversary code running in the browser. It doesn't matter whether the adversary rewrites it on the server or the browser. The point is, the adversary will still succeed in the rewriting attack, and the defender will not know it is running in the matrix.</p>
+<p>(Discussion re: threat models, tit for tat.)</p>
+<p>YK: ServiceWorker: any HTTP request can be intercepted and pwned.</p>
+<ul>
+<li>Discussion that lead to GreaseMonkey</li>
+<li>extensions are more dangerous</li>
+</ul>
+<p>BE: Should talk about this more.</p>
+<p>MM: The APIs in the Realm must be set by the creator of the Realm</p>
+<p>DH: Need to determine what things appear in a Realm when you ask for the default</p>
+<p>MM: The convenience of &quot;give me the host provided stuff&quot; is to great, the rule should come from us.</p>
+<p>DH: Could also maintain a document that specifies what things are in the default</p>
+<p>MM: Can say that the default is &quot;at least populated by the built-ins&quot; and anything the host wants to include</p>
+<p>DH: Unclear what things should not be included.</p>
+<p>DH: Need to provide the list of what should be there and what should not be there.</p>
+<a href="#conclusionresolution-57-can-security-monitors-reliably-detect-monkey-patching-of-primordials"><h4 id="conclusionresolution-57-can-security-monitors-reliably-detect-monkey-patching-of-primordials">Conclusion/Resolution</h4></a><ul>
+<li>Use the Realm API</li>
+<li>The idea that we can hang something on the Realm API to help protect against possibly-malicious extensions.</li>
+<li>The Realm initialization API probably should be enhanced to take a whitelist as argument, so it can include only the subset of the initial primordials enumerated by that whitelist.</li>
+</ul>
+<a href="#52-pure-functions"><h2 id="52-pure-functions">5.2 Pure Functions</h2></a><p>Casual discussion, not sure we've actually started this...</p>
+<p>?: Why not define pure functions as passing function source code and then eval'ing it in an empty environment?</p>
+<p>MM: It's similar, but defining pure function abstractions allows for better implementation optimization opportunities.</p>
+<p>WH: What does structured cloning do with proxies?</p>
+<p>Various simultaneously: It's a mess, implementation-defined, not expressible in ECMAScript, and/or breaks proxies.</p>
+<p>DH: Separate out design problem of what a frozen environment is.</p>
+<p>WH: The implementations discussed so far sound heavy-weight: structured cloning of parameters, possibly eval'ing function body. My impression was that pure function would be used to customize parallel code by mapping a function over a data structure in parallel, etc. These functions are often tiny such as (x, y) -&gt; (x &gt; y) and we'd want a very lightweight pure function model.</p>
+<p>WH: In addition, a lot of the pure functions we'd want to map over data structures in parallel are actually pure closures. The closed-over state would be cloned.</p>
+<p>MM: [presents write barrier model of thinking about pure functions. Mark all state allocated before the fork; any attempt by a pure function to modify that state would throw.]</p>
+<p>WH: This brings up the library issue of what happens when a pure function calls a library method. C<ins>11 faced the same issue when they added concurrency to the language. Multiple threads are allowed to read the same data unsynchronized, but if at least one thread does a write (and they aren't all synchronized) then the behavior is undefined. For simple accesses such as reading an int, that's clear. But what about calling methods on library functions? What do they do internally? Can readers keep and update caches? The C</ins> committee decided to stick with the prevailing practice and declare that any library functions that look like they're readers (in C++ indicated by declaring them const) shall not mutate any internals (at least not unless they use special language features to achieve proper synchronization). In ECMAScript we'd want to do something similar.</p>
+<p>WH: However, the above makes proxies break pure functions and vice versa. Consider an otherwise transparent proxy of an object O that behaves the same as O but also counts the number of times each method is invoked. That proxy breaks all usage of O in a pure function.</p>
+<p>DH: [Skeptical about parallel ECMAScript.]</p>
+<p>MM: ES6 specifies that Function.prototype.toString(call) of a normal JS-written function results in an evaluable expression that, if evaled in an adequately similar environment, results in a function object with the same [[Call]] behavior as the original. Thus, given the original (SES-like) assumption that the primordials of the receiving environment are frozen, you can use the same trick as used by the old proposed &quot;there&quot; function <a href="http://wiki.ecmascript.org/doku.php?id=strawman:concurrency#there">http://wiki.ecmascript.org/doku.php?id=strawman:concurrency#there</a> -- stringify the function on the sending side, and then safely eval it on the receiving side. For this eval (or call to Function constructor) to be safe, the receiving environment must be so much like SES that it may as well be SES.</p>
+<p>MM: (In response to something by DH) If the primordials are naively frozen, you'll face the same usability issue we faced with SES -- the override mistake <a href="http://wiki.ecmascript.org/doku.php?id=strawman:fixing_override_mistake">http://wiki.ecmascript.org/doku.php?id=strawman:fixing_override_mistake</a> , resulting in innocent code like &quot;Point.prototype.toString = ...&quot; failing. To fix this, you'll need to tamper proof the primorials instead, replacing each data property with an accessor whose setter emulates how assignment would have worked in the absence of the override mistake.</p>
+
+</body>

@@ -1,0 +1,682 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 18, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-18-2013-meeting-notes"><h1 id="september-18-2013-meeting-notes">September 18, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Dave Herman (DH), István Sebestyén (IS), Alex Russell (AR), Allen Wirfs-Brock (AWB), Erik Arvidsson (EA), Eric Ferraiuolo (EF), Doug Crockford (DC), Luke Hoban (LH), Anne van Kesteren (AVK), Brendan Eich (BE), Brian Terlson (BT), Rick Waldron (RW), Waldemar Horwat (WH), Rafeal Weinstein (RWN), Boris Zbarsky (BZ), Domenic Denicola (DD), Tim Disney (TD), Niko Matsakis (NM), Jeff Morrison (JM), Sebastian Markbåge (SM), Oliver Hunt (OH), Sam Tobin-Hochstadt (STH), Dmitry Lomov (DL), Andreas Rossberg (ARB), Matt Sweeney (MS), Reid Burke (RB), Philippe Le Hégaret (PLH), Simon Kaegi (SK), Paul Leathers (PL), Corey Frang (CF)</p>
+<hr>
+<a href="#42-reconsider-decision-to-make-typed-arrays-non-extensible-cont"><h2 id="42-reconsider-decision-to-make-typed-arrays-non-extensible-cont">4.2 Reconsider decision to make Typed Arrays non-extensible (Cont)</h2></a><p>RW: (recapping yesterday's discussion)</p>
+<p>EA: Can we pick 3 people to champion a recommendation?</p>
+<p>RW: Ideal</p>
+<p>(support in the room)</p>
+<a href="#consensusresolution-42-reconsider-decision-to-make-typed-arrays-non-extensible-cont"><h4 id="consensusresolution-42-reconsider-decision-to-make-typed-arrays-non-extensible-cont">Consensus/Resolution</h4></a><ul>
+<li>2 People to come back with a recommendation:</li>
+<li>Dmitry Lomov</li>
+<li>Allen Wirfs-Brock</li>
+</ul>
+<p>Post meeting update: Dmitry and I discussed the issue and our
+recommendation is that Typed Array instances should come into existance being extensible. This is only about the objects created by the current set of built-in typed array constructors (or any subclasses derived from them). It does not imply that fixed size array types introduced by the future typed objects proposal will necesarily also be extensible.
+-- Allen</p>
+<p>As part of that consensus, variable-length (but not fixed-length!) typed array instances that are part of a future Typed Object spec should also be extensible in the same way as current Typed Array objects. In that way, full compatibility and equivalence between say &quot;Uint8Array&quot; and &quot;new ArrayType(uint8)&quot; will be maintained. As part of typed objects proposal, we will also consider having a different &quot;type constructor&quot; names for variable- and fixed-length typed arrays (e.g. &quot;new ArrayType(uint8)&quot; vs. &quot;new FixedArrayType(uint8, 10)&quot;).
+-- Dmitry</p>
+<a href="#44-symbols"><h2 id="44-symbols">4.4 Symbols</h2></a><p>Dave Herman presenting (follow up slides)</p>
+<p>DH: Symbols: object or primitive?</p>
+<p>Open issues:
+- privacy
+- object or primitive</p>
+<p>(1) Statelessness</p>
+<ul>
+<li>Symbols should not share state</li>
+<li>Encapsulates key and nothing else</li>
+</ul>
+<p>(2) Cross-Frame Compatibility</p>
+<pre><code class="language-js">obj[iterator] = <span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>) </span>{};
+</code></pre>
+<p>Another frame must also know what this <code>iterator</code> symbol is</p>
+<p>EA: Workers?</p>
+<p>AWB: Only an issue when you want to move a value...</p>
+<p>EA: Case where you use a name as a brand (branding using public symbols do not work. Branding needs true private state.)</p>
+<p>YK: can these be structure-cloned?</p>
+<p>(3) Methods</p>
+<p>DH: The one place that most objects can't have methods is prototypeless objects, but they can have instance methods. For most most of the interesting data (strings) there are things you can do on them:</p>
+<pre><code class="language-js">
+alert.call();
+
+<span class="hljs-built_in">Math</span>.sin(<span class="hljs-number">0</span>);
+
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"body"</span>);
+
+</code></pre>
+<p>DH: if you only allow things to work via functions with arguments, you are turning off a powerful tool</p>
+<p>(4) Mutable Prototypes</p>
+<p>Monkey-patching standard methods is a best practice</p>
+<p>The evolution of the web depends on it</p>
+<p>DH: This is important to the language</p>
+<p>DH: mutable prototypes are the way that developers provide a consistent platform across user agents they don't control</p>
+<p>STH: This is assuming that Symbol will grow methods</p>
+<p>YK: It's actually an assumption that it <em>won't</em></p>
+<p>DH: If we freeze a prototype, we're closing the door to ever evolving the API and closing the door to user code experimenting</p>
+<ul>
+<li>No experience to show that freezing a prototype &quot;works&quot;</li>
+</ul>
+<p>WH: By &quot;mutable prototype&quot;, you mean add and change methods, not change the prototype</p>
+<p>DH: Yes, changing the shape of the prototype object</p>
+<p>AR: (general defense of mutability, in prototypes and otherwise)</p>
+<p>AWB: Freezing the prototype can be undone safely, if there is reason in the future.</p>
+<p>AR: this is not a conservative position, despite the claim.</p>
+<p>DH: It doesn't matter, if we design depending on the invariance that the prototype is immutable then we can't change</p>
+<p>(5) Non-Answers</p>
+<p>(6) Shallow-Frozen Objects</p>
+<pre><code class="language-js">O.getPrototypeOf(iterator).foo = <span class="hljs-number">12</span>;
+</code></pre>
+<ul>
+<li>Fails Desideratum #1: is stateful</li>
+<li>Fails Desideratum #3: distinct cross frame iterators</li>
+</ul>
+<p>WH: What doesn't work?</p>
+<p>DH: The standard iterator symbol would be different in different frames because they exist in different heaps</p>
+<p>(6) Deep-Frozen Objects</p>
+<pre><code class="language-js">O.getPrototypeOf(iterator).foo = <span class="hljs-number">12</span>; <span class="hljs-comment">// strict error</span>
+</code></pre>
+<ul>
+<li>Fails Desideratum #4: no evolution</li>
+</ul>
+<p>YK: How does the current spec deal with the function.prototype linkage</p>
+<p>AWB: The prototype is null</p>
+<p>DH/YK/AWB: this is incoherent, doesn't work at all.</p>
+<p>(7) Missed? Something about prototype-less wrappers, fill in from slides...</p>
+<p>(8) JS already has an answer for this! Autowrapping of primitives</p>
+<ul>
+<li>typeof iterator === &quot;symbol&quot;</li>
+<li>Get/Call operations auto wrap</li>
+<li>Prototype state is global per-frame</li>
+</ul>
+<p>&quot;People think auto-wrapping is gross&quot;</p>
+<ul>
+<li>provides uniform OO surface</li>
+<li>does so without runing immutability</li>
+<li>doesn't ruing API patchability</li>
+<li>need a solution for value types</li>
+</ul>
+<p>(9) Remaining Issues</p>
+<ul>
+<li>[[ToPropertyKey]] of Symbol objects&quot; auto-unwrap? Does it matter in practice?</li>
+<li>Worry about toString for symbols and Symbol objects? Does it matter in practice?</li>
+</ul>
+<p>WH: We should be consistent with the way we already do things. We don't unwrap boolean wrappers when used in a condition; we shouldn't unwrap symbol wrappers when used to look up a property. If you use Boolean(false) in an if statement, it will evaluate true.</p>
+<p>AWB: In ES5, there was special treatment of wrappers, e.g. in JSON.</p>
+<ul>
+<li>no reason you should have a wrapper value in most contexts</li>
+<li>I would say, don't use</li>
+</ul>
+<p>YK: Is it important that === works cross frame or just the indexing</p>
+<ul>
+<li>Have a mechanism that allows them to</li>
+</ul>
+<p>DH: A kind of object that overloads ===</p>
+<p>YK: No, don't</p>
+<ul>
+<li>If you go with new Symbol() returns object with mutable prototype</li>
+</ul>
+<p>DH: No &quot;object&quot; solution works because of methods</p>
+<ul>
+<li>Need to move to next slide</li>
+<li>w/r to toString, I can't construct a plausible scenario where this would be encountered</li>
+</ul>
+<p>YK: Accidentally construct a wrapper</p>
+<p>WH: People explicitly convert to string before doing an operation. It would be impractical to make symbols survive the various kinds of string conversions.</p>
+<p>ARB: Lot's of existing code that has code paths that converts a value to a string to get property key, would subtly misbehave with implicit symbol-to-string conversion</p>
+<p>(10) typeof Extensibility</p>
+<p>We don't know that it wont break the web</p>
+<p>MSIE &quot;unknown type may simply be rare enough to be undiscovered.</p>
+<p>Fallback: &quot;object&quot; with [[Get]] et al that behave like auto-wrapper? (Object.isValue()?)</p>
+<p>WH: It won't break the web because existing scripts won't see the new type. Seeing one of these things requires changing the script.
+WH: We said that array subclasses are new and safe because unmodified code won't see them break things like Array.prototype.slice.call; why isn't the same argument applicable to symbols?</p>
+<p>AWB: when I did symbols originally, as primitives and not wrappers, it was a bug farm, because everywhere that assumed a primitive type, now had to explicitly account for the possibility of a symbol. The standard library in particular had to do this. In practice, anyone who is writing a general-purpose library would have to do the same thing. If you have wrappers, then the value &quot;turns into an object&quot; when you use them as such, which works fine.</p>
+<p>ARB: I implemented symbols in V8 with wrappers and there were no places where they needed special handling.</p>
+<p>AWB: yes I agree! Wrappers address most of the issues.</p>
+<p>YK: (Concerns about existing code that might not be resilient to typeof)</p>
+<p>DH: the most straightforward thing to do is extend typeof, but you can have code that's not resilient to new typeof values.</p>
+<p>(More discussion of existing library code having to deal with symbols).</p>
+<p>DH: Many new things in ES6 are objects with new APIs, so passing them in would violate basic interfaces expected. Whereas for typeof, many APIs will take any value whatsoever, and then figure out what to do via discriminating via typeof. So introducing a new typeof will break their assumption that they can handle any case.</p>
+<p>JM: I don't think it's so different; they will fail in similar ways.</p>
+<p>AWB: This is different; it's at the core of the language, and there is a different expectation.</p>
+<p>DC: Yes, this is different. There is an idiom that will fail, and it's a common. <code>switch (typeof something)</code>.</p>
+<p>DH: if the only conservative extension guarantee we can make is that if you don't use any new features, everything is fine...</p>
+<p>DH: the difference is that there are APIs that say &quot;I'll take any JavaScript value,&quot; they don't mean &quot;I'll take any JavaScript value that was present in the ES5 era.&quot; This is different from saying &quot;I'll take something with an array interface,&quot; and you passing in something like Map which happens to violate the array interface.</p>
+<p>WH: you are picking the wrong strawman. We are introducing things that do keep to the array interface (array subclasses) but break existing idioms such as using Array.prototype.slice.call to coerce to an Array object.</p>
+<p>DH: right, I'm picking Jeff's strawman, not yours.</p>
+<p>AWB: the issue with slice() is about realms, not kinds of objects, or subclasses.</p>
+<p>WH: The slice problem is not about realms. It arises merely if you introduce an array subclass and never use more than one realm.</p>
+<p>WH/AWB: (arguing about what they're arguing about)</p>
+<p>JM: You say it's clear when you pass in the wrong interface to an array-expecting vs. an all-expecting. Can you expand on why that's clear?</p>
+<p>DH: Difference between an api says &quot;I will take an arraylike thing&quot; and I will operate correctly and API that accepts &quot;any&quot;</p>
+<p>JM: but it's not about types for the &quot;any&quot; APIs; they usually just pass them through, e.g. a datastore API.</p>
+<p>LH: Rare that any API says &quot;I'll accept any&quot;</p>
+<p>DH: we're talking about parametricity, passing through the value vs. inspecting it. My experience is that I see type inspection of the type-any inputs a lot.</p>
+<p>LH: How often does an API take type &quot;any&quot;</p>
+<p>DH: A lot of JS programs don't protect against wrong values</p>
+<p>WH: No such thing as an API reliably taking type &quot;any&quot; and portably doing anything useful with it. Suppose we later introduce a new Decimal primitive that obeys the IEEE standard in that a DecimalNaN is not === to itself. Would a map work with it? Code that exhaustively type-dispatches primitives simply must change once in a while.</p>
+<p>YK: (recalling a point AWB made) people using typeof to defeat autowrap, tell the difference between a thing that auto-wraps and a thing that does not</p>
+<p>DH: The reason we shouldn't be afraid, is typeof of serves the purpose ...</p>
+<p>EA: If typeof primitive symbol returns &quot;object&quot; there is no way to distinguish a primitive symbol from a wrapped symbol.</p>
+<p>DH: we'd have to add a gross check for distinguishing</p>
+<ul>
+<li>slipperly slope</li>
+</ul>
+<p>WH: &quot;the future is bigger then the past&quot; and it seems we're trying to perpetually mortgage the future to fix a relatively transitory fear we're not even sure is real. The cost is forever having yet another mechanism to distinguish the types of primitives.</p>
+<p>DH: Then there is the &quot;browser game theory&quot; argument, who will implement in the face of danger first?!</p>
+<p>WH: (interrupts)</p>
+<p>DH: I also like finishing my sentences. I'm willing to give it a try, but...</p>
+<p>EA: FWIW, V8 is shipping typeof symbol under a flag and no bug reports</p>
+<p>DH: under a flag is not the web</p>
+<ul>
+<li>Willing to take this back to SM implementors</li>
+</ul>
+<p>AWB: Explicitly checking for &quot;object&quot;</p>
+<p>DH: Existing code breaking, this needs to be considered.</p>
+<ul>
+<li>New code can find old code that can be fixed</li>
+</ul>
+<p>RW: Will put Symbol through jQuery in test suite to see what &quot;breaks&quot;</p>
+<p>Agreement that auto-wrapping is the way to go</p>
+<p>WH: Yes, use auto-wrapping the way we know it</p>
+<p>re: toString</p>
+<p>DH: One way or another we'll have to have it, whether it throws or produces a string</p>
+<p>DH: There are values that throw, like proto-less objects</p>
+<ul>
+<li>conversion to string is not infallable in JavaScript</li>
+</ul>
+<p>ARB: implemented two toString methods</p>
+<ul>
+<li>Symbol.prototype.toString =&gt; throws to avoid the implicit coercion hazard</li>
+<li>Object.prototype.toString =&gt; applicable to Symbol, but have to be explicit</li>
+</ul>
+<p>AWB: Plausible that Symbols could have a printable &quot;name&quot;</p>
+<p>DH: Proposal summary:</p>
+<ul>
+<li>Symbols are primitive</li>
+<li>typeof is &quot;symbol&quot;</li>
+<li>standard Symbol prototype</li>
+<li>construct to create wrapped symbol</li>
+<li>Symbol wrapper object does not auto unwrap. ToPropertyKey will eventually call Symbol.prototype.toString which will throw.</li>
+</ul>
+<p>ARB: for the record: that is exaclty what V8 implements</p>
+<p>YH: to the implementers in the room, please make the error message when you use a wrapper very nice.</p>
+<p>ARB: V8 gives explicit error message</p>
+<p>DD: new Symbol() is a probable footgun; should it do anything at all? Maybe just throw? Because we don't have symbol literals, so unlike <code>new Number(5)</code> vs. <code>Number(5)</code> vs <code>5</code>, the choice is not obvious; people will try to do <code>new Symbol()</code> not realizing that this creates a wrapper.</p>
+<p>RW: Agree.</p>
+<p>ARB: but then it's weird that there is an object you can get access to, but whose constructor doesn't actually work.</p>
+<p>DD: but the only way you can get access to these objects is via the <code>this</code> value inside <code>Symbol.prototype</code> methods, in sloppy mode.</p>
+<p>DH: no, <code>Object(primitiveSymbol)</code> would give you back the wrapper.</p>
+<p>DD: ah, damn.</p>
+<p>AWB/ARB: Discussing valueOf returns, used in contexts where a numeric value is expected</p>
+<p>DC: But string.valueOf produces strings</p>
+<p>AWB: Do you anticipate future value types having auto-wrapping?</p>
+<p>DH: BE has thoughts about typeof modifyability</p>
+<p>RW: Defer until BE is present.</p>
+<p>Agreement</p>
+<p>AWB: How does user code define a &quot;well known Symbol&quot;? One that works across Realms?</p>
+<p>DH: not sure</p>
+<ul>
+<li>Standard library, we can create something that exists everywhere</li>
+<li>Library code, not sure</li>
+</ul>
+<p>ARB: Think this is a serious problem that needs to be addressed</p>
+<p>DH: Proposal</p>
+<ul>
+<li>Agree that it's bad to have a Symbol with BOTH a private and public form</li>
+<li>Private by default? Public by access?</li>
+<li>Need to solve the remaining proxy leak problem</li>
+</ul>
+<p>AWB: We've discussed and concluded that we're nowhere near a solution to the private state problem.</p>
+<p>YK: Mark's solution inverts where the transaction occurs</p>
+<p>DH: If private symbols really behave like WeakMaps and you invert where they live, then they are truly private</p>
+<p>YK: You want the proxy to trap them.</p>
+<p>Why?</p>
+<p>AWB: It's just a property name.</p>
+<p>DH: If you have access to the symbol</p>
+<p>EA: What about iterator?</p>
+<p>STH: If you want the proxy to have iterator behaviour, you need access to @@iterator</p>
+<p>...</p>
+<p>AWB: Mistake to conflate symbols, which are guaranteed unique property keys, with private state. There is a temptation to do it, but we run into problems. I want private state, but there are better ways to do it.</p>
+<p>DH: I am pretty exhausted from years of this debate, but from all the things we have to decide, this has to be decided now. And I am willing to fall on either side of the fence (private vs. public vs. both), for the sake of resolving this, but we need to resolve it.</p>
+<p>LH: agree; we can't leave this meeting without a decision on this. But Arv's proposal (GUIDs) does give us a path.</p>
+<p>AWB: but Arv's proposal doesn't solve privacy at all; it's just about the representation of symbols (strings vs. real symbols).</p>
+<p>RW/DH: strings as symbols have bad usability and problematic to use.</p>
+<p>YK: No solution to the enumerability question (are symbols enumerable)</p>
+<p>DH: yes, if we were going to go with this, we would just have iterator and create be a shitty string.</p>
+<p>YK: worse, it would have to be a UUID published in the spec.</p>
+<p>AWB/DD/AR: underscores are better than GUIDs.</p>
+<p>DD/RW: Symbols not for private state, use a WeakMap. Symbols for uniqueness, move on.</p>
+<p>DH: Arv, what is your issue with just having public symbols?</p>
+<p>EA: they don't carry their own weight. They behave like strings, except for reflection.</p>
+<p>(silence)</p>
+<p>AWB: there is one difference. They are in a different meta-level of the system. There is no way that user data can coincidentally be confused for a symbol.</p>
+<p>DD: also, symbols do not show up in <code>JSON.stringify</code>.</p>
+<p>DH: This allows us to add a meta level. Just like <code>__proto__</code> in the past. Underscores are, until now, our magic feather that we wave around to say &quot;This is the meta-level! This will not be confused with data!&quot; And that's BS.</p>
+<p>LH: unless you enforce the distinction, people will build abstractions that break through the layers.</p>
+<p>EA: before we had <code>for-in</code>; then we gave people <code>getOwnPropertyNames</code> and people started using that; now we're going to give them <code>getOwnPropertyKeys</code> and they'll use that.</p>
+<p>discussion about the string display</p>
+<p>YK: debugger could recognize that it's a uuid and replace with a readable value</p>
+<p>discussion about &quot;__&quot; names.</p>
+<p>LH: if you use any english word, someone <em>could</em> create a conflict. If you use &quot;__&quot;, there is no accidental conflict.</p>
+<p>YK: Using &quot;iterator&quot; or &quot;<code>__iterator__</code>&quot;, no one can reliably ducktype for an ES6 iterator</p>
+<p>STH: leaving for lunch, in favor of Symbols</p>
+<p>EA: I'm still in favor of keeping symbols, sorry for derailing the discussion a bit; what helps is the possibility of removing <code>getOwnPropertyKeys</code>. That makes them secure in the absence of proxies.</p>
+<p>LH: but then existing libraries cannot implement a real mixin that moves symbol-keyed properties over to a target object
+(if symbols aren't given reflective capabilities)</p>
+<p>(Brief discussion of making <code>Object.mixin</code> be the only way to do this.)</p>
+<p>DH: <code>Object.mixin</code> that can transfer symbols plus proxies allows you to reimplement <code>Object.getOwnPropertyKeys</code>.</p>
+<p>AWB: Still think we should have Symbols, getOwnPropertyKeys</p>
+<p>WH: I object to getOwnPropertyKeys (because of too many historical layers: in every spec we seem to be adding yet another layer of enumerating the properties of an object with a we-really-mean-it-use-this-one-instead-of-the-previous-edition's vibe).</p>
+<p>DD/AR/DH: (discussion of <code>Object.mixin</code> + proxies trick.)</p>
+<p>YK: It sounds like we're slipping down the path of doing privacy with symbols again, and we're going to appease people for the wrong</p>
+<p>LH: the concern for <code>getOwnPropertyKeys</code> is that people would just use it in place of <code>getOwnPropertyNames</code>. Maybe if we separate into <code>getOwnPropertySymbols</code> + <code>getOwnPropertyNames</code> that will make it sufficiently painful that people won't just use <code>getOwnPropertyKeys</code> together.</p>
+<a href="#consensusresolution-44-symbols"><h4 id="consensusresolution-44-symbols">Consensus/Resolution</h4></a><ul>
+<li>Symbols are a new primitive type with regular wrapper objects</li>
+<li>typeof symbol === &quot;symbol&quot;</li>
+<li>implicit conversion to string throws</li>
+<li>new Symbol throws</li>
+<li>Symbols are public, not private ok that they leak to Proxy</li>
+<li>Symbols are unique</li>
+<li>Only exposed via Object.getOwnPropertySymbols instead of Object.getOwnPropertyKeys</li>
+<li><code>Object.mixin</code> copies both symbol and string properties</li>
+</ul>
+<p>Additionally:</p>
+<ul>
+<li>AWB commits to bringing a proposal for user defined well-known symbol registration</li>
+</ul>
+<a href="#6-post-es6-spec-process"><h2 id="6-post-es6-spec-process">6. Post ES6 Spec Process</h2></a><p>(Rafael Weinstein) - <a href="http://slid.es/rafaelweinstein/tc39-process">http://slid.es/rafaelweinstein/tc39-process</a></p>
+<p>RWN: put together some thoughts after the last meeting with DL, EA, AWB, etc.</p>
+<p>RWN: most of it is good except that it's date driven and the consensus requirements lead to a high-stakes game for getting features into the game.</p>
+<p>RWN: The second problem is that with large-quanta spec releases, there's a varrying maturity level for proposals. Stable stuff is &quot;held hostage&quot; to newer features.</p>
+<p>RWN: as we near a release, we end up with large pressure around things which may or may-not make it. Argue that this is destructive to feature quality.</p>
+<p>RWN: we also have an informal process. It occurs to us that acceptance of features comes before details are sorted out. Implementers, therefore, lack a clear signal about when it's time to start implementing features. Might be unavoidable, but other groups show a different way (W3C, e.g.)</p>
+<p>RWN: we also have a single spec writer who bears the full burden of authoring spec text.</p>
+<p>RWN: a few ideas:</p>
+<ul>
+<li>decouple additions from dates</li>
+<li>put structure around stages of maturity</li>
+<li>what does each stage mean? Get clarity</li>
+</ul>
+<p>RWN: non-goal: componentize the spec or break apart responsibility from the whole group. Also a non-goal to change the rate of evolution (necessarialy).</p>
+<p>RWN: looked at how the W3C works and tried to extract the bits that seem to work well. A 4-stage process:
+1.) proposal
+2.) working draft
+3.) candidate draft
+4.) last call</p>
+<p>RWN: At a (much more) regular interval, we'd post (smaller delta) drafts to ECMA.</p>
+<p>AWB: do these stages line up with W3C terminology?</p>
+<p>(sort of, not really)</p>
+<p>RWN: proposals outline the problem, need, API, key algorithms, and identification of cross-cutting concerns. Also, and identified champion. Acceptance signifies the idea that the solution is something the committee wants to keep working on.</p>
+<p>RWN: note that we don't explicitly slate a specific revision is targeted for a proposal. That comes later.</p>
+<p>AWB: concerned that we might accumulate accepted proposals that there's no activity on. How can we structure a cull?</p>
+<p>BE: as needed. FileSystem API as example.</p>
+<p>RWN: the analog might be the &quot;deliverables list&quot; used by W3C -- removing something from the list on the wiki could be that thing</p>
+<p>DH: Not to componentize? Seems like there is something of a componentization and that's the value?</p>
+<p>RWN: don't want to abandon the goal of language coherence. CSS did this wrong and have lots of weirdness as a result. Non-communicating editors lead to pain. This model is different: everything merges into a single spec.</p>
+<p>DH: how is this different to what we're doing now? Maybe this is a smaller tweak?</p>
+<p>BE: What this does is adds more staging before &quot;proposal&quot;</p>
+<p>RWN: this is saying the first stage doesn't have spec text, but the second stage does.</p>
+<p>DH: Makes a lot of sense, might make sense to spell out the earlier &quot;incubator&quot; stage.</p>
+<p>RWN: so there might be a stage-0, which is sort of the strawman we've had before</p>
+<p>RWN: what we want to see at stage 2 is draft spec text. It can have early-quality notes, etc. but thought should be put into the text for the feature before we collectively accept the feature.</p>
+<p>RWN: there are a couple of key things to look at: can we decouple spec editions from specific features? what are the substantives stages of maturity?</p>
+<p>BE: quick question: the i18n spec was on a different track, is this only for core stuff
+(quotes FakeAlexRussell??)</p>
+<p>(sort of, might be a way to draw stuff into the main spec)</p>
+<p>RWN: stage 3 is the &quot;Candidate Draft&quot;. It signifies that the committee thinks the scope of the feature is set. We can incorporate changes, but the key thing is that implementations are potentially costly. This stage is a green-light for implementing and final feed-back</p>
+<p>RWN: stage 4 is &quot;last call draft&quot;. 2 implementations and an acceptance test that they pass. Once accepted at this stage, the draft can be scheduled for the next spec to be published.</p>
+<p>RWN: what about dependencies? The committee isn't absolved of this. IT's up to us to manage them and there isn't any silver bullet. We need to make decisions.</p>
+<p>RWN: thought a lot about linkage as a part of this. A champion's interests might work against the language (ducking dependencies, etc.). The committee still needs to advise and continue to look over the landscape.</p>
+<p>(discussion)</p>
+<p>AWB: implicit in this is redefining the role of the editor to be more of an EDITOR, and less of an author. Should probably have a role in advancing proposals.</p>
+<p>RWN: so still a world where there's a single editor?</p>
+<p>AWB: yes.</p>
+<p>(general agreement)</p>
+<p>PLH: Noting that some of the process order might be confusing/out of order, with regard to naming?</p>
+<p>RWN: yes, &quot;last call&quot; means somethign different in W3C that doesn't map well</p>
+<p>YK: the year might be a red-herring. The point isn't the date and the goal isn't to rush things under the wire.</p>
+<p>RWN: (refers to Chrome release process) (not quite Chrome, but close and relevant: <a href="https://developers.google.com/v8/launchprocess">https://developers.google.com/v8/launchprocess</a> )</p>
+<p>AWS: some of the non-technical overhead can be offloaded</p>
+<p>DL: part of the goal is to help offload the work, getting more people writing more spec text.</p>
+<p>(notes that this happened for Proxies and O.o)</p>
+<p>DL: inside the v8 team, we don't have a ton of visibility into the maturity of features.</p>
+<p>BE: spidermonkey has shipped many things over the years, but at a cost</p>
+<p>(discussion about implementations and style)</p>
+<p>RWN: so we can imagine that you'd have different styles of implamentations at each stage? Makes sense.</p>
+<p>(agreement)</p>
+<p>AVK: the w3c is removing the last couple of these steps</p>
+<p>PLH: there's a new draft on github somewhere</p>
+<p>(some discussion that you need implementations, hence the new W3C process)</p>
+<p>AR: the chrome process shows that some features might slip multiple features, and that's very good for overall quality.</p>
+<p>AWB: are the criteria here entry or exit criteria?</p>
+<p>(discussion)</p>
+<p>WH: What about mutualy beneficial features?</p>
+<p>AR: that's the dependency question, we talked about that</p>
+<p>RWN: it's sort of arbitrary, but that exists no matter what. There's no silver bullet. It's the job of the committee to keep an eye on what's in flight. Not sure a process can ensure that we can do that well or poorly.</p>
+<p>WH: not componentizing is good, but want to make sure that the process doesn't get in the way.</p>
+<p>BE: true.</p>
+<p>AWS: if we see things that are tightly linked, we might treat them that way</p>
+<p>RWN: as I said earlier, the committee can choose to merge them</p>
+<p>WH: is the intent that the spec will be written by many people? or a single author?</p>
+<p>RWN: the hope is that we'll have more authors for sections of the text, and it'll continue to be the responsibility of the (single) editor to maintain quality.</p>
+<p>YK: I've found it useful to go throuh the exercise of writing spec text</p>
+<p>LH: I like that aspect of this proposal quite a lot</p>
+<p>DH: I've found it useful to write things in pseudo-code when exploring many alternatives...there's a cost for writing it out that way</p>
+<p>AR: things are meant to get more &quot;specy&quot; and improve in quality over time</p>
+<p>(Reviewing previous approaches to specificying new features)</p>
+<p>BE: I think ES7 should follow this</p>
+<p>AWB: Yes</p>
+<p>STH: As long as we're realistic about how much process change can really be helpful</p>
+<p>DH: Smaller features can ship and large pieces can take the time that they need.</p>
+<p>DH: need a way to post features in progress</p>
+<p>WH: Difficult to do refactorings the spec if various folks write parts of it independently.</p>
+<p>BE: Integration step left out? (eg. when does feature integration to the spec occur?)</p>
+<ul>
+<li>huge costs</li>
+<li>potentially huge conflicts</li>
+<li>need to identify necessary changes early as possible</li>
+</ul>
+<p>WH: Concerned that the one-edition-per-year timeline is unrealistic both for us and for our users.</p>
+<p>WH: Once-per-year would be too much of a moving target for users. For example, writing (and re-reading) books about ECMAScript would be difficult.</p>
+<p>WH: Imagine trying to fast-track one edition per year through ISO, with yet another one done in ECMA by the time the previous one gets done in ISO. Also note that ISO has been known to generate interesting comments.</p>
+<p>??: We don't need to send every edition to ISO.</p>
+<p>??: Yes we do. They don't like it when you update an existing ISO standard and don't send them the update.</p>
+<p>??: ISO likes their specs updated once every three years.</p>
+<p>WH: How many simultaneous internal versions of the spec (the master Word document) would we maintain? Three?</p>
+<p>AWB: One.</p>
+<p>WH: Really? Let's say we'd plan to ship a new edition every December. When would we fork our internal spec to work on new features for the next edition while preparing to send the current edition to the General Assembly?</p>
+<p>AWB: Every January</p>
+<p>WH: Then we'd be editing two editions simultaneously almost all the time.</p>
+<p>AWB: I can handle it.</p>
+<p>WH: Yes, but can the reviewers of the spec handle it? We have enough trouble getting folks to re-read stuff as it is.</p>
+<p>WH: Once every two years would be more reasonable.</p>
+<a href="#consensusresolution-6-post-es6-spec-process"><h4 id="consensusresolution-6-post-es6-spec-process">Consensus/Resolution</h4></a><ul>
+<li></li>
+</ul>
+<a href="#510-function-parameter-scoping-and-instantiation"><h2 id="510-function-parameter-scoping-and-instantiation">5.10 Function parameter scoping and instantiation</h2></a><p>Andreas Rossberg</p>
+<p><a href="default-arguments.pdf">Slides</a></p>
+<p>Default Parameters/Arguments</p>
+<p>Goals: Convenience Feature</p>
+<ul>
+<li>Readable!</li>
+</ul>
+<p>Non-goal: subtle expressiveness</p>
+<p>Should be able to understand the defaults without looking at the function body</p>
+<p>ARB: Two Issues</p>
+<ul>
+<li>Scoping related to the function body</li>
+</ul>
+<p>(examples of really weird cases)</p>
+<p>Solution:</p>
+<pre><code>- Defaults should behave as if provided by wrapper function
+</code></pre>
+<p>Solution:</p>
+<pre><code>- Evaluate defaults in seperate scope
+- Can see &quot;this&quot;, &quot;arguments&quot; and function name (where applicable)
+- Can see other parameters
+- Cannot see bindings created in function body
+- Cannot see bindings created in function body LATER (via eval)
+</code></pre>
+<p>Evaluation Order</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x = y, y = <span class="hljs-number">2</span></span>) </span>{}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x = eval(<span class="hljs-string">"y"</span></span>), <span class="hljs-title">y</span> = 2) </span>{}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x = (y = <span class="hljs-number">3</span>, <span class="hljs-number">1</span></span>), <span class="hljs-title">y</span> = 2) </span>{}
+</code></pre>
+<p>ARB: Preferably should be const bindings <em>in that scope</em> (not the funciton body)</p>
+<p>AWB: (describes the TDZ)</p>
+<p>Solution:</p>
+<ul>
+<li>parameters have TDZ</li>
+<li>Initialized in sequence</li>
+</ul>
+<p>WH: No distinction between a missing parameter and explicit undefined?</p>
+<p>AWB: We agreed on that a long time ago.</p>
+<p>BE: I thought there was agreement/discussion?</p>
+<p>(referring to: <a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2012-11/nov-29.md#proposal-part-2">https://github.com/rwaldron/tc39-notes/blob/master/es6/2012-11/nov-29.md#proposal-part-2</a> )</p>
+<p>(need slide examples)</p>
+<p>DH: Most concerned with implicit rebinding</p>
+<p>STH: The rebinding is only observable</p>
+<p>(discussion re: mutation in parameter bound closures)</p>
+<p>STH: Can fix this while preserving</p>
+<p>ARB: Can change the &quot;nutshell&quot; to meet the needs of the concern items:</p>
+<pre><code>const =&gt; let
+</code></pre>
+<p>BE: In the example that binds</p>
+<p>AWB:</p>
+<ul>
+<li>parameters are in separate scope contour</li>
+<li>visible to the body scope</li>
+<li>the body is disallowed from creating</li>
+<li>&quot;namespace&quot; for parameters</li>
+</ul>
+<p>NM/RW: (agreeable points about curly brace boundaries reinforcing scope)</p>
+<p>BE: Summary:</p>
+<ul>
+<li>Outer Scope</li>
+<li>Parameter Scope</li>
+<li>Function Body Scope</li>
+</ul>
+<p>YK: (recalling names declared in parameter scopes being rebound in the function body)</p>
+<p>AWB: I can express this with one Environment Record</p>
+<p>ARB: Cannot, because of eval.  A delayed eval in the parameter list must not see bindings from the body</p>
+<pre><code class="language-js">
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-number">3</span> * <span class="hljs-number">3</span>;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">h = (</span>) =&gt; <span class="hljs-title">eval</span>(<span class="hljs-params"><span class="hljs-string">"g()"</span></span>)) </span>{
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * <span class="hljs-number">3</span>;
+  }
+  h();
+}
+
+</code></pre>
+<p>AWB: Agreed</p>
+<p>DH: (post-clarification)</p>
+<ul>
+<li>Two Scopes
+<ul>
+<li>The Function Head/parameter list</li>
+<li>The Function Body</li>
+</ul></li>
+</ul>
+<p>In the function head/parameter list, cannot see the scope to the right (the function body).</p>
+<p>AWB: Any new syntax in the parameters, changes the handling?</p>
+<p>(vast disagreement)</p>
+<p>AWB: The spec currently says var-like bindings. If you have new syntax, they're still var-like</p>
+<ul>
+<li>Duplicates are illegal</li>
+<li>Rules about redeclaration</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-comment">// If...</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-keyword">var</span> x;
+}
+
+<span class="hljs-comment">// changes to...</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x = {}</span>) </span>{
+  <span class="hljs-keyword">var</span> x;
+}
+
+<span class="hljs-comment">// No difference.</span>
+
+<span class="hljs-comment">// But changes to...</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x = {}</span>) </span>{
+  <span class="hljs-keyword">let</span> x;
+}
+
+<span class="hljs-comment">// Error for redeclaration.</span>
+</code></pre>
+<p>(clarification re: nothing changes var bindings to let bindings)</p>
+<p>WH: (whiteboard) What is the value of y in this example? 5 or 2?</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"> x=(y=<span class="hljs-number">3</span>, <span class="hljs-number">2</span></span>), <span class="hljs-title">y</span> ) </span>{
+  <span class="hljs-built_in">console</span>.log( x, y );
+}
+f(<span class="hljs-literal">undefined</span>, <span class="hljs-number">5</span>);
+</code></pre>
+<p>(discussion without a clear resolution)</p>
+<p>CF: What about:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> y = <span class="hljs-number">2</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"> x=y, y=<span class="hljs-number">3</span> </span>) </span>{
+  <span class="hljs-built_in">console</span>.log( x, y );
+}
+f();
+</code></pre>
+<p>BE &amp; Others: <code>y</code> is shadowed result is (undefined, 3)</p>
+<p>WH: What is the value of y in this example? 2, undefined, or 5?</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x = (y = undefined, <span class="hljs-number">7</span></span>), <span class="hljs-title">y</span> = 5) </span>{ ... }
+f(<span class="hljs-literal">undefined</span>, <span class="hljs-number">2</span>);
+</code></pre>
+<p>AWB: The original value of the parameter is used to decide whether to default it or not.</p>
+<p>BE: Surprised. Unhappy with having to store the original values of the parameters, thereby making for two copies of each one.</p>
+<p>AWB: Already need to do this for the arguments object.</p>
+<p>BE: The arguments object is easy to statically detect. These are more insidious.</p>
+<p>(no clear resolution)</p>
+<p>ARB: Fundamendally these are mutually recursive bindings.</p>
+<p>BE: We agreed on two scopes. Head and body.</p>
+<ul>
+<li>If another parameter has a default?</li>
+</ul>
+<a href="#consensusresolution-510-function-parameter-scoping-and-instantiation"><h4 id="consensusresolution-510-function-parameter-scoping-and-instantiation">Consensus/Resolution</h4></a><ul>
+<li>Two Scopes
+<ul>
+<li>Head/Parameter List</li>
+<li>Body</li>
+</ul></li>
+<li>Temporal dead zone?</li>
+<li>Details unresolved?</li>
+</ul>
+<a href="#45-modules-update"><h2 id="45-modules-update">4.5 Modules Update</h2></a><p>Dave Herman</p>
+<p>[Slides](need to commit for a link)</p>
+<a href="#generic-bundling-slide"><h3 id="generic-bundling-slide">Generic Bundling Slide</h3></a><p>(Debate about hash as the delimiter. Agreement that this discussion can take place elsewhere.)</p>
+<p>DH: the browser loader is not something that belongs in Ecma-262. It's a separate spec. We can do it concurrently. We definitely want to start now and get feedback early, but it doesn't need to block ES6.</p>
+<p>(Discussion of confusion on parsing vs. evaluation timing. Custom loaders can implement the desired esoteric use case; see caching slides.)</p>
+<p>DH/LH/JM: Use case under discussion is lazy module execution, like AMD bundles or previous named module declarations. If you have a <code>console.log</code> inside a module, is there a way for that not to get executed?</p>
+<p>DH: we may need to check to ensure that is possible, but it probably is. And the simplification of removing named module declarations still seems worth it.</p>
+<a href="#46-unbound-variable-checking"><h2 id="46-unbound-variable-checking">4.6 Unbound variable checking</h2></a><p>Dave Herman</p>
+<p>DH: Proposes that if m is an imported module, then m.bar should be a compile-time error if the module doesn't have a property named bar.</p>
+<p>WH on whiteboard: Should this be a static error in that case?</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> m <span class="hljs-keyword">from</span> <span class="hljs-string">"foo"</span>;
+
+<span class="hljs-keyword">with</span> (a) {
+    m.bar;
+}
+</code></pre>
+<p>?: Modules are in strict mode and don't allow 'with'.
+WH: But this isn't a module; it's just referencing one.</p>
+<a href="#module-loading"><h2 id="module-loading">Module loading</h2></a><p>DH: it used to be that <code>&lt;script async&gt;</code> would be able to do I/O, including <code>import</code> declarations; I've relaxed that. Now <code>&lt;script&gt;</code> can do that.</p>
+<p>DD/DH: (clarification that you can use module syntax in scripts, not just modules&gt;</p>
+<p>BE/DH: (discussion of allowing <code>&lt;script&gt;</code> without <code>async</code> to load modules.&gt;</p>
+<p>AR: note that inline scripts with <code>async</code> or <code>defer</code> attributes <em>currently</em> do not impact execution or parsing. This may change in the future.</p>
+<p>JM: if people want to use <code>import</code> in a synchronous script definition, that should be OK; just throw</p>
+<p>DH: that was the direction I was moving, but LH was objecting to. And DD has an interesting point that if we don't let <code>import</code> happen at the top level, that would work well too.</p>
+<p>STH: What do we like?</p>
+<p>YK: Adding a form to HTML that says &quot;this is a module.&quot; This reduces the need to allow <code>import</code>s in scripts.</p>
+<p>BE: that would mean we're betting on getting something into HTML</p>
+<p>DH: yes, but you could just use the loader API.</p>
+<p>BE (whiteboard): four cases</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="undefined">(1)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"..."</span>&gt;</span><span class="undefined">(2)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">async</span>&gt;</span><span class="undefined">(3)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"..."</span> <span class="hljs-attr">async</span>&gt;</span><span class="undefined">(4)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>WH: how do you load a module without async scripts?</p>
+<p>YK/LH: <code>System.load(&quot;module&quot;)</code></p>
+<p>WH: and you wouldn't need to import <code>System</code> or similar</p>
+<p>DH: no, that's just a global</p>
+<p>WH: but we have features that require modules, e.g. <code>iterator</code></p>
+<p>DH/YK: yes, but you can just do <code>System.get(&quot;std:iterator&quot;).iterator</code>.</p>
+<p>WH/DH: if it's hard to use a module inline in the page, then it's hard to write the good code we want them to write.</p>
+<p>DH: this is something that needs to happen for multiple reasons, so it should happen in HTML.</p>
+<p>YK: <code>import</code> in top-level scripts doesn't give us modules in top-level scripts, only <code>import</code> in top-level scripts.</p>
+<p>JM: so how do you enter the module system from HTML?</p>
+<p>DH: two ways. The loader API, or the hypothetical <code>&lt;module&gt;</code>.</p>
+<p>BE (whiteboard); top level script looks like</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> { keys, values } = System.get(<span class="hljs-string">"@iter"</span>);
+</code></pre>
+<p>DH: BTW JS practictioners, I'd like to reiterate if you have concerns about the standard module system.</p>
+<p>LH: Implementers will ship iterators before modules, so we need a way to get at these things more easily.</p>
+<p>DD (jokingly): We can just use a proxy to trap <code>@@iterator</code> in the meantime.</p>
+<p>DH: I really think this how-to-enter-the-system conversation can occur outside TC39.</p>
+<p>BE: so we can provide two top-level environments.</p>
+<p>BE: OK, this is all about separation of standards-body concerns.</p>
+<p>DH: and this helps not block TC39.</p>
+<p>(Discussion somehow turns back to <code>&lt;script&gt;</code> vs. <code>&lt;script async&gt;</code> getting module-loading abilities.)</p>
+<p>BE (to LH): so you're worried about an attractive nuisance, people doing more synchronous loading than they should</p>
+<p>LH: Well today, <code>import</code> always succeeds, but with this proposal, it's order dependent, like today's <code>System.get</code>.</p>
+<p>WH: <module> as a new HTML element won't work due to HTML parsing issues. Note that scripts contain un-HTML-escaped &lt;'s (and even larger chunks of HTML tags) while other HTML elements don't. An HTML parser wouldn't know how to properly skip past an element (such as the proposed <module>) that it doesn't know about.</p>
+<p>DH: I think <code>&lt;script type=&quot;module&quot;&gt;</code> or similar is going to be necessary, for many reasons.</p>
+<p>DH: so to recap, there's the two possibilities: allow gradual integration via <code>import</code> etc. in scripts, or the green path where you enter the module system once and then are there.</p>
+<p>JM: Facebook wants both, so we can do initial page load and async load.</p>
+<p>DH: that's fine, you can do that with <code>System.set</code> in the initial page load.</p>
+<p>DH/BE: (Agreement that this should go in other standards bodies.)</p>
+<a href="#back-to-static-checking"><h2 id="back-to-static-checking">Back to Static Checking</h2></a><p>LH: back to static checking?</p>
+<p>BE: you have to do label checking. It's not that bad.</p>
+<p>ARB/BE/DH: we have to implement to find out.</p>
+<p>BE: how much parsing do you have to do?</p>
+<p>ARB: so that's in the pre-parser for V8</p>
+<p>BE/DH/ARB: (discussion of V8's pre-parser)</p>
+<p>DH: somewhere in between a reader (along the lines of SweetJS) and a parser, and that's what I don't understand.</p>
+<p>ARB: it's a parser, but it just glosses over a lot of the grammar.</p>
+<p>ARB: to be completely honest, we would like to get rid of this thing.</p>
+<p>BE: so we won't know if adding this static checking for modules has implementation consequences, until implementers actually go implement it. So if they have appetite for it, we should try to do that.</p>
+<p>DH: JSHint or TypeScript could do all these things... We need to at the very least provide the basic foundation. But that would shut the door on further static things.</p>
+<p>BE: V8, do you guys have an appetite for trying it?</p>
+<p>ARB: I'd like to try, but not sure if it's possible within the ES6 time frame.</p>
+<p>BE: and what about Chakra?</p>
+<p>LH: we can try it, but we don't know...</p>
+<p>DH: it would be OK with me to close the door on static things like guards.</p>
+<p>BE (to ARB): wait I'm confused. If you're doing import/export checking, aren't you doing about the same work you'd be doing for full static variable checking?</p>
+<p>ARB/LH: no</p>
+<p>DH: import/export is top-level only; you don't have to walk the full AST</p>
+<p>LH: you would have to freeze the global environment at the point in which the static checking happens, and test against that</p>
+<p>DH: yes, that's right</p>
+<p>BE: OK, so maybe it's enough to have import/export checking. That spot-in-time check could be a problem. Yes, this is a problem for monkey-patching.</p>
+<p>DH: every time we go through these cases it takes hours to remember the global object semantics.</p>
+<p>AWB: I thought we concluded a long time ago that we had to preserve global semantics.</p>
+<p>DH: clarifies: only talking about within the body of a module.</p>
+<ul>
+<li>Check the script against the current state of the Global object at compile time</li>
+<li>This is an unsound and incomplete analysis, but, it's one that you can program to.</li>
+</ul>
+<p>BE: so if we say that module bodies do not have this type of static name checking, we're closing the door to guards, hygenic macros, type checking, ...</p>
+<p>WH: how does it close the door to guards?</p>
+<p>DH: we always talk about guards as if we knew what their semantics were...</p>
+<p>BE: OK, well, how about truly static stuff like types or macros.</p>
+<p>DH: my experience in ES4 was that it was fighting with the dynamic aspect of the language</p>
+<p>WH: in Lisp we have a multi-level time-of-execution (i.e. eval-when) system... it was very messy...</p>
+<p>BE: I think static types and static metaprogramming as an option are shown to be not possible, really, via the fact that TypeScript and Dart are both basically WarnScript.</p>
+<p>DH: I think that it's been shown that tooling is generally how the web solves this problem.</p>
+<p>LH: and we could do this outside the language itself, the opt-in could be e.g. opening the debug tools instead of being in a module body.</p>
+<p>STH: But, nobody's said that this is a horrible feature, there's just some implementer reluctance.</p>
+<p>DH: JSHint works fine; modules alone will allow JSHint's undefined variable checking to work without having to provide a large list of globals.</p>
+<p>LH: we've started creeping a little bit toward doing more static analysis, but this would be a big step.</p>
+<p>DH: what do you mean static analysis.</p>
+<p>LH: I mean more early errors. We added more in ES5, e.g. duplicate variables. ES6 has added more with <code>let</code> and <code>const</code>. This is the next big jump. It's not clear where that's trying to go... We could go much further, we could build the whole linter into that point.</p>
+<p>DH: I have years of experience writing Racket code, which works exactly like this. Once you're in module code, you have static variable checking.</p>
+<p>LH: but no global object in the scope chain.</p>
+<p>DH: actually kind of, but yes, people don't use it nearly as much as on the web.</p>
+<p>DH: The static variable checking is both unsound and incomplete; the former is because of snapshot-in-time globals, and the latter is because of the halting problem.</p>
+<p>WH: I want a way to get static variable checking but also monkey patching. Perhaps declare which global bindings you might want to monkey-patch.</p>
+<p>checks on import/export</p>
+
+</body>

@@ -1,0 +1,333 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 25, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-25-2014-meeting-notes"><h1 id="september-25-2014-meeting-notes">September 25, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jeff Morrison (JM), Jonathan Turner (JT), Sebastian Markbåge (SM), Erik Arvidsson (EA), Brendan Eich (BE), Domenic Denicola (DD), Peter Jensen (PJ), Eric Toth (ET), Yehuda Katz (YK), Dave Herman (DH), Brendan Eich (BE), Simon Kaegi (SK), Boris Zbarsky (BZ), Andreas Rossberg (ARB), Caridy Patiño (CP), Niko Matsakis (NM), Mark S. Miller (MM), Matt Miller (MMR), Jaswanth Sreeram (JS)</p>
+<p>Remote:
+István Sebestyén (IS)</p>
+<hr>
+<a href="#58-object-rest-destructuring-and-spread-properties"><h2 id="58-object-rest-destructuring-and-spread-properties">5.8 Object Rest Destructuring and Spread Properties</h2></a><p>(Sebastian Markbage)</p>
+<p>Spec <a href="https://github.com/sebmarkbage/ecmascript-rest-spread">https://github.com/sebmarkbage/ecmascript-rest-spread</a></p>
+<p>Request Slides</p>
+<p>SM: Update: own properties?</p>
+<ul>
+<li>Need to be own properties</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.prototype.hostile = <span class="hljs-number">1</span>;
+
+<span class="hljs-keyword">let</span> { ...o } = {};
+
+<span class="hljs-keyword">let</span> o = { ...{} };
+
+o.hostile; <span class="hljs-comment">// 1</span>
+o.hasOwnProperty(<span class="hljs-string">"hostile"</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<p>MM: clarifies hostile vs. accidental</p>
+<p>MM: When does Object.assign do toMethod?</p>
+<p>RW: Never. That was designed for Object.define/mixin</p>
+<p>AWB: Confirm</p>
+<p>SM: Mental model:</p>
+<pre><code class="language-js">...o
+
+expands keys = <span class="hljs-built_in">Object</span>.keys(o) to 
+o[keys[<span class="hljs-number">0</span>]], o[keys[<span class="hljs-number">1</span>]], o[keys[<span class="hljs-number">2</span>]]
+</code></pre>
+<p>Security Consideration?</p>
+<p>Syntax introduces a new way to determine &quot;ownness&quot; without going through (patchable) library functions:</p>
+<ul>
+<li>Object.prototype.hasOwnProperty</li>
+<li>Object.keys</li>
+</ul>
+<p>MM: Explains that SES is capable of patching the above by replacing these APIs. Rewriting syntax is undesirable.</p>
+<p>Discussion about ownness and enumerability</p>
+<p>YK:</p>
+<p>MM: If we proceed assuming weak maps are not slow, then they won't be (i.e., browsers will finally switch to the transposed representation)</p>
+<p>YK: As a lib impl, weak maps are slow and I have no reason to believe they'll be fast in the near future, so I won't use them</p>
+<p>AWB: Not our job to design lang around what things are slow today</p>
+<p>ARB: concerned about proliferating the use of enumerability</p>
+<p>AWB: Had this discussion many times. Enumerable is obselete reflection of semantics of for-in. Don't want people to use enumerable to start meaning new things.</p>
+<p>YK: We agreed it's obselete function of for-in, but it is widely used. So can't change the way it's assumed to work</p>
+<p>AWB: Today, in es5, enumerability used as a way to deal with copying</p>
+<p>MM: WRT proposal on table, it is a copying API. So you're agreeing with the fact that the proposal on table is sensitive to enumerability</p>
+<p>YK: Yes</p>
+<p>ARB: This is only really useful for record copying</p>
+<p>AWB: Let's talk about own again. This is an extension of obj destructuring -- which, as it exists today, does not restrict prop accesses to own properties.</p>
+<p>AWB: However, it does restrict/ignores enumerability</p>
+<p>AWB: Implication of this being own: You couldn't use a tree structure to represent a set of values:</p>
+<pre><code class="language-js">BaseOpts = {<span class="hljs-attr">__proto__</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">o1</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">o2</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">o3</span>: <span class="hljs-number">3</span>, ... oN: n};
+ThisTime = {<span class="hljs-attr">__proto__</span>: BaseOpts, <span class="hljs-attr">o7</span>: <span class="hljs-number">14</span>};
+foo(ThisTime);
+</code></pre>
+<p>AWB: Now, inside of Foo...</p>
+<p>AWB: Since you're excluding non-enumerables, normally things in Object.prototype are excluded. So not worried about picking up those things</p>
+<p>YK: You're worried about picking up someone's old prototype extensions. It's true people could do that, but in practice people don't</p>
+<p>MM: We have several arguments that say own is what's expected</p>
+<p>MM: In ES3, assumption is there's all sorts of gunk on Object.prototype because no way to get rid of it. Reason it was restricted to own-ness was because there was a desire to not iterate stuff on Object.prototype</p>
+<p>YK: There's a notion of copying today that means &quot;non-enum, own&quot;</p>
+<p>AWB: Notions in JS today are diff from notions 5 years ago and 5 years from now</p>
+<p>MM: We can't accomodate legacy in this way forever. We're in a history dependent trap, we should make this (enumerable + own)?[verify]</p>
+<p>AWB: How does this play with/needed in the context of other extensions? For example, record types vs property bags to represent options. If people use typed objects vs regular, would expectations change for this syntax?</p>
+<p>SM: Brings up another proposal: Records (new proposal) in same realm as TypedObjects, but simpler syntactically</p>
+<p>AWB: In the past, when focusing in on a microfeature, it makes sense. But when looking at features more broadly those proposals make sense differently. There are enough things that are coming soon that need to be considered here as well</p>
+<p>MM: This feature is on the same &quot;future table&quot; as those other things, so they'll be considered together as we move forward.</p>
+<p>SM: Record types don't have a concept of prototype chain, so not even a consideration; So this should operate consistently between those and regular objects</p>
+<p>SM: (tries to move on to a new slide)</p>
+<p>ARB: so ownness is clear, but are we settled on enumerability?</p>
+<p>MM: yes</p>
+<p>SM: I think it should be settled, and any argument against the enumerability policy here also appllies to Object.assign</p>
+<p>YK: Object.assign is meant to be a widely-used mechanism for copying</p>
+<p>ARB: I see your point, but am still concerned...</p>
+<p>YK: I think the problem is that people don't like enumerability. I don't like enumerability. But enumerability is how you design copying behavior in this language.</p>
+<p>AWB: Is this feature valuable enough to make this as syntax rather than something that lives in a library</p>
+<p>MM: Need a functional mechanism for  updating records</p>
+<p>AWB: This seems like a nice feature, but not sure why this should make it in over other features.</p>
+<p>YK: Symmetrical with destructuring, so easy to understand.</p>
+<p>MM: This seems like a smaller burden on programmer psychology</p>
+<p>AWB: Well, it is a burden. Spread and rest used to be an enumerable list of things, and now we have ... mean something else.</p>
+<p>MM: There is a cognitive cost, but because of the analogy it's much less than a new feature.</p>
+<p>MM: When we previously produced large specifications (through ES6) we used to determine the complexity everything together. Possible that the yearly release will make it more difficult to budget for complexity.</p>
+<p>DH: Also makes it harder to say no to a feature that makes sense locally and has gone through the process.</p>
+<p>MM: We should allow for something to get rejected even after it has gotten through all the stages.</p>
+<p>YK: It's an implicit requirement. Should make it an explicit requirement.</p>
+<p>MM: Agree.</p>
+<p>DH: Recognize that this feature is fitting in an existing syntactic space and is rounding out a syntax that already exists.</p>
+<p>ARB: It's subtly different...</p>
+<p>DH: You'll have to learn it</p>
+<pre><code><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ComponentChild</span><span class="hljs-params">({ isFoo, <span class="hljs-rest_arg">...rest</span> })</span> </span>{
+    <span class="hljs-keyword">var</span> type = isFoo ? <span class="hljs-string">'foo'</span> : <span class="hljs-string">'bar'</span>;
+    <span class="hljs-keyword">return</span> ComponentBase({ ... rest, type });
+}
+</code></pre>
+<p>AWB: What happens if rest is an array?</p>
+<p>MM/SM: It creates the enumerable array properties.</p>
+<p>AWB: But we use iterators.</p>
+<p>MM: It should be dependent on the syntactic thing containing the .... In an object literal, ... will enumerate properties.</p>
+<p>SM: Stage 1?</p>
+<a href="#conclusionresolution-58-object-rest-destructuring-and-spread-properties"><h4 id="conclusionresolution-58-object-rest-destructuring-and-spread-properties">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 approval</li>
+</ul>
+<p>AWB: Be sure to mark agenda items that want to advance with some kind of notation, this will help to get pre-meeting attention.</p>
+<p>(Confirmed by all)</p>
+<p>RW: Use the rocketship icon</p>
+<p>YK: I feel like the rocketship icon should be for proposals which are ready to launch</p>
+<p>DD: If you bikeshed on the rocketship icon I will change it to a bikeshed icon.</p>
+<p>RW: :D</p>
+<a href="#loader-pipeline"><h2 id="loader-pipeline">Loader pipeline</h2></a><p>AWB: Working on module spec. Questions: Loader pipeline.  Can we simplify modules for ES spec?</p>
+<p>&quot;A.js&quot;</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> g = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">import</span> f <span class="hljs-keyword">from</span> <span class="hljs-string">"B.js"</span>;
+f(g);
+</code></pre>
+<p>&quot;B.js&quot;</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> g <span class="hljs-keyword">from</span> <span class="hljs-string">"A.js"</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">z</span>) </span>{
+    <span class="hljs-keyword">return</span> z * g;
+};
+</code></pre>
+<p>AWB: Essential in ES6 that the semantics of above example code is well defined.</p>
+<ul>
+<li>None of it depends on how the loader is parameterized.</li>
+<li>Strictly at the declarative level of the language</li>
+</ul>
+<p>BE: So what goes on the ES side?</p>
+<p>AWB: Syntax and semantics (static, linking, and runtime) of declarative modules. Linking does have to be there, but it's linking at the declarative level of the lang.</p>
+<p>DH: So you have some small number of low-level integration hooks in ES that expose enough for browser implementors design and build loader pipeline themselves?</p>
+<p>AWB: They're at the same level as the other host hooks that we have</p>
+<p>AWB: The only host hook is the one that says &quot;there's a request for a module name (from referrer), give me the source code&quot;</p>
+<p>DH: To clarify: I think what Allen means by &quot;hook&quot; is not user-visible, it's visible to an engine. It's a spec device used to factor out the pipeline. It's not available to user code, just to the internal semantics of the pipeline.</p>
+<p>MM: And we can move the pipeline into a separate spec.</p>
+<p>EF: &quot;Authoring and runtime&quot;</p>
+<ul>
+<li>Authoring: actual writing of modules</li>
+<li>Runtime: the loader</li>
+</ul>
+<p>(Discussion about Loader polyfill)</p>
+<p>(Discussion of how the loader spec would be a separate document)</p>
+<p>YK: The loader pipeline will be done in a &quot;living spec&quot; (a la HTML5) so that Node and the browser can collaborate on shared needs.</p>
+<a href="#conclusionresolution-loader-pipeline"><h4 id="conclusionresolution-loader-pipeline">Conclusion/Resolution</h4></a><p>Loader pipeline goes into a separate spec: living document that deals with integration</p>
+<p>AWB: Retitle? ECMAScript 2015 (6th edition), and so on</p>
+<a href="#train-schedule"><h2 id="train-schedule">Train Schedule</h2></a><p>DH: Let's define the schedule</p>
+<p>YK: ES2015 is the first train.</p>
+<a href="#types"><h2 id="types">Types</h2></a><p>(Jonathan Turner)</p>
+<p><a href="./type_annotations.pdf">type_annotations.pdf</a></p>
+<p>JT: Goals</p>
+<ul>
+<li><p>Short term</p></li>
+<li><p>Reserve syntax used by TypeScript, Flow, etc. for some form of annotation</p></li>
+<li><p>Venue for collaboration among interested committee members</p></li>
+<li><p>Long term</p></li>
+<li><p>Consensus on a shared syntax fr many varied type annotation implementations</p></li>
+<li><p>Consensus on</p></li>
+<li><p>Additionally, a shared syntax for interface definition for documening API boundaries (.d.ts files)</p></li>
+</ul>
+<p>Examples &amp; Demo</p>
+<p>...</p>
+<p>Rationale: Why Type Annotations?</p>
+<ul>
+<li>Toolability</li>
+<li>Closure</li>
+<li>TypeScript</li>
+<li>Flow</li>
+<li>JSDoc</li>
+<li>Performance</li>
+<li>Asm.js</li>
+<li>Hidden classes/runtime inferences</li>
+<li>API specification</li>
+<li>DefinitelyTyped/.d.ts</li>
+<li>WebIDL</li>
+<li>Runtime checks/Guarantees</li>
+<li>Guards</li>
+<li>Contracts</li>
+</ul>
+<p>Rationale: Why Standardize?</p>
+<p>copy from slides</p>
+<p>JT: Looking for Stage 0 blessing to pursue type annotations a la TypeScript and .d.ts file definitions.</p>
+<p>MM: You've presented annotation, what about checking?</p>
+<p>JT: Type checking not defined</p>
+<ul>
+<li>mention of python type design</li>
+</ul>
+<p>MM: I'm not familiar</p>
+<p>JT: TS, Flow have different type checking rules that will hopefully emerge</p>
+<p>DD: Draws comparison to divergent promise implementations that were successfully unified</p>
+<p>ARB: the result is rather terrible</p>
+<p>MM: The fact that <code>.then</code> came together was a miracle and shouldn't be a practice.</p>
+<p>DH: If we want to agree on reserved syntax that currently has no legal JavaScript overlap, that is it fails, not ignored. If such a thing can be agreed on, then different groups can develop around the syntax divergently. Cannot expect to reserve <em>behavior</em>. The rationale slide is far too vague.</p>
+<ul>
+<li>Goal: TS and Flow are taking a risk where TC39 could easily standardize on a syntax that invalidates those project's uses</li>
+</ul>
+<p>JM: no attempt to standardize the entire syntax</p>
+<ul>
+<li><p>Python: imagine similar approach</p></li>
+<li><p>annotations</p></li>
+<li><p>arbitrary expressions evaluated then attached to the function object</p></li>
+<li><p>language doesn't need to use them in runtime</p></li>
+<li><p>tooling may use them</p></li>
+<li><p>allows both static and runtime tooling</p></li>
+<li><p>(this point was about third party consumption of type information, needs to be filled in)</p></li>
+<li><p>no guarantee that TS or Flow won't continue extending the grammar</p></li>
+</ul>
+<p>YK: If you give type checks anything but an error, you can't create different semantics later</p>
+<p>DH/YK/DD: mixed discussion re: history of type design sets constraints</p>
+<p>JM: We need to start making these things possible by putting the capability in the language</p>
+<p>STH: underestimating the complexity (refers to DH work)</p>
+<ul>
+<li>Types seem to be doing well in their current form (compile to JS)</li>
+<li>what is the problem we're trying to solve here?</li>
+<li>RE: Python, the underspecification is already causing problems w/ competing groups</li>
+</ul>
+<p>JM: to move forward we really need a space that's reserved</p>
+<p>DD: Wouldn't have proposed this as types, it's closer to parameter types and returns</p>
+<p>YK: decorators suffered the same syntactic space arguments.</p>
+<p>MM: I'd propose that you enter Stage 0 with TypeScript.</p>
+<ul>
+<li>TS made a choice and proved that this choice has utility.</li>
+</ul>
+<p>DH: Don't need TC39</p>
+<p>JM: How do we know when it's time to come to TC39? We need TC39 to help with progress</p>
+<p>JM: Various projects working toward similar goals: TypeScript, Safe TypeScript, Closure Compiler, IBM has a project, Flow. Ongoing research that should be collaborating and coordinating with TC39</p>
+<p>BE: codify annotation grammar, build object that you can reflect on. Not ready to do that.</p>
+<ul>
+<li>Make reserved syntax, we can do that.</li>
+</ul>
+<p>MM: It's just a 16.1 restriction on extensions.</p>
+<p>BE: ECMAScript allows and always has allowed implementers to make syntax extensions.</p>
+<p>YK: Nashorn adds &quot;#&quot; comment</p>
+<p>DH: Difference between TS, Flow and Nashorn</p>
+<p>RW: (couldn't say outloud) Nashorn changed JS syntax; TS, Flow compile to JS</p>
+<p>JT: Just want to reserve/restrict certain basic block of syntax that projects can use</p>
+<p>DH: Syntax reservation has value. Attempting to define some minimal semantics is a bad idea.</p>
+<p>BE: (copy grammar from whiteboard)</p>
+<p>JM: Would like to be able to point to document for this</p>
+<p>AWB: Some kind of &quot;statement of future direction&quot; document</p>
+<p>RW: Similar to Future Reserved Word, it's a &quot;Future Reserved Grammar/Syntax&quot;</p>
+<p>(agreement)</p>
+<p>AWB: (explanation of how this could work and documented)</p>
+<p>SM: Concrete spec proposal and what goes into next release?</p>
+<ul>
+<li>Will need to converge eventually</li>
+<li>Can do it on our own</li>
+<li>Could do this as part of the TC39 process</li>
+</ul>
+<p>RW: suggest proposal Future Reserved Grammar doc for next meeting to ask for Stage 0</p>
+<p>(discussion about responsibility)</p>
+<p>JM: Seems like &quot;type systems of some kind&quot; have interest. Start conservatively, Future Reserved Grammar/Syntax etc, and build from there.</p>
+<p>JT: Stage -1: reserved grammar</p>
+<p>DH: Stage 0 for this:</p>
+<ul>
+<li>Reserve syntax via Future Reserved Grammar/Syntax</li>
+<li>Does not compute</li>
+<li>Is an error</li>
+<li>cannot ever create an incompatible change</li>
+</ul>
+<p>AWB: Make a motion that TC39 is creating an area of research in types and type annotations and all members are welcome to get involved?</p>
+<p>DH: As long as we maintain balance and prioritize.</p>
+<p>BE: Concern about opening the door too wide.</p>
+<p>SK: What about work on extensions that <em>require</em> semantics?</p>
+<p>ARB: you can't know what type syntax you need without knowing the semantics. In particular, Python's type syntax as just expression syntax doesn't scale, you generally need different constructs on both levels</p>
+<p>BE: for example generic brackets</p>
+<p>DH: What is the grammar?</p>
+<p>JM: (python expression example)</p>
+<p>What's the conclusion?</p>
+<p>ARB: make colon syntax reserved</p>
+<p>RW: there's more to it!</p>
+<a href="#conclusionresolution-types"><h4 id="conclusionresolution-types">Conclusion/Resolution</h4></a><ul>
+<li>Create Future Reserved Syntax (extension restrictions)</li>
+<li>Syntax error</li>
+<li>Define <code>a: T&lt;U&gt;</code></li>
+</ul>
+<a href="#510-globalasap-for-enqueuing-a-microtask"><h2 id="510-globalasap-for-enqueuing-a-microtask">5.10 global.asap for enqueuing a microtask</h2></a><p>(Domenic Denicola and Brian Terlson)</p>
+<p>DD: Want enqueue microtask, which is capable of starving the eventloop</p>
+<p>AWB: As spec writer, I don't know what this is</p>
+<p>YK: In JS there is a frame, it loops</p>
+<p>MM: Is the queue, the same queue that promises queue into?</p>
+<p>DD: Yes</p>
+<p>YK: Want a way to queue a job that's guaranteed to run before all other tasks</p>
+<p>AWB: There are spec mechanisms that define ways to create a job in the queue</p>
+<p>DD: Don't care what it's called just want it to exprss the intent, which is faster than setImmediate</p>
+<p>Discussion about the semantics and defining the order of execution. MM is objecting</p>
+<p>YK: A non-normative note?</p>
+<p>DD: No, if it's non-normative I don't care, I want it normative</p>
+<p>Issues about host interference with expected run-to-completion model</p>
+<p>AWB: present job and job queue mechanism intended to describe the two things we needed to describe and knew there would elaboration. Go ahead and develop a proposal.</p>
+<p>YK: Concerned that explanation problems lie in using browser terminology</p>
+<ul>
+<li>Micro task is part of run to completion</li>
+<li>Task queue is not</li>
+</ul>
+<p>AWB: jobs run to completion</p>
+<p>MM: Job queues are always async by definition</p>
+<ul>
+<li>We have terminology, please use the correct terminology</li>
+</ul>
+<p>YK: Ok, won't use &quot;synchronous&quot;</p>
+<p>MM; multiple queues in a priorty mode</p>
+<ul>
+<li>You want the microtask queue to have a strictly higher priority</li>
+<li>We may even specify priority queues</li>
+</ul>
+<p>DD: Want to specify <code>global.asap</code></p>
+<ul>
+<li>Accepts a function</li>
+<li>Enqueues in a high priority queue</li>
+</ul>
+<p>DH: Think this is awesome</p>
+<ul>
+<li>We need a generic model for job scheduling.</li>
+</ul>
+<a href="#conclusionresolution-510-globalasap-for-enqueuing-a-microtask"><h4 id="conclusionresolution-510-globalasap-for-enqueuing-a-microtask">Conclusion/Resolution</h4></a><ul>
+<li>Stage 0:
+<ul>
+<li>Some way to publish into a queue</li>
+<li>priority queueing</li>
+</ul></li>
+</ul>
+
+</body>

@@ -1,0 +1,317 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 23, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-23-2016-meeting-notes"><h1 id="may-23-2016-meeting-notes">May 23, 2016 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Dave Herman (DH), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Shu-yu Guo (SYG), Mark S. Miller (MM), Kevin Smith (KS), Michael Saboff (MS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Andreas Rossberg (ARB), Ben Smith (BS), Thomas Wood (TW), Alan Schmitt (AS), Brad Nelson (BNN), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD)</p>
+<p>Remote:
+Michael Hablich (MHH), Yang Guo (YGO), Toon Verwaest (TVT), Daniel Clifford DCD), Nikolaus Papaspyrou (NPU), Ben Titzer (BTR)</p>
+<hr>
+<a href="#discussion-of-the-agenda-and-timing"><h2 id="discussion-of-the-agenda-and-timing">Discussion of the agenda and timing</h2></a><p>PTC/STC on Tuesday morning/afternoon for MS employees to call in
+9 hours differences between CET and US Pacific time. Only afternoon works...
+First YK/BT class evaluation order, then PRs, then features for advancement, then other features</p>
+<a href="#class-evaluation-order"><h2 id="class-evaluation-order">Class Evaluation Order</h2></a><p>(Yehuda Katz, Brian Terlson)</p>
+<p>[<em>Presentation (with slides)</em>] <a href="https://github.com/tc39/tc39-notes/blob/master/es7/2016-05/classevalorder.pdf">https://github.com/tc39/tc39-notes/blob/master/es7/2016-05/classevalorder.pdf</a></p>
+<p>BT: We need consensus, as this comes up with decorators and other new language features.</p>
+<p>YK: Resolves question that committee asked</p>
+<p>BT: [<em>slide ES6 Class Evaluation order</em>] Mostly not observable.</p>
+<p>MF: Some of those steps are observable</p>
+<p>YK: The interleaving is not all observable</p>
+<p>EF: What matters is that the evaluation steps are in order and that you get the TDZ right</p>
+<p>BT: The observable effects are that the class is in TDZ while the extends clause is evaluated and then the computed property names are evaluated</p>
+<p>BT: [<em>slide In-order Evaluation: Unrealistic</em>] Hard to add additional features to classes while maintaining these constraints</p>
+<p>YK: [<em>slide Impossible scenarios with in-order evaluation</em>] There are a number of dynamic things, and it'd be really hard to do them all in textual order for new features</p>
+<p>DH: Can I make that slightly more rigorous? A number of new features include evaluation of expressions</p>
+<p>...</p>
+<p>YK: <strong>TODO: provide gist link</strong>. When should static field initialization be evaluated? Seems like it would be nice to have the class not in TDZ and fully initialized when static initializers run. Glimmer actually uses this.</p>
+<p>MM: This is really bad, like Java; we shouldn't have the class defined until all of the statics are there.</p>
+<p>DH: This is one of the most common, natural use cases of statics.</p>
+<p>YK: What should be done instead?</p>
+<p>WH: In C++, you can do this, statics are defined later. Worked fine until constexpr, which exposed badness with phases. Now it exposes lots of badness that no one understands — can't even call constexpr functions statically and textually defined earlier in the same class.</p>
+<p>MM: I want to register that exposing this is disturbing</p>
+<p>YK: Here's an @integrity decorator. It freezes all the things. If we want to have statics evaluated later, outside of TDZ, but it had ordinary imperative semantics, then we couldn't do it in conjunction with the @integrity decorator, because the freezing should happen later.</p>
+<p>YK: If you have a @nonconfigurable decorator, then you need the getter/setters to be put together, otherwise &quot;adding&quot; the second one would fail</p>
+<p>YK: Forward references: the static initializer should be able to call all kinds of methods, even using computed property names, which are declared textually <em>after</em> the initializer</p>
+<p>WH: What if Symbol.iterator referred to a static initializer? Example:</p>
+<pre><code class="language-js">    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Args</span> </span>{
+        <span class="hljs-keyword">static</span> LIST = [... new Args()];
+        <span class="hljs-keyword">static</span> PI = <span class="hljs-number">3.14</span>;
+        ... iterator code refers to PI ... <span class="hljs-comment">// In turn, LIST refers to the iterator code, creating an order of evaluation dilemma</span>
+    }
+</code></pre>
+<p>YK: You're assuming this is imperative. We'll see in the proposal. We'll come back to further example later.</p>
+<p>BT: Instance initializers have to be run as part of the constructor, so they are not subject to in-order evaluation</p>
+<p>WH: I was talking about static.</p>
+<p>BT: [<em>slide Out-of-order Evaluation</em>]</p>
+<p>WH: Is the order purely syntactically defined, or does it vary depending on what's in the values being defined?</p>
+<p>BT: Syntactically defined.</p>
+<p>BT: There is actually an intuitive order, which runs in non-textual order, found in other languages. You  may think it's good or bad (Java example); there are ES supersets which are very popular
+which have this sort of semantics.</p>
+<p>YK: We can use semantics similar to Ruby, though it has more imperative class semantics, where ES is more static. Babel and TypeScript made independent choices here which are out-of-order and seem to meet user expectations, though at the same time, the semantics may be incidental based on the implementation of transpilation</p>
+<p>BT: These are not edge cases; they are core features. Instance and static initializers are very very popular features and we in TypeScript have not received any bug reports of users being confused about the evaluation order.</p>
+<p>BT: [<em>slide Class.next Evaluation Order Strawman</em>] Aligns what is implemented in Babel and TypeScript (modulo a TS bug that they are on-board to fix).</p>
+<p>BT: Difference starts with step 4, about making an intermediate list of all of the methods</p>
+<p>YK: The spec could've been written this way, and the difference is unobservable</p>
+<p>BT: Evaluate decorator expressions (to find out which decorator it is, not to call the decorators) and computed property names.</p>
+<p>WH: What scope are decorators evaluated in?</p>
+<p>BT: In the same scope as computed property names.</p>
+<p>WH; So they cannot see any of the class properties?</p>
+<p>BT: Correct.</p>
+<p>EF: What happens when decorators are not in the picture? Seems like it just means that statics happen at the end. Let's tweeze these two things apart.</p>
+<p>YK: It will be clarifying to think through the complete picture with decorators, but you are right.  A lot of this is spec factoring, but this is very important to expose to decorators.</p>
+<p>BT: Slide edit to insert step 11 where decorator transformations are run after static elements are installed onto the class in order by evaluating initializers</p>
+<p>WH: Isn't it problematic that you have static element initializers run, with access to the class, when the constructor is not in TDZ? What if an exception is thrown in step 10? To be more concrete, ...</p>
+<p>MM just now gave an example of a decorator that freezes the class. If one of the static initializers in step 10 throws and someone catches it, the class will be defined but never be frozen.</p>
+<p>DE: E.g., what if the initializer saves the constructor somewhere and then an exception is thrown? Then you'll see that the decorators have not run and the integrity is not inserted.</p>
+<p>DH: There is a distinction between the ability to write something silly that doesn't work and a full argument against a proposal. It's more important that you should be able to meet important user cases. It might not be so important that you could leak a class that hasn't fully been initialized.</p>
+<p>YK: FWIW I think it's good to reduce the number of bad cases. We should try to figure out the actual cases and what the issues look like.</p>
+<p>DH: There is imperativeness inherent in the space.</p>
+<p>YK: I think we can make it declarative modulo static initializers.</p>
+<p>MM: To clarify, do these steps (sub-steps of 4) run member-by-member in textual order through a few of them, or does it run across all members in order?</p>
+<p>YK: In textual order, each member will do those four steps, though we could consider another way.</p>
+<p>EF: You can decorate the getters and setters separately?</p>
+<p>MM: What does that mean?</p>
+<p>YK: Run textually bottom-up per get/set.</p>
+<p>WH: Seems like the order in which decorator functions are evaluated in step 6 is not statically decidable because of getters and setters that use computed property names. One can't statically tell which getters will match up with which setters if they use computed property names, and the pattern of these matches will change the order in which decorator functions are evaluated in step 6.</p>
+<p>DE: Seems like the getters and setters get evaluated first, and coalesced, and then the decorators run</p>
+<p>KS: Could this be factored a bit differently?</p>
+<p>YK: Up to spec editor</p>
+<p>KS: Seems like no changes to current class semantics, right?</p>
+<p>YK: Right, maybe a small amount of changes to class literals, but otherwise the same.</p>
+<p>KS: So mostly a constraint on future additions?</p>
+<p>YK: Yes, it gives guidelines</p>
+<p>JHD: What is the division exactly between step 6/7 and step 11?</p>
+<p>YK: Decorators should not be able to see the in-progress class, so they will get access to some sort of representation to something instead. Step 6 produces modifications, and step 11 actually applies them.</p>
+<p>JHD: So 6/7 produces property descriptors and 11 applies them?</p>
+<p>YK: Basically, though we need more power than just property descriptors; for ES2015 property descriptors are everything.</p>
+<p>WH: Why don't the decorator functions in step 6 get evaluated in textual order?</p>
+<p>YK: Wouldn't be opposed to running them in textual order.</p>
+<p>MM: What is the difference between this and TS?</p>
+<p>BT: TS does step 10 and 11 in reverse. So if you have a static initializer referring to the class, you get an instance which isn't decorated. You need to make a tradeoff: does the decorator see the static fields of the class, or switched?</p>
+<p>DH: It's important for a class integrity decorator to be able to apply to the statics and make them affected as well.</p>
+<p>BT: Babel with the decorators plugin aligns entirely with this.</p>
+<p>JHD: If you have a static initializer which creates a class instance, don't you see the partially constructed class?</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+
+    @incrementByOne
+
+    <span class="hljs-keyword">static</span> A = <span class="hljs-number">3</span>;
+
+
+    <span class="hljs-keyword">static</span> B = Foo.A; <span class="hljs-comment">// is B 3 or 4?</span>
+
+}
+</code></pre>
+<p><em>Discussion about how decorated properties work using thunks. It's similar to TDZ intuition</em></p>
+<p>MM: Can a decorator on a property see the class?</p>
+<p>YK: No</p>
+<p>EF: Sounds like people are swayed that we want out-of-order evaluation. What else besides decorators is up for discussion here? Maybe we could come back to these things in the decorators proposal.</p>
+<p>YK: There's also something with computed property names, but I want to come to consensus on the basics here.</p>
+<p>MM: question</p>
+<p>YK: You shouldn't have access to the class in a dangerous case.</p>
+<p>MM: For the sake of concreteness, the overall picture you have in mind is that step 11 only applies to class decoration, right?</p>
+<p>DE: Do we have consensus on a staged order?</p>
+<p>MM: It needs to be clearly and unambiguously defined, and follow least surprise; this seems pretty good to me.</p>
+<p>WH: One comment: for step 6, I would suggest textual order.</p>
+<p>EF: At the last meeting, people had a lot of trouble with class initializers. Has this concern been resolved?</p>
+<p>MM: yes, for me.</p>
+<p>DE: So, consensus?</p>
+<p><strong><em>Yes</em></strong></p>
+<p>EF: what is the concern with object literals?</p>
+<p>BT: Because the right hand side of object literals are evaluated in order with computed properties, it is basically impossible to apply the same scheme to objects, unfortunately.</p>
+<p>YK: Today, object literals are still used a lot as partial classes. Because that's a thing people do, you may want to use decorators (e.g., @nonconfigurable) as part of objects. The issue is that computed property name evaluation is interleaved with the property values. Seems like specifying a different ordering would create subtle bugs, so it's very hard to define well.</p>
+<p>DH: I want to be able to have a @nonenumerable decorator for all property definitions, and it seems like a huge loss otherwise.</p>
+<p>YK: Why did we get rid of duplicate property names anyway?</p>
+<p>DE: computed property names?</p>
+<p>MM: rest and spread properties (FB proposal) became more useful if textually later properties could override earlier properties.</p>
+<p>YK: I don't think that was the reason.</p>
+<p>MM: That was the reason. I was insistent that the dynamic error parallel the static error, so we got rid of the static error as well.</p>
+<p>JHD: Although it would be a breaking change, maybe it would be reasonable to evaluate all computed property names of object literals before their values</p>
+<p>MM, WH: Agree.</p>
+<p>ARB: You could have arbitrary side effects in computed property names or property values!</p>
+<p>MM: If the feature was recently deployed, then the code that's using the feature is generally code that's still being maintained.</p>
+<p>YK: I think web developers assume that new features are still in flux to some degree.</p>
+<p>JHD: Cases 1) Babel 2) Web but not caring about compat 3) Node, and then v8 changes in a major version bump. None should be a problem.</p>
+<p>KS: Prototype in Babel?</p>
+<p>ARB: I don't like this change because I think left-to-right is a good thing to have.</p>
+<p>EF: I'm also vaguely uncomfortable, but not being able to write decorators in object literals anyway seems</p>
+<p>DH: It might be that people take arguments that they use as computed property names, but probably aren't all that stateful</p>
+<p>DE: Domenic has mentioned a use case for this where people may even refer to properties of objects as computed property names.</p>
+<p>YK: It was a mistake to make getters/setters non-enumerable</p>
+<p>DH: I remember getting consensus on it being enumerable</p>
+<p>DE: But doesn't Object.assign only refer to own properties, so making it enumerable wouldn't fix rest/spread properties?</p>
+<p>YK: Regardless, the room somehow believed getters/setters would be included in rest/spread params (included in &quot;snapshot&quot;)</p>
+<p>MM: ... uses own/enumerable/Get, follows Object.assign semantics</p>
+<p>YK: But a getter on the prototype is not an own property.</p>
+<p>YK: It's urgent to reconsider this because people have implemented it.</p>
+<p>JHD: Sounds like this is unrelated to the topic at hand.</p>
+<p>YK: Just mentioning all potential breaking changes.</p>
+<p>EF: Seems like coalescing get/set was better in the old world than the new world. Should we explore alternate syntax so that it's grouped?</p>
+<p>DH: Syntax is very expensive to add. It would be unfortunate to add new syntax that doesn't &quot;pay for itself&quot; and flattening is very ergonomic. Coalescing is nicer for the metaprogrammer.</p>
+<p>YK: Linters should enforce get/set being adjacent.</p>
+<p>YK: Maybe there should be a dynamic error if you decorate both the getters and setters separately</p>
+<p>MM, YK, EF, DH: All agree, better than decorating them separately.</p>
+<p><em>Do we have consensus on everything?</em></p>
+<p>DE: I'm still uncomfortable with static initializers running before the class decorators have had their effect on the class, similar to WH's concern</p>
+<a href="#conclusionresolution-class-evaluation-order"><h4 id="conclusionresolution-class-evaluation-order">Conclusion/Resolution</h4></a><ul>
+<li>Consensus on a general staged model</li>
+<li>Provisional consensus towards a proposal to evaluate all object computed property names before the values</li>
+<li>Interest in seeing more development towards how getters/setters will interact with rest/spread properties, including reconsidering whether they should be non-enumerable</li>
+<li>Consensus that decorating getters and setters separately should be a dynamic error; you are decorating the pair, not individually.</li>
+</ul>
+<a href="#updates-from-istvan"><h2 id="updates-from-istvan">Updates from István</h2></a><p><em>Record all members present, including on VC, in the notes</em></p>
+<p>Do we have consensus on adopting the minutes of the March meeting?</p>
+<p>Besides Github notes and ES discuss notes we need to prepare the official Ecma version of the minutes that annexes the &quot;Technical Notes&quot;. This is needed not so much for TC39 as for the other Ecma Membership on what is going on in Tc39, and this goes also into the long-term archive of Ecma.</p>
+<p><em>Consensus</em>. TC39 approved TC39/2016/019 Rev1 minutes of the March 2016 San Francisco meeting.</p>
+<ul>
+<li><p>We cannot have any more technical changes for ES2016. As requesred by Ecma Rules the 3 TC39 standards up for voting at the June 2016 GA have been published. Only small Editorial changes are allowed. ECMA Secretariat is working with the editors of 262 and 402. In ECMA 414 (ECMASCript Suite) Allen Wirfs Brock suggests also to included ECMA-404 (JSON) into the normative references (I have forgotten to say verbally in the meeting...). This is an editorial addition as ECMA-404 is already included as Normative Reference in ECMA-262...</p></li>
+<li><p>ECMAScript Suite (ECMA-414) for ISO fast track up for approval, going to be presented to ECMA GA. The ECMA Management are all very impressed with the ability to release ECMAScript 2016 so quickly. To avoid getting out of date with frequent updates, we will not submit future ECMAScript &quot;components&quot; (like ECMA-402, ECMA-262) updates for ISO fast track and just submit the one suite standard as the new Edition of IS 16262. Unclear whether this will work practically (actually ISO secretariat suggested this, but some national bodies may object to it - one never knows), but it is very important to ECMA that the annual version be standardized and published.</p></li>
+<li><p>ECMA 404 (JSON) will be up for ISO fast track from the 2013 version, aligned with IETF standard, unlikely to change in the future. Actually we have a go ahead from the Ecma GA this from 2014, but only now we are submitting the fast track. The only reason for the JTC1 fast-track of JSON to demonstrate the world that JSON is stable and there is no intention to change it. When there will be a similar IETF Standard (not FRC) we will issue a new ECMA-404 Edition when we will take up that and get it synchronized with ECMA-404.</p></li>
+<li><p>Brian Terlson and Rick Waldron has been proposed to the Ecma Management and the CC by István for the GA ECMA award of recognition at their June 2016 meeting. Caridy Patiño (as ECMA-402) Editor may also be proposed for an award (this was seconded by TC39). We are also open to nominating other TC39 committee members for ECMA recognition awards for any outstanding TC39 related contribution. This occurs twice a year at the GA. E.g. Allen W-B. or Waldemar H. has received this award in the past.</p></li>
+</ul>
+<p><strong>NOTE</strong>: The ECMAScript standards currently contribute to about 2/3 of all Ecma downloads of standards. Constantly we have about 5000-7000 downloads of ECMA-262 per month. That is the record holder standard. The HTML version has about 100000 visits in 2016 so far.</p>
+<p>Another point only mentioned here but not in the verbal report: He gets a great external interest for ECMAScript Security Projects and how to speed up ECMAScript performance (e.g. by parallel processing) for Media Codecs running in ECMAScript.</p>
+<a href="#standardize-a-rangeerror-for-call-stack-overflow"><h2 id="standardize-a-rangeerror-for-call-stack-overflow"><a href="https://github.com/tc39/ecma262/pull/319">Standardize a RangeError for call stack overflow</a></h2></a><p>(Mike Pennisi) <a href="https://github.com/tc39/ecma262/pull/319">https://github.com/tc39/ecma262/pull/319</a></p>
+<p>BT: Leading discussion on this proposal. This would help write tests to see if resources are exhausted for stacks.</p>
+<p>WH: This seems like a special case of out-of-memory. How could you even signal such an out-of-memory failure? You could make the same case about writing tests to make sure weak maps garbage collect.</p>
+<p>DE: It is not possible to detect memory exhaustion on Linux reliably.</p>
+<p>DE: On Linux it just picks a process and kills it, not necessarily the one that exhausted memory.</p>
+<p>BT: yes, for this reason I oppose this proposal. It does not seem possible for us to reliably detect the out of stack condition and recover with a RangeError.</p>
+<p>MM: The ECMAScript spec can only &quot;correctly&quot; be implemented on an infinite memory machine. We don't acknowledge failure. Java preallocates VM errors. Erlang OTOH terminates the process. Let's do that in ES.</p>
+<p>BT: Although that would be ideal, it sounds web-incompatible.</p>
+<p><em>Chakra, JSC and SpiderMonkey throw exceptions on out of memory, but V8 just crashes</em></p>
+<p>DE: Sounds like we need more web compatibility evidence. Maybe we should recommend to browsers to collect data on how often out of resource exceptions are caught and handled.</p>
+<p>SG: Games may try to allocate a bunch of memory in a try block</p>
+<p><em>General discussion about the unimplementability of throwing correctly all the time.</em></p>
+<p>DH: We have to do good science here.</p>
+<p>DE: The test262 tests are parameterized, and there are both positive and negative tests</p>
+<p>DH: Recommendation to test262: write a routine to experimentally determine the maximum stack size, and run this at the beginning, rather than starting at 100k.</p>
+<p>BT: Isn't it possible for this to come to a variable outcome?</p>
+<p>MS: I wrote this routine, and it's very hard to do it correctly determine the exact outcome. It required growing exponentially, then backing off, etc</p>
+<p>LBR: After a lot of research, this was the best we found. It is not the happiest solution, but we couldn't find anything better. We just wanted to offer some form of tests on test262 for each feature of the spec, and that's what we did for tail call optimization. You already have to have a $PRINT function that implementations support, and this is similarly parameterized.</p>
+<p>BT: It's a pragmatic solution</p>
+<p>MF: Proper tail calls are unobservable and should not have a test262 test</p>
+<p>BT: But it is very useful and works on all implementations</p>
+<a href="#conclusionresolution-standardize-a-rangeerror-for-call-stack-overflow"><h4 id="conclusionresolution-standardize-a-rangeerror-for-call-stack-overflow">Conclusion/Resolution</h4></a><ul>
+<li>Consensus to not standardize RangeError (impossible to implement reliably)</li>
+<li>Continue discussion on a GitHub bug about possible reorganization of test262 to take into account that the PTC tests are implementation-specific/not technically correct</li>
+</ul>
+<a href="#w-and-w-semantics-in-case-insensitive-unicode-regexps"><h2 id="w-and-w-semantics-in-case-insensitive-unicode-regexps"><a href="https://github.com/tc39/ecma262/pull/525">\w and \W semantics in case-insensitive Unicode RegExps</a></h2></a><p>(Michael Saboff)</p>
+<p>WH: This is the exact same problem that I solved in ES3 by adding the prohibition to case-canonicalization of non-ASCII Unicode characters into ASCII characters. Without that, the same \W weirdness would have appeared in ES3.</p>
+<p>MS: Recap of very strange semantics caused by Unicode case folding (MS please insert link to slides). \W includes K because the kevin symbol case-folds to something in \w, so K is case-insensitive in the set of things that aren't a letter.</p>
+<p>MS: Proposal: make \W be the inverse of \w, and change \b and \B to be consistent. An alternate proposal would be to stick to ASCII-only as Waldemar did for ES3.</p>
+<p>WH: [<em>explaining the rationale for how ES3 regexps were specified</em>]. Character classes evaluate into sets of allowed characters and an invert flag. Used an invert flag to make [^...] be an exact negative of [...]. It would have been tempting to use an invert flag to make \W into an exact negative of \w, but that wouldn't work when combining \W or \w with other things in a character set: [abc\w], etc. That's why \W inverts the set manually instead of using the invert flag.</p>
+<p>YK: Would it be web-compatible to do a change?</p>
+<p>WH: Having k and s match \W is clearly a spec bug.</p>
+<p>YG: Chrome shipped this in 50, with the spec's semantics.</p>
+<p>DE: It should still be web-compatible, though, as it is very recently shipped. The bug reporter was someone who was writing a conformance test, rather than finding this in actual usage.</p>
+<p>BT: Edge actually ships MS's proposal, so we don't need to worry about web compat.</p>
+<p>MS: Should we change \b as well?</p>
+<p>YG: Yes, they should change together?</p>
+<p>WH: Isn't it strange that what's contained in the class is dependent on the i flag?</p>
+<p>YG: But they should change together and be consistent.</p>
+<p>MS: There is currently an inconsistency between \b and \w due to this issue as well. Proposal flips this, and makes \w\W or \W\w be \b. It's necessary for</p>
+<p>YG: I was suggesting bringing in Unicode because it seems ad-hoc to bring in just small long S and kelvin symbol</p>
+<p>MS: Or, we could make it not cross the ASCII boundary, and not do Unicode case folding with respect to the evaluation of this character class.</p>
+<p>JHD: But seems like we should be aligned with Unicode.</p>
+<p>MS: My proposal just uses UnicodeCaseFolding.txt and will be future-compatible</p>
+<p>YG: It seems rather ad-hoc to not follow UnicodeCaseFolding.txt, so let's keep it if possible. This all applies only with /ui, right?</p>
+<p>MS: Yes</p>
+<p>DH: What Unicode changes affect this?</p>
+<p>WH: Unicode defining new characters which case-convert into ASCII letters.</p>
+<p><em>discussion: Good to follow Unicode going forward, as it has changed over time, both in adding new characters and revisions to existing characters</em>.</p>
+<a href="#conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps"><h4 id="conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps">Conclusion/Resolution</h4></a><p>Consensus on MS's pull request, and working out \b and \B as he indicated.</p>
+<a href="#function-names"><h2 id="function-names"><a href="https://github.com/tc39/ecma262/pull/575">Function names</a></h2></a><p>(Michael Saboff)</p>
+<p>MS: Proposal: When the inferred name is a reserved word, use &quot;&quot; rather than the current name. The problem is that the .name property won't eval.</p>
+<p>MM: What is the problem with the .name property being not an identifier?</p>
+<p>MS: The problem is that math.js puts type decorations in the name when they put the property of the function into the object.</p>
+<p>DD: Later, they eval it, concatenating the .name onto it</p>
+<p>MM: That's what broke in Chrome 50 on SES, which was wrong due to bound functions and getters/setters.</p>
+<p>MS: but you can't call getters and setters</p>
+<p>EF: Yes you can; get the property descriptor, find the getter, and call it</p>
+<p>DD: the issue is how should we balance compatibility with the clean semantics of the current spec.</p>
+<p>DE: V8 has shipped this in Chrome 50 and does not see a huge flood of bug reports</p>
+<p>JHD: Function name property is not something that you can eval in general</p>
+<p>DE: There are a lot of ways that we could handle compatibility issues. Collect qualitative or quantitive information, contact large users, etc. Where does this sit when comparing to TypedArray methods (Microsoft contacted Turbulenz; it was fixed and we all managed to ship the methods) and RegExp feature testing (too widespread; made a spec workaround)?</p>
+<p>MS: Seems like this is probably not as bad as the RegExp issue.</p>
+<p>MS: Proposal: &quot;&quot; name only in object literals, when the name is not an identifier</p>
+<p>YK: Compatibility is important</p>
+<p>BT: good to have an evidence-based overturning of previous decisions</p>
+<p>MS: Hard to do telemetry for this</p>
+<a href="#conclusionresolution-function-names"><h4 id="conclusionresolution-function-names">Conclusion/Resolution</h4></a><p>No change in the spec for now; MS says Safari will likely ship their compat workaround for now, and see if it can get more information for the next meeting or the one after that to consider the decision</p>
+<a href="#typedarrayarraybufferdataview-constructor-changes"><h2 id="typedarrayarraybufferdataview-constructor-changes"><a href="https://github.com/tc39/ecma262/pull/410">TypedArray/ArrayBuffer/DataView constructor changes</a></h2></a><p>(Leo Balter)</p>
+<p>LBR: [<em>Presented bug comment showing behavior across browsers</em>]</p>
+<p>MM: What does n/a mean?</p>
+<p>LBR: not providing that argument</p>
+<p>MS: JSC gives somewhat changed and more standards-compliant behavior for some cases listed here, more in line with all other implementations</p>
+<p>JHD: Seems like some of these have multiple browsers throwing, but your PR makes it not throw, in alignment with only V8. Why?</p>
+<p>LBR: I'm trying to make a canonical approach</p>
+<p>DE: We should consider web compatibility also for things that are not strictly at the intersection</p>
+<p>YK: E.g., Mobile web</p>
+<p>MM: When there's no hard rule applicable, about intersection semantics, then we can rely on soft factors. Another factor here is consistency among approaches.</p>
+<p>LBR: Some of the real motivation is also web compatibility. For example, throwing errors for things which are not integers, or some other things, which did not throw in any browser but throws in the spec.</p>
+<p>MM: Is a particular -0 value correct?</p>
+<p>BT: We have had some -0-related bugs in the past; not sure if this is that.</p>
+<p>LBR: What I have here is a new abstract operation, ToIndex, to uniformly treat all of these arguments.</p>
+<p><em>MM, LBR: Going through the details of the spec</em></p>
+<p>LBR: The new semantics for ToIndex are ToInteger, then check that it equals toLength of that (which asserts the range basically), allowing -0.</p>
+<p>YK: Point of hesitation that in some cases, almost all browsers throw, but one browser does not throw and the resulting semantics do not throw.</p>
+<p>MM: Seems like this is representing the length, rather than the index</p>
+<p>LBR: Sometimes, it represents an offset index, e.g., the TypedArray byteOffset argument has ToIndex applied to it. I've bikeshedded a lot of different names!</p>
+<p>CM: Question: How does ToIndex differ from ToLength? Are there places where ToLength is used which don't go through this?</p>
+<p>JHD: There are many uses</p>
+<p>LBR: Many cases use ToLength that I cannot apply this check for ToIndex to.</p>
+<p>DE: e.g., all of the Array methods</p>
+<p>CM: OK, compatibility seems like a decisive argument</p>
+<p>MM: Why not just use ToLength?</p>
+<p>JHD: Because then it wouldn't throw a RangeError.</p>
+<p>MM: Although I prefer errors to no errors, I prefer smaller specs to larger specs. Why not just use ToLength?</p>
+<p>DE: I think Allen wanted to make TypedArrays as strict as possible. This PR seems like a good compromise.</p>
+<p>LBR: It's also nice that we have stricter infinity behavior.</p>
+<p>MM: This sounds OK then</p>
+<p>LBR: From TC39 philosophy, we could change later for throwing to not throwing, right?</p>
+<p>MM: Let's throw the error because want to throw the error</p>
+<p>YK: But we could go from throwing to not throwing, right?</p>
+<p>MM: We can, but let's get a good decision here.</p>
+<p>CM: Some of these things seem like weird cases that should throw an error, and some browsers do throw errors for some of these cases. Part of that is using a consistent rule everywhere, which i like, but if it's gonna be sloppy, I'm in favor of being more particular on edge cases.</p>
+<p>DE: One thing I really like about this proposal is how it's consistent between the different callsites. Some callsites cast to 0 in all browsers on NaN</p>
+<p>LBR: I'm not totally stuck one way on NaN. Maybe we could throw. But I believe this proposal is the most consistent way. One historical reason Allen mentioned was to make it compatible with WebIDL. It's true that this is not exactly the same as WebIDL, but I also consulted with developers who use TypedArrays every day, and they liked this proposal.</p>
+<p>MM: there are cases where it's an error to make a 0-length array?</p>
+<p>LBR: I found all kinds of cases of inconsistencies here. This PR makes things more regular.</p>
+<p>MM: If the PR is adopted, then for all kinds of arrays, can you make zero-length arrays?</p>
+<p>LBR: You will be able to create empty ArrayBuffers. TypedArrays may have additional checks.</p>
+<p>MM: any objections?</p>
+<p>MS: Were you concerned about compat, DE?</p>
+<p>DE: No, I was concerned about compat for other proposals. I think this will probably work.</p>
+<a href="#conclusionresolution-typedarrayarraybufferdataview-constructor-changes"><h4 id="conclusionresolution-typedarrayarraybufferdataview-constructor-changes">Conclusion/Resolution</h4></a><p><em>Consensus!</em></p>
+<a href="#revisiting-duplicate-function-declarations-in-blocks"><h2 id="revisiting-duplicate-function-declarations-in-blocks"><a href="https://github.com/tc39/ecma262/pull/453">Revisiting &quot;Duplicate Function Declarations in Blocks&quot;</a> (DE, SG)</h2></a><p>SG: Should our Annex B 3.3 legacy duplicate function in sloppy block behavior do an assignment for each function declaration, or just the last one?</p>
+<p>DE: I thought we were executing the assignment for each one. This is observable if you break out of the block in the middle. I'm fine with only doing the last one.</p>
+<p>SG: I'm fine with either also, but thought we had consensus on just the last one</p>
+<p>YK, MM: Seems like it'd be more intuitive that each function declaration does the assignment,</p>
+<a href="#conclusionresolution-revisiting-duplicate-function-declarations-in-blocks"><h4 id="conclusionresolution-revisiting-duplicate-function-declarations-in-blocks">Conclusion/Resolution</h4></a><p>Consensus on DE's PR to do an assignment for each function</p>
+<a href="#throwing-an-error-for-returning-primitives-from-base-class-constructors"><h2 id="throwing-an-error-for-returning-primitives-from-base-class-constructors"><a href="https://github.com/tc39/ecma262/pull/469">Throwing an error for returning primitives from base class constructors</a></h2></a><p>(Claude Pache)</p>
+<p>DE: I'm concerned it wouldn't be web-compatible to change this. We've apparently always supported returning non-object from a construct leading to returning this</p>
+<p>DH, others: Concern from various members of the committee about returning primitives leading to breaking long-held invariants</p>
+<p>Realizations:</p>
+<ul>
+<li>Broader concern: ES2015 and this proposal both ensure that objects are always returned from new; the question is just does a primitive return this, or throw a TypeError</li>
+<li>DE: Web compat may not be so big of an issue since this only applies to ES2015 class syntax, not ordinary function constructors</li>
+</ul>
+<a href="#conclusionresolution-throwing-an-error-for-returning-primitives-from-base-class-constructors"><h4 id="conclusionresolution-throwing-an-error-for-returning-primitives-from-base-class-constructors">Conclusion/Resolution</h4></a><p>Yes on the PR, though we will have to take web compatibility feedback into account as implementations attempt this</p>
+<a href="#always-update-object-properties-if-property-descriptor-is-applicable-nan-issue"><h2 id="always-update-object-properties-if-property-descriptor-is-applicable-nan-issue"><a href="https://github.com/tc39/ecma262/pull/353">Always update object properties if property descriptor is applicable (NaN issue)</a></h2></a><p>(Daniel Ehrenberg)</p>
+<p>DE: This PR makes writes of a new NaN value to an existing writable property in an ordinary object take effect. That way, a non-canonicalizing implementation like V8 does not have to do a check on ordinary property sets to meet correctness. It continues to prevent information leaks on nonwritable properties by making those writes not change which NaN is there, though return success. Seems like a great change towards web reality while keeping both implementation constraints and desirable language properties in mind.</p>
+<p>MM: Sounds good to me</p>
+<p>DH: I'm uncomfortable with making this sort of change; the semantics for NaN observability and canonicalization seem weird</p>
+<p>DE: The spec text is weirdly written; it warrants a refactoring.</p>
+<p>BT: Didn't you promise to do that at your first meeting?</p>
+<p>DE: Sorry I haven't done this yet; it's something that I was planning on doing if/when SIMD.js reaches Stage 4.</p>
+<p>DH: I'm not sure if your refactoring makes sense either.</p>
+<a href="#conclusionresolution-always-update-object-properties-if-property-descriptor-is-applicable-nan-issue"><h4 id="conclusionresolution-always-update-object-properties-if-property-descriptor-is-applicable-nan-issue">Conclusion/Resolution</h4></a><p>Discuss more later. Agreement between DH and DE that this is lower priority than many other items on the agenda.</p>
+
+</body>

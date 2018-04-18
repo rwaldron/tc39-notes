@@ -1,0 +1,389 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 31, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-31-2016-meeting-notes"><h1 id="march-31-2016-meeting-notes">March 31, 2016 Meeting Notes</h1></a><hr>
+<p>Dave Herman (DH), Michael Ficarra (MF), Jordan Harband (JHD), Adam Klein (AK), Mark S. Miller (MM), Brian Terlson (BT), Domenic Denicola (DD), Brad Nelson (BNN), JF Bastien (JFB), Joe Lencioni (JLI), Sebastian Markbåge (SM), Jeff Morrison (JM), Kevin Smith (KS), Lars Hansen (LHN), Saam Barati (SBI), Keith Miller (KM), Michael Saboff (MS), Eric Ferraiuolo (EF), Eric Faust (EFT), Chip Morningstar (CM), Dean Tribble (DT), Shu-yu Guo (SYG), Tim Disney (TD), Waldemar Horwat (WH), Bert Belder (BBR), Peter Jensen (PJ), Daniel Ehrenberg (DE), Caridy Patiño (CP), Diego Ferreiro Val (DFV), Jean-Francis Paradis (JFP), Shelby Hubick (SHK), Leo Balter (LBR), Miško Hevery (MHY), Allen Wirfs-Brock (AWB), Kevin Gibbons (KG), Steven Loomis (SLS), Zibi Braniecki (ZB)</p>
+<hr>
+<a href="#final-draft-standards-approval"><h2 id="final-draft-standards-approval">Final Draft Standards Approval</h2></a><p>ECMA-262: Approved with 2 abstains</p>
+<p>ECMA-402: Approved with 1 abstain</p>
+<p>ECMAScript Specification Suite (pointer spec for ISO): Approved</p>
+<p>Note that everyone has until May 1st to review the document for patent issues.</p>
+<a href="#tail-calls"><h2 id="tail-calls">Tail Calls</h2></a><p>AWB: objected that the current standard language is sufficient</p>
+<p>SYG: <em>objected to AWB's objection and clarified the issue</em></p>
+<p>BT: The sec says the implementation must release any transient resource associated with the current context</p>
+<p>AWB: if the current function is a cross realm call. so it's return has extra state to handle the return. ... people don't follow so he goes to draw a picture...</p>
+<p>SYG: do you think it is spec compliant if two mutually recursive functions doing tail calls across a realm boundary caused the stack to continue to grow with each call?</p>
+<p>AWB: No</p>
+<p>MM: articulated the perspective that the <em>calls</em> can be tail calls, but the membrane in the middle may not be able to then make a tail call. Therefore the membrane is accumulating the intermediate state.</p>
+<p>AWB: doesn't mind saying it's implementation dependent</p>
+<p>...</p>
+<p>BT: it would be preferable if the spec test calls out that if it's possible ot have the membrane crossing be a tail call, it should be.</p>
+<p>AWB: given that there's an issue inke dhere to realms, are there other non-=specified things that might be tied to calls for which the same argument shoudl be made.  &quot;The spec says this should be a tail call, but if we do then e.g., debugging information will be lost so....&quot;</p>
+<p>AK: How did we arrive at consensus that this is normatively required?</p>
+<p>AWB: It wouldn't bother me if Firefox didn't meet all of the normative requirements.</p>
+<p>BT: I think that would bother Firefox once they started failing test262 tests</p>
+<p>EF: Yes, we want to pass test262</p>
+<p>BT: We all fail the reference types</p>
+<p>MS: We'd rather it say that it's preferred to use proper tail calls in the cross-realm case, and it's OK to do an ordinary call as Mozilla will do</p>
+<p>EF: But that's the same, it's logically equivalent</p>
+<p>MM, BT: But there's different conntations</p>
+<p>AWB: But if you want compatibility, then you'll avoid it. But, here's a case where cross-realm tail calls would be good: Some of the Array built-ins...</p>
+<p>EF: We need to speak more about our containers model, and the Array built-ins, and the implications. We've reached consensus</p>
+<p>EF: The spec text should say it's implementation dependent, but aspirational, to do proper tail calls in the cross-realm case. We agreed that we do want a normative change to make the value implementation-defined in this case.</p>
+<p>-- second part of tail calls, presented by BT</p>
+<p>BT: For Chakra, implementing tail calls is hard because of some platform constraints: the Windows ABI is strict with when we can touch stack, and our calling conventions make it so that, in an ideal case, we can approach tail calls with roughly equivalent performance, however in pathological cases (e.g., mutually recursive functions with varying numbers of arguments) those will be slower for the forseeable future. We are concerned that if we just turn tail calls on on the internet, many sites will be slower, because existing callsites will happen to be in tail position. We use the Windows ABI for setting up stack; we have C++ exceptions, and doing this with tail calls is hard.</p>
+<p>AWB: You're using heavyweight stack frames for all calls?</p>
+<p>BT: Except for inline calls, which have a side table. That's the main problem. A side problem is, tail calls affect the value of error.stack, which is important. For example, telemetry tools which bucket based on the value of error.stack. And there is an ergonomic position as well: if you use tail calls, you don't get much feedback from the language. Instead, you have to put it in the right position, and hope that you have enough tests that exhaust the stack space. So an explicit sigil may help, for users to explicitly opt in. The benefits:</p>
+<ul>
+<li>Explicitly opt-in, to avoid slow cases where it's slower on some platforms.</li>
+<li>Give a SyntaxError when it's not a valid tail call, or some kind of error to help the programmer</li>
+</ul>
+<p>MF: Clojure has a sigil for this, recur instead of return, which similarly helps</p>
+<p>WH: Suppose they call a user-provided function and use the explicit tail call syntax. If that function turns out to be in a different realm, would they get an error?</p>
+<p>EF: No, we would probably do a warning, not an error</p>
+<p>MS: So you're saying it's a tail-call hint? Otherwise, you'd expect an error for a cross-realm call.</p>
+<p>MM: We should think about the cross-realm case as that the callee owns the stack space.</p>
+<p>BT, AWB: We already talked about this, it's done</p>
+<p>AWB: You could only use it when in tail position; otherwise it's a syntax error. My suggestion for how to approach it: the ergometric aspect we (TC39) talked about before</p>
+<p>BT: Does anyone know where the notes from that discussion are?</p>
+<p>AWB: I'm positive it came up, and we made a decision on it. We could revisit that, but maybe we don't have to. The primary concerns raised by Brian are implementability and web compatibility issues. If, on the basis of those issues, we need some sort of explicit designation based on tail calls, we don't have to get into the...</p>
+<p>MM: For me, the convincing argument was none of the things emphasized so far, which was what appears in the stack trace. Not so much because there's existing software, but because users using stack traces for debugging need an understandable model about understanding what is in the stack. I don't think syntactic tail position provides that sufficiently for normal user programmers.</p>
+<p>BT: Devtools could have a special mode where you're storing off stack off to the side</p>
+<p>EF: Ergonomics of forcing spec non-compliance when debugging tools are open is very bad</p>
+<p>MM: For the entire program, I'm not just getting the stack frames I want, but also for each iteration.</p>
+<p>JM: It's not just about debugging, but also telemetry in production.</p>
+<p>WH: For debugging you could start eliding tail frames only when running into a long repeating loop of frames of the stack, and keep them around otherwise.</p>
+<p>MM: It's a much better knob to have it on each call, rather than on/off in devtools</p>
+<p>WH: Is this a good knob to ask on each call site? It's too much to ask all script and library authors to think of this.</p>
+<p>DE: Yes, this corresponds to how users work</p>
+<p>MS: Shouldn't this knob be default-tail-call?</p>
+<p>EF: For web compatibility, programmers can already debug</p>
+<p>MM: JS is unique in the span of programmers it tries to accommodate. In the absence of this debugger issue, many programmers will not know that a call is a tail call. In the absence of TCO, this would be fine. But having the default behavior of TCO on is counter to developer intuition in terms of when you'd get the stack</p>
+<p>(fill in DE's point)</p>
+<p>MS: To me, it seems more intuitive to opt out of tail calls than to opt in.</p>
+<p>SYG: I agree with Mark's intuition that this is not what programmers expect. TCO is not a time optimization. Because of various parts of implementation complexity, at best it could be a time savings, but it is not an</p>
+<p>MS: TCO lets us omit popping the stack and running epilogue code. And if I use less stack space, we touch less memory and are more cache friendly</p>
+<p>SYG: I think most cases of accidental opt-in are not loops, and are simply function calls.</p>
+<p>MS: Performance benefits of tail calls: If you reuse a frame, you'll likely do less writes to a frame. Likely some things will already be valid there, and you're writing to the same cache lines.</p>
+<p>WH: That is speculative. If your new frame is bigger than the fhan the caller frame, it could be slower.</p>
+<p>BB: The spec doesn't require stack space. People right now don't expect to get tail calls or do tail recursion. I'd expect that, for those particular cases where tail calls are present, it would be better to make it an explicit opt-in, so we would be able to tell users when it won't work. For the cross-realm case, it would be useful to throw or warn, rather than silently using stack space.</p>
+<p>BT: I think your (JSC)'s implementation is basically optimal, as you don't use C++ implementation, and the cleanup that the caller/callee do</p>
+<p>AWB: Those are implementation decisions that each runtime does. When you design a new runtime, you make these decisions about which kind of stack frames you use.</p>
+<p>BT: At the end of the day, we've investigated this, and we've determined that we'll see perf regressions in real code.</p>
+<p>AWB: For a self-tail-recursive function, even if the tail call is marked, will the performance be less?</p>
+<p>BT: For self-recursion where the argument pattern doesn't change, we'll be slightly faster.</p>
+<p>EF: That falls into the good case. Anyway, how big of an issue is the error.stack thing?</p>
+<p>JM: Facebook collects it</p>
+<p>MM: With regard to cross-browser error code, there is a lot of differences between browsers, and you have a lot of differences</p>
+<p>EF: But what if you bucket it by UA</p>
+<p>BT: You can't just bucket by string equality</p>
+<p>AWB: What do you do when inlining? Do you still synthesize a stack frame for it?</p>
+<p>KM: Yes, every browser does this</p>
+<p>(a side thing, everyone says)</p>
+<p>MS: Wouldn't you argue, based on your stack analysis, that this means that we shouldn't make a decision based on any kind of cross-browser support of stack scraping?</p>
+<p>MM: With regard to the text that shows up in the stack. But with regard to whether a particular stack frame is represented or not, I actually don't know; I haven't investigated that as a separate question. My intuition is that there is generally pretty broad agreement that, per level of call, there is a line representing the stack frame. Certainly going forward, one of the things I'm concerned about is that I want to confirm is how to specify a stack trace. Many parts will have to be implementation-defined, but the basic issue of giving a general, predictable model about when you do and do not accumulate stack frames, I would like to have agreement is, on whether they accumulate. Could be opt-in or opt-out, a global switch or not, but I want to have agreement.</p>
+<p>AWB: We certainly talked about debugging information in working on ES6, so that's been taking into account. So if we, right now, can address the issue without going back on that, that could be better</p>
+<p>EF: FWIW when I discussed this with Dave, he found the devtools argument compelling, and found that we basically missed a stakeholder.</p>
+<p>AWB: So is the first, performance issue important enough?</p>
+<p>SYG: I see these (perf, debugging) as the same issue, in that an explicit opt-in solves more issues than an explicit opt-out.</p>
+<p>MS: The issue about what Mark said earlier, in an eloquent way, about the quality of JavaScript programmers, is relevant because it's a compiler trick to give better performance</p>
+<p>AWB: proper tail calls proponents would say that it's not an optimization, it's about linear space</p>
+<p>MS: Second, it's a way to enable more programming styles</p>
+<p>AWB: Yes, it was to make this possible. A transparent optimization would've already been possible, but the point is to enable proper tail call-based programming patterns, is the reason it was included in the spec.</p>
+<p>WH: If we were to use an explicit mark, it would have to be an opt in. An opt out just wouldn't work. From personal experience from working with languages with proper tail calls, it would happen everywhere, confusing stack traces that didn't capture those.</p>
+<p>BT: Opt-out wouldn't solve the web compat, debugging and telemetry problems</p>
+<p>MS: For RegExps, Google graciously collected information on what sites would break. Do we know what sites would break with tail calls?</p>
+<p>DE: We know that tail calls occur on the web, but it's not so possible to tell whether it causes breakage.</p>
+<p>AK: The kind of breakage we're talking about is that a stack frame is missing on a stack trace. This is very subtle and indirect.</p>
+<p>JHD: I don't understand the rules of proper tail calls. It seems like spooky action at a distance, and I'd really like it with explicit tools.</p>
+<p>MF: In Clojure it's just a hint/marking explicit, but tail calls could happen in other places.</p>
+<p>DE: But here's it's being proposed to only do it when it's marked</p>
+<p>AWB: If an implementation can do a transparent optimization, it can do it either way</p>
+<p>KS: You don't want to put stack frame above user experience. To Jordan's point, by having it opt-in, if i&quot;m googling about the feature, and understanding it, it's more something you can handle.</p>
+<p>DH: Didn't we settle this in 2015? How many things do we want to revisit?</p>
+<p>DE: We've revised other things in ES2015 based on other browser experience. And browsers are almost done with almost all ES2015 features, so there's not much risk.</p>
+<p>AWB: What's crucial to me is that there would be negative performance impact. Essentially it's a web compatibility thing. I've been trying to set aside the ergonomics (since we already discussed it), but</p>
+<p>DH: Proper tail calls are a space feature, not a performance optimization. This involves doing more work, so it may be slower than doing less work. There also may be well-known optimizations</p>
+<p>BT: And we can do it sometimes, but not other times</p>
+<p>DH: As a non-implementor, I can't evaluate these arguments</p>
+<p>AWB: So replacing tail calls with marked tail calls addresses the legacy compatibility issue</p>
+<p>DH: I really don't like us coming into something with long-standing consensus and casually reverting that</p>
+<p>BT: What's casual about it?</p>
+<p>DH: This is all built in consensus, and we should treat it as a hard-earned thing that should not be reverted cheaply. However, there were faults in the earlier ES process, including that we didn't have implementation experience. So it was inevitable that we would run into implementation. I don't want people to think that it's cheap to reopen the issue. We should understand the gravity of this. The other thing that we should figure out more about what explicit syntax we want to replace it with. If you have explicit syntax in every expression position that's a non-tail-call, then it's a nonstarter. For example, if the two branches of a ternary are tail positions. So tail position is a local property.</p>
+<p>AWB: But the expressions feed into statements</p>
+<p>EF: Say we make the syntax in the return position, and it feeds down into subexpressions</p>
+<p>DH: Yeah, that sounds good, we should make that clear. I don't think anyone has done the work of thinking through completely. For example, let's put it on return statements. Oops, now there's no tail call in an arrow function with an expression body. There's work to do here--we are going pretty close to square one.</p>
+<p>MS: I want to reinforce your first point: there were no implementation. We implemented tail calls July/August last year, available in our nightly since then; we've had a few bugs. The last bugs were in October. We have an issue about debugging, and we have an answer for that--we're going to ship a side stack</p>
+<p>JM: This doesn't address the telemetry issues. I'm just curious because we use it internally--we (Facebook) use production telemetry to debug issues. It will make it much harder for us to examine these stacks.</p>
+<p>MS: To reinforce Dave's point, one vendor, in good faith has implemented it. And now another vendor is pushing back on it without data.</p>
+<p>EF: It's many orders of magnitude more work to implement it, at least six months. How long did it take you?</p>
+<p>MS: Three man-months</p>
+<p>EF: When could we talk about it? In six months?</p>
+<p>AWB: But it won't be official for a year</p>
+<p>DE: It's useful to look to the current draft spec</p>
+<p>DH: Yes, it's a reflection of consensus</p>
+<p>AWB: All we could do at this point is revert it; there's no well-thought-out replacement.</p>
+<p>MS: It was unfortunate for us because we are throwing away our work; we did all of this work to implement tail calls, as the first implementor when ES6 came out of this feature</p>
+<p>BT: We had a lot of features shifting underneath us too</p>
+<p>DE: Us too</p>
+<p>DH: It's not like implementors weren't at the table; they're at the same state now as then; it's not right for them to block the feature</p>
+<p>AK: To be clear, V8 has done the implementation work, and we feel that we would prefer to get explicit syntax, for debugging/profiling experience</p>
+<p>DD: For me, the programmer intention argument was really convincing, to give guidance when it fails.</p>
+<p>DH: I won't keep saying this forever, but we talked about this already</p>
+<p>AK: I agree that, in general, we don't want to go through the ES2015 spec. This is pretty much the last thing to come.</p>
+<p>DH: I knew that there were some concerns about tail calls. Probably implementation concerns are bubbling up; I'm not an implementor, so there's nothing I can do. But now that I know you have an implementation</p>
+<p>DE: I don't think we could ship Apple's strategy for debugging.</p>
+<p>AK: There are developer experience tools, and</p>
+<p>[various discussion]</p>
+<p>DH: We have an implementer who has implemented [proper tail calls] as an optimization, and would like to continue shipping that optimization. We should make sure that any Error.stack proposal does not interfere with their ability to do so.</p>
+<p>DH: BT wants to put forward a new proposal, and I want to make sure that he's going to be heard. From what I've understood today, it seems totally reasonable.</p>
+<a href="#conclusionresolution-tail-calls"><h4 id="conclusionresolution-tail-calls">Conclusion/resolution</h4></a><p>Brian Terlson (with EF as co-champion) to champion a stage 0 proposal to amend existing tail call spec language to require extra syntax to implement a tail call</p>
+<a href="#reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression"><h2 id="reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression">Reference type and implementation reality (double-evaluation of computed property expression)</h2></a><p>MF: IE6-8 and some versions of Opera has the correct (specified) semantics.</p>
+<p>BT: Less worried about the web compatibility aspects. Fixing issue is costly for us.</p>
+<p>AWB: We had a spec. We had divergent implementations. We looked it. We asked if the spec should change. We said no. We said that the spec was correct. An implementor becoming divergent doesn't invalidate that.</p>
+<p>EFT: Firefox implemented the specified semantics as of two days ago.</p>
+<p>AWB: The specified behavior was not an experiment. It was existing behavior by a number of implementations.</p>
+<p>BT: We were following Chrome's behavior.</p>
+<p>BT: Spec should implement reality.</p>
+<p>AWB: Not if ...</p>
+<p>BT: This doesn't matter all that much.</p>
+<a href="#conclusionresolution-reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression"><h4 id="conclusionresolution-reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression">Conclusion/resolution</h4></a><p>Let the current spec stand.</p>
+<a href="#intl"><h2 id="intl">Intl</h2></a><p>ZB: presenting gi</p>
+<p>Wants to advance to stage 3</p>
+<p>Fundamentally, it's that all future formatters will have *.formatToParts</p>
+<p>AWB: objectected to the long name</p>
+<p>ZB: the longer name is mostly used by libraries. Most people will just use format and so it's a good compromise</p>
+<p>DH: Naming is bikeshedding.</p>
+<p>WH, AWB: But we're setting precedent here.</p>
+<a href="#conclusionresolution-intl"><h4 id="conclusionresolution-intl">Conclusion/resolution</h4></a><p>formatToParts advances to stage 3</p>
+<p>Additional Intl List/Unit/RelativeTime/Duration entries advance to stage 1</p>
+<p>BT: Reserve the right to come back later and object more strongly. Not sure if ICU has the APIs that we can use to support this.</p>
+<p>The ECMA 402 group encourages Microsoft to use ICU</p>
+<p>AWB: TC39 is not supposed to be telling parties how to implement the standards, only what to implement.</p>
+<a href="#public-class-fields"><h2 id="public-class-fields">Public class fields</h2></a><p>JM: talking (no presentation)</p>
+<p>JM: An update on two major concerns. From Mark, public class fields in the constructor, Mark and Jeff talked with Kevin, and everyone is OK with it being in the class body.</p>
+<p>MM: Even though there's no scoping mechanism, there is a scoping intuition. The use of the property name is in the body of the class, and therefore the property is intuitively scoped to the class body, and should be declared in the class body rather than the constructor.</p>
+<p>AWB: are there initlaizaation expressions on the public class fields?  what is the scoping and evaluation time</p>
+<p>JM: eval time is immediately at the last stage after calling super (the proposal documents it). It is part of construction</p>
+<p>WH: this is similar to the alternate implementation of private fields?</p>
+<p>KS: yes</p>
+<p>WH: Is this done at construction time, or at the time super returns in the constructor? To clarify the distinction, what happens if super substitutes and returns a different object from the one it got?</p>
+<p>JM: The properties get added to whatever object super returns.</p>
+<p>WH: OK; just checking that the private and public field proposals are harmonious here, and it looks like they are.</p>
+<p>AWB: you can think about it as an anonymous function that is invoked at the time of...</p>
+<p>JM: you can think of it that way.  there are edge cases that don't quite match that intuition</p>
+<p>JM: there are conflicting opinions about what it means to put a this or a super in the expression</p>
+<p>AWB: shouldn't be. there's only one plausible meaning of this.</p>
+<p>DD: the other plausible meaning is the this of the lexicalness (lexical outer this?)  compare it with what is the meaning of arguments</p>
+<p>AWB: what about constructor parameters</p>
+<p>AWB: whatever the answer here, it needs to apply to both this and privates</p>
+<p>JS: we could go with lexical this and instance this. we don't know yet which one is right.  there's more utility in &quot;this&quot; representing instance and &quot;super&quot; making sense.</p>
+<p>DH: argues that we should start from the intuition at the programming model not the implementation of the feature.  so the &quot;this means instance&quot; is that intuition. they may lead to different conclusions for this vs. fields/properties.  this praticular feature is lexically scoped to the class body.</p>
+<p>AK: describing it in terms of a function call led to the confusion, but thinking in terms of instantiation avoided the confusion.</p>
+<ul>
+<li>discussion of <code>arguments</code>*</li>
+</ul>
+<p>MM: classes are strict, so you cannot bind &quot;arguments&quot; as a variable.</p>
+<p>AWB: showed a way that you could shadow it</p>
+<p>MM: ok don't make it a dynamic poison, make it a static error.  It's a weird edge case, so just make it illegal so we don't have to figure it out.</p>
+<p>AK: that seems weirder than just making it lexical</p>
+<p>WH: What about <code>this</code>?</p>
+<p>MM: &quot;this&quot; inside an initializer evals ot the instance being initialized.</p>
+<p>DD: shows and example such that there's two different definitions of this at different places in the class definition.  that's super confusing.</p>
+<p>DH: this issue comes up repeatedly because an intuition about class bodies is wrong. People assume tha thtey are executed once. But in JS they are not.  You will always see things described in orde that will execute in a different order</p>
+<p>DD: but this would be the first time that we have introduced such a drastic difference in timing.</p>
+<p>MM: DD is bringing up two points. 1) wrt scoping 2) wrt execution time.  Jeff and I had previously talked abotu execution time.  If you accept the declaration being in teh class body, but you don't allow an initializer, then we avoid the multilayer issue. This is how it has been in Babel and people have not reported an issue.</p>
+<p>DH: the intuition of top to bottom does not survive contact with reality.</p>
+<p>BT: TypeScript also does not impose top to bottom ordering.  And noone has been confused about it.  Including with decorators.</p>
+<p>DH: puts up another code sample to show that class elements are not really ordered.</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+
+  state a = <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"A"</span>);
+
+  b = <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"b"</span>);
+
+  <span class="hljs-keyword">static</span> c = <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"C"</span>);
+}
+</code></pre>
+<p>MM: my proposal is that we don't allow initializers and then this issue evaporates.</p>
+<p>JHD: then you lose a lot of value of the proposals.</p>
+<p>WH: in this example, statics would get executed only once or more than once?</p>
+<p>DH: only once</p>
+<p>DH: if don't allow for the idea that there can be multiple rounds of execution within a class, we will stall out class development.</p>
+<p>JS: I need to know what concerns need to be addressed to make progress.</p>
+<p>AWB:</p>
+<p>WH: We already have staged execution that doesn't follow textual order. Functions get lifted to the top of their scopes.</p>
+<p>MM: JS made the point about a bunch of data from existing users not being confuse. BT also reports users are not confused.  So that corroborates JS position that execution order is not a problem. (that's separate from scoping).  also combined with decorators that affect execution order, I retract my objection to changing execution order.</p>
+<p>DH: some options: abandoned phased execution, [... I missed the rest]</p>
+<p>MM: scoping of this, super, and arguments, and ...</p>
+<p>MM: for all these, file issues on teh proposal</p>
+<a href="#conclusionresolution-public-class-fields"><h4 id="conclusionresolution-public-class-fields">Conclusion/resolution</h4></a><ul>
+<li>JM will bring a proposal in May</li>
+<li>DE will try to organize a call in advance</li>
+<li>please file issues on the proposal repo for all specific concerns</li>
+<li>some concerns seem to be: 1) execution order, 2) this/super/arguments scoping in both instance and statics, 3) initializers allowed in class body?</li>
+</ul>
+<a href="#weak-references"><h2 id="weak-references">Weak References</h2></a><p>Dean Tribble presenting slides (<a href="https://github.com/tc39/proposal-weakrefs/blob/master/specs/Weak%20References%20for%20EcmaScript.pdf">https://github.com/tc39/proposal-weakrefs/blob/master/specs/Weak%20References%20for%20EcmaScript.pdf</a>)</p>
+<p>AK: What motivates the cross-realm restriction?</p>
+<p>MM: Weak references open up a side channel: if I'm pointing at an immutable object, I can observe it going away. By separating the ability to create weak realms, that allows policing within a realm. But you can't police other realms.</p>
+<p>AWB: So why wouldn't you use membranes to handle that?</p>
+<p>MM: Yes, in that case you could handle it.</p>
+<p>AWB: But it seems like realms are more general than the security use case.</p>
+<p>MM: There is an enhancement that was discussed previously: if you have a WeakRefFactory, you can ... [didn't understand the full explanation, will follow up later (see issue below)]</p>
+<p>DT: I'm going to time out the discussion. Let's add that to the issues list.</p>
+<p>KG: Isn't there a race between weak.get() &amp;&amp; weak.get().something?</p>
+<p>DT: Within a single turn, once you've called .get(), the reference becomes strong until the end of the turn.</p>
+<p>WH: So if you have an 'await', all bets are off?</p>
+<p>DT: Yes, just as another job could have run and changed the state of the system.</p>
+<p>WH: This now introduces a second side channel, which is that you can determine whether someone else has called weak.get()</p>
+<p>MM: It's a statistical side channel, but you need to have the weak reference to begin with</p>
+<p>DT: Let's cut this off and make it an issue.</p>
+<p>[discussion of &quot;minimizing non-determinism&quot; slide]</p>
+<p>DT: It's important that makeWeakRef is replaceable with something that has reproducible, deterministic behavior, e.g. for testing</p>
+<p>SYG: How does the &quot;Unintended retention mitigated&quot; slide prevent bad programmer behavior?</p>
+<p>DT: It throws an error</p>
+<p>AWB: How can that be checked?</p>
+<p>MM: If your holding's value is the target, then an error is thrown</p>
+<p>WH: What if someone calls <code>makeWeakRef(this, () =&gt; closeFile(file))</code> and the implementation retains <code>this</code> due to sharing context with another closure in the same scope (as per the example in the presentation)? Is that a bug in the program or the implementation?</p>
+<p>MM: You get a leak. The spec does not require that the weak ref is ever collected.</p>
+<p>WH: So, unlike the tail call guarantee, there's no guarantee that <em>any</em> finalizer will ever run?</p>
+<p>DT: We may try to tighten that guarantee, but for now, no, this is a programming error.</p>
+<p>?: In addition to the general lack of guarantee, we allow closures to close over more of the environment than is explicitly mentioned inside them.</p>
+<p>KS: I'm not entirely sure that separating the holdings into a separate argument, given JavaScript programmer practice, is likely to prevent programmers from running into this bug.</p>
+<p>DT: You could have a lint rule, though: holdings provides a pattern for doing the right thing.</p>
+<p>SYG: What if you 'yield' after calling weakRef.get()?</p>
+<p>MM: That's up to the consumer of the generator: you have to assume that state may change between yield points.</p>
+<p>WH: Is the implementation allowed to clear the weak reference while the object it references is still strongly reachable?</p>
+<p>DT: No, the weakRef must not be cleared unless the target object is condemned.</p>
+<p>WH: So how do you define reachability?</p>
+<p>WH: Ah, then this will not fly:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">let</span> x = ...;
+
+  <span class="hljs-keyword">let</span> w = MakeWeakRef(...x...);
+
+  <span class="hljs-keyword">await</span> a;
+
+  <span class="hljs-keyword">await</span> b;
+
+  foo(w);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">w</span>) </span>{
+
+  assert(w.get());  <span class="hljs-comment">// this assert can fail in an optimizing compiler</span>
+}
+</code></pre>
+<p>MM: Yes, that's correct.</p>
+<p>WH: Well than I'd like to understand how reachability is defined. x is still live at the time foo is called.</p>
+<p>MM: If the future of the computation will use the object (navigates to the object and makes use of it), then it must be reachable at that point. So only if the implementation can prove that an object is not used in the future is it allowed to clear the weak reference.</p>
+<p>WH: That still doesn't answer the question for optimizing compilers because the notion of the future is ill-defined. A compiler may take something that you think is in the future in the program text but does it early because it has no side effects other than on object lifetimes.</p>
+<p>DT: Except for the clever thing to preserve this within a turn, implementations are allowed to collect things as early as possible, or as late as they want.</p>
+<p>EF: I hope you are not attempting to specify when the collections will happen.</p>
+<p>DT: Absolutely not. You can run collections whenever you want, even within a turn.</p>
+<p>DH: In past discussions around weak references, there's a portability concern, and you mentioned between turn which something I've heard floated at various points. Not about security concerns, not bugs necessarily, just about different implementations collecting at different times.</p>
+<p>MM: And even the same implementation collecting at different times.</p>
+<p>DH: Worse, between implementations, you could test on one browser and then fail in another. But maybe GC is unpredictable enough in practice that this isn't that much of a problem?</p>
+<p>DT: In a testing scenario, you can do more allocation to force more determinism.</p>
+<p>DH: But that doesn't help here: if someone comes to rely on the behavior, it can work in one implementation but not other implementations.</p>
+<p>EF: I can't speak for other implementations, but you may find that if you're debugging something, and then you go over to MDN to look something up, then you may go back to your test case and find that things changed.</p>
+<p>AK: This is also a worry if your GC keeps things alive longer than another implementation.</p>
+<p>DH: This might force better GCs to do the same, to match behavior.</p>
+<p>EF: An implementation may keep various things alive for a variety of reasons.</p>
+<p>DT: This is why we used to keep everything in one big weak array. We did this in Midori, and found that in a generational collector, then all those weak refs migrated to the older generation, meaning lots of pointers between generations. In this proposal, with a single object per reference, generational GCs could tie the generation of the weak ref to the object pointed to.</p>
+<p>EF: I still think the concern has little to do with the GC's behavior. Our black magic is different than V8's behavior which is different than JSC's behavior. And that's completely opaque to me as a user, all I can tell that something is being kept alive, and I go pound on the door.</p>
+<p>DH: Or that something that you expected to be kept alive was not.</p>
+<p>DT: I think that's something that's not a problem in practice.</p>
+<p>AK: DId you run your code on multiple implementations?</p>
+<p>DT: Yes</p>
+<p>MM: But not in the sense that the web platform has multiple implementations</p>
+<p>DT: It was in that there were multiple optimization models, multiple architectures (with very different optimizations available), etc.</p>
+<p>AWB: My experience has been that people rely on the idiosyncrasies of the timing of how implementations collect references. What it comes down to is: will people write mission-critical systems that depend on weak refs behaving in a certain way?</p>
+<p>EF: I think that the stage process is exactly set up to handle something like this. We could create experimental implementations and ask people to write code against them.</p>
+<p>DH: The problem is that this can't be polyfilled, so there's no good way to get developers to use this.</p>
+<p>DE: Node has a weak reference API that can provide some of the same functionality which might provide code to use for this purpose.</p>
+<p>SYG: What if you had an implementation that changed the weak ref to null at some point during the execution?</p>
+<p>DT: You couldn't do that, since the object might still be reachable.</p>
+<p>[KM/DT discuss various testing problems]</p>
+<p>DT: Are we ready for stage 1? and then what is the gap to stage 2?</p>
+<p>WH: Do we have consensus that this is something that we want to be adding to the language?</p>
+<p>AK: I'm comfortable with stage 1, but not stage 2: I'm not sure this is something we want in the language</p>
+<p>DT: Would it help implementers if there was something they could tell users when they report a bug, pointing at the spec?</p>
+<p>DH: That's not really how the web works. When an Alexa top 50 site breaks, then something has to be done.</p>
+<p>AWB: I'm just going to reinforce the same thing. This presentation didn't emphasize the unpredictability of whether your finalization will run. GC implementers understand that there are no guarantees about when, if, and how GC happens. Framework authors may not have the same understanding.</p>
+<p>EF: At what level of the JS stack do expect this feature to be used?</p>
+<p>DT: At the framework/library level.</p>
+<p>AWB: Well, you can't guarantee that.</p>
+<p>DH: And I'm not as worried about the framework authors. The problem is there's nothing stopping the long tail of authors from using it.</p>
+<p>MM: I'd like to raise the similarity of this issue to that of the racy-read issue [in SharedArrayBuffer]. Once you make it available, some users are going to get sequential consistency in development, but get races in production. It's the same issue.</p>
+<p>EF: The thing that makes me feel safer than the racy-read issue is the the weakRef.get() -&gt; strong thing.</p>
+<p>DH: That's a reasonable plausibility argument, especially the turn-based thing. But what about workers? Their turns can be arbitrarily long.</p>
+<p>DT: So what would I need to do to get to stage 2?</p>
+<p>AK: I don't have concrete thoughts there, I'm not convinced that this isn't a hazard for JS users.</p>
+<p>AWB: On your list of things you need to address: I do think you need to address this turn-based behavior in a non-turn-based execution environment.</p>
+<p>MM: In a long running computation, then you're no worse off than if you didn't have weak references. If you want to give the GC a chance to collect, you must add turn boundaries.</p>
+<p>AK: One option would be for the champions to prototype this in one of the open source engines</p>
+<p>DT: Would one of the implementers to volunteer to implement this?</p>
+<p>DE: You could use Node, which already has a weak reference implementation.</p>
+<p>SYG: I would volunteer to help one of the champions prototype this in our engine</p>
+<p>AWB: This needs debate, and it needs implementation experience.</p>
+<p>EF: The core of the problem is that the worries about the proposal are exactly those things that the proposal explicitly does not address.</p>
+<a href="#conclusionresolution-weak-references"><h4 id="conclusionresolution-weak-references">Conclusion/resolution</h4></a><p>Stage 1</p>
+<p>Open issue: deal with cross-realm stuff in more detail</p>
+<p>Open issue: .get() -&gt; strong as a side channel</p>
+<p>Open issue:  address this turn-based behavior in a non-turn-based execution environment.</p>
+<a href="#template-literals-are-broken"><h2 id="template-literals-are-broken">Template Literals Are Broken</h2></a><p>(TD)</p>
+<p>(see slides)</p>
+<p>TD: one of main points is to &quot;embed languages&quot;</p>
+<p>TD: escape sequences introduce a problem</p>
+<p>TD: can't embed languages if syntax is restricted to legal ES escape sequences</p>
+<p>TD: proposal: remove escape sequence restriction</p>
+<p>TD: cooked values option 1: cook valids, ignore invalids. could be footgun/surprising</p>
+<p>TD: cooked values option 2: set cooked values with illegal escapes to undefined, devs can use .raw for originals</p>
+<p>MM: option 3 we discussed?</p>
+<p>TD: cooked values option 3: option 2, but use SyntaxError instance instead of undefined</p>
+<p>CM: what about closing quote? eg [ ` ]</p>
+<p>TD: $ and ` are always escaped</p>
+<p>DH: nothing we can do about &quot;if you need to end in , have to handle separately&quot;</p>
+<p>MF: ?</p>
+<p>MM: for template literal tags that only pay attention to &quot;raw&quot; still see same raw content</p>
+<p>DH: question is &quot;can that be fixed&quot;, answer is no</p>
+<p>MM: agree</p>
+<p>AWB/WH: points out that undefined is better than a SyntaxError because of string concat</p>
+<p>MM: withdraw option 3, prefers option 2.</p>
+<p>DH: when you're designing that tag, you're making a library</p>
+<p>AWB: only on tagged literals?</p>
+<p>… discussion about it being a static error on untagged literals …</p>
+<p>DH: untagged could be thought of as sugar for builtin tag that throws on undefined cooked value</p>
+<p>AWB: agree, could be handled</p>
+<p>WH: a bit concerned about details; whether grammar can get out of sync with counting backslashes etc</p>
+<p>DH: clearly stage 1 appropriate, will need lots of stage 2 spec analysis rigor</p>
+<p>WH: similar to regexes, which have a cover grammar</p>
+<p>… discussion about compat issue …</p>
+<a href="#conclusionresolution-template-literals-are-broken"><h4 id="conclusionresolution-template-literals-are-broken">Conclusion/resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#mapprototypetojsonsetprototypetojson"><h2 id="mapprototypetojsonsetprototypetojson">Map.prototype.toJSON/Set.prototype.toJSON</h2></a><p>(JHD)</p>
+<p>Continued discussion from yesterday.</p>
+<a href="#conclusionresolution-mapprototypetojsonsetprototypetojson"><h4 id="conclusionresolution-mapprototypetojsonsetprototypetojson">Conclusion/resolution</h4></a><ul>
+<li>Rejected.</li>
+</ul>
+<p><code>toJSON</code> is a legacy artifact, and a better approach is to use a custom <code>replacer</code> that, for example, checks <code>[Symbol.toStringTag]</code> and dispatches to appropriate serializations.</p>
+<p>The committee did not want to bless the <code>toJSON</code> approach by adding what would be an incomplete representation - one that would not obviate the need for developers to define their own serialization format and revivification logic.</p>
+<a href="#aggregated-foss-parser-pass-fail-and-equivalence-tests"><h2 id="aggregated-foss-parser-pass-fail-and-equivalence-tests">Aggregated FOSS parser pass-fail and equivalence tests</h2></a><p>(KG)</p>
+<a href="#conclusionresolution-aggregated-foss-parser-pass-fail-and-equivalence-tests"><h4 id="conclusionresolution-aggregated-foss-parser-pass-fail-and-equivalence-tests">Conclusion/resolution</h4></a><ul>
+<li>needs lots of review, nobody volunteered</li>
+<li>decision left to test262 maintainers</li>
+<li>test262 are not conformance tests</li>
+<li>having additional repositories that are part of the test262 project but not part of test262 is OK</li>
+</ul>
+
+</body>

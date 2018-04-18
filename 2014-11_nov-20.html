@@ -1,0 +1,280 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 20, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-20-2014-meeting-notes"><h1 id="november-20-2014-meeting-notes">November 20, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Taylor Woll (TW), Jordan Harband (JHD), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jeff Morrison (JM), Sebastian Markbåge (SM), Erik Arvidsson (EA), Peter Jensen (PJ), Eric Toth (ET), Yehuda Katz (YK), Dave Herman (DH), Brendan Eich (BE), Ben Newman (BN), Forrest Norvell (FN), Waldemar Horwat (WH), Alan Schmitt (AS), Michael Ficarra (MF), Jafar Husain (JH), Lee Byron (LB), Dmitry Lomov (DL), Arnaud Le Hors (ALH), Chip Morningstar (CM), Caridy Patiño (CP), Domenic Denicola (DD), Mark S. Miller (MM), Yehuda Katz (YK), Dmitry Soshnikov (DS), Kevin Smith (KS), Rafeal Weinstein (RWN)</p>
+<hr>
+<a href="#55-arrayprototypeincludes-proposal-to-move-to-stage-2"><h2 id="55-arrayprototypeincludes-proposal-to-move-to-stage-2">5.5 Array.prototype.includes() proposal to move to Stage 2.</h2></a><p>(Domenic Denicola)</p>
+<p>DD: Has all of the requisite items complete.</p>
+<ul>
+<li>Not ready for Step 3 because we need more patches landed.</li>
+<li>Ready for Allen to review specification text.</li>
+</ul>
+<p>AWB: Move stuff to TC39 github?</p>
+<p>DD: Yes.</p>
+<p>AWB: For Ecma record, need PDF</p>
+<a href="#conclusionresolution-55-arrayprototypeincludes-proposal-to-move-to-stage-2"><h4 id="conclusionresolution-55-arrayprototypeincludes-proposal-to-move-to-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Proceeds to Stage 2</li>
+</ul>
+<a href="#56-objectobserve-proposal-to-move-to-stage-3"><h2 id="56-objectobserve-proposal-to-move-to-stage-3">5.6 Object.observe: proposal to move to Stage 3.</h2></a><p>(Rafael Weinstein)</p>
+<p>RWN: Move Object.observe to Stage 3?</p>
+<p>RW: Can you list out the updates?</p>
+<p>RWN: Conferred with Ember team, issues were theoretical</p>
+<p>YK: Conceptual</p>
+<p>RWN: Appears to be objections from YK and Ember, provided examples that should overcome</p>
+<p>YK: Yes, but the actual solution does address the problem with the specification of the feature.</p>
+<ul>
+<li>There are process issues. I've repeatedly provided feedback and repeatedly dismissed.</li>
+<li>Technical Issues:</li>
+<li>As a result of async callback, the decision was &quot;don't ever drop anything&quot;</li>
+<li>All intermediate values are kept, of all properties in all states, even if these are completely unnecessary.</li>
+</ul>
+<p>EA: What if someone needs all the changes?</p>
+<p>YK: There should be a mechanism explicitly say what you want</p>
+<p>WH: What happens if you change a property repeatedly in a tight loop without switching microtasks?</p>
+<p>YK: You will accumulate <em>every</em> change</p>
+<p>WH: And eventually run out of memory</p>
+<p>DH: Similar concerns from Mozilla engineers</p>
+<p>JM: Thoughts on a solution?</p>
+<p>YK: Approach that's been discussed is an API mechanism that allows me to specify the properties I want.</p>
+<p>EA: I think you're making a bigger problem of this, it's inherently dangerous</p>
+<p>RW: Waldemar just illustrated a danger</p>
+<p>YK: (gives more examples of problems)</p>
+<p>RWN: Restate:</p>
+<ul>
+<li>Too many allocations, all of the change records.</li>
+<li>Retaining all of the changes</li>
+</ul>
+<p>WH: Does it create a record for <em>every</em> change, say a numeric property: 1, 2, 3, 4... One for each?</p>
+<p>YK: Yes.</p>
+<p>DH/YK: Overwhelming number of changes when properties you don't care about are also changed.</p>
+<p>BT: On the other side, there are a lot of developers waiting for this feature. It's the number one requested.</p>
+<p>YK: Not opposed to the feature, just want to get it right.</p>
+<p>AWB: We need address issues that we've identified and gain consensus.</p>
+<p>DH: Look at it in two parts:</p>
+<ul>
+<li>&quot;I want an efficient way of being notified of changes that I care about&quot;</li>
+<li>&quot;I want a full change log&quot;</li>
+</ul>
+<p>Both are very useful, but the second is likely to give you more data than you ever need. The default should be minimal, but should allow for opting into the full change log.</p>
+<p>BT: I was operating under the assumption that V2 could add the less expensive path on top of the more expensive path.</p>
+<p>DH: I would prefer the less expensive path to start with</p>
+<p>DD: No, wouldn't you want all the data and then add mechanism to limit?</p>
+<p>YK: Want use case</p>
+<p>RWN: If you have a generic write barrier on the array, you'd have to hold onto the original array and compute the difference, which is expensive. Providing the intermediary values significantly reduces that expense.</p>
+<p>JM: Is there an objection to adding the configurability?</p>
+<p>EA/YK: (discussion re: performance of configurability)</p>
+<p>JM: But still no objection to configurability, which can be omitted and give you all the change records.</p>
+<p>RWN: (provides background of the design)</p>
+<p>YK: Changes:</p>
+<ol>
+<li>List of properties that I want to observe</li>
+<li>Don't hold onto all intermediaries, the change record has only the last value</li>
+</ol>
+<p>AWB: Would you want multiple notifications if multiple changes occur before the record is processed?</p>
+<p>YK: No, just the last</p>
+<p>AWB: How do you know when you need to start making notifications again?</p>
+<p>YK: Same as now, when the changes are delivered, start over.</p>
+<ul>
+<li>Recapping the concern and what's desired.</li>
+</ul>
+<p>RWN: Concerned that what you want will start to unravel the design.</p>
+<p>(Discussion of authoring responsibilities).</p>
+<p>Agreement to work this out offline.</p>
+<p>AWB: More concerns:</p>
+<ul>
+<li>I'd like the specification to be written in terms of ES6 mechanisms.</li>
+<li>Need to use the Job mechanisms, likely everything you need is there for you.</li>
+<li>Need to define the interactions with Proxy's (alot of &quot;[[...]]&quot; stuff that doesn't correspond to MOP in ES6)</li>
+</ul>
+<p>RWN: My understanding was that Proxy's wouldn't do anything automatic with regard to <code>Object.observe</code></p>
+<p>EA: Right now the spec is defined to tie into DefineOwnProperty. If Plain Object or Exotic Array, then it works. Some other Exotic? No.</p>
+<p>AWB: If you wanted to?</p>
+<p>EA: No text yet, but could add this</p>
+<ul>
+<li>Exotic Objects are Exotic. How much do we want to polish that turd?</li>
+</ul>
+<p>DD: DOM updated with internal slots. Boris Zbarsky has identified issues with holding all the values as well.</p>
+<p>EA: Will add normative text for exotic objects. Will help update the DOM.</p>
+<p>(discussion about notification handler changes and special cases that still need to be addressed)</p>
+<a href="#conclusionresolution-56-objectobserve-proposal-to-move-to-stage-3"><h4 id="conclusionresolution-56-objectobserve-proposal-to-move-to-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Draft revisions for filtering</li>
+<li>Spec terminology updates</li>
+<li>Normative section about exotic objects</li>
+</ul>
+<a href="#402-status-update"><h2 id="402-status-update">402 Status Update</h2></a><p>(Rick Waldron)</p>
+<p>RW: Next version will coincide with ES6. Future versions will coincide with future versions of 262.</p>
+<p>RW: After ES6 the Yahoo team (Eric Ferraiuolo, Caridy Patiño)  is taking over.</p>
+<p>RW: Intl 1 provides ...</p>
+<p>RW: Intl 2 provides <code>Array.prototype.toLocaleString</code></p>
+<p>RW: Intl 2 will align subclassing semantics with ES6. Refactoring [[Construct]] and use [[CreateAction]]. Update to use new spec algorithms/abstract operations.</p>
+<p>EA: There was previous talk about big action items for the next version of Intl.</p>
+<p>RW: This spec only includes minor fixes and bringing the spec up to date. Will leave the big feature items for future versions of the Intl spec.</p>
+<p>AWB: There will be an rf opt out for this at the same time as for the ES6 spec.</p>
+<a href="#conclusionresolution-402-status-update"><h4 id="conclusionresolution-402-status-update">Conclusion/Resolution</h4></a><ul>
+<li>See above.</li>
+</ul>
+<a href="#break-out-sesssions"><h2 id="break-out-sesssions">Break out sesssions</h2></a><ul>
+<li>Object.observe</li>
+<li>Async generators/iterators. Get your yield on</li>
+<li>Value Objects</li>
+</ul>
+<a href="#54-io-streams-as-part-of-the-es-standard-library"><h2 id="54-io-streams-as-part-of-the-es-standard-library">5.4 I/O Streams as part of the ES standard library</h2></a><p>(Domenic Denicola)</p>
+<p>DD: Presents: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a></p>
+<ul>
+<li>Some suggestion to move into ES</li>
+<li>Specified as platform agnostic (browser and node)</li>
+<li>Possibly too narrow</li>
+</ul>
+<p>MM: Abstraction is not data specific?</p>
+<p>DD: Correct.</p>
+<ul>
+<li>Walk through back pressure</li>
+</ul>
+<p>MM: Explain the &quot;too narrow&quot;</p>
+<p>DD: Just that it might be a step too far</p>
+<p>RW: agrees</p>
+<p>MM: Is the specification bigger than it needs to be?</p>
+<p>DD: No, it's as specified as it needs to be, but seems like a step too large</p>
+<p>JH: Don't see a conflict with async generators</p>
+<p>Discussion on the merit of different io mechanisms</p>
+<p>DD: With modules, do we want to extend to cover many different aspects? fetch, etc.</p>
+<p>AWB: Programming languages need basic IO? Yes. Need to think about the ES standard built-in library. This could easily be an Ecma spec for a standard module.</p>
+<p>RW: Had this same conversation independently and propose this as a TC39 guided spec, not dependent on Ecma-262, but normatively referenced.</p>
+<p>WH: Any requirements for asynchrony, execution turns?</p>
+<p>DD: No. Specifically designed away from such</p>
+<p>AWB: Prefer that TC39 handle these things to avoid too much platform specific design.</p>
+<p>Discussion about appropriate groups to foster development. (Compare to Intl)</p>
+<p>Discussion re: oversight?</p>
+<p>DD: Joint deliverable?</p>
+<p>RW: RFTG?</p>
+<p>DD:</p>
+<p>BT: Honest: The best way you'll get good participation from MS is in TC39, because the legal processes and agreements are in place to protect work here. We can work in w3c for same reason. Whatwg is less clear, and therefore not easy for us to be involved.</p>
+<p>AWB: Very complex, legally. To be resolved for whatwg, they'd have to become a recognized standards organization. In the legal/governmental recognition sense.</p>
+<p>MM: We've provided plenty of reason why TC39 would take this, can you explain why you'd rather work in whatwg?</p>
+<p>DD: Personal preference.</p>
+<ul>
+<li>Can provide snapshots for ecma if necessary</li>
+</ul>
+<p>AWB: Not the issue, the issue is the legality of contributions/contributors.</p>
+<p>DH: Hixie is also willing to work with companies on these things.</p>
+<p>Heated discussion about specification ownership</p>
+<p>MM: If the proposal is to allow the editor unilateral control, vs. committee refinement, consensus, and agreement, then the proposal should be withdrawn.</p>
+<p>DD: Then withdrawn.</p>
+<a href="#conclusionresolution-54-io-streams-as-part-of-the-es-standard-library"><h4 id="conclusionresolution-54-io-streams-as-part-of-the-es-standard-library">Conclusion/Resolution</h4></a><ul>
+<li>Withdrawn</li>
+</ul>
+<a href="#async-generators"><h2 id="async-generators">Async Generators</h2></a><p>(Jafar Husain)</p>
+<p><a href="https://github.com/jhusain/asyncgenerator">https://github.com/jhusain/asyncgenerator</a></p>
+<p>JH: Propose to move to Stage 1</p>
+<p>Major digression re: process.</p>
+<p>...</p>
+<p>DH: Want to see a comparative survey of how other languages and systems have approached this problem space. What does it look like, how does it work. Would like to return to providing this sort of detail.</p>
+<ul>
+<li>Rust has RFC process that nicely tracks feature work history and development.</li>
+</ul>
+<p>Slides</p>
+<pre><code class="language-js">interface Iterable {
+  Generator @@iterator(Generator);
+}
+ 
+interface Observable {
+  Generator observer(Generator);
+}
+ 
+<span class="hljs-built_in">Array</span>.prototype[@@observer] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">generator</span>) </span>{
+  <span class="hljs-keyword">var</span> decoratedGenerator = <span class="hljs-built_in">Object</span>.create(generator),
+    done = <span class="hljs-literal">false</span>;
+ 
+  [<span class="hljs-string">"throw"</span>,<span class="hljs-string">"return"</span>].forEach(<span class="hljs-function"><span class="hljs-params">method</span> =&gt;</span> {
+    decoratedGenerator[method] = <span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> {
+      <span class="hljs-keyword">var</span> superMethod = generator[method];
+      done = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">if</span> (superMethod) {
+        <span class="hljs-keyword">return</span> superMethod.call(generator, v);
+      }
+    }
+  });
+ 
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> x <span class="hljs-keyword">of</span> <span class="hljs-keyword">this</span>) {
+    decoratedGenerator.next(x)
+    <span class="hljs-keyword">if</span> (done) {
+      <span class="hljs-keyword">break</span>;
+    }
+  }
+  <span class="hljs-keyword">if</span> (!done) {
+    decoratedGenerator.return();
+  }
+ 
+  <span class="hljs-keyword">return</span> decoratedGenerator;
+}
+ 
+[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>][@@observer]({
+  <span class="hljs-attr">next</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(value);
+    <span class="hljs-keyword">if</span> (value === <span class="hljs-number">2</span>) {
+      <span class="hljs-keyword">this</span>.return();
+    }
+  }
+});
+ 
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> x <span class="hljs-keyword">of</span> [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]) {
+  <span class="hljs-built_in">console</span>.log(value);
+  <span class="hljs-keyword">if</span> (x === <span class="hljs-number">2</span>) {
+    <span class="hljs-keyword">break</span>;
+  }
+}
+ 
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> x on [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]) {
+    <span class="hljs-built_in">console</span>.log(value);
+    <span class="hljs-keyword">if</span> (x === <span class="hljs-number">2</span>) {
+      <span class="hljs-keyword">break</span>;
+    }
+  }
+}
+ 
+<span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">"mousemove"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">next</span>(<span class="hljs-params">e</span>) </span>{
+ 
+});
+</code></pre>
+<p>DH: Concerns about symmetry</p>
+<p>JH: Any iterable can be an observable.</p>
+<p>DH: (Clarifying gist) If I am a data source (collection), I call myself iterable if I want to some consumer to &quot;pull&quot; values. If I am a data source, I call myself &quot;observable&quot; if I want to &quot;push&quot; my values.</p>
+<p>Examples of <code>for-on</code>, <code>@@observer</code></p>
+<p>BE: I wouldn't try for Stage 1 quite yet. Let's see more explanation in the form of examples (gists, etc).</p>
+<p>DH: need to find more ways to discuss this stuff other than the output of a transpilation.</p>
+<ul>
+<li>Need it to explain at a user level</li>
+</ul>
+<p>DS: Needs a real use case</p>
+<p>MMj, WH: These help.</p>
+<p>DH: Need to look at this from a &quot;what is the problem space&quot;, then try to solve that. There are two competing solutions (<code>async function *</code>) and this</p>
+<p>KS: (explains his approach with async iterator)</p>
+<pre><code class="language-js">Interator&lt;<span class="hljs-built_in">Promise</span>&gt; or Observable
+
+asyc <span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">v</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> values = toAsycInterable(<span class="hljs-keyword">new</span> Websocket(...));
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> promise <span class="hljs-keyword">of</span> values) {
+    <span class="hljs-keyword">let</span> value = <span class="hljs-keyword">await</span> promise;
+    <span class="hljs-keyword">yield</span> value + <span class="hljs-number">1</span>;
+  }    
+}
+</code></pre>
+<p>Discussion re: back pressure</p>
+<p>WH: Does either approach do buffering by default? [Prefer to transfer/work on one item at a time unless buffering is explicitly requested to avoid blowing up if a turn takes a while.]</p>
+<p>JH: (shows an example of <code>for-on</code> to illustrate support for back pressure)</p>
+<p>More discussion about backpressure</p>
+<a href="#conclusionresolution-async-generators"><h4 id="conclusionresolution-async-generators">Conclusion/Resolution</h4></a><ul>
+<li>Comparison documentation</li>
+</ul>
+<p>Thanks to Paypal for the meeting accommodations. Thanks to Ecma.</p>
+
+</body>

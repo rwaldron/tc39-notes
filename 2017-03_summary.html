@@ -1,0 +1,43 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>Summary for the 57th meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="#summary-for-the-57th-meeting-of-ecma-tc39"><h1 id="summary-for-the-57th-meeting-of-ecma-tc39">Summary for the 57th meeting of Ecma TC39</h1></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2017/03.md">Agenda</a></li>
+<li>ES2017 was officially approved by the committee to be sent to the ECMA General Assembly for approval. <a href="2017-03_mar-21.html#6ii-vote-to-accept-ecma-262-2017-final-draft-and-forward-it-to-ecma-ga-approval-subject-to-completion-of-rf-opt-out-period-with-no-opt-outs">notes</a></li>
+<li>A <a href="https://tc39.github.io/code-of-conduct-proposal/">Code of Conduct</a> was presented, based on an open process of feedback over the previous two months. The committee shares the goal of being open and welcoming to diversity and is working through issues of scope and enforcement. The current draft will be sent to the ECMA Executive Committee for
+review and approval.</li>
+<li>Several RegExp feature enhancements reached Stage 3; these and <a href="2017-03_mar-21.html#any-items-for-the-2018-edition">more may be in store for ES2018</a>
+<ul>
+<li>Lookbehind Assertions: <a href="2017-03_mar-21.html#10ib-regexp-lookbehind-assertions">notes</a>, <a href="https://github.com/tc39/proposal-regexp-lookbehind">proposal</a></li>
+<li>Unicode property escapes: <a href="2017-03_mar-21.html#10ic-regexp-unicode-property-escapes-for-stage-3">notes</a>, <a href="https://github.com/tc39/proposal-regexp-unicode-property-escapes">proposal</a></li>
+<li>Named Capture Groups: <a href="2017-03_mar-21.html#10iib-regexp-named-groups-for-stage-3">notes</a>, <a href="https://github.com/tc39/proposal-regexp-named-groups">proposal</a></li>
+<li><code>s</code> (dotAll) flag: <a href="2017-03_mar-21.html#10id-regexp-dotall-flag-for-stage-2">notes</a>, <a href="https://github.com/mathiasbynens/es-regexp-dotall-flag">proposal</a></li>
+</ul></li>
+<li><a href="https://github.com/tc39/proposal-integer">Arbitrary-precision Integers</a> were introduced and reached Stage 2. <a href="2017-03_mar-23.html#10iva-arbitrary-precision-integer-type-for-stage-2">notes</a></li>
+<li>A <a href="https://github.com/tc39/proposal-template-literal-revision">proposal</a> allowing what would otherwise be invalid escape sequences in tagged template literals reached stage 4.</li>
+<li>A <a href="https://github.com/maggiepint/proposal-temporal">new built-in Date replacement</a> reached Stage 1. <a href="2017-03_mar-23.html#12iia-date-proposal---nodatime-as-a-built-in-module-for-stage-1">notes</a></li>
+<li>The Stage 1 <a href="https://github.com/tc39/proposal-realms/">Realms</a> proposal has been solidifying, with hooks for the module loading pipeline. <a href="2017-03_mar-23.html#10iic-realms-update">notes</a></li>
+<li>Several Intl proposals were presented <a href="2017-03_mar-21.html#7-ecma-402-status-update-1">notes</a>
+<ul>
+<li><a href="https://github.com/zbraniecki/intl-list-format-spec">Intl.ListFormat</a> reached Stage 2.</li>
+<li><a href="https://github.com/zbraniecki/proposal-ecma402-datetime-style">dateStyle/timeStyle</a> reached Stage 1.</li>
+<li>Identified reviewers for <a href="https://github.com/tc39/proposal-intl-segmenter">Intl.Segmenter</a>. <a href="2017-03_mar-21.html#10ih-intlsegmenter-requesting-stage-3">notes</a></li>
+</ul></li>
+<li>There is an <a href="https://github.com/erights/Orthogonal-Classes">alternative proposed unifying syntax</a> for class features. <a href="2017-03_mar-22.html#10iiia-orthogonal-classes">notes</a></li>
+<li><a href="https://github.com/tc39/proposal-weakrefs">WeakRefs</a> is seeking implementations to work with and develop feedback. <a href="2017-03_mar-21.html#weak-references-status-update">notes</a></li>
+<li>Browsers are no longer pursuing SIMD.js, in favor of SIMD exposed by WASM. <a href="2017-03_mar-21.html#10if-simdjs-status-update">notes</a></li>
+<li>The role of Annex B (normative-optional, web required) specification text came up in a few topics. There's disagreement about the current role and appropriateness, to be revisited in a future meeting. <a href="2017-03_mar-21.html#any-items-for-the-2018-edition">notes</a></li>
+<li>Several needs-consensus pull requests reached consensus, tightening up semantics in edge cases. <a href="2017-03_mar-22.html#12-i-needs-consensus-prs">notes</a>
+<ul>
+<li><a href="https://github.com/tc39/ecma262/pull/856">#856</a> (<a href="2017-03_mar-22.html#856-avoid-duplicate-tafill-value-coercions">notes</a>), <a href="https://github.com/tc39/ecma262/pull/854">#854</a> (<a href="2017-03_mar-22.html#854-remove-implementation-defined-behavior-for-number-methods">notes</a>), <a href="https://github.com/tc39/ecma262/pull/785">#785</a> (<a href="2017-03_mar-22.html#785-arrayprototoypesort-checks-for-comparefn-being-valid">notes</a>), <a href="https://github.com/tc39/ecma262/pull/833">#833</a> (<a href="2017-03_mar-22.html#833-remove-duplicate-keys-from-proxies">notes</a>), <a href="https://github.com/tc39/ecma262/pull/852">#852</a> (<a href="2017-03_mar-22.html#852-move-side-effecty-toindex-in-ta-constructor-to-before-detached-check">notes</a>), <a href="https://github.com/tc39/ecma262/pull/853">#853</a> (<a href="2017-03_mar-22.html#853-stringprototypereplace-edge-case-alignment">notes</a>)</li>
+</ul></li>
+</ul>
+
+</body>

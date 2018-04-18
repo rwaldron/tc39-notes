@@ -1,0 +1,533 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>April 8, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#april-8-2014-meeting-notes"><h1 id="april-8-2014-meeting-notes">April 8, 2014 Meeting Notes</h1></a><hr>
+<p>Doug Crockford (DC), Brian Terleson (BT), Luke Hoban (LH), Dmitry Lomov (DL), Waldemar Horwat (WH), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Hudson (RH), Rick Waldron (RW), Eric Ferraiuolo (EF), Jafar Husain (JH), Jeff Morrison (JM), Sung-Jae Lee (SJL), Seo-Young Hwang, Mark Honenberg (MH), Caridy Patiño (CP), Yehuda Katz (YK), Niko Matsakis (NM), Ben Newman (BN), Filip Pizlo (FP), Satish Chondra (SC), Domenic Denicola (DD), Mark S. Miller (MM)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>JN: (open remarks)</p>
+<p>AWB: logistics</p>
+<a href="#introductions"><h2 id="introductions">Introductions</h2></a><p>See attendee list</p>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p><a href="https://github.com/tc39/agendas/blob/master/2014/04.md">https://github.com/tc39/agendas/blob/master/2014/04.md</a></p>
+<p>JN: Agenda approved with changes.</p>
+<a href="#minutes"><h2 id="minutes">Minutes</h2></a><p>JN: Approval of minutes from Jan 2014, Ecma document 007</p>
+<a href="#41-review-latest-spec-draft"><h2 id="41-review-latest-spec-draft">4.1 Review Latest Spec Draft</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>Slides: <a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-04/April-meeting-status-ES6-spec.pdf">April-meeting-status-ES6-spec.pdf</a></p>
+<p>AWB: Updates to formatting, etc.
+Summary of changes: <a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts#august_23_2013_draft_rev_17">http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts#august_23_2013_draft_rev_17</a></p>
+<p>YK: Concerns about let bindings in function parameters
+...Let's make sure that anything in ES5 that does not have a let binding doesn't produce such, to avoid interop hazards.</p>
+<p>BT: In IE11, you can't create a let binding whose identifier is the same as a function parameter</p>
+<p>AWB/YK: Then this is a spec bug.  (AWB: not clear what this is referring to, the behavior described above for IE11 sounds correct)</p>
+<p>BT: Even <code>var x; let x;</code> is an error</p>
+<p>AWB: There are lexical bindings that the closure captures and then there are static semantic rules that say you cannot have a <code>let</code> in the body that are same name as a <code>parameter</code>
+... We need</p>
+<p>LH: <code>let</code> is not designed to directly replace <code>var</code>, it's a benefit that these static rules exist.</p>
+<p>RW: Agree (<code>let</code> is not the new <code>var</code>)</p>
+<p>AWB: Cannot <code>import x</code> and then <code>let x</code>, this would be a redeclaration.
+...There is an item to discuss <code>catch(e)</code></p>
+<p>WH: What are the ContainsExpressions rules in the function declaration instantiation spec for? As far as I can tell, they're an optimization to take out an invisible environment. They appear to have no visible effect.
+AWB: Yes, that's invisible. Went back and forth about whether to express such optimizations in the spec.</p>
+<p>AWB: (moving on)</p>
+<ul>
+<li>Lookahead grammar restriction created, to disambiguate <code>new super()</code>  (AWB: but they aren't right yet.  Stills needs some more work)</li>
+<li>Lookahead <code>let</code> restrictions added: IterationStatement (see notes)</li>
+<li>Temporary change return default for missing class constructor: Reverted.</li>
+</ul>
+<p>AWB: First call to a generator (half of 4.ii on the agenda)</p>
+<ul>
+<li>Eliminate throw if argument is passed</li>
+<li>Argument is ignored and inaccessibe</li>
+<li>Differing recolltions on January discussion</li>
+<li>Most compelling reason: creates unnecessary difference between generator and manual implementaion of equivalent iterators.</li>
+</ul>
+<a href="#42-conclusionresolution-41-review-latest-spec-draft"><h4 id="42-conclusionresolution-41-review-latest-spec-draft">4.2 Conclusion/Resolution</h4></a><ul>
+<li>removal of the thrown exception when a value is passed to next() for a newborn generator</li>
+<li>further discussion to be had by Ben Newman and Dave Herman re: what to do with that value.</li>
+</ul>
+<p>AWB: (continuing)</p>
+<pre><code class="language-js"><span class="hljs-built_in">Array</span>.from({<span class="hljs-number">0</span>: <span class="hljs-number">0</span>, <span class="hljs-number">4</span>:<span class="hljs-number">4</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">5</span>});
+</code></pre>
+<p>... didn't produce a sparse array. Changed in Rev23.</p>
+<p>Current spec says: in no way can <code>Array.from</code> produce a sparse array.</p>
+<p>RW: This is good and makes the behaviour consistent with the iterator path in <code>Array.from</code></p>
+<p>YK: Generally, sparse arrays are dead.</p>
+<p>(no opposition)</p>
+<p>AWB: (continuing) Corrected RegExpExec so it correcly translates the match state of full unicode RegExps back to UTF-16 cature values and endIndex</p>
+<p>WH: If you have a composed character, is it still considered two characters?</p>
+<p>AWB: Yes, it operates at the level of code points or  code units.  Not a higher livel such as composed characters</p>
+<p>YK: (requesting more information about the the ES5 compatibility change item added to Annex D)</p>
+<p>RW: (note: it appears to be missing, Allen, please fill in/follow up?)</p>
+<p>AWB: Call for Spec reviewers</p>
+<p>BT: Need to create a &quot;sign up&quot; for task assignment for reviewing sections</p>
+<p>AWB: Would like to see two TC39 members reviewing each of the sections</p>
+<p>... September is the <em>end</em>, otherwise we risk delaying for another 6 months. The final reviewing needs to be done between now and July.</p>
+<p>MM: Last meeting I said I was going to organize a security review. There are no draft implementations of the Realm API which will make the exploratory process of analyzing the system useless. There has to be some time to poke at a draft implementation before committing.</p>
+<p>YK: We should wait to delve into this issue (modules) with Dave present</p>
+<p>AWB: Agreed</p>
+<p>MM: Putting the Realm aside, I have no concerns for the modules specification</p>
+<p>JM: What exactly is missing, what can we work on to help make progress.</p>
+<p>LH: What about the JS Loader projects that exist?</p>
+<p>YK: There is no way to do the Realm API with those, however the Loader implementations</p>
+<p>JM: Can <code>contextify</code> be used to implement Realm?</p>
+<p>MM: There may be way to use this to discover holes. Let's take a look at it. There may be a way to expose issues in the same way.</p>
+<p>AWB: There are changes to the Realm API, since the last meeting.</p>
+<p>LH: Are there further expected changes?</p>
+<p>AWB: One of the issues is the eval support is now at the Realm level. One of the change we got down from 4 methods to three methods re: eval.</p>
+<p>YK: We should avoid discussing this without Dave present?</p>
+<p>LH: There are API changes expected in Realms? Are there API changes in Loader?</p>
+<p>AWB: Hopefully</p>
+<p>LH: That's what expected</p>
+<p>YK: Special casing class and function to create bindings at the parent level for <code>export default function foo</code> and <code>export default class foo</code>. We should special case those expression forms to behave like declaration forms</p>
+<p>LH/BT: Yes.</p>
+<p>AWB: If you want to treat it like an expression, put it in parens.</p>
+<p>WH: What is <code>export default</code>?</p>
+<p>YK: We've discussed this</p>
+<p>AWB: (recapping the utility and specification of default exports)</p>
+<p>WH: Can only have one default?</p>
+<p>AWB/YK: Yes.</p>
+<p>AWB: It's for modules that you want to export without a specific name.</p>
+<p>YK: Compatibility with a desirable style of programming.</p>
+<p>LH: We need to lock down API changes as soon as possible.</p>
+<p>YK: It's possible to punt on Realm API (to ES7). Dave specifically designed this to separable.</p>
+<p>MM: Where would you draw the line? If Realms were on the opposite side of the line, where would you draw the line?</p>
+<p>AWB: I could draw a line: No API.</p>
+<p>YK: Draw a line? No public Realm API, but the semeantics are still there.</p>
+<p>LH: Our success critically relies on Loader API, this is where requirements are resolved.</p>
+<p>...Discussion about Loader API</p>
+<p>LH: All of the multiple phase complexity is needed</p>
+<p>Discussion about Guy Bedford's work, es6-module-transpiler, traceur, etc.</p>
+<p>YK: I'll open discussion with Guy to pinpoint hardships in implementation</p>
+<p>LH: This will be helpful</p>
+<p>EF: (to Brian) you're presenting implementation report?</p>
+<p>BT: No, just feedback from TypeScript</p>
+<a href="#open-issues"><h3 id="open-issues">Open Issues</h3></a><p>AWB: for of/in, initialization expression scoping?</p>
+<pre><code>{
+  let x = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]<span class="hljs-comment">;</span>
+  for (<span class="hljs-name"><span class="hljs-builtin-name">let</span></span> x of x) console.log(<span class="hljs-name">x</span>)<span class="hljs-comment">;</span>
+}
+</code></pre>
+<p>WH: Wouldn't it be the same as saying <code>let x = x</code>?</p>
+<p>AWB: should be</p>
+<ul>
+<li>Current spec: of/in expression evaluated in enclosing scope:. Log: 0 1</li>
+<li>Possible alternative: extra scope with uninitialized x. Throws TDZ error</li>
+</ul>
+<p>LH: This example has two scopes, the alternative has three?
+...for creates a scope
+...Why do you want to change?</p>
+<p>AWB: There have been arguments that say <code>x</code> isn't yet initialized in the <code>for</code> scope</p>
+<p>WH: Is the question: creating the scope before or after?</p>
+<p>AWB: We have to create an extra scope where <code>x</code> is dead.</p>
+<p>(ah-ha moment.)</p>
+<p>AWB: Need input from implementors</p>
+<p>MM: If no one has a strong reason, I suggest going through the second approach.</p>
+<p>YK: err on the side of being more useful to the programmer</p>
+<p>MM/AWB: Yes</p>
+<p>WH: There might not be a dead zone violation</p>
+<p>MM: it would be a dead zone violation in the second bullet
+... There is only no dead zone violation if you don't touch it.</p>
+<p>AWB: We need a consistent approach
+... Already have this extra scope</p>
+<p>AWB: Need to go back, we may initialize that outer binding and maybe we shouldn't</p>
+<a href="#conclusionresolution-41-review-latest-spec-draft"><h4 id="conclusionresolution-41-review-latest-spec-draft">Conclusion/Resolution</h4></a><ul>
+<li>Be consistent</li>
+<li>Look at the initialization scope and be sure to intentionally <em>never</em> initialize the for bindings in that scope</li>
+<li>Solution to open issue: extra scope with uninitialized x. Throws TDZ error</li>
+</ul>
+<a href="#var-hoisting-and-catch-parameters"><h3 id="var-hoisting-and-catch-parameters">var hoisting and catch parameters</h3></a><p>AWB:</p>
+<pre><code class="language-js"><span class="hljs-keyword">catch</span> (x) {
+  <span class="hljs-keyword">var</span> x = <span class="hljs-number">42</span>;
+}
+</code></pre>
+<p>Discussion about the existance of this code in real world.</p>
+<p>BT: This exists in code found in the top 1k sites</p>
+<p>AWB: i can remove the static semantics rule that's specifiically for catch, that says this is an error. In that case, it will be just like ES5, there will be a var and the var will be hoisted. Need to look at various place where simplifications of runtime semantics that assume this has been applied.</p>
+<p>YK: Question about the actual binding.</p>
+<p>WH: The same that happens inside a <code>with</code> that has captures a property with the same name as a var—the var hoists out.</p>
+<p>YK: What is the negative effect of creating a binding that's undefined?
+...Change incompatibility should have a higher bar than &quot;it complicates the spec&quot;</p>
+<p>MM: Breaking changes aren't worth</p>
+<p>WH: Keep the catch as a <code>let</code> binding, but make it not an error in Annex B, just for catch (not for let's in general)</p>
+<p>LH/AWB: I like this</p>
+<p>FP: It seems better to keep the existing behaviour?</p>
+<p>MM: Is Annex B, normative? Normative optional?</p>
+<p>YK: Confirms that Annex B is <em>required</em> for browsers but normative/optional for non browsers</p>
+<p>MM: Ok, no issue then.</p>
+<p>Agreement that browser implementation will lead and others will follow for compatibility.</p>
+<p>YK: Also need to make sure that this is not an error:</p>
+<pre><code class="language-js"><span class="hljs-keyword">catch</span>(x) {
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">x</span>(<span class="hljs-params"></span>) </span>{
+  }
+}
+</code></pre>
+<p>AWB: This is an error</p>
+<p>WH: Any reason for us to believe this exists in the wild?</p>
+<p>BT: Looked for this pattern, with no findings, but absence in top 1k doesn't mean non-existence.</p>
+<p>WH: Disallow this and see if there is any pushback.</p>
+<a href="#conclusionresolution-41-review-latest-spec-draft"><h4 id="conclusionresolution-41-review-latest-spec-draft">Conclusion/Resolution</h4></a><ul>
+<li>Keep the catch as a <code>let</code> binding, but make it not an error in Annex B, just for <code>catch</code> (no other)</li>
+<li>If redeclaration with <code>let</code> or <code>const</code> is still a redeclaration error (this is no change)</li>
+<li>Continue to disallow function declaration in catch</li>
+</ul>
+<p>MM: This could only exist in non-strict code.</p>
+<p>YK: The same behaviour as:</p>
+<pre><code class="language-js">{
+<span class="hljs-keyword">let</span> x;
+<span class="hljs-keyword">let</span> x;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">x</span>(<span class="hljs-params"></span>) </span>{}
+}
+</code></pre>
+<p>Confirm.</p>
+<a href="#presentation-by-samsung-representatives"><h2 id="presentation-by-samsung-representatives">Presentation by Samsung Representatives</h2></a><p>Slides: <a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-04/ecma-tc39-talk-v1.0.pdf">ecma-tc39-talk-v1.0.pdf</a></p>
+<p>Presentation focus on intent of committee participation</p>
+<ul>
+<li>JS on wearable devices</li>
+<li>JS on microcontrollers (small memory devices)</li>
+</ul>
+<p>Interested in building a small footprint JS engine</p>
+<ul>
+<li>Wearables and IoT</li>
+<li>A subset?</li>
+<li>Possibly as an open source project</li>
+</ul>
+<p>We are here to ask your opinion about approach</p>
+<ul>
+<li>multi level subset of profile of ECMAScript</li>
+<li>is it reasonable to define a subset</li>
+<li>can this be covered  can this committee</li>
+</ul>
+<p>WH: 48K of RAM? That's the same as an Apple II.</p>
+<p>WH: Just supporting Unicode takes a lot more memory than that.</p>
+<p>MM: What about running existing code?</p>
+<p>RW: (share experience of using JS subset in microcontroller environments)</p>
+<p>SC: (more about goals of the platform, re: HTML/CSS)</p>
+<p>LH: HTML and CSS are massive</p>
+<p>RW: Platform dependencies themselves assume specification compliance</p>
+<p>WH: One of the reasons for selecting a subset of JavaScript is that you can write applications for the device that also run in the browser.</p>
+<p>WH: While libraries are big, a subset of the &quot;good parts&quot; of ECMAScript would also be useful for reducing memory usage.</p>
+<p>?: How so?</p>
+<p>WH: Some of the features of ECMAScript (such as peculiarities of eval) pretty much require efficient implementations to do speculative optimization and then have a mapping and a way to back out if the assumptions fail. That mapping and the extra copy of the code for deoptimization costs memory.</p>
+<p>YK: So don't optimize. Use an interpreter.</p>
+<p>WH: Lack of optimization would waste battery power on small devices.</p>
+<p>RH: points about starting and reducing</p>
+<p>LH: It's important to consider what are you willing to trade?</p>
+<p>Mixed discussion about ES versions that might be considered subsets themselves.</p>
+<p>AWB: There is clearly concern here, but it would be valuable to have you included and there are people here that are interested in small device platforms.</p>
+<a href="#setprototypeof-circularity-invariant"><h2 id="setprototypeof-circularity-invariant">[[SetPrototypeOf]] circularity invariant</h2></a><p>(Allen Wirfs-Brock)</p>
+<ul>
+<li>If Proxy involved, impossible to enforce on prototype chain</li>
+<li>Eliminate the invariant?</li>
+<li>Is there some weaker invalriant we might replace with?</li>
+</ul>
+<p>LH: How?</p>
+<p>AWB: getPrototypeOf can lie while the invariant is being checked</p>
+<p>MM: Are there any recommendations beyond dropping the invariant?</p>
+<p>FP: (Question about requirements)</p>
+<p>MM: Any defensible options other than dropping the invariant?</p>
+<p>AWB: No</p>
+<p>WH: Yes. To prevent proxy cycles, something in the proxy (perhaps the target's prototype, perhaps something else) would record what the proxy thinks the prototype is.  GetPrototypeOf does not run user code and only returns the current stored value.  SetPrototypeOf runs user code and can change the stored value.  The circularity check occurs at the time of the store.</p>
+<p>AWB: Possible for ordinary objects, if the prototype chain only consists of ordinary objects, there must not be circularities.</p>
+<p>Discussion about Proxy trap handlers for <code>getPrototypeOf</code> and <code>setPrototypeOf</code></p>
+<p>MM: Storing state related to the target</p>
+<p>BN: In the same way there is RangeError for call recursion, is there a way to RangeError on length of prototype walk</p>
+<p>MM: Waldemar's rule will give you the error earlier.</p>
+<p>WH: It's better to pay the runtime cost in the less frequent cases that change prototypes rather than having to pay it every time a prototype chain is read.</p>
+<p>NM: The more user code we can get out of the prototype look up, the better.</p>
+<p>AWB: Ask Tom about intervening when user sets prototype</p>
+<p>YK/MM: Agree.</p>
+<a href="#conclusionresolution-setprototypeof-circularity-invariant"><h4 id="conclusionresolution-setprototypeof-circularity-invariant">Conclusion/Resolution</h4></a><ul>
+<li>Prevent proxy cycles. If the target is a proxy, the proxy target prototype records what it thinks the proxy prototype is, and returns the targets protototype and setPrototype is never called</li>
+<li>Whenever you change a prototype, you run a circulartity check immediately.</li>
+</ul>
+<p>(the following is about whether [[SetPrototypeOf]] should be allowed modify the prototype of Object.prototype)</p>
+<p>BT: Does the proxy's handler have get trap</p>
+<p>WH: If it does, there is an infinite loop</p>
+<p>MM: Even without Object.prototype, you can create this same loop</p>
+<ul>
+<li>When you mess around with prototypes, you can render the entire environment inoperable.</li>
+</ul>
+<p>BT: Setting Object.prototype to a Proxy?</p>
+<p>WH: I agree with you but not worried about it.</p>
+<p>YK: Proxy is the only way to implement exotic behaviour in user code.</p>
+<p>MM: Too late to draw the line about what prototypes can be assigned a Proxy.</p>
+<p>(This addressed agenda item 4.9)</p>
+<a href="#promise-then-issue"><h2 id="promise-then-issue">Promise then issue</h2></a><pre><code class="language-js">p.then(<span class="hljs-number">42</span>, <span class="hljs-string">"43"</span>)
+  .then(<span class="hljs-literal">false</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>);
+</code></pre>
+<ul>
+<li>Error or default argument values if actual argument is not callable?</li>
+<li>if error throw or asynch error?</li>
+</ul>
+<p>AWB: Area of disagreement that Andreas brought up:</p>
+<ul>
+<li>The arguments to then are supposed to be functions,</li>
+<li>If the first argument isn't provided and not explicitly <code>undefined</code> or <code>null</code>,
+What do you do with non-callable arguments?</li>
+</ul>
+<p>Possible solutions:</p>
+<ul>
+<li>The same thing if you provide no argument?</li>
+<li>Throw?</li>
+</ul>
+<p>Currently throws.</p>
+<p>LH: The current behaviour is throw</p>
+<p>MM: Domenic wants it to not indicate an error?</p>
+<p>AWB: Correct.
+Here's an example:</p>
+<pre><code class="language-js">p.then(expr &amp;&amp; callable);
+</code></pre>
+<p>If <code>expr</code> evaluates to false, this non-callable false value is passed.</p>
+<p>AWB: The claim is that all libraries accept the non-callable and just use the default.</p>
+<p>JH, WH: Do we unwrap eagerly or lazily?</p>
+<p>AWB: We'll get to that issue.</p>
+<p>LH: WinJS throws</p>
+<p>JH: (jafar, this point was about sync and async errors, can you fill in?)</p>
+<p>YK: (points about errors that are logged to the console)</p>
+<p>Discussion about IDL</p>
+<p>YK: There are two development modes, one that wants all errors logged and one that does not.</p>
+<p>WH: Don't want some errors sync and some errors async</p>
+<p>(Note: the point of this discussion is whether <code>p.then(non-callable)</code> should throw synchronously)</p>
+<p>AWB reviews spec and finds other points in which then throws synchronously</p>
+<p>LH: Where do you draw the line that differentiates what is a runtime error and a construction time error</p>
+<p>JH: Why make a distinction?</p>
+<p>LH: Right, it's very difficult and causes you to be very specific. Or just &quot;give up&quot;</p>
+<p>AWB: Don't type check unless you need to</p>
+<p>LH: The spec always does type checking up front, for example <code>[].map(null)</code>, this throws.</p>
+<p>RW: (presents own position which agrees with LH)
+(Present Domenic's position verbatim)</p>
+<p>DD (via RW):</p>
+<blockquote>
+<p>Changing these to throws from existing promise code is a refactoring hazard. Similar to making methods non-enumerable. i'm ok with it rejecting, but not with it throwing, then you have to do .catch() AND catch { }, it's still a refactoring hazard, but at least one that doesn't screw you over by creating sync errors in code that previously only expected async ones.</p>
+</blockquote>
+<p>AWB:</p>
+<p>LH: Ok, so Domenic made two points:</p>
+<ul>
+<li>The Refactoring Hazard</li>
+<li>Making it an error means you have to decide whether it's sync or async</li>
+</ul>
+<p>LH: 3 options</p>
+<ul>
+<li>Sync error</li>
+<li>Async error</li>
+<li>No Error</li>
+</ul>
+<p>YK/RW: Domenic is ok with async error (ie. reject)</p>
+<p>JM: If didn't want async error, is there a way to emulate?</p>
+<p>No</p>
+<p>LH:</p>
+<p>JM: Promises exist in two stages: setup stage, execution stage. setup stage is the code that is written, the execution stage is async behaviour. setup stage errors should be sync</p>
+<p>RW: agree</p>
+<p>LH: it should never be required to put a try/catch around <code>p.then</code>. (restates JM)</p>
+<p>YK: conflation of two modes</p>
+<p>MM: Why is <code>.then(non-callable)</code> different then a malformed subclassing? (the latter is sync)</p>
+<p>LH: let's narrow it down and take &quot;no error&quot; off the table.</p>
+<p>Agreement.</p>
+<p>2 options:</p>
+<ul>
+<li>Sync error</li>
+<li>Async error</li>
+</ul>
+<p>LH: IDL currently does all type checks on parameters sync.</p>
+<p>YK/LH: If you were to use <code>await</code>, always get all of your type checking inside the async flow.</p>
+<p>YK: The way to look at this is to treat it like it's an async function.</p>
+<p>(Domenic Denicola call in)</p>
+<p>LH: (recap current discussion)</p>
+<p>DD: First, strange that we are accepting null, but not false or 0. Why is null and undefined on one side, but other values on the other. Second, the refactor hazard.</p>
+<p>MM: What does Q do?</p>
+<p>DD: If Promise A+ does this and with the amount of code that already relies on this.</p>
+<p>LH: Agree that accepting null and undefined is already</p>
+<p>DD: Precendent: IgnoreNonCallable in JSON.parse and JSON.stringify, .valueOf; Array.prototype.sort throws for non-callable</p>
+<p>MM: For sort?</p>
+<p>DD: sort throws if you pass non-callable
+(AWB: actually ES5 says that sort is implementation defined if argument is a non-callables other than undefined.)</p>
+<p>YK: Enough evidence to leave it as is</p>
+<p>LH: I'm convinced.</p>
+<p>Discussion about IDL optional function vs. mandatory function</p>
+<p>MM: Recalling that originally, no part of Promise.then executed synchronously.
+Case in concern:</p>
+<pre><code class="language-js"><span class="hljs-built_in">Promise</span>.resolve(instanceOfSubclass);
+</code></pre>
+<p>DD: returns a <code>Promise</code></p>
+<p>MM: How does <code>Promise.resolve()</code> handle <code>instanceOfSubclass</code></p>
+<p>DD: Treats it as an untrusted thenable</p>
+<p>MM: Excellent</p>
+<p>Review of <code>Promise.resolve</code>, focused on <code>Promise.resolve(untrustedObject).then(onFulfilled, onRejected)</code></p>
+<p>MM: Before subclassing, we had the safety property, given frozen Promise and Promise.prototype, that
+Promise.resolve(untrustedObject).then(...untrustedArguments)
+did not run user code synchronously during these two calls. Satisfied that we have
+preserved this safety property.</p>
+<p>YK: Enough evidence that we shouldn't error here and then all other errors are async.</p>
+<p>AWB: Anything that's non-callable uses the default (not just null and undefined)</p>
+<p>Discussion about precedent.</p>
+<p>WH: Reluctant to go with no error. It's a bad idea to silently ignore things such as attempts to write read-only variables or call things that are not functions.</p>
+<p>WH: No particular precedent here. Some places throw when you call a non-function, some don't. If the sort comparator is not undefined and not a function, the standard throws.</p>
+<p>AWB: The presented arguments are 2/3 in JSON functions</p>
+<p>LH: Do we want to set a precedent?
+...The Loader API throws on non-callable.</p>
+<p>MM: Crock, was there a reason you chose not to throw on non-callable?</p>
+<p>DC: No particular criteria.</p>
+<p>MM: Experience with the API?</p>
+<p>DC: I'd be reluctant to do the same again.</p>
+<p>The discussion is now:</p>
+<ul>
+<li>Async Error</li>
+<li>No Error</li>
+</ul>
+<p>RW: Firefox Nightly doesn't throw on this</p>
+<p>DD: Chrome doesn't throw</p>
+<p>MM: Given the state, I don't think we should change.</p>
+<p>LH: If making a change mattered, then we should make the change. If there are no benefits, then &quot;do no damage&quot; first.</p>
+<p>LH: (discussion about the amount of time we spend on these things)
+... p.then(42)? Doesn't matter. It's a minor corner case (we should go with what programmers expect)</p>
+<p>The decision for how to handle this non-callable case could inform all cases that expect functions</p>
+<p>MM/WH: Don't really like the silently tolerant behaviour in general. Want the general precedent to be to throw errors when calling something that can't be called, but willing to make an exception in this case due to the established library usage.</p>
+<a href="#conclusionresolution-promise-then-issue"><h4 id="conclusionresolution-promise-then-issue">Conclusion/Resolution</h4></a><ul>
+<li>w/r to .then, respect libraries: no error.</li>
+<li>do not adopt this as a principle for non-callables passed where callables are expected, the general principal: if something is neither a callable or undefined, indicate an error.</li>
+</ul>
+<p>DD: Optional callable vs. required callable. There is spec text that matches neither of the consequents.</p>
+<p>?: Example is [].map(nonCallable). If you pre-check, this errors. If you &quot;just call it&quot;, this does not error (since it never gets called.)</p>
+<p>MM: Per the principle defined, you'd simply check if the argument is defined, if it is, call it.</p>
+<a href="#iterator-for-arguments-object"><h2 id="iterator-for-arguments-object">@@iterator for arguments object</h2></a><p>AWB:</p>
+<ul>
+<li>Own Property?</li>
+<li>Or should introduce a prototype object to contain it?</li>
+</ul>
+<p>RW: There is a record of an agreement for this from several years ago</p>
+<p>BT: Not sure why we want to do this for arguments?</p>
+<p>JH: Don't want to encourage programmers to use arguments object in ES6</p>
+<p>RW: Agrees, but not sure that's the right way to go.</p>
+<p>RW: We already have consensus on iterator protocol for arguments object.</p>
+<p>MM: Any notes on own vs prototype?</p>
+<p>RW: No.</p>
+<p>YK: Foresee a problem</p>
+<p>RW: agree that we should do it, purely for consistency, but practioners need to discourage the use of <code>arguments</code> in ES6 code.</p>
+<p>AWB: 2 Cases:</p>
+<ul>
+<li>want each by name</li>
+<li>want to parse the arguments list</li>
+</ul>
+<p>Discussion about default params pattern and <code>...arguments</code> delegation.</p>
+<p>Back to consensus on inclusion</p>
+<p>MM: Strong against introducing Arguments.prototype</p>
+<p>RW: Same.</p>
+<p>JH: Ideally the @@iterator is on a prototype to avoid the allocation costs.</p>
+<p>YK: Implementations can optimize.</p>
+<a href="#conclusionresolution-iterator-for-arguments-object"><h4 id="conclusionresolution-iterator-for-arguments-object">Conclusion/Resolution</h4></a><ul>
+<li>@@iterator on arguments object</li>
+<li>specified as an own property (no creation of exposed Arguments.prototype)</li>
+<li>Updated: <a href="https://bugs.ecmascript.org/show_bug.cgi?id=1114">https://bugs.ecmascript.org/show_bug.cgi?id=1114</a></li>
+</ul>
+<a href="#default-parameters"><h2 id="default-parameters">Default parameters</h2></a><p>(Brian)</p>
+<p>BT:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">a = <span class="hljs-number">1</span></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(a, <span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 1, undefined ?</span>
+}
+
+f(<span class="hljs-literal">undefined</span>);
+</code></pre>
+<p>BN: That's consistent with the difference between arguments and parameters.</p>
+<p>BT: If a default or rest param, you get non-mapped arguments.</p>
+<p>MM: What is arguments.length?</p>
+<p>BT: Always based on what is <em>passed</em></p>
+<p>RW: There is a rule that was created, which is relevant to this discussion: <a href="https://github.com/rwaldron/tc39-notes/blob/6d88efa7c4eba2d7a8b6fd5801f2415c2f29c94c/es6/2013-07/july-25.md#consensusresolution">https://github.com/rwaldron/tc39-notes/blob/6d88efa7c4eba2d7a8b6fd5801f2415c2f29c94c/es6/2013-07/july-25.md#consensusresolution</a></p>
+<p>MM: Avoidance of micromodes if possible. (Mark, can you fill this in? It was re: craziness)</p>
+<a href="#conclusionresolution-default-parameters"><h4 id="conclusionresolution-default-parameters">Conclusion/Resolution</h4></a><ul>
+<li>An argument list that only has identifiers in sloppy mode has mapped arguments object. ALL other arguments objects (ie. any that contain default, destructuring, or rest, or those in strict mode)  don't map.</li>
+</ul>
+<a href="#initializer-in-for-in"><h2 id="initializer-in-for-in">Initializer in for-in</h2></a><p>AWB:</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> x = <span class="hljs-string">"nothing"</span> <span class="hljs-keyword">in</span> foo) { ... }
+</code></pre>
+<p>Previously convinced that this was safe to remove. Apple implementors reported breakage caused by removing this.</p>
+<p>MH: (confirms) Have encountered sites that have this code.</p>
+<p>YK: I understand the desire to clean up, but if clean up causes breakage then why bother?</p>
+<p>AWB: Need to address the let case (AWB: this was more about consistacy with the let case. let case does not have the initializer but as new syntax that doesn't introduce any compatability issues.)</p>
+<p>YK: Nothing happens in the let case,</p>
+<p>MM: Except for the side effects of the expression</p>
+<p>AWB: So basically it was a matter of seeing if we can</p>
+<p>YK: As a rule, we should err on the side of caution when faced with these minor changes that create incompatibilities once we find real-world problems.</p>
+<a href="#conclusionresolution-initializer-in-for-in"><h4 id="conclusionresolution-initializer-in-for-in">Conclusion/Resolution</h4></a><ul>
+<li>Punt on a decision until May</li>
+</ul>
+<a href="#function-as-block"><h2 id="function-as-block">Function &quot;as&quot; Block</h2></a><p>BT:</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+
+}
+</code></pre>
+<p>MM/BT: Already illegal in strict mode</p>
+<p>BT: In all browsers, you can call <code>f()</code> after this, but doesn't hoist.</p>
+<p>WH: That's a contradiction, you said it doesn't hoist but can be called.</p>
+<p>(This is the problem?)</p>
+<p>BT: On the list, Brendan was opposed to adding this to Annex B</p>
+<p>WH: Is this hypothetical or real breakage? Where does this actually occur in the wild?</p>
+<p>BT: ...haven't seen this anywhere in the existing code</p>
+<p>WH: Inclined to keep the new semantics simple and ignore this.</p>
+<p>MM: Not seeing in the wild? Back off</p>
+<p>YK: If we can get implementors to agree to make this an error, then we'll specify it as such</p>
+<p>AWB: note: file bug to have this tested in Firefox</p>
+<a href="#conclusionresolution-function-as-block"><h4 id="conclusionresolution-function-as-block">Conclusion/Resolution</h4></a><ul>
+<li>Allen will file bug to have this tested in Firefox</li>
+</ul>
+<a href="#name-property-of-bound-functions-and-tomethod-functions"><h2 id="name-property-of-bound-functions-and-tomethod-functions">Name property of bound functions and toMethod functions</h2></a><p>AWB:</p>
+<ul>
+<li>Currently neither have an own name property</li>
+<li>Should either or both get one?</li>
+<li>If so, what should it be?
+<ul>
+<li>&quot;bound foo&quot;?  (for the bound case)</li>
+</ul></li>
+</ul>
+<p>YK: Why this naming?</p>
+<p>RW: In the current ES6 specification, for the name property of function, accessors are prefixed by &quot;get &quot; and &quot;set &quot; (trailing space intended).</p>
+<p>AWB: Don't think about these name conventions as any kind of type information, just as an a means to distinguish</p>
+<p>MM: what about toMethod?</p>
+<p>AWB: Suggest no qualifier</p>
+<p>Reviewing toMethod</p>
+<p>MM: What about function properties named &quot;get foo&quot;?
+MM: I guess this is ok. These names are not high-integrity -- mostly intended for debugging info.</p>
+<a href="#conclusionresolution-name-property-of-bound-functions-and-tomethod-functions"><h4 id="conclusionresolution-name-property-of-bound-functions-and-tomethod-functions">Conclusion/Resolution</h4></a><ul>
+<li>toMethod: no prefix qualifier</li>
+<li>Bound functions: &quot;bound foo&quot;</li>
+<li>Adopt uniformly:
+<ul>
+<li>&quot;get &quot;</li>
+<li>&quot;set &quot;</li>
+<li>&quot;bound &quot;</li>
+</ul></li>
+<li>Fix empty string property bug</li>
+</ul>
+<p>AWB: Concerned about backwards injection attacks.</p>
+<p>MM: Too late to
+(AWB: I don't recall what this was about)</p>
+<a href="#new-%typedarray%iterable"><h2 id="new-%typedarray%iterable">new %TypedArray%(iterable)</h2></a><ul>
+<li>Currently constructor doesn't recognize iterables, but requires an array like.  This is the behavior inherited from the Khronos spec.</li>
+<li>Need to use:</li>
+<li>%TypedArray%.from(iterable)</li>
+<li>Should constructor work like %TypedArray%.from?</li>
+</ul>
+<a href="#conclusionresolution-new-%typedarray%iterable"><h4 id="conclusionresolution-new-%typedarray%iterable">Conclusion/Resolution</h4></a><ul>
+<li>Make all %TypedArray% constructors accept iterable</li>
+</ul>
+<a href="#new-%typedarray%2"><h2 id="new-%typedarray%2">new %TypedArray%(&quot;2&quot;)</h2></a><p>DL: %TypedArray% actually coerces this to a number first to create a typed array with length 2. The previous consensus would have to occur <em>after</em> the coercion step to preserve the expected behaviour.</p>
+<a href="#conclusionresolution-new-%typedarray%2"><h4 id="conclusionresolution-new-%typedarray%2">Conclusion/Resolution</h4></a><ul>
+<li>Do string coercion to number before handling iterable to avoid mishandling a string argument.</li>
+</ul>
+<a href="#map-constructor-and-duplicate-keys"><h2 id="map-constructor-and-duplicate-keys">Map Constructor and Duplicate Keys</h2></a><pre><code class="language-js"><span class="hljs-keyword">let</span> map = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>([[<span class="hljs-string">"x"</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">"x"</span>, <span class="hljs-number">2</span>]]);
+</code></pre>
+<p>RW: Revisiting:</p>
+<ul>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-07/july-23.md#consensusresolution-1">https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-07/july-23.md#consensusresolution-1</a></li>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-07/july-24.md#consensusresolution-2">https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-07/july-24.md#consensusresolution-2</a></li>
+</ul>
+<a href="#conclusionresolution-map-constructor-and-duplicate-keys"><h4 id="conclusionresolution-map-constructor-and-duplicate-keys">Conclusion/Resolution</h4></a><ul>
+<li>No error, last property wins, eg. map.get(&quot;x&quot;) === 2</li>
+</ul>
+
+</body>

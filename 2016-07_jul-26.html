@@ -1,0 +1,525 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 26, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-26-2016-meeting-notes"><h1 id="july-26-2016-meeting-notes">July 26, 2016 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (MS), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD), Rick Waldron (RW), Stefan Penner (SP), Jonathan Sampson (JSN), Caridy Patiño (CP), Sam Tobin-Hochstadt (STH), John Buchanan (JB), Kevin Gibbons (KG), Lars Hansen (LHN), Peter Jensen (PJ), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Kris Gray (KGY), Adam Klein (AK), Dean Tribble (DT), Eric Faust (EFT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Ben Newman (BN)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>JN: (agenda)</p>
+<ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2016/07.md">https://github.com/tc39/agendas/blob/master/2016/07.md</a></li>
+</ul>
+<p>IS: (wishes to determine a log.... I am not sure I understand what this means... :-))</p>
+<p>DE: We could go through the agenda and appoint reviewers for each topic</p>
+<p>DD: I think we should appoint note-takers at the beginning of this meeting</p>
+<p>YK: I think we should appoint note-takers as we start each topic</p>
+<p>RW: If we have different note-takers, they might not follow the right format, making my job of cleaning up the notes harder</p>
+<p>DE: Let's defer to Brian when he gets back</p>
+<p>IS: Different Ecma groups do different things; there is no single solution. Some e.g. only record the subject and outcome of the discussion, but not the actual discussion itself. This has to be decided by the TC. Anyway, with the current practice, which is very similar what the W3C does, we need the support of the group. e.g. Ecma can not hire any pay for a professional technical notetaker, that has to be organized / fulfilled by TC39 members.</p>
+<p>JN: Looks like some things are timeboxed</p>
+<p>BT: Does anyone want to volunteer to take notes the whole day?</p>
+<p>RW: Me</p>
+<p>AWB: (punt on addressing this now?)</p>
+<p>BT: Let's go with Rick taking notes for now, since he volunteered, but long-term we'll go item by item</p>
+<a href="#conclusionresolution-welcome"><h4 id="conclusionresolution-welcome">Conclusion/Resolution</h4></a><ul>
+<li>Moving on, further discussion to be on github as before this meeting. Interested members are encouraged to participate there directly.</li>
+</ul>
+<a href="#3-agenda-adoption"><h2 id="3-agenda-adoption">3 Agenda Adoption</h2></a><ul>
+<li>Approved</li>
+</ul>
+<a href="#4-may-minutes-approval"><h2 id="4-may-minutes-approval">4 May Minutes Approval</h2></a><ul>
+<li>Approved</li>
+</ul>
+<p>JN: Agenda?</p>
+<p>(Discussion re: backing documents not present for a handful of agenda items, should we start requiring these?)</p>
+<p>WH: I'm fine with occasional items not having backing materials — there are situations where that's appropriate — as long as they're relatively rare and not looking to advance.</p>
+<p>WH: ECMA has a global policy (we all agreed to) that documents up for significant decisions shall be provided 2-3 weeks in advance. I'd interpret this as applying to proposals looking to advance in TC39.</p>
+<p>IS: It's 3 weeks. This is e.g. to formally move forward or approve a TC39 draft specification. But for things for information, to start a discussion on new items, not to strive for a formal decision anything until the meeting is allowed. But of course it is encouraged to submit and post on Github as soon as possible.</p>
+<p>JN: Approval of minutes?</p>
+<a href="#conclusionresolution-4-may-minutes-approval"><h4 id="conclusionresolution-4-may-minutes-approval">Conclusion/Resolution</h4></a><ul>
+<li>Agenda Adopted</li>
+<li>May Minutes approved</li>
+<li>Add item to discuss the agenda item locking.</li>
+</ul>
+<a href="#5-report-from-the-ecma-secretariat"><h2 id="5-report-from-the-ecma-secretariat">5. Report from the Ecma Secretariat</h2></a><p>IS: Submitted the ECMAScript Suite Standard (approved by the GA as Ecma 414) to ISO/IEC JTC1 for fast-track. This should enable not to submit anymore ECMA-262 and ECMA-402, etc. to JTC1 separately anymore. This would allow to solve the speed difference problem and the RF patent policy problem. However, JTC1 editors wanted to have more text in the standard and not only the list of normative and informative references. IS said that he will work with Allen Wirfs-Brock on that. If possible we try to beed up ECMA-414 until the September 2016 meeting that isót can be approved as new Edition in the Decemmber 2016 GA. If the plan is delayed we finish it by June 2017.</p>
+<ul>
+<li>Link IETF spec to Ecma 404 (that was already fast tracked to ISO actually before the May 2016 TC39 meeting). On that one JTC1 has not given any feedback yet. So we guess that is on track.</li>
+<li>On the issue we are in close contacts with the IETF. When we get the IETF spec number (when available) we will make a 2nd Edition of ECMA-404 and fast track that edition to JTC1. With that we want to link the Ecma Standrad with the IETF specification that they should be in full harmony.</li>
+<li>Awards: BT and RW received ECMA awards for ECMA-262 7 th Edition and ECMA-402 (plus the many notetaking). Congratulations!</li>
+<li>New Executive Committee, made from a combination of ECMA management and the former Coordinating Committee.
+<ul>
+<li>A change from the past is that up to two ECMA members from categories other than ordinary members may now be elected into the the Executive Committee. Nominations for that can come from anybody, but in the end the December GA will vote on the nominations. The membership in the Executive Committee is always one year, but with the possibility of reelection.</li>
+<li>All members can now participate in the General Assembly and take actively part in the discussions, not just ordinary members. However, only ordinary members can vote (that is unchanged).</li>
+<li>IS also noted that TC39 is now by far the largest Ecma Group and it has grown to a size where he feels that we have to organize our structure and work better, otherwise at the face-to-face meetings there might be disappointment by some who prepare for a topic for discussion and presentation but in the shortness of time the subject is not discussed properly. Discussion on that to be continued by those who are interested on GitHub.</li>
+<li>What IS forgot to tell, that actually with the publication of ECMAScript 2016 and ECMA-402 new Edition etc. it would be a good idea to make more PR, e.g. Press Release.</li>
+</ul></li>
+</ul>
+<a href="#8-test-262-status-update"><h2 id="8-test-262-status-update">8. Test 262 Status Update</h2></a><p>IS: Technical Report 104 needs to be updated. He added that all specs related to TC39 work are being downloaded very heavily (actually at  least 2/3 of all Ecma downloads are TC39 related).  The HTML version of ECMA-262 and ECMA-402 is in addition to it, and compared to full downloads that is even significantly higher.This is actually more than e.g. what is being downloaded from the ISO Shop (of course that is not free of charge...).  So automatically also TR-104 gets downloaded rather heavily. But e.g. in TR/104 the URL to the tests does not work. Also the text needs to be updated. It reflects a situation when only ES5 was covered, but  e.g. not ECMA-402.</p>
+<p>AWB: Propose updating TR 104 to be descriptive only?</p>
+<p>BT: Is this just a readme? Possible get rid of it?</p>
+<p>AWB: Just reduce to an abstract description of the content and motivation of test262</p>
+<p>DE: Should ecma site link to draft spec?</p>
+<p>AWB: The draft isn't the published standard</p>
+<p>(Suggestions to link both, with clear identifiers)</p>
+<p>Note IS: I did not say that in the meeting, but In case of TC39 actually we give links to the latest ECMAScript drafts.</p>
+<a href="#conclusionresolution-8-test-262-status-update"><h4 id="conclusionresolution-8-test-262-status-update">Conclusion/Resolution</h4></a><ul>
+<li>Bring to reflector for further discussion</li>
+<li>TR104 update (or withdrawal)</li>
+<li>Linking standard and draft?</li>
+<li>It's there, but some want it to be more prominent</li>
+</ul>
+<p>Note IS: The TC39 website pages at Ecma have always room for improvement. If anything you want to include just contact Patrick from the Secretariat who maintains the webpages.</p>
+<a href="#6-ecma-262-status-update"><h2 id="6-ecma-262-status-update">6. Ecma 262 Status Update</h2></a><p>Brian Terlson</p>
+<p>BT: 6 months left for ES2017</p>
+<ul>
+<li>Object.values</li>
+<li>Object.entries</li>
+<li>String.prototype.padStart</li>
+<li>String.prototype.padEnd</li>
+<li>RegExp changes to case insensitive flags (<a href="https://github.com/tc39/ecma262/pull/525">https://github.com/tc39/ecma262/pull/525</a>)</li>
+</ul>
+<p>AWB: (questions about consolidated changelog that provides complete document of changes from previous edition to present edition)</p>
+<p>YK: Make a single place for all published changlogs?</p>
+<p>BT: There has never been such a document, isn't Annex B's change listing sufficient?</p>
+<ul>
+<li>Want changelogs in annex?</li>
+</ul>
+<p>AWB: Yes</p>
+<p>DD: Use links instead of copy/paste?</p>
+<p>BT: Links to releases tab?</p>
+<p>AWB: Cannot stand alone without github</p>
+<p>BT: (has a plan)</p>
+<p>...</p>
+<p>AWB: Do we have a &quot;focus on 2017 items list&quot;?</p>
+<p>BT: No, not yet.</p>
+<p>JHD: Benefit of knowing what year a thing will be ready?</p>
+<p>BT: Addressing the cross cutting issues, knowing the big picture</p>
+<p>AWB: Resolving issues discovered in an implementation</p>
+<p>BT: Champions responsible</p>
+<a href="#conclusionresolution-6-ecma-262-status-update"><h4 id="conclusionresolution-6-ecma-262-status-update">Conclusion/Resolution</h4></a><ul>
+<li>Bring to reflector for further discussion</li>
+<li>Need changelog for each edition</li>
+<li>Discuss form/forum/format</li>
+</ul>
+<a href="#7-ecma-402-status-update"><h2 id="7-ecma-402-status-update">7. Ecma 402 Status Update</h2></a><p>(Caridy Patiño)</p>
+<p>No updates</p>
+<a href="#8-test262-update-revisit"><h2 id="8-test262-update-revisit">8. Test262 Update Revisit</h2></a><p>(Leo Balter)</p>
+<p>LBR: Bocoup has just wrapped project delivering coverage for ES2015</p>
+<ul>
+<li>Iterating on feedback from other members</li>
+<li>Moving forward on ES2016 tests</li>
+<li>More work to be done, but need volunteers</li>
+<li>Deprecated Python runner</li>
+<li>Working on test262 harness that runs from node.js</li>
+</ul>
+<p>DE: Work to be done on test262 presence</p>
+<ul>
+<li>Spoke with Kangax about including test262 in the compat table sites</li>
+</ul>
+<p>LBR: More visibility for test262</p>
+<p>TC: Need help with reviewing contributions</p>
+<ul>
+<li>Promises</li>
+<li>Yield</li>
+</ul>
+<p>TC: Barrier to entry quite lower based on the work that's been done in the last year.</p>
+<p>SP: (asking about test submission with new features)</p>
+<p>BT: Staged features require tests. Known issue: normative changes haven't been blocked by any requirement for tests</p>
+<p>RW: Previously, not a lot of contribution, so this wasn't an issue. Now we're seeing more contribution, so it needs to be addressed (this is a concern that we have at Bocoup)</p>
+<p>BT: Possibly a requirement to create an issue on test262?</p>
+<p>SP: Block merge?</p>
+<a href="#conclusionresolution-8-test262-update-revisit"><h4 id="conclusionresolution-8-test262-update-revisit">Conclusion/Resolution</h4></a><ul>
+<li>Labels to mark normative changes that need tests</li>
+<li>Work with change author to make tests</li>
+<li>Block on normative changes until they have tests</li>
+<li>Due diligence on both the tests and normative spec changes</li>
+<li>Authors, champions, leads must be satisfied with changes on both repositories</li>
+<li>Include mention of available mentorship for test writing.</li>
+</ul>
+<a href="#9ia-reintroduce-for-in-initializer"><h2 id="9ia-reintroduce-for-in-initializer">9.i.a Reintroduce for-in-initializer</h2></a><p>(Kevin Gibbons)</p>
+<p>Slides: <a href="https://docs.google.com/presentation/d/19LVVdCHfokJWQnNvkyu8M2vdpMAz8yIE1wB8yK7hLBR4/edit#slide=id.gc6f980f91_0_0Slides">https://docs.google.com/presentation/d/19LVVdCHfokJWQnNvkyu8M2vdpMAz8yIE1wB8yK7hLBR4/edit#slide=id.gc6f980f91_0_0Slides</a>:</p>
+<p>KG: V8, SM, JSC implemented and later reverted. Chakra did not implement</p>
+<ul>
+<li>Web breakage happens!</li>
+</ul>
+<p>Proposing changes to Annex B</p>
+<p>AWB: Annex B are generally items not allowed in strict mode</p>
+<p>KG: Not consistent</p>
+<p>YK: Can we make illegal in strict mode?</p>
+<p>KG: Chrome does</p>
+<p>?: JSC does too</p>
+<p>AWB, WH: So we should add for-var-in initializers with the old semantics to Annex B, for non-strict mode only.</p>
+<p>RW: (brief discussion about strict mode additions: resolved, non-issue)</p>
+<p>YK: Does this mean sloppy mode changes are always in annex b?</p>
+<p>Generally, no.</p>
+<a href="#conclusionresolution-9ia-reintroduce-for-in-initializer"><h4 id="conclusionresolution-9ia-reintroduce-for-in-initializer">Conclusion/Resolution</h4></a><ul>
+<li>Add for-var-in initializers with the old semantics to Annex B, for non-strict mode only.</li>
+<li><a href="https://github.com/tc39/ecma262/pull/614">ecma262/pull/614</a></li>
+<li>Kevin will write tests for the change, based on the new policy</li>
+</ul>
+<a href="#9ib-update-on-async-iteration"><h2 id="9ib-update-on-async-iteration">9.i.b Update on Async Iteration</h2></a><p>(Domenic Denicola)</p>
+<p>(No slides)</p>
+<p>DD: Kevin Smith has left the committee; I am taking over as champion. I did not have time to address spec issues, so it is not ready to advance, but they are minor and I will work on it. Who should be Stage 3 reviewers?</p>
+<a href="#conclusionresolution-9ib-update-on-async-iteration"><h4 id="conclusionresolution-9ib-update-on-async-iteration">Conclusion/Resolution</h4></a><ul>
+<li>Reviewers: Bradley Farias, Daniel Ehrenberg</li>
+</ul>
+<p>AWB: Going back to the previous topic, Kevin, could you please share a PDF on the notes page, since links rot?</p>
+<a href="#9ie-trailing-commas-in-functions"><h2 id="9ie-trailing-commas-in-functions">9.i.e Trailing commas in functions</h2></a><p>(Jeff Morrison)</p>
+<p>JM: It's implemented in two browsers (JSC, Edge)</p>
+<p>AK: Actually V8 also</p>
+<p>BT: Actually we ship it already. Are there test262 tests?</p>
+<p>JM: I thought so. Stage 4?</p>
+<p>WH: I don't object to advancing this to stage 4, but I'm sad to see this in the language.</p>
+<p>?: Ditto.</p>
+<p>(We can't find tests)</p>
+<a href="#conclusionresolution-9ie-trailing-commas-in-functions"><h4 id="conclusionresolution-9ie-trailing-commas-in-functions">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4 pending on writing and merging test262 tests</li>
+</ul>
+<a href="#9if-unify-string-and-array-maximum-lengths"><h2 id="9if-unify-string-and-array-maximum-lengths">9.i.f Unify String and Array maximum lengths</h2></a><p>(Michael Saboff)</p>
+<p>MS: Unify the length of strings and arrays. Strings are 2^53-1, Arrays are 2^32-1 indexed elements. A few APIs cross over. Really, browsers are all 2^31 or less. I don't care which way we go, but I'd like Strings and Arrays to be unified.  Maybe we should delay this a little until we figure out how to make Arrays bigger; I originally proposed reducing everything to 2^32-1</p>
+<p>MF: What's the motivation?</p>
+<p>MS: Consistency, so they all use the same type of index.</p>
+<p>AWB: There was a lot of thought that went into it. We increased the size of everything that we could — strings, typed arrays — and held off on Arrays for compatibility reasons.</p>
+<p>DD: As Michael was saying, in current VMs this isn't a good idea, but maybe in a few years, it could be reasonable.</p>
+<p>AWB: And Arrays can be sparse anyway</p>
+<p>YK: Seems like a bad idea. Use Maps here instead for spare Arrays, or TypedArrays for big Strings or Arrays. We have TextDecoder in the DOM to deal with TypedArrays that have encoded Strings.</p>
+<p>DD: Why not even lower?</p>
+<p>AWB: We use 2^53 for basically everything, except for Array length calculation, which maxes out at 2^32-1</p>
+<p>DD: It seems like bigger would be better</p>
+<p>DE: What was the web compatibility evidence presented in the past?</p>
+<p>BE: The motivation [of increasing it] was weak, and no one wanted to jump on the hand grenade.</p>
+<p>AWB: Well, we have a motivated implementer here. Maybe Michael should try it out.</p>
+<p>MS: I don't think any browser believes we need more than 2^32 for browsers. However, for servers, it could be an important limit to hit. I don't think this is important for JSC as we are just a browser implementation.</p>
+<p>AWB: There's a chicken and egg problem. Someone has to prove the feasibility of it, and you're the only major implementation who has brought it up as a possibility.</p>
+<p>MS: My proposal was to make string lengths smaller.</p>
+<p>AWB: We don't want to make string lengths smaller</p>
+<p>DD: It would be nice if everything were as big as it could possibly be, but I don't have a problem with making it smaller</p>
+<p>AWB: The max size is implementation-dependent</p>
+<p>YK: It seems OK to just choose the lowest common denominator size</p>
+<p>BFS: It seems like large Arrays or Strings are important for some applications</p>
+<p>YK: We can just make those things use TypedArrays. Wouldn't you want to use binary data for such big things?</p>
+<p>WH: We'd need to shrink TypedArrays too if we're shrinking strings; otherwise we wouldn't get the consistency that's the whole motivation of this.</p>
+<p>EF: If we don't shrink TypedArrays, we wouldn't get a level paying field.</p>
+<p>AK: What is the motivation for this change, given that JSC already limits strings to 2^31?</p>
+<p>MS: It's consistency. In regular expressions, for split, we have to do these 53-bit calculations, but really strings are smaller</p>
+<p>AWB: For split, we made a change to use ToUint32 rather than ToLength, but we should've made it throw</p>
+<p>AK: that's a separate proposal</p>
+<p>AWB: It's gotten worse with recent changes</p>
+<p>DE: We've hit the timebox limit; Add this to the end of the agenda?</p>
+<p>MS: This isn't a hill for me to die on; i think it's something we should address, but not my #1 priority</p>
+<a href="#conclusionresolution-9if-unify-string-and-array-maximum-lengths"><h4 id="conclusionresolution-9if-unify-string-and-array-maximum-lengths">Conclusion/Resolution</h4></a><ul>
+<li>Not finished; will revisit</li>
+</ul>
+<a href="#9ih-standardize-dateutc-when-called-with--2-arguments"><h2 id="9ih-standardize-dateutc-when-called-with--2-arguments">9.i.h Standardize Date.UTC when called with &lt; 2 arguments</h2></a><p>(Brian Terlson)</p>
+<p>BT: All implementations except Edge return NaN for Date.UTC for &lt; 2 arguments, but Edge treats those missing arguments as 0.</p>
+<p>AWB: What discussion have we had before?</p>
+<p>BT: I couldn't find it. As Chakra is the only holdout, and we have no compelling reason, we're willing to return NaN. So I believe we should update the spec text and return NaN, and Chakra will do that.</p>
+<p>DT: Is this part of a more general principle?</p>
+<p>DD: Actually the spec had a specific cop-out there</p>
+<p>BT: OK, consensus on the change?</p>
+<p>AK: Are there test262 tests?</p>
+<p>BT: I'll write them! But I'll merge the Chakra PR first</p>
+<p>AWB: Why not actually make them optional like Chakra does? Maybe those are good semantics.</p>
+<p>YK: We're just standardizing what's there in browsers</p>
+<p>DD: Does anyone want to experiment?</p>
+<p>BT: We're shipping this already. I'm concerned about interoperability.</p>
+<p>YK: NaN is horrible and we should avoid letting it leak out into programs.</p>
+<p>DE: We can't generally be in the business of making bad arguments to things return useful values. Date uses NaN all over the place as a way to stand in for something having gone wrong. The Date library is horrible and legacy; our job should be to standardize what's there. The Date.parse presentation will show a significantly worse case than this, but we should standardize it anyway. Given that we have three browsers agreeing, we should just standardize that. I would be OK with standardizing the other behavior.</p>
+<p>WH: We shouldn't create a second Date library just to fix this, we should make this one good.</p>
+<p>WH: UTC(year) should return the first day of that year, just like UTC(year, month) returns the first day of that month. We know that works because Chakra does it.</p>
+<p>AWB: Oh, I see what's going on. This fills in a missing case from the Date overload. Date does something completely different when passed one argument than when it gets two.</p>
+<p>BT: Let's pick one of the two existing semantics, not something in between. Oh, wait, it's actually December 31, 1899</p>
+<p>DD: that's two-digit year 0, timezone-shifted</p>
+<p>DE: Sounds like Chakra's semantics are significantly bad</p>
+<p>BT: Let's standardize returning NaN now, and we could revisit it later.</p>
+<p>DE: Returning NaN is sorta like throwing an exception, so we could make it return a useful value later.
+DE: We are running into the timebox. Do we have consensus on the PR?</p>
+<p>WH: No. I think that, barring additional evidence, it would be good for the one-argument case to return the beginning of the year. I'm fine with NaN for the zero-argument case.</p>
+<p>AK: What would be the use case for this? is it worth it to ask implementations to make this change? We're making a normative change; there should be some reasonable motivation.</p>
+<p>BT: It's a grand compromise</p>
+<p>AWB: 1) Interoperability among implementations 2) Usability going forward--what would users expect? This is forward-looking, not backwards-looking.</p>
+<p>BT: That seems like a reasonable rational. Are other implementers reluctant to return a useful value for that case?</p>
+<p>AK: My point is a little higher-level, that if we are making normative changes, we should have a motivation for it.</p>
+<p>AWB: Good design aesthetics would be to revisit what things are, rather than just polling implementations</p>
+<p>AK: This is adding to the incompatibility for the future and churn.</p>
+<p>BE: It is what it was. I support the status quo, copying Java, returning NaN</p>
+<p>MS: I support returning NaN for less than two arguments, just because of the confusion that Date has 0 arguments, 1 arguments, and then 2 or more is just like Date.UTC</p>
+<p>AWB: The Date constructor has an overload for one argument, so it can't treat that as the year and be analogous to Date.UTC for the one-argument case.</p>
+<a href="#conclusionresolution-9ih-standardize-dateutc-when-called-with--2-arguments"><h4 id="conclusionresolution-9ih-standardize-dateutc-when-called-with--2-arguments">Conclusion/Resolution</h4></a><ul>
+<li>No consensus on the full change. The zero-argument change is agreed to return NaN, but disagreement about what the one-argument case</li>
+</ul>
+<a href="#9id-revisiting-nan"><h2 id="9id-revisiting-nan">9.i.d Revisiting NaN</h2></a><p>(Daniel Ehrenberg)</p>
+<p><a href="https://github.com/tc39/ecma262/issues/635">https://github.com/tc39/ecma262/issues/635</a></p>
+<p>Slides: <a href="https://docs.google.com/presentation/d/1eqimbmVpMZET_5H9NacVkXGP2WNATg8bXWi3Ky2bsGo/edit">https://docs.google.com/presentation/d/1eqimbmVpMZET_5H9NacVkXGP2WNATg8bXWi3Ky2bsGo/edit</a></p>
+<p>DE: (presenting slides)</p>
+<ul>
+<li>Some implementations fit pointers in NaN payloads, so canonicalize</li>
+<li>V8 does not do NaN tagging, so pointers are 32-bits on 32-bit archs</li>
+<li>Extra canonicalization writing into a TypedArray is a perf regression (see slide for link)</li>
+</ul>
+<p>Slide: &quot;What does ES2015 day about NaN?&quot;</p>
+<ul>
+<li><p>The Number Type
+&quot;to ECMAScript code, all NaN values are indistinguishable from each other&quot;</p></li>
+<li><p>SetValueInBuffer( arrayBuffer, byteIndex, type, value [ , isLittleEndian ] )
+&quot;An implementation must always choose the same encoding for each implementation distinguishable NaN value.&quot;</p></li>
+</ul>
+<p>DE: ok with: &quot;anytime you use SetValueInBuffer, use whatever you have&quot;</p>
+<p>&quot;Why would property writes make a new NaN?&quot;</p>
+<p>SetValueInBuffer ( arrayBuffer, byteIndex, type, value [ , isLittleEndian ] )</p>
+<ul>
+<li>V8's FAST_HOLEY_DOUBLE_ARRAY ElementsKind</li>
+<li>Sample code:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(<span class="hljs-number">6</span>)
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; x.length; i++) x[i] = <span class="hljs-number">0.5</span>
+</code></pre>
+<ul>
+<li>Initially &quot;filled with holes&quot; (missing properties), then entries are added
+V8 canonicalizes NaNs when setting elements into such an array so it can have a distinct &quot;hole&quot; NaN value</li>
+</ul>
+<p>WH: This is an instance of the general problem that implementations will sometimes do NaN-boxing and sometimes not within the same program, depending on code and data structure optimizations.</p>
+<p>DH: Easiest solution: maximally non-deterministic: allowed to non-deterministically change bit pattern
+Problem: many places possible to predict the bit pattern. Can convey information, want to preserve that preciseness.</p>
+<p>MM: Uncontrolled non-determinism of NaN bit pattern, depends on unspecified nullable</p>
+<p>(discussion re: intentionally evil implementations)</p>
+<p>WH: My view is that what NaN bit pattern you get should be unspecified. I understand MM's concern and wouldn't want them to be evilly unspecified, although I'm not sure if there is a reasonable way of expressing that.</p>
+<ul>
+<li>timebox ran out, discussion continued *</li>
+</ul>
+<p>DH: expectations:</p>
+<ul>
+<li>want implementation flexibility, use cases for changing bit patterns</li>
+<li>frozen properties, should not be able to reliably observe changes</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>NaNs carry around bit pattern,</li>
+<li>specific places can scramble</li>
+<li>specific places preserve</li>
+</ul>
+<p>EFT: Over the time box, no new points made</p>
+<p>MM: Don't understand the optimization in V8</p>
+<p>AK: I think this needs to be discuss offline?</p>
+<p>DH: (taking issue with time box)</p>
+<p>DH: Some predictable behavior that has changed over the years and some implementations are doing different things, new use cases.</p>
+<a href="#conclusionresolution-9id-revisiting-nan"><h4 id="conclusionresolution-9id-revisiting-nan">Conclusion/Resolution</h4></a><ul>
+<li>Allen, Mark, Dave, Waldemar, Dan to have discussion and come back for another time box discussion.</li>
+</ul>
+<p>(More discussion re: time box)</p>
+<a href="#9iia-objectgetownpropertydescriptors-when-a-proxy-returns-an-undefined-descriptor"><h2 id="9iia-objectgetownpropertydescriptors-when-a-proxy-returns-an-undefined-descriptor">9.ii.a Object.getOwnPropertyDescriptors: when a Proxy returns an undefined descriptor?</h2></a><p>(Jordan Harband)</p>
+<p>JHD: Any non-proxy, call built-in op claims foo in object, call Object.getOwnPropertyDescriptor(foo, &quot;prop&quot;), you get that property descriptor. Proxy can lie, which is problematic when passing the returned value from <code>Object.getOwnPropertyDescriptors(...)</code></p>
+<p>BT: Side-effecting proxies. If a proxy says &quot;no descriptor for this property&quot;, then there is none. Object.getOwnPropertyDescriptors(...) shouldn't be seen as the authority.</p>
+<ul>
+<li>Property should be skipped on the grounds that &quot;it doesn't exist&quot;</li>
+</ul>
+<p>MM: once an obj is not observable, ownkeys cannot give an answer that was not previously true</p>
+<p>DE: Cait Potter implemented both semantics and there are no noticeable differences.</p>
+<p>AWB: No guarantee once you get a descriptor that it remains valid to do something with it in the future - operations are unknown</p>
+<p>JHD: The change is: only properties with valid property descriptors are returned.</p>
+<a href="#conclusionresolution-9iia-objectgetownpropertydescriptors-when-a-proxy-returns-an-undefined-descriptor"><h4 id="conclusionresolution-9iia-objectgetownpropertydescriptors-when-a-proxy-returns-an-undefined-descriptor">Conclusion/Resolution</h4></a><ul>
+<li>Recommended change approved for merging the PR</li>
+</ul>
+<p>AWB: obligated to notify implementors?</p>
+<p>JHD: Implementors are aware and following progress</p>
+<a href="#9iib-objectenumerablekeysvaluesentries"><h2 id="9iib-objectenumerablekeysvaluesentries">9.ii.b Object.enumerable{Keys,Values,Entries}</h2></a><p>(Leo Balter &amp; John-David Dalton)</p>
+<p>LBR: Discussing <a href="https://github.com/leobalter/object-enumerables">https://github.com/leobalter/object-enumerables</a></p>
+<p>JDD: No built-in API that allows getting own and inherited properties</p>
+<p>EFT/DD: for loop?</p>
+<p>JDD: Want built-in functionality, not syntax</p>
+<p>DH: Something more?</p>
+<p>JDD: Allows a shim path.</p>
+<p>DH: An example?</p>
+<p>JDD: (showing an example in lodash)</p>
+<p>STH: Can't the shim write the for in loop?</p>
+<p>DD: Spec seems to treat objects as maps, but specifically objects and their prototype properties as values in the map</p>
+<p>JDD: (further examples, showing: <a href="https://github.com/leobalter/object-enumerables#use-cases">https://github.com/leobalter/object-enumerables#use-cases</a> )</p>
+<p>DH: Not impossible to write in library code?</p>
+<p>JDD: no, but not the point</p>
+<p>STH: Offers shim authors something to coordinate on to fix bugs in older browsers, but not sure we should be in the business of doing so.</p>
+<p>YK: It's rare to encounter an enumerable property on the prototype, it happens</p>
+<ul>
+<li>If there <em>are</em> properties on a class prototype that are enumerable</li>
+</ul>
+<p>AWB: Effectively creating for-in</p>
+<p>YK: Yes</p>
+<p>DD: Do we want to further encourage the programming model that these encourage?</p>
+<p>MM: (concurring, discussing value of such a feature)</p>
+<p>DH: A number of libraries want to use this functionality and it would be nice expose as built-in, but why not define in one library and that's that.</p>
+<p>AWB: Back to &quot;inherited, enumerable things&quot;. The only definition we have is via for-in</p>
+<p>DH: can also crawl the prototype chain</p>
+<p>AWB: then have to impose your own rules re: side effects</p>
+<p>BE: for-in is bad legacy</p>
+<p>&quot;Never invest in the trailing edge&quot;</p>
+<p>DD: Adding new features, in new browsers, to fix features in old browsers, is not what we should be doing.</p>
+<p>MM: I don't think this is going to get consensus</p>
+<a href="#conclusionresolution-9iib-objectenumerablekeysvaluesentries"><h4 id="conclusionresolution-9iib-objectenumerablekeysvaluesentries">Conclusion/Resolution</h4></a><ul>
+<li>No advance</li>
+</ul>
+<a href="#9iic-regexp-unicode-property-escapes"><h2 id="9iic-regexp-unicode-property-escapes">9.ii.c RegExp Unicode Property Escapes</h2></a><p>(Brian Terlson, Daniel Ehrenberg, Mathias Bynens)</p>
+<p><a href="https://github.com/mathiasbynens/es-regex-unicode-property-escapes">https://github.com/mathiasbynens/es-regex-unicode-property-escapes</a></p>
+<p>Slides: <a href="https://docs.google.com/presentation/d/1o31S9RqDdkoWW2zfPMNIZdPDIp25Rr0-XW0gro_cskk/edit">https://docs.google.com/presentation/d/1o31S9RqDdkoWW2zfPMNIZdPDIp25Rr0-XW0gro_cskk/edit</a></p>
+<p>DE: Expose more unicode data to RegExps</p>
+<ul>
+<li>Properties with values:
+<code>/\p{UnicodePropertyName=UnicodePropertyValue}/</code></li>
+<li>Binary properties:
+<code>/\p{LoneUnicodePropertyNameOrValue}/</code></li>
+<li>Inverse:
+<code>\P</code></li>
+</ul>
+<p>Example:</p>
+<p><a href="https://i.gyazo.com/0dcfc195d891a36c4b0c04d460cb5d72.png">https://i.gyazo.com/0dcfc195d891a36c4b0c04d460cb5d72.png</a>
+In text form: <a href="https://github.com/mathiasbynens/es-regexp-unicode-property-escapes#illustrative-examples">https://github.com/mathiasbynens/es-regexp-unicode-property-escapes#illustrative-examples</a></p>
+<p>DE: Have full spec text, implementation in V8, tests for V8 (need to be updated for test262)</p>
+<p>BT: If ok with deviating from what’s allowed inside <code>\u</code>, then we can overload <code>\u</code> instead of <code>\p</code></p>
+<p>DD: Are there conflicts with other languages and use of <code>\u</code>?</p>
+<p>WH: <code>\u</code> could be trouble if anyone comes up with classname consisting entirely of characters A-F</p>
+<p>DE: I can find out if this is an invariant that will be maintained. If it is, then we should use <code>\u</code>, otherwise <code>\p</code>. If Unicode advises us <em>not</em> to depend on existing <code>\u</code> invariants, then we won't</p>
+<p>DE: Stage 2?</p>
+<p>MF: Is there a syntax error when type any random character where in <code>/\p{UnicodePropertyName=UnicodePropertyValue}/</code>, <code>/\p{LoneUnicodePropertyNameOrValue}/</code> ?</p>
+<p>DE: No UnicodePropertyName syntactic restrictions in present spec</p>
+<p>Addendum by Mathias: a SyntaxError is thrown at runtime in such cases. But yeah, maybe these should trigger early errors instead? No strong opinion here.</p>
+<p>AWB: Need to specify the syntax</p>
+<p>WH: If we choose to use <code>\u{}</code>, then we must make unknown classes (or typos) into early errors because we need typos in hex numbers to be early errors. With <code>\p{}</code> we'd have a choice of standardizing on early or runtime errors.</p>
+<p>Revisiting String.prototype.normalize specification.</p>
+<p>This may need to be &quot;normative optional&quot;? Inclusion of new data tables may be problematic?</p>
+<p>Discussion re: ICU data, Unicode data on constrained devices.</p>
+<p>RW: When Tessel 2 moves to Node 6, we'll be shipping Node.js compiled with the disable flags, which means normalize is useless, but the additional data isn't included.</p>
+<p>AWB: Can define it such that, if the data is not available, the character set is empty</p>
+<p>DE: Stage 1?</p>
+<a href="#conclusionresolution-9iic-regexp-unicode-property-escapes"><h4 id="conclusionresolution-9iic-regexp-unicode-property-escapes">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1: Approved.</li>
+<li>YK wants confirmation about <code>\u</code></li>
+</ul>
+<a href="#9iid-async-functions-for-stage-4"><h2 id="9iid-async-functions-for-stage-4">9.ii.d Async Functions for Stage 4</h2></a><p>(Brian Terlson)</p>
+<p>BT: no updates, no changes</p>
+<ul>
+<li>Shipping in Edge</li>
+<li>Implementations in V8 and SpiderMonkey</li>
+</ul>
+<p>YK: Worried about cancellation?</p>
+<p>DD: Cancel token integrate well with async functions</p>
+<p>YK: Not at stage 2 with cancellation, hard to be sure that it's compatible</p>
+<p>KG: not sure it could change, given widepsread use in transpilation</p>
+<p>YK: (concerns with cancellation intuition)</p>
+<p>DE: the correct time for this was prior to stage 3</p>
+<p>YK: I made these objections then</p>
+<p>DE: I'm pretty optimistic about Domenic's cancellation specification</p>
+<p>DD: If I had held off on Cancel tokens, this would've made it to stage 4</p>
+<p>BT: Off topic.</p>
+<p>YK: Certain assumption that one can reasonably assume that an expression that exist can become abrupt</p>
+<ul>
+<li>Have to know that X cannot throw</li>
+<li>Cancellation exists, now X might throw</li>
+</ul>
+<p>WH: I'm trying to understand the concerns here. Should this proposal be blocked on the cancellation proposal advancing a few levels?</p>
+<p>WH: I hear vague uneasiness about interactions between async functions and cancellations, but need something more concrete to be able to judge the merits.</p>
+<p>BT: willing to postpone this until we know more about interaction with cancellation</p>
+<p>SP: Can we revisit this after cancellation?</p>
+<p>(Discussion, re: some people that object, that are apparently in the room, but aren't speaking)</p>
+<p>MM: concerns: === should never throw, typeof should never throw. I don't recall where cancellation would make await throw, where it previously would not throw.</p>
+<p>Was</p>
+<p>DD:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">await</span> f();
+        g();
+    } <span class="hljs-keyword">catch</span> (e) {
+        h();
+    }
+}
+</code></pre>
+<p>might call neither g nor h. But then there are other situations where neither g nor h is called. Use <code>finally</code> if you want cleanup code.</p>
+<p>DD: Objecting to the third</p>
+<p>JHD: If <code>f</code> is changed to return <code>new Promise(() =&gt; {})</code>, then both <code>g</code> and <code>h</code> will never run now, without cancellation existing - therefore if you expect <code>g</code> or <code>h</code> to always run, you are simply wrong, and your expectation is invalid.</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">await</span> f();
+        g();
+    } <span class="hljs-keyword">catch</span> (e) {
+        h();
+    }
+    i();
+}
+</code></pre>
+<p>DD: however, currently you can guarantee that either <code>g</code> or <code>h</code> will always run before <code>i</code>, and it's possible with cancellation that this might not hold.</p>
+<p>MM: the example here has nothing to do with something that was not abrupt, becoming abrupt</p>
+<ul>
+<li>A new way to be abrupt, in addition to the old way to be abrupt</li>
+</ul>
+<p>DH: If from scratch, no issue. The issue is that catch expectations no longer valid.</p>
+<p>DD: There is past precedent for moving ahead. We introduced proxies, which created objects that behaved outside the past invariants that code might have relied on. We introduced new typeof types with similar effect.</p>
+<p>JHD/EFT: No call site can be defensive against code it didn't write</p>
+<p>JHD: In the case of Promises, if you're returning a promise that you didn't create, in a <code>then</code>, you can't defend against it, because you can't know if the other promise will ever settle.</p>
+<p>(Questions about &quot;Third State&quot;)</p>
+<a href="#conclusionresolution-9iid-async-functions-for-stage-4"><h4 id="conclusionresolution-9iid-async-functions-for-stage-4">Conclusion/Resolution</h4></a><p>Will revisit after discussing cancels more; hopefully reshuffle non-timeboxed agenda items to enable that to happen in this meeting.</p>
+<a href="#9iie-math-extensions"><h2 id="9iie-math-extensions">9.ii.e Math extensions</h2></a><p>(Rick Waldron)</p>
+<p>RW: There are some nasty npm modules for these sorts of math functions. This comes up in IoT, cool animations, etc.  We could add some more functions to the standard library. This stuff happens over and over and over again; typing things into consoles.</p>
+<p>YK: leftPad went well</p>
+<p>RW: This falls into the leftPad box. This is putting down pavement where a cowpath once was.</p>
+<p>RW: Math.constrain: Could be called Math.clamp. Like Uint8ClampedArray. Very straightforward.</p>
+<p>RW: Math.map is just scaling x from one range to another</p>
+<p>YK: scale is better than map</p>
+<p>RW: Scale is my favorite actually; I didn't want to seem biased. fmap is the version where the result is converted to a float32.</p>
+<p>DD: Looks like it'll move x to the corresponding point in the 'out' linear range as it was in the 'in' range.</p>
+<p>RW: Yes</p>
+<p>DD: Why not just use fround composed with it? Is there a hardware operation for this?</p>
+<p>RW: No; we can take this or leave it</p>
+<p>AWB: Since we're doing multiplies, the fround won't end up commuting with the operations, so this won't get those efficiency advantages. This is specified to do double precision scaling. This is just a nice-to-have.</p>
+<p>DH: is every one on the list something that you found in other languages?</p>
+<p>RW: Yes, the readme has links to standard library features analogous to these in tons of other languages.</p>
+<p>MM: Shouldn't these be in a new built-in module?</p>
+<p>RW: I'd love to do that. If between now and 2017 lockout day, I will change the writing for that.</p>
+<p>DH: Part of your motivation is that it's trivially accessible from the console, and you can't import from the console.</p>
+<p>RW: If it's a built-in standard lib module</p>
+<p>DH: From the console, that extra line is a pain, and further, I can't see why we should be inconsistent with the other Math functions that exist. Seems silly to be out of sync with each other.</p>
+<p>DT: Built-in modules just in the console?</p>
+<p>MM: Seems like adding functions for radians and degrees when they are so trivial is just a waste of time.</p>
+<p>DD: I don't feel so strongly about this, but taking conversions for different unit systems takes Math in a totally different direction.</p>
+<p>RW: If you look at other languages, they include these conversions for radians/degrees and not other things</p>
+<p>STH: And degrees are unitless</p>
+<p>DD: They are not natural</p>
+<p>CM: But degrees are widespread as a notation</p>
+<p>DH: There's a high bar for adding something to the JavaScript standard library, given that our library is rather more limited. We do want to add things that are common enough.</p>
+<p>RW: And it's painful to install someone's bad npm library</p>
+<p>DH: We make these generic arguments about the benefits of standardizing functions, but we can't standardize all functions in npm. The argument should be, we know what the costs are, we know that we can't do it for everything, so we have to make the argument that these are extraordinarily common for important use cases.</p>
+<p>STH: Two other reasons why these functions have a strong claim: Unlike other domains, JavaScript has as reasonably strong Math standard library, for historical reasons, and so programmers expect Math.whatever to be the math standard library in a way that they don't expect for Strings or TCP connections. Second, these are things that are commonly in the standard library of other languages. Yet again, programmers expect, when they look for functions like the ones Rick is proposing, where their counterparts are in other languages.</p>
+<p>DD: I agree with these points, but maybe we should group these under &quot;Units&quot; and include time constants, also RAD PER_DEG not &quot;TO&quot;</p>
+<p>YK: I agree that time conversions are very common.</p>
+<p>RW: I'm asking for stage 1.</p>
+<p>JHD: Do we expect to devote time to the problem space?</p>
+<p>RW: Single-precision values are important because some datasheets ask for things to a certain precision. You want the rounding to happen in your own code, not implicitly when writing it into the actual register. But really, Math.fmap is not all that important.</p>
+<p>WH: I was wondering why we have fmap but not fmax, etc. What does this actually do?</p>
+<p>RW: It maps a range</p>
+<p>YK: We are interested in this subject; in stage 1 we can look into unit conversions generally</p>
+<p>DD: I feel really strongly that it shouldn't be in Math</p>
+<p>JHD: We don't have to come to all of these answers in order to get to Stage 1.</p>
+<p>RW: As part of Stage 1, I will document why these should go within Math</p>
+<p>MF: I want to define a selection criteria for math functions. This seems like a random bag.</p>
+<p>RW: I used subjective criteria, for what is the most painful in my everyday programming</p>
+<p>DH: Some possible selection criteria: 1) Incredibly high applicability 2) known hardware fastpaths</p>
+<p>DE: Or known VM fastpaths, like Object.values</p>
+<p>DH: Neither of those has anything to do with whether it's in Math. Domenic makes a good point that some of these don't belong in Math.</p>
+<p>WH: I would have expected math library extensions to include common math functions like the gamma function. Why aren't those in here?</p>
+<p>RW: That was my long list, but I pared it down. Maybe we should be including a lot of functions from other standard libraries.</p>
+<p>AWB: We went through a similar process in ES2015 where we made a big spreadsheet of various languages and functions, and chose what to add to Math based on that</p>
+<p>RW: How about looking at Racket and Python</p>
+<p>MF: We should look at rather broad datasources, like utility libraries for JS today, a number of different programming languages, etc</p>
+<p>DH: We should avoid the slippery slope that, if we do one thing, we do all the things. We should have a high bar</p>
+<p>DD: We shouldn't tell the champion that they need to add more than they want; they should be able to put in what they value</p>
+<p>AWB: Seems like this request is a valid input.</p>
+<p>RW: This is really robotics-driven</p>
+<p>WH: Last time, we got bogged down in specifying precision of math functions. How should we avoid that here?</p>
+<p>CM: If there are subtleties in the implementation, that's a good reason for standards.</p>
+<a href="#conclusionresolution-9iie-math-extensions"><h4 id="conclusionresolution-9iie-math-extensions">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+
+</body>

@@ -1,0 +1,641 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 28, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-28-2015-meeting-notes"><h1 id="july-28-2015-meeting-notes">July 28, 2015 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Waldemar Horwat (WH), István Sebestyén (IS), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Jonathan Turner (JT), Paul Leathers (PL), Chip Morningstar (CM), Vladimir Matveev (VM), Ron Buckton (RBN), Brian Terlson (BT), Alan Schmitt (AS), Ben Newman (BN), Mohamed Hegazy (MH), Abhijith Chatra (AC), Tom Care (TC), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Mike Pennisi (MP)</p>
+<hr>
+<a href="#introduction"><h2 id="introduction">Introduction</h2></a><p>BT: (logistics)</p>
+<p>AWB: I will chair until John N. arrives.</p>
+<a href="#adoption-of-agenda"><h2 id="adoption-of-agenda">Adoption of Agenda</h2></a><p>AWB: <a href="https://github.com/tc39/agendas/blob/master/2015/07.md">https://github.com/tc39/agendas/blob/master/2015/07.md</a></p>
+<p>YK: Propose that future agendas be organized by stage advancement</p>
+<p>(Agreement)</p>
+<p>IS: Need to add Ecma Secretariat items (Allen adds) like report from the GA.</p>
+<a href="#conclusionresolution-adoption-of-agenda"><h4 id="conclusionresolution-adoption-of-agenda">Conclusion/Resolution</h4></a><ul>
+<li>Approved</li>
+</ul>
+<a href="#approval-of-minutes-from-may-2015"><h2 id="approval-of-minutes-from-may-2015">Approval of Minutes from May 2015</h2></a><p>AWB: Posted on Github and es-discuss</p>
+<p>IS: Ecma is archiving (mirroring) the most significant documents from GitHub, like technical notes as well as summaries associated with the agendas.
+This practice should satisfy both the requirements of Ecma as an SDO as well as of Tc39.</p>
+<a href="#report-from-ecma-secretariat"><h2 id="report-from-ecma-secretariat">Report from Ecma Secretariat</h2></a><a href="#4i-status-of-isoiec-fast-track-of-ecma-262-ed6-ecma-402-ed2-and-ecma-404"><h2 id="4i-status-of-isoiec-fast-track-of-ecma-262-ed6-ecma-402-ed2-and-ecma-404">4.i Status of ISO/IEC Fast Track of ECMA-262 Ed.6, ECMA-402 Ed.2 and ECMA-404</h2></a><p>IS: Need an Ecma-262, Ecma-402 and Ecma-404 package &quot;Explanatory Report&quot;</p>
+<ul>
+<li>Next project is &quot;linking&quot; the three explanatory reports in one</li>
+<li>Then discussion on the fast track started</li>
+</ul>
+<p>AWB: Can we push through our current documents, as-is? Without changes?</p>
+<p>IS: Similar to 5.0 -&gt; 5.1, editorial changes allowed. Any technical changes, no. Concerns about stability.</p>
+<p>AWB: Concerns about an ISO document that says one thing, vs. the Ecma document that says another.</p>
+<p>IS: Can disallow discrepancies, therefore it is always the policy to synchronize the standard on both sides</p>
+<p>WH: What happens if the ISO reviewers discover technical issues?</p>
+<p>IS: The problem is that the yearly update for JTC1 might to be too fast. We are elaborating on them. Theoretically worst case, we withdraw the &quot;fast track&quot;</p>
+<p>WH: [incredulous] Withdraw instead of fixing bugs? That wouldn't be nice.</p>
+<p>IS: (explains why fast track). We have started this about 17 years ago, as long TC39 came out with big time gaps between Edition, no problem, but the current &quot;turbo speed&quot; like standardization (update) may create problems in synchronization. we are discussing this new thing with ISO.</p>
+<p>AWB: Good to communicate to ISO</p>
+<ul>
+<li>We appreciate technical feedback</li>
+<li>Feedback will be put into the next edition as part of the on going process</li>
+</ul>
+<p>IS: Explained to Rex Jaeschke (JTC1 SC22 Chair) the new schedule. Normally ISO likes to update standards every three years, have expressed our one year schedule plans.</p>
+<p>WH: Afraid ISO might not like &quot;take it or leave it&quot;.  In the past, we got excellent technical reviews from them and have integrated the changes into the ISO standard and to the Ecma standard.</p>
+<p>AWB: But that would be next June</p>
+<p>WH: That's how we've always done it. The ISO version was a year behind the ECMA version. If we don't integrate the known defect fixes, the ISO version would be multiple years behind ECMA.</p>
+<p>AWB: Ignoring unknown issues, we have 5 or 6 technical issues that could comprise a 6.1</p>
+<p>RW: If we have a yearly release for full edition points, perhaps we can also include a 6 month &quot;sub release&quot; to address minor changes to current</p>
+<p>YK: Not unreasonable when the work is done by a group using shared tools</p>
+<p>IS: Theoretically in Ecma we could have a 6 month correction cycle (TC52 Dart uses that). Depends on TC39 what they want.</p>
+<p>AWB: What does the GA think about doing this process every six month?</p>
+<p>IS: no problem there, this could be reasonable solution, for Dart it has been accepted. Of course Impose a deadline of 2 months before December GA meeting for the version to be voted upon and published.</p>
+<p>RW: Can correspond with our September meeting.</p>
+<p>IS: (agreed)</p>
+<p>AWB: Trivial to make minor changes, willing to work through the first round as we transition editorship.</p>
+<ul>
+<li>Need to decide this meeting and produce a draft for approval at next meeting.</li>
+<li><a href="https://bugs.ecmascript.org/describecomponents.cgi?product=ECMA-262%20Edition%206">https://bugs.ecmascript.org/describecomponents.cgi?product=ECMA-262%20Edition%206</a></li>
+</ul>
+<p>RW: Does this need to include the ISO review comments (Waldemar's concern)</p>
+<p>YK: Would like to come back to this after we have a more in depth discussion about the future of our tooling.</p>
+<p>Discussion about what we produce.</p>
+<p>AWB: We can produce errata any time, but it's not the standard</p>
+<p>DD: If we have the base covered, avoiding shipping bugs, do we publish errata every year or every six month?</p>
+<p>WH: It's not ok to ship a standard with known defects. We can publish standards on whatever schedule we want, but anything we publish should have all known defects fixed.</p>
+<p>YK: Think &quot;annual&quot; is enough time to fix bugs</p>
+<p>AWB: The issue is ISO. There is concern about divergence between those two documents (ISO document with changes made by their reviewers, Ecma version)</p>
+<p>BT/IS clarifying why we need ISO version?</p>
+<p>BT: Why?</p>
+<p>WH: There are benefits to ISO publication</p>
+<p>AWB: There are organizations that may require</p>
+<p>IS: Public procurement, if it's an Ecma standard, maybe problematic. ISO is in the &quot;highest level&quot; of international standard category.</p>
+<p>BT: Are there concrete examples of using ISO specification over Ecma?</p>
+<p>(Spending too much time on something we don't know the value of)</p>
+<p>DD: Propose that we don't do this process unless an external request for it is made.</p>
+<p>IS: We are already for 17 years in this process, and it is expected that we continue for future editions as well. So this is automatic and not exteranl request is needed.  How to explain why ES 1, 2, 3, 5 &amp; 5.1 are ISO standards, but 6 and 7 etc. not and what if Ecma is already e.g. at 7 and ISO still on 5.1?.</p>
+<p>Can we be forced to do this?</p>
+<p>IS: Yes, the current rule for synchronization &quot;forces&quot; it.</p>
+<p>YK: (clarify) Once we issue <em>any</em> ISO spec, we're required to maintain?</p>
+<p>Several &quot;yes&quot;</p>
+<p>WH: We don't want to destroy the relationship between Ecma and ISO</p>
+<p>STH: How does is hurt to not create ES 6.1?</p>
+<p>YK: ISO was ok with a two year wait for 5 to 5.1, should be ok with a year between 6 and 7</p>
+<p>WH: But much longer since 5.1</p>
+<p>AWB:</p>
+<ul>
+<li>Errata?</li>
+</ul>
+<p>Discussion re: schedule, responsibilities, etc.</p>
+<p>AWB: We will submit to ISO, with exact same text (subject to ISO naming, etc). But the text will include any known errors.</p>
+<p>WH: No, they have to be fixed. I'm not ok with shipping standard with defects known to us.</p>
+<p>DD: We agreed to fast track at the last meeting and Waldemar is now disagreeing?</p>
+<p>WH: Incorrect</p>
+<p>DD: You said you won't allow us to fast track with defects</p>
+<p>WH: No, we <em>must</em> fix defects</p>
+<p>STH: Why does fast track require fixing errata?</p>
+<p>WH: Not a lot of work</p>
+<p>DD: You're saying that you no longer agree to fast track</p>
+<p>WH: We will get comments from ISO reviewers, these will identify defects, these need to be fixed. It is our job to fix</p>
+<p>CM: Exactly the proposal: take the existing text and put it in the pipeline and publish the errata later.</p>
+<p>YK: Treat ISO as an LTS?</p>
+<p>WH: That's <em>what</em> it is</p>
+<p>DD: Can we have members of the committee that are responsible for incorporating the errata, as a separate task.</p>
+<p>AWB: That's the editor's job. Incorporating errata is not a lot of work.</p>
+<p>RW: This is exactly my suggestion, but with a schedule requirement.</p>
+<p>Discussion about who and how.</p>
+<p>AK/JT: What is the cut off for known defects?</p>
+<p>DD: Suggest that we let whoever volunteers be responsible for making those decisions</p>
+<p>YK: With better tooling, we could really just do this as branches in a repository where all work is tracked.</p>
+<p>AWB: Don't think that any editorial difficulty. Bigger isssue: what are we going to do with ISO on a regular basis? Yearly ISO and it's the same document?</p>
+<p>BT: Agreed.</p>
+<p>AWB: Ideally we'd have &quot;fast track authority&quot;, submit the Ecma document and they either take it or leave it.</p>
+<p>YK: Can we revisit this after we've read the agenda items? (Specifically item 5)</p>
+<p>AWB: That item is Editorship?</p>
+<p>YK: That seems to determine tooling.</p>
+<p>JN: Assignment of Editorship role.</p>
+<p>BT/AWB: Yearly release, give them to ISO without change, accept them as is. Take their changes and roll them into next year's edition.</p>
+<p>WH: This is agreed to an incorrect assumption. All ISO comments must be addressed.</p>
+<p>IS: That's correct. That's required by the ISO process.</p>
+<p>BT: If István can convince ISO to accept yearly releases &quot;as-is&quot;, are you ok with this?</p>
+<p>WH: If ISO can accept as-is, then let's discuss this again, but I don't think they can</p>
+<p>IS: I told ISO at the last meeting that we are moving much faster and that we need to create a new way to submit. This is a way to handle that and I can present it to them as a solution. Normally, they don't update until every 3 years. I pointed out the issue with their timeline and they agreed. This is a possible solution and I will work with them to sort out this problem.</p>
+<p>WH: Are they ok with not making comments?</p>
+<p>IS: From some members, but not all, awaiting final word.</p>
+<p>WH: Not ok with making decision until we know where they stand.</p>
+<a href="#conclusionresolution-4i-status-of-isoiec-fast-track-of-ecma-262-ed6-ecma-402-ed2-and-ecma-404"><h4 id="conclusionresolution-4i-status-of-isoiec-fast-track-of-ecma-262-ed6-ecma-402-ed2-and-ecma-404">Conclusion/Resolution</h4></a><ul>
+<li>Yearly release, given to ISO without change, to accept as is.</li>
+<li>No sub releases</li>
+<li>Publish errata as follow up</li>
+<li>Take their reivew comments/changes and integrate them into next year's edition.</li>
+<li>István will present this to ISO as a solution</li>
+</ul>
+<a href="#propose-life-membership-for-allen-wirfs-brock"><h2 id="propose-life-membership-for-allen-wirfs-brock">Propose Life Membership for Allen Wirfs-Brock</h2></a><p>(Rick Waldron)</p>
+<p>RW: As we have for Brendan, I'd like to propose inviting Allen Wirfs-Brock as a lifetime member of TC39</p>
+<p>IS: Such a category does not exists officially at Ecma, only some freedom for the Secretary General to allow partication as invited expert. He will bring this to Ecma Management for seeking agreement. This is a special case, and I am confident.</p>
+<a href="#conclusionresolution-propose-life-membership-for-allen-wirfs-brock"><h4 id="conclusionresolution-propose-life-membership-for-allen-wirfs-brock">Conclusion/Resolution</h4></a><ul>
+<li>István to get approval</li>
+</ul>
+<a href="#5-ecma-262-editorship"><h2 id="5-ecma-262-editorship">5 ECMA-262, Editorship</h2></a><p>JN: Need to appoint a new editor, only one volunteer has come forward and that's Brian Terlson.</p>
+<ul>
+<li>Motion to appoint Brian</li>
+</ul>
+<p>YK/RW: Seconded</p>
+<p>JN: Discussion?</p>
+<p>WH: Do you see your approach as different from Allen?</p>
+<p>BT: Only in that I'm a different person, but generally the same. I'm not Allen, but I will do my best.</p>
+<p>AWB: Appropriate to also appoint a manager for the content that we're producing.</p>
+<a href="#conclusionresolution-5-ecma-262-editorship"><h4 id="conclusionresolution-5-ecma-262-editorship">Conclusion/Resolution</h4></a><ul>
+<li>Brian Terlson is new editor of Ecma-262</li>
+<li>Unanimous consent</li>
+</ul>
+<a href="#discussion-of-the-manager-role"><h2 id="discussion-of-the-manager-role">Discussion of the Manager Role</h2></a><p>AWB: Useful to have some web content which will need a manager</p>
+<p>Discussion, re: content manager</p>
+<p>&quot;web master&quot;</p>
+<p>IS: Need procedures to archive the github material</p>
+<p>AWB: Unless someone wants to volunteer now, then let's resolve to appoint someone by the next meeting.</p>
+<p>JN: Allen please generate a &quot;job description&quot;</p>
+<a href="#conclusionresolution-discussion-of-the-manager-role"><h4 id="conclusionresolution-discussion-of-the-manager-role">Conclusion/Resolution</h4></a><ul>
+<li>Allen will produce a &quot;job description&quot;
+<ul>
+<li>Coordinate with Brian</li>
+</ul></li>
+<li>Submit to member companies for review</li>
+<li>Member appointed to the position at next meeting</li>
+</ul>
+<a href="#exponentiation-operator"><h2 id="exponentiation-operator">Exponentiation Operator</h2></a><p>(The room is very excited about technical discussion finally starting.)</p>
+<p>RW: SpiderMonkey is ready; V8 is ready; spec material is ready <a href="https://rwaldron.github.io/exponentiation-operator/">https://rwaldron.github.io/exponentiation-operator/</a>; it meets the requirements for stage 3</p>
+<p>WH: This is incomplete; it is missing details on the lexical grammar.</p>
+<p>RW: Agreed; I can address that issue before the end of this session. Perhaps we can revisit in the coming days.</p>
+<p>DH: Let's avoid a precedent that if anyone finds any minor hole, they can stop advancement.</p>
+<p>WH: This is an issue of completeness</p>
+<p>DH/BT: The resolution of this problem is obvious and trivial to implementors</p>
+<p>AWB: We need to improve the process document to include expectations for reviewership</p>
+<p>DD: The process document is now published as an HTML document in an public repository on GitHub.com. I have migrated it from Google Docs with no changes to content. I have opened two issues to discuss details that have historically vexed this committee.</p>
+<p>WH: I have no doubt that you can address this by the end of this meeting.</p>
+<p>RW: I am literally done.</p>
+<p>BT: We have agreed that technical issues should not block advancement to Stage 3. Does anyone object to advancement?</p>
+<p>AWB/DH: We have technical questions, but they have no bearing on advancement to Stage 3.</p>
+<p>(break for lunch)</p>
+<a href="#conclusionresolution-exponentiation-operator"><h4 id="conclusionresolution-exponentiation-operator">Conclusion/Resolution</h4></a><ul>
+<li>Approved for stage 3</li>
+</ul>
+<a href="#62-regexpescape"><h2 id="62-regexpescape">6.2 RegExp.escape</h2></a><p>(Domenic Denicola)</p>
+<p><a href="https://github.com/benjamingr/RegExp.escape">https://github.com/benjamingr/RegExp.escape</a></p>
+<p><a href="http://slides.com/benjamingruenbaum/regexp-escape">Slides</a></p>
+<p>DD: (presents slides)</p>
+<p>YK: Don't make user think about escaping.</p>
+<p>AWB: Generate a complete regexp from string. Append cases</p>
+<p>WH: What does it mean to create a regexp from a string? (w/r to Proposal Ruled Out)</p>
+<p>AWB: Regexp construction that will exactly match</p>
+<p>YK: A simple example: a lexer, the lexemes provided as a string</p>
+<p>DD:</p>
+<p>SyntaxCharacter Proposal</p>
+<ul>
+<li>Escapes string just enough to be used as a RegExp</li>
+</ul>
+<p>AWB: Used as argument to the RegExp constructor</p>
+<p>DD: yes</p>
+<p>Safe With Extra Escape Set</p>
+<ul>
+<li>Escapes everything the SyntaxCharacter proposal does</li>
+<li>Escapes <code>-</code> addl. for the context sensitive inside-character-class matching</li>
+<li>Escapes hex numeric literals (0-9a-f) at the start of the string in order to</li>
+<li>Less readable output but safer</li>
+</ul>
+<p>WH: Escaping <code>d</code> by replacing it with <code>\d</code> completely changes its meaning. The latter matches any digit but not the letter 'd'.</p>
+<p>YK: Issue is <code>RegExp.escape(...)</code> what?</p>
+<p>WH: Second use case (<a href="https://github.com/benjamingr/RegExp.escape/blob/master/EscapedChars.md">https://github.com/benjamingr/RegExp.escape/blob/master/EscapedChars.md</a>, <code>0-9a-fA-F</code>) is not useful. There is no good reason for someone to concatenate the erroneously short (three digits instead of four) <code>\u004</code> to user-defined input. The first use case there is also not common.</p>
+<p>MF: Should be a <code>RegExp.compose</code>, not use <code>+</code> to concatenate strings for <code>RegExp()</code></p>
+<pre><code><span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">"\\u004"</span>)
+</code></pre>
+<p>AWB: illegal in the grammar, but allowed in the annex extentions (annex b grammar allows &lt; 4 characters following the <code>\\u</code>)</p>
+<p>WH: Why would you do this on purpose?</p>
+<p>WH: How do you escape these things? <code>\d</code>, or  <code>\0</code> which does not mean <code>0</code></p>
+<p>MM: Issue about fragment hazards, not using + for composition. I actually think that a template string tag is the solution</p>
+<p>DD: Extended &quot;Safe&quot; Proposal, Allen had concerns?</p>
+<p>AWB: ES5 takes efforts to roundtrip the string returned for a regex has forward slashes</p>
+<p>WH: RegExp's toSource creates a string that, when eval'ed, produces a valid RegExp</p>
+<p>DD: No change to output of <code>RegExp.prototype.toString</code></p>
+<p>DD: <a href="https://github.com/benjamingr/RegExp.escape/issues/4">https://github.com/benjamingr/RegExp.escape/issues/4</a> explains why not a template string tag, but reviewing now, the arguments are not strong</p>
+<p>MM: You get the escape functionality in terms of the template string tag.</p>
+<p>MF: Concerns about unnecessary escaping</p>
+<p>DD:</p>
+<p>WH: Readability costs. Don't want RegExp.escape to turn '7' into '\u0037'.</p>
+<p>MM: template string doesn't have those costs</p>
+<p>DD: cannot compose a variable number of strings together with template string tag</p>
+<p>YK: Assumes certain amount of &quot;static-ness&quot;.</p>
+<p>... Would like to see an injection scenario that seems realistic.</p>
+<p>DD: it's possible, it can happen. Reasonable for a TC created solution to address all the cases. All we need to do is address all of the cases presented, at the beginning of the string</p>
+<p>AWB: Why do we thing there is one <code>escape</code> function that covers all cases?</p>
+<p>WH: Whoever is writing the things that are not escapes, limits themselves to a subset of &quot;well behaved regexp&quot;. In a well-behaved regexp:</p>
+<ul>
+<li>don't end it with a single \</li>
+<li>don't end it with \u002</li>
+<li>don't end it with \1</li>
+<li>don't end it with (?</li>
+<li>etc.</li>
+</ul>
+<p>DD: What if you want to match backreference \1</p>
+<p>WH: If you want to do it just before a concatenation point, write it as (?:\1). A trailing backreference is such a rare case, this is a reasonable constraint to do to simplify readability of all escaped strings that start with digits.</p>
+<p>MM: Object to template string solution?</p>
+<p>WH: No. My argument is orthogonal to whether we use template strings or RegExp.escape. Object to escaping individual non-punctuation characters a, b, c, d, e, f, 0, 1, 2, 3, 7...</p>
+<p>DD: Objection to any proposal but the SyntaxCharacter Proposal?</p>
+<p>WH: No. Fine with other punctuation-escaping-only variants such as also escaping '/' if we choose to do so.</p>
+<p>YK: Does SyntaxCharacter escape <code>-</code>?</p>
+<p>DD: No</p>
+<p>YK: That's a mistake</p>
+<p>AWB: SyntaxCharacter has specific meaning</p>
+<p>DD: Current thing on table: SyntaxCharacter and hyphen</p>
+<ul>
+<li>Advocate for whitespace?</li>
+</ul>
+<p>YK: Why?</p>
+<p>DD: eval</p>
+<p>Discussion re: template string availability</p>
+<p>DD: Proposal coming from people that need to ship code to non-edge browsers</p>
+<p>YK: Use today? Library code.</p>
+<p>DD: Has been a request for a long time, give what's requested even if unsafe? Give them what they want plus things that make it safe? or make a new thing from template strings.</p>
+<p>Discussion, re: issues with template strings in this use case</p>
+<p>YK: Maybe template string API is flawed and needs work to be dynamic</p>
+<p>MM: Agreed with need.</p>
+<p>CM: this output from one piece of code to another</p>
+<p>STH: The spec can say &quot;the output looks like literally the input&quot;</p>
+<p>YK: People will then rely on it</p>
+<p>STH: State the goal, then go back and specify to reach the goal.</p>
+<p>DD: We've done this, and the constraints are illustrated <a href="https://github.com/benjamingr/RegExp.escape/blob/master/EscapedChars.md">https://github.com/benjamingr/RegExp.escape/blob/master/EscapedChars.md</a></p>
+<p>MM: What is the motivation for readable output?</p>
+<p>BE/YK: Debugging</p>
+<p>MM: Ok, then issue is debugging vs creating less bugs?</p>
+<p>DD: Then escape everything</p>
+<p>YK/MM: Agreed</p>
+<p>DD: Any objections to escape everything?</p>
+<ul>
+<li>There's been a lot of work so far</li>
+<li>Can we continue on this path?</li>
+<li>Preference for template strings?</li>
+</ul>
+<p>MM: I think the template string proposal is better in all dimensions</p>
+<p>YK: Maybe do both?</p>
+<ul>
+<li>Safe version of <code>RegExp.escape</code></li>
+<li>Template String solution</li>
+</ul>
+<p>AWB: Stage 1? Will the champions know that this could change from RegExp.escape to template strings?</p>
+<p>DD: Want to say that <code>RegExp.escape</code> can move forward for now</p>
+<p>YK: ?</p>
+<p>MM: template strings handle all of the malformed fragment cases</p>
+<ul>
+<li>Small list completely safe?</li>
+</ul>
+<p>AWB: and is 100% convinced is safe?</p>
+<p>MM: eval thing is safer than</p>
+<p>DD: &quot;only beginning of string&quot;</p>
+<p>WH: What mark is suggesting conflicts with what I was saying</p>
+<p>YK: What is the constraint?</p>
+<p>WH: Readability</p>
+<p>Ok to escape everything, but don't have to</p>
+<p>MM: Rather not inro hazards, ok with either solution that doesn't</p>
+<p>DD: Ok to advance is escape everuthing?</p>
+<p>WH: if we don't, escape everything, unnecessary to escape &quot;d&quot; at the beginning of string</p>
+<p>DD: This has been identified as a security issue</p>
+<p>WH: it does't buy anything and there are others that aren't covered.</p>
+<p>DD: Can you give example</p>
+<p>WH:</p>
+<pre><code><span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">"\\"</span> + <span class="hljs-built_in">RegExp</span>.escape(<span class="hljs-string">"x"</span>))
+</code></pre>
+<p>MM: &quot;\&quot; is a regexp fragment.</p>
+<p>WH: Yes (in this case), but in practice so what? There's nothing in the concatenation example that would ensure you only concatenate complete fragments.</p>
+<p>MM: Right, this is still a security issue. Unresolvable by escaping due to the odd-even problem.</p>
+<p>DD: Ok, the point was to handle all cases</p>
+<p>YK: Non capturing parens solution</p>
+<pre><code><span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">"\\\\(?:x)"</span>)
+</code></pre>
+<p>WH: Stick to well-behaved</p>
+<p>Each case fails where another does not. Template strings address all issues, but fails for not being dynamic</p>
+<p>MM: Would Benjamin be interested in pursuing the template string solution.</p>
+<p>DD: Will bring this to Benjamin</p>
+<p>?: Need to work to resolve the caveats in RegExp.escape.</p>
+<p>WH: The caveats of protecting against all possible prefixes are inherent and irremovable. I want RegExp.escape to move forward despite those. It's safe for concatenating arbitrary escaped user input with well-behaved regexp fragments.</p>
+<p>MM: I'm not ok</p>
+<a href="#conclusionresolution-62-regexpescape"><h4 id="conclusionresolution-62-regexpescape">Conclusion/Resolution</h4></a><ul>
+<li>dynamic solution that has caveats</li>
+<li>caveats cannot be eliminated</li>
+<li>not confident that all issues can be addressed</li>
+<li>want to see template string solution explored</li>
+</ul>
+<a href="#6i-advance-arrayprototypeincludes-to-stage-3"><h2 id="6i-advance-arrayprototypeincludes-to-stage-3">6.i Advance Array.prototype.includes to stage 3</h2></a><p>(Domenic Denicola)</p>
+<p><a href="https://github.com/tc39/Array.prototype.includes">https://github.com/tc39/Array.prototype.includes</a></p>
+<p>DD: Walking through <a href="https://github.com/tc39/Array.prototype.includes/issues/12">https://github.com/tc39/Array.prototype.includes/issues/12</a></p>
+<a href="#conclusionresolution-6i-advance-arrayprototypeincludes-to-stage-3"><h4 id="conclusionresolution-6i-advance-arrayprototypeincludes-to-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Approved Stage 3</li>
+</ul>
+<a href="#introduce-promise-rejection-tracking-proposal"><h2 id="introduce-promise-rejection-tracking-proposal">Introduce promise rejection tracking proposal</h2></a><p>(Domenic Denicola)</p>
+<p><a href="https://github.com/domenic/unhandled-rejections-browser-spec#changes-to-ecmascript">https://github.com/domenic/unhandled-rejections-browser-spec#changes-to-ecmascript</a></p>
+<p>DD: (introduction)</p>
+<p>YK: (summarizing) Some want to be notified when a Promise is rejected without an error handler</p>
+<ul>
+<li>Will be used as if any promse without an immediate handler to treat as a fatal error</li>
+</ul>
+<p>MM: prefer this to solution had consider</p>
+<p>YK: Easily be used incorrectly</p>
+<p>BE: Regardless of our intentions, it will be misused</p>
+<ul>
+<li>What do you do with the promise?</li>
+</ul>
+<p>DD: Use to correlate</p>
+<ul>
+<li>dedupe on client</li>
+</ul>
+<p>Discussion, re: potential hazards</p>
+<p>YK: People often try to deal with promise debugging incorrectly</p>
+<p>MM: This provides diagnotistic tools that allow for better debugging</p>
+<p>YK:</p>
+<p>MM: Instead of using the turn boundary, await gc, but gc may never happen</p>
+<ul>
+<li>Intead of calling something to notify, a query API: did a promise get rejected? provide reason</li>
+</ul>
+<p>DD: (refocusing) All I'm hoping for is the addition of these non-observable steps to the specification (showing <a href="https://github.com/domenic/unhandled-rejections-browser-spec#promise--executor-">https://github.com/domenic/unhandled-rejections-browser-spec#promise--executor-</a> )</p>
+<p>AWB: Nothing there that an implemenation couldn't do in terms of the current spec, it's totally allowed.</p>
+<p>DD: You'd have to say &quot;insert steps here&quot;</p>
+<p>AWB: When putting in the hooks, we more than say &quot;this is allowed&quot;, we're saying &quot;this is supported&quot;</p>
+<p>BE: This is more like a debugger API</p>
+<p>Agree</p>
+<p>YK/MM: An innocent refactoring to register a rejection handler</p>
+<p>MM: The utility of having a diagnostic outweighs the noise of introducing</p>
+<p>DD: There is no delay, occurs immediately, at the earliest step possible</p>
+<p>MM: If I call Promise.reject?</p>
+<p>DD: Will trigger the HostPromiseRejectionTracker</p>
+<p>YK: Persuaded by Mark's argument</p>
+<p>Discussion, re: .done</p>
+<p>AWB: Different promise's can have different handlers? No</p>
+<p>AWB: no reason an implementation needs to define HostPromiseRejectionTracker, so a default handler should be specified.</p>
+<p>DD: Didn't see something like that</p>
+<p>YK: Move to stage 2, because already implemented.</p>
+<p>Discussion, re: stage process? Yes.</p>
+<a href="#conclusionresolution-introduce-promise-rejection-tracking-proposal"><h4 id="conclusionresolution-introduce-promise-rejection-tracking-proposal">Conclusion/Resolution</h4></a><ul>
+<li>Specify a default handler</li>
+<li>Filed: <a href="https://github.com/domenic/unhandled-rejections-browser-spec/issues/14">https://github.com/domenic/unhandled-rejections-browser-spec/issues/14</a></li>
+<li>Non-normative note: &quot;If operation is &quot;handle&quot;, it must not hold a reference to promise in a way that would interfere with garbage collection.&quot;</li>
+<li>Filed: <a href="https://github.com/domenic/unhandled-rejections-browser-spec/issues/15">https://github.com/domenic/unhandled-rejections-browser-spec/issues/15</a></li>
+<li>Approved for stage 2</li>
+</ul>
+<a href="#9-tooling-updates"><h2 id="9-tooling-updates">9 Tooling Updates</h2></a><p>(Brian Terlson)</p>
+<p><a href="tooling-updates.pdf">Slides</a></p>
+<p>BT:</p>
+<p>Grammarkdown (Grmd)</p>
+<ul>
+<li><a href="http://github.com/rbuckton/grammarkdown">http://github.com/rbuckton/grammarkdown</a></li>
+<li>Plain text syntax for specifying ECMAScript grammar</li>
+<li>Support for multiple emitters—MD, HTML, Emu</li>
+<li>Example</li>
+</ul>
+<p>AsyncArrowFunction[In, Yield] ::
+<code>async</code> [no LineTerminator here] AsyncArrowBindingIdentifier[?Yield] [no LineTerminator here] <code>=&gt;</code> AsyncConciseBosy[?In] #1</p>
+<p>MM: Can I use this standalone?</p>
+<p>BT: Sure, but it's just part of Emu</p>
+<p>Ecmarkup (Emu)</p>
+<ul>
+<li>Emu-xref for cross-references</li>
+<li>Emu-production references</li>
+<li>Emu-syntax element supports Grammarkdown</li>
+<li>In use by SIMD, Intl 2.0, Async Function and others</li>
+<li>Michael Dyck now maintaining es-spec-html, working on high-fidelity emu output</li>
+<li>Next steps:</li>
+<li>Unclock authoring of new specs and porting of 262</li>
+<li>New EMD processing model</li>
+<li>Continue improving authoring tools</li>
+<li>Emd 3.0</li>
+</ul>
+<p>AWB: note that the Python program that Jason wrote has evolved</p>
+<p>Ecmarkdown (Emd)</p>
+<ul>
+<li>Working towards 3.0 release</li>
+<li>Hand written parser</li>
+<li>Support for parsing entre documents (not just single paragraph/list or fragment)</li>
+<li>Support for more Markdown-like syntax</li>
+<li>Bullet lists</li>
+<li>Backslash escape</li>
+<li>Next steps:</li>
+<li>Unblock authoring of new specs and porting exsting spec</li>
+<li>Syntax for links</li>
+<li>Smart quotes</li>
+</ul>
+<a href="#66-bindingrestelement-should-allow-a-bindingpattern-ala-assignmentrestelement"><h2 id="66-bindingrestelement-should-allow-a-bindingpattern-ala-assignmentrestelement">6.6 BindingRestElement should allow a BindingPattern ala AssignmentRestElement</h2></a><p>(Brian Terlson)</p>
+<p><a href="binding-rest-element.pdf">Slides</a></p>
+<p>BT: AssignmentRestElement allows destructuring, BindingRestElement throws. Destructure rest on assignment, but not on binding</p>
+<ul>
+<li>Historic accident</li>
+<li>Bug filed on error thrown by having an array lutera after a rest</li>
+<li><a href="https://bugs.ecmascript.org/show_bug.cgi?id=3361">https://bugs.ecmascript.org/show_bug.cgi?id=3361</a></li>
+</ul>
+<p>Possible Avenues</p>
+<ol>
+<li>Keep as is</li>
+<li>Remove support for a bunding pattern in a rest element</li>
+<li>Align AssignmentPattern with BindingPattern to allow further destructuring of the rest element</li>
+</ol>
+<p>BindingRestElement[Yield] :
+<code>...</code> BindingIdentifier[?Yield]
+<code>...</code> BindingPattern[?Yield]</p>
+<p>Plus necessary statc and runtime semantics to align with BindingPattern</p>
+<p>MM: Made and fixed this error in <a href="http://research.google.com/pubs/pub43462.html">http://research.google.com/pubs/pub43462.html</a></p>
+<ul>
+<li>Any reason to not do the general orthogonal thing?</li>
+</ul>
+<p>BT: No</p>
+<p>BT: Babel already treats the same</p>
+<a href="#conclusionresolution-66-bindingrestelement-should-allow-a-bindingpattern-ala-assignmentrestelement"><h4 id="conclusionresolution-66-bindingrestelement-should-allow-a-bindingpattern-ala-assignmentrestelement">Conclusion/Resolution</h4></a><ul>
+<li>Align AssignmentPattern with BindingPattern to allow further destructuring of the rest element</li>
+</ul>
+<a href="#67-new--generatorfunction"><h2 id="67-new--generatorfunction">6.7 new &amp; GeneratorFunction</h2></a><p>(Brian Terlson)</p>
+<p><a href="new-generator-function.pdf">Slides</a></p>
+<p>BT:</p>
+<p>Current Semantics:</p>
+<ul>
+<li>[[call]] <code>this</code> set normally by caller</li>
+<li>[[construct]] <code>this</code> is a dynamic ReferenceError</li>
+</ul>
+<p>Issues:</p>
+<ul>
+<li>Potentially confusing</li>
+<li>new doesn't do anything useful</li>
+</ul>
+<p>Possible Solution:</p>
+<ul>
+<li>GenerationFunction doesn't implement constructor, so new throws</li>
+<li><code>this</code> is not a dynamic ReferenceError, but instead refers to the GeneratorFunction instance (align with current implementations: Babel, V8, SM)</li>
+</ul>
+<p>AWB: Doesn't act like derived constructor, does have a prototype property that's used to initialize instances</p>
+<p>BT: No case where a subclass will always throw</p>
+<p>AWB: Body of function is not run as part of the constructor. The body is not a constructor body in the typical sense</p>
+<p>BT: Breaks down the <code>this</code> and <code>new</code> behavior, b/c can't use <code>this</code> with <code>new</code></p>
+<p>AWB: The body isn't run as part of the constructor, it's run as &quot;next&quot;</p>
+<p>DH: A generator used with new is weird. (giving an example)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">Thing</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-keyword">this</span>.x = x    
+}
+
+Thing.prototype.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{};
+
+<span class="hljs-keyword">let</span> thing = <span class="hljs-keyword">new</span> Thing(<span class="hljs-string">"tc"</span>, <span class="hljs-number">39</span>);
+
+thing.x <span class="hljs-comment">// undefined</span>
+thing.y <span class="hljs-comment">// undefined</span>
+thing.next();
+
+thing.x <span class="hljs-comment">// "tc"</span>
+thing.y <span class="hljs-comment">// undefined</span>
+thing.next();
+
+thing.x <span class="hljs-comment">// "tc"</span>
+thing.y <span class="hljs-comment">// 39</span>
+</code></pre>
+<p>DH: Why would want to pause before fully constructing the object?</p>
+<ul>
+<li>Introduces a non-orthogonality that doesn't pay for itself</li>
+</ul>
+<p>AWB: Generator method</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
+  *foo() {
+    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>;    
+  }
+};
+
+<span class="hljs-keyword">let</span> iter = <span class="hljs-keyword">new</span> obj.foo();
+</code></pre>
+<p>RW: Non-generator method would throw a TypeError when <code>new ...</code></p>
+<p>MM/DH: (discussing special cases)</p>
+<p>BT: Potential argument for why we should allow <code>this</code> inside generator, observables, where you might initialize this before the first yield (by calling <code>next</code> before handing out your iterator)</p>
+<p>AWB: this binding is actually set up when the iterator is created</p>
+<p>MM: A generator method, that does not mention super, has a call behaviour that sets this from it's caller the way that a generator function does</p>
+<p>AWB: imagine &quot;MyCollection&quot;</p>
+<pre><code class="language-js">
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyCollection</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-comment">// ...</span>
+  }  
+  * values() {
+    <span class="hljs-keyword">let</span> k = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">let</span> length = <span class="hljs-keyword">this</span>.length;
+    <span class="hljs-keyword">while</span> (k &lt; length) {
+      <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>[k++];    
+    }
+  }    
+}
+
+<span class="hljs-keyword">let</span> collection = <span class="hljs-keyword">new</span> MyCollection();
+
+<span class="hljs-keyword">let</span> values = collection.values();
+</code></pre>
+<pre><code class="language-js">
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyCollection</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+  <span class="hljs-comment">//</span>
+  }    
+}
+
+<span class="hljs-keyword">let</span> collection = <span class="hljs-keyword">new</span> MyCollection();
+
+collection.values = <span class="hljs-function"><span class="hljs-keyword">function</span> * (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>);
+};
+</code></pre>
+<p>DH: Have a construct trap, normal new object passed in. Generator function is a generator implementation of a function.</p>
+<ul>
+<li>On us to prove/disprove value</li>
+</ul>
+<p>BN: If trying to discourage using new, this may already be the case, since this.next(), this.throw(), this.return() will all throw if called from within the generator, because the generator is already executing</p>
+<p>AWB: Cannot re-enter</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">Thing</span>(<span class="hljs-params">x, y</span>) </span>{
+  <span class="hljs-keyword">this</span>.x = x  <span class="hljs-comment">// current ES6: throw here.</span>
+  <span class="hljs-keyword">yield</span>;   
+  <span class="hljs-keyword">this</span>.y = y;
+}
+
+Thing.prototype.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{};
+
+<span class="hljs-keyword">let</span> thing = <span class="hljs-keyword">new</span> Thing(<span class="hljs-string">"tc"</span>, <span class="hljs-number">39</span>);
+
+thing.x <span class="hljs-comment">// undefined</span>
+thing.y <span class="hljs-comment">// undefined</span>
+thing.next(); <span class="hljs-comment">// current ES6: ReferenceError on `this`</span>
+
+thing.x <span class="hljs-comment">// "tc"</span>
+thing.y <span class="hljs-comment">// undefined</span>
+thing.next();
+
+thing.x <span class="hljs-comment">// "tc"</span>
+thing.y <span class="hljs-comment">// 39</span>
+</code></pre>
+<p>(Note that SpiderMonkey doesn't throw at either of the places called out above)</p>
+<p>DH: The * is a way of saying that you're providing a way to the precise thing you would do by hand, but without the long form hand written</p>
+<p>RW: Then generator method should throw TypeError when called with new</p>
+<p>DH: Agreed</p>
+<p>MM: What is the instance created from whehn a generator method is called with new?</p>
+<p>AWB: instance of Generator</p>
+<p>MM:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> coll = {*values() {}};
+<span class="hljs-keyword">let</span> it = coll.values();
+it <span class="hljs-keyword">instanceof</span> coll.values; <span class="hljs-comment">// true</span>
+</code></pre>
+<p>MM: Unseen: allocatiing a new generator instance. Contains an implicit <code>new</code> and implcit constructor body.</p>
+<p>DH: * imputes an implicit <code>new</code> (in both the method and constructor)</p>
+<p>MM: Acting like a function that's calling an implicit constructor</p>
+<p>BT: it's a factory</p>
+<p>DH: Simpler: &quot;* is never new-able&quot;</p>
+<p>Alternative 2: a function * has</p>
+<p>MM:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> coll = { *values() { <span class="hljs-keyword">this</span>; } }
+coll.values(); <span class="hljs-comment">// ?</span>
+
+coll.items = <span class="hljs-function"><span class="hljs-keyword">function</span> * (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">this</span>; };
+coll.items(); <span class="hljs-comment">// ?</span>
+</code></pre>
+<p>DH:</p>
+<table>
+<thead>
+<tr><th>S</th><th>I</th><th>Code</th></tr>
+</thead>
+<tbody>
+<tr><td>?</td><td>X</td><td><code>{ *foo() {} }</code> (no [[construct]])</td></tr>
+<tr><td>X</td><td>X</td><td><code>function * () {}</code> (no [[construct]])</td></tr>
+<tr><td>?</td><td>?</td><td><code>function * () { this }</code> is exactly like <code>function() { this }</code></td></tr>
+</tbody>
+</table>
+<p>AK (offline): Further spec reading suggests that GeneratorMethods need to have their [[Construct]] removed just like GeneratorFunctions (they both pass &quot;generator&quot; to FunctionInitialize, which is where the decision to set up [[Construct]] is made).</p>
+<a href="#conclusionresolution-67-new--generatorfunction"><h4 id="conclusionresolution-67-new--generatorfunction">Conclusion/Resolution</h4></a><ul>
+<li>Maintain spec that cannot construct generator methods (or change spec to make them non-constructible, see above)</li>
+<li>Spec change: generator function do not have a [[construct]] trap, so <code>new</code> throws</li>
+<li>Call a generator, <code>this</code> should be set by the caller, as is normal (global or undefined)</li>
+<li>File Errata</li>
+</ul>
+<a href="#612-stringprototypesplit-its-limit-argument-and-tolength-vs-touint32"><h2 id="612-stringprototypesplit-its-limit-argument-and-tolength-vs-touint32">6.12 String.prototype.split, its limit argument, and ToLength vs ToUint32</h2></a><p>(Adam Klein)</p>
+<p><a href="https://gist.github.com/ajklein/335e0f948c500a0c25dc">https://gist.github.com/ajklein/335e0f948c500a0c25dc</a></p>
+<p>AK: Issues:</p>
+<ul>
+<li>ES5 (15.5.4.14.5): If limit is undefined, let lim = 2**32-1; else let lim = ToUint32(limit).</li>
+<li>ES6 (21.1.3.17.8): If limit is undefined, let lim = 2**53-1; else let lim = ToLength(limit).</li>
+</ul>
+<p>Problems:</p>
+<ul>
+<li>Return value is an Array, so a limit greater than 2**32-1 would result in a &quot;malformed&quot; array (one with elements past the end of the array). Iteration over the return value will skip all such elements.</li>
+<li>Behavior changes for negative limit: ToUint32 transforms -1 to 232-1; ToLength instead transforms -1 to 0.</li>
+</ul>
+<p>AWB: One of the discussions was to change arrays to be larger</p>
+<p>AK: That would make sense</p>
+<p>Discussion about changes</p>
+<ul>
+<li>break web?</li>
+<li>but this will never likely be hit by any real world code</li>
+<li>clamping is valued</li>
+</ul>
+<p>Proposal: Revert this spec change. Existing implementations still match ES5, and the old behavior still makes sense (even with ES6's longer String length limit).</p>
+<p>WH: The spec needs a geocities-style &quot;Under Construction&quot; animated GIF here ;). This was the first phase of a series of changes attempting to move the spec to eliminate the 2^32 array length limit, with the changes spread over time.</p>
+<a href="#conclusionresolution-612-stringprototypesplit-its-limit-argument-and-tolength-vs-touint32"><h4 id="conclusionresolution-612-stringprototypesplit-its-limit-argument-and-tolength-vs-touint32">Conclusion/Resolution</h4></a><ul>
+<li>Revert this spec change. Existing implementations still match ES5, and the old behavior still makes sense (even with ES6's longer String length limit).</li>
+<li>Filed <a href="https://bugs.ecmascript.org/show_bug.cgi?id=4432">https://bugs.ecmascript.org/show_bug.cgi?id=4432</a></li>
+</ul>
+
+</body>

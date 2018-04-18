@@ -1,0 +1,465 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 28, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-28-2012-meeting-notes"><h1 id="november-28-2012-meeting-notes">November 28, 2012 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Norbert Lindenberg (NL), Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Luke Hoban (LH), Rick Waldron (RW), Eric Ferraiuolo (EF), Doug Crockford (DC), Yehuda Katz (YK), Erik Arvidsson (EA), Mark S. Miller (MM), Dave Herman (DH), Sam Tobin-Hochstadt (STH), István Sebestyén (IS), Andreas Rossberg (ARB), Brendan Eich (BE), Alex Russell (AR)</p>
+<hr>
+<a href="#syntactic-support-for-private-names"><h2 id="syntactic-support-for-private-names">Syntactic Support for Private Names</h2></a><p>BE/LH: Concern that the syntax required too much declaration</p>
+<p>LH: Can delve deeper when presenting TypeScript findings. We don't have any experience with the impact of this syntax.</p>
+<p>AWB: This is where we left it at the last meeting and I haven't had an opportunity to respond to feedback.</p>
+<p>Mixed discussion regarding syntactic pains and impact of @-names</p>
+<p>LH: Before it can go forward, someone will need to go back and address the existing issues.</p>
+<p>AWB: The concern is the double declaration and we discussed adding a private prefix for method declarations.</p>
+<p>YK: Alternatively, module bound private names, where declaration  scopes to the module.</p>
+<p>Discussion of Kevin Smith's modular @-names proposal...</p>
+<p>AWB: The same logic applies to global vs. lexical namespace, and modules.</p>
+<p>WH: If you have an @-name somewhere in a module, is it scoped to this module</p>
+<p>YK: If you use an @-name it implies binding, and you need to explicitly export</p>
+<p>AWB: References an implicit declaration if doesn't already have one?</p>
+<p>YK: Yes. (draws example on whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> <span class="hljs-string">"view"</span> {
+  <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">View</span> </span>{
+    <span class="hljs-keyword">constructor</span>(id) {
+      <span class="hljs-keyword">this</span>.@id = id;
+    }
+  }
+}
+</code></pre>
+<p>DH: Points of clarification...</p>
+<ol>
+<li>If we're talking about @-names explicitly scope to a module, no declaration nec. Does that make them private or unique?</li>
+</ol>
+<ul>
+<li>You would have to declare specifically</li>
+</ul>
+<p>Reviewing Kevin Smith's gist (<a href="https://gist.github.com/3868131">https://gist.github.com/3868131</a>) on projector...</p>
+<p>ARB: How does this avoid the use of the same name twice?</p>
+<p>AWB: You're expected to know your module.</p>
+<p>BE: (draw comparison to Go, Dart, CoffeeScript)</p>
+<p>DH: The goal is simply to avoid repetitive declaration lists</p>
+<p>LH: The notion that declaration of private names as a runtime construct is great, but the syntactic representation needs to be  intuitive to &quot;this is a private thing&quot;. So far, this feels at odds with those intuitions</p>
+<p>DH: Disagrees, this is a static concept and declarations within are intuitively static.</p>
+<p>WH/AR/STH: There is no precedence in the language to scope limited binding forms.</p>
+<p>DH: Painful if you're required to list out everything</p>
+<p>WH/YK: Sharing private names across classes is a problem that needs to be solved.</p>
+<p>DH: Implicit scoping is asking for trouble (gives examples)</p>
+<p>AWB: Common case where a symbol only needs to scoped to a class,  for that case, we have a proposal on the table that covers everything except for fields without a lot of redundant declaration. Beyond the scope of a single class, it seems an explicit declaration at an appropriate level is desirable.</p>
+<p>DH: Tied to classes implicitly? But allowed to explicitly bound to other scopes</p>
+<p>AWB/DH: Clarification on private for classes.</p>
+<p>ARB: Would need to hoist the thing outside the class?</p>
+<p>AWB: Only if you're contributing to the thing outside of the class.</p>
+<p>BE: If you want an outer scope, put a block around it.
+...Kevin's proposal seems to have no support here.</p>
+<p>LH/AWB: back to the @-names, we left it at &quot;it's too chatty&quot;</p>
+<p>LH: I want syntax for privacy, something less</p>
+<p>Discussion about import @iterator in classes...</p>
+<p>LH: The immediate problem w/ YK's example on board is that it's unclear that @id...
+Developers don't want to think about binding names as objects</p>
+<p>AWB: (modifies whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> <span class="hljs-string">"view"</span> {
+  private @id; <span class="hljs-comment">// allows declaring a private name called "id"</span>
+  <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">View</span> </span>{
+    <span class="hljs-keyword">constructor</span>(id) {
+      <span class="hljs-keyword">this</span>.@id = id;
+    }
+  }
+}
+</code></pre>
+<p>Move private @id...</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> <span class="hljs-string">"view"</span> {
+  <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">View</span> </span>{
+    private @id;
+    <span class="hljs-keyword">constructor</span>(id) {
+      <span class="hljs-keyword">this</span>.@id = id;
+    }
+  }
+}
+</code></pre>
+<p>BE: This all may be developer and future hostile.</p>
+<p>WH: (agrees)</p>
+<p>BE: Developers want declarative form to define an instance field with a private name in one step. We separate those two.</p>
+<p>WH: I want to preserve the option of saying one thing</p>
+<p>BE: That's what Luke wants.</p>
+<p>LH: Most developers don't want to think about declaring their names before use.</p>
+<p>AWB: Then we can't address private within a class without addressing field declarations in a class.
+(moves <code>private @id</code> out of example)</p>
+<p>WH: We can't allow this to now be declarable in multiple contexts.</p>
+<p>LH: The current behavior of @-names is not what developers expect it to be.</p>
+<p>DH: I have contradicting experience. (ie. Racket define-local-member-name)</p>
+<p>LH: If you had to do this for every property that you're ever going to use...?</p>
+<p>DH: (Agrees with Yehuda's complaints)</p>
+<p>BE: Then we need field syntax first.</p>
+<p>LH/YK/WH: (nods of agreement)</p>
+<p>DH: Let's punt on this for ES6. Too late</p>
+<p>EA: How to do @iterator?</p>
+<p>DH: We can make that work, but this is too large and too late. There are too many questionable issues w/r to declaration for the sake of scoping a name, without creating a field.</p>
+<p>MM: Let's not discount ES7 development.</p>
+<p>AWB: I disagree and don't think that we should defer on addressing this.</p>
+<p>BE: If we wait and defacto standards emerge, then we're too slow.</p>
+<p>MM: Intend to advocate:</p>
+<ul>
+<li>postpone explicit field declarations to ES7 and things that might conflict until.</li>
+</ul>
+<p>BE: Agree</p>
+<p>LH: The concern is @iterator?</p>
+<p>standard private names and public names</p>
+<p>WH: What is the point of contention for the existing field declaration proposal?</p>
+<p>BE/AR: (explanation of constructor declaration and hoisting issue)</p>
+<p>BE: (whiteboard)</p>
+<p>// Mark's proposal from a year ago
+// <a href="http://wiki.ecmascript.org/doku.php?id=harmony:classes">http://wiki.ecmascript.org/doku.php?id=harmony:classes</a></p>
+<pre><code class="language-js"><span class="hljs-keyword">constructor</span>(id) {
+  private id = id;
+}
+</code></pre>
+<p>MM: (reiterates rationale)</p>
+<p>LH: (whiteboard)
+// TypeScript...</p>
+<pre><code class="language-js">private id;
+<span class="hljs-keyword">constructor</span>(id) {
+  <span class="hljs-keyword">this</span>.id = id;
+}
+</code></pre>
+<p>AWB: What happens when there is foo.id is in the constructor?</p>
+<p>DH: So private is to statically reject programs that appear to poke at things that are assumed private?</p>
+<p>LH: Confirm</p>
+<p>MM: So they foo.id will refer to the same id field?</p>
+<p>LH: Yes.</p>
+<p>...Unusable for ES6</p>
+<p>DH: Proposes... Exactly the semantics as shown, but syntactically only allows field declaration position in classes and import/export.</p>
+<p>WH: Important that you will want to <em>declaratively</em> (not imperatively) list fields. Guaranteed to be there in instances of a class. Those who want to lock down the class further might also want extra class attributes that disallow other expando properties, etc. (not the default case, but something you might want to do).</p>
+<p>LH: This is now a different discussion. If we introduce a form (re: whiteboard example)...</p>
+<p>DH: A future compatible subset of what we discussed before.</p>
+<p>Discussion about the baseline problem: Needing two lines to declare a private field.</p>
+<p>YK: Not sure why the example that Luke approves of is different from the given syntax.</p>
+<p>Discussion of computed object/class-literal properties, rejected due to</p>
+<ul>
+<li>Runtime duplicate checking</li>
+<li>Static object literal optimization</li>
+</ul>
+<p>LH: Computed properties might be worth revisiting</p>
+<p>EA: But you can't predict what the property name will be...</p>
+<p>AWB: And you still need to go through the declaration steps...</p>
+<p>BE/DH: Revisiting previous consensus on unique name for iterator</p>
+<p>DH: No revisit on consideration for string name for iterator</p>
+<p>LH: Revisit on square bracket computed properties.</p>
+<p>AWB: Square brackets are future hostile... Explanation of the [] Reformation <a href="http://wiki.ecmascript.org/doku.php?id=strawman:object_model_reformation">http://wiki.ecmascript.org/doku.php?id=strawman:object_model_reformation</a></p>
+<p>BE/DH: (volley re: import iterator)</p>
+<p>BE: If there is a standard library prelude in ES6 for @iter, that buys time to fully specify for ES7</p>
+<p>AWB: Let me summarize... Take the @name proposal without the declaration.</p>
+<p>DH: Understand, but the thing we do now needs a coherent story</p>
+<p>AWB: Yes, we provide pre-declared @names and that's the end.</p>
+<p>LH: Normal lexical bindings?</p>
+<p>AWB: No, @name bindings</p>
+<p>DH: max/min: only in property name position</p>
+<p>WH: Can you stick an @name on any arbitrary object?</p>
+<p>AWB: Just getting rid of declaration</p>
+<p>BE: max/min</p>
+<p>AWB: Existing @names in spec</p>
+<ul>
+<li>@hasInstance</li>
+<li>@iterator</li>
+</ul>
+<p>DH: the whole benefit of unique names is no name clash</p>
+<p>BE: This is why we decided that iterator should be public, because there is no way to avoid existing properties. We want new things to have no clash.</p>
+<p>ARB: Want to use it for properties to avoid cross cut</p>
+<p>BE: Use for stratified traps.</p>
+<p>AWB: Any symbol is fine, doesn't need to private</p>
+<p>DH: Why would you decide to expose something as visible...</p>
+<p>AWB: There are cases where certain properties might want to be extended or customized.</p>
+<p>Discussion of reorganization of Meta Object operations in order to simplify Proxy specification.</p>
+<p>WH: The class proposals only permitted private properties on instances of the class. It was never the intent to allow you to create a private instance property @foo of instances of class C and then attach it to random objects unrelated to C.</p>
+<p>AWB: At the root, symbols - ie. unique names are a powerful tool</p>
+<p>MM: Always in consensus that symbols where a means of assigning and looking up a property by a unique, unforgeable name. It was never specifically tied to classes.</p>
+<p>WH: Disagree. That's only one of the privacy proposals. Something got lost in translation in the attempts to merge the two privacy proposals. The class one would let you look up a class-private @foo on any object, but only the class could define an @foo property.</p>
+<p>DH/AWB: (Discussion of pre-defined fields on class instances.)</p>
+<p>AR: Similar to my constructor pre-amble...</p>
+<p>LH: (Summarizing) No clash between the use of symbols at a lower level.</p>
+<p>YK: Imagine a map literal...</p>
+<p>AWB: Hypothetical Map that used [] for key, might use symbols for keys in that map, now there is an ambiguity at access time.</p>
+<p>LH: Care about not having private names becoming lexical scopes</p>
+<p>AWB, WH: (in response to question about why @'s are necessary) In the past we've attempted to work through several proposals that don't and it never works</p>
+<p>ARB: Concern with meaning of @-syntax being dependent on context: sometimes denotes symbol itself, sometimes value it indexes. Might potentially be ambiguous in some circumstances, e.g. modules</p>
+<p>MM: State a proposal:</p>
+<ul>
+<li>We don't have in ES6: a private or special declaration form.</li>
+<li>We allow @identifier, that is a symbol
+let @foo = Unique();</li>
+<li>After a dot, in property name position, @foo does not refer to a new literal @foo, it refers to the value of the lexically enclosing @foo.
+We address Andreas's issue with modules separately.</li>
+</ul>
+<p>DH: b/c tied to variable declaration forms, no way to know upfront what one of these names is.</p>
+<p>AWB: Clarify...</p>
+<p>DH: (Re-explains)</p>
+<p>AWB: (refutes)</p>
+<p>DH: What I was hoping for was declarative syntax closing in... but realize it's totally generative.</p>
+<p>ARB/LH: This is a hack</p>
+<p>DH: The syntax looks static but is not at all.</p>
+<p>MM: Is the hack a subset of all the non-hack things we want?</p>
+<p>DH: This shows the same problems as we discussed earlier.</p>
+<p>AWB: This what symbols are...</p>
+<p>MM: The &quot;@&quot; is what makes it clear that this is not static</p>
+<p>DH: You could say the same thing about brackets.</p>
+<p>MM: Always knew @ was dynamic. Opaque, unforgeable and generative.</p>
+<p>ARB: (to DH), Once this is defined in a dynamic context it becomes dynamic.</p>
+<p>WH: (illustration of perceived hoisting and dynamic rebinding issues)</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+  private @name;
+  f() {
+    <span class="hljs-keyword">for</span>(...) {
+      x.@name = <span class="hljs-number">5</span>;
+    }
+    <span class="hljs-keyword">var</span> @name....
+  }
+}
+</code></pre>
+<p>DH/MM: (discussion of future additions)</p>
+<p>BE: We already have with nested function declarations name binding and generativity. Why is it ok for function, but not symbol?</p>
+<p>DH: Punning the syntax to make it look static, but it's not.</p>
+<p>BE: agreed, that was the fork we took to a bad path, punning &quot;after-the-dot identifier&quot;</p>
+<p>DH: People rightly complained early on about static understanding/knowable aspects of syntax. (eg. do I have to look up in scope to know what prop means in { prop: val })</p>
+<p>AWB: Most developers will align [] with dynamic property access, vs. .@foo aligns with &quot;static&quot; property name access.</p>
+<p>LH: Clarification that we're not talking about the object literal case, but in fact the non-breakable, historic language syntax of property access with []</p>
+<p>BE: (Hypothetical future with object [] reformation)</p>
+<p>Discussion about implications of hypothetical future with object dereference reformation with ES6 objects.</p>
+<p>MM: (to</p>
+<p>LH: Moving back to the conservative position to build up from</p>
+<p>AWB: Still have symbols</p>
+<p>LH: Yes</p>
+<p>YK: This is the max/min problem, writ large.</p>
+<p>MM: Reminder of workload, wherein ES7 should look like just another phase of development and it's ok to defer to ES7.</p>
+<p>AWB: Return to where we were before @-names were introduced</p>
+<p>MM: yes</p>
+<p>YK: Returning to [iterator]?</p>
+<p>Yes.</p>
+<p>LH: Still support Mark's proposal (see above)</p>
+<p>DH: Only strict mode you get the duplicate error?</p>
+<p>MM: true</p>
+<p>DH: Could do semantics of strict mode and allow the collision</p>
+<p>MM: I don't think this introduces a strict mode runtime tax.</p>
+<a href="#conclusionresolution-syntactic-support-for-private-names"><h4 id="conclusionresolution-syntactic-support-for-private-names">Conclusion/Resolution</h4></a><p>STH will provide a summary.</p>
+<ul>
+<li>Symbols, unique and private are runtime concepts</li>
+<li>Only additional syntactic support for them in ES6 is the square brackets in literal forms.</li>
+<li>Strict object literals throw on collision.
+(Today, duplicate checks happen at compile time, this will no longer be the case when [prop]: val is used in an objlit)</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> s1 <span class="hljs-keyword">new</span> PrivateSymbol();
+<span class="hljs-keyword">const</span> s2 = s1;
+
+<span class="hljs-keyword">var</span> x = {
+  [s1]: <span class="hljs-number">33</span>,
+  [s2]: <span class="hljs-number">44</span>
+};
+</code></pre>
+<p>In this context, within the square brackets: AssignmentExpression</p>
+<p>(Re: Symbol constructor binding: <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules_standard">http://wiki.ecmascript.org/doku.php?id=harmony:modules_standard</a>)</p>
+<a href="#experience-with-typescript"><h2 id="experience-with-typescript">Experience With TypeScript</h2></a><p>(Luke Hoban)</p>
+<ul>
+<li><a href="http://sdrv.ms/W21q9e">slides</a></li>
+</ul>
+<p>Findings...
+<strong>Classes: Statics</strong></p>
+<ul>
+<li>Statics are used frequently</li>
+<li>Imperative update is awkward when using an otherwise declarative construct</li>
+</ul>
+<p><strong>Classes: Privates</strong></p>
+<ul>
+<li>Frequent asks for Privacy</li>
+<li>TypeScript added compile-time-only privacy</li>
+<li>Not quite the same as current private names syntax proposal
+<ul>
+<li>w/o further sugar private names syntax proposal will feel awkward in practical class</li>
+</ul></li>
+</ul>
+<p><strong>Classes: Automatic base constructor calls</strong></p>
+<ul>
+<li>Missing super calls</li>
+</ul>
+<p><strong>ArrowFunctions</strong></p>
+<ul>
+<li>Want thin arrow</li>
+</ul>
+<p><strong>Classes: Decorators</strong></p>
+<ul>
+<li>w/ classes available, teams want to use them</li>
+<li>Biggest block is when existing class library supported some extra &quot;magic&quot; associated w/ class/method declarations</li>
+<li>No solution yet, not sure what this looks like.</li>
+</ul>
+<p>MM: (re annotations) Note that &quot;@&quot; is no longer reserved for ES6...</p>
+<p>DH: Point out that we are future proof here.</p>
+<p>MM: Let's postpone discussion of the feedback</p>
+<p><strong>Modules</strong></p>
+<ul>
+<li>ES6 modules</li>
+<li>compiled to JS which uses AMD/CommonJS
+...</li>
+</ul>
+<p><strong>Modules: Namespaces</strong></p>
+<ul>
+<li>Two common patterns for large code structure
+<ol>
+<li>On demand loaded modules</li>
+<li>Namespace objects to reduce global pollution</li>
+</ol></li>
+<li>External Modules address #1</li>
+<li>TypeScript allows internal module re-declaration to grow the object
+<ul>
+<li>Effectively, a declarative form for object extension with build in closure scope and syntax that matches large scale structuring use cases well.</li>
+</ul></li>
+</ul>
+<p>LH: (the transition from AMD/CommonJS of today to modules a la ES6 is not going to be an easy transition)</p>
+<p>Loading order...</p>
+<p>LH: When you have circular references, current modules make it appear easy to ignore these issue.</p>
+<p><strong>Modules: &quot;modules.exports =&quot; use case</strong></p>
+<ul>
+<li>Not addressed in TypeScript</li>
+<li>Critical for interop with existing CommonJS/AMD code</li>
+<li>Supportive of &quot;export =&quot; syntax proposal</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-comment">// something.js</span>
+<span class="hljs-keyword">export</span> = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">"something"</span>;
+};
+
+<span class="hljs-comment">// other.js</span>
+<span class="hljs-keyword">import</span> something = <span class="hljs-built_in">module</span>(<span class="hljs-string">"something"</span>);
+<span class="hljs-keyword">var</span> s = something();
+</code></pre>
+<p>DH: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{};
+---------------------------------
+<span class="hljs-keyword">import</span> <span class="hljs-string">"foo"</span> <span class="hljs-keyword">as</span> foo;
+foo();
+</code></pre>
+<p><strong>Async</strong></p>
+<ul>
+<li>Top requested addition for TypeScript is C# &quot;await&quot;-style async</li>
+<li>Generators + task.js help, but likely not enough
+<ul>
+<li>Wrapping is still very unnatural in any real examples</li>
+</ul></li>
+<li>But light sugar over generators + task.js would serve</li>
+<li>Feeds into promises discussion - have to standardize the task objects.</li>
+</ul>
+<p>(shows example for task.js and identifies &quot;spawn&quot; which returns a promise object)</p>
+<p>Mixed discussion about the history of async discussion through generators, promises, Q.async</p>
+<a href="#modules-update"><h2 id="modules-update">Modules Update</h2></a><p>(Dave Herman)</p>
+<p>(whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-comment">// Modules looked like...</span>
+<span class="hljs-built_in">module</span> X {
+  <span class="hljs-keyword">export</span> <span class="hljs-built_in">module</span> Y {
+  }
+}
+
+<span class="hljs-comment">// Moved to...</span>
+<span class="hljs-comment">// "foo" doesn't bind anything into this scope,</span>
+<span class="hljs-comment">// just adds to the module registry</span>
+<span class="hljs-built_in">module</span> <span class="hljs-string">"foo"</span> {
+  <span class="hljs-built_in">module</span> <span class="hljs-string">"bar"</span> {
+    <span class="hljs-comment">// no more exporting...</span>
+  }
+}
+
+<span class="hljs-built_in">module</span> <span class="hljs-string">"foo/bar"</span> {}
+
+<span class="hljs-string">"bar"</span> is not exposed <span class="hljs-keyword">as</span> a property <span class="hljs-keyword">of</span> <span class="hljs-string">"foo"</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">"foo/bar"</span> <span class="hljs-keyword">as</span> m;
+
+</code></pre>
+<p>AWB: (clarification of his understanding of the original way that nested modules work)</p>
+<p>STH: Yes, that was the way, but there was a realization that much of the earlier approach was flawed and these updates lead to revisions.</p>
+<p>One important use case for modules is to configure module references, so that libraries can import jQuery (for example), and get the appropriate version of jQuery specified by the page. Further, it's desirable to be able to use different code for the same library name in different context. Originally, the modules proposal managed this via lexical scope, as follows:</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> M1 {
+  <span class="hljs-built_in">module</span> jquery = <span class="hljs-string">"jquery.js"</span>;
+  <span class="hljs-built_in">module</span> something = <span class="hljs-string">"something_that_uses_jquery.js"</span>
+}
+
+<span class="hljs-built_in">module</span> M2 {
+  <span class="hljs-built_in">module</span> jquery = <span class="hljs-string">"zepto.js"</span>;
+  <span class="hljs-built_in">module</span> something_else = <span class="hljs-string">"something_else_that_uses_jquery.js"</span>
+}
+</code></pre>
+<p>However, this has two major problems:
+Inheriting scope across references to external files is potentially confusing, and disliked by a number of people
+Once we decided to share instances of the same module, the &quot;parent scope&quot; of a module is no longer well-defined</p>
+<p>Therefore, we abandoned the idea of inheriting scope across external references.  However, this had two consequences that we did not immediately appreciate.  First, we no longer had a method for managing this configuration between module names and source code.  Second, scoped module names no longer had nearly as much use as originally.</p>
+<p>Thus, Dave and I revisited the design, abandoning the use of lexical scope for managing module names, and introducing module names that could be configured on a per-Loader basis.</p>
+<p>DH: The registry with the string names is now where the sharing mechanism occurs.</p>
+<p>Loader...</p>
+<pre><code class="language-js">System.baseURL = <span class="hljs-string">"..."</span>;
+System.resolve = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">...</span>) </span>{
+  ...
+};
+</code></pre>
+<p>Mixed discussion...</p>
+<ul>
+<li>&quot;global namespace&quot; as in &quot;per realm&quot;</li>
+<li></li>
+</ul>
+<p>ARB: This seems to create a parallel global object for modules. Giving up lexical scoping for one global namespace.</p>
+<p>DH: There is no way to get rid of the global object</p>
+<p>STH: Yes we tried.</p>
+<p>DH: (explanation of registry table)</p>
+<ul>
+<li>Per loader</li>
+</ul>
+<p>MM: Separate name registries?</p>
+<p>DH: Either are fine</p>
+<p>...Provide a minimal set of APIs to allow devs to build there own.
+...Sane default behavior
+...Default resolution:
+- baseURL + &quot;Crypto/sha1&quot; + &quot;.js&quot; when no config has been done, this is the base default behavior.</p>
+<pre><code class="language-js"><span class="hljs-comment">// foo.js</span>
+<span class="hljs-keyword">export</span> = <span class="hljs-number">42</span>;
+
+<span class="hljs-comment">// bar.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
+}
+
+<span class="hljs-comment">// foobar.js</span>
+<span class="hljs-built_in">module</span> <span class="hljs-string">"foo"</span> {
+  <span class="hljs-keyword">export</span> = <span class="hljs-number">42</span>;
+}
+<span class="hljs-built_in">module</span> <span class="hljs-string">"bar"</span> {
+  <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
+  }
+}
+</code></pre>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+System.baseURL = <span class="hljs-string">"assets/"</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">async</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">import</span> <span class="hljs-string">"foo"</span> <span class="hljs-keyword">as</span> foo;
+<span class="hljs-keyword">import</span> <span class="hljs-string">"bar"</span> <span class="hljs-keyword">as</span> bar;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>WH: What happens if...
+import &quot;foobar&quot; as fb;
+(given the above &quot;files&quot;)</p>
+<p>STH: Answer: fb is an empty object. You also get modules named &quot;foobar/foo&quot; and &quot;foobar/bar&quot; defined.</p>
+<p>[WH's question was related to a claim in the discussion that there is no need to have module .js files be distinguishable at the textual level from top-level script .js files]</p>
+<p>Mixed discussion w/r loading protocols... and resource loading (files from server, etc) seems to be out of scope?</p>
+<p>DH: How is there anything special about JavaScript as the one asset to know about in browsers?</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"prefetch"</span><span class="hljs-attr">...</span>&gt;</span>
+</code></pre>
+<p>BE: Before imports, prefetch dependencies... but an out of line module import is not a hint, it's a requirement.</p>
+<p>DH: Help the browser know in advance about its...</p>
+<p>AR: a &quot;prefetch&quot; attribute for scripts? Requests script but doesn't execute.</p>
+<p>RW: Until import?</p>
+<p>AR: Yes</p>
+<p>EF: Don't want to prefetch lazily loaded code later in the program. Don't want to load packages with same dependencies twice.</p>
+<p>Bundle A, Bundle B
+Each share common dependencies. Leads to unbounded number of combinations of pre-build bundles.</p>
+<p>A loader should have a way which it can be told, upfront, about the dependency graph. Allowing the system to know all dependencies in advance, so that it doesn't have to compute transitive dependencies for all, every time—to make smart choices about IO.</p>
+
+</body>

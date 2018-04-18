@@ -1,0 +1,620 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 30, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-30-2015-meeting-notes"><h1 id="july-30-2015-meeting-notes">July 30, 2015 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Waldemar Horwat (WH), István Sebestyén (IS), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Jonathan Turner (JT), Paul Leathers (PL), Chip Morningstar (CM), Vladimir Matveev (VM), Ron Buckton (RBN), Brian Terlson (BT), Alan Schmitt (AS), Ben Newman (BN), Mohamed Hegazy (MH), Abhijith Chatra (AC), Tom Care (TC), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Daniel Ehrenberg (DE), Dan Gohman (DGN), Andreas Rossberg (ARB), Rick Waldron (RW), Mike Pennisi (MP), Akrosh Gandhi (AGI), Jonathan Sampson (JSN)</p>
+<hr>
+<a href="#7-test262-updates"><h2 id="7-test262-updates">7 Test262 Updates</h2></a><p>(Brian Terlson, Mike Pennisi)</p>
+<p><a href="https://jugglinmike.github.io/presentations/2015/tc39-test262-update">Slides</a></p>
+<p>MP: Introduction</p>
+<p>See slides</p>
+<p>WH: (re: <a href="http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#7">http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#7</a> ) question, re: es6draft, ecmascript spec, before/after publication?</p>
+<p>?: es6draft ? ECMAScript 6 draft</p>
+<p>BT: Ongoing. Could also add Chakra bugs</p>
+<p>MF: raw flag? Does this prevent issues other than directive prologue issues?</p>
+<p>MP/BT: &quot;raw&quot; means: don't touch the file, just run it. No access to assert features, useful for syntax only tests</p>
+<p>[discussing distinction between early errors and parse errors that test262 does]</p>
+<p><a href="http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#12">http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#12</a></p>
+<p>AWB: These are a specification artifact. An implementation doesn't have to do parsing and early errors in separate passes.</p>
+<p>WH: This becomes visible when there are multiple errors, some in parsing and some early errors. Does the spec designate which error should be reported when there are multiple of these?</p>
+<p>AWB: No. An implementation is free to report any of these errors.</p>
+<p>AWB: Distinguishing early and parsing errors in tests is overspecifying.</p>
+<p>(re: website improvements)</p>
+<p>BT: current test262 site does not have ES6 collatoral.</p>
+<ul>
+<li>Implementing ToLength appears to lock up the website</li>
+<li>Alot of work needed to get the test262 site into a functional state</li>
+<li>Is the work something that Bocoup is going to do?</li>
+</ul>
+<p>MP: Nearing end of time, but ideally would like to take on this work</p>
+<p>BT: Then we need to find a &quot;resource&quot; for this project</p>
+<ul>
+<li>Enumerating outstanding issues with test262 website</li>
+</ul>
+<p>YK: Considered running tests in iframe or worker and timing out?</p>
+<p>BT: Harness uses iframes</p>
+<p>Discussion of implementation details of test harness</p>
+<p>BT: Requirement of new site: use web workers</p>
+<p>Moving on to <a href="http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#15">http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#15</a></p>
+<p>MP: (first example) TypedArray, 9 sets of the same tests. The tests might start in sync, but it's hard to maintain over time.</p>
+<ul>
+<li>Typed Arrays (9)</li>
+<li>Destructuring Assignment (3)
+<ul>
+<li>AssignmentExpression evaluation</li>
+<li>ForIn/OfBodyEvaluation
+<ul>
+<li>for..in statement</li>
+<li>for..of statement</li>
+</ul></li>
+</ul></li>
+<li>Spread Operator (4)
+<ul>
+<li>ArrayLiteral: [...x]</li>
+<li>ArgumentList
+<ul>
+<li>SuperCall: super(...x)</li>
+<li>CallExpression: f(...x)</li>
+<li>MemberExpression: new f(...x)</li>
+</ul></li>
+</ul></li>
+<li>Expressions &amp; Declarations
+<ul>
+<li>Function</li>
+<li>Generator</li>
+<li>Class</li>
+</ul></li>
+</ul>
+<p>AWB: Similar to wanting to share code in tests, implementations will want to share code.</p>
+<ul>
+<li>Look at how an implementation and its tests go wrong?</li>
+<li>Tests that would catch the most common ways the implementation abstractions might go wrong</li>
+</ul>
+<p>YK: Instead of testing all the things, find the things that might fail</p>
+<ul>
+<li>things that look similar, but are subtley different: test that.</li>
+</ul>
+<p>MP: (gives an example of how strict and non-strict tests are automattically run, unless flagged)</p>
+<p>WH: Value in testing exhaustively when the number of cases is reasonable. Per the presentation, there are only 18 contexts in which destructuring is used, which is reasonable for full cross-product testing.</p>
+<ul>
+<li>Re: Allen's point, there are subtle things that can go wrong. I can imagine an implementation getting destructuring right in most contexts but messing up some subtle aspect of it for, say, arrow function parameters.</li>
+<li>But still worthwhile to test try to be exhaustive</li>
+</ul>
+<p>BT: Not suggesting that we won't test syntax in unique contexts</p>
+<ul>
+<li>More about the authoring</li>
+<li>For tests that cover identical syntax semantics and the only difference is syntactic context, then test once</li>
+<li>Why not sweet.js or an existing templating engine? We need to test syntax errors (and other negative tests)</li>
+</ul>
+<p>WH: Just pick one that doesn't make you escape all of the ECMAScript syntax</p>
+<p>Discussion, re: <a href="https://gist.github.com/jugglinmike/476bdb6dd69ffddaf9d2#syntax">https://gist.github.com/jugglinmike/476bdb6dd69ffddaf9d2#syntax</a></p>
+<p>AK: (concerns about useful output)</p>
+<p>DD: most consumers clone the repo, so we need to make sure that we check the output as well</p>
+<p>AK: I'm less concerned about running, but about the output that will inform me of the failure</p>
+<p>BT: Don't want to check in the actual generated tests</p>
+<ul>
+<li>This proposal MUST make it easy to identify failures</li>
+<li>The test harness will write to disc the actual code that failed at the moment of failure</li>
+<li>produce, on-demand, the filled-in template</li>
+</ul>
+<p>DE: For tests users, this can be automated?</p>
+<p>BT: Yes.</p>
+<a href="#conclusionresolution-7-test262-updates"><h4 id="conclusionresolution-7-test262-updates">Conclusion/Resolution</h4></a><ul>
+<li>Continue exploring test generation</li>
+</ul>
+<a href="#meeting-schedule"><h2 id="meeting-schedule">Meeting Schedule</h2></a><p>(John Neumann)</p>
+<p>JN: will propose a 2016 schedule in september. Need to know if we'll be in Europe?</p>
+<ul>
+<li>Switzerland: Geneva, Lugano, Montreux, Lausanne (Geneva may not work: too many attendants and too expensive)</li>
+<li>Germany: Munich</li>
+<li>France</li>
+<li>England</li>
+</ul>
+<p>Discussion planned for next meeting</p>
+<ul>
+<li>September in Portland, hosted by jQuery/Yehuda</li>
+<li>November in Santa Clara, hosted by PayPal</li>
+</ul>
+<p>JN: Need to confirm what the 7th edition will contain</p>
+<p>YK: Straight forward, whatever is Stage 4 goes in the spec</p>
+<p>AWB: (enumerating general spec process timelines)</p>
+<ul>
+<li>submission</li>
+<li>review</li>
+<li>60 day opt-out</li>
+</ul>
+<p>YK: That's after January?</p>
+<p>AWB: Approximately end of January</p>
+<p>YK: January is submission, work backward to find deadline.</p>
+<p>Discussion re: time needed for Brian to integrate the stage 4 features.</p>
+<a href="#conclusionresolution-meeting-schedule"><h4 id="conclusionresolution-meeting-schedule">Conclusion/Resolution</h4></a><ul>
+<li>Get proposals wrapped up if you want to get these features into the spec</li>
+</ul>
+<a href="#64-advance-async-functions-to-stage-2"><h2 id="64-advance-async-functions-to-stage-2">6.4 Advance Async Functions to Stage 2</h2></a><p>(Brian Terlson)</p>
+<p><a href="async-function-updates.pdf">Slides</a></p>
+<p>BT:</p>
+<p>Updates from Last Time</p>
+<ul>
+<li>Complete spec available ( <a href="http://tc39.github.io/ecmascript-asyncawait/">http://tc39.github.io/ecmascript-asyncawait/</a> / <a href="https://github.com/tc39/ecmascript-asyncawait">https://github.com/tc39/ecmascript-asyncawait</a> )</li>
+<li>Removed <code>await *</code></li>
+<li>Implemented in Babel</li>
+<li>Losts of positive feedback from the web</li>
+</ul>
+<p>DH: Future proof for potential future syntax extensions</p>
+<p>DD: Clarify not <code>await *</code></p>
+<p>BT: <code>await *</code> was not useful. If there is a proposal for a useful semantics, then good, but not in this proposal.</p>
+<p>Questions</p>
+<ul>
+<li>Async Arrow Function
+<ul>
+<li>async (a, b) =&gt; await a + await b;</li>
+<li>(a, b) @=&gt; await a + await b;</li>
+</ul></li>
+</ul>
+<p>DE: What's the issue with the first?</p>
+<p>BT: <code>async</code> not a keyword and that could be a call: <code>async(a, b)</code></p>
+<p>MM: @ seems like a poor choice, but I don't have an alternate suggestion</p>
+<p>AWB: only b/c &quot;a&quot;sync</p>
+<ul>
+<li>the <code>async</code> form defeats the conciseness</li>
+</ul>
+<p>BT: I've worked out the grammar, it needs review, but it appears to work correctly</p>
+<p>YK: Shouldn't have 3 sigils right next to eachother.</p>
+<ul>
+<li>hard to google a sigil or set of symbols</li>
+<li>a &quot;grawlix&quot; problem</li>
+</ul>
+<p>BT: Opposed with the top grammar? (assuming the grammar works)</p>
+<p>(no opposition, pending review)</p>
+<p>DH: Would like to see more code illustrating actual use cases</p>
+<p>DD: There's a lot of code in the wild that's been using the top form</p>
+<p>DH: Any higher order combinator is where this will have the most use.</p>
+<p>MM: No consensus on the second. Consensus on the first contingient on grammar validation</p>
+<p>DH: Cannot make <code>async</code> a keyword, one of the most popular modules on npm is <code>async</code></p>
+<p>DD: <code>Promise.all</code> doesn't quite work because it's a combinator that takes promises, not functions that return promises</p>
+<p>DH: The syntax that we've come up with for past features like <code>=&gt;</code> map to an extremely high use case with hardship. Not clear to me that we have the full async callback picture</p>
+<p>DD: should look into the ecosystem of Babel users and see where it's come up</p>
+<p>Design Questions (continued)</p>
+<ul>
+<li>Newing an async function:
+<ul>
+<li>Error</li>
+<li>Promise-for-instance</li>
+</ul></li>
+</ul>
+<p>BT: Suggest &quot;no&quot;
+(no disagreement)</p>
+<p>Design Questions (continued)</p>
+<ul>
+<li>Errors in Parameter Initialization</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">foo</span>(<span class="hljs-params">a = (function(</span>) </span>{ <span class="hljs-keyword">throw</span> <span class="hljs-number">1</span>; }())) {
+    
+}
+<span class="hljs-keyword">let</span> iter = foo(); <span class="hljs-comment">// throws 1</span>
+</code></pre>
+<p>BT: the equivalent in async functions:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bar</span>(<span class="hljs-params">a = (function(</span>) </span>{ <span class="hljs-keyword">throw</span> <span class="hljs-number">1</span>; }())) {
+
+}
+bar(); <span class="hljs-comment">// as of the latest proposal, this throws 1</span>
+
+<span class="hljs-comment">// Alternative semantics would have the error deferred:</span>
+bar().catch(<span class="hljs-function"><span class="hljs-params">cb</span> =&gt;</span> ...); <span class="hljs-comment">// Possible semantics</span>
+</code></pre>
+<p>DD: Wish this was caught for generators</p>
+<p>AWB: We knew about it, but nothing can be done</p>
+<p>MM: For generators, we have immediate throw</p>
+<ul>
+<li>Async function: throw in body breaks the promise</li>
+<li>think about <em>when</em> the throw happens</li>
+<li>what way is it reported?</li>
+<li>throw in generator body is reported with a throw</li>
+<li>throw in async body is reported by rejecting promise</li>
+</ul>
+<p>YK: when use promise, you can catch all the errors into one place</p>
+<p>AK: Arguing for throw immediately?</p>
+<p>BT: Yes, found that error throwing default parameters don't happen (rare case?)</p>
+<ul>
+<li>Mark's point about multiple symmetry in play</li>
+</ul>
+<p>CM: setup preparation part, consumption part. The generator setup might have error in setup, reported immediately</p>
+<p>DD: Code will expect to receive the error via the catch path, not an immediate throw path.</p>
+<ul>
+<li>Most promise ops go through the API</li>
+<li>Devs can muck with the built-ins and produce errors</li>
+</ul>
+<p>AWB: What if you put a proxy on an async function and the call trap throws?</p>
+<p>MM: There's not a problem with the [[Call]] trap. If the [[Call]] trap in the Proxy throws, then you have a &quot;throw&quot;.</p>
+<p>AWB: Say the async function is actually a proxy wrapped around an async function?</p>
+<p>MM: It's exactly the same hazard as if you hand someone a function that wraps an async function and the wrapping function throws.</p>
+<p>DD: Problem is thinking of async functions as a separate category. Just a function</p>
+<p>DH: Mark, I agree. There are errors we consider normal to happen in programs that you should deal with, and those where soemthing went badly wrong and you can't write code that has try/catch every where. A function call that throws an exception should follow the error handling model for the programming paradigm that we're in; since we're in an aync world, the programming model for handlng errors is <code>catch</code></p>
+<p>BT: want to be very clear about rationalization, so that same can be applied to <code>async</code> generator.</p>
+<p>AWB: The generator function returns its value before evaluating its body.</p>
+<ul>
+<li>A generator is a function</li>
+</ul>
+<p>MM: An async generator... I missed the rest of this</p>
+<p>YK: Can you <code>yield</code> in a default parameter in a generator?</p>
+<p>AWB: No, you cannot <code>yield</code> there because the object doesn't exist yet.</p>
+<p>BT: We need to establish the rationale for the behavior of error handling in non-simple generator parameter lists</p>
+<p>YK: Might've been a mistake?</p>
+<p>AWB: Generators do what generator functions previously did in Firefox. We weren't sure if it should be changed. Different results:</p>
+<ul>
+<li>timing evaluation changes: happen on the first <code>next</code>, the values aren't the same values at the time of the call.</li>
+</ul>
+<p>DD: Generators suspend immediately, <code>async</code> suspend on the first <code>await</code></p>
+<p>DH: All cases, expect that parameter default expressions execute eagerly, not that they execute at some time later</p>
+<p>DH: Generators are all about order of execution. The fact that generator functions and async functions have different control flow expectations means that it's reasonable for their error handling behavior to differ.</p>
+<p>Discussion about complications of the implicit <code>yield</code> in generators</p>
+<p>DH: Don't need symmetry between generator and async</p>
+<p>YK: Async function is just a function, but the generator is a different thing.</p>
+<ul>
+<li>When calling a generator, you're not calling a function as shown</li>
+</ul>
+<p>DD: When calling a generator function, the first line of the function does not execute</p>
+<p>DD/YK: Agreed.</p>
+<p>YK: The consequence is that the refactoring doesn't make sense.</p>
+<p>Design Questions Continued</p>
+<ul>
+<li>Await synchronous things synchronously
+<ul>
+<li><code>await 1</code> does it trigger a turn of the event loop as in the desugaring?</li>
+<li>allow synchronous await but ensure promise resoltion is async?</li>
+<li>do neither and allow returning an already-resolved promise?</li>
+</ul></li>
+</ul>
+<p>MM: describing the hazard of sometimes &quot;sync&quot; and sometimes &quot;async&quot;</p>
+<p>????????????????Z??????????A???????????L????????????G????????????????????????? !????????????</p>
+<p>:applause:</p>
+<p>YK: The same hazard doesn't exist with await, because the callback model is changing which scope the function is called in, but doesn't exist in await.</p>
+<p>MM: Agreed that the hazard to aync functions is smaller than that to Promises. The bugs will be both fewer and more subtle and harder to figure out.</p>
+<p>DD: no cost to go back to the event loop</p>
+<p>YK: not true.</p>
+<ul>
+<li>hot code is always awaiting some promise, could be optimized to consider inline-able. Never true if you always have to go back to the queue</li>
+</ul>
+<p>MM: If an implementation can optimize, which is very hard and hazardous</p>
+<p>YK: I'm making a different point. If you say. &quot;you are not allowed to go back to the event loop&quot; and if you discover that it is synchronous, then you can optimize by in-lining the synchronous code. In an ideal world, it is &quot;just a loop&quot;, and a loop is fast.</p>
+<p>JH: The relative harm: cost not zero, need to weigh</p>
+<p>MM: Experience with <code>asap</code>, cost is worth it to reduce the hazard.</p>
+<ul>
+<li>When bugs do occur, very subtle and hard for programmer to figure out</li>
+</ul>
+<p>YK: Hazard in the callback case is in pieces of code that are right next to eachother that appear to [...] Let me put it another way: the hazards you are talking about are based on assumptions that I would never make when writing a program.</p>
+<p>MM: hazard as soon as mutated state is sufficiently non-local</p>
+<p>YK: cannot rely on what interleavings are possible</p>
+<p>BT: hazard here: order of your next turns change. not that callback could be async, but that your callbacks mayb run out of order. What Yehuda is saying is that people don't write programs with multiple Promises where they expect the promises to resolve at specific turns of the event loop.</p>
+<p>MM: Two different hazards:</p>
+<ul>
+<li>The order of events on the event loop is one hazard</li>
+<li>the isolation of side effects is job that was executed up to the await point, completes before any code of the <code>await</code>
+<ul>
+<li>All invariants storing during the job</li>
+</ul></li>
+</ul>
+<p>Mark, I need you to fill this in, we're moving too fast.</p>
+<p>YK: Transaction committed before any await is called. This exists in Ember.</p>
+<ul>
+<li>Need to see an example of the invariant Mark is describing</li>
+</ul>
+<p>MM: After the await point, the callee is starting with a fresh stack.</p>
+<ul>
+<li>Event loop programming paradigm that suspends an invariant must restore the invariant before the job ends.</li>
+<li>Illustrates with example of doubly linked list operation</li>
+</ul>
+<p>MM: Event loop concurrency requires restored invariants before the end of the event loop turn</p>
+<p>YK: Different from what's encountered in practice</p>
+<p>DD: What's the position?</p>
+<p>YK: Discussing already-resolved-promises</p>
+<p>DD: <code>await 1</code> is not the same as <code>await Promise.resolve(1)</code></p>
+<ul>
+<li>If you have a promise, you've said that the value is async and breaking that is crazy</li>
+</ul>
+<p>MM: Found with the Q.asap bug: I wrote my code, tested my code, then my code had bugs. Result of code running out of turn with test code.</p>
+<p>YK: consistency is absorbed by syntax</p>
+<p>MM: disagree</p>
+<ul>
+<li>The bug was directly the result of assuming the invariant will be resolved.</li>
+</ul>
+<p>Discussion re: invariant restoration on event turn completion</p>
+<pre><code class="language-js"><span class="hljs-comment">// BT:</span>
+foo().then( <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+   <span class="hljs-comment">/* 1 */</span> 
+});
+<span class="hljs-comment">/* 2 */</span>
+<span class="hljs-comment">// Which is first</span>
+
+<span class="hljs-keyword">async</span> funcion foo() {
+  <span class="hljs-comment">/* 1 */</span>
+  <span class="hljs-keyword">await</span> x;
+  <span class="hljs-comment">/* 2 */</span>
+    
+  <span class="hljs-comment">// are these the same turn?</span>
+}
+foo();
+<span class="hljs-comment">// HAZARD: setup state required by /* 2 */</span>
+</code></pre>
+<p>Currently, <code>await</code> is always async.</p>
+<p>JH: Concern that the notion of asynchrony bound to...?</p>
+<p>MM:</p>
+<p>JH: predicts that await means async to developers. await is composition.</p>
+<p>DD: yield is composition</p>
+<p>MM: asynchrony is mandated by the async keyword</p>
+<p>JH: is that adequate? <code>async</code> means asynchrony, <code>await</code> does not mean asynchrony, just pause the execution.</p>
+<p>YK: Come back to this?</p>
+<p>Agreed. Next turn of the event loop.</p>
+<p>JHD: Agree that <code>await x</code> always means <code>await Promise.resolve(x)</code>?</p>
+<p>Some agreement.</p>
+<p>YK: Doesn't fully describe the trade off</p>
+<p>MM: Implementation prohibited from making optimization</p>
+<p>JH: can we put together a program that illustrates the hazard?</p>
+<pre><code class="language-js"><span class="hljs-comment">// BT:</span>
+foo().then( <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+   <span class="hljs-comment">/* 1 */</span> 
+});
+<span class="hljs-comment">/* 2 */</span>
+<span class="hljs-comment">// Which is first</span>
+
+<span class="hljs-keyword">async</span> funcion foo() {
+  <span class="hljs-comment">/* 1 */</span>
+  <span class="hljs-keyword">await</span> x;
+  <span class="hljs-comment">/* 2 */</span>
+    
+  <span class="hljs-comment">// are these the same turn?</span>
+}
+foo();
+<span class="hljs-comment">// HAZARD: setup state required by /* 2 */</span>
+</code></pre>
+<p>YK:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x;
+foo().then( <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">val</span>) </span>{ x = val; <span class="hljs-comment">/* 1 */</span> } );
+<span class="hljs-comment">// what is x?</span>
+</code></pre>
+<p>JH: Is that an issue in asap? or were there other issues?</p>
+<pre><code class="language-js"><span class="hljs-comment">// BT &amp; YK:</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// relies on y being `1`</span>
+  <span class="hljs-keyword">await</span> x;
+  <span class="hljs-comment">// relies on y being `2`</span>
+}
+
+<span class="hljs-keyword">let</span> y = <span class="hljs-number">1</span>;
+foo();
+y = <span class="hljs-number">2</span>;
+</code></pre>
+<p>MM/DD/YK: discussing the hazards above.</p>
+<p>AK: Different conditions, different behavior.</p>
+<p>Discussion about race conditions in JS</p>
+<p>DH: largely around the interleaving asynchronous events</p>
+<ul>
+<li>Mark wants this to be limited</li>
+</ul>
+<p>MM: confirms</p>
+<p>YK: When type <code>await</code>, I expect unpredictability</p>
+<p>MM: unpredictable interleaving of job</p>
+<p>DD:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dStuff</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">window</span>.state === <span class="hljs-number">1</span>) { doA(); }
+  <span class="hljs-keyword">else</span> { doB(); }   
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  doStuff(); <span class="hljs-keyword">await</span> x; doStuff();
+}       
+
+<span class="hljs-built_in">window</span>.state = <span class="hljs-number">1</span>;
+foo();
+<span class="hljs-built_in">window</span>.state = <span class="hljs-number">2</span>;
+</code></pre>
+<p>MM: impossible to reason about a program without knowing something about what is going on.</p>
+<ul>
+<li>testing in sync case, and it works</li>
+<li>execute in async case, and it fails</li>
+</ul>
+<p>DD: Always have a consistent state on the next turn</p>
+<p>Discussion, restating positions back and forth.</p>
+<ul>
+<li>Promise cancellation:
+<ul>
+<li>Depends on cancellation at the promise level</li>
+<li>Urge promise champions to consider ergonomics with async functions</li>
+</ul></li>
+</ul>
+<p>BT: not going to specify cancellation in this proposal</p>
+<p>MM: Not sure that base Promise is going to change?</p>
+<p>DD: Talk offline.</p>
+<ul>
+<li>Await at top-level
+<ul>
+<li>Can you await at the top level of a module?</li>
+<li>Useful, especially in Node</li>
+</ul></li>
+</ul>
+<p>DH: Issues.</p>
+<p>YK: Previously, could assume that top level ran start to finish, if many pieces have setup await</p>
+<p>AWB: this changes the entire model of module execution</p>
+<p>BT: modules are wrapped in async function which called immediately</p>
+<p>MM: after top level await point, import/export, are these effected?</p>
+<p>AWB: initialization happens in the order of import/export but before the module body starts</p>
+<p>MM: only &quot;when&quot; the execution happens</p>
+<p>AWB: This could be misunderstood</p>
+<p>DH:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> ... from ...;
+
+<span class="hljs-keyword">let</span> m;
+
+<span class="hljs-keyword">if</span> (dev) {
+  m = <span class="hljs-keyword">await</span> local.import(<span class="hljs-string">"lib-dev"</span>);
+} <span class="hljs-keyword">else</span> {
+  m = <span class="hljs-keyword">await</span> local.import(<span class="hljs-string">"lib-production"</span>);
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> x = <span class="hljs-number">17</span>;
+</code></pre>
+<p>DH: Requires module be async.</p>
+<p>Unresolvable if node remains sync at the top level.</p>
+<p>(break)</p>
+<p>DH: we need to do more work offline.</p>
+<p>BT: is top level await worth pursuing?</p>
+<p>DH: Addresses a definite need, eg. dynamic module loading</p>
+<p>BT: Flesh it out?</p>
+<p>DH: No, this needs to be designed in concert with loader. Suggest decoupling to unblock async/await</p>
+<p>BT: Confirms.</p>
+<ul>
+<li>Waldemar's grammar concern?</li>
+</ul>
+<p>WH: (presenting now)</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span>(a=<span class="hljs-keyword">await</span>/
+</code></pre>
+<ul>
+<li>According to cover grammar, this is a division symbol</li>
+<li>Is await a keyword or identifier here?</li>
+</ul>
+<p>BT: parsed like a keyword, but there is a static semantics that says any occurence of await expression is an error.</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span>(a=<span class="hljs-keyword">await</span>/x, b=c/i) =&gt; b;
+</code></pre>
+<ul>
+<li>Parse cover grammar, don't know that you're in a arrow function. This lets await sneak through as an identifier</li>
+<li>When you do the reparse, <code>/x, b=c/i</code> is treated as a regexp</li>
+</ul>
+<p>MF: The reparse says it has to match this additional grammar, same set of tokens</p>
+<p>WH: It's not clear in the spec.</p>
+<p>BT: Yes, the await would appear as an identifier until you apply the cover grammar.</p>
+<p>MF: (reads from <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-static-semantics-coveredparenthesizedexpression">ECMAScript 2015 specification, section 12.2.1.1</a></p>
+<p>MF: if await is always an await expression, this would fail to reparse, resulting in a SyntaxError</p>
+<p>BT: Correct, expected.</p>
+<p>BT/WH to have offline discussion re: grammar.</p>
+<p>BT: Those that know execution model should review this.</p>
+<a href="#conclusionresolution-64-advance-async-functions-to-stage-2"><h4 id="conclusionresolution-64-advance-async-functions-to-stage-2">Conclusion/Resolution</h4></a><ul>
+<li><code>async (a, b) =&gt; await a + await b;</code> contingent on grammar validation</li>
+<li><code>async</code> functions: no construct slot</li>
+<li>errors occuring in parameter initialization take the catch path</li>
+<li>Approved for Stage 2</li>
+<li>Reviewers
+<ul>
+<li>Waldemar Horwat</li>
+<li>Jafar Husain</li>
+<li>Yehuda Katz</li>
+</ul></li>
+</ul>
+<a href="#65-proposed-changes-to-observable-api"><h2 id="65-proposed-changes-to-observable-api">6.5 Proposed Changes to Observable API</h2></a><p>(Jafar Husain)</p>
+<p><a href="https://github.com/zenparsing/es-observable/tree/zenlike">https://github.com/zenparsing/es-observable/tree/zenlike</a></p>
+<p><a href="https://docs.google.com/file/d/1uEVcOgJIMsHjN1vypKKyfmDRg_bz5cKXpo0v4Nc0q8NfqKolBeSDHIj8z9GS8A4EiMpZ8QQ3l87Q_wF3/edit?usp=docslist_api">Slides</a></p>
+<p>JH:</p>
+<p>Conclusions after 45 Issues and Impl Work</p>
+<ul>
+<li>Generator should not be used Sink</li>
+<li>Sync Subscription Affirmed Necessary</li>
+<li>Can implement EventTarget using Observable</li>
+</ul>
+<p>Using Generators as Sinks</p>
+<p>Issues:</p>
+<ul>
+<li>Type Fudging (would like implicit {done: true})</li>
+<li>Priming Problem
+<ul>
+<li>issue with implicit yield</li>
+<li>considered a decorator, but likely a footgun</li>
+</ul></li>
+<li>Return invoked on unsubscribe
+<ul>
+<li>mistake because it conflates two concepts: the need to free scarce resources and the need to signal iteration has completed</li>
+<li>the equivalent to breaking out of a for loop,</li>
+</ul></li>
+</ul>
+<p>YK: Why does it end up not being important to generators? (dispose being separated from return)</p>
+<p>YK: Straight forward to add a <code>dispose()</code> method to Generator instance objects  <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-generator-prototype">http://www.ecma-international.org/ecma-262/6.0/#sec-properties-of-generator-prototype</a></p>
+<p>JH: Believe adding <code>dispose()</code> is good</p>
+<p>DD: And/or remove <code>return()</code>. To remove the try/finally that's implicitly added around a for-of loop</p>
+<p>Discussion, re: try/finally</p>
+<p>JH: even if we fix the return/dispose conflation, the priming problem is still a compelling reason not to use generators as sinks</p>
+<p>Using Generators as Sinks (continued)</p>
+<p>Issues:
+...</p>
+<ul>
+<li>Multiple unsub methods</li>
+</ul>
+<p>Proposed Solution: Observer Type</p>
+<p>(get bullets from slide)</p>
+<p>Advantages of Observer Type</p>
+<p>(get bullets from slide)</p>
+<p>Proposed Observable Type Changes</p>
+<p>(get code from slide)</p>
+<p>DD: Strange to hide a method by using well-known symbol</p>
+<ul>
+<li>if sync subscription is allowed, just make it easy</li>
+</ul>
+<p>WH: What does Symbol.observer return? (Not referring to the symbol, but to the method to which this is the well-known symbol-as-computed property name)</p>
+<p>JH: Nothing</p>
+<p>DD: What happened to the flush that we discussed?</p>
+<p>JH: In progress</p>
+<p>MM: What is the <code>Object?</code> in <code>Observer</code> type?</p>
+<p>JH: Allowed to return something</p>
+<p>(Should be &quot;any&quot;)</p>
+<p>MM: Why not just support the Observer (in <code>subscribe</code> method)</p>
+<ul>
+<li>Prefer two separate methods</li>
+</ul>
+<p>JH: previously had a forEach that returns a promise, still exists, just not shown</p>
+<p>Discussing a swath of code on jsbin</p>
+<p>Sync Subscription Affirmed Necessary</p>
+<ul>
+<li>Necessary to build EventTarget using Observable
+(get rest of bullets from slide)</li>
+</ul>
+<p>Jafar moves through slides too fast.</p>
+<p>DD: Would prefer something simpler than Symbol.observer, instead just call it something obvious</p>
+<p>MM: Name it such a way that the name is clear to the user (no suggestion)</p>
+<p>Discussion, re: await observable.</p>
+<p>All scalar combinators produce promises or observables</p>
+<a href="#conclusionresolution-65-proposed-changes-to-observable-api"><h4 id="conclusionresolution-65-proposed-changes-to-observable-api">Conclusion/Resolution</h4></a><ul>
+<li>Approved for Stage 1 (which means: nothing changed here)</li>
+<li>Offline discussion, re: sync subscription</li>
+</ul>
+<a href="#613-advance-restspread-properties-to-stage-2"><h2 id="613-advance-restspread-properties-to-stage-2">6.13 Advance Rest/Spread Properties to Stage 2</h2></a><p>(Sebastian Markbage)</p>
+<p><a href="https://github.com/sebmarkbage/ecmascript-rest-spread">https://github.com/sebmarkbage/ecmascript-rest-spread</a></p>
+<p>SM:</p>
+<p>Static Properties vs. Computed Properties</p>
+<p>SM (slide): question on evaluating computed property keys multiple times on the LHS of a destructuring assignment?</p>
+<p>SM (slide): question when a &quot;rest&quot; destructured object param throws (via getter, for example), should <code>rest</code> be undefined, or a partial object. or, should the getter be copied rather than evaluated</p>
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">var</span> throwingObj = {
+    <span class="hljs-attr">x</span>: <span class="hljs-number">1</span>, 
+    <span class="hljs-attr">y</span>: <span class="hljs-number">2</span>, 
+    get z() { <span class="hljs-keyword">throw</span> myError; },
+    <span class="hljs-attr">w</span>: <span class="hljs-number">4</span>
+  };
+
+  <span class="hljs-keyword">var</span> {x, ...rest} = throwingObj;
+  
+} <span class="hljs-keyword">catch</span> (err) {
+  x; <span class="hljs-comment">// 1</span>
+  rest; <span class="hljs-comment">// undefined (could be { y:2, w: 4 })</span>
+}
+</code></pre>
+<p>MM: possibilities?</p>
+<p>SM:</p>
+<ul>
+<li>undefined</li>
+<li>{ y: 2, w: 4 }</li>
+</ul>
+<p>MF: also <code>{}</code> and <code>{ y: 2 }</code></p>
+<p>MM: further semantics need to be explored</p>
+<a href="#conclusionresolution-613-advance-restspread-properties-to-stage-2"><h4 id="conclusionresolution-613-advance-restspread-properties-to-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Approved for Stage 2</li>
+<li>Reviewers
+<ul>
+<li>Andreas Rossberg</li>
+</ul></li>
+</ul>
+
+</body>

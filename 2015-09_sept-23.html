@@ -1,0 +1,485 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 23, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-23-2015-meeting-notes"><h1 id="september-23-2015-meeting-notes">September 23, 2015 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
+<hr>
+<a href="#55-decorators-update"><h2 id="55-decorators-update">5.5 Decorators Update</h2></a><p>(Yehuda Katz)</p>
+<p><a href="https://github.com/wycats/javascript-decorators/tree/big-picture">https://github.com/wycats/javascript-decorators/tree/big-picture</a></p>
+<p>YK: Consider this an exploration in several cross cutting features that are in development.</p>
+<p>Starting at <a href="https://github.com/wycats/javascript-decorators/blob/big-picture/interop/reusability.md#usage-with-property-declarations-in-javascript">https://github.com/wycats/javascript-decorators/blob/big-picture/interop/reusability.md#usage-with-property-declarations-in-javascript</a></p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
+  @reader _first = <span class="hljs-string">"Andreas"</span>;
+  @reader _last = <span class="hljs-string">"Rossberg"</span>;
+}
+
+<span class="hljs-keyword">let</span> andreas = <span class="hljs-keyword">new</span> Person();
+andreas.first <span class="hljs-comment">// "Andreas"</span>
+andreas.last <span class="hljs-comment">// "Rossberg"</span>
+</code></pre>
+<p>The <code>@reader</code> decorator has created the getters for <code>first</code> and <code>last</code>. ie.</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
+  @reader _first = <span class="hljs-string">"Andreas"</span>;
+  @reader _last = <span class="hljs-string">"Rossberg"</span>;
+}
+
+<span class="hljs-comment">// Actually produces...</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
+  _first = <span class="hljs-string">"Andreas"</span>;
+  _last = <span class="hljs-string">"Rossberg"</span>;
+
+  get first() { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._first; }
+  get last() { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._last; }
+}
+</code></pre>
+<p>Assume <code>@reader</code> is defined as:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">reader</span>(<span class="hljs-params">target, descriptor</span>) </span>{
+  <span class="hljs-keyword">let</span> { enumerable, configurable, <span class="hljs-attr">property</span>: { name, get }, hint } = descriptor;
+
+  <span class="hljs-comment">// extractPublicName('_first') === 'first'</span>
+  <span class="hljs-keyword">let</span> publicName = extractPublicName(name() <span class="hljs-comment">/* extract computed property */</span>);
+
+  <span class="hljs-comment">// define a public accessor: get first() { return this._first; }</span>
+  <span class="hljs-built_in">Object</span>.defineProperty(target, publicName, {
+    <span class="hljs-comment">// give the public reader the same enumerability and configurability</span>
+    <span class="hljs-comment">// as the property it's decorating</span>
+    enumerable, configurable, <span class="hljs-attr">get</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> get(<span class="hljs-keyword">this</span>, name); }
+  });
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractPublicName</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-comment">// Symbol(first) -&gt; first</span>
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> name === <span class="hljs-string">'symbol'</span>) <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>(name).slice(<span class="hljs-number">7</span>, <span class="hljs-number">-1</span>);
+
+  <span class="hljs-comment">// _first -&gt; first</span>
+  <span class="hljs-keyword">return</span> name.slice(<span class="hljs-number">1</span>);
+}
+</code></pre>
+<p>AWB: How is <code>super</code> treated, when encountered?</p>
+<p>YK: Not yet considered, avoiding entanglement with yet to exist features, trying to stay future proof to account for them.</p>
+<p>Moving on to: <a href="https://github.com/wycats/javascript-decorators/blob/big-picture/interop/reusability.md#basic-rules-of-decorators">https://github.com/wycats/javascript-decorators/blob/big-picture/interop/reusability.md#basic-rules-of-decorators</a></p>
+<p>DH: Decorators vs. macros: staging. Decorators good next step</p>
+<p>YK: Consider decorators a meta programming facilities.</p>
+<p>Basic Rules of Decorators:</p>
+<ul>
+<li>Decorators always operate on a particular syntactic element, providing a hook into the runtime semantics for that syntax.</li>
+<li>If the runtime semantics for the syntax include <code>let x be the result of evaluating SomeExpression</code>, that expression is passed into the decorator as a function that, when called, evaluates the expression (a &quot;thunk&quot;).</li>
+<li>Decorators are not macros: they cannot introduce new bindings into the scope and cannot see any downstream syntax. They are restricted to operating on a local declaration using reflection tools.</li>
+</ul>
+<p>Looking at: <a href="https://github.com/wycats/javascript-decorators/blob/big-picture/interop/reusability.md#appendix-making-propertydefinitionevaluation-decoratable">https://github.com/wycats/javascript-decorators/blob/big-picture/interop/reusability.md#appendix-making-propertydefinitionevaluation-decoratable</a></p>
+<p>AWB: Why not capture the property key, could be computed property</p>
+<p>YK: Don't want to make that policy decision, but can revisit.</p>
+<p>AWB:</p>
+<p>YK: general open question about whether a decorator function has to return a descriptor or not. alternatives like &quot;false =&gt; cancel property creation&quot; or &quot;undefined&quot; to keep going untouched, etc
+...explanation of &quot;decorate&quot; implementation in the appendix, which is semantics, but not API.</p>
+<p>DH: question about if decorators have to be identifiers, or LHS</p>
+<p>YK: (explaining how computed and uninitialized property decorators would work the same)</p>
+<p>YK: static properties would be treated the same as object literal properties, as type &quot;property&quot; instead of type &quot;field&quot;</p>
+<p>Discussion re: <code>static @reader</code> vs. <code>@reader static</code></p>
+<p>YK: you have to decide where to put the decorator, I've always put it to the right. Usually modifying the builtin thing</p>
+<p>AWB: I've always thought of it as modifying the declaration</p>
+<p><em>question about shadowing symbol bindings in Methods example, update function</em></p>
+<p>YK: easy to create shadowing hazards with symbols and function args</p>
+<p>(explanation of decoration on properties in object literals using shorthand syntax)</p>
+<p>DH: basically the hint is a tag to explain to the decorator function the context being used</p>
+<p>YK: yes, this is a motivating example</p>
+<p>AWB: ambiguity here? can't tell whether the user wants to initialize to null vs. normal shorthand syntax</p>
+<p>YK: it's up to the decorator to decide the semantics</p>
+<p>YK: simplest solution is to say that you have to type @reader _first: undefined directly</p>
+<p>YK: but my suggestion is to allow decorator to decide</p>
+<p>(describing how the motivating example would look in MM's syntax)</p>
+<pre><code class="language-js">public @reader <span class="hljs-keyword">this</span>._first = first;
+</code></pre>
+<p>YK: feel less strongly about how in-constructor declaration is bad. Moving @reader to the right of public</p>
+<p>DH: I don't think that's the issue. more important that properties are at the toplevel of class</p>
+<p>YK: not arguing one way or the other for &quot;initialization in constructors or not&quot; but trying to demonstrate that that question is orthogonal to this topic</p>
+<p>MM: accept that this is orthogonal</p>
+<p>YK: <em>showing syntax alternatives for privates, not trying to bikeshed</em></p>
+<p>YK: in this hypothetical privates scenario, subclasses would not have access to superclasses' &quot;private&quot; fields, ie, lexical scope</p>
+<p>YK: no reflection API to get at privates outside of lexical class body, and Proxies do not allow access to it</p>
+<p>DH: if you want to think of it like weak map...</p>
+<p>YK: that's not the programming model or representation. Reflect.construct is a difference</p>
+<p>DH: doesn't affact intercession</p>
+<p>YK: from semantics perspective, very similar</p>
+<p>Discussion of observable differences between weakmap and this</p>
+<p>MM: only becomes observably different in the future were it could be reified</p>
+<p>YK: I agree. My proposal doesn't make it a weakmap, but from a programmer perspective, you could see it that way</p>
+<p>AWB: difference: a mirror of private state needs to be presented to decorator, mirror is presented at class definition time not instantiation time…</p>
+<p>YK: there's one difference, it's a <em>read only</em> WeakMap - you aren't allowed to set the fields</p>
+<p>MM: about mirror: mirror is reflecting on the class...</p>
+<p>AWB: no instance-level reflection</p>
+<p>MM: why does the reification of the field name as part of the reification of the class need to be able to give read access to the instance value</p>
+<p>AWB: it doesn't</p>
+<p>YK: TL;DR new metaproperty called class.slots, effectively a limited subset of the weakmap API. only operation I care about is class.slots.for, gives dictionary with private fields</p>
+<p>MM: some reification of the name of the private fields?</p>
+<p>YK: just the ones that are lexically available to the class definition. Gives keys and values of properties declared</p>
+<p>MM: why give the ability to read the instance value, but not to set the intsance value</p>
+<p>YK: sorry, imprecise. You can set private slots, cannot replace dictionary. Think of it as non-configurable</p>
+<p>MM: ok, good. reification is not quite a weak map, doesn't have ability to delete. Violates the fixed shape constraint</p>
+<p>AWB: agree details need to be figured out, but big picture sounds good</p>
+<p>YK: (describing syntax class.slotsof)</p>
+<p>MM: class.slotsof is a special form</p>
+<p>YK: refers to a lexical binding, not value. wanted for ergonomic reasons, if you need to do things on the class outside of the class definition lexical scope</p>
+<p>AWB/YK: better to try to move this inside the class definition, perhaps with a static { ... } block inside the class definition</p>
+<p>(discussion of accessing parent's slots from nested inner class)</p>
+<p>DH: for this case, just use a local variable in parent scope, can be accessed by inner class. maybe let bindings in class definition?</p>
+<p>YK: class.slots reification mechanism is 90% sugar</p>
+<p>DH: (example of let binding of class.slots in class toplevel so binding can be accessed by inner class)</p>
+<p>AWB: if you have this you have less need for static private slots</p>
+<p>YK: static method that you invoke and delete immediately has same behavior</p>
+<p>(discussion of private statics)</p>
+<p>MM: thing that makes private statics different, for an instance, all contributions are collected into one instance, in static it is spread out over the prototype chain... should be able to let the prototype chain do it's work</p>
+<p>AWB: don't think so, what if you make an instance count static. now define subclasses, don't they get their own instance count?</p>
+<p>MM: but they can't access it</p>
+<p>YK: (getting back to presentation)</p>
+<p>YK: (explaining how slots.for is abstraction for get/set in decorator for public vs. private properties)</p>
+<p>(come back to field, slot, property distinction)</p>
+<p>BE notes:</p>
+<ul>
+<li>class elements define properties of the class prototype, class statics of the constructor</li>
+<li>JM's property declarations specify something else: instructions to run from <code>[[Construct]]</code> before the constructor call</li>
+<li>this suggests using &quot;field&quot; as jargon for JM's public property declarations and YK's private slot declarations</li>
+<li>field: instance property instruction specified by declarative new kind of class element, public or private</li>
+<li>slot private field
+AWB recalls ARB's V8 self-hosted JS has private slots, want them to pack in instance storage</li>
+</ul>
+<p>DD: cannot be allowed to run synchronous operations arbitrarily in all constructor (HTML Elements, etc.)</p>
+<p>YK: Agree, lock down reflection APIs</p>
+<p>AWB: Any new reflection APIs should be reviewed by Mark for security</p>
+<p>(lunch)</p>
+<p>YK: Summary...</p>
+<ul>
+<li>Decorators on methods</li>
+<li>Decorators on object literal properties</li>
+</ul>
+<p>Neither rely on some other proposal</p>
+<p>DE: previous proposal mentioned function decorators</p>
+<p>YK: Issues</p>
+<ul>
+<li>Staging</li>
+<li>Where does decorator go? It's clear with class and object literal, not with function decl.</li>
+</ul>
+<p>AWB: TDZ?</p>
+<pre><code class="language-js"><span class="hljs-comment">// TDZ on access vs invocation</span>
+
+addEventListener(<span class="hljs-string">"error"</span>, onerror);
+
+@metadata(<span class="hljs-string">"foo"</span>);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onerror</span>(<span class="hljs-params">...args</span>) </span>{
+    
+}
+</code></pre>
+<p>Unclear what this does.</p>
+<p>DH: The decorator is not wrapping, is mutating existing object.</p>
+<ul>
+<li>not calling the decorator later.</li>
+<li>An identity decorator should be equivalent to not having a decorator at all</li>
+<li>Becomes the one place a decorator is not wrapping.</li>
+</ul>
+<p>Angular use case: want to decorate function declarations for unit testing.</p>
+<p>DH: factor out function declaration decorators. Rather have an imperfect decorator than none at all.</p>
+<p>YK: Not actually proposing this.</p>
+<p>MM: Happy with this at stage 1, no controversy.</p>
+<p>YK: Important change: If expression, thunk on it.  (thunking in lieu of quoting)</p>
+<p>AWB: is there specifically a name parameter that is that thunk?</p>
+<p>YK: yes.</p>
+<p>AWB: trying to understand various binding contexts where wouldnt want to evaluate ...</p>
+<p>YK: not confident that there is no case to defer evaluation</p>
+<p>AWB: concerned about expressions <em>not</em> being evaluated</p>
+<p>Discussion, re: effect on computed and non-computed properties</p>
+<p>JM: VM authors lose the ability to understand the shape?</p>
+<p>YK: No</p>
+<p>AWB: requires analysis at runtime, rather than compilation.</p>
+<p>AK: might lose runtime fast path</p>
+<p>DH: can't be any worse than existing policy of looking at the shape after the constructor is done.</p>
+<p>AK: Once you see decorator in literal, the VM gives up until sometime later.</p>
+<p>YK: Doesn't mean it's slow</p>
+<p>AK: In the short term, maybe.</p>
+<p>DH: need to understand challenges:</p>
+<ul>
+<li>already ahave machinery to analyze and find optimizations</li>
+<li>accept that decorators may have a slow first implementation</li>
+<li>why can't you then immediately optimize with existing machinery?</li>
+</ul>
+<p>YK: Request moving presented today and &quot;privates&quot; (abstractly) to stage 1. Want to think about future additions in terms of being decoratable.</p>
+<p>DD: Not enough discussion re: decorating shorthand properties.</p>
+<p>AWB: This is just part of feature design details.</p>
+<p>AK: Don't understand the &quot;bundle&quot;.</p>
+<p>YK: Form a champion group to work forward these features as a group.</p>
+<p>JM: Do something outside of committee.</p>
+<ul>
+<li>Private state</li>
+<li>Decorators</li>
+<li>Decoratable object literal properties</li>
+</ul>
+<a href="#conclusionresolution-55-decorators-update"><h4 id="conclusionresolution-55-decorators-update">Conclusion/Resolution</h4></a><ul>
+<li>Remains at Stage 1 with all changes presented</li>
+</ul>
+<a href="#53-async-functions"><h2 id="53-async-functions">5.3 Async Functions</h2></a><p>(Brian Terlson)</p>
+<p>BT: Stage 3 proposal?</p>
+<ul>
+<li>Waldemar has reviewed, changes in place.</li>
+<li>Yehuda and I agree on cancelation</li>
+<li>Believe that cancelation can be done later</li>
+</ul>
+<p>YK: If you don't type <code>return</code> in your async function, no way to the return path. May have written some finalization, but no way to guarantee</p>
+<p>BT: Can write async that assumes some finalization, that might not happen.</p>
+<p>YK: In the absence of cancelation, if there are no upstream promises to reject...</p>
+<p>DD:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  setup();    
+  <span class="hljs-keyword">await</span> delay(<span class="hljs-number">5000</span>);
+  cleanup();
+}
+
+<span class="hljs-keyword">const</span> p = foo();
+
+p.cancel();
+
+<span class="hljs-comment">// Would need to be...</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  setup();    
+  
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> delay(<span class="hljs-number">5000</span>);
+  } <span class="hljs-keyword">finally</span> {
+    cleanup();
+  }
+}
+
+<span class="hljs-keyword">const</span> p = foo();
+
+p.cancel();
+</code></pre>
+<p>If async functions forever stay non-cancelable, no issue. If all async functions become cancelable, the hazard is introduced.</p>
+<p>BT: async functions <em>must</em> be cancelable. We won't add them unless they are.</p>
+<ul>
+<li>fulfilled: normal completion</li>
+<li>rejected: throw abrupt completion</li>
+<li>canceled: return abrupt completion</li>
+<li>???: continue/break abrupt completion</li>
+</ul>
+<p>JHD: q. about synchronous &quot;return abrupt completion&quot;</p>
+<p>YK: Generator, call <code>return()</code></p>
+<p>&quot;Return Abrupt Completion&quot; is for any kind of return from current execution</p>
+<p>BT: case where promise returned by async function, awaiting 5 promises? A promise is canceled, reasonable to handle that promise and move onto the next thing—otherwise have to nest 5 try/finally deep.</p>
+<p>Discussion of return, cancelation and recovery.</p>
+<p>AWB: A new type of completion?</p>
+<p>YK/BT: Yes</p>
+<p>JHD: Clarify need for cancelation?</p>
+<p>BT: Cancelation important, widely wanted, they will come to Promises, and will not be able to use async functions for that. So needed for async.</p>
+<p>Discussion re: promise cancelation, how to introduce it.</p>
+<p>CM: clarification between the two main uses of a cancelation.</p>
+<p>YK: Promises should be allowed to represent themselves as cancelable</p>
+<p>CM: No disagreement.</p>
+<p>JHD: maybe cancel is just the wrong name?</p>
+<p>YK: cancel impacted design, want to make sure that adding cancel to async function in the future wont pown them.</p>
+<p>BT: haven't found significant issues with cancelation for async functions</p>
+<ul>
+<li>Subtle to add to Promises, but work needed</li>
+<li>No obvious issue to add to async function</li>
+</ul>
+<p>Hazard:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  setup();    
+  <span class="hljs-keyword">await</span> delay(<span class="hljs-number">5000</span>);
+  cleanup(); <span class="hljs-comment">// &lt;-- not called if canceled. </span>
+}  
+</code></pre>
+<p>...</p>
+<p>DE: Changes since last update?</p>
+<p>BT: No relevant.</p>
+<p>AK: Async arrows?</p>
+<p>BT: Waldemar reported no issues.</p>
+<p>DD: Should use try/finally to guarantee cleanup. Strictly a hazard if someone starts calling <code>cancel()</code> on your promises.</p>
+<p>BE: Does this push up need for finally method?</p>
+<p>BT: Need more work there.</p>
+<p>YK: <code>finally</code> is a handler, doesn't correspond to a completion record change, but a cluster of completion records</p>
+<p>DD:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  setup();    
+  
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> promise;
+  } <span class="hljs-keyword">catch</span> cancel {
+    <span class="hljs-comment">// recover and continue?</span>
+  } <span class="hljs-keyword">finally</span> {
+    cleanup();
+  }
+}
+
+promise.cancel();
+</code></pre>
+<p>BE: Add cancel to Promises, then ok for async/await</p>
+<p>BT: finally is being conflated with cancelation</p>
+<p>This is stage 0.</p>
+<p>SP: A future where finally is important, if code written to expect, then ok.</p>
+<p>BE: Should use try/finally, regardless of await</p>
+<p>...</p>
+<p>BT: Chakra has implemented async/await on Edge. SpiderMonkey may have implementation? In Babel, TypeScript, Flow.</p>
+<p>DH: Confirmed active development in SpiderMonkey</p>
+<p>JHD: (some q about try/finally)</p>
+<p>SP: assume code written indefensively might fail.</p>
+<p>More totally useful, important, completely clear and not repetitive discussion about how bad code might fuck up if promises are canceled.</p>
+<a href="#conclusionresolution-53-async-functions"><h4 id="conclusionresolution-53-async-functions">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 Approval</li>
+</ul>
+<a href="#ecma-402-update"><h2 id="ecma-402-update">ECMA 402 Update</h2></a><p>RW: blah blah blah</p>
+<p>AWB: A lot of proposals, what is the criteria for new additions</p>
+<p>EF: Paving cow paths, otherwise remain in library code. Working on proposals for plural and relative-time formatting.</p>
+<p>CP: For ES2016, we will focus on exposing low level apis for existing abstract methods. New features will probably arrive in ES2017.</p>
+<p>DD: FirefoxOS devs discovered real needs that are being reported.</p>
+<p>EF: Getting the locale data (e.g. CLDR data) into/accessible-by the runtimes is a focus because it avoids haivng to transfer larges amounts of data over the network. NumberFormat and DateTimeFormat have large amounts of locale data to back their APIs; looking to do something similar for plural and relative-time formatting proposals.</p>
+<a href="#conclusionresolution-ecma-402-update"><h4 id="conclusionresolution-ecma-402-update">Conclusion/Resolution</h4></a><ul>
+<li>Send new HTML to Ecma</li>
+</ul>
+<a href="#510-proposal-stringpadleft--stringpadright"><h2 id="510-proposal-stringpadleft--stringpadright">5.10 Proposal: String#padLeft / String#padRight</h2></a><p>(Jordan Harband, Rick Waldron)</p>
+<p><a href="https://github.com/ljharb/proposal-string-pad-left-right">https://github.com/ljharb/proposal-string-pad-left-right</a></p>
+<p>JHD: (run through history of proposal)</p>
+<ul>
+<li>min length vs. max length semantics? min length semantics with repeat. max length is the desired functionality.</li>
+</ul>
+<p>AWB: re: min length and max length, concerning unicode characters, code points.</p>
+<p>JHD: Issues will exist in <em>any</em> string apis. This API doesn't use code points, can be changed to do so. Length property wouldn't be useful. If filler is a surrogate pair, I can use a multiple of it's length...</p>
+<ul>
+<li>Max length is in code points?</li>
+</ul>
+<p>DH: re: terminal output, do control characters count against length?</p>
+<p>JHD: Yes, always.</p>
+<p>Discussion, re: code points vs. latin centric characters</p>
+<p>BT: This API is no different than existing APIs</p>
+<p>JHD: really want to solve this? Change everything to use graphemes</p>
+<p>AWB: interpret &quot;length&quot; as simply: &quot;number of occurrences of your fill character&quot;</p>
+<p>DD: assumes the rest of your string is Emoji. Never going to get the width correct.</p>
+<p>AWB: if it doesn't do the right thing in the real world, why?</p>
+<p>BT: Trying to do things beyond the simplest use case is just untenable.</p>
+<p>RW: Intl could adopt responsibility for a non-latin character set handling?</p>
+<p>BT: Agree.</p>
+<p>Derailed into discussion about what gets to go in the standard library and what gets defined in a standard module.</p>
+<p>DH: (To Rick) Not cool to attack other specs when inclusion of proposal is questioned.</p>
+<p>Note: I made a comment that if two string methods are &quot;too much&quot;, then we should revisit SIMD for the same concerns.</p>
+<p>Back to padLeft, padRight...</p>
+<p>DH: Clearly important if implementers are agreeing to implement before other features.</p>
+<p>Discussion re: stage 1 or 2?</p>
+<p>AWB: For stage 2, controversy resolved.</p>
+<p>JHD: Then stage 1.</p>
+<a href="#conclusionresolution-510-proposal-stringpadleft--stringpadright"><h4 id="conclusionresolution-510-proposal-stringpadleft--stringpadright">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>Reviewers to be assigned.</li>
+</ul>
+<a href="#511-proposal-objectvalues--objectentries"><h2 id="511-proposal-objectvalues--objectentries">5.11 Proposal: Object.values / Object.entries</h2></a><p>(Jordan Harband)</p>
+<p><a href="https://github.com/ljharb/proposal-object-values-entries">https://github.com/ljharb/proposal-object-values-entries</a></p>
+<p>JHD: Need is obvious.</p>
+<p>Question about return: iterable or array? Spec wants to be an array.</p>
+<p>DH: Confirm, when array you get a snapshot. If an iterator, then updates would be shown, which breaks from <code>keys</code></p>
+<a href="#conclusionresolution-511-proposal-objectvalues--objectentries"><h4 id="conclusionresolution-511-proposal-objectvalues--objectentries">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2 Approval</li>
+</ul>
+<a href="#512-proposal-stringmatchall"><h2 id="512-proposal-stringmatchall">5.12 Proposal: String#matchAll</h2></a><p>(Jordan Harband)</p>
+<p><a href="https://github.com/ljharb/String.prototype.matchAll">https://github.com/ljharb/String.prototype.matchAll</a></p>
+<p>JHD: pass a regex, returns an iterator, each yield returns what exec would.</p>
+<p>Notable:</p>
+<ul>
+<li>doesn't accept a string, not coercion</li>
+<li>always adds the &quot;g&quot; flag</li>
+<li>makes a &quot;copy&quot; of regexp to avoid mutating</li>
+</ul>
+<p>BE: reason for not including string?</p>
+<p>JHD: Enforces a better practice</p>
+<p>AWB/BE: valid, but creates an inconsistency, should be updated to include string.</p>
+<p>JHD: Will update then.</p>
+<p>AWB: Needs to work with RegExp subclass as well.</p>
+<p>DE: Will call RegExp.prototype.exec, can leak the RegExp.</p>
+<p>Confirmed.</p>
+<p>Specify as <code>@@matchAll</code></p>
+<p>AWB: Default impl of <code>@@matchAll</code>, see default <code>@@match</code></p>
+<p>DD: Not a lot of &quot;library&quot; code</p>
+<p>BE: Won't find it there, it's generally in &quot;open code&quot;. Steve Levithan wrote about this.</p>
+<p>YK: Ruby has a scan method, which I use frequently.</p>
+<p>DD: an alternate: add another flag that avoid global state</p>
+<p>nah.</p>
+<p>DE: Still leaks.</p>
+<p>Can we avoid the observable &quot;cloning&quot;?</p>
+<p>BE: Take back to work through this</p>
+<p>Discussion of algorithm approaches.</p>
+<p>YK: Missing? A thing that's like exec, but gives you back the lastIndex?</p>
+<p>AWB: <code>exec()</code> could grow an additional argument for start position.</p>
+<p>The name stinks, but nothing really better.</p>
+<ul>
+<li><code>matchEach</code>? It produces an iterator... (some agreement)</li>
+</ul>
+<p>nah.</p>
+<a href="#conclusionresolution-512-proposal-stringmatchall"><h4 id="conclusionresolution-512-proposal-stringmatchall">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 approval</li>
+<li>Accept strings</li>
+<li>Allow RegExp subclass</li>
+<li>Default impl of <code>@@matchAll</code>, see default <code>@@match</code></li>
+</ul>
+<a href="#59-trailing-commas-in-function-parameter-lists"><h2 id="59-trailing-commas-in-function-parameter-lists">5.9 Trailing commas in function parameter lists</h2></a><p>(Jeff Morrison)</p>
+<p>JM: Updates since previous...</p>
+<p>MF: Change arity? Object, array...</p>
+<p>RW: No, ignored.</p>
+<p>YK: Symmetry with arrays? Holes on the call side?</p>
+<p>nah.</p>
+<p>BE: (revisit C issues with trailing commas)</p>
+<p>AWB:</p>
+<p>Missing:</p>
+<ul>
+<li>evaluation rules</li>
+<li>static semantics rules</li>
+</ul>
+<p>BT: Don't need to block on this, can be delivered later.</p>
+<p>Quick run through trailing comma in parenthetical expressions</p>
+<p>nah.</p>
+<a href="#conclusionresolution-59-trailing-commas-in-function-parameter-lists"><h4 id="conclusionresolution-59-trailing-commas-in-function-parameter-lists">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Reviewers?</li>
+<li>Michael Ficarra</li>
+<li>Brian Terlson</li>
+</ul>
+<a href="#process-discussion"><h2 id="process-discussion">Process Discussion</h2></a><ul>
+<li>A plenary day</li>
+<li>Two presentation and discussion days</li>
+</ul>
+<a href="#exponentiation-operator"><h3 id="exponentiation-operator">Exponentiation Operator</h3></a><p>RW: Precedence issues:</p>
+<p>BE (On whiteboard): -x^y in math and every other language means -(x^y)</p>
+<p>Old spec is (-x)^y</p>
+<p>AWB: Does the potential confusion of this (whichever way it happens to be decided) suggest we should pull it out?</p>
+<p>BE: No, math and every other programming language do it this way...</p>
+<p>AWB: I agree if there is an exponentiation operator the precedence should be followed going back to math. Since this potential confusion has been identified, we have a perfectly good way to do this...</p>
+<p>RW: This is a case of the new process working as it should - implementers gave feedback, proposal is now better.</p>
+<p>YK: Arguing for -5 ** 2 being (-5) ** 2 because people will think that's how it works.</p>
+<p>YK: I think minus is kind of an edge case and I'm happy with this either way. Is my intuition wrong? If everyone else thinks the answer of what the proposal is now, then fine.</p>
+<p>BE: Problem is people thinking minus is part of the literal.</p>
+<p>DH: For math it seems obvious that -5^2. But for -5 ** 2, because of the whitespace around the infix operator. Even without space, - seems to be part of the literal.</p>
+<p>BT: Python docs says don't use space.</p>
+<p>YK: Doesn't JS precedence win over all other precedence?</p>
+<p>RW: Jason's intution matches that of all other programming languages that has intuition operator.</p>
+<p>YK: This is cargo culting.</p>
+<p>BE: Let's say that fortran did it to be mathy and everyone copied it. There's still a precedence argument.</p>
+<p>YK: I'm a rubyist. I had to look up what is in ruby. People don't know ow it works.</p>
+<p>DH: We are operating in the context of an industry that gets expectation from historical context or JavaScript operators?</p>
+<p>BE: You should be parenthesizing.</p>
+<p>RW: Coffee's ** operator matches Python and Math and Ruby.</p>
+<p>JH: Will value types complicate this? Will people copy/paste from C programs or other things?
+JS is eating the world. This will cause friction if we break historical precedence.</p>
+<p>YK: I don't copy/paste code from other languages.</p>
+<p>BE: Options: 1) wall of confusion, do nothing. 2) math/programming language precedence. 3) Javascript/dave/unary minus binds tighter people.</p>
+<p>RW: Mark advocates for abandon/withdraw (1)</p>
+<p>BE: Let's vote...</p>
+<p>1: 4, 2: 15, 3: 2 (including MM virtual vote)</p>
+<p>DH: Let's be clear - people might copy code I guess, but effectively zero people have an intutition about this from other languages. Agree people have an itutition that ** is the exponentiation operator. But people usually try to avoid dark corners so they never develop an intuition for negative bases.</p>
+<p>I also reject that we must do what math does.</p>
+<p>DD: I disagree.</p>
+<p>BE: New option: 4 - it is an error to combine ** with unary minus. Code you port doesn't have this almost for sure.</p>
+<p>No consensus... people are leaving.</p>
+
+</body>

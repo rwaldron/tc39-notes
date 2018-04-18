@@ -1,0 +1,488 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 23, 2017 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-23-2017-meeting-notes"><h1 id="may-23-2017-meeting-notes">May 23, 2017 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Jeff Morrison (JM), James Snell (JSL), Keith Miller (KM), Myles Borins (MBS), Rick Waldron (RW), Mariko Kosaka (MKA), Stephen Murphy (SMY), Rob Palmer (RPR), Andrew Paprocki (API), Philippa Gardner (PGR), Sam Goto (SGO), Mark S. Miller (MM), Nathan Hammond (NHD), Masud Rahman (MRN), Henry Zhu (HZU), Sebastian Markbåge (SM), Joe Mordetsky (JMY), Franziska Hinkelmann (FHN), Caridy Patiño (CP), Myles Borins (MBS), Ron Buckton (RBN), Ashley Williams (AWS), Domenic Denicola (DD), Patrick Soquet (PST), Peter Hoddie (PHE), Leo Balter (LBR), Ben Newman (BN), Jafar Husain (JH), Yehuda Katz (YK), Sarah D'Onofrio (SDO), Kirill Cherkoshin (KCN), Andres Suarez (ASZ), Diego Ferreiro Val (DFV), Tzvetan Mikov (TMV)</p>
+<p>Remote:
+Jamund Ferguson (JXF), Bradley Farias (BFS)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>(request slides?)</p>
+<p>AWB: (introduction, explanation of TC39 and Ecma)</p>
+<a href="#6-agenda-adoption"><h2 id="6-agenda-adoption">6. Agenda Adoption</h2></a><p><a href="https://github.com/tc39/agendas/blob/master/2017/05.md">https://github.com/tc39/agendas/blob/master/2017/05.md</a></p>
+<a href="#conclusionresolution-6-agenda-adoption"><h4 id="conclusionresolution-6-agenda-adoption">Conclusion/Resolution</h4></a><ul>
+<li>Adopted</li>
+</ul>
+<a href="#9-ecma-262-status-update"><h2 id="9-ecma-262-status-update">9. Ecma 262 Status Update</h2></a><p>(Brian Terlson)</p>
+<p>BT: (Final draft of ES2017 coming soon)</p>
+<ul>
+<li>Ongoing effort in Ecma and ISO to accept non-paged formats</li>
+<li>Convince to move away from paper documents</li>
+<li>Many editorial commits from Andre Bargul</li>
+<li>The opt-out period has ended, can move forward with publishing</li>
+<li>Executive committee approved draft last month</li>
+<li>The draft is now &quot;ES2018&quot; (which means we are working on ES2018)</li>
+</ul>
+<a href="#conclusionresolution-9-ecma-262-status-update"><h4 id="conclusionresolution-9-ecma-262-status-update">Conclusion/Resolution</h4></a><ul>
+<li>On track for publication</li>
+</ul>
+<a href="#10-ecma-402-status-update"><h2 id="10-ecma-402-status-update">10. Ecma 402 Status Update</h2></a><p>(Caridy Patino)</p>
+<p>CP: Draft is complete, producing a PDF with &quot;print to pdf&quot;.</p>
+<p>BT: If the new tool from Dean Tribble doesn't work out, we'll just do the same for Ecma 262</p>
+<p>CP: Minor editorial and version updates.</p>
+<a href="#11-ecma-404-status-update"><h2 id="11-ecma-404-status-update">11. Ecma 404 Status Update</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: We'll get to this on Thursday, please read the documents in reflector</p>
+<a href="#12-test262-status-updates"><h2 id="12-test262-status-updates">12. Test262 Status Updates</h2></a><p>(Leo Balter)</p>
+<p>LBR:</p>
+<ul>
+<li>over 200k new lines of test code written thanks to test generator</li>
+<li>a lot of coverage for async iteration</li>
+<li>New coverage for object spread (rest properties)</li>
+<li>Documenting new feature tests via front matter flags
+<ul>
+<li>this allows consumers to filter tests as needed</li>
+<li><a href="https://github.com/tc39/test262/blob/master/FEATURES.md">https://github.com/tc39/test262/blob/master/FEATURES.md</a></li>
+<li>Aiming to grow the contributor base.</li>
+</ul></li>
+</ul>
+<p>LBR: (explaining clean up of erroneous tests that interact with implied global, re: &quot;length&quot; and &quot;name&quot;)</p>
+<p>AWB:</p>
+<ul>
+<li>Tests are required for reaching Stage 4.</li>
+</ul>
+<p>RW:</p>
+<ul>
+<li>Has been working on some of the tests for async function and generators with for-await loops</li>
+<li>Extensive destructuring assignment and destructuring binding tests ported from for-of</li>
+<li>Caught some awesome crashing bugs.</li>
+</ul>
+<p>DD:</p>
+<ul>
+<li>Object Rest/Spread has open agenda item for further discussion.</li>
+<li>Has a fairly complete test suite.</li>
+</ul>
+<a href="#conclusionresolution-12-test262-status-updates"><h4 id="conclusionresolution-12-test262-status-updates">Conclusion/Resolution</h4></a><ul>
+<li>The work is never ending, want to discuss further contribution opportunities with other members</li>
+</ul>
+<a href="#16ia-regexp-legacy-features-for-stage-3"><h2 id="16ia-regexp-legacy-features-for-stage-3">16.i.a RegExp Legacy Features for Stage 3</h2></a><p>(Mark S. Miller, by Claude Pache)</p>
+<p><a href="https://github.com/tc39/proposal-regexp-legacy-features">https://github.com/tc39/proposal-regexp-legacy-features</a></p>
+<p>MM: The meeting notes did not capture the reviewer names, so didn't reach out.</p>
+<p>DE: subclassing restriction is neither necessary or sufficient.</p>
+<ul>
+<li>There are use cases where subclassing is relevant.</li>
+<li>The steps using new.target don't prevent leakage</li>
+</ul>
+<p>MM: Need to revisit.</p>
+<p>WH: Have same concern; in fact the very motivation argument contains an example that demonstrates why it's not motivated.</p>
+<ul>
+<li>Don't think subclassing should be gated.</li>
+</ul>
+<p>DE: Can discuss further and return</p>
+<p>MM: revisit on Thursday</p>
+<p>AWB: Don't need to rush</p>
+<p>MM: Goals: minimal semantic pollution, while matching web reality as closely</p>
+<a href="#conclusionresolution-16ia-regexp-legacy-features-for-stage-3"><h4 id="conclusionresolution-16ia-regexp-legacy-features-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Revisit on Thursday</li>
+</ul>
+<a href="#16ib-mathsignbit-proposal"><h2 id="16ib-mathsignbit-proposal">16.i.b. Math.signbit proposal</h2></a><p>(JF Bastien, presented by Keith Miller)</p>
+<p><a href="https://tc39.github.io/proposal-Math.signbit/Math.signbit.html">https://tc39.github.io/proposal-Math.signbit/Math.signbit.html</a></p>
+<p>KM: propose a signbit function that will behave as a signbit function should</p>
+<ul>
+<li>The existing Math.sign gives results that are unexpected</li>
+</ul>
+<p>WH: I disagree with how it's presented, but don't disagree with the feature</p>
+<p>KM:</p>
+<p><a href="https://tc39.github.io/proposal-Math.signbit/Math.signbit.html#sign">https://tc39.github.io/proposal-Math.signbit/Math.signbit.html#sign</a></p>
+<ul>
+<li>Should we coerce the number?</li>
+<li>What should we do with NaN?</li>
+</ul>
+<p>WH/MM: Why is Math.sign inadequate? Why would you like to get this information?</p>
+<p>KM: want to do low level operations that require the signbit</p>
+<p>RW: I spend a lot of time writing bit shifting operations to determine sign of values assembled from 8 bit, looking for signs.
+(After revisiting real driver code, and further discussion re: this is about the IEEE754 double precision sign bit, I retract this use case evidence. Determining signbit for these cases would require knowing the number of bits the value should be clamped to).</p>
+<p>MM: Is there a situation where you want just the sign bit but not the full 64-bit serialization of the number? If you usually/always want the full serialization too, you can just serialize to a TypedArray.</p>
+<p>AWB: cases where it might matter if you're receiving a value that came from positive or negative</p>
+<p>API: Important to use copysign to know if truncated precision that looks like zero is positive or negative, as in -0.000 being rendered in red</p>
+<p>WH: Using copysign or Math.signbit for that is a bug! If the original untruncated input is actually -0 (which you can get in various ways without any roundoff), it should not be rendered in red. Instead, use x&lt;0 as the test.</p>
+<p>YK: There may be cases that exist that can be satisfied with this operation in other languages?</p>
+<p>MM echoes: let's take a look at other languages.</p>
+<p>KM: There are many results for signbit in Apple codebase</p>
+<p>WH: How many of them are bugs?</p>
+<p>KM: Need to answer these questions:</p>
+<p><a href="https://tc39.github.io/proposal-Math.signbit/Math.signbit.html#alts">https://tc39.github.io/proposal-Math.signbit/Math.signbit.html#alts</a></p>
+<p>WH: If we're going to do this, the way it's specified now is the right way to do it: result is a boolean, NaNs are always &quot;positive&quot; to avoid another Pandora's box. However, I haven't seen any good motivation so far as to why we should do it. The one thing this does is provide a way to distinguish between +0 and -0; the canonical way of doing that has been to take their reciprocals.</p>
+<p>?: Or use Object.is, which is the new hotness.</p>
+<a href="#conclusionresolution-16ib-mathsignbit-proposal"><h4 id="conclusionresolution-16ib-mathsignbit-proposal">Conclusion/Resolution</h4></a><ul>
+<li>Coercison ToNumber?</li>
+<li>Unless otherwise necessary, follow existing</li>
+<li>The return type is Boolean?</li>
+<li>Yes</li>
+<li>NaN is equivalent to a positive number?</li>
+<li>JFB to address</li>
+</ul>
+<a href="#16ic-status-update-on-regexp-proposals-lookbehind-unicode-properties-dotall-flag-and-named-groups-status-update"><h2 id="16ic-status-update-on-regexp-proposals-lookbehind-unicode-properties-dotall-flag-and-named-groups-status-update">16.i.c Status update on RegExp proposals: lookbehind, Unicode properties, dotall flag and named groups status update</h2></a><p>(Daniel Ehrenberg)</p>
+<p>(request slides)</p>
+<p>DE: proposals…</p>
+<ul>
+<li>named groups <a href="https://github.com/tc39/proposal-regexp-named-groups">https://github.com/tc39/proposal-regexp-named-groups</a></li>
+<li>dotAll <a href="https://github.com/tc39/proposal-regexp-dotall-flag">https://github.com/tc39/proposal-regexp-dotall-flag</a></li>
+<li>Unicode properties <a href="https://github.com/tc39/proposal-regexp-unicode-property-escapes">https://github.com/tc39/proposal-regexp-unicode-property-escapes</a></li>
+<li>lookbehind <a href="https://github.com/tc39/proposal-regexp-lookbehind">https://github.com/tc39/proposal-regexp-lookbehind</a></li>
+</ul>
+<p>Status:</p>
+<ul>
+<li>All implemented in V8</li>
+<li>Tests in Test262</li>
+<li>Spec text written by Mathias Bynens and others</li>
+<li>Implement next?</li>
+<li>Sarah working on this in ChakraCore!</li>
+</ul>
+<p>LBR: I believe Andre Bargul is working on this in SpiderMonkey?</p>
+<p>SYG: Need to sync upstream? Not a clear rebase path forward</p>
+<p>AWB: Looking for an additional implementor for Stage 4</p>
+<p>SYG: Does Firefox count?</p>
+<p>KM: Michael Saboff is on board, as in: &quot;supports the idea&quot;</p>
+<a href="#conclusionresolution-16ic-status-update-on-regexp-proposals-lookbehind-unicode-properties-dotall-flag-and-named-groups-status-update"><h4 id="conclusionresolution-16ic-status-update-on-regexp-proposals-lookbehind-unicode-properties-dotall-flag-and-named-groups-status-update">Conclusion/Resolution</h4></a><ul>
+<li>General support?</li>
+</ul>
+<a href="#16id-intlsegmenter-for-stage-3"><h2 id="16id-intlsegmenter-for-stage-3">16.i.d Intl.Segmenter for Stage 3</h2></a><p>(Daniel Ehrenberg)</p>
+<p><a href="https://docs.google.com/presentation/d/1KC-qBVqsUdTiePWmSextuMGVIsUa3Tb9EOcVNIj8eOA/edit#slide=id.p">https://docs.google.com/presentation/d/1KC-qBVqsUdTiePWmSextuMGVIsUa3Tb9EOcVNIj8eOA/edit#slide=id.p</a></p>
+<p><a href="https://github.com/tc39/proposal-intl-segmenter">https://github.com/tc39/proposal-intl-segmenter</a></p>
+<p>DE: (from slides)</p>
+<ul>
+<li>What?
+<ul>
+<li>Locale-tailored grapheme, word and sentence breaks (UTS 29)</li>
+<li>Line breaks (UAX 14)</li>
+</ul></li>
+<li>Why?
+<ul>
+<li>Complex in-browser rich text editors, design tools, rendering</li>
+<li>Want to deprecate Chrome’s Intl.v8BreakIterator</li>
+</ul></li>
+<li>Out of scope
+<ul>
+<li>Hyphenation</li>
+</ul></li>
+</ul>
+<p>DE: new, &quot;jumpt to a point, reverse iteration&quot;</p>
+<p>BT: Any new features to Intl are impossible without ICU</p>
+<p>WH: Is the issue that ICU is the only viable library or that there are several libraries that do things differently?</p>
+<p>BT: ICU does a lot that the windows intl libraries don't do and vice versa. It's not that non-ICU are not viable, but that this is very ICU.</p>
+<p>AWB: Are we adding because it's in ICU, ir because it's fundamentally useful?</p>
+<p>BT: Fundamentally useful</p>
+<p>DE: have to decide between shipping massive amount of data or being slightly inaccurate</p>
+<ul>
+<li>Can be used for HTML line breaking accuracy</li>
+</ul>
+<p>BT: concerns...</p>
+<ul>
+<li>First time with Intl, we went in circles to implement &quot;implementation defined&quot;</li>
+<li>Now have a bug, because only non-ICU Intl. Our results are not interoperable.</li>
+<li>The community sees this as &quot;chakra does the wrong thing&quot;</li>
+<li>Expect to use the date time formatter to get a parseable date</li>
+<li>When there are invalid characters in result, they file bugs</li>
+<li>Want to format a full time, ie. minutes as mm:00, because spec said so.</li>
+</ul>
+<p>DE, BT: discussing Intl implementation databases...</p>
+<p>AWB?: Are those libraries standardized?</p>
+<p>DE: CLDR is Unicode (<a href="http://cldr.unicode.org/">http://cldr.unicode.org/</a>)</p>
+<p>DE: New ICU APIs go through a standards process.</p>
+<p>AWB: edition 1 of Ecma 402: &quot;don't like things left under specified&quot;. The outcome is interoperability issues on the web.</p>
+<p>BT: It would be better if the implementations were all diverse instead of a consensus-of-3 vs. 1. The latter case makes the 1 look like a bug.</p>
+<p>RW: (provides historic context w/r to the intentional under specification)</p>
+<p>AWB: Do we want to specify a behavior, ie. ICU or not?</p>
+<ul>
+<li>Would it be better for interoperability to specify explicitly?</li>
+<li>Should we draw the line and say we're not going to introduce new features that are intentionally underspecified?</li>
+</ul>
+<p>BT/AWB: Do nothing until we get consensus on normative references to, eg ICU.</p>
+<p>BT: The windows database has everything that CLDR has (regularly updated), this doesn't help.</p>
+<p>AWB: Do we introduce new features that are not fully specified?</p>
+<p>DE: Likely need to work offline</p>
+<p>BT: Ok with stage 3 because it gives me enough time to take this to the Windows team</p>
+<p>DE: Stage 3 might be a good &quot;forcing function&quot; to drive the research to solve the above questions and concerns</p>
+<p>BT: Agree</p>
+<p>AWB: I think we shouldn't advance &quot;implementation dependent&quot; features</p>
+<p>BT: We're moving towards ICU normative</p>
+<p>DE: Whether we make it normative or not, is not relevant to spec text</p>
+<p>AK: Not a stage 3 issue.</p>
+<p>(Further discussion re: unspecified or underspecified features)</p>
+<p>LBR: Would like to ensure that someone from Microsoft is formally reviewing.</p>
+<a href="#conclusionresolution-16id-intlsegmenter-for-stage-3"><h4 id="conclusionresolution-16id-intlsegmenter-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Reviews still needed</li>
+<li>Caridy Patino</li>
+<li>Kent C. Dodds will find someone at PayPal</li>
+<li>Brian Terlson</li>
+</ul>
+<a href="#normative-icu-reference"><h2 id="normative-icu-reference">Normative ICU Reference</h2></a><p>BT: Should we advance a proposal for normative ICU reference?</p>
+<p>DE: want to include Steven Loomis and Anne van Kesteren in this discussion</p>
+<p>JSL: Volunteer to help</p>
+<a href="#conclusionresolution-normative-icu-reference"><h4 id="conclusionresolution-normative-icu-reference">Conclusion/Resolution</h4></a><ul>
+<li>Stage 0</li>
+<li>Domenic Denicola to act as committee liaison</li>
+</ul>
+<a href="#16ie-standardizing-dateprototypetostring"><h2 id="16ie-standardizing-dateprototypetostring">16.i.e Standardizing Date.prototype.toString</h2></a><p>(Daniel Ehrenberg)</p>
+<p><a href="https://github.com/tc39/ecma262/pull/848">https://github.com/tc39/ecma262/pull/848</a></p>
+<p>DE: Long time unspecified, all browsers are consistent, simply want to get this defined</p>
+<p>AK: Can this be addressed when we discuss &quot;Needs Consensus PRs&quot;?</p>
+<p>JXF: Are there libraries that will break with this change?</p>
+<p>DE: TZ is optional</p>
+<p>API: Not guaranteed to have a TZ string on systems with no TZ</p>
+<p>DE: Any recommendation for how this should be handled?</p>
+<p>API: whatever the os reports?</p>
+<p>AWB: Just toString? Or toLocaleString?</p>
+<p>DE: Just toString</p>
+<p>AWB: (explains how 262 defers to 402 in toLocaleString cases)</p>
+<a href="#conclusionresolution-16ie-standardizing-dateprototypetostring"><h4 id="conclusionresolution-16ie-standardizing-dateprototypetostring">Conclusion/Resolution</h4></a><ul>
+<li>Consensus</li>
+</ul>
+<a href="#16ig-float16-on-typedarrays-dataview-mathhfround-for-stage-1"><h2 id="16ig-float16-on-typedarrays-dataview-mathhfround-for-stage-1">16.i.g Float16 on TypedArrays, DataView, Math.hfround for stage 1</h2></a><p>(Leo Balter, original request from esdiscuss)</p>
+<p><a href="https://docs.google.com/presentation/d/1Ta_IbravBUOvu7LUhlN49SvLU-8G8bIQnsS08P3Z4vY/edit?usp=sharing">https://docs.google.com/presentation/d/1Ta_IbravBUOvu7LUhlN49SvLU-8G8bIQnsS08P3Z4vY/edit?usp=sharing</a></p>
+<p>LBR: (presenting direct from slides above)</p>
+<p>AWB: Who's blocked by not having this feature? What's the use-case? Pain point or &quot;nice-to-have&quot;?</p>
+<p>LBR: Main usecase: webgl, graphics,</p>
+<p>DD: Support stage 1 to explore.</p>
+<ul>
+<li>For stage 2, need to determine how widespread the need is, from webgl/graphics/etc folks.</li>
+</ul>
+<p>WH: What are you going for here? Space compactness, speed, compatibility with external APIs? What's the speed benefit if there are no Float16-specific operations currently? Are the expectations that implementations will optimize a double operation followed by hfround into a 16-bit float operation?</p>
+<p>DD: largely about memory and movement between cpu and gpu</p>
+<p>DE: speed gains are in communication between CPU and GPU  (I thought there was mention of DMA?) (not sure)</p>
+<p>LBR: A polyfill exists, but not efficient</p>
+<p>AWB: If the concern is memory compactness, not performance, and there are no operations... add extra zeroes?</p>
+<ul>
+<li>Can produce a memory buffer containing Float 16s...missed</li>
+</ul>
+<p>KM: is it a matter of costing X times as much in software?</p>
+<p>DE/SM: Already supported in webgl... serving hardware that can only use half-floats in a render target... passing data through, computational format use cases. Best way to get the most amount of bits through the process.</p>
+<p>DD: Can already pack the bits into 16-bit elements and use an array buffer</p>
+<p>SM: Have use case, but much more narrow</p>
+<p>YK: Seems like setFloat16, getFloat16 might be useful without Float16Array?</p>
+<p><em>Agreement</em></p>
+<p>DH: The dataview is a way to do marshalling/unmarshalling of opaque data</p>
+<p>DD: @ Dave... ASM/WebGL/Unity, etc?</p>
+<p>DH: Can pass along to them to find need.</p>
+<a href="#conclusionresolution-16ig-float16-on-typedarrays-dataview-mathhfround-for-stage-1"><h4 id="conclusionresolution-16ig-float16-on-typedarrays-dataview-mathhfround-for-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>need to explore and answer questions discussed above.</li>
+<li>Ask browser-based game developers if this is of broad value</li>
+</ul>
+<a href="#16ih-why-allow-bindingpattern-for-bindingrestparameter-for-object-rest-maybe-we-should-just-allow-identifiers"><h2 id="16ih-why-allow-bindingpattern-for-bindingrestparameter-for-object-rest-maybe-we-should-just-allow-identifiers">16.i.h Why allow BindingPattern for BindingRestParameter for object rest. Maybe we should just allow identifiers.</h2></a><p>(Keith Miller on behalf of Saam Barati)</p>
+<p><a href="https://github.com/tc39/ecma262/issues/915">https://github.com/tc39/ecma262/issues/915</a></p>
+<p>KM: (walking through the issue linked above)</p>
+<p>The simplest example:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> { ...[] } = {};
+</code></pre>
+<p>What does <code>...[]</code> mean?</p>
+<p>AK: (explains that <code>...[]</code> is nonsense)</p>
+<p>Doesn't exist:</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.prototype[<span class="hljs-built_in">Symbol</span>.iterator]
+</code></pre>
+<p>WH: So far the examples of nonfunctionality have all been about array destructuring after ... . Is the proposal to get rid of array destructuring or all destructuring after ...?</p>
+<p>?: We're just raising the issue.</p>
+<p>SM: Context: what happens if <code>{ a, ...{ b, c }} = rhs</code>?</p>
+<p>AWB: What does <code>{ a: [x] } = { a: obj }</code> do?</p>
+<ul>
+<li><code>x</code> is bound to the first iterator value of <code>obj</code></li>
+<li>what we're discussing is the fact that <code>b</code> in <code>{ a, ...b } = obj</code> is always a new object whose prototype is <code>Object.prototype</code>, so there's no chance it's iterable</li>
+</ul>
+<p>AWB: We still have the ability to define <code>...</code> in object rest destructuring as &quot;take all the keys from the RHS that were not already destructured, create an <em>iterator</em> from that, and use that iterator for destructuring into whatever pattern comes after the <code>...</code>, which would work for <code>...[]</code></p>
+<p>BN: Does that work for <code>{ a, ...{ b, c }}</code>?</p>
+<p>SM: We would specify that case separately, so we would not create the iterator AWB proposed.</p>
+<p>KM: We could say it's disallowed to write <code>...[</code> for now, then design the behavior later.</p>
+<p>HZ: <code>...[</code> used to be a syntax error in Babel in 6.0, but we changed it to be allowed in 7.0 (still alpha) so we can make a patch.</p>
+<p>Agreement on making <code>...[</code> a syntax error for now, which can be revisited later.</p>
+<p>SM: What about <code>...{</code>?</p>
+<p>AWB: Assume it destructures he remaining properties?</p>
+<p>KG: Not currently useful?</p>
+<p>SM: No, there are use cases for <code>{ a, ...{ b, c }}</code>, because <code>b</code> and <code>c</code> must be own properties, whereas <code>{ a, b, c } = obj</code> allows <code>b</code> and <code>c</code> to be inherited.</p>
+<p>Important distinctions:</p>
+<pre><code class="language-js"><span class="hljs-comment">// find A and B anywhere in the prototype chain of the result of evaluating expr, ie. [[Get]]</span>
+<span class="hljs-keyword">let</span> { A, B } = expr;
+
+<span class="hljs-comment">// find B only when own, enumerable B exists on the result of evaluating expr</span>
+<span class="hljs-keyword">let</span> { A, ...{ B } } = expr;
+
+<span class="hljs-comment">// What does this mean?</span>
+<span class="hljs-keyword">let</span> { A, ...[ B ] } = expr;
+</code></pre>
+<a href="#conclusionresolution-16ih-why-allow-bindingpattern-for-bindingrestparameter-for-object-rest-maybe-we-should-just-allow-identifiers"><h4 id="conclusionresolution-16ih-why-allow-bindingpattern-for-bindingrestparameter-for-object-rest-maybe-we-should-just-allow-identifiers">Conclusion/Resolution</h4></a><ul>
+<li>Consensus to disallow <code>...[</code> &amp; <code>...{</code> inside object destructuring, as invalid syntax</li>
+</ul>
+<a href="#16iia-atomicswaitnonblocking-for-stage-1"><h2 id="16iia-atomicswaitnonblocking-for-stage-1">16.ii.a Atomics.waitNonblocking for Stage 1</h2></a><p>(Shu-yu Guo, Lars Hansen in absentia)</p>
+<p><a href="https://github.com/lars-t-hansen/moz-sandbox/blob/master/sab/waitNonblocking.md">https://github.com/lars-t-hansen/moz-sandbox/blob/master/sab/waitNonblocking.md</a></p>
+<p>SYG: (reviewing: <a href="https://github.com/lars-t-hansen/moz-sandbox/blob/master/sab/waitNonblocking.md#overview-and-background">https://github.com/lars-t-hansen/moz-sandbox/blob/master/sab/waitNonblocking.md#overview-and-background</a> )</p>
+<p>MM: re: naming, &quot;waitNonBlocking&quot; is like &quot;jumbo shrimp&quot;</p>
+<p>SYG: Leo suggested &quot;waitAsync&quot;</p>
+<p>WH: MM, before you ask for chaging the name, keep in mind that wake affects both wait and waitNonblocking.</p>
+<p>WH: So waitNonblocking checks the atomic value only at the time you call it, not later?</p>
+<p>SYG: Yes</p>
+<p>AWB: <code>Atomics.wait</code> is waiting for changes?</p>
+<p>WH: No, I thought this as well, but that's not what it does. It checks the atomic variable only once, when you first call it.</p>
+<p>SYG: If the atomic variable's value doesn't match, wait aborts immediately. If it matches, it waits until woken or it times out.</p>
+<p>DD: Why an operation, when <code>===</code>?</p>
+<p>SYG: Should defer to Lars</p>
+<p>WH: proposal contradicts itself, some inconsistent behavior: <a href="https://github.com/lars-t-hansen/moz-sandbox/blob/master/sab/waitNonblocking.md#informal-semantics-aka-notable-facts">https://github.com/lars-t-hansen/moz-sandbox/blob/master/sab/waitNonblocking.md#informal-semantics-aka-notable-facts</a></p>
+<p>WH: In the current spec, an agent can only do one wait at a time. If it blocks, it can't do anything until it times out or is woken up. With waitNonblocking, it can have several waits running in parallel, and the proposal is inconsistent as to what happens if wake gets called to wake only one agent.</p>
+<p>Discussion of naming...</p>
+<p>DH: is it too late to rename the original naming?</p>
+<p>SYG: The risk of breaking code is low, but we have shipped so sooner is better.</p>
+<a href="#conclusionresolution-16iia-atomicswaitnonblocking-for-stage-1"><h4 id="conclusionresolution-16iia-atomicswaitnonblocking-for-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 for semantics, naming TBD.</li>
+<li>WH to review semantics.</li>
+</ul>
+<a href="#16iib-module-import-options-discussion-potentially-for-stage-1"><h2 id="16iib-module-import-options-discussion-potentially-for-stage-1">16.ii.b Module import options discussion, potentially for stage 1</h2></a><p>(Domenic Denicola)</p>
+<ul>
+<li>Discussion: <a href="https://discourse.wicg.io/t/specifying-nonce-or-integrity-when-importing-modules/1861/4">https://discourse.wicg.io/t/specifying-nonce-or-integrity-when-importing-modules/1861/4</a></li>
+<li>Slides: <a href="https://docs.google.com/presentation/d/1qfoLTniLUVJ5YNFrha7BaVumAnW0ZgcCfUU8UbyyuYY/edit?usp=sharing">https://docs.google.com/presentation/d/1qfoLTniLUVJ5YNFrha7BaVumAnW0ZgcCfUU8UbyyuYY/edit?usp=sharing</a></li>
+</ul>
+<p>DD: (walking through slides)</p>
+<p>discussion about multiple requests for same resource with different parameters/options</p>
+<p>AK: Can fetch twice if necessary, eg. once with credentials and once without (per case)</p>
+<p>DD: (calling out issue with <code>integrity</code> option)</p>
+<p><a href="https://docs.google.com/presentation/d/1qfoLTniLUVJ5YNFrha7BaVumAnW0ZgcCfUU8UbyyuYY/edit#slide=id.g1f527b5ce9_0_103">https://docs.google.com/presentation/d/1qfoLTniLUVJ5YNFrha7BaVumAnW0ZgcCfUU8UbyyuYY/edit#slide=id.g1f527b5ce9_0_103</a></p>
+<p>DH: Strong &quot;EWM&quot; (Extensible Web Manifesto) story... service worker hook vs. new js syntax? A low level hook would allow people to experiment on workflows immediately in userland</p>
+<p>WH: What does SRI stand for?</p>
+<p>SS/KM: &quot;Subresource Integrity&quot; (see: <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity">https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity</a>)</p>
+<p>DD: sharing feedback from team</p>
+<p>BT: Typescript effectively has out-of-band type declarations for imports, which might be a precedent for out-of-band metadata about imports generally.</p>
+<p>JM: Flow has in-band <code>declare export ...</code> annotations and out-of-band declarations, and people seem to prefer out-of-band.</p>
+<p>MM: Anywhere you can hook back into JS code for information needed by Service Workers, you should just communicate that information to the loader.</p>
+<p>YK: The top-level app shouldn't have to do all integrity validation. Easier for libraries to ship manifest files than inject code into application modules.</p>
+<p>DH: Is it even possible to come up with a hash that's identical to a certain part of the string being hashed?</p>
+<p>AWB: Circular dependencies make in-module integrity hashing impossible, right?</p>
+<p>MBS: Peer-to-peer networks would be eager to come up with a spec for low-level hooks for out-of-band configuration.</p>
+<p>BF: I will weigh in for in-band, don't want people to include in work flow.</p>
+<p>DD: Sounds like out of band?</p>
+<p>BF: No (something about files?)</p>
+<p>(some discussion about tooling and file modification)</p>
+<p>BT: Do we have an inkling what out-of-band configuration would look like?</p>
+<p>DD: Prototype in service workers? Would be great if Node could provide some use cases.</p>
+<p>BF: can offer use cases... not always about integrity... might want async loading, parameterization (via url params currently)</p>
+<p>MM: (asks about package.json)</p>
+<p>AWS: People put all kinds of custom things in there, but the format isn't going to change.</p>
+<p>DH: Big distinction (in terms of standardization) between a machine-generated format vs. something humans are supposed to write.</p>
+<p>SDO: Was there a follow up about how Node users might want to use this?</p>
+<p>DD: Yes</p>
+<p>JMS: Need to work through this on the Node side.</p>
+<p>SM: Need any input from Webpack?</p>
+<p>DD: A lot of responders want &quot;In Band&quot;</p>
+<a href="#conclusionresolution-16iib-module-import-options-discussion-potentially-for-stage-1"><h4 id="conclusionresolution-16iib-module-import-options-discussion-potentially-for-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Out of band is preferred</li>
+<li>No need to advance in TC39 at this time</li>
+<li>Recommending ServiceWorkers get a hook?</li>
+<li>Apparently they already have this</li>
+<li>Can experiment with &quot;In Band&quot; (using e.g. module identifer query params)</li>
+</ul>
+<a href="#16iic-importing-modules-which-failed-evaluation"><h2 id="16iic-importing-modules-which-failed-evaluation">16.ii.c Importing modules which failed evaluation</h2></a><p>(Domenic Denicola)</p>
+<p><a href="https://github.com/tc39/ecma262/issues/862">https://github.com/tc39/ecma262/issues/862</a></p>
+<p>DD: (walking through the issue)</p>
+<p>AWB: Should put the new state in AbstractModuleRecord (not just SourceTextModuleRecord), as something any kind of ModuleRecord must implement.
+(general agreement on this, including from DD)</p>
+<p>DH: Explains what non-SourceText ModuleRecords are for: dynamically creating dependency graphs.</p>
+<p>MM: The AbstractModuleRecord super class should have an abstract method that returns the module's dependencies, and it can be implemented differently for SourceTextModuleRecord vs. other record types.</p>
+<p>DH: That should be a spec-level mechanism, not exposed to JS. (general agreement)</p>
+<p>AWB: Concerned about rethrowing/reusing exceptions. (===)</p>
+<p>YK: Awaited rejected promises re-throw the same (===) exception every time; there is precedent.</p>
+<p>SDO: Promises might not be a good precedent, since their exceptions aren't going to be === across multiple realms.</p>
+<p>DD: Errors won't be cached/re-thrown across multiple realms/iframes. (SDO seems reassured)</p>
+<p>DD: Not aiming to come to a conclusion in this meeting for split between AbstractModuleRecord and SourceTextModuleRecord, but maybe directional comments.</p>
+<p>AWB: AbstractModuleRecord contains what it contains for sometimes subtle reasons, so we should be careful about hoisting functionality up from SourceTextModuleRecord.</p>
+<p>DH: Feels like a natural modification by coming up with the state transitions. This seems like the next incremental improvement.</p>
+<a href="#conclusionresolution-16iic-importing-modules-which-failed-evaluation"><h4 id="conclusionresolution-16iic-importing-modules-which-failed-evaluation">Conclusion/Resolution</h4></a><ul>
+<li>Moving forward with top-down storing/re-throwing of state/exceptions, as proposed by DD.</li>
+<li>Still need to figure out the details of circular dependency situations (don't merge the spec PR just yet).</li>
+</ul>
+<a href="#16iie-advance-numeric-separators-proposal-to-stage-1"><h2 id="16iie-advance-numeric-separators-proposal-to-stage-1">16.ii.e Advance Numeric separators proposal to Stage 1</h2></a><p>(Sam Goto)</p>
+<p>Proposal: <a href="https://github.com/samuelgoto/proposal-numeric-separator">https://github.com/samuelgoto/proposal-numeric-separator</a>
+Slides: <a href="https://docs.google.com/presentation/d/1hcajTemZB2Ruo4EePOyFiva1xpyv5ukKk4aQ0B83dUA/edit#slide=id.p">https://docs.google.com/presentation/d/1hcajTemZB2Ruo4EePOyFiva1xpyv5ukKk4aQ0B83dUA/edit#slide=id.p</a></p>
+<p>SGO: (walking through slides)</p>
+<p>MM: Separator at the beginning of number is a non-starter for JS because that's currently a valid identifier.</p>
+<p>SGO: Restrictions: single separator, between digits only, tentatively just <code>_</code>.</p>
+<p>WH: [responding to <code>parseInt(&quot;10_000&quot;)</code> example on slide]: Currently that's valid and returns 10. Changing the behavior on user input can be troublesome.</p>
+<ul>
+<li>Discussion re: <code>parseInt(&quot;10_000&quot;)</code></li>
+<li>Likely to follow the same design decision used when introducing <code>0b</code> and <code>0o</code></li>
+</ul>
+<p>MM: (explaining why we usually chose to take safe route when introducing new features that &quot;might&quot; be non-upward compatible. And why we sometimes do succeed at a &quot;technicalllY&quot; non-compatible cleanup that turns out to be compatible with the web anyway.)</p>
+<p>AWS: How is breakage measured?</p>
+<p>RW: bug reports, sometimes only one is needed</p>
+<p>SYG: explaining how finding and experimenting is ad-hoc</p>
+<p>RW: (revisit the Array.prototype.values issue)</p>
+<p>WH: Is the _ only allowed between consecutive digits? i.e., not allowed adjacent to a decimal point?</p>
+<p>SYG: Correct</p>
+<p>WH: What about inside the exponent?</p>
+<p>SYG: _ would be allowed between digits there too.</p>
+<p>RW: Volunteer to write tests for this</p>
+<a href="#conclusionresolution-16iie-advance-numeric-separators-proposal-to-stage-1"><h4 id="conclusionresolution-16iie-advance-numeric-separators-proposal-to-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>Needs grammar written, etc.</li>
+</ul>
+<a href="#16iiia-accessing-host-specific-module-metadata-from-inside-a-module"><h2 id="16iiia-accessing-host-specific-module-metadata-from-inside-a-module">16.iii.a Accessing host-specific module metadata from inside a module</h2></a><p>(Domenic Denicola)</p>
+<p>Issue: <a href="https://github.com/whatwg/html/issues/1013">https://github.com/whatwg/html/issues/1013</a>
+Slides: <a href="https://docs.google.com/presentation/d/1p1BGFY05-iCiop8yV0hNyWU41_wlwwfv6HIDkRNNIBQ/edit?usp=sharing">https://docs.google.com/presentation/d/1p1BGFY05-iCiop8yV0hNyWU41_wlwwfv6HIDkRNNIBQ/edit?usp=sharing</a></p>
+<p>AWB: (objecting to <code>import { url } from &quot;js:context&quot;</code>): lose idempotence?</p>
+<p>DD: Still idempotent given (importing module, identifier).</p>
+<p>AWB: If identifiers like &quot;js:context&quot; are going to be host-defined, and you use an identifier not defined by the current host...</p>
+<p>DD: There are definitely portability problems. Probably a good idea to do <code>import * as module from &quot;js:context&quot;</code>.</p>
+<p>MM: Want to require it to be straightforward for a controlling context (such as the creator of a Realm) to be able to virtualize or censor access to host-defined objects.</p>
+<p>DD: Parsing seems necessary there.</p>
+<p>BN: The import style will be hoisted, so it's harder to do feature testing (because you can't catch exceptions). The import.meta.* property is just an expression, so developers can inspect its properties using conditional logic.</p>
+<p>DH: You can still use <code>import * as module from &quot;js:context&quot;</code> and then inspect the properties of <code>module</code>.</p>
+<p>BF: Some developers might really want early errors.</p>
+<p>JSL: Worried about two different hosts trying to define the same property.</p>
+<p>MM: Only option #3 makes sense.</p>
+<p>DH: Can't introduce let variables that collide with named imports! (MM retracts)</p>
+<p>WH: MM, so your concern is that you want the ability to disable code from running things like import.currentScript?</p>
+<p>MM: Yes. Code should not be able to do i/o if it's denied access to i/o objects.</p>
+<p>MM: In option 1, it would work if the special name were passed to the module loader, which would be able to deny access if it wants.</p>
+<p>DD: currentScript is an HTML script elements, from which you could get eval</p>
+<p>DH: import. is a much bigger concern in a script than it is in a module because</p>
+<p>DH (rephrasing his argument):</p>
+<ul>
+<li>today you can run untrusted code with a protected eval (which must be a script, not a module)</li>
+<li>today people write secure code by restricting access to eval</li>
+<li>adding new power tools to modules is safe because restricted eval can't access them anyway</li>
+<li>so we have some time to figure out a security story for host-defined contextual module capabilities</li>
+</ul>
+<p>WH: So you're suggesting that import.meta be usable from modules only, not scripts?</p>
+<p>DH: Yes</p>
+<p>DE: To build a platform where this is a security primitive requires consulting with a lot of stakeholders who care about capabilities/security.</p>
+<p>DD: I want it stated on record that we do care about security.</p>
+<p>MM: (concedes this is true, having an argument)</p>
+<p>DD: Node is going to implement &quot;js:context&quot; anyway if we don't come up with something in this meeting.</p>
+<p>MM: The beautiful thing about &quot;js:context&quot; is it falls within a mechanism (import) that we already have to vet for security/sandboxing purposes.</p>
+<p>JSL: Node does not have the option of avoiding this question. We have to have some mechanism to get module-contextual metadata.</p>
+<p>KG: (strawman idea): what about using top-level <code>this</code>, which is currently undefined?</p>
+<p>(general aversion in the committee)</p>
+<p>DD: Option #1 and option #3 can be done outside this committee.</p>
+<p>WH: A lot of bad things have gone into the spec which have been implemented on the web and then later forced through committee as &quot;existing practice&quot;</p>
+<p>DH/AWB: Time pressure is distorting the conversation. We're going to keep talking about this.</p>
+<p>MM: Now strongly favoring #1 (that is, <code>import * as module from &quot;js:context&quot;</code>).</p>
+<p>MM: &quot;Us realm guys&quot; (referring to himself and DH et al.) really need to figure out security implications of modules and loading hooks. More and more libraries are going to be made available on the web using modules.</p>
+<p>YK, WH: Why is import.meta.* (option #2) hard to virtualize?</p>
+<p>WH: Option #1 has the problem of namespace collisions between module names and meta-like things like &quot;js:context&quot;. This kind of thing hurt perl badly, with creative filenames causing havoc when passed to file i/o.</p>
+<p>DH: Option #1 also has to be hoisted out.</p>
+<p>AWB, WH: Based on this conversation, option #3 (adding new free variables) seems completely off the table.</p>
+<p>MM: Withdraws objection to option #2, since <code>import.meta</code> just becomes one of the things that obviously have to be virtualized in a secure environment.</p>
+<p>DH: Object.getOwnPropertyDescriptor is precedent for <code>import.meta</code> <em>not</em> being a locked-down module namespace-like object.</p>
+<p>YK: Option #3.c (<code>import { url } from here</code>) is undesirable because it must be top-level.</p>
+<p>(bikeshed discussion of what to call <code>import.thing</code>)
+(general consensus for <code>import.meta</code>)</p>
+<p>MM: What about exposing dynamic <code>import()</code> as a method of <code>import.meta</code>?</p>
+<p>DH: <code>import.meta.import()</code> is just really verbose for a common idiom.</p>
+<p>BF: And import() should be available in script, where the import.meta meta-property is not available.</p>
+<a href="#conclusionresolution-16iiia-accessing-host-specific-module-metadata-from-inside-a-module"><h4 id="conclusionresolution-16iiia-accessing-host-specific-module-metadata-from-inside-a-module">Conclusion/Resolution</h4></a><ul>
+<li>Let's go with <code>import.meta</code>; Domenic to come back later this meeting with a proposal</li>
+</ul>
+
+</body>

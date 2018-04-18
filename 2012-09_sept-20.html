@@ -1,0 +1,322 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 20, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-20-2012-meeting-notes"><h1 id="september-20-2012-meeting-notes">September 20, 2012 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Mark S. Miller (MM), Norbert Lindenberg (NL), Nebojša Ćirić (NC), Allen Wirfs-Brock (AWB), Luke Hoban (LH), Paul Leathers (PB), Sam Tobin-Hochstadt (STH), Andreas Rossberg (ARB), Brendan Eich (BE), Erik Arvidsson (EA), Dave Herman (DH), Yehuda Katz (YK), Rick Waldron (RW), Eric Ferraiuolo (EF), Matt Sweeney (MS), Doug Crockford (DC), Alex Russell (AR), Rafeal Weinstein (RWN), Waldemar Horwat (WH), Rick Hudson (RH)</p>
+<hr>
+<a href="#objectobserve-update"><h2 id="objectobserve-update">Object.observe Update</h2></a><p>(Rafael Weinstein)</p>
+<p>REQUEST SLIDES!</p>
+<p>Aug 18th, Released an experimental implementation, spec complete, via special Chromium Build.
+<a href="https://github.com/rafaelw/v8">https://github.com/rafaelw/v8</a></p>
+<p>Updates to strawman:</p>
+<ul>
+<li>Updating [[Prototype]] qnqueues a &quot;prototype&quot; changeRecord</li>
+</ul>
+<p>ChangeSummary.js (experimental library)
+<a href="https://github.com/rafaelw/ChangeSummary">https://github.com/rafaelw/ChangeSummary</a></p>
+<ul>
+<li>Prototypes &quot;diff&quot; view of changes</li>
+<li>Correct observation of &quot;paths&quot; (eg. o.foo.bar.baz)</li>
+<li>Array splice projection (minimal ops to syn)</li>
+<li>Basis for framework usage</li>
+</ul>
+<p>YK: Question about splice projections being built in. When splice happens, many records change... is pathologically slow. Fine for v1 to leave it to library code.</p>
+<p>RWN: Opted to leave this out...
+...explains n^2 issues that arise when changes to an array occur. ...explains rationale for leaving out for the foreseeable future and allow library authors to handle as they see fit for the time being.</p>
+<p>DH: How to make a policy decision about &quot;what&quot; to look at in the change of an object. Agrees with this v1 decision, in favor of allowing library optimization patterns to emerge. [We can't determine the &quot;policies&quot; before the needs are fully understood]</p>
+<p>AWB: Not just large scale libs, but everyday data type abstractions.</p>
+<p>RWN: Sounds like there are specific issues?</p>
+<p>AWB: Yes, but not to be addressed in this timeline</p>
+<p>MM: Is the synthetic changeRecord adequate for the level of abstraction you may require</p>
+<p>AWB: Yes, sufficient.</p>
+<p>RW: (shared anecdotal experience writing &quot;Fact&quot; with Object.observe: <a href="https://github.com/rwldrn/fact">https://github.com/rwldrn/fact</a> )</p>
+<p>RWN: (presenting demo)</p>
+<p>ADD LINK</p>
+<p>Discussion about &quot;read&quot; notifications and performance concerns.</p>
+<p>YK: Willing to move Ember, despite the scale</p>
+<p>EF: Did Angular replace all dirty checking?</p>
+<p>YK/RWN: Not really possible to remove all dirty checking.</p>
+<a href="#observing-computed-properties-and-dependencies"><h3 id="observing-computed-properties-and-dependencies">Observing Computed Properties and Dependencies</h3></a><p>RWN: Believe that it is not in scope now or ever.</p>
+<a href="#tuning-spec-implementation-complexity"><h3 id="tuning-spec-implementation-complexity">Tuning Spec, Implementation Complexity</h3></a><p>RWN: ...Is hoping to progress the strawman to harmony. A few slides that discuss remaining issues.</p>
+<p>LH: These represent concerns and agreements of several committee members who have been involved.</p>
+<a href="#synchronous-delivery"><h3 id="synchronous-delivery">Synchronous Delivery?</h3></a><p>NO.</p>
+<a href="#security-mitigations"><h3 id="security-mitigations">Security Mitigations</h3></a><p>Object.getNotifier( frozenObject ) returns null
+(Out of 3 options: return null, throw, or do nothing notifier)</p>
+<p>WH: What happens when the argument is a Proxy?</p>
+<p>RWN: Returns the Proxy's notifier</p>
+<p>STH: An invariant maintained internally, that if the proxy is frozen it ensures the target is frozen.</p>
+<p>ARB: Not sure if this is true.</p>
+<p>MM/STH: The proxy cannot say it is frozen if the target is not. Can the proxy say its NOT frozen if the target IS?</p>
+<p>WK/MM/STH: <strong>Proxy can say it's frozen if AND ONLY IF, the target is frozen.</strong></p>
+<p>MM: If the notifier is derived, then the object is frozen, the notifier will continue to work as expected.</p>
+<p>Creator of an object:</p>
+<ol>
+<li>creates an object</li>
+<li>gets the notifier</li>
+<li>freezes the object</li>
+<li>releases the object</li>
+</ol>
+<p>This is an intended mechanism of the Proxy proposal</p>
+<p>WH/AWB/MM: Discussion about notifications from frozen objects. The use of the notifier should ONLY be from the provider of the abstraction.</p>
+<a href="#oldvalue"><h3 id="oldvalue">oldValue</h3></a><p>Most use cases would create copy of all observed data</p>
+<p>WH: What about accessors?</p>
+<p>RWN: accessors don't notify</p>
+<p>WH: That's bad.</p>
+<p>MM/EA/RWS/AWB: No, this is intended.</p>
+<p>RWN: (Explains that getNotifier can be used to build synthetic events for accessors)</p>
+<p>RW: Yes, accomplished this while experimenting with &quot;Fact&quot;</p>
+<p>RWN: (Revisits demo to show example of what an abstraction over this looks like)</p>
+<p>YK: (Supported use story in Ember)</p>
+<p>...Mixed discussion about far future notifier patterns:</p>
+<pre><code class="language-js"><span class="hljs-comment">// no-op, just for example...</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handler</span>(<span class="hljs-params"> changeRecord </span>) </span>{
+  <span class="hljs-built_in">console</span>.log( changeRecord );
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+  private @x, @notifier;
+
+  <span class="hljs-keyword">constructor</span>(x) {
+    <span class="hljs-keyword">this</span>.@x = x;
+
+    <span class="hljs-built_in">Object</span>.observe(<span class="hljs-keyword">this</span>, handler);
+
+    <span class="hljs-keyword">this</span>.@notifier = <span class="hljs-built_in">Object</span>.getNotifier(<span class="hljs-keyword">this</span>);
+  }
+
+  get x() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.@x;
+  }
+
+  set x(v) {
+    <span class="hljs-keyword">this</span>.@notifier.notify({
+      <span class="hljs-attr">object</span>: <span class="hljs-keyword">this</span>,
+      <span class="hljs-attr">name</span>: <span class="hljs-string">"x"</span>,
+      <span class="hljs-attr">type</span>: <span class="hljs-string">"updated"</span>,
+      <span class="hljs-attr">oldValue</span>: <span class="hljs-keyword">this</span>.@x
+    });
+
+    <span class="hljs-keyword">this</span>.@x = v;
+  }
+}
+
+<span class="hljs-keyword">var</span> f = <span class="hljs-keyword">new</span> Foo(<span class="hljs-string">"hello"</span>);
+f.x = <span class="hljs-string">"Hola"</span>;
+
+<span class="hljs-comment">// synthetic change event fired with "changeRecord"</span>
+<span class="hljs-comment">// defined in the set x() accessor</span>
+</code></pre>
+<p>Discussion regarding the feasibility of adding to ES6.</p>
+<p>DH: Doesn't need to be in spec to prototype</p>
+<p>BE: Worried about sheer weight of work involved in Allen's spec writing.</p>
+<p>RH: Moving from strawman to proposal/spec is meaningful to implementor teams.</p>
+<p>[some discussion about whether the above construction pattern has efficiency problems; needs implementation experience]</p>
+<a href="#conclusionresolution-objectobserve-update"><h4 id="conclusionresolution-objectobserve-update">Conclusion/Resolution</h4></a><ul>
+<li>Push for prototype implementations (Chrome already in progress). Encourage others to do the same</li>
+<li>Officially Promoted to proposal for ES7.</li>
+</ul>
+<a href="#grammar-validation"><h2 id="grammar-validation">Grammar Validation</h2></a><p>(Brendan Eich, Waldemar Horwat, Rick Waldron)</p>
+<p>Overdue for grammar validation, would be ideal to re-validate.</p>
+<p>WH: The following is ambiguous because yield is not a reserved word. It can't even be lexed:
+boom = yield/area/
+height;
+Note that the current semantic restrictions on where yield expressions can go don't help because they apply after the program has been parsed; with this example you can't even get to the lexing and parsing stages.</p>
+<p>Resolution on the yield issue?</p>
+<a href="#conclusionresolution-grammar-validation"><h4 id="conclusionresolution-grammar-validation">Conclusion/Resolution</h4></a><ul>
+<li>AWB will refactor grammar so that yield can only be used within the context of a generator function and yield will not be usable as an identifier there. This will require essentially doubling the number of grammar rules in an analogous way to how the no-in rules are handled today, but on a much larger scale.</li>
+<li>Grammar Validation
+<ul>
+<li>Waldemar is going to try to work on this</li>
+</ul></li>
+</ul>
+<a href="#formal-parameter-scope"><h2 id="formal-parameter-scope">Formal Parameter Scope</h2></a><p>(Brendan Eich)</p>
+<p>With regard to default formal parameters...</p>
+<p>Previously, all to the LEFT are in scope,
+<code>let *</code>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> b = <span class="hljs-string">"outer"</span>;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">a = x, b = a * b, c = c * g(</span>) ) </span>{
+  <span class="hljs-comment">/*
+  three scopes:
+    (a),
+    (a and b)
+    (a, b, c)
+  */</span>
+}
+</code></pre>
+<p>Realistically, it should desugar, scope rules included:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> b = <span class="hljs-string">"outer"</span>;
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">a, b, c</span>) </span>{
+  <span class="hljs-keyword">if</span> ( a === <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> ) a = x;
+  <span class="hljs-keyword">if</span> ( b === <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> ) b = a * b;
+  <span class="hljs-keyword">if</span> ( c === <span class="hljs-keyword">void</span> <span class="hljs-number">0</span> ) c = c * ();
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{} <span class="hljs-comment">// will hoist</span>
+}
+</code></pre>
+<p>AWB: functions will hoist, let and const will be in the dead zone and will fail, var will hoist and initialize undefined</p>
+<p>BE: Can we agree to get rid of <code>let *</code>?</p>
+<p>With <code>let x</code> this is an error:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"> a = <span class="hljs-string">"a"</span> </span>) </span>{
+  <span class="hljs-keyword">let</span> a;
+  <span class="hljs-keyword">var</span> a;
+}
+</code></pre>
+<p>Not <code>let</code> bindings</p>
+<pre><code class="language-js">f(a = b, b = <span class="hljs-number">3</span>)
+</code></pre>
+<p>let scope would break var scope: bad
+let scope with magic to break var scope: bad</p>
+<p>ARB: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x = (y = <span class="hljs-number">42</span></span>), <span class="hljs-title">y</span> = 41)</span>{}
+
+f();
+
+<span class="hljs-number">42</span>, <span class="hljs-number">42</span>
+</code></pre>
+<p>DH: My understanding was that temporal dead zone should error all the way to actual &quot;blessed source code&quot; where the binding is initialized.</p>
+<p>Remind why only &quot;no read before write&quot;?</p>
+<p>BE: 2 years ago in redmond agreement.</p>
+<p>AWB: (explains the rationale and current semantics)</p>
+<p>DH: is this a distinction worth making, for <code>let</code>, when we're trying to say that <code>let</code> is a better <code>var</code></p>
+<p>MM: <code>let</code> guards were the original reasoning.</p>
+<p>DH: <code>let</code> guards should be different from just <code>let</code></p>
+<p>MM/WH: No, they shouldn't be different.</p>
+<p>STH: Need to provide an argument beyond that</p>
+<p>WH: guarded <code>let</code> should be not be different from a <code>let</code>. One  common option for a guard must be a bottom type that lets through  anything, but that's impossible with the same behavior if a guarded  'let' differs from a plain 'let'.</p>
+<p>DH: This is far future, hypothetical</p>
+<p>MM/DH: related to temporal dead zone discussion.</p>
+<p>LH: The temporal dead zone opposition is perf</p>
+<p>WH/DH: (discussion of complexity for <code>let</code> and <code>const</code>)</p>
+<p>DH: I dont want to alienate developers for no good reason (gives supporting argument)</p>
+<p>MM: Better to return undefined or immediately error to show where the mistake is made</p>
+<p>DH: Want to simplify to &quot;no read before write&quot;. The model of <code>let</code> creates a binding and = assigns a value to it. There is no way to explain that this <code>=</code> is different from that <code>=</code>. Refers to Alex's JS is top-to-bottom.</p>
+<p>MM: But it's not because you can forward-call functions, because JavaScript allows you to interleave function and var initializations and assignments throughout your program.</p>
+<p>DH: (missed not about read barrier)</p>
+<p>WH:</p>
+<p>ARB: Trying to simulate C semantics within the constraints of a dynamic system.</p>
+<p>AWB: Yes, this was the agreement before temporal dead zone. throw if used before init.</p>
+<p>MM, WH: Halting further discussion. We frequently eat up time on subjects like this that have already reached consensus. Let's postpone unnec revisitings.</p>
+<p>AWB: Ok to revisit for valid reasons...</p>
+<p>YK: worried that if no performance issues are found then it wont be revisited.</p>
+<p>AR: Points out that there might be real issues with developer understanding. (cites some example, ask to share?)</p>
+<p>[[[[[[[[[[[[[[[[[[[[[[[
+Temporarily, this happened:
+Conclusion/Resolution</p>
+<ul>
+<li><code>var</code> bindings and are in scope within the function</li>
+<li>cannot use <code>let</code> to shadow a parameter</li>
+<li>defaults can refer to any top level binding
+]]]]]]]]]]]]]]]]]]]]]]]</li>
+</ul>
+<a href="#conclusionresolution-formal-parameter-scope"><h4 id="conclusionresolution-formal-parameter-scope">Conclusion/Resolution</h4></a><ul>
+<li>Revisit when data is gathered, re: perf or unexpected behaviours</li>
+</ul>
+<a href="#arrayof-rename"><h2 id="arrayof-rename">Array.of Rename?</h2></a><p>Recent post on es-discuss from user that doesn't like Array.of</p>
+<p>Array.of has been implemented in all of the es6 shim libs (Paul Miller, Axel Rauschmayer, Andrea Giammarchi and others...)</p>
+<a href="#arrayof"><h3 id="arrayof">Array.of()</h3></a><p>Makes sense, nice to say and explain.
+When I reason about a program:</p>
+<p>&quot;Here we have an array of elements&quot;
+(elements, items, numbers, strings)</p>
+<a href="#conclusionresolution-arrayof-rename"><h4 id="conclusionresolution-arrayof-rename">Conclusion/Resolution</h4></a><ul>
+<li>No change, no revisit.</li>
+<li>If we do <code>Foo.new()</code>, it must be <em>identical</em> to <code>new Foo()</code>.</li>
+</ul>
+<a href="#thin-arrow"><h2 id="thin-arrow">Thin Arrow?</h2></a><p>(Brendan Eich)</p>
+<p>We have the fat-arrow, supported by Kevin Smith's research, it's a win. Some voices in the community don't want the unexpected behaviour of the bound lexical <code>this</code></p>
+<p>class, concise methods and fat-arrow are all new, powerful and composable function binding forms.</p>
+<p>WH: Don't want two slightly different concepts with a confusingly similar syntax. It would be too difficult for casual users to remember which arrow is which [in the same way as I can never remember in C++ which variant of the ++ operator overload takes an extra dummy argument].</p>
+<p>?: Then let's use fat-arrow with an extra 'this' parameter to stand for thin arrow.</p>
+<p>WH: That would address the confusion, but is still unnecessary featuritis and doesn't even save much in terms of text, which was its original reason for existence. Saving a couple characters here is not worth complicating the language.</p>
+<a href="#conclusionresolution-thin-arrow"><h4 id="conclusionresolution-thin-arrow">Conclusion/Resolution</h4></a><ul>
+<li>Consensus holds on fat-arrow</li>
+</ul>
+<a href="#existential-operator-strawman-discussion"><h2 id="existential-operator-strawman-discussion">Existential Operator (strawman discussion)</h2></a><p>(Brendan Eich)</p>
+<p>Significant desire include a null and undefined check in syntax/operator form (a la coffeescipt)</p>
+<pre><code class="language-js">o = {}
+r = o?.p.q.r
+r = o?.p?.q.r
+</code></pre>
+<p>Mixed discussion about the needs and use cases as they apply to coffeescript code.</p>
+<p>ARB: This is non-compositional</p>
+<pre><code>    o = {}
+    r = o?.p.q.r
+    r = (o?.p).q.r
+    r = o?.p.q.r()
+</code></pre>
+<p>Results in...</p>
+<pre><code>    var o, r;
+    o = {};
+    r = o != null ? o.p.q.r : void 0;
+    r = (o != null ? o.p : void 0).q.r;
+    r = o != null ? o.p.q.r() : void 0;
+</code></pre>
+<p>Non-starter.</p>
+<p>DH: Why not an operator that needs to be explicit?</p>
+<pre><code>    o?.p?.q?.r
+</code></pre>
+<p>LH: Why would you ever even use it on the first?</p>
+<p>BE: Forget all of the problems with coffeescript's impl, the need exists.</p>
+<p>YK: In the common cases, where it works, it works well. Where it doesn't, it falls apart unexpectedly.</p>
+<p>WH: What about other contexts such as p?[x], p?.q[x], and p?(x) ? [Note that grammar problems arise for some of those.]</p>
+<p>General agreement.</p>
+<a href="#conclusionresolution-existential-operator-strawman-discussion"><h4 id="conclusionresolution-existential-operator-strawman-discussion">Conclusion/Resolution</h4></a><p>Seems useful, but not now. Semantics are unclear</p>
+<a href="#generators"><h2 id="generators">Generators</h2></a><a href="#thisbinding"><h3 id="thisbinding">thisBinding</h3></a><p>Generator thisBinding is the thisBinding of the original generator call.</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyArray</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{
+  *iterator() {
+    <span class="hljs-keyword">let</span> last = <span class="hljs-keyword">this</span>.length;
+    <span class="hljs-keyword">let</span> next = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (next &lt; last) <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>[next++];
+  }
+}
+</code></pre>
+<a href="#generator-object-api"><h3 id="generator-object-api">Generator object API?</h3></a><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyArray</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{
+  *iterator() {
+    <span class="hljs-keyword">let</span> last = <span class="hljs-keyword">this</span>.length;
+    <span class="hljs-keyword">let</span> next = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (next &lt; last) <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>[next++];
+  }
+}
+
+<span class="hljs-keyword">new</span> MyArray(<span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">15</span>, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>, <span class="hljs-number">42</span>).iterator();
+</code></pre>
+<p>...returns a generator instance that will have generator methods</p>
+<p>MM: Take a care to expose the APIs that you expect to expose.</p>
+<p>DH: Agrees</p>
+<p>LH: Specify the generator?</p>
+<p>BE: Allen is worried that normative spec will require generators when it's unnec.</p>
+<p>DH: spec a simplified generator interface, without semantics, just to define the method interface.</p>
+<p>MM: what is the minimal method interface?</p>
+<p>DH: send, throw, close</p>
+<p>Discussion around specifying a generator contract.</p>
+<p>DH: Don't specify what can't be put on generator objects.</p>
+<p>AWB: Need something for spec</p>
+<p>YK: If everyone implemented iterators with generators</p>
+<p>DH: Not super worried about this...</p>
+<a href="#conclusionresolution-generators"><h4 id="conclusionresolution-generators">Conclusion/Resolution</h4></a><ul>
+<li>The spec should not specify built in iterators to have 3 extra generator methods (ie send, throw, close)
+(Currently in draft, needs to be refactored)</li>
+</ul>
+<p>Notably: Significant dissent on throwing exceptions for control flow.</p>
+<p>Continued discussion of note...</p>
+<p>LH: Using a debugger, break on throw, exceptions. Want to catch at the point where they are thrown... on a StopIteration, do I see internals?</p>
+<p>DH: Up to the debugger to determine whether or not it should expose</p>
+<p>LH: (whiteboard, example misuse of iterator)</p>
+<p>BE: Historically, not an issue.</p>
+<p>YK: (Question about use of in-band return?)</p>
+<p>LH: if this is not an issue, then why not specify</p>
+<p>Discussion about protocol specifications, where precedent exists.</p>
+<a href="#supplemental-tests-for-tests-262"><h2 id="supplemental-tests-for-tests-262">Supplemental tests for Tests 262</h2></a><p>SpiderMonkey and v8 are writing tests, can contribute back.</p>
+<p>Need parity, it's hard.</p>
+<a href="#goals"><h2 id="goals">Goals</h2></a><p>AWB: January, spec: feature complete.</p>
+<p>LH: Multiple implementations?</p>
+<p>Concerns about removal of new additions when there isn't enough evidence to support the removal.</p>
+<p>Too soon to make cuts when we don't know what to cut.</p>
+
+</body>

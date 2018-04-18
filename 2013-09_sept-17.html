@@ -1,0 +1,668 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 17, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-17-2013-meeting-notes"><h1 id="september-17-2013-meeting-notes">September 17, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Dave Herman (DH), István Sebestyén (IS), Alex Russell (AR), Allen Wirfs-Brock (AWB), Erik Arvidsson (EA), Eric Ferraiuolo (EF), Doug Crockford (DC), Luke Hoban (LH), Anne van Kesteren (AVK), Brendan Eich (BE), Brian Terlson (BT), Rick Waldron (RW), Waldemar Horwat (WH), Rafeal Weinstein (RWN), Boris Zbarsky (BZ), Domenic Denicola (DD), Tim Disney (TD), Niko Matsakis (NM), Jeff Morrrison (JM), Sebastian Markbåge (SM), Oliver Hunt (OH), Sam Tobin-Hochstadt (STH), Dmitry Lomov (DL), Andreas Rossberg (ARB), Reid Burke (RB)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>RW: (Logistics)</p>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>Promises to be discussed Thurs. PLH from W3C will be here on Wed/Thurs.</p>
+<p>BE: won't be here thurs, and that suits me.</p>
+<p>JN: objections to using this agenda?</p>
+<p>(crickets)</p>
+<p>JN: next issue is approving the agenda.</p>
+<p>Approved.</p>
+<p>JN: Minutes approval?</p>
+<p>RW: (Confirms no changes since last review)</p>
+<p>Approved.</p>
+<p>JN: have a strong duty to surface the agenda to ECMA and right now we don't know how to do that. Want to publish something to ECMA 3 weeks before the meeting and one week before, a final version of the agenda.</p>
+<p>AVK: how about we give them a URL?</p>
+<p>IS: the issue is that we haven't had a fleshed-out agenda 3 weeks before the meeting. There hasn't been anything there.</p>
+<p>AR: this seems like a mismatch between the historical timings of meetings and our accelerated cadence.</p>
+<p>DH: We talked about this in last meeting, where we agreed that everything would be in the agenda one week prior. If we don't accept new items, the agenda is a dead letter.</p>
+<p>AR: we can commit to having a skeleton that has stuff we will usually talk about, but not more.</p>
+<p>RW: in the past, an email went out that helped remind people. If we sent out a reminder email at the halfway point, it might  help people remember to add agenda items then.</p>
+<p>DH: Let's strategize which items are best to work on and which day.</p>
+<ul>
+<li><p>Modules: Wait for Andreas</p></li>
+<li><p>Typed Arrays: Wait for Dmitry, Oliver</p></li>
+<li><p>Symbols: wait for Andreas</p></li>
+<li><p>Proxies: wait for Tom VC</p></li>
+</ul>
+<p>DH: Arrows, Math.hypot today</p>
+<p>EA: Spec process</p>
+<p>DH: We can do this out of order.
+...Let's discuss Data parallelism while Niko Matsakis is present.</p>
+<a href="#11-status-report-262"><h2 id="11-status-report-262">11. Status Report 262</h2></a><p>AWB: I'd like feedback and comments on the new re-orderings.</p>
+<p>DH: I know that Jason Orendorff has some issues (es-discuss: <a href="https://mail.mozilla.org/pipermail/es-discuss/2013-September/033314.html">https://mail.mozilla.org/pipermail/es-discuss/2013-September/033314.html</a> (starting with Olliver Hunt))</p>
+<p>AWB: New sections...</p>
+<ul>
+<li>Runtime Abstractions</li>
+<li>Group Of Chapters that define the language</li>
+<li>Lexical Grammars</li>
+<li>Syntactic Grammars</li>
+</ul>
+<p>AWB: There was some recent discussion about how you track down semantics when you have so many named semantic algorighms that are associated with productions. I've done work subsequent to r18 that adds a &quot;see also&quot; section at the top of each segment so you can</p>
+<p>BE: what do people think of the new organization?</p>
+<p>(general approval&gt;</p>
+<p>WH: The latest version sent to the ECMA document repository is from May. Why aren't new versions being sent to the ECMA repository?</p>
+<p>(group directs WH to the latest version not in the ECMA document repository&gt;</p>
+<p>(googlers + facebookers arrive&gt;</p>
+<p>BE: wait there's more Googlers? We have to bring more Mozillans now... (I kid, I kid.)</p>
+<p>AWB: At the last meeting we sucessfuly deluded ourselves into thinking we didn't need NoIn productions. We've been unconvinced, so I reintroduced them.</p>
+<p>WH: I've been looking into this NoIn business</p>
+<p>AWB: OK, well if you come up with a solution for it!</p>
+<p>WH: I got my grammar verifier up and running again.</p>
+<p>DH: Ollie spent a long time looking at them and didn't come up with a solution.</p>
+<p>AWB: naked yield is supported. The assignment part is optional.</p>
+<p>EA: for yeild*, the expression is needed.</p>
+<p>DH: agreed</p>
+<ul>
+<li>yield * wouldn't make sense without</li>
+</ul>
+<p>AWB: WH brought up that you can't have a conditional reserved word, so what I did is ensure that yield is always a reserved word which, in contexts where it can be an identifier is treated as such.</p>
+<p>DH: contextual reserved would would be another instance of feedback from parser back to lexer (a la slash); Allen's approach is more elegant.</p>
+<p>BE: yes, it's the right tradeoff.</p>
+<p>AWB: overall status: thanks to Dave, in the current working draft we're starting to bring in module grammar productions and semantics.</p>
+<ul>
+<li>module grammar productions</li>
+<li>module semantics</li>
+<li>Confident in the progress</li>
+</ul>
+<p>BE: we have a separate agenda item on this, yes?</p>
+<p>(yes&gt;</p>
+<p>AWB: still hanging out there and need work</p>
+<ul>
+<li>no work done on unicode regexp</li>
+<li>no work done on updating regexp to web reality</li>
+</ul>
+<p>LH: Last consensus on &quot;web reality&quot; was that it would be in an annex ...</p>
+<p>LH: there's text (<a href="http://wiki.ecmascript.org/doku.php?id=strawman:match_web_reality_spec">http://wiki.ecmascript.org/doku.php?id=strawman:match_web_reality_spec</a>) that patches some rules.</p>
+<p>LH: the reason we got hung up is we thought there might be some grander unification with the regexp unicode flag, and I don't know what the status is on that.</p>
+<p>LH: we should integrate the web reality piece into the spec.</p>
+<p>AWB: do we want to defer the Unicode part</p>
+<p>BE: did we have someone identified to work on it?</p>
+<p>(norbert&gt;</p>
+<p>AVK: I thought there was discussion that agreed what was in and what was out?</p>
+<p>BE: If Norbert doesn't do it, it's not going to happen for ES6</p>
+<p>WH: (Q about the yield)</p>
+<ul>
+<li>Will allow yield as an identifier?</li>
+</ul>
+<p>AWB: Yes</p>
+<p>WH: This will break</p>
+<p>(whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">yield</span> * <span class="hljs-number">1</span>;
+</code></pre>
+<p>is that a multiplication or <code>yield *</code>?</p>
+<p>AWB:
+(whiteboard)</p>
+<p>YieldExpression := [inside a generator] yield aaugh this keeps getting erased</p>
+<p>AWB: inside a generator function, &quot;yield&quot; is a keyword that introduces a generator expression.</p>
+<p>WH: inside a generator, this (&quot;/&quot;) will be a RE, outside it will be a division symbol?</p>
+<p>WH:</p>
+<pre><code class="language-js"><span class="hljs-keyword">yield</span> /a/g;
+</code></pre>
+<p>is this yield divided by a? or yield a regexp?</p>
+<p>BE: so this is like the regular expression delimiter, it's going to need to have feedback from the parser to the lexer.</p>
+<p>?: If you're inside a generator, it's lexed as a regexp. If not, it's lexed as division.</p>
+<p>DH: I think that isn't affected here, the lexer is always fed the parsing context; it's not an ambiguity because it's determined by context.</p>
+<p>WH: What's &quot;inside a generator&quot;? What if you're inside, say, an arrow function inside a generator?</p>
+<p>?: Then you're not actually inside a generator.</p>
+<p>WH: But you need to lex the thing to parse the thing to find out that you're inside something nested inside a generator, so that's begging the question.</p>
+<p>BE: split grammar at higher level, InGenerator, NotInGenerator, something something something.</p>
+<p>BE &amp; DH: use new tricks, e.g. parametric productions. Even NoIn, back in the day, we would have preferred to use those.</p>
+<p>AWB: Yeah, if we have to do this for yield, I'd be happy to switch to parametric productions, since it avoids having four forms of the expression grammar.</p>
+<p>BE: alternatives is to make generator bodies strict.</p>
+<p>DH: We shouldn't make the users life worse just to make the spec easier.</p>
+<p>WH: well we are prioritizing the user, think of syntax-coloring editors, they also now need to know these complicated rules, too complicated and they'll get them wrong.</p>
+<p>DH: in practice editors get things wrong</p>
+<p>BE: and then you can pull request against them so it's all good.</p>
+<p>DH: new implicit modes will bite more often</p>
+<p>BE: let and yield are reserved in strict mode since ES5</p>
+<p>DH: Parameterized productions are the cleanest solution</p>
+<p>BE: Much better to parameterize then to duplicate productions.</p>
+<p>BE &amp; AWB: let's do a smaller group on parametrizing the productions.</p>
+<p>...</p>
+<p>AWB: Is there a point on binary data?</p>
+<ul>
+<li>Don't think we're going to get them in</li>
+</ul>
+<p>BE: related to spec process, getting things done painless and in a rapid-release fashion. let's talk separately.</p>
+<p>AWB: Status wise: no progress on Binary data Typed Objects proposal with regard to the spec.</p>
+<p>RW: (clarified binary data vs &quot;typed objects&quot;)</p>
+<p>DH: binary data name is bad, &quot;typed objects&quot; better. Because typed objects as specced are not actually good for binary data.</p>
+<p>Typed Objects (formerly known as binary data)</p>
+<p>AWB: typed arrays and dataviews are in ES6 spec, &quot;structs&quot; are not.</p>
+<p>DH: Dmitry <em>is</em> working on this, it's not 2014 yet, we shouldn't definitively say it's not going in.</p>
+<p>AWB: well, I'm trying to manage expectations.</p>
+<p>BE: Let's revisit after we get a little further with the other items.</p>
+<a href="#41-arrow-functions"><h2 id="41-arrow-functions">4.1 Arrow Functions</h2></a><p>BE: When I proposed Arrow Functions, the empty parameter list was made optional. The omission</p>
+<p>LH: C# requires formal parameters?</p>
+<p>DC: Who is asking for this?</p>
+<p>BE: Community feedback, Domenic has mentioned it as well.</p>
+<p>DD: Possibly due to CoffeeScript, but is nice to omit the parens where they aren't necessary.</p>
+<p>BE: For this proposal, there is no issue in leaving the param list out</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">let</span> foo = =&gt; ...;
+
+x = (y) <span class="hljs-comment">// note missing semilicon</span>
+=&gt; z
+
+</code></pre>
+<p>BE: but nobody does this.</p>
+<p>DC: A concern, <code>x = y</code>, as written without the parens...</p>
+<pre><code class="language-js">x = <span class="hljs-function"><span class="hljs-params">y</span>
+=&gt;</span> z
+</code></pre>
+<p>(This is a valid Arrow Function: <a href="http://traceur-compiler.googlecode.com/git/demo/repl.html#let%20x%20%3D%20y%0A%20%20%20%20%3D%3E%20z">http://traceur-compiler.googlecode.com/git/demo/repl.html#let%20x%20%3D%20y%0A%20%20%20%20%3D%3E%20z</a> )</p>
+<p>AWB: No parameters: no LineTerminator here?</p>
+<p>BE: If someone began with an arrow,</p>
+<p>WH: I'm fine with this being an arrow function, but don't want this to depend on line breaking. I consider the following to be legitimate:</p>
+<pre><code class="language-js">    x = <span class="hljs-function"><span class="hljs-params">averylongid</span>
+       =&gt;</span> foo
+</code></pre>
+<p>DH: This would introduce a new sigil that you'd have to worry about</p>
+<p>BE: npm style is a thing. People actually put semicolons at the beginning of lines starting with + - / { [ (, this would introduce =&gt; to that list.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> i = <span class="hljs-string">"1"</span>
+;+i
+</code></pre>
+<p>WH: (laughter)</p>
+<p>BE: you laugh, but people do this</p>
+<p>WH: I thought I'd seen it all...</p>
+<p>BE: Do we extend the short list of characters that can begin an ExpressionStatement</p>
+<p>DH: It's not worth it</p>
+<p>EA: I think it's worth it</p>
+<p>BE: Writing &quot;()&quot; is too hard?</p>
+<p>DD: It's ugly.</p>
+<pre><code class="language-js">it(<span class="hljs-string">"should do something"</span>, =&gt; {
+    <span class="hljs-comment">// ...</span>
+});
+
+vs.
+
+it(<span class="hljs-string">"should do something"</span>, () =&gt; {
+    <span class="hljs-comment">// ...</span>
+});
+</code></pre>
+<p>DH: I'd prefer not to have the hazard.</p>
+<p>AR, DC: Agree with DH</p>
+<a href="#consensusresolution-41-arrow-functions"><h4 id="consensusresolution-41-arrow-functions">Consensus/Resolution</h4></a><ul>
+<li>No consensus on removing the empty param list</li>
+</ul>
+<a href="#43-mathhypot"><h2 id="43-mathhypot">4.3 Math.hypot</h2></a><p>DH: The idea is that it returns the square root of the sum of its arguments, but we have 2 and 3 argument special casing.</p>
+<p><a href="http://wiki.ecmascript.org/doku.php?id=harmony:more_math_functions">http://wiki.ecmascript.org/doku.php?id=harmony:more_math_functions</a></p>
+<p>It's an offense to mathematics if it's not: &quot;The square root of the sum of the squares of all the arguments&quot;</p>
+<p>Defend the pristine purity of math. If it's only a 2-argument function, that's OK, but having it a 2- and 3-argument function is not good, just make it an n-argument function.</p>
+<p>BE: Jason Orendorff outlined these problematic cases... (see es-discuss)</p>
+<p>DH: this is no good man.</p>
+<p>LH: Should be variadic</p>
+<p>DC: Programming in general is an insult to mathematics. Because what we call functions are not what they call functions. One convention we have in JS is that calling a function with three parameters is the same as calling it with two plus undefined.</p>
+<p>DH: but not for variadic functions. Since we want it for arity 2 and arity 3, cleanest way is to make it variadic. If you have 2 cases, yo have n cases.</p>
+<a href="#consensusresolution-43-mathhypot"><h4 id="consensusresolution-43-mathhypot">Consensus/Resolution</h4></a><ul>
+<li>variadic</li>
+<li>call ToNumber on all actual arguments</li>
+<li>if one is NaN, no special behaviour, allow to fall out.</li>
+</ul>
+<a href="#47-jsonstringify-and-unpaired-surrogates"><h2 id="47-jsonstringify-and-unpaired-surrogates">4.7 JSON.stringify and unpaired surrogates</h2></a><p><a href="https://mail.mozilla.org/pipermail/es-discuss/2013-September/033293.html">https://mail.mozilla.org/pipermail/es-discuss/2013-September/033293.html</a></p>
+<p>AWB: The concern is that JSON.stringify, as specified in ES5, if there is an unpaired surrugate</p>
+<p>AVK: There's a bug in V8 where lone surrogates passed to the utf-8 encoder turn into CESU-8 byte sequences.</p>
+<ul>
+<li>What is the defined failure space</li>
+</ul>
+<p>DC: The new spec is code points, so it could be unpaired surrogates</p>
+<p>AVK: So it's 16-bit code units</p>
+<p>DC: Yes</p>
+<ul>
+<li>JSON currently passes unpaired surrogates right through</li>
+<li>Suggest escaping them</li>
+</ul>
+<p>AWB: Only for unpaired surrogates</p>
+<p>DC: Will get through a UTF 8 Encoder, but will blow up</p>
+<p>AVK: If you want the surrogates to make a round trip, then escape them</p>
+<p>LH: Seems like it's saying, in practice, JSON will only admit into a JSON document UTF8</p>
+<p>DC: (Question about range of affected)</p>
+<p>AVK: only surrogates are affected</p>
+<p>LH: were people running into this problem in practice?</p>
+<p>AVK: Right now, roundtripping unpaired surrogates does not work. We could fix this by escaping them.</p>
+<p>AWB: But this is an incompatible change from ES5, since the length of the string would change to include \uXXXX (or \uXXXX\uYYYY) instead of the surrogate itself.</p>
+<p>AVK: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-built_in">JSON</span>.stringiyf(<span class="hljs-string">"\uD800"</span>)
+</code></pre>
+<p>AVK: \uD800 is a single sixteen-bit code unit that is also a surrogate.</p>
+<p>BE: this seems incompatible, so I say no</p>
+<p>LH: this just seems like a single case...not sure why we'd patch just this case</p>
+<p>AWB: this is about unicode/UTF-8 which is very common</p>
+<p>LH: any time I serialize any JS string, I have this issue, JSON isn't necessarily what's in question</p>
+<p>AVK: this is also about JSON as it's a network format</p>
+<p>DC: why are people doing this anyway</p>
+<p>AWB: e.g. because they're passing binary data as strings</p>
+<p>BE: murphy was an optimist</p>
+<p>WH: Note the CESU-8 spec, which is a mutant of UTF-8 that encodes individual surrogates individually (even if they're paired).</p>
+<p>AR: if CESU-8 is bad, why isn't this fix bad?</p>
+<p>AVK: you get subtle security bugs and it's incompatible with UTF-8. I don't really mind that we lose surrogates as I don't care about them</p>
+<p>BZ: if you pass unparied surrogtates, you'll just get bytes. If people are trying to use the high bits to store binary data, there are going to be problems.</p>
+<p>DC: the problem is that you're trying to pass 16-bit data through to UTF-8.</p>
+<p>(binary data through UTF-8 requires separate escaping)</p>
+<p>AVK: is a network format, it has strings</p>
+<p>BE: JSON is more then a network format</p>
+<p>?: If you want to pass binary data, just escape unpaired surrogates before serializing them as JSON.</p>
+<p>WH: Won't work. JSON will escape the backslashes in the escape sequences and you'll get double backslashes.</p>
+<a href="#consensusresolution-47-jsonstringify-and-unpaired-surrogates"><h4 id="consensusresolution-47-jsonstringify-and-unpaired-surrogates">Consensus/Resolution</h4></a><ul>
+<li>No Change. If you want to use lone surrogates you'll have to escape them after JSON.stringify().</li>
+</ul>
+<a href="#51-splice-cross-realm-arrays-and-subclassing"><h2 id="51-splice-cross-realm-arrays-and-subclassing">5.1 splice, cross-realm Arrays and subclassing</h2></a><p><a href="http://esdiscuss.org/topic/array-prototype-slice-web-compat-issue">http://esdiscuss.org/topic/array-prototype-slice-web-compat-issue</a></p>
+<p>AWB: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> newA = a.slice();
+</code></pre>
+<p>AWB: it turns out people use this to make a copy of an array</p>
+<p>In the general case, assume you have:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SA</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{}
+
+<span class="hljs-keyword">let</span> sa = <span class="hljs-keyword">new</span> SA(<span class="hljs-number">10</span>);
+
+sa.slice(<span class="hljs-number">1</span>, <span class="hljs-number">5</span>);
+
+<span class="hljs-comment">// What does this return?</span>
+<span class="hljs-comment">// - a new SA?</span>
+<span class="hljs-comment">// - a new Array?</span>
+</code></pre>
+<p>It seems to make sense that when you slice a <code>SA</code>, you should get a new instance of <code>SA</code></p>
+<p>WH: (recalling Mark's points about Caja(?) use of slice) Array.prototype.slice.call(a)</p>
+<p>AWB: This all makes sense, but the problem came up: what if &quot;a&quot; came from a different realm? Under ES5, slice() always gives you an array from the realm from which the slice function itself was defined.</p>
+<p>EA: the expecation that you'll get an array is flawed since you are just calling &quot;slice&quot; on an unknown object. &quot;slice&quot; could return 42.</p>
+<p>WH: Not what I asked. I was asking about the common existing idiom of calling Array.prototype.slice.call on an unknown object to coerce it into something known to be the built-in array. This breaks that.</p>
+<pre><code class="language-js">
+[].slice.call(a);
+
+<span class="hljs-comment">// This result will be an array from the [].slice.call realm</span>
+</code></pre>
+<p>AWB: I've tweaked the spec to say:</p>
+<ul>
+<li>If the constructor I'm using to make the new instance is in fact a built-in Array constructor (not a subclass) from any realm, it then creates an instance of the Array constructor of the slice function.</li>
+<li>So it essentially does what ES5 does, but if it's a subclass it doesn't do what ES5 does, but ES5 does</li>
+</ul>
+<p>RW: my concern was if NodeList was eventually to become a subclass of Array, what happens to existing code that does...</p>
+<pre><code class="language-js">[].slice.call(nodelist);
+</code></pre>
+<p>RW: it may solve itself? (the returned thing has the expected &quot;shape&quot;)</p>
+<p>(returned thing IS a realm-local Array instance)</p>
+<p>AVK: we're not going to change NodeList (we're still trying to maybe put Array in its prototype chain), we're creating a new thing, Elements, which will work great.</p>
+<p>RW: A new thing avoid breaking the old things.</p>
+<p>BZ: well note that HTMLCollection can <em>never</em> get fixed in any way.</p>
+<p>AR: just to clarify, if I have subclassInstance.slice(...), I get back what?</p>
+<p>AWB: a subclass instance</p>
+<p>(yay)</p>
+<p>WH: If we adopt this, what would be the new blessed way to coerce something to an actual Array?</p>
+<p>AWB: ES6 has <em>numerous</em> ways to force things to be an actual Array (not a subclass) from a given realm. Anyone who wants to force it can do that.</p>
+<p>BE: yes, Array.from, or spread, i.e. <code>[...otherArray]</code>.</p>
+<p>DC/LH: you're proposing a breaking change?</p>
+<p>AWB: no, I'm actually removing a breaking change. For all existing cases, the behavior will be exactly the ES5 behavior.</p>
+<p>WH: It is a change for the uses that expect Array.prototype.slice.call to coerce to an actual Array. They will need to change if they interact with any ES6 code.</p>
+<p>(General concern to ensure the behaviour remains the same)</p>
+<p>BZ: In the subclassing world, and I add method to Array.prototype, if I had an actual array, I will get an array from this realm.</p>
+<p>BE: If the first arg to <code>[].slice.call(a)</code> (a) is an instance of a subclass of an Array in this realm, <code>a</code>s constructor will be used, otherwise, use</p>
+<p>BZ: if the realm of the thisObj and the method do not match, create it in the realm of the method using the stardard Array constructor there.</p>
+<p>AWB: Agree</p>
+<p>WH: How do you find the realm of a Proxy?</p>
+<p>DH: really don't want to go in the direction of relying to heavily on the realm</p>
+<p>BE: What are you using to construct?</p>
+<p>AWB: it's constructor property</p>
+<p>AR: Mark counts on this behaviour to ensure that he'll always get &quot;clean arrays&quot; from something that may or may not be &quot;dirty&quot;. He could accomplish this by using a frozen version of the method?</p>
+<p>AR: Concerned about the Array &quot;redirection&quot;, different prototype depending on what you call slice with</p>
+<p>BZ: If you're doing &quot;a.slice()&quot;, there is no problem, the result is a new instance of the thing you called slice</p>
+<p>RW: Right, the issue arises when doing [].slice.call(arguments), nodelist, etc.</p>
+<p>AWB: And these aren't arrays</p>
+<p>(arguing the meaning of subclassing in ES5)</p>
+<p>AWB: BZ's proposal of matching the realm of the function with the realm of the constructor is probably the right way.</p>
+<p>DH: Seems like creating a patch for a scenario</p>
+<p>DD: But this is what user code would do, using this.constructor</p>
+<p>AWB: none of these are guaranteed, where you can wack the prototype...</p>
+<p><strike></p>
+<a href="#consensusresolution-51-splice-cross-realm-arrays-and-subclassing"><h4 id="consensusresolution-51-splice-cross-realm-arrays-and-subclassing">Consensus/Resolution</h4></a><ul>
+<li>When slice is call, what is the realm of the slice method and the realm of the constructor of the thisObj (since objects don't have realms, only functions do, we have to look up constructor).</li>
+<li>If they do not match, create it in the realm of the method using the stardard Array constructor there.
+</strike></li>
+</ul>
+<p>DH: why not actually find out what realm an object was created in, instead of trying to infer it from this.constructor.</p>
+<p>AWB: Is there any other way of creating an instance of this object without knowing what this.constructor is?</p>
+<p>BE: In ES6, <code>class B extends A {}</code></p>
+<p>AWB: Need to know two things:</p>
+<ol>
+<li>How to query what the constructor object is</li>
+<li>What the protocol is for invoking that constructor</li>
+</ol>
+<p>DH: So for slice, we have a default</p>
+<p>AWB: Yes. Considering adding to collection constructors, a factory for creating</p>
+<p>DD: Sounds like an unforgeable symbol that effectively is the same as .constructor, but can't be messed up like .constructor can.</p>
+<p>DH: Object to something that is an approximation to what we want</p>
+<p>BE: It's a reflective approximation</p>
+<ul>
+<li>Implementations do not want</li>
+</ul>
+<p>AWB: What I am proposing and BZ:</p>
+<pre><code>What is the realm of the object I would create?
+
+Is the object going to create an Array?
+</code></pre>
+<p>BZ: Seperate the concerns, two conversations about creation:</p>
+<ol>
+<li>&quot;How?&quot;</li>
+<li>&quot;What?&quot;</li>
+</ol>
+<p>WH: Are you expecting to construct or call</p>
+<p>(back to &quot;how&quot;)</p>
+<p>AWB: In my proposal you check if it's a constructor</p>
+<p>BE: Opposed to that</p>
+<p>DH: Have you audited these cases, how does it work for them all? Does it work for them all, except this case?</p>
+<p>AWB: Yes. (The fix for splice is the fix for all of them)</p>
+<p>BE: You've added a new reflection on the constructor</p>
+<ul>
+<li>Let's take this back and make it completely backward compatible</li>
+</ul>
+<p>BE: I can write code that sets constructor, and now it works differently in ES5 and ES6.</p>
+<p>AR: (mumbled something relevant)</p>
+<p>BE: Don't think Mark  would want the constructor check</p>
+<p>AR: The dot operator is the root of all evil in JavaScript.</p>
+<p>BE: I thought it was the NaNs...</p>
+<p>AR: We've got a lot of evil.</p>
+<p>DH: How much breakage are we talking about? Given the semantics Allen originally wanted?</p>
+<p>AWB: under what situations does getting an array instance from a different realm break something? Well, if you've tweaked Array.prototype across your realms, that will make a difference.</p>
+<p>BE: The odds are non-trivial that we'll break something</p>
+<p>WH: If you're looking at the prototype of things, Caja will break. If you're looking at the constructor property, ES5 code will break for anything that has a custom constructor</p>
+<p>AWB: Ignoring the Realm, unless we add some new operation on instances that reveal what Realm they are originally from.</p>
+<p>BE/DH: need to go back and work on this.</p>
+<a href="#consensusresolution-51-splice-cross-realm-arrays-and-subclassing"><h4 id="consensusresolution-51-splice-cross-realm-arrays-and-subclassing">Consensus/Resolution</h4></a><ul>
+<li>Needs revision of proposal.</li>
+</ul>
+<a href="#52-evaluation-order-and-the-invoke-operation"><h2 id="52-evaluation-order-and-the-invoke-operation">5.2 Evaluation Order and The [[Invoke]] Operation</h2></a><p>DH: Yehuda was interested in this.</p>
+<a href="#53-unscopeable"><h2 id="53-unscopeable">5.3 @@unscopeable</h2></a><p>AWB: Inheritance?</p>
+<p>ARB: Wrong to apply this across inheritance</p>
+<p>AWB: Changed in r18</p>
+<p>ARB: How was this changed?</p>
+<p>AWB: Own property</p>
+<p>The remaining question, do we lookup on entry of with block or for every access?</p>
+<p>WH: which one is slower?</p>
+<p>AWB: every access</p>
+<p>WH: OK, let's do the slower one.</p>
+<p>(general laughter and applause)</p>
+<p>ARB: (question about lookups that occur <em>up</em> a prototype chain that might encounter an @@unscopeable)</p>
+<p>DH: The semantics of with:</p>
+<ul>
+<li>There is an object that we'll do all lookups on</li>
+</ul>
+<p>We're adding to that:</p>
+<ul>
+<li>Check the black list first</li>
+</ul>
+<p>BZ: Consider you have two objects in your prototype chain, with two different @@unscopeable black lists</p>
+<p>AWB: The first</p>
+<p>ARB: What if you've put a &quot;values&quot; property directly on the instance?</p>
+<p>RW: This was meant to fix that problem.</p>
+<p>ARB/BZ: On the prototype, but what about an own property on the instance</p>
+<p>(acknowledged)</p>
+<p>ARB/DH: Discussion about predicted breakage.</p>
+<p>BZ: Possibly as a descriptor?</p>
+<p>RW: That was also considered</p>
+<p>ARB: But if you [[Set]] it won't go away</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> a = [];
+a.values = <span class="hljs-number">1</span>; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">--</span>
+</span></span></code></pre>
+<p>DH: (Recalling the issue that created this problem)</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">values</span>) </span>{
+            ^-------------------------+
+  <span class="hljs-keyword">with</span>(values) {                      |
+    values = <span class="hljs-number">1</span>;                       |
+      ^--<span class="hljs-string">"values"</span> here is pointing to-+
+  }
+}
+</code></pre>
+<p>But, if the parameter bound <code>values</code> object has a property called <code>values</code>, the <code>values</code> access INSIDE <code>with(){}</code> is accessed.</p>
+<p>RW: The case that hits @@unscopeable in its current form is far on the edge. Ext.js is generally an outlier in their use of with(){} (in a world that's continuing to progress towards strict mode). Future versions of Ext.js won't have the offending with(){} code, so it won't break on @@unscopeable. Ext.js has also committed to evangelising and getting the patched code out to clients, it was just a matter of needing time to do so.</p>
+<p>AWB: Someone could have created his own Array instance with names that @@unscopeable would hide. This would be also not be compatible.</p>
+<p>BE: This is why I find find/fill kind of short, you might get collisions. ??</p>
+<p>AVK/EA: But but but DOM</p>
+<p>BE: Don't rush!</p>
+<p>BE: Gecko did ship Array.prototype.values and backed out which is why we added @@unscopeable.</p>
+<p>BZ: In the DOM we want Element.prototype.remove and friends which are problematic due to event handlers, which use with semantics.</p>
+<p>BZ: You could have a proxy that does the same thing.</p>
+<p>AVK: Ouch.</p>
+<p>ARB: When an access occurs in with(){}, and a property is found, look at the @@unscopeable on THAT object</p>
+<p>DH: Do we want to blacklist names or name-object pairs.</p>
+<ul>
+<li>Distinguish between allowing instance properties</li>
+</ul>
+<p>BE: How does this change for MOP?</p>
+<p>AWB: Changes from Get to GetOwn, etc.</p>
+<p>BZ: DOM Proxies are nicely behaved.</p>
+<p>...</p>
+<p>AWB: Is anyone actually going to implement?</p>
+<p>DH: This is easy for SpiderMonkey</p>
+<p>ARB: This is easier then the previous.</p>
+<p>BE: Concerns about changing the Identifier resolution for Proxy</p>
+<p>AWB: Only for <code>with</code></p>
+<p>DH: If you want to not bypass the proxy mechanisms, you have have to give them a new trap to define how they behave when [[Get]] in <code>with(){}</code></p>
+<p>BZ: Have to give Proxy a way to know that it's happening in <code>with(){}</code></p>
+<p>(working through issues with document.forms)</p>
+<p>hasOwn on @@unscopeable</p>
+<p>DH:</p>
+<ul>
+<li>Walk the prototype chain</li>
+<li>foreach one,</li>
+<li>check if it hasOwn @@unscopeable</li>
+<li>hit a proxy, does the same</li>
+</ul>
+<p>...This prohibits Proxy from participating in the object operation.</p>
+<p>WH: Summarize?</p>
+<p>BE: We have a problem adding names to mature the API. Let's move forward with @@unscopeable</p>
+<p>AWB: For the @@unscopeable arrays I specify in the specification, should they be frozen?</p>
+<p>DH: No, need to be able to polyfill feature additions.</p>
+<p>AWB: You could always replace the array object.</p>
+<p>BE: When in doubt, don't freeze. Why isn't it a Set?</p>
+<p>DH: put down the freeze gun. Put it down.</p>
+<p>EA: Set is the right answer, semantically.</p>
+<p>AWB: Yeah.</p>
+<p>DH: I don't really care.</p>
+<p>AWB: You asked for a Set no, I think it should be a Set.</p>
+<a href="#consensusresolution-53-unscopeable"><h4 id="consensusresolution-53-unscopeable">Consensus/Resolution</h4></a><ul>
+<li>Continueing with @@unscopeable, with changes w/r to lookup to be defined.</li>
+<li>Noted change:
+<ul>
+<li>When a property is found, look at the @@unscopeable on THAT object</li>
+</ul></li>
+</ul>
+<ul>
+<li>@@unscopeable</li>
+<li>a Set</li>
+</ul>
+<a href="#55-mathroundfloat32"><h2 id="55-mathroundfloat32">5.5 Math.roundFloat32</h2></a><p>AWB/DH: Offline discussion to rename to something more Math object familiar</p>
+<p>Suggestions:</p>
+<ol>
+<li>Math.fround()</li>
+<li>Math.f32round()</li>
+<li>Math.roundF32()</li>
+</ol>
+<p>DC: This isn't a round operation</p>
+<p>DH: It is, according to IEE 754</p>
+<p>BE: fround. f means float, i means integer</p>
+<p>AWB: What this effectively does, is &quot;round&quot; (observably)</p>
+<a href="#consensusresolution-55-mathroundfloat32"><h4 id="consensusresolution-55-mathroundfloat32">Consensus/Resolution</h4></a><ul>
+<li>Math.fround</li>
+</ul>
+<a href="#56-backwards-compatability-unicode-utr31-and-es-identifiers-u2e2f"><h2 id="56-backwards-compatability-unicode-utr31-and-es-identifiers-u2e2f">5.6 Backwards compatability, Unicode UTR31, and ES identifiers (U2e2f)</h2></a><p><a href="http://esdiscuss.org/topic/backwards-compatibility-and-u-2e2f-in-identifier-s">http://esdiscuss.org/topic/backwards-compatibility-and-u-2e2f-in-identifier-s</a></p>
+<p>AWB: Traditionally, ES has said that Identifier are composed of unicode characters. There are changes to Unicode that rescind it's ability to be an Identifier.</p>
+<p>AVK: According to Norbert, the character in question was not part of Unicode 3.0 and therefore not a change</p>
+<p>(group testing identifier creation with U2e2f)</p>
+<a href="#consensusresolution-56-backwards-compatability-unicode-utr31-and-es-identifiers-u2e2f"><h4 id="consensusresolution-56-backwards-compatability-unicode-utr31-and-es-identifiers-u2e2f">Consensus/Resolution</h4></a><ul>
+<li>No change</li>
+<li>SpiderMonkey: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=917436">https://bugzilla.mozilla.org/show_bug.cgi?id=917436</a></li>
+<li>V8: <a href="https://code.google.com/p/v8/issues/detail?id=2892">https://code.google.com/p/v8/issues/detail?id=2892</a></li>
+</ul>
+<a href="#57-note-in-116-wrt-unicode-versions-update-to-unicode-51"><h2 id="57-note-in-116-wrt-unicode-versions-update-to-unicode-51">5.7 note in 11.6 WRT Unicode versions, update to Unicode 5.1</h2></a><p><a href="http://people.mozilla.org/~jorendorff/es6-draft.html#sec-11.6">http://people.mozilla.org/~jorendorff/es6-draft.html#sec-11.6</a></p>
+<p>AWB: (Norbert proposal)</p>
+<a href="#consensusresolution-57-note-in-116-wrt-unicode-versions-update-to-unicode-51"><h4 id="consensusresolution-57-note-in-116-wrt-unicode-versions-update-to-unicode-51">Consensus/Resolution</h4></a><ul>
+<li>Remove: &quot;NOTE 2 If maximal portability is a concern, programmers should only employ the identifier characters that were defined in Unicode 3.0.&quot;</li>
+</ul>
+<a href="#58-line-terminators-in-template-strings-should-they-be-normalized"><h2 id="58-line-terminators-in-template-strings-should-they-be-normalized">5.8 line terminators in template strings. Should they be normalized?</h2></a><p>(discussion re line terminators)</p>
+<p>AVK: HTML parser does normalization, but e.g. DOM setters do not</p>
+<p>BE: not normalizing would introduce more interop hazards than we want.</p>
+<p>AWB: just to be clear, this is both cooked and raw form.</p>
+<p>BE: yes. Add \r\n to the list of special things, alongside closing backtick and ${</p>
+<ul>
+<li>Propose: CR and CR+LF are canonicalized</li>
+</ul>
+<p>AR: why isn't this just part of the data? Why canonicalize?</p>
+<p>BE: it's not a byte string, it's a string.</p>
+<p>BE: but raw should be raw</p>
+<p>DD: no but then you have an interop hazard, because people will write code that works great on Unix, then some poor Windows user ends up with \r's in his strings that the Unix-using author did not anticipate.</p>
+<p>BE: but you should be using cooked</p>
+<p>DD: but a lot of the examples, e.g. on the wiki, use raw</p>
+<p>BE: ah right, like the regex one, because you need all those slashes. Hmm.</p>
+<p>BE: Python normalizes, Ruby normalizes</p>
+<a href="#consensusresolution-58-line-terminators-in-template-strings-should-they-be-normalized"><h4 id="consensusresolution-58-line-terminators-in-template-strings-should-they-be-normalized">Consensus/Resolution</h4></a><ul>
+<li>Normalize CR, LF, and CRLF to LF</li>
+</ul>
+<p>[WH: Is this consensus recorded correctly? I understood the consensus to be normalizing all lexical grammar LineTerminatorSequences to LF.]</p>
+<p><strong>EDIT</strong>
+RW: Yes, and was re-stated for confirmation.</p>
+<a href="#59-1224-note-says-we-decided-jan-2012-tail-calls-only-in-strict-mode-is-this-still-correct"><h2 id="59-1224-note-says-we-decided-jan-2012-tail-calls-only-in-strict-mode-is-this-still-correct">5.9 12.2.4 note says we decided (Jan 2012) tail calls only in strict mode. Is this still correct?</h2></a><p><a href="http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls">http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls</a></p>
+<p>DH: function.arguments is poisoned in strict mode. This opened up doing tail calls.</p>
+<p>LH: Are the tail call locations on the wiki still up to date?</p>
+<p>DH, AWB: yes, to the best of our knowledge; let us know ASAP if there's something wrong with them.</p>
+<ul>
+<li>Discussion about tail call location opportunities</li>
+</ul>
+<p>AWB: getting close to the point of getting tail call stuff into the spec (depending on how busy Dave keeps me); any comments appreciated sooner rather than later.</p>
+<p>AWB: Implicit calls to accessor properties in tail positions, e.g. <code>return x.y</code>, and <code>x.y</code> turns out to be a getter, do we want this to be a tail call.</p>
+<pre><code class="language-js"><span class="hljs-keyword">return</span> x.y;
+</code></pre>
+<p>If <code>x.y</code> turns out to be a getter, is that a tail call?</p>
+<p>AWB: also consider <code>return x.y()</code> where <code>x</code> turns out to be a proxy; then it's not just a simple call, it goes through the proxy handler.</p>
+<p>DH: More generally, if anything, syntactically not a call, turns out to be a call, do we include that as a tail call?</p>
+<p>DH: basically, is the spec mandating something that makes too much work for implementations. The definition of tail position is not in question; it's the semantics of what things in tail position become tail calls.</p>
+<p>LH: Function calls?</p>
+<p>AWB/DH: and method calls</p>
+<p>AWB: Calls in general</p>
+<p>WH: new?</p>
+<p>DH: no, <code>new</code> doesn't really work, because of the IsObject check afterward.</p>
+<p>AWB: OK, what about the proxy case.</p>
+<p>DH: I think it works fine; the semantics is just tail-calling the call trap.</p>
+<p>STH: I agree with Dave; we're just making a tail call to some arbitrary code. The code we're worried about is in the call-<em>ing</em> function, not in the MOP operation/trap handler.</p>
+<a href="#consensusresolution-59-1224-note-says-we-decided-jan-2012-tail-calls-only-in-strict-mode-is-this-still-correct"><h4 id="consensusresolution-59-1224-note-says-we-decided-jan-2012-tail-calls-only-in-strict-mode-is-this-still-correct">Consensus/Resolution</h4></a><ul>
+<li>Yes, the list is still correct.</li>
+<li>function.arguments in non-strict makes tail call effectively impossible.</li>
+</ul>
+<p>(increasing insistence on break time)</p>
+<p>AWB: but let's do point 5.11.</p>
+<a href="#511-disallow-let-undefined-const-undefined-class-undefined--module-undefined-from-foo"><h2 id="511-disallow-let-undefined-const-undefined-class-undefined--module-undefined-from-foo">5.11 Disallow? let undefined; const undefined; class undefined {}; module undefined from &quot;foo&quot;;</h2></a><p>No one thinks that disallowing this is a good idea.</p>
+<a href="#consensusresolution-511-disallow-let-undefined-const-undefined-class-undefined--module-undefined-from-foo"><h4 id="consensusresolution-511-disallow-let-undefined-const-undefined-class-undefined--module-undefined-from-foo">Consensus/Resolution</h4></a><ul>
+<li>Allow</li>
+</ul>
+<p>BE: Let's make it a keyword inside generators! Just kidding.</p>
+<a href="#42-reconsider-decision-to-make-typed-arrays-non-extensible"><h2 id="42-reconsider-decision-to-make-typed-arrays-non-extensible">4.2 Reconsider decision to make Typed Arrays non-extensible</h2></a><p><a href="http://esdiscuss.org/topic/non-extensibility-of-typed-arrays">http://esdiscuss.org/topic/non-extensibility-of-typed-arrays</a></p>
+<p>AWB: Last f2f we decided to make typed arrays non extensible.</p>
+<p>ARB: Chrome makes them extensible but I'm in favor of making them non extensible.</p>
+<p>AWB: the most significant thing I saw is that if you create a subclass of a typed array, the reason for doing so might include adding some additional state, and so the only direct way to do that is by adding own properties to the instance of the subclass, and if typed array instances are created non-extensible, then subclasses couldn't do this.</p>
+<p>DD: You cannot add indexed properties to typed array. It would be surprising if you could add identifier name properties.</p>
+<p>DL: There are no objects in JavaScript that have this behavior right now.</p>
+<p>OH: Certain restrictions exist for numeric properties. There is no other object that doesn't allow you to add an expando.</p>
+<p>OH: Neutering is a performance issue as well. If we should make decision based on performance we should kill neutering.</p>
+<p>BE: the real issue is not performance (although the thread may have misdirected in that direction).</p>
+<p>AWB: we could go back to having numeric expandos, if you want...</p>
+<p>BE: No no no no, there was a performance counterargument there, unlike for named expandos.</p>
+<p>DL: (clarifying</p>
+<pre><code class="language-js">A = <span class="hljs-keyword">new</span> ArrayType(uint8, <span class="hljs-number">10</span>);
+s = <span class="hljs-keyword">new</span> StructType({<span class="hljs-attr">a</span>: A, ...});
+a = <span class="hljs-keyword">new</span> A();
+a.foo = <span class="hljs-number">5</span>;
+s.a = a; <span class="hljs-comment">// ??</span>
+b = s.a
+</code></pre>
+<p>DH: A &quot;Typed Object&quot; is effectively a pointer to a shared backing store. If those objects can carry addition state</p>
+<p>OH: If</p>
+<p>DL: With typed objects we can do</p>
+<pre><code class="language-js"><span class="hljs-built_in">Uint8Array</span> = <span class="hljs-keyword">new</span> ArrayType(uint8);
+</code></pre>
+<p>AWB: There may differences between TypedArray types</p>
+<p>...</p>
+<p>DH: There's an example, wherein two views on the same backing store will not be === or ==, but there are implementation strategies that could make it possible.</p>
+<p>STH: It's easy to use getters where writing to one</p>
+<p>I'm behind....</p>
+<p>OH: Structs aren't expandable so therefore Typed Arrays shouldn't be expandable</p>
+<p>BE: Do we need extensible array types</p>
+<p>DL: All variable length array types to be extensible?</p>
+<p>AWB: We'd have to have a form of class, whose instance properties are defined by a Typed Object</p>
+<p>DH: Foresee a mechanism</p>
+<p>WH: Prefix properties?</p>
+<p>DH: Yes, if you have super type, its subtype is</p>
+<p>OH: Index properties are seen first in ForIn</p>
+<p>DH: Recalls discussion to allow index names to diverge, object model reform, etc.</p>
+<p>DH: most beginner references establish that all properties are strings</p>
+<p>RW: There is a lot of attention paid, in learning resources, to establish Array and Object as two different things, based on their property name &quot;type&quot;. It's not until much later that realization is made that they are the not different, aside from special length property behaviour.</p>
+<p>ARB: not allowing them is more conservative for now. We can always relax them later.</p>
+<p>BE: that conservative argument seems strictly stronger than consistency arguments which always pick their preferred dimension of consistency.</p>
+<p>WH: I haven't seem any good arguments for allowing expandos in arrays but not structs.</p>
+<p>BE: the arguments are: it's useful; it works on arrays.</p>
+<p>AWB: as currently specified, you can create a subclass of Uint32Array.</p>
+<p>(Discussion of how buffer semantics work in subclasses. Decided it's not really relevant.)</p>
+<p>AWB: the subclass wants to add new properties</p>
+<p>DD: but it's OK to add prototype properties...</p>
+<p>AWB: yes, but, most people represent per-instance state with own properties. Yes, you could use a weak map, that's the universal answer, but that's not what people do currently in JavaScript.</p>
+<p>WH: composition over inheritance</p>
+<p>AWB: but then you don't get any inherited behavior</p>
+<p>AWB: Here's what I would advise. Use composition when you're composing base abstractions into a new abstraction. But if your new thing is a specialized kind of array, which may need some extra state, then that's not a composition type of situation, it's an inheritance type of situation.</p>
+<p>DH/AWB: we could not make @@create create a non-extensible object, instead we would make the typed array constructor call <code>Object.preventExtensions</code> on <code>this</code>.</p>
+<p>WH: extensibility breaks compositionality.</p>
+<p>AR: this is a strange argument; you serialize and deserialize the object, losing expandos seems fine.</p>
+<p>BE: serialization/deserialization is not the model.</p>
+<p>DD&amp;DH: so if you don't call <code>super</code>, or wait until the end of the constructor to call <code>super</code>, the constructor can extend with per-instance properties</p>
+<p>OH: Have @@create produce an extensible object and have the constructor call <code>Object.preventExtensions</code></p>
+<p>DH: Yes</p>
+<p>DH/AWB: What order does super get called?</p>
+<p>DH: Seems like a solution, but not one that everyone is fully in support of.</p>
+<p>DH: Points are not about speed of accessing properties of objects and more about layout of objects</p>
+<p>BE: Most users of typed arrays are not naive. We should not be promoting these overal normal arrays.</p>
+<p>AWB: Not even numeric?</p>
+<p>BE: Define numeric. Unless you actually know what you're doing, you shouldn't be using these and we shouldn't be promoting them for these.</p>
+<p>BE: Typed arrays are power tools.</p>
+<p>(Float-containing normal array is almost equal in perf to float64 typed array in JavaScriptCore.)</p>
+<p>OH: Agreed.</p>
+<p>OH: Transfering large amounts of data to a worker.</p>
+<p>??: Better not have any expandos.</p>
+<p>BE: How do we make progress? Stand-off!</p>
+<p>DH, WH: to be clear, it would be sad if typed objects and typed arrays were inconsistent. so if we say typed arrays should allow expandos, then so should typed objects.</p>
+<p>DH: You can't put a variable-sized array in a struct.</p>
+<p>OH: Do we have a ToArrayIndexedProperty somewhere? Might have been internal to JavaScriptCore.</p>
+<p>AWB: The problem here is what array index meant when there was only the built-in array type doesn't fit with the typed array usage we have now.</p>
+<p>BE: I don't see it.</p>
+<p>Straw poll: 8 non-extensible, 8 mu (abstain), 1 (Ollie) extensible (I think it was moo, way more of a cow sound.) ( <a href="https://en.wikipedia.org/wiki/Mu_%28negative%29">https://en.wikipedia.org/wiki/Mu_%28negative%29</a> )</p>
+<p>OH: We don't see any reason to remove extensibility, you can always make them non-extensible</p>
+<p>OH: The view of the JavaScriptCore team is that making them non-extensible removes what developers can do, whereas making them extensible does not have to cost and provides more freedom.</p>
+<p>OH: examples of behaviour equivalent to TypeArrays with expandos:</p>
+<pre><code class="language-js">array = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+<span class="hljs-built_in">Object</span>.defineProperty(array, <span class="hljs-string">"length"</span>, {<span class="hljs-attr">writable</span>:<span class="hljs-literal">false</span>})
+array[<span class="hljs-number">3</span>] = <span class="hljs-number">0</span>;
+array[<span class="hljs-number">3</span>] =&gt; <span class="hljs-literal">undefined</span>
+</code></pre>
+<p>Various DOM lists allow non integer expandos, but don't allow integer expandos</p>
+<p>BE: The conservative argument is that if we're unsure we should make it non-extensible so we can make it extensible later.</p>
+<p>AR: You can interpret it both ways.</p>
+<p>DH: Non-extensible is conservative because you can change it later. It being extensible cannot.</p>
+<p>DH: Extensible is probably my preference at this point, but we can't leave it unspecified.</p>
+<p>BE: Due to duplicate bug of <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695438">https://bugzilla.mozilla.org/show_bug.cgi?id=695438</a> -- namely <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=828599">https://bugzilla.mozilla.org/show_bug.cgi?id=828599</a> with its adding .stride to WebGL vertex typed arrays -- I am now in the extensible camp.</p>
+<p>Straw poll:</p>
+<p>Extensible: 10
+Non-extensible: 6</p>
+<p>STH: (points about the mental model of operating on the backing store)</p>
+<p>DC: (points about the hazard of user code that abuses Array and creating a new hazard)</p>
+<a href="#consensusresolution-42-reconsider-decision-to-make-typed-arrays-non-extensible"><h4 id="consensusresolution-42-reconsider-decision-to-make-typed-arrays-non-extensible">Consensus/Resolution</h4></a><ul>
+<li>Consensus deferred.</li>
+</ul>
+
+</body>

@@ -1,0 +1,470 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 29, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-29-2016-meeting-notes"><h1 id="november-29-2016-meeting-notes">November 29, 2016 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Adam Klein (AK), Thomas Wood (TW), Mark S. Miller (MM), Jeff Morrison (JM), Chip Morningstar (CM), Dave Herman (DH), Yehuda Katz (YK), Leo Balter (LB), Sebastian Markbåge (SM), Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Peter Jensen (PJ), Juan Dopazo (JDO), Domenic Denicola (DD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), JF Bastien (JFB), Keith Miller (KM), Michael Saboff (MS), Chris Hyle (CHE), Alex Russell (AR), Brendan Eich (BE), Caridy Patiño (CP), Diego Ferreiro Val (DFV), James Kyle (JK), Eric Ferraiuolo (EF), Mathias Bynens (MB), István Sebestyén (IS)</p>
+<hr>
+<a href="#introduction"><h2 id="introduction">Introduction</h2></a><p>Discussion with István, dinner on Wednesday, etc.</p>
+<p>WH: ECMA member site is down and email is bouncing. How do we vote on standards at next week's GA when we can't get them and don't even know where the GA is?</p>
+<p>IS: Will send out packet tomorrow.</p>
+<p>IS: Correct, for more than a week we are experiencing major problems with our internal IT system, we have no email and access to the internal servers. The major HP server that we are using internally collapsed within an hour last Monday and 3 Harddisk, the mainboard, another board had to be replaced. This took a week for our external IT caretaker and HP. Now starting from Thursday morning at least the Email is back, and the file servers should also be back this afternoon. Sorry for the problems, this was the biggest IT problem I had in the Ecma office.</p>
+<p>AWB is acting chair, as John Neumann is missing.</p>
+<a href="#3-adoption-of-the-agenda"><h2 id="3-adoption-of-the-agenda">3 Adoption of the agenda</h2></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2016/11.md">Agenda</a></li>
+</ul>
+<a href="#conclusionresolution-3-adoption-of-the-agenda"><h4 id="conclusionresolution-3-adoption-of-the-agenda">Conclusion/Resolution</h4></a><ul>
+<li>Adopted.</li>
+</ul>
+<a href="#4-approval-of-the-minutes-from-last-meeting"><h2 id="4-approval-of-the-minutes-from-last-meeting">4 Approval of the minutes from last meeting</h2></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2016/11.md">Agenda</a></li>
+</ul>
+<p>AWB: Can't get the minutes due to ECMA web site being down, so this item is deferred until January.</p>
+<p>IS: Correct, I will try to trace it and distribute it per Email. Maybe you can approve it at this meeting.
+Basically I did prepare the minutes as usual and published it about 3-4 weeks after the September 2016 meeting.</p>
+<a href="#conclusionresolution-4-approval-of-the-minutes-from-last-meeting"><h4 id="conclusionresolution-4-approval-of-the-minutes-from-last-meeting">Conclusion/Resolution</h4></a><ul>
+<li>Adopt at next meeting.</li>
+</ul>
+<a href="#5-report-from-ecma-secretariat"><h2 id="5-report-from-ecma-secretariat">5 Report from ECMA Secretariat</h2></a><p>Scheduled for tomorrow in conversation with István</p>
+<a href="#6-administrative-matters"><h2 id="6-administrative-matters">6 Administrative matters</h2></a><p>AWB: Proposed dates for next year's meeting on the agenda. Which organizations may want to host? We need the January meeting scheduled! Schedule for 40-50 as a safe upper bound.</p>
+<ul>
+<li>Checking on dates for next meeting:</li>
+<li>Adam @ Google SF</li>
+<li>Domenic @ Google NY</li>
+<li>Shu @ Mozilla MV</li>
+<li>Juan @ Yahoo (?)</li>
+</ul>
+<p><strong>should we write this in the notes? maybe better not to publicly shame people here to host</strong></p>
+<p>IS: In my opinion there is no problem for discussion this openly. Hosting of TC39 meetings are not easy. And it is always appreciated if someone can take such a burden. But also understood if someone can not take it. Whatever help from Ecma is required we try to fulfill. For Ecma it is a great help if one of the TC39 members can host the meetings. An alternative would be to go into a hotel, but that would be quite expensive since especially in Silicon Valley many Tc39 members would not stay in the hotel, but come from home. If we had the meeting e.g. in Switzerland, then everybody would need a hotel room, and we could go for a &quot;conference package&quot; solution, which of course for TC39 participants also not inexpensive as such meeting would include travel and hotel costs.</p>
+<a href="#7-ecma262-status-updates"><h2 id="7-ecma262-status-updates">7 ECMA262 Status Updates</h2></a><a href="#spec-changes"><h3 id="spec-changes">Spec Changes</h3></a><ul>
+<li>Async Functions merged</li>
+<li>Trailing Function Commas merged</li>
+<li>Better rules for NewTarget and Super in eval.</li>
+<li><em>Please file a bug if you run into weird things like this!</em></li>
+<li>Export specifier is refactored to use a grammar parameter with far fewer static semantics.</li>
+<li>Buckets of editorial fixes as usual.</li>
+<li>JSON is no longer characterized as a subset of ECMAScript (due to handling of U+2028/U+2029 LINE/PARAGRAPH SEP)</li>
+<li>Maybe we could fix this, by making those ES line breaks as well! It may break compatibility, though. Leave for a concrete proposal.</li>
+</ul>
+<a href="#tooling-changes"><h3 id="tooling-changes">Tooling Changes</h3></a><ul>
+<li>New layout (got rid of dark theme :()</li>
+<li>Responsiveness++</li>
+<li>Better search. Key to efficient usage: / toggle, make use of casing.</li>
+<li>Pinned clauses - replaces a thumb in the spec.</li>
+<li>Keep in mind that CSS and JS changed. If you are hotlinking ECMA262's stylesheets your spec is broken. Don't do this.</li>
+</ul>
+<a href="#end-game"><h3 id="end-game">End Game</h3></a><ul>
+<li>NOW - last opportunity for stage 4 consensus on large features.</li>
+<li>global</li>
+<li>SharedArray buffers</li>
+<li>a couple 402 features, possibly</li>
+</ul>
+<p>DD: Layering changes for the web?
+BT: Need help prioritizing them</p>
+<ul>
+<li>Jan - last opportunity for stage 4 consensus on small features.</li>
+<li>Candidate Draft starts Feb 1, features frozen.</li>
+<li>RF Opt-out Period - Feb 1, 2017 to April 1, 2017. Or as early as possible</li>
+</ul>
+<p>AWB: Ideally, members can review before sending to Ecma--some time before the next meeting. But it should be OK to discuss needs-consensus PRs in the January meeting in time for that opt-out period.</p>
+<ul>
+<li>June - ES2017 ratified!</li>
+</ul>
+<p>AWB: Sounds like the big undetermined part is SharedArrayBuffer. If it goes to Stage 4 for ES2017, it would have to be decided at this meeting.
+SG: We could get to Stage 3 at this meeting; I will present on the memory model at this meeting. Test262 tests are still needed, but we already have implementations.
+BT: The integration work could be done before we get to Stage 4
+DD: The test262 tests will be technically difficult to write
+AWB: If we have a committment from implementers for tests by June, maybe we could go forward with it.
+SG: How about the HTML integration?
+DD: This is in progress, but it is also out of scope for this committee</p>
+<a href="#8-ecma402-status-updates"><h2 id="8-ecma402-status-updates">8 ECMA402 Status Updates</h2></a><p>DE: not much has changed since the last meeting; one small bug fix. There are a few editorial open issues, for which patches are welcome. We have two stage 3 features, plural rules and number format format-to-parts, where implementation work is ongoing.</p>
+<p>AWB: the endgame schedule for 402 needs to be the same as for 262.</p>
+<p>DE: yes. Note that those two stage 3 features already have test262 tests. One feature that did make it in is DateTimeFormat formatToParts. There was this change I got consensus on a while ago about resolving the constructor semantics (which changed from v1 to v2), but we're still waiting on infrastructure work to put that into the spec. I hope it can get into v4.</p>
+<p>DE: (clarifies that the infrastructure missing is the spec infrastructure for noting something as normative-optional but putting it inline instead of in an Annex)</p>
+<p>BT: it's OK to just use some nice HTML that makes things look good. It's not as important that it be machine-readable. You can just do something for now and we'll work on the infrastructure later; I honestly believe the inlining of Annex B into the spec is the future of 262, so we'll definitely use that in the future.</p>
+<p>DE: OK, so if I do this some time over the next two months will that be in time?</p>
+<p>AWB: ye</p>
+<p>DE: PRs to get into ES2018:</p>
+<ul>
+<li><a href="https://github.com/tc39/ecma402/pull/84">https://github.com/tc39/ecma402/pull/84</a></li>
+<li><a href="https://github.com/tc39/ecma402/pull/114">https://github.com/tc39/ecma402/pull/114</a></li>
+</ul>
+<p>Possible proposals at Stage 3 which may reach Stage 4 by January and be integrated:</p>
+<ul>
+<li><a href="https://github.com/tc39/ecma402/issues/30">https://github.com/tc39/ecma402/issues/30</a></li>
+<li><a href="https://github.com/tc39/proposal-intl-plural-rules">https://github.com/tc39/proposal-intl-plural-rules</a></li>
+</ul>
+<a href="#9-ecma404-and-ecma414-updates"><h2 id="9-ecma404-and-ecma414-updates">9 ECMA404 and ECMA414 Updates</h2></a><p><em>no update</em></p>
+<a href="#13i-needs-consensus-prs"><h2 id="13i-needs-consensus-prs">13.i Needs-consensus PRs</h2></a><p>BT: Layering fixes, DE's item on the agenda later, (discussion of unifying Array and String lengths---let's leave it open until later)</p>
+<a href="#11ia-regexp-sdotall-flag-proposal"><h2 id="11ia-regexp-sdotall-flag-proposal">11.i.a RegExp s/dotAll flag proposal</h2></a><p>(Brian Terlson)</p>
+<ul>
+<li><a href="https://github.com/mathiasbynens/es-regexp-dotall-flag">Proposal</a></li>
+</ul>
+<p>BT: proposal is basically complete; really simple. It's just the additional s flag, plus the change to the flags portion of the regexp so you can query whether dotall is used. It's just a way to tell the regexp engine to tell dot to match everything instead of almost everything.</p>
+<p>YK: even with m?</p>
+<p>BT: yes. That just changes the behavior of $ and ^.</p>
+<p>YK: I see. In Ruby m is basically s.</p>
+<p>BT: Also this will make . match astral characters even for non-Unicode regexps</p>
+<p>MB: correction: no, it won’t</p>
+<p>DE: and by &quot;matches&quot; you mean matches a single code unit, not the code point like the Unicode mode does</p>
+<p>AWB: To clarify, we need to only match code units here, not code points.</p>
+<p>WH: . has always matched all non-line-terminator characters. In non-Unicode mode it doesn't care if those happen to be surrogates or not. The mention of astral plane characters in the proposal seems to just be confusion.</p>
+<p>(debate on whether the current spec actually does match astral code units or not)</p>
+<p>MB: To clarify: the proposal states that with <code>u</code>, <code>.</code> already matches astral characters but not line terminators (i.e. <code>u</code> already solves one issue with <code>.</code>). By adding <code>s</code> it matches line terminators as well. <code>s</code> doesn’t have any special effect related to astral symbols.</p>
+<p>BT: regardless, not important for stage 1. The majority use case is making dot match line breaks.</p>
+<p>DE: V8 is fine with it.</p>
+<p>BT: other languages have it. It's easy for Chakra to implement. Spec changes are very minimal.</p>
+<p>(debate over whether &quot;s&quot; is the right name. It is, simply because every other language does it that way.)</p>
+<a href="#conclusionresolution-11ia-regexp-sdotall-flag-proposal"><h4 id="conclusionresolution-11ia-regexp-sdotall-flag-proposal">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>Once Brian figures out why he put the thing about surrogate pairs in there and removes or clarifies it, it will come back for stage 2</li>
+</ul>
+<a href="#11iib-promisetry"><h2 id="11iib-promisetry">11.ii.b Promise.try</h2></a><p>(Jordan Harband)</p>
+<ul>
+<li><a href="https://github.com/ljharb/proposal-promise-try">proposal</a></li>
+</ul>
+<p>JHD: This could start off a chain of calls to .then. To run the code on the same tick and return a Promise, so it's different from Promise.resolve().then().</p>
+<p><em>Discussion about what the semantics of the job loop are</em></p>
+<p>JHD: This avoids creating an immediately invoked async function, avoids the Promise constructor, etc.</p>
+<p>DD: This is used all over the place in userspace. It always runs synchronously. It traps any exceptions and turns them into exceptions, critically.</p>
+<p>MM: Is this ambiguous? Will it always run synchronously, or sometimes?</p>
+<p>JHD: Always.</p>
+<p>MM: This is important that it's done like this.</p>
+<p>JHD: Virtually any Promise library has this feature.</p>
+<p>DD: Example for motivation: If you have a function that returns a Promise, it's not supposed to throw. Wrapping the function body in a Promise.try() will achieve the right result of converting the throw into a rejected Promise.</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">relativeURL</span>) </span>{
+  <span class="hljs-keyword">const</span> absoluteURL = <span class="hljs-keyword">new</span> URL(relativeURL, someBaseURL).href;
+
+  <span class="hljs-keyword">return</span> fetch(absoluteURL);
+}
+
+foo(<span class="hljs-string">"http:0"</span>); <span class="hljs-comment">// throws!! oops</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">relativeURL</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.try(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-keyword">const</span> absoluteURL = <span class="hljs-keyword">new</span> URL(relativeURL, someBaseURL).href;
+
+    <span class="hljs-keyword">return</span> fetch(absoluteURL);
+  });
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">relativeURL</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> absoluteURL = <span class="hljs-keyword">new</span> URL(relativeURL, someBaseURL).href;
+
+    <span class="hljs-keyword">return</span> fetch(absoluteURL);
+  })();
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">relativeURL</span>) </span>{
+  <span class="hljs-keyword">const</span> absoluteURL = <span class="hljs-keyword">new</span> URL(relativeURL, someBaseURL).href;
+
+  <span class="hljs-keyword">return</span> fetch(absoluteURL);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">relativeURL</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">do</span> { <span class="hljs-comment">// ?!?!?!</span>
+    <span class="hljs-keyword">var</span> absoluteURL = <span class="hljs-keyword">new</span> URL(relativeURL, someBaseURL).href;
+
+    fetch(absoluteURL);
+  };
+}
+</code></pre>
+<p>YK: Given that we have async functions, isn't that more ergonomic than Promise.try, which is only a half-solution?</p>
+<p>DD: I think in all real examples, you should just use a normal async function; you don't need an immediately invoked async function.</p>
+<p>JHD: This is addressing the case where as a user of a function, the original author of the function made the unfortunate mistake
+of not ensuring that the promise-returning function will never throw.</p>
+<p>JHD: Some use cases may want to work with Promises and not return a Promise. Promise.try may be more ergonomic than an immediately invoked async function here.</p>
+<p>KG: Or returning an array of Promises, etc.</p>
+<p>JHD: Async function is not always what you want to do. This is why I'm working on methods like this one, and finally.</p>
+<p>YK: Wouldn't this be hard to teach? Not present in RSVP</p>
+<p>AWB: Idioms are things to learn. This seems learnable.</p>
+<p>BT: Async functions existing aren't a reason to not extend Promises.</p>
+<p>JHD: This provides something analogous to async functions, which is synchronous execution up to the first await.</p>
+<p>WH: I'm skeptical about adding an additional way to do it, especially since it's not shorter in terms of number of characters.</p>
+<p>JHD: Shorter in cognitive load. I've heard from users that Promise.try and Promise.finally are the only reason for continuing to use Bluebird.</p>
+<p>BT: I've heard that too.</p>
+<p>MM: Cognitive overhead goes both ways. Adding features and diversity of idoms increases the congitive overhead</p>
+<p>WH: People read others' code in addition to writing it. We already have this feature in terms of async functions. It'd increase cognitive overhead to also add an equivalent Promise.try to do the same thing.</p>
+<p>BT: Async functions happen to do some similar things, but the intent is different. Are the only concerns that this is worth paying the complexity cost?</p>
+<p>(What about async do?)</p>
+<p>JHD: Let's decouple these. Promise.try and Promise.finally give us most of what we need.</p>
+<p>YK: Why not publish libraries for just these extensions?</p>
+<p>JHD: I have published a polyfill, but developers seem to like to get one thing that gets all the things.</p>
+<p>MM: I overall feel this doesn't pull its weight, but it still meets the criteria for stage 1.</p>
+<p>BT: would any promise API rise to a level of usefulness that you would be happy with in the presence of async function?</p>
+<p>YK: Promise.any</p>
+<p>MM: Promise.post/send/get/etc. for promise pipelining</p>
+<p>BT: but what about things that you could implement with async functions?</p>
+<p>MM: I'm not making a blanket statement, but async functions raise the bar very high; the case would have to be strong and it would have to add a lot of value compared to async functions.</p>
+<p>JHD: Regardless of transpilers, there is a barrier to adopting new features. Async functions may be harder to adopt than this library feature. We don't use async functions at AirBnB because we don't want the regenerator dependency.</p>
+<p>AR: It's good to have various features that people can adopt incrementally based on a common intelligible base, such as Promises and async functions</p>
+<p>JHD: new Promise is unintelligible</p>
+<p>YK: When I have a project using async functions, it's hard to find a point where I don't want to just use them all the time. And the congitive overhead is far lower.</p>
+<p>Timebox BEEP</p>
+<p>JHD: Stage 1?</p>
+<p>WH: I don't object to Stage 1, but I am uncertain about utility</p>
+<p>Stage 1.</p>
+<p>JHD: Doesn't sound like we're at Stage 2 because of concerns about utility. What would it take for convincing?</p>
+<p>MM: Argument for: the proposal: Analogous to syntax, and would be expected for orthogonality, so does not increase cognitive burden but rather decreases it.</p>
+<p>BT: Let's look at the codebases of people who use try, the people who say they're not ready for standard Promises as a result.</p>
+<a href="#conclusionresolution-11iib-promisetry"><h4 id="conclusionresolution-11iib-promisetry">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>Not ready for Stage 2, pending more evidence of motivation.</li>
+</ul>
+<a href="#12ia-promiseresolve-constructor-check"><h2 id="12ia-promiseresolve-constructor-check">12.i.a Promise.resolve constructor check</h2></a><p>(Jordan Harband)</p>
+<p>JHD: <code>Promise.resolve</code> checks the constructor property and returns it straight away if so. Should new things like <code>Promise.prototype.finally</code> do this as well? Or do we regret it?</p>
+<p>DD: Whenever trying to coerce something to a Promise--we do this in several places: Promise.resolve and async functions. Upcoming, <code>Promise.prototype.finally</code> and async iteration. What should we do? Promise.resolve checks <code>IsPromise &amp;&amp; .constructor === Promise</code>. Async functions always wrap in a new Promise. What should we do for new features?</p>
+<p>AWB: This is all about subclassing. If you subclass Promise, then the constructor check should make things distinct.</p>
+<p>MM: The brand check is critical. If you say <code>Promise.resolve(P)</code> where P is a genuine Promise, that you get P back. I could entertain eliminating the constructor, but we need the brand check.</p>
+<p>AK: What about always wrapping?</p>
+<p>MM: A coercion which always wraps has overhead, and we want to avoid that expense.</p>
+<p>YK: Whether we remove the constructor check seems like whether we consider subclassing an important feature.</p>
+<p>DD: Or, subclasses could do a little more work to make their own resolve method.</p>
+<p>AWB: If you want a Promise, you say Promise.resolve, you don't say SubPromise.resolve. We currently, with the constructor check, guarantee that we get a direct instance of Promise.</p>
+<p>JHD: I can buy that if you do Foo.resolve, you want a Foo.</p>
+<p>DE: Shouldn't a subclass be OK, with substitutability of subclass instances?</p>
+<p>AWB: <code>finally</code> should use <code>@@species</code>, similar to <code>then</code></p>
+<p>DD: V8 has a spec compliance issue where, in async functions, we brand check and avoid creating the extra Promise. This is a spec violation, and fixing the violation has potential performance cost. I think we should do a brand check and just use it when it passes.</p>
+<p>MM: I was surprised that await always wraps. My memory was that we decided that await would do the equivalent of <code>Promise.resolve()</code>, implying that if it is a genuine Promise, it does not wrap. Having them not agree is just creating complexity and not equivalences, and it does confuse people.</p>
+<p>JHD: The constructor check shouldn't be needed for async functions, just the brand check</p>
+<p>DD: But the <code>.then</code> method is always called, when we wrap the Promise and then it gets resolved by calling the <code>.then</code> later in the resolution process. We want to have a primitive version of coercion which is common.</p>
+<p>WH: Like MM, I want all of the places where we coerce things to promises (including Promise.resolve) to have consistent semantics. A constructor check doesn't make sense in some of those, so none of them should do a constructor check. They should only do a brand check.</p>
+<p>AWB: If we brand check, allow subclasses, and then use the primitive <code>then</code>, the whole purpose of the subclass may be to override <code>then</code>, and we wouldn't be calling that new <code>then</code>.</p>
+<p>DD: We shouldn't contort everything and make it slower to override then.</p>
+<p>YK: I used to support Promise subclasses, and combinators don't work well with subclassing, so it's bad practice.</p>
+<p>DD: Promise subclassing does not work; splits the ecosystem.</p>
+<p>BT: We should either come to consensus that we don't want Promise subclassing, and not support it, or if we don't, then we have the responsibility to support it well.</p>
+<a href="#conclusionresolution-12ia-promiseresolve-constructor-check"><h4 id="conclusionresolution-12ia-promiseresolve-constructor-check">Conclusion//Resolution</h4></a><ul>
+<li>Continue discussion later (timeboxed item)</li>
+</ul>
+<a href="#12ib-arrayiterator-tweak-for-detached-typedarrays"><h2 id="12ib-arrayiterator-tweak-for-detached-typedarrays">12.i.b ArrayIterator tweak for detached TypedArrays</h2></a><p>(Daniel Ehrenberg)</p>
+<p>DE: <em>shows the PR</em></p>
+<ul>
+<li><a href="https://github.com/tc39/ecma262/issues/713">Issue</a></li>
+<li><a href="https://github.com/tc39/ecma262/pull/724">PR</a></li>
+</ul>
+<p>DE: For TypedArrays we want to be consistent, same for <code>length</code>  checks.</p>
+<p>BT: We could refactor the iterators to be different if we can get away with changing the same-valueness between TA iterator and Array iterator.</p>
+<p>DE: Could do.</p>
+<p>WH: If you detach the typed array upon access of the last element, the next <code>length</code> access doesn't throw even though it should.</p>
+<p>Would it break things to have typed arrays just use the length property?</p>
+<p>Why do we not use length for typed arrays? &lt;who is sitting next to @msaboff?</p>
+<p>AWB: Not sure about historical reasons for doing it this way.</p>
+<p>DE: These would be observable changes, although implementations don't currently implement the spec.</p>
+<p>AK: Is anyone against adding an extra throw-if-detached line?</p>
+<p>AWB: I am. Current spec has a problem. And, solution is to use variant A of the proposal.</p>
+<p>BT: Can we just make [[TypedArrayLength]] 0?</p>
+<p>DE: Possible...</p>
+<a href="#conclusionresolution-12ib-arrayiterator-tweak-for-detached-typedarrays"><h4 id="conclusionresolution-12ib-arrayiterator-tweak-for-detached-typedarrays">Conclusion//Resolution</h4></a><ul>
+<li>Consensus on taking the PR (aka throwing on detached typed array during iteration via ValidateTypedArray)</li>
+<li>consensus example <a href="https://github.com/tc39/ecma262/issues/713#issuecomment-255878360">found here</a> (the first option, &quot;a&quot;)</li>
+</ul>
+<pre><code><span class="hljs-number">8.</span> If a has a <span class="hljs-string">[[TypedArrayName]]</span> internal slot, <span class="hljs-keyword">then</span>
+  a. Perform ? ValidateTypedArray(a).
+  b. Let <span class="hljs-built_in">len</span> be a.<span class="hljs-string">[[ArrayLength]]</span>.
+<span class="hljs-number">9.</span> Else,
+  a. Let <span class="hljs-built_in">len</span> be ? ToLength(? Get(a, <span class="hljs-string">"length"</span>)).
+</code></pre>
+<a href="#12iib-module-namespace-objects-various-oddities"><h2 id="12iib-module-namespace-objects-various-oddities">12.ii.b Module Namespace Objects: Various Oddities</h2></a><p>(Adam Klein)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1FgSbTHoLlDsigEHBd_qufJMPBNXCwbIw2kQsR-B0HPA/edit?usp=sharing">Presentation</a></li>
+</ul>
+<p>AK: Module namespace exotic objects are very exotic. Mostly immutable from the outside, null prototype, special @@iterator</p>
+<a href="#slide-module-iterator"><h3 id="slide-module-iterator">Slide: module @@iterator</h3></a><p>AK: The @@iterator is weird. Proposal possibilities:
+- Remove @@iterator; you can use Object.keys() for this
+- Make @@iterator more like other iterators and freeze the function</p>
+<p>BT: You can for-of a Map...</p>
+<p>DD: This is incongruous, since other object literals don't have an @@iterator like this</p>
+<p>DH: @@iterator is for iterating over collections, and modules are not conceptualized as a collection</p>
+<p>BT: I  see that argument</p>
+<p>AWB: Map is a completely different thing; this is a namespace object.</p>
+<p>BT: Point is, if it makes sense to iterate most of the time using keys, values, or entries, add an @@iterator to do that. Otherwise, don't. In this case keys doesn't make much sense.</p>
+<p>DH: I can't remember the original motivation. Maybe we can find it in the bug database.</p>
+<p>AWB: Say you've imported a namespace object. You've imported *. So you want to look at the names of the object, and you iterate over it.</p>
+<p>AK: I would say this is not a very common operation</p>
+<p>AWB: Arguably, this is a meta-level operation, a reflective operation, so explicit Object.keys makes sense</p>
+<p>DH: This is in the power tools section, so we shouldn't be doing crazy extra work for the ergonomics</p>
+<p>YK: but import * is not a power tool</p>
+<p>DH: But looking at is as this fancy object is</p>
+<p>JFB: We are talking about exposing WASM modules as ES module exotic objects. For dynamic linking, we may want to process all of it. You can do it with either feature, though.</p>
+<p>AWB: The only other argument is that the @@iterator doesn't need to create this intermediate array, so it may be more directly implementable.</p>
+<p>AK: Creating the JS functions for the @@iterator has its own overhead.</p>
+<p>BT: I am worried that we don't have a good understanding of the motivation for creating this feature</p>
+<p>AWB: For iterating over the objects without creating the intermediate array. But anyway, let's remove it</p>
+<a href="#slide-tostringtag"><h3 id="slide-tostringtag">Slide: @@toStringTag</h3></a><p>AK: @@toStringTag: [[Configurable]] is true, but [[Set]] and [[DefineOwnProperty]] fail. This is inconsistent.</p>
+<p>AWB: But this is a standardized, built-in method, and we generally allow monkey-patching of those.</p>
+<p>JM: Isn't this for polyfilling? But in this case, there is a module</p>
+<p>YK: And there's a null prototype, so we can't even do a real polyfill</p>
+<p>AK: But the module doesn't get to choose.</p>
+<p>AWB: So I think it should be configurable and mutable.</p>
+<p>JHD: Could be useful for polyfilling if the thing that produced the module namespace object were wrapped and amended it</p>
+<p>AWB: You don't want this to be a communications channel. If Mark were here, he'd agree. However, there's no essential invariant that configurable means it really is configurable. Anyway, it's OK to make it non-configurable--better internal consistency.</p>
+<a href="#slide-setprototypeof"><h3 id="slide-setprototypeof">Slide: SetPrototypeOf</h3></a><p>AK: SetPrototypeOf to null should return true</p>
+<p>BT: This is just following the precedent of defineProperty on non-writable, non-configurable, same-valued sets.</p>
+<p>(agreement)</p>
+<a href="#conclusionresolution-12iib-module-namespace-objects-various-oddities"><h4 id="conclusionresolution-12iib-module-namespace-objects-various-oddities">Conclusion/Resolution</h4></a><ul>
+<li>Consensus on removing @@iterator from module namespace exotic objects</li>
+<li>For local consistency, make @@toStringTag non-configurable</li>
+<li>SetPrototypeOf should return true for null</li>
+</ul>
+<a href="#12iid-proposal-to-reform-the-spec-to-include-default-export-in-export--from-module"><h2 id="12iid-proposal-to-reform-the-spec-to-include-default-export-in-export--from-module">12.ii.d Proposal to reform the spec to include default export in export * from 'module'</h2></a><p>(Caridy Patiño)</p>
+<ul>
+<li>(Presentation: )</li>
+</ul>
+<p>CP: <code>export * from 'module'</code> does not export default export - seems confusing</p>
+<p>CP: You may want to reexport, and that's broken. A common pattern is <code>module.exports = require('...');</code>
+(The example in the presentation has some issues: <code>default</code> is a keyword and can't be imported without getting renamed)</p>
+<p>DH: I strongly object to this proposal</p>
+<p>CP:  The main proposal is remove the special restriction on default, and this creates a named binding when imported, rather than being filtered out?</p>
+<p>DH: What happens when there are multiple export defaults?</p>
+<p>AK: Just like currently, if there are conflicts, then they would lead to an error when importing through the conflict</p>
+<p>YK: Seems bad that this is an error in linking rather than statically</p>
+<p>AK: That's a different discussion</p>
+<p>DH: I think the idea is to just treat it like everything else. But this isn't the programmer intuition. The programmer intuition for default export is that this is the default anonymous export. This happens to be implemented through a special exported name called default, but nevertheless, the idea is that this is the anonymous thing.</p>
+<p>JM: I see that a lot of people get confused about default exports, but in my experience, I can clear it up by explaining that default is just another named export.</p>
+<p>DH: Maybe understanding the mechanism helps advanced users, but the programmer intuition is more basic.</p>
+<p>JM: The concept is that default is the main export, among a number of other subordinate named exports.</p>
+<p>DH: That's understanding the mechanism, but when we design policies, they have to be designed around the programmer purpose. What are the intuitions about what it means. What I am reexporting from another module, this is something that I decide. When I'm composing utilities, I decide what the default is, and don't want to just inherit it.</p>
+<p>YK: The intuition part is true, but the default of one will be different from the default of another.</p>
+<p>JM: What about the scenario like lodash where you want to combine a bunch of libraries . If you're wrapping another module, and adding a couple things, where the default is forwarded, is more plausible. The language already exposes <code>import { default as alias }</code> -- the conceptual module is reasonable, but it's at a high level. There's a difference between suggesting (with nice syntax) and imposing constraints (the behavior that the proposal is reverting) it's different, making an inconsistency with the rest of the scenarios.</p>
+<p>JHD: Why does import * bring in &quot;default&quot;?</p>
+<p>YK: Because it has no cost</p>
+<p>DH: Because it's not putting them in a scope, it's just putting them in an object</p>
+<p>JHD: If you're arguing that the &quot;default as named export&quot; is supposed to be &quot;hidden&quot; from the conceptual model of a developer, then it seems like exposing it in <code>import *</code> is weird, when you can't <code>export *</code> and get the same behavior. I don't think that discrepancy is worth changing what <code>export *</code> does, but should we change <code>import *</code>?</p>
+<p>YK, DH: Too late</p>
+<p>DH: Two use cases for export *: Composing multiple modules, and decorating a module. Filtering default is necessary for the composition use case.</p>
+<p>AK: That's not true, you can fix the ambiguity by explicitly exporting the default that you want.</p>
+<p>JM: Anyway, you have that problem when combining modules that have the same name, resolvable in the same way</p>
+<p>DH: There's an asymmetry--explicit name clashes are more explicit, but the concept of a default is more that it's per-module and not the category of things that would be overlapping.</p>
+<p>JM: But, in the wrapping use case, forwarding with export * has the same thought process, but it's a scenario where you'd really prefer default to be included. Default should be handled the same way for exporting default twice as for exporting names multiple times.</p>
+<p>AWB: Default has to always be explicit</p>
+<p>JM: You combine named modules because you know they are bags of named exports. If you do that with wrapping, it's with the understanding that it has a default, and exporting that. I agree that default is special, and thinking of it as named is not important here.</p>
+<p>KG: This would be a change to existing semantics, potentially breaking. Regardless of whether it's a good idea, could we get away wtih it?</p>
+<p>DE: In the transpiler universe?</p>
+<p>KG: Yes</p>
+<p>DH: It would cause something which was an error to stop being an error.</p>
+<p>AK: The only thing the proposal does is remove the special handling for export *</p>
+<p>YK: What about the ambiguity?</p>
+<p>CP: That's a property fo how modules work already. This is not a breaking change, and details are in the README: It's causing additional things to be exported, and you only encounter the errors if you actually use this new export which is ambiguous. From static semantics, you only take programs which were illegal and making them legal. Explicit defaults override anyway, so their semantics don't change.</p>
+<p>DH: Only if you actually iterate over the module namespace objects would the behavior of existing programs change.</p>
+<p>AK: Sounds like there's not consensus to move forward with this change. It was specifically designed to work like this</p>
+<p>DH, YK: Right</p>
+<p>CP: Do we want to be able to reexport more flexibly, with the second part of the proposal?</p>
+<p>(Sounds like not)</p>
+<p>AK: What's the really bad thing that happens if someone exports default, and then imports default</p>
+<p>DH: The bad thing is when you don't want default at all.</p>
+<p>YK: If you export it by accident, people may depend on it, and you can't remove it later.</p>
+<a href="#conclusionresolution-12iid-proposal-to-reform-the-spec-to-include-default-export-in-export--from-module"><h4 id="conclusionresolution-12iid-proposal-to-reform-the-spec-to-include-default-export-in-export--from-module">Conclusion/Resolution</h4></a><ul>
+<li>No consensus on this change; the current state is as designed.</li>
+</ul>
+<a href="#12iva-import"><h2 id="12iva-import">12.iv.a import()</h2></a><p>(Domenic Denicola)</p>
+<p>DD: AWB's issue: import as a unary operator rather than a pseudo-function as currently proposed. <a href="https://github.com/tc39/proposal-dynamic-import/issues/23">https://github.com/tc39/proposal-dynamic-import/issues/23</a></p>
+<p>KG: Would it be an actual function?</p>
+<p>DD: No, needs to be a function-like form.
+Pros for function-like:</p>
+<ul>
+<li>Future extensibility (second argument)</li>
+<li>Ambiguity with 'import x' form in modules. You could use this from a script, and you might expect that you can write 'import x' in a script. But that would not be the same--it would create a Promise and then throw it away</li>
+</ul>
+<p>AWB: You could require it to be parenthesized when it's in statement position, with the same logic that prohibits a function expression there</p>
+<p>DD: But, at that point, if you need parens, you might as well have them after the import, rather than before</p>
+<p>DH: If there's a lookahead restriction on expressions...</p>
+<p>DD, WH: There's no lookahead involved here; this is just what grammars do, and by the time you get to the reduce part of the grammar you know which form you have</p>
+<ul>
+<li>Parens are usually required anyway, e.g., if you'll then the result</li>
+<li>If we were to do <code>await import x</code>, then it would be impossible because we've already used the unary operator</li>
+<li>Another possibility (though AWB expressed dislike) is local import being hoisted, which this would disallow</li>
+</ul>
+<p>AWB: Pros for unary operator, with a low precedence like yield:
+- We are looking at something which is not a call, it's really based on conceptual state</p>
+<p>BT: This is a little more like super(), which uses contextual information.</p>
+<p>DH: But you could conceptually think of this as a function call. We have both forms, function-like and operator-ilke. Also, eval.</p>
+<p>BT: If eval were a keyword, we'd maybe do it more as this pseudo-function thing</p>
+<p>AWB: Actually I think we should do it as a unary operator in this case</p>
+<p>DH: People might not actually think that hard about not needing parens for a prefix operator. So there might not be a strong conceptual distinction between unary operators and pseudo-functions</p>
+<p>JHD: Douglas Crockford has in the past advocated using typeof with parens</p>
+<p>BT: I claim that the mental model of import as a special function is simpler and more intelligible than operators.</p>
+<p>WH: The only place the function mental model breaks down is if users try to assign without calling <code>x = import;</code> (but fails early like super)</p>
+<p>AWB: I am concerned about things like the spread operator not working.</p>
+<p>WH: But you can't spread into the parenthesized expression in an if statement either.</p>
+<p>YK: Initially I was sympathetic to operator, but now I am thinking more like, the analogy to require is nice. So I support a function form. require is similarly magical about how it gets your context.</p>
+<p>BT: Could we make import really a function at all?
+(Seems hard, and no one is really advocating that)</p>
+<p>BE: Back in the day, I considered making eval a special form. Regrets!</p>
+<p>DH: The parens distinguish this form from the import statement, which is important. It disambiguates much better.</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { toString };  <span class="hljs-comment">// With AWB's proposal, would import "foo"!</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toString</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"foo"</span>;
+}
+
+(<span class="hljs-keyword">import</span> <span class="hljs-string">"foo"</span>).then(...);  <span class="hljs-comment">// JHD: Looks like something very weird</span>
+<span class="hljs-keyword">import</span>(<span class="hljs-string">"foo"</span>).then(...);  <span class="hljs-comment">// JHD: Looks like normal JS</span>
+  <span class="hljs-comment">// BE: In AWB's proposal actually imports the result of evaluating the expression `("foo").then(...)`.</span>
+</code></pre>
+<p>DD: We could allow spread and have it throw an error if it is dynamically not one argument</p>
+<p>(Discussion about whether it should be OK to throw on the wrong number of arguments)</p>
+<p>AK: The DOM often throws on the wrong number of arguments.</p>
+<p>DD: We should either do either fully static or fully dynamic argument number checks</p>
+<p>AWB: For extensibility, what if we define a second argument which is an options bag</p>
+<p>DH: Seems like predicting the future in a possibly fallable way</p>
+<p>DE: Concretely, a hash for SRI or a nonce for CORS may take this second argument position</p>
+<p>DH: In the past, implementations which gave an interpretation for the second argument for eval, and this poisoned the well so we couldn't add our own meaning for a second argument.</p>
+<p>WH: If we don't support spread now, we can always extend the syntax compatibly in the future.</p>
+<p>AWB: My concern is teaching and learnability. Anyway, the precedence issue seems like the fatal thing that makes DD's proposal the winner</p>
+<p>JHD: People would only run into this if an error occurs and it's hard to explain</p>
+<p>DH: However, the browser error messages may not be great. I don't want to have the mixed static/dynamic enforcement.</p>
+<p>KCD: I'm sure people will teach that import is a function, FWIW</p>
+<p>KG: But that ship has sailed; it will not be possible to treat it as a value.</p>
+<p>JHD: People will accept this limitation</p>
+<p>AWB: It'll be unfortunate if people teaching have to talk about how things don't all work the same, and we really muddy the issues about what function values are.</p>
+<p>JHD: There's already a list of things</p>
+<p>DD: Membrane penetration issue <a href="https://github.com/tc39/proposal-dynamic-import/issues/26">https://github.com/tc39/proposal-dynamic-import/issues/26</a> : MM said he would not block Stage 3, as he is unable to find an attack</p>
+<p>AWB: If you have a membrane, importing a module dynamically could introduce a side-channel because someone outside the membrane and inside importing the same module, any mutable state exposed (e.g., exported function that you can attach properties to) can be used to move information across the membrane</p>
+<p>DD: Mark already has a pre-compiler. And this isn't any worse than manipulating the DOM with [script type=module]. Mark's system depends on restricting eval and parsing and transforming the code there. So it seems like there's no reason to hold things up.</p>
+<p>DD: <a href="https://github.com/tc39/proposal-dynamic-import/issues/27">https://github.com/tc39/proposal-dynamic-import/issues/27</a> &quot;revised proposal still violates run-to-completion execution semantics&quot;. The spec mechanics give host environments the ability to violate run-to-completion semantics by calling back into ES when it completes.</p>
+<p>AWB: Abstract operations aren't there to say, hosts can call them at any time and destroy all the invariants.</p>
+<p>DD: We don't have spec mechanics for any of that right now.</p>
+<p>AWB: Hosts don't just use the spec as an API, they extend it</p>
+<p>BE: We don't want to monkey-patch the spec</p>
+<p>DD: The Web host embedding environment calls Object.prototype.toString() all over the place, and we don't have anything explicitly in ES prohibiting it from being called in the wrong place. This seems like the same problem.</p>
+<p>AWB: &quot;Either immediately or at some future time&quot;</p>
+<p>DD: This is required for Node's ability to integrate require() with ES modules well. That's what the &quot;immediately or&quot; part is for; we need it for Node integration.</p>
+<p>DE: Could we separate advancing this proposal from getting the job queue mechanism in order? We seem to be in agreement on all the substantial issues here, and the job mechanism was already present.</p>
+<p>DD: I'm not comfortable with advancing this with broken semantics&gt;</p>
+<p>AWB: Let's start by using the mechanisms that are there, and use them, or come up with new mechanisms and use those, rather than this vague prose?</p>
+<p>DE: Let's not be so insistent on one form or the other. We have other forms which are unimplementable, like the lack of describing resource restrictions.</p>
+<p>BE: If we ignore feedback like Domenic's and implementers ignore the spec text, we risk the actual spec being a dead letter.</p>
+<p>YK: We just need to say that the jobs happen separately in order, with run-to-completion.</p>
+<p>BT: I want to avoid spending a lot of time writing spec text for the job queue mechanics, when we could instead use general prose which preserves the run-to-completion semantics. This would be in accordance with Domenic's PR <a href="https://github.com/tc39/ecma262/pull/735">https://github.com/tc39/ecma262/pull/735</a></p>
+<p>DH: It may be very important to Node to do this synchronously (as Domenic was attempting to do, but which AWB's semantics object to)</p>
+<p>DE: Could we decouple this into another proposal?</p>
+<p>YK: Interoperability concern: top-level evaluation in modules imported in Node may see the side effects synchronously.</p>
+<p>DH: Maybe Node could delay things to a new turn, but we need to talk to them. Also, it violates expectations to have something that returns a Promise execute everything immediately.</p>
+<p>YK: Node will still have require; people can still use it if they want synchronous.</p>
+<p>AK: Is the major problem here that we don't have Node folks here?</p>
+<p>DH: Yes</p>
+<p>DD: Seems like it should be possible to move forward to remove the synchronous possibility, and then have the discussion with Node and work on patching the whole system, as part of Caridy's proposal which patches the module system all over.</p>
+<p>JHD: I don't understand why this is a problem for Node. You could begin the require call later, when called from Node, so it should be possible to be always asynchronous. Stage 3 seems early to constrain these things; seems like this is about implementer feedback.</p>
+<p>AWB: My understanding is that Stage 3 means we have really decided on semantics. Among ourselves, we can decide that it should be asynchronous.</p>
+<p>JHD: You can be synchronous or asynchronous without violating run to completion. I would predict that Node implementation feedback won't require synchronous, and Stage 3 is where we get their feedback.</p>
+<p>DH: I am not OK with synchronous semantics without them being in the room to explore the options.</p>
+<p>AR: I don't understand the discomfort with getting implementation feedback. Can't we have the conversation with them?</p>
+<p>JHD: Bradley Farias can call in tomorrow.</p>
+<a href="#conclusionresolution-12iva-import"><h4 id="conclusionresolution-12iva-import">Conclusion/Resolution</h4></a><ul>
+<li>Stick with import()'s function-like form, with no spread, no commas, just an assignment expression; can't be extended with extra arguments (Chapter 16) <a href="https://github.com/tc39/proposal-dynamic-import/issues/23#issuecomment-263742551">https://github.com/tc39/proposal-dynamic-import/issues/23#issuecomment-263742551</a></li>
+<li>Open issues which block Stage 3:
+<ul>
+<li>Interoperability with Node if modules execute synchronously</li>
+<li>Spec mechanics for ensuring that we are preserving run-to-completion if we allow synchronous execution in Node, asynchronous execution in the browser.</li>
+</ul></li>
+<li>To resume with a call from Bradley Farias.</li>
+</ul>
+
+</body>

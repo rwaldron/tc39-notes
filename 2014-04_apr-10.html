@@ -1,0 +1,534 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>April 10, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#april-10-2014-meeting-notes"><h1 id="april-10-2014-meeting-notes">April 10, 2014 Meeting Notes</h1></a><hr>
+<p>Doug Crockford (DC), Brian Terleson (BT), Luke Hoban (LH), Dmitry Lomov (DL), Waldemar Horwat (WH), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Hudson (RH), Rick Waldron (RW), Eric Ferraiuolo (EF), Jafar Husain (JH), Jeff Morrison (JM), Seo-Young Hwang (SYH), Mark Honenberg (MH), Caridy Patiño (CP), Yehuda Katz (YK), Niko Matsakis (NM), Ben Newman (BN), Sebastian Markbåge (SM), Mathias Bynens (MB), Rafeal Weinstein (RWN), Mark S. Miller (MM),</p>
+<hr>
+<a href="#process-discussion"><h2 id="process-discussion">Process Discussion</h2></a><p>YK: Revisit new TC39 process. Phase 2?</p>
+<p>LH: Phase 2 is experimental</p>
+<p>YK: Yesterday, was told Phase 2 is too late for feedback</p>
+<p>LH: My sense was that the issue is communication</p>
+<a href="#410-modules-feedback"><h2 id="410-modules-feedback">4.10 Modules Feedback</h2></a><p>(Brian Terlson)</p>
+<p><a href="https://gist.github.com/bterlson/e68d34b691254a640841">https://gist.github.com/bterlson/e68d34b691254a640841</a></p>
+<p>(need slides)</p>
+<p>BT: This is feedback, not necessarily requests for change.</p>
+<p><strong>Key Points</strong></p>
+<ul>
+<li><p>Module + Import Syntax</p></li>
+<li><p>Hard to remember which does what?</p></li>
+<li><p>Having two import syntax forms seems undesirable</p></li>
+<li><p>Conceptual model is a departure from what folks are used to</p></li>
+<li><p>Reason for departure is not immediately clear (cycles?)</p></li>
+</ul>
+<p>YK: When I teach modules, I don't teach the <code>module ...</code> form at all
+...Doesn't</p>
+<p>BT: The only way to get a binding to the module itself</p>
+<p>LH: Can be used almost as a first-class object reference</p>
+<p>YK: Cutting at this stage is not bad, I can champion researching the possibility</p>
+<p>CP: This may break the ability to statically verify the module?</p>
+<p>LH: If you did:</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> foo <span class="hljs-keyword">from</span> <span class="hljs-string">"bar"</span>;
+
+foo.whatever
+</code></pre>
+<p>If <code>foo.whatever</code> didn't exist, would be an error</p>
+<p>Question about this being in the spec?</p>
+<p>YK: The solution is to go back and determine whether or not <code>module foo from &quot;...&quot;</code> is necessary or can be cut.</p>
+<p>(This does not affect default imports)</p>
+<p>AWB/LH: &quot;module&quot; was for the <code>Math</code> case?</p>
+<p>JM/RW: <code>Math</code> case could very well be defined as a default export.</p>
+<p>YK: Can use the following to bring in a module solely for side effects:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-string">"foo"</span>;
+System.get(<span class="hljs-string">"foo"</span>);
+</code></pre>
+<p>WH: How is work divided between the import and the System.get?</p>
+<p>YK: <code>import &quot;foo&quot;</code> is just the mechanism to ensure the import of a module without specific bindings. For side-effecting modules.</p>
+<p>WH: So the System.get is not neeed to bring in a module solely for side effects.</p>
+<p>YK: It's there if you want to get a handle to the module.</p>
+<p>LH: This is very close to the semantics of the <code>module</code> keyword, unless missing something</p>
+<p>Discussion re: is the issue superficial syntax?</p>
+<p>LH: Maybe (recommended by AWB) <code>import module Foo from &quot;...&quot;</code> to replace <code>module Foo from &quot;...&quot;</code>?</p>
+<p>YK: May not be trivial
+... The feedback is that the default export being the main module <em>and</em> a property is confusing.</p>
+<p>LH: (confirm)</p>
+<p>YK: (walks through explanation)</p>
+<p>BT: (continuing)</p>
+<ul>
+<li>Lots of ways to import and export</li>
+<li>As many as 3 different ways you would consume jQuery depending on what jQuery exports</li>
+<li>See: <a href="https://gist.github.com/bterlson/e68d34b691254a640841#possible-confusion">https://gist.github.com/bterlson/e68d34b691254a640841#possible-confusion</a></li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> $ <span class="hljs-keyword">from</span> <span class="hljs-string">"jQuery"</span>;
+<span class="hljs-keyword">var</span> get = $.get;
+
+<span class="hljs-comment">// vs.</span>
+
+<span class="hljs-keyword">import</span> { get } <span class="hljs-keyword">from</span> <span class="hljs-string">"jQuery"</span>;
+</code></pre>
+<p>RW: The first two serve different purposes</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> Foo = <span class="hljs-built_in">require</span>(<span class="hljs-string">"foo"</span>);
+
+<span class="hljs-comment">// and</span>
+
+<span class="hljs-keyword">var</span> Foo = <span class="hljs-built_in">require</span>(<span class="hljs-string">"foo"</span>).Foo;
+
+<span class="hljs-comment">// The latter is the same as:</span>
+<span class="hljs-keyword">var</span> f = <span class="hljs-built_in">require</span>(<span class="hljs-string">"foo"</span>);
+<span class="hljs-keyword">var</span> Foo = f.Foo;
+</code></pre>
+<p>Discussion about general understanding of node module design</p>
+<p>YK: The important point is that if the first is used where the second is needed, user will get an error immediately and will change to the correct form.</p>
+<p>LH: As much as I think this may be confusing, I don't want to change it because it I don't want to risk breaking cycle support.</p>
+<p>YK: Cycles are not and should not be a thing that the user has to think about.</p>
+<p>RW: (prompting to move on)</p>
+<p>BT: (continuing)</p>
+<ul>
+<li>Lack of support for dynamic scenarios</li>
+</ul>
+<p>BT: want write a function that took a module name as a param, import that module , mutate it and re-export. it would look like importing the original module, but actually getting the modified.</p>
+<p>AWB: Can do this at the Loader level</p>
+<p>BT: Confirms.</p>
+<p>CP: We've been able to prove that this works quite well.</p>
+<a href="#conclusionresolution-410-modules-feedback"><h4 id="conclusionresolution-410-modules-feedback">Conclusion/Resolution</h4></a><ul>
+<li>Revisit <code>module foo from &quot;...&quot;</code> (YK)</li>
+</ul>
+<a href="#reviewer-sign-up"><h2 id="reviewer-sign-up">Reviewer sign up</h2></a><a href="#revisiting-initializer-in-for-in"><h2 id="revisiting-initializer-in-for-in">Revisiting: Initializer in for-in</h2></a><p>AWB: New information:</p>
+<p>OH: To clarify JSC encountered breakage in the syntax. Only case we’ve seen is (presumably) author changing their mind about type of loop, so we <em>no-op</em> the expression.  No execution at all.
+...Unclear about what we’re saying about the let case. I would be opposed to leaking the redundant initialiser into for (let blah of/in …)
+... Would be great to eventually nuke it.</p>
+<p>AWB: Likely won't have any new information in May?</p>
+<p>OH: All internal builds have this change, so we'll have users reporting.</p>
+<p>AWB: Do we move forward nuking it, or as a syntax with no semantics? In main body or an annex?</p>
+<p>WH: If we retain the syntax, it should do what it has always done. Why should we have it do something different?</p>
+<p>MM: If we leave it in, we have to accept the side effects it causes.</p>
+<p>YK: Why does JSC want to ignore evaluation?</p>
+<p>OH: To discourage its use.</p>
+<p>WH: If we wish to discourage its use, we should move the initializer syntax to Annex B (and have the Annex B semantics reflect its historical behavior, not new behavior).</p>
+<p>RW: Any code that has been run through JSLint/JShint will not have this syntax, rejected outright.</p>
+<p>AWB: Continue to have it removed, allow the syntactic form in Annex B</p>
+<p>MM: Another observable thing... no properties, the var decl is visible after the loop
+... The only reason to leave it is concern about breaking something bizarre?</p>
+<p>WH: Isn't the var always visible? It's hoisted</p>
+<p>MM: Yes, but the initialization value being assigned is only visible if there are no properties</p>
+<p>WH: What's the impetus to keep the initializer syntax but change the semantics of the syntax to something different in Annex B?</p>
+<p>AWB: Easier to put in the syntax with no semantics</p>
+<p>MM: Either flush it, or put it in with the old semantics</p>
+<p>AWB: Flush it and let implementations do what they do</p>
+<p>BT: If implementors aren't getting rid of this, new runtimes will implement to match the web</p>
+<p>MM: If we expect all browsers to implement, we should codify. If we expect not to implement, then don't codify. Cross browser content</p>
+<p>Discussion, re: comparison to <code>__proto__</code></p>
+<p>MM: Other than JSC, any other impl?</p>
+<p>BT: If JSC doesn't feel comfortable, unlikely that IE will</p>
+<p>AWB: There has only been discussion at Mozilla</p>
+<p>OH: We have evangelized, no one heeds</p>
+<p>MM: Mozilla evangelized successfully</p>
+<p>OH: Performance punishment (log messages for features that need to be discouraged)</p>
+<p>BT: Willing to wait for Mozilla to guide</p>
+<p>WH: Does test262 cover this?</p>
+<p>BT: Probably, the test will have to be removed.
+...Spec should reflect reality.</p>
+<p>WH: In favor of taking it out and seeing if we can get away with it. We can put it back in Annex B. The work to take it out is not wasted.</p>
+<p>BT: If all three browsers continue supporting, we agree to put it in the spec, at least in Annex B</p>
+<a href="#conclusionresolution-revisiting-initializer-in-for-in"><h4 id="conclusionresolution-revisiting-initializer-in-for-in">Conclusion/Resolution</h4></a><ul>
+<li>Mozilla willing to ship a patch in nightly for experimentation</li>
+</ul>
+<a href="#revisiting-generator-issues"><h2 id="revisiting-generator-issues">Revisiting: Generator Issues</h2></a><p>(Jafar Husain)</p>
+<p>Slides: <a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-04/Allowing-Generators-to-Compose-over-IO.pdf">Allowing-Generators-to-Compose-over-IO.pdf</a></p>
+<p>JH: Generators can't abstract over sync or async IO.</p>
+<p><strong>Two Ways to Iterate</strong></p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> nums = <span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">yield</span> <span class="hljs-number">2</span>;
+}
+</code></pre>
+<p><strong>Iterable</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Iterable</span>(<span class="hljs-params">generatorFunction</span>) </span>{
+  <span class="hljs-keyword">this</span>[@@iterator] = generatorFunction;
+}
+</code></pre>
+<p><strong>Creating Iterables</strong></p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> nums = <span class="hljs-keyword">new</span> Iterable(<span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">yield</span> <span class="hljs-number">2</span>;
+  <span class="hljs-keyword">yield</span> <span class="hljs-number">3</span>;
+});
+</code></pre>
+<p><strong>Iterating Iterables</strong></p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> x <span class="hljs-keyword">of</span> nums()) {
+  <span class="hljs-built_in">console</span>.log(x);
+}
+
+<span class="hljs-comment">//...becomes...</span>
+
+<span class="hljs-keyword">let</span> iterator = nums()[@@iterator],
+  pair;
+
+<span class="hljs-keyword">while</span>(!(pair = iterator.next()).done) {
+  <span class="hljs-built_in">console</span>.log(pair.value);
+}
+</code></pre>
+<p><strong>IO Streams as Iterables</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getLines</span>(<span class="hljs-params">fileName</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Iterable(<span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> SyncReader(fileName);
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">while</span>(!reader.eof) {
+        <span class="hljs-keyword">yield</span> reader.readLine();
+      }
+    }
+    <span class="hljs-keyword">finally</span> {
+      reader.close();
+    }
+  })
+}
+</code></pre>
+<p><strong>Iterable Composition</strong></p>
+<pre><code class="language-js">Iterable.prototype.map = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">projection</span>) </span>{
+   <span class="hljs-keyword">let</span> self = <span class="hljs-keyword">this</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Iterable(<span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> x <span class="hljs-keyword">of</span> self) {
+      <span class="hljs-keyword">yield</span> projection(x);
+    }
+  });
+};
+
+Iterable.prototype.takeWhile = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">predicate</span>) </span>{
+  <span class="hljs-keyword">let</span> self = <span class="hljs-keyword">this</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Iterable(<span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> x <span class="hljs-keyword">of</span> self) {
+      <span class="hljs-keyword">if</span> (!predicate(x)) {
+        <span class="hljs-keyword">break</span>;
+      }
+      <span class="hljs-keyword">yield</span> x;
+    }
+  });
+};
+</code></pre>
+<p>YK: Need to address Brendan's objections from yesterday</p>
+<p>JH: The crucial problem: the iterator claims to be an iterable and it's not.
+...If async generators return Iterables, not Iterators.</p>
+<p>WH: How</p>
+<p>JH: If I accept an iterable and invoke <code>@@iterator</code>, I would expect to get a fresh iterator from each call</p>
+<p>MM: everythime you for-of you expect to see &quot;the stuff&quot;</p>
+<p>JH: Iterators are claiming to Iterables, which is a lie.</p>
+<p>NM: An Iterable creates Iterators, Ite</p>
+<p>AWB: An iterator that itself has an @@iterator is an iterable</p>
+<p>WH: The distinciton is similar to C++'s distinction between input iterators and forward iterators. Input iterators are not replayable.</p>
+<p>JH: This is a leaky abstraction. Two calls to @@iterator on the same iterator type will cause the same iterator to be shared unexpectedly in two different code paths.</p>
+<p>Discussion re: the process for handling this.</p>
+<p>YK: This should've been presented to the feature champions first.</p>
+<p>MM: If these are issues that we're going to address, they need to be addressed in ES6</p>
+<p>AWB: If we address it in ES6, the only way is to drop Generators from ES6</p>
+<p>YK: The best approach is to first discuss with champions of feature</p>
+<p>MM: Let's first hear the issues</p>
+<p>YK: Disagree with first hearing of the issue in this forum. Jafar could've been more effective by bringing this to Dave and Brendan first.</p>
+<p>WH: I want to understand the issues. This is the best forum we have at this moment.</p>
+<p>AWB: This is a long resolved and accepted feature, may have non-optimal characteristics, but agreed on. We're long past changes like this.</p>
+<p>LH: Let's focus on the problem, not the solution</p>
+<p>(New example. copy from slide when available)</p>
+<p>OH: you need <code>self</code> to finish somehow after the <code>break</code></p>
+<p>JH: you need the <code>return</code> semantic
+...not a problem in Python, because they have StopIteration. This impl had StopIteration and close and both removed.</p>
+<p>LH: (Luke please fill in the comments made re: StopIteration and finally clauses)</p>
+<p>WH: Please explain what you're arguing for:</p>
+<p>JH: Add a <code>return()</code> to generators</p>
+<p>LH: return would trigger the <code>finally</code> clauses</p>
+<p>WH: why in addtion to <code>throw</code>?</p>
+<p>LH: throw hits <code>catch</code> blocks</p>
+<p>WH: for-of would call that if you break?</p>
+<p>LH: Yes, but that's a separate level of the proposal</p>
+<p>AWB: No way to run only the <code>finally</code> blocks and not the <code>catch</code> blocks</p>
+<p>WH: Is there some other aspect?
+...Iterator is a once through, cannot go back</p>
+<p>JH: Make function * to return Iterable</p>
+<p>YK: The most salient use case: break but want to continue to use the generator</p>
+<p>AWB: Let's just talk about return, no way to force the finally to run
+...Specific issues that Andy brought up need to be addressed. Additionally need to convince why the agreement to those issues was incorrect.</p>
+<p>YK: The break is ambiguous</p>
+<p>JH: As long as you never use the for-of syntax, you're fine</p>
+<p>Proposal:</p>
+<pre><code>- for...of always assume generator creation
+- for...of alwayss terminates generator function
+</code></pre>
+<p>Lost in cross talk...</p>
+<p>NM: If you know that iterable creates a fresh iterator, it's very reasonable to close it every time. If you don't know that, then Andy's argument holds.</p>
+<p>JH: The value proposition of for-of is that you don't need to work with iterators</p>
+<p>AWB: We <em>could</em> add a <code>return()</code> method.
+... It's a bigger change, but we could make for-of invoke <code>return()</code> on exit or completion</p>
+<p>YK: doubt we can come to a conclusion on this</p>
+<p>AWB: We <em>must</em> come to a tentative conclusion</p>
+<p>JH: Confirm, let's try.</p>
+<p>MM: Agree with Allen</p>
+<a href="#plausible-solution"><h4 id="plausible-solution">Plausible Solution:</h4></a><p>MM:</p>
+<ul>
+<li>continue to have iterators have an @@iterator, classified as iterables</li>
+<li>continue to have generators return an  iterator+</li>
+<li>continue to for-of on an iterator</li>
+<li>we change:</li>
+<li>generator instances have a <code>return</code> that when invoked, caused the yield point to take the return path, returning the argument that was provided to the return method. [AWB: actually, needs to return a IteratorResult object:   {done: true, value: returnMethodArgument} ]</li>
+<li>the for-of behaviour is extended with an equivalent of a finally cause that feature tests for presence of return, if present, call it on any abnormal exit from the loop, normal or abnormal. [AWB:no change is necessary for normal loop complextion because the return from the generator body that sets the completion object to {done: true} will run any finally code in the generator body]</li>
+<li>AWB: a 'return' call that  interrupts a yield* needs to be propagate to the inner iterator, just like a 'throw' call.</li>
+</ul>
+<p>YK: Recalling Brendan's opposition</p>
+<p>MM: The new information: if you want to partially consume an iterator, don't use for-of.</p>
+<p>Discussion about process.</p>
+<p>RW: (interupt) We can't have a discussion with the champions without considering the issue an dhaving a meaningful record of the discussion. (consider a process note)</p>
+<p>LH: Notable, C# does what we're proposing. C# also doesn't allow <code>yield</code> in <code>finally</code>. No guarantee that we'll run to resource completion.</p>
+<p>AWB: No guarantee</p>
+<p>MM: No asking for consensus?</p>
+<p>AWB: I am. This room needs consensus before we bother including champions</p>
+<p>MM: Not a TC39 consensus, a provisional consensus until the champions have been involved.</p>
+<p>Discussion about process.</p>
+<p>AWB: If we dont decide something, this will float to next meeting.</p>
+<p>YK: Proposal: Jafar, Allen, Ben, Dave and Brendan need to work this out offline.</p>
+<p>MM: Any dissent from the proposal stated being presented to the champions and allow a decision to be made without further discussion.</p>
+<p>WH: Objects to this problem <em>not</em> being solved. Object to the status quo of doing nothing. Some solution (such as MM's above) must be found.</p>
+<a href="#conclusionresolution-revisiting-generator-issues"><h4 id="conclusionresolution-revisiting-generator-issues">Conclusion/Resolution</h4></a><ul>
+<li>Unanimous agreement to allow the champions, Allen Wirfs-Brock, Brendan Eich, Dave Herman, Andy Wingo, Jafar Husain, Ben Newman to solve this problem.</li>
+<li>Allen Wirfs-Brock to originate the email for discussion.</li>
+<li>Reference material: <a href="https://mail.mozilla.org/pipermail/es-discuss/2013-May/030683.html">https://mail.mozilla.org/pipermail/es-discuss/2013-May/030683.html</a></li>
+</ul>
+<a href="#decorators-for-es7"><h2 id="decorators-for-es7">Decorators for ES7</h2></a><p>(Yehuda Katz)</p>
+<p><a href="https://github.com/rwaldron/tc39-notes/raw/master/es6/2014-04/Decorators.pdf">Slides</a></p>
+<p>YK: Presenting aspects of common use cases not yet covered by ES6 <code>class</code>.</p>
+<p>Knockout.js example (compute the value of a property)</p>
+<p>WH: Do you want to use functors to produce functions that are per-class (i.e. on the prototype) or per-instance?</p>
+<p>AWB: Per instance wants to be handled in the constructor</p>
+<p>YUI example (a readonly property)</p>
+<p>LH/YK: Sometimes you want to say a method is readOnly</p>
+<p>AWB: No declarative way to describe the per instance state</p>
+<p>Angular example</p>
+<p>LH: (explanation) when I declare a class, I also want to register it with some other system</p>
+<p>ES6 Experiments: Angular</p>
+<pre><code class="language-js">@NgDirective(<span class="hljs-string">'[ng-bind]'</span>)
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NgBind</span> </span>{
+  @Inject([Element])
+  <span class="hljs-keyword">constructor</span>(element) {
+    <span class="hljs-keyword">this</span>.element = element;
+  }
+}
+</code></pre>
+<p>AWB: The &quot;@&quot; used to define an annotation</p>
+<p>JH: Point out that this is inert meta data</p>
+<p>Userland Classes: Ember</p>
+<pre><code class="language-js">App.Person = Ember.Object.create({
+  <span class="hljs-attr">firstName</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">lastName</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">fullName</span>: Em.computed(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.get(<span class="hljs-string">'firstName'</span>) + <span class="hljs-string">' '</span> + <span class="hljs-keyword">this</span>.get(<span class="hljs-string">'lastName'</span>);
+  }, <span class="hljs-string">'firstName'</span>, <span class="hljs-string">'lastName'</span>)
+});
+</code></pre>
+<p>ES6 Experiments: Ember</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Ember</span>.<span class="hljs-title">Object</span> </span>{
+  - dependsOn(<span class="hljs-string">'firstName'</span>, <span class="hljs-string">'lastName'</span>)
+  get fullName() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.get(<span class="hljs-string">'firstName'</span>) + <span class="hljs-string">' '</span> + <span class="hljs-keyword">this</span>.get(<span class="hljs-string">'lastName'</span>);
+  }
+
+  - on(<span class="hljs-string">'init'</span>)
+  - observes(<span class="hljs-string">'fullName'</span>)
+  fullNameChanged() {
+    <span class="hljs-comment">// ...deal with the change</span>
+  }
+}
+</code></pre>
+<p>YK: Goals:</p>
+<ul>
+<li>Decoration of methods and accessors</li>
+<li>Decoration of future declarattive property syntax</li>
+<li>modifcation of the property descriptor in addition to its value</li>
+<li>can wr
+...need slide.</li>
+</ul>
+<p>Property Decorators</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readonly</span>(<span class="hljs-params">prototype, name, descriptor</span>) </span>{
+  descriptor.writable = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">return</span> descriptor;
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PostComment</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  - readonly
+  - on(<span class="hljs-string">'click'</span>)
+  clicked() {
+
+  }
+
+  - observes(<span class="hljs-string">'value'</span>)
+  valueChanged() {
+
+  }
+}
+</code></pre>
+<p>Close desugaring...</p>
+<pre><code class="language-js"><span class="hljs-comment">// after PostComment declared</span>
+
+<span class="hljs-built_in">Object</span>.defineProperty(PostComment.prototype, {
+  <span class="hljs-attr">clicked</span>: {
+    <span class="hljs-attr">value</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ ... },
+    <span class="hljs-attr">writable</span>: <span class="hljs-literal">false</span>
+  }
+});
+
+</code></pre>
+<p>MM: What order?</p>
+<p>YK: Bottom up</p>
+<p>Memoize</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">memoize</span>(<span class="hljs-params">...dependencies</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">prototype, name, descriptor</span>) </span>{
+ <span class="hljs-comment">// ... see slide for specifics</span>
+  };
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> </span>{
+  - memoize(<span class="hljs-string">'firstName'</span>, <span class="hljs-string">'lastName'</span>)
+  get fullName() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-keyword">this</span>.firstName}</span> <span class="hljs-subst">${<span class="hljs-keyword">this</span>.lastName}</span>`</span>;
+  }
+}
+</code></pre>
+<p>NM: This is very similar to Python and there is a large history of people doing amazing and terrifying things</p>
+<p>MM: The descriptor provided is the descriptor that, in the absense of the annotation, would've been installed on the property?</p>
+<p>YK: Yes, only providing the descriptor</p>
+<p>MM: Only the descriptor returned by the final annotation is used to install on the property.</p>
+<p>AWB: Example:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> </span>{
+  - dynamic(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ ... })
+  boringMethod() {}
+}
+</code></pre>
+<p>YK: Yes, but there is another class annotation proposal better suited</p>
+<p>Metadata</p>
+<p>(extensive slides)</p>
+<p>MM: Order of accessor case?</p>
+<p>YK: Statically</p>
+<p>Static Semantics</p>
+<ul>
+<li><code>MathodDefinition</code> and <code>static MethodDefinition</code> have a list of <code>DecoratorExpressions</code> (AssignmentExpression)</li>
+</ul>
+<p>WH: How does the decorator know whether you're decorating a getter or a setter from a get/set pair? It's reasonable to request different decorations for the two — decorate the getter as public and setter as private.</p>
+<p>YK: It can't. Right now the proposal merges the get/set descriptors into an aggregated descriptors.</p>
+<p>AWB: This assumes that the property is created with an aggregated descriptor, but DefineOwnProperty knows to only set the properties provided and doesn't set the other properties to undefined if they're not present.</p>
+<p>MM: If you want the accessor to be non-configurable, you have to set them at once.</p>
+<p>YK: If you don't aggregate, using a single decorator for a get/set pair is impossible.</p>
+<p>WH: If you do aggregate, using a decorator for just a get or a set is impossible. That's a necessary thing to do and more closely matches the syntax.</p>
+<p>MM: The getter for &quot;foo&quot; is non-configurable non-enumerable, and the setter for &quot;foo&quot; is non-configurable enumerable, it's impossible</p>
+<p>YK: Need to find a solution to disallow creating contradictory descriptors</p>
+<p>AWB: Overriding ClassMethodDefinition?
+MM: Overriding MemberOfLiteral definition?</p>
+<p>(Note: ClassMethodDefinition and MemberOfLiteral don't exist)</p>
+<p>More Custom Syntax</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Article</span> </span>{
+  + hasMany(<span class="hljs-string">'comment'</span>)
+  + belongsTo(<span class="hljs-string">'user'</span>)
+  + attr(<span class="hljs-string">'title'</span>)
+  + attr(<span class="hljs-string">'author'</span>)
+  + attr(<span class="hljs-string">'body'</span>)
+
+  <span class="hljs-keyword">constructor</span>() {
+
+  }
+
+  - dependsOn(<span class="hljs-string">'title'</span>, <span class="hljs-string">'author'</span>)
+  get byline() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-keyword">this</span>.title}</span> by <span class="hljs-subst">${<span class="hljs-keyword">this</span>.author}</span>`</span>;
+  }
+}
+</code></pre>
+<p>MM: The reason not using &quot;@&quot; was for two mechanisms?</p>
+<p>YK: Yes</p>
+<p>LH: Don't want to put a method decorator on a class level annotation.
+... May not be the best solution to this problem. What you want is something declarative.</p>
+<p>WH: How do you create prototype properties out of thin air?</p>
+<p>YK: Use the + form.</p>
+<p>WH: Then you could do this, right?</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Article</span> </span>{
+  + hasMany(<span class="hljs-string">'comment'</span>)
+  + belongsTo(<span class="hljs-string">'user'</span>)
+  + attr(<span class="hljs-string">'title'</span>)
+  + attr(<span class="hljs-string">'author'</span>)
+  + attr(<span class="hljs-string">'body'</span>)
+
+  - dependsOn(<span class="hljs-string">'title'</span>, <span class="hljs-string">'author'</span>)
+  + generateMeAMethod
+
+  - dependsOn(<span class="hljs-string">'title'</span>, <span class="hljs-string">'author'</span>)
+  get byline() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-keyword">this</span>.title}</span> by <span class="hljs-subst">${<span class="hljs-keyword">this</span>.author}</span>`</span>;
+  }
+}
+</code></pre>
+<p>YK: No, it's passed the class</p>
+<p>AWB: The + form, does it involve the descriptor?</p>
+<p>YK: No. The + form takes a class object, not a property descriptor.</p>
+<p>WH: The cool thing is that - is composable. It would be weird to not be able to apply it to prototype properties that happen to be created out of thin air</p>
+<p>Discussion about the problem faced across instance and prototype properties.</p>
+<p>WH: Want declarative properties too.</p>
+<p>MM: Use method decorators on computed declarative properties.</p>
+<p>YK: Yes</p>
+<p>WH: Concerned about syntax ambiguities</p>
+<p>WH, AWB: Need to coordinate this with declarative properties proposals</p>
+<p>AWB: Careful abt not using this to do things that we may do in language. This is targetted at library designers</p>
+<p>MM: Creating this whole &quot;module&quot; thing, but pre-populating it with system modules. Could pre-populate with system decorators.</p>
+<p>RW: There is long precedent, appropriate, etc.</p>
+<p>RW/NM: Decorators made available in a decorators modules, avoids restricting user code</p>
+<p>AWB: We should try to follow the same guidelines that we define with regard to defining library code in the language vs. library code in user space.</p>
+<p>MM: All basic descriptor manipulation could easily be pre-populated.</p>
+<p>YK/RW: configurable (sets configurable: true), nonconfigurable (sets configurable: false)</p>
+<p>LH: Encourage the Angular designers to bring forward their proposal as well.</p>
+<a href="#conclusionresolution-decorators-for-es7"><h4 id="conclusionresolution-decorators-for-es7">Conclusion/Resolution</h4></a><ul>
+<li>Start a strawman</li>
+<li>work together with others that have class syntax extension proposals</li>
+<li>consider other proposals</li>
+</ul>
+<a href="#ecma-402-updates"><h2 id="ecma-402-updates">Ecma 402 Updates</h2></a><p>AWB: updates need to be made to Ecma 402, but I dont have the time/bandwidth</p>
+<a href="#conclusionresolution-ecma-402-updates"><h4 id="conclusionresolution-ecma-402-updates">Conclusion/Resolution</h4></a><ul>
+<li>RW volunteers to attempt</li>
+<li>AWB will provide basic summary information</li>
+</ul>
+<a href="#preview-of-asnycawait"><h2 id="preview-of-asnycawait">Preview of asnyc/await</h2></a><p>(Luke Hoban)</p>
+<p><a href="https://github.com/lukehoban/ecmascript-asyncawait/">https://github.com/lukehoban/ecmascript-asyncawait/</a></p>
+<p>A few updates since last time:</p>
+<ol>
+<li>Ben Newman has implemented async/await in regenerator</li>
+<li>Async arrows feedback</li>
+<li>await at top level</li>
+<li>Is await* needed?</li>
+<li>Ordering of static + async: static async foo() { }</li>
+</ol>
+<p>Discussion of async arrows from <a href="https://github.com/lukehoban/ecmascript-asyncawait/issues/13">https://github.com/lukehoban/ecmascript-asyncawait/issues/13</a></p>
+<p>LH: If we cared about being forward compatible with eliding () in arrows, we could be conservative with [no line terminator] : <a href="https://github.com/lukehoban/ecmascript-asyncawait/issues/13#issuecomment-40124678">https://github.com/lukehoban/ecmascript-asyncawait/issues/13#issuecomment-40124678</a></p>
+<p>Several: async(foo, bar) =&gt; ... looks too much like a function call.</p>
+<p>LH:  If 'async' were 'function', you likely wouldn't say that.  Once editors colorize, this will be less of a concern.</p>
+<p>WH: you're not proposing to make &quot;async&quot; a keyword?</p>
+<p>LH: Contextual keyword</p>
+<p>[Discussion of syntax and no-line-terminator-here]</p>
+<p>LH: Questions about whether 'await' should be allowed at top level.  We could add to the module top level grammar, not the script grammar</p>
+<p>WH: If it's usable in modules outside async functions, would await be a contextual keyword inside modules? It isn't right now.</p>
+<p>MM: That would be a breaking change from ES6.</p>
+<p>?: We could disambiguate in grammar.</p>
+<p>WH: No. Is x = await(foo) a legacy ES6 function call or an await call?</p>
+<p>LH: Good point, we'd need to reserve &quot;await&quot; in modules in ES6.</p>
+<p>LH: Original proposal included an optional &quot;await<em>&quot; syntax that was sugar over &quot;await Promise.all(...)&quot;.  It was unrelated to &quot;yield</em>&quot; which has no meaning in async context.</p>
+<p>MM: Using await * that is not analogous to yield * is bad, let's take it off the table.</p>
+<p>LH: Agreed - we'll remove that from the proposal.</p>
+<p>LH: Current proposal requires &quot;static async&quot; to be ordered that way for async methods.</p>
+<p>Several:  Sounds okay.</p>
+<a href="#conclusionresolution-preview-of-asnycawait"><h4 id="conclusionresolution-preview-of-asnycawait">Conclusion/Resolution</h4></a><ul>
+<li>&quot;await&quot; needs to be reserved in module context</li>
+<li>Keep async arrows, and keep the conservative grammar with [no line terminator] annotations</li>
+<li>Tentatively believe await at top level in modules should be okay.</li>
+</ul>
+<a href="#closing"><h2 id="closing">Closing</h2></a><p>JN: Want to thank Mozilla for hosting us and appreciation to Ecma for dinner last night.</p>
+<a href="#conclusionresolution-closing"><h4 id="conclusionresolution-closing">Conclusion/Resolution</h4></a><ul>
+<li>Unanimous agreement :)</li>
+</ul>
+
+</body>

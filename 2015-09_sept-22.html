@@ -1,0 +1,712 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 22, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-22-2015-meeting-notes"><h1 id="september-22-2015-meeting-notes">September 22, 2015 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
+<p>Remote:
+Mark S. Miller (MM), Dan Gohman (DGN), John McCutchan (JMC)</p>
+<hr>
+<a href="#1-opening-items"><h2 id="1-opening-items">1. Opening Items</h2></a><p>JN: (Introduction)</p>
+<p>JN: Agenda is <a href="https://github.com/tc39/agendas/blob/master/2015/09.md">https://github.com/tc39/agendas/blob/master/2015/09.md</a></p>
+<p>YK: Post ES6, do we want to break up days into plenary and presentation.</p>
+<p>AWB: An agenda item?</p>
+<p>BE/YK: Add to agenda</p>
+<p>Suggest:</p>
+<ul>
+<li>morning plenary groups</li>
+<li>afternoon discussion</li>
+</ul>
+<p>LS: (facilities)</p>
+<a href="#adoption-of-agenda"><h2 id="adoption-of-agenda">Adoption of Agenda</h2></a><p>AWB: Future agendas should avoid being specific about the version</p>
+<p>BE: Helpful for me to know which features are on track</p>
+<a href="#conclusionresolution-adoption-of-agenda"><h4 id="conclusionresolution-adoption-of-agenda">Conclusion/Resolution</h4></a><ul>
+<li>Change agenda &quot;Proposal for future editions of ECMA-262&quot;</li>
+<li>Agenda approved</li>
+</ul>
+<a href="#4-secretariat-report"><h2 id="4-secretariat-report">4. Secretariat Report</h2></a><p>JN: 1 o'clock on Thursday</p>
+<a href="#51-shared-memory-and-atomics"><h2 id="51-shared-memory-and-atomics">5.1 Shared memory and atomics</h2></a><p>(Lars T Hansen)</p>
+<ul>
+<li><a href="http://lars-t-hansen.github.io/ecmascript_sharedmem/shmem.html">proposal</a></li>
+</ul>
+<p>Need slides</p>
+<p>LHN: Work in progress at Mozilla, Google, etc.</p>
+<p>Use Cases</p>
+<p>asm.js</p>
+<ul>
+<li>pthreads in translated C/C++ code</li>
+<li>Support for safe threaded languages</li>
+</ul>
+<p>&quot;Plain&quot; ES</p>
+<ul>
+<li>Shareed state and multicore computation</li>
+<li>Fast communcation through shared memory</li>
+</ul>
+<p>Use cases conflict:</p>
+<ul>
+<li>asm.js has flat memory, no gc, string types</li>
+<li>plain ES is object based GC'd weak types</li>
+</ul>
+<p>Compromise?</p>
+<p>...</p>
+<p>Approach</p>
+<p>Provide low-level facilities</p>
+<ul>
+<li>SharedArrayBuffer + TypedArray</li>
+<li>Atomic Operations</li>
+<li>Concurrent agents (introducing)</li>
+<li>Agent sleep/wakeup operations</li>
+</ul>
+<p>Build Higher Level facilities</p>
+<ul>
+<li>Locals
+...
+(need slides)</li>
+</ul>
+<p>API: Shared Memory</p>
+<p>A new data type:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> sab = <span class="hljs-keyword">new</span> SharedArrayBuffer(size);
+</code></pre>
+<p>(need slides)</p>
+<p>Views on Shared Memory</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> sab = <span class="hljs-keyword">new</span> SharedArrayBuffer(size);
+<span class="hljs-keyword">var</span> ia = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Int32Array</span>(sab);
+<span class="hljs-keyword">var</span> fa = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Float64Array</span>(sab, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>);
+</code></pre>
+<p>(need slides)</p>
+<p>API: Atomic Operations</p>
+<pre><code class="language-js">...
+</code></pre>
+<p>API: Agent Sleep and Wakeup</p>
+<p>Modeled on the Linux &quot;futex&quot; (fast user space mutex)</p>
+<pre><code class="language-js">Atomics.futexWait(i32c, loc, expect, timeout);
+Atomics.futexWake(i32c, loc, expect, timeout);
+</code></pre>
+<ul>
+<li>Minimal assumptions, very flexible
+(need slides)</li>
+</ul>
+<p>Example: mutex lock()</p>
+<pre><code class="language-js">Lock.
+<span class="hljs-comment">//  get code from slide</span>
+</code></pre>
+<p>Discussion re: scheduling and execution.</p>
+<p>DH: tasks can be scheduled, but not executed</p>
+<p>CM: Understanding there would never be shared state threads in JS. This appears to be that.</p>
+<p>(Discuss after presentation, Moving on)</p>
+<p>LHN:</p>
+<p>Agent Model</p>
+<ul>
+<li>Need a model for concurrency in ES</li>
+<li>Define concurrency in termsn of agents</li>
+<li>Define agents in terms of ES6 jobs</li>
+<li>Give jobs a forward progress guarantee</li>
+</ul>
+<p>Agent Mapping</p>
+<ul>
+<li><p>In a browser, an agent could be a web worker</p></li>
+<li><p>SAB sharing is by postMessage,</p></li>
+<li><p>WebWorker semantics need work, nearly useless today.</p></li>
+<li><p>In a non-browser setting (SpiderMonkey shell)</p></li>
+<li><p>concurrent thread, separate global environment</p></li>
+<li><p>mailbox mechanism for sharing memory</p></li>
+</ul>
+<p>AWB: Can imagine request for generalized model</p>
+<p>DD: A different group could approach to define generic</p>
+<p>AWB: Dont want a mechanism that will only work in a browser.</p>
+<p>LHN: (Confirms)</p>
+<p>Implementation Concerns</p>
+<ul>
+<li>Trick to block on the main thread in browsers?</li>
+<li>Subcontracting, main browser thread actus on behalf of worker</li>
+<li>Possible to deadlock if main thread is waiting</li>
+<li>Make workers not truly concurrent</li>
+<li>Where's the bug?</li>
+<li>Subcontracting for UI and other things are also problematic</li>
+</ul>
+<p>DD: An early version of this proposal said that these APIs were not on the main thread</p>
+<p>YK: Scary to have locks on the main thread</p>
+<p>LHN: Not that scary, it's no different than a loop</p>
+<p>YK: Async functions are the solution that has evolved</p>
+<p>AWB: Are the workers multiplexed?</p>
+<p>LHN: If JS on main thread creates a worker and waits on the location, it will hang because the worker doesnt get started.</p>
+<p>AWB: Semantically observable?</p>
+<p>LHN: Can observe remotely (a corner case)</p>
+<p>Memory Model (1)</p>
+<ul>
+<li>Atomics in the program are totally oridered</li>
+<li>Conventional &quot;happens-before&quot; relation on events:</li>
+<li>Program order (intra-agent)</li>
+<li>Atomic-write, atomic-read (intra-agent)</li>
+<li>futexWake called -&gt; futexWait returns (intra-agent)</li>
+<li>postMessage -&gt; event callback (intra-agent)</li>
+<li>transitivity, irreflexivity</li>
+</ul>
+<p>Discussion: clarification of consistency model</p>
+<p>Memory Model (2)</p>
+<ul>
+<li>Reads only see writes that happen before them (and only the last of those writes)</li>
+<li>Unordered accesses where at least one...
+(need slides)</li>
+</ul>
+<p>Memory Model (3)</p>
+<ul>
+<li>Races are safe, programs don't blow up</li>
+<li>Races are unpredictable, a race poisons the memory by writing garbage</li>
+<li>A race affacts... (need slides)</li>
+</ul>
+<p>DH: Say there is a non deterministic collection of memory bits in location</p>
+<p>YK: What happens when you read the garbage?</p>
+<p>LHN: Currently will get the garbage</p>
+<p>Memory Model (4)</p>
+<p>Complications:</p>
+<ul>
+<li>Aliased arrays and cells thar are not exclusively atomic</li>
+<li>Weakly ordered memory (ARM, MIPS, Power)</li>
+</ul>
+<p>C11, C++11 have similar issues, mildly unsound?</p>
+<p>Java Better? But complex and subtle</p>
+<p>DH: if mem model says data structure, behavior localized to data structure. integration with rest of language impacts jit compilers, spec semantics (how deep). Not sure what the biggest risk is... limited to array buffer and only in specific case? Invariants in loads and stores</p>
+<p>LHN: optimization to load value from typed array, use it for something, eg. function call. If not affected, can reload.</p>
+<p>DH: Already know typed array, can assume not shared array buffer. Cases where I <em>don't</em> know the backing store, nervous</p>
+<p>AWB: Typed array accesses with brackets</p>
+<p>Limit concerns to optimizations re: Typed Array cases.</p>
+<p>DH: Concerns: How much does this leap into the current spec. How much does it affect the lower level operations?</p>
+<p>AWB: Typed Array access get turned into operations on their bufffer. Buffer operations become polymorphic (unshared, shared). A common operation that occurs, with slightly different behavior.</p>
+<p>Other Memory Model Issues</p>
+<ul>
+<li>No &quot;relaxed&quot; atomics, we problam ant them but they are complicated</li>
+<li>No &quot;acquire-release&quot; atomics, ditto though weaker use case</li>
+<li>Shared memory can be used to implement high-precision timers (you just count), which can be used to simplif cache sniffing attacks</li>
+<li>Slight security concern</li>
+<li>Misc minor issues, see github repo</li>
+</ul>
+<p>BE: Like mips load, link (re: &quot;acquire-release&quot;)</p>
+<p>LHN: (state of &quot;acquire-release&quot; on current platforms)</p>
+<p>Status</p>
+<ul>
+<li>Spec is stable, memory model is being refined</li>
+<li>Firefox Nightly since Q1 2015, demo level code for asm.js, plain JS is running</li>
+<li>Google have committed publicaly, at least in part
+(need slides)</li>
+</ul>
+<p>CM: This is terrifying. Can see cases for use in libraries for communicating internally, but as soon as this is exposed to random web developers... The nightmare is people that don't know how to code in this paradigm. Likely a majority. Now can write highly insecure programs, introducing the problems that JS rid us of</p>
+<p>YK: What about other high level languages, Ruby? It exposes pthreads. Then developers write better higher level abstractions</p>
+<p>CM: Nothing to protect from authors of page and script running in it.</p>
+<p>YK: Concerns is third party scripts?</p>
+<p>CM: Yes.</p>
+<p>YK: Could mitigate</p>
+<p>DD: sandbox?</p>
+<p>CM: Could design the things you might make with this, then codify into language...</p>
+<p>YK: Verification?</p>
+<p>CM: No, if the facilities don't exist, then safe.</p>
+<p>BE: Agree, most web developers should not be tempted, even able to write shared memory programs. We need to talk about what goes wrong. Cannot have shared memory without races? We have demand for this.</p>
+<p>Why Not Just for asm.js?</p>
+<ul>
+<li><p>Some tasks are best/only done in JS callouts</p></li>
+<li><p>I/O</p></li>
+<li><p>Thread Management</p></li>
+<li><p>Runtime tasks in general</p></li>
+<li><p>JS has data structures, easier to program</p></li>
+<li><p>The callout needs at least some shmem access</p></li>
+</ul>
+<p>LHN: need to satisfy both use cases</p>
+<p>DE: Any program can already get into an infinite loop, unresponsive.</p>
+<p>CM:</p>
+<p>BE: If we don't do something like this, there will be a bigger gap for webassembly stuff.</p>
+<p>YK: Shared memory is not inherently unsafe, only in raw form. We can provide safe access.</p>
+<p>(Mark joins on phone)</p>
+<p>YK: Need to more concretely address the constraints</p>
+<p>MM: Will read emails from waldemar:</p>
+<ul>
+<li>Introducing a high bandwidth side-channel</li>
+<li>Even if only computation with coarse granularity, the ability to access shared memory seems fatal.</li>
+</ul>
+<p>LHN: Only fatal if you can prove it's not already possible</p>
+<p>MM: No way to do high-bandwidth side channels, such as cache attacks</p>
+<p>MM: Timing attack is: shared array buffer with self.</p>
+<p>BS: Issue is using the shared array buffer as a timer, you just read it and allows cache attacks</p>
+<p>MM: If attacker can create two threads that can communicate, you can create high resolution timer attacks</p>
+<p>BE: There's been demonstrations of not-as-high resolution timer attacks that already exist. This is not the <em>first</em> high resolution timer attack.</p>
+<p>MM: Waldemar believes this is a bad vulnerability</p>
+<p>BE: <a href="http://www.theregister.co.uk/2013/08/05/html5_timing_attacks/">http://www.theregister.co.uk/2013/08/05/html5_timing_attacks/</a></p>
+<p>DE: Any further conserns?</p>
+<p>MM: Delayed weak refs because of</p>
+<ul>
+<li><p>JS has become mostly deterministic</p></li>
+<li><p>Plat</p></li>
+<li><p>bits in nan are platform dependency, not generatl non-determinism</p></li>
+<li><p>for-in iteration order is platform dependency, not generatl non-determinism</p></li>
+</ul>
+<p>MM: On whatwg, proposed System object. System is not distinct from the ES built-ins. Grants</p>
+<p>MM: perhaps the non-determinism comes from creating the Worker in the first place? Thinking out loud</p>
+<p>Where does one get access to the SharedArrayBuffer constructor</p>
+<p>Either from global or imported from module.</p>
+<p>AWB: How do you gain access to an already existing SAB created in another Worker?</p>
+<p>MM: Creating an SAB alone is safe.</p>
+<p>BE: The</p>
+<p>(<a href="http://www.theregister.co.uk/2015/04/21/cache_creeps_can_spy_on_web_histories_for_80_of_net_users/">http://www.theregister.co.uk/2015/04/21/cache_creeps_can_spy_on_web_histories_for_80_of_net_users/</a>) / <a href="http://arxiv.org/pdf/1502.07373v2.pdf">http://arxiv.org/pdf/1502.07373v2.pdf</a></p>
+<p>LHN: the resolution of performance.now has been reduced to help prevent the caching attack</p>
+<p>DD: not concerned about the paternalistic argument, rather the actual security concerns?</p>
+<p>YK/CM: Concerned about the programmer shooting themselves in the foot</p>
+<p>MM: Concerned about security attack, more than programmer</p>
+<p>CM: concerned about DOS attacks from third parties
+...concerns are directly related</p>
+<p>YK: Right way: expose async futexWait</p>
+<p>LHN: Originally had an async futexWait</p>
+<p>CM: Proposing non-blocking-but-blocking?</p>
+<p>YK: No, want to express sequencing in a local way. This will be done with async function
+... want same solution, async futexWait</p>
+<p>MM: Q: motivation for SAB proposal: conventional c/c++ pthreads code can be compiled through asm.js can still fnction?</p>
+<p>LHN: That's one of the case</p>
+<p>YK: Shared Memory is a useful primitive.</p>
+<p>MM: Want to separate:</p>
+<ol>
+<li>Compile old legacy pthread code</li>
+<li>Make good use of hardware parallelism</li>
+</ol>
+<p>BE: legacy?</p>
+<p>DH: Tried to build higher level primitives to give deterministic parallelusm to JS. Challenging. Meanwhile the extensible web strategy proves every time. Expose better, high performance, multi-core parallelism primitives.</p>
+<p>YK: Should give 0.01% more credit (like authors of gzip, etc)</p>
+<p>LHN: first thing I did when I finished the prototype</p>
+<p>MM: fan of the Rust/Pony approach, low-level, universal. Arrived independently at a similar result.</p>
+<p>YK: Easily imagine a Rust-like model, b/w dynamic checks</p>
+<p>DH: Rust has Shared Memory concurrency, static type system and library design that statically guarantees
+...best of performance and programming model. Can't be added directly to JS, maybe with APIs and DSLs that have some speed tradeoffs, don't know what will win in the end</p>
+<p>BE: MM mentioned Pony, which has similar design</p>
+<p>BE/DH: Cannot evolve JS into Rust.</p>
+<p>MM: not what I'm proposing. I'm proposing investigating building on TypedArray safely parallel memory system with ownership transfer of region, capitalizing on Rust/Pony development</p>
+<p>DE: how do we solve the compile from C++ problem?</p>
+<p>BE: circles back to earlier point: don't have time to find SAB alternatives, without exposing shared memory needs of C++. If we do nothing, then other &quot;bad stuff&quot; will happen. If we do this, then other people can experiment to find a better solution</p>
+<p>MM: The potential show stopper: the side channel. I want to see some real analysis of this danger and why we should be confident that the danger is minimal, before we proceed.</p>
+<p>LHN: we have security people working on that, we can try to expedite.</p>
+<ul>
+<li>danger is that page load, you think its safe. Allows to fork off a worker with shared memory, and there's the attack.</li>
+</ul>
+<p>YK: Might want restrictions on the main thread, so ads can't own your site</p>
+<p>LHN: is this appropriate for the language or the browser embedding?</p>
+<p>LHN: whole thing with service workers/shared workers is tricky.</p>
+<p>YK: Thing is (oksoclap disconnected on me, notes lost)</p>
+<p>LHN: fundamental constraints with blocking on the main thread? Or can the browser implementations work around this.</p>
+<p>YK: is this a fundamental C++ problem?</p>
+<ul>
+<li>fetch in browser: fork off a thread, do the work, wait for response.</li>
+</ul>
+<p>LHN: depends on which web APIs are avai</p>
+<ul>
+<li>want to update webgl</li>
+</ul>
+<p>&quot;shared&quot; or &quot;transferrable&quot; canvas</p>
+<p>DH: Concern, if growing API, implementation burden to find ways to share with workers? maybe WebIDL?</p>
+<p>AK: More clarification on urgency?</p>
+<p>BE: if we do nothing, it is a bigger jump to WebAssembly, or somebody else will do it anway to compete. Can't polyfill Unreal engine 4.</p>
+<p>DH: Jeopardize adoption of web assembly.</p>
+<p>AK: Is this going to be a problem with wasm features for time to come?</p>
+<p>BE: maybe in the future JS will not be serving the cross-compilation master, but not right now</p>
+<p>YK: constraingts: what dynamic checks do you need to make SAB work?</p>
+<p>BE: if we have web assembly in all the browsers, why would we need these in JS?</p>
+<p>MM: Memory model discussion?</p>
+<p>LHN: we talked about that.</p>
+<p>BE: If we say out of bounds &quot;no and forever&quot;, something else will happen (see: flash, java). We need to work towards something.</p>
+<p>YK: concrete example: VLC in the browser, don't want to write C, write JS, chunk up the screen</p>
+<p>AK: Can't use argument of &quot;needs&quot; c/c++ pthreads.</p>
+<p>LHN: (pre lunch summary)</p>
+<ul>
+<li>This feature has cost</li>
+<li>sophisticated shared memory given to those that don't know how to use it</li>
+</ul>
+<p>YK: better to allow the ecosystem to help us design the higher level sync operations than try to design ourselves</p>
+<p>LH/MM: discussion of burden of proof of timing channel attacks</p>
+<p>BE: hard to choose between higher-level and lower-level primitives</p>
+<p>YK: quarantining helps that problem. Have to deal with timing channel attack.</p>
+<p>CM: not sure quarantining is sufficient, what are the modes of vulnerability. Ecosystem of mutually distrustful components, run the risk of someone not paying attention, leaving the barn doors open</p>
+<p>YK: orthogonal to the primitive, access to the primitive</p>
+<p>AK: depends on the primitive</p>
+<p>YK: actually, yeah.</p>
+<p>(Lunch)</p>
+<p>BT: True that impl. shared array buffers in wasm is easier than normal JS?</p>
+<p>LHN: Different, not easy
+...Optimizing generics atomics, backend implementation</p>
+<p>BT: SAB in wasm have same security concerns?</p>
+<p>LHN: Yes.</p>
+<p>BT: Need a sense, wasm is a ways out.</p>
+<p>BE: something will happen if we don't act</p>
+<p>LHN: thought about having it only in asm.js, not sufficient. runtime and IO services need accesses to shared memory and atomics. some of it could be moved into asm.js, but not all of it. to do so asm.js would need access to DOM APIs.</p>
+<p>DH: Value? Same potential security concerns. Same access from JS. Also brought in requirement to standard another thing. If done in asm, then need to standardize all of asm.</p>
+<p>BT: what about WebAsm only? I don't think polyfills are critical. asm.js is great because it is a subset, sound great as a marketing story, but haven't seen a real example</p>
+<p>DH: Important that it was a subset, was adopted.</p>
+<p>BT: asm.js compiled stuff doesn't work when asm.js is turned off. Games will not run in wasm</p>
+<p>YK: gzip.js?</p>
+<p>BE: you're saying that things don't work well outside of optimized asm.js?</p>
+<p>BT: wasm polyfill has no value to game developers. Unreal Engine running against this polyfill will not work.</p>
+<p>DH: asm.js exists today! Polyfill WebAssembly to asm.js, it will run well.</p>
+<p>BT: asm.js apps running without asm, don't run.</p>
+<p>DH: two different stories: asm.js as a subset of JS is to break out of a deadlock. Disagreement between browsers about how to port C++ apps to the web. Competitive pressure created excitement. Kickstarting the process.</p>
+<p>BE: (shows zombie chicken killing example in browser) compiled to asm.js, running in browser.
+(He's playing this next to me and I'm really more interested in that than the current discussion. - RW)</p>
+<p>DH: WebAssembly is in a different place -- not about disagreement between browser vendors, there is agreement. The polyfill here is about making sure that browsers that haven't yet implemented features can still run, and people can ship functionality.</p>
+<p>BT: wasm polyfilled ontop of asm will be a useable experience?</p>
+<p>BE: Yes, I'm playing right now.</p>
+<p>BT: the polyfill burden for asm.js is too much, you can probably get better performance without asm.js. Kind of a side tangent</p>
+<p>DH: this is super important! Need to keep our eye on the ball for polyfill for WebAssembly. Still have a couple of years before wasm, maybe more years before all browsers have the functionality, maybe timeline is off, but the polyfill story helps mitigate the risk of shipping wasm features.</p>
+<p>BT: if I'm Epic, I need two codebases to support asm.js and non-asm.js browsers</p>
+<p>YK: long tail of things that benefit from asm.js, but still work without</p>
+<p>BE: spoke with Apple about this, they think they don't need to specialize for asm.js, can generate good code without detecting &quot;use asm&quot;</p>
+<p>BT: Why polyfill?</p>
+<p>BE: Can run code sooner than later.</p>
+<p>BT: Browsers that don't support asm or wasm will be gone soon?</p>
+<p>BE: That support asm, but don't support wasm.</p>
+<p>YK:</p>
+<p>BT: I think I can understand the value of the polyfill</p>
+<p>BE: But do we want to add it to JavaScript for all time? Maybe that's not the right argument, what about Rust to JS, Pony to JS, etc.</p>
+<p>BT: But you can still do that from wasm, right?</p>
+<p>LHN: we need to make sure we support both use cases, compile to asm.js and data parallel in JS. Much more useful to have both than not</p>
+<p>BT: I agree we shouldn't be telling JavaScript devs that they can't use these features, but do we save anything but focusing only on asm.js? It sounds like no</p>
+<p>LHN: I don't think the extra burden to the JS dev is very big</p>
+<p>AWB: It doesn't seem like it would be optimized very well if we force JS devs to communicate through asm.js for this feature</p>
+<p>BT: If there is strong motivation to add for all time, then I'm fine. As long as not <em>just</em> for a polyfill.</p>
+<p>DH: I see this as a building block for the long term</p>
+<p>BE: we need to reach consensus, but we don't have to say this is going to be in JS forever just yet</p>
+<p>LHN: Request Stage 1, with a list of things to investigate.</p>
+<p>MM: w/r to SAB, discussed extensively that burden of proof to show cache sniffing vulnerability is on the champion</p>
+<p>... memory model is not contained. This will bleed into anything that touches the SAB. We need to try to find a way to contain it.</p>
+<p>LHN: sounds reasonable</p>
+<p>AWB: Object to Stage 1?</p>
+<p>MM: no problem moving to stage 1</p>
+<p>YK/SM: What restrictions do we want, who do they work? Difference between global and local.</p>
+<p>CM: All concerns are stated.</p>
+<a href="#conclusionresolution-51-shared-memory-and-atomics"><h4 id="conclusionresolution-51-shared-memory-and-atomics">Conclusion/Resolution</h4></a><p>The committee agrees that those wishing to advance shared array buffers must explicitly address the following before further advance is considered:</p>
+<ol>
+<li>To what degree might shared array buffers exacerbate the side channel problem that web browsers suffer from?</li>
+</ol>
+<ul>
+<li>The issue is the potential increase in vulnerability over the status quo.</li>
+<li>How bad might this new side channel be?</li>
+<li>How can we be confident that it is not worse than that?</li>
+<li>How bad is the status quo?</li>
+<li>How much less bad could the status quo implementation be without breaking the web?</li>
+</ul>
+<p>Cite: <a href="https://github.com/lars-t-hansen/ecmascript_sharedmem/issues/1">https://github.com/lars-t-hansen/ecmascript_sharedmem/issues/1</a></p>
+<p>[Waldemar: I couldn't attend the meeting because of an injury accident but was asked to share my concerns about how bad this can be. Here's a paper demonstrating how one AWS virtual machine has been able to practically break 2048-bit RSA by snooping into a different virtual machine using the same kind of shared cache timing attack. These were both running on unmodified public AWS, and much of the challenge was figuring out when the attacker was co-located with the victim since AWS runs a lot of other users' stuff. This attack would be far easier in shared-memory ECMAScript, where you have a much better idea of what else is running on the browser and the machine (at least in part because you can trigger it via other APIs).</p>
+<p><a href="https://eprint.iacr.org/2015/898.pdf">https://eprint.iacr.org/2015/898.pdf</a> ]</p>
+<ol start="2">
+<li>To what degree can normal JavaScript code be insulated from the complexity of modern memory models?</li>
+</ol>
+<ul>
+<li>For code that does not itself touch a shared array buffer, but for example, merely calls something that does, it is not reasonable to disrupt the programmer's understanding of the JavaScript program in terms of naive sequential consistency.</li>
+<li>Of course, one can do that at the price of fine-grain synchronization and/or avoiding all interesting compiler reordering like common subexpression elimination. But such approaches are likely to kill the performance that motivates this proposal in the first place.</li>
+</ul>
+<a href="#52-simdjs-stage-3-proposal"><h2 id="52-simdjs-stage-3-proposal">5.2 SIMD.js Stage 3 proposal</h2></a><p>(Daniel Ehrenberg, John McCutchan, Peter Jensen, Dan Gohman)</p>
+<p>DE: (update)</p>
+<p>(Copy from slide)</p>
+<p>AWB: do you mean they are not canonicalized in a SIMD.js operation or when you extract? lumping load/store w/ extracting</p>
+<p>DE: canonicalized at extraction</p>
+<ul>
+<li>Interfacing between SIMD and TypedArrays, never creating a JS scalar</li>
+</ul>
+<p>AWB: don't think you need to say this</p>
+<p>DE: consensus among implementors was to specify.</p>
+<p>AWB: I don't think this is observable. It is no more observable than normal number arithmetic, you can tell with two values but not necessarily that a third is the same</p>
+<p>DE: change makes spec more strict.</p>
+<p>DH: observable.</p>
+<p>AWB: TypedArray, have a signaling NaN. SIMD signals on signalling NaN, if the SIMD unit processes, you must get exception thrown.</p>
+<p>DE: Yes, I think that's what should happen, but we also removed the feature in another case. It's not really in use</p>
+<p>AWB: Read from TypedArray a f64, allow that to continue being a signalling NaN.</p>
+<p>DE: We were trying to make the change on the writing side, but we changed to not care about that</p>
+<p>AWB: concern that implementation will have to change to allow for signalling NaN. Saying that the implementation cannot change that to a non-signalling NaN.</p>
+<p>AWB: Do any known implementations treat signaling as non-signaling?</p>
+<p>PJ: x86 doesn't, it just uses the default control register</p>
+<p>DE: We don't allow people to turn that on from JS anyway</p>
+<p>DE: Suggested to make lane an argument to load/store</p>
+<p>BE: case wants constant. (lane argument)</p>
+<p>(Copy from slide &quot;changes&quot;)</p>
+<p>DH: (question about partial staging?)</p>
+<p>BE: Seems better than going back to zero</p>
+<p>DE: Diff in how hardware works, between ARM and x86. Proposal to have opaque type for this case</p>
+<p>BE: Don't know how to fix this without support from hardware?</p>
+<p>DGN: We have a proposal that works, but we don't have enough confidence. Current proposal doesn't use an intermediate type</p>
+<p>(Copy from slide &quot;questiosn raised by reviewers&quot;)</p>
+<ul>
+<li>SIMD as a built in module (now, global object)?</li>
+<li>Methods on wrappers (now, static functions)?</li>
+<li>Class hierarchy to reduce duplication?</li>
+<li>Equality semantics?</li>
+<li>Motivation for certain operations?</li>
+</ul>
+<p>DH: agree, modules should not be a blocking depedency</p>
+<p>AWB: Possible to define as module, but also not be a blocking dependency
+...Issue is the <em>size</em> (500 intrinsics) relative to the actual use.</p>
+<p>DE: down to 300 now, signed vs. unsigned added an additional 100 or so</p>
+<p>AWB: Didn't have to.</p>
+<p>DE: targeting asm style compilers and normal JS JITs</p>
+<p>AWB: One possibility: build hierarchy. eg. All the integer types can share an add method. You need to check the arguments anyway.</p>
+<p>BE: this is class-side inheritance</p>
+<p>AWB: confirmed.
+...Type check -&gt; type dispatch.
+...add method can check type of value</p>
+<p>BE: you're saying that implementations need to optimize down to functions with typed arguments</p>
+<p>Discussion re: overall design.</p>
+<p>AWB: remaining concern: huge API surface area</p>
+<p>DE: Still don't think it's a major concern.</p>
+<p>whiteboard...</p>
+<pre><code class="language-js">SIMD.Int32x4.fromInt16x8Bits();
+</code></pre>
+<p>Could be:</p>
+<pre><code class="language-js">SIMD.Int32x4.fromBits();
+</code></pre>
+<p>Because type check must be done <em>anyway</em>.</p>
+<p>JMC: Doing that loses the static knowability</p>
+<p>DE: Big difference between optimizing for a completely unknown case and just deoptimizing for disallowed types.</p>
+<p>JMC: in terms of RTTI you don't lose anything, but in static case you do</p>
+<p>static types give us hints, otherwise we...</p>
+<p>AWB: a hint is just a hint, still have to handle the general case</p>
+<p>DE: we can propagate the type infomration in asm.js</p>
+<p>AWB: this is a general type inference propagation problem</p>
+<p>BE: Full JITs do that, but asm.js doesn't. This is not a simple API</p>
+<p>DE: Not usable by people who don't know what type they're working with ahead of time</p>
+<p>BE: SIMD programmers must now the exact types, they'll write by hand. Nobody is calling for the frombits case except you (AWB). JMC, do you agree?</p>
+<p>JMC: people will write this code by hand. people know the types, every SIMD program is completely typed. Nobody cares for a generic conversion, they know the types, it's been propagated the whole way through</p>
+<p>AWB: That's generally true for most code that people write in most application domains. You just don't redundantly annotate the operations with the types</p>
+<p>BE: I don't think frombits is a user concern</p>
+<p>DH: This is a JavaScript DSL</p>
+<p>RW: when you have uglifiers, like closure, it will alias builtins</p>
+<p>PJ: that's OK, the declaration needs to be in the same context. if you look at asm.js code, that's how it works currently</p>
+<p>RW: my question was about the static knowability, WRT to JMC's point</p>
+<p>DH: (explains how optimizer can determine that builtin is aliased)</p>
+<p>BE: seems like the remaining complaint is too many methods</p>
+<p>AWB: is there some fundamental API design that can reduce the number of methods?</p>
+<p>DH: I don't think counting the number of methods will lead to better design.</p>
+<p>... The overall problem domain is affected by the combinatorics. It's a large domain.</p>
+<p>JMC: you're asking is there some alternate API design we could have? We have as a group collectively tried to accomplish this, and we don't think there is.</p>
+<p>BE: signed vs. unsigned operators</p>
+<p>JMC: feedback we got is that the API would be better with explicit types. It goes against another constraint, lets have fewer functions.</p>
+<p>AWB: my argument is have multiple types, but share functions between those types</p>
+<p>DE: Doesn't work in asm</p>
+<p>AWB: short term trade off</p>
+<p>BE: Explicit type instructions that map to hardware instructions
+...SIMD is <em>only</em> about hardware instructions</p>
+<p>DE: equality semantics... should <code>-0 === 0</code> wanted to generalize to value types, is this what we want? should it be SameValue?</p>
+<p>AWB: if you have <code>Float32(0, 0, 0, 0) === Float32(-0, -0, -0, -0)</code>, how should those be compared?</p>
+<p>DE: we don't think this will be useful for devs at all, it just needs to be defined. Simplest definition I could think of, and implementable</p>
+<p>AWB: <code>===</code> gets applied to each of the elements?</p>
+<p>DE: Correct.</p>
+<p>AWB: Same issues that come up with scalar numbers in JS</p>
+<p>positive and negative zero are equal, but NaNs aren't necessarily</p>
+<p>DE: Could be that <code>===</code> is considered a &quot;legacy&quot;</p>
+<p>AWB: I don't have the solution...</p>
+<p>MM: Find deep equality with SameValue attractive</p>
+<p>AWB: possibly, but I'm concerned about maps and sets. using a map for memoization, key is a SIMD vector. you want to memoize float32x4 differently with +0 vs -0</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> m = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+m.set(Float32(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-number">1</span>);
+m.get(Float32(<span class="hljs-number">-0</span>, <span class="hljs-number">-0</span>, <span class="hljs-number">-0</span>, <span class="hljs-number">-0</span>)); <span class="hljs-comment">// 1?</span>
+</code></pre>
+<p>DE: Don't think anyone will do that.</p>
+<p>MM: memoization is a strong argument</p>
+<p>DE: I don't think memoization is useful for SIMD vectors</p>
+<p>BE: used for constants.</p>
+<p>MM: memoization is broken if you don't distinguish +0 and -0, e.g. dividing by this produces positive or negative inf
+... Any NaN contained, must be not equal.</p>
+<p>DE: you already have to do that with floats.</p>
+<p>MM: not if we say that === is non-reflixive with the values</p>
+<p>DE: Implemented in some browsers, seem convenient to us.</p>
+<p>MM: strong preference. when it is applied to anything other than direct application to a scalar, mathematical equivalence class must be reflexive</p>
+<p>Discussion of <code>===</code> and <code>==</code> semantics.</p>
+<p>DE: I wouldn't want to make different behavior for ==</p>
+<p>AK: This is more appropriate for Brian to deal with; DE said it's not important to SIMD.</p>
+<p>DH: Is problematic for me that <code>NaN !== NaN</code>, except for when it's in a SIMD value, eg. <code>Float32(NaN, 0, 0, 0) === Float32(NaN, 0, 0, 0)</code>
+... Only reasonable semantics: component-wise <code>===</code>, respect NaN</p>
+<p>BE: it seems like we'll break with IEEE754</p>
+<p>AWB: it seems logical that === should propagate out through the components for value types</p>
+<p>BE: Do SIMD programmers want all NaNs to not equal?</p>
+<p>JMC: Yes</p>
+<p>BE: Do SIMD programmers want -0 to equal 0?</p>
+<p>JMC: Yes</p>
+<p>MM: Understand -0/+0, by why NaN semantics?</p>
+<p>AWB: my only concern with the present design is WRT maps and sets. we decided to use SameValueZero</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> m = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+m.set(Float32(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-number">1</span>);
+m.get(Float32(<span class="hljs-number">-0</span>, <span class="hljs-number">-0</span>, <span class="hljs-number">-0</span>, <span class="hljs-number">-0</span>)); <span class="hljs-comment">// 1?</span>
+</code></pre>
+<p>AWB: we could define SameValueZero for vectors to not distinguish + and - zero.</p>
+<p>DH: we want SameValueZero and === to be recursively defined</p>
+<p>DH: nobody expects 0 and -0 to be different in a set, nor do they expect NaN to be different</p>
+<p>RW: And has, get will behave accordingly:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> m = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+m.set(<span class="hljs-literal">NaN</span>, <span class="hljs-number">1</span>);
+m.has(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// true</span>
+m.get(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// 1</span>
+<span class="hljs-comment">// even though NaNs are not `===` equal. </span>
+</code></pre>
+<p>DE: we assume that SIMD users are more clever and will not be confused by this?</p>
+<p>MM: we all agree that SameValue recursively does SameValue. My preference is that all of them recur with SameValue. Next... (missed the specifics here, sorry)</p>
+<p>... in order to implement SameValue, if x != x &amp;&amp; y != y then return true; else ... it knows that NaN is a bizarre case, and it tests for it explicitly. It knows that 0 and -0 are weird and test for it explicitly. That coding pattern is copied a lot</p>
+<p>BE: this won't get any better with this</p>
+<p>MM: I'm not suggesting that SIMD.js diverge, just for value types</p>
+<p>DE: Brian, do you have an opinion?</p>
+<p>BT: I'm in Dave Camps</p>
+<p>MM: I'm going to register an objection, but if no one else agrees, then I'll let all these recur on themselves.</p>
+<p>AWB: that's how value types should work, still concerned about maps. Maybe we should revisit for maps an explicit comparison function.</p>
+<ul>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-01/jan-31.md#mapset-comparator">https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-01/jan-31.md#mapset-comparator</a></li>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-11/nov-20.md#reconsidering-the-map-custom-comparator-api">https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-11/nov-20.md#reconsidering-the-map-custom-comparator-api</a></li>
+</ul>
+<p>BE: We have unfinished business with map</p>
+<p>DE: We have an objection registered, but consensus on the current equality spec</p>
+<p>Discussion of min/max vs minnum maxnum. Defined by IEEE754, related to NaN behavior. minnum/maxnum will return the other value if one is a NaN</p>
+<p>JMC: confirms that IEEE754 defines min num, max num</p>
+<p>AWB:</p>
+<p>discussion about including length in SIMD operations</p>
+<p>MS: Resolution on built-in module?</p>
+<p>DH: Need module loading completed</p>
+<p>AWB: Don't need this</p>
+<p>YK: Signed up for this previously, can restart work on it.</p>
+<p>DH: Browser vendors are blocked on loader api</p>
+<p>AWB: we should as a matter of policy, call an end to adding new globals</p>
+<p>DD: I don't agree, the global object is where you put these things</p>
+<p>DH: aspirational, but not there yet</p>
+<p>AWB: Stage 3 means API is frozen.</p>
+<p>DE: There is an outstanding API question re: <code>{load|store}[123]</code> (<code>load1(...)</code>, <code>load2(...)</code>), that needs to be investigated. Potential performance cliff.</p>
+<p>YK: TLDR here is if you still want to make this change, you need to signal to the implementors that this is what stage 3 means</p>
+<p>DE: Can decide now that we're not going to do this change.</p>
+<p>PJ: problem is that we want people to use constants for accessing the lane, but they don't have to, and that needs to work</p>
+<p>JHD: how hard would it be to split the load/store methods into stage 2, and the others move to stage 3. Does it work without those methods?</p>
+<p>AWB: you could code the equivalent, not as efficiently</p>
+<p>BE: will we learn more to help us decide?</p>
+<p>JMC: this is a relatively new suggestion. I don't think we'll learn anything new performance-wise. If compiler cannot be sure that it is a constant, it can choose not to optimize. Let's just make a call</p>
+<p>DGN: difference from extract lane: there are indexes in bounds that we can't be sure to make fast. Slow and tricky to implement</p>
+<p>DE: behavior is strange to have operation throw if it would be slow</p>
+<p>AWB: Still alot to work on in the spec. Is it at API freeze state or not?</p>
+<p>BT: to the best of our knowledge, no changes.</p>
+<p>AWB: enough thorough review of this large and complex addition to the language?</p>
+<p>BE: SIMD seems stable. it's funky but its gone through the paces for stage 3. We wanted it for 262 because it blazes the trail for value types</p>
+<p>AWB: more comfortable in another spec</p>
+<a href="#conclusionresolution-52-simdjs-stage-3-proposal"><h4 id="conclusionresolution-52-simdjs-stage-3-proposal">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 Approval</li>
+<li><code>{load|store}[123]</code></li>
+<li>Consensus on existing</li>
+<li>Equality Semantics</li>
+<li>Consensus on existing</li>
+<li>An Objection from MM</li>
+<li>Work to do on Maps and Sets</li>
+</ul>
+<a href="#10-tooling-update"><h2 id="10-tooling-update">10 Tooling Update</h2></a><p>(Brian Terlson)</p>
+<p>BT: All proposals are now using ecmarkup</p>
+<ul>
+<li>402 Complete</li>
+<li>262 In progress</li>
+</ul>
+<p>CM: Need improved workflow documentation.</p>
+<p>AWB: Concerns about general public review; diffs not ideal</p>
+<p>YK/DD: will review visual, structural diffing tools to add to workflow</p>
+<a href="#conclusionresolution-10-tooling-update"><h4 id="conclusionresolution-10-tooling-update">Conclusion/Resolution</h4></a><ul>
+<li>Write up workflow documentation.</li>
+<li>Review and recommend visual, structural diffing tools to add to workflow</li>
+<li>Move 262 to Ecmarkup</li>
+</ul>
+<a href="#54-updates-on-class-properties-proposal"><h2 id="54-updates-on-class-properties-proposal">5.4 Updates on class-properties proposal</h2></a><p>(Jeff Morrison)</p>
+<p><a href="https://github.com/jeffmo/es-class-properties">https://github.com/jeffmo/es-class-properties</a></p>
+<p>JM: (updating)</p>
+<p>YK: Decorator interop, with this proposal, needs reflection</p>
+<p>JM: Don't decorators operate on the instance?</p>
+<p>YK: Unrelated, decorators are described in terms of descriptors.</p>
+<p>MM: How do class instance properties interop with decorators?</p>
+<p>... Revisiting the proposal semantics.</p>
+<p>MM: Expression itself is evaluated once per instantiation?</p>
+<p>YK/JM: Yes</p>
+<p>AWB: How does inheritance work?</p>
+<p>JM: Each property and expression is evaluated in top down order as a result of <code>super()</code> in <code>constructor() {}</code></p>
+<p>YK: Mark suggests that these go in the constructor</p>
+<p>BE: Problematic:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+  ha = <span class="hljs-built_in">eval</span>(args)    
+}
+
+<span class="hljs-keyword">var</span> args = <span class="hljs-string">"arguments"</span>;
+<span class="hljs-keyword">var</span> huh = <span class="hljs-keyword">new</span> C();
+<span class="hljs-built_in">console</span>.log(huh.ha); <span class="hljs-comment">// ?</span>
+</code></pre>
+<p><a href="http://gul.ly/4du5">http://gul.ly/4du5</a></p>
+<p>JM: as written, the <code>this</code> binding is the object that's been instantiated.</p>
+<p>DD: This is an issue, the lexical scope is unclear</p>
+<p>BE: But there is a &quot;secret&quot; thunk scope</p>
+<p>JM: Users have been using this in Babel without any confusion about the expression being delayed or defered.</p>
+<p>Discussion about <code>arguments</code> and <code>this</code></p>
+<p>MM: How is this an improvement over <a href="https://github.com/jeffmo/es-class-properties/issues/2">https://github.com/jeffmo/es-class-properties/issues/2</a> ?</p>
+<p>DH: (responding to alt proposal) the syntax isn't good.</p>
+<ul>
+<li>The class body is for declarative parts of the object template</li>
+<li>The constructor body is for imperative initialization parts</li>
+</ul>
+<p>Easy to get caught up in semantics and lose sight of syntax.</p>
+<p>MM: Disagree. Convention to follow: always begin a class by putting the constructor first and in the constructor, properties declared, then blacnk line (for organization).</p>
+<p>RW/AWB: Where does super go?</p>
+<p>MM: This is an open question. Depends on what you need to do with instance properties and when</p>
+<p>Discussion comparing:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    public <span class="hljs-keyword">this</span>.x = x;
+    public <span class="hljs-keyword">this</span>.y = y;
+  }
+}
+</code></pre>
+<p>vs.</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  public <span class="hljs-keyword">this</span>.x = x;
+  public <span class="hljs-keyword">this</span>.y = y;
+    
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    <span class="hljs-comment">// ...</span>
+  }
+}
+</code></pre>
+<p><code>x</code> and <code>y</code> not in scope.</p>
+<p>JM:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stuff</span> </span>{
+  autoBound = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>);
+  };
+  
+  id = getId();
+}
+</code></pre>
+<p>DD: This SHOULD be written in the constructor.</p>
+<p>RW: Completely agree, and also concerned with:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stuff</span> </span>{
+  a = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>);
+  };
+  b() {
+      
+  }
+}
+</code></pre>
+<p>AWB: And what is <code>arguments</code> in that arrow?
+JM: Same as arguments immediately before the class declaration:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">arguments</span>; <span class="hljs-comment">// same</span>
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bar</span> </span>{
+        a = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+            <span class="hljs-built_in">arguments</span>; <span class="hljs-comment">// same</span>
+        };
+    }
+}
+</code></pre>
+<p>...</p>
+<p>Discussion comparing the merits of Mark's proposal vs. Jeff's proposal.</p>
+<p>MM: These declarations should result in non-configurable properties.</p>
+<p>YK: Disagree.</p>
+<a href="#conclusionresolution-54-updates-on-class-properties-proposal"><h4 id="conclusionresolution-54-updates-on-class-properties-proposal">Conclusion/Resolution</h4></a><ul>
+<li>Move to stage 1</li>
+<li>Jeff will follow up with Mark to further discuss his counter-proposal, and Allen to further discuss his thoughts on private properties</li>
+<li>Jeff will update proposal to store property declarations in slots (rather than container on prototype)</li>
+<li>Jeff will include reflection API for introspecting/reflecting declared properties</li>
+</ul>
+<p>(keep these)</p>
+
+</body>

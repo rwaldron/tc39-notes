@@ -1,0 +1,324 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 19, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-19-2013-meeting-notes"><h1 id="september-19-2013-meeting-notes">September 19, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Dave Herman (DH), István Sebestyén (IS), Alex Russell (AR), Allen Wirfs-Brock (AWB), Erik Arvidsson (EA), Eric Ferraiuolo (EF), Doug Crockford (DC), Luke Hoban (LH), Anne van Kesteren (AVK), Brian Terlson (BT), Rick Waldron (RW), Waldemar Horwat (WH), Rafeal Weinstein (RWN), Boris Zbarsky (BZ), Domenic Denicola (DD), Tim Disney (TD), Niko Matsakis (NM), Jeff Morrison (JM), Sebastian Markbåge (SM), Oliver Hunt (OH), Sam Tobin-Hochstadt (STH), Dmitry Lomov (DL), Andreas Rossberg (ARB), Matt Sweeney (MS), Reid Burke (RB), Philippe Le Hégaret (PLH), Simon Kaegi (SK), Paul Leathers (PL), Corey Frang (CF), Mark S. Miller (MM)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>(discussion re: destructuring concerns)</p>
+<p>AWB: If you want to not throw for no value you have to define the default value.</p>
+<p>DH: That's not YK's position. He wants to not throw.</p>
+<p>DH/AR: The way you pull things out of an object is to do a [[Get]] wich does not throw and returns <code>undefined</code></p>
+<p>WH: What about <code>{a:b, c:{x}} = {}</code>? If you emulate the [[Get]] model, you'll still throw on a two-level destructuring pattern. Not clear what the useful point of sometimes soft-failing and sometimes hard-failing, even within the same pattern, is.</p>
+<p>DH: That is not the same issue.</p>
+<p>DH: In the case where the thing you are destructuring is an object, and the property you're looking for is not there, it should not throw. That matches existing JavaScript</p>
+<pre><code class="language-js">
+{ <span class="hljs-attr">a</span>: { <span class="hljs-attr">b</span>: c } } = {};
+
+</code></pre>
+<p>The inner object is the source of the error.</p>
+<p>ARB: Confused because notes different from what just said.</p>
+<p>AWB: Currently spec throws unless a default value is provided.</p>
+<p>YK/DH: Not happy with that outcome.</p>
+<p>RW: (recalling agreement between AC/YK/RW at last meeting on feeling that we're not following expected JS behaviour)</p>
+<p>DH: The obvious case is using an object.</p>
+<ul>
+<li>What does the syntax most naturally correspond to?</li>
+<li>Looking for smooth refactoring paths</li>
+</ul>
+<p>ARB: I don't buy that it will be common to refactor like this</p>
+<p>ARB: Common bug that you get <code>undefined</code> for <code>o.x</code></p>
+<p>DH: That is just how JS works and we cannot redo JS.</p>
+<p>AWB: I can represent YK's position. Personally fine either way. But we need to decide. We cannot keep putting this off.</p>
+<p>DH: I believe we would dissappoint the community if it threw. It is just too different from what they are used to.</p>
+<p>AVK: My recolection was that we woudl go with no exception and maybe add a <code>!</code> in the future.</p>
+<p>LH: Ultimate consensus at last meeting was fail soft, waiting for ARB to object.</p>
+<p>ARB: Other consistency arg with a future formal pattern matching</p>
+<p>AWB: Yes, but for pattern matching we'd have something else</p>
+<p>LH: If pattern matching used something else, and you were in that context, it's not a stretch to tell people there are new rules in that context.</p>
+<p>ARB: Results in two semantics for one syntactic class (patterns). Bad for consistency and language economy</p>
+<p>DH: Whatever familiarity from other languages and contexts, we need to align with JS and align with fail soft</p>
+<p>AR: (to ARB) the practioners in the room are consistently disagreeing with your position.</p>
+<p>RW: In a pattern matching context it is fine to do things more strict. People will not be surprised by the difference between destructuring and pattern matching</p>
+<p>DD: (recalling recent extensive destructuring experience)</p>
+<p>DH: Opposed to having two different semantics. Throw in destructuring but fail soft in [[Get]].</p>
+<p>JB: What was the problem with <code>?</code></p>
+<p>DH: Default behavior is backwards.</p>
+<p>AWB: There plenty of unresolved syntactic and semantic issues and not enuogh time to get them done in ES6.</p>
+<p>JB: and <code>!</code>?</p>
+<p>AWB: No bang for ES6</p>
+<p>RW: opposed to re-appropriation of <code>!</code>...</p>
+<p>ARB:  I think this makes for a worse and more error-prone language. But acknowledge that I am alone and I will not stand in the way of this.</p>
+<a href="#consensusresolution-agenda"><h4 id="consensusresolution-agenda">Consensus/Resolution</h4></a><ul>
+<li>Throw if not an object</li>
+<li>Then do a (fail-soft) [[Get]].</li>
+</ul>
+<a href="#9-promises"><h2 id="9-promises">9. Promises</h2></a><p>Domenic Denicola</p>
+<p><a href="https://github.com/domenic/promises-unwrapping">https://github.com/domenic/promises-unwrapping</a></p>
+<p>DD: Consensus on AP3. Some issues with extending toward the future. Some bugs in the DOM spec. Tried to fix those.</p>
+<p>MM: Recommending that TC39 adopt promises-unwrapping so that w3c can proceed, and TC39 also get consensus on adding <code>.done</code>, <code>.flatMap</code>, and <code>.of</code>.</p>
+<p>AVK: promises-unwrapping is wanted for shipping in browsers. A lot of specs that rely on promises and we'd like a blessing.</p>
+<ul>
+<li>AP3 was initial consensus</li>
+<li>changes were made to make new consensus</li>
+</ul>
+<p>MM: Can we agree on promises-unwrapping to move forward?</p>
+<p>STH: The promises-unwrapping spec, in that it doesn't include ... (Google Hangouts misbehaves.)</p>
+<p>MM: (explaining semantics and benefits of flatMap etc)</p>
+<p>DD: without flatMap they will unwrap on the way out</p>
+<p>STH: unwrapping?</p>
+<p>DD: input side doesn't unwrap, only the output side</p>
+<p>STH: Then I'm happy with this.</p>
+<p>MM: No dissent from promises-unwrapping with the addition of .done, .flatMap, .of</p>
+<p>WH: What is the unwrapping doing</p>
+<p>DD/MM: explains that unwrapping occurs as long as there is a then() on down until there is no then()</p>
+<p>ARB: (to Sam) I share the compositionality concerns. Are we sure there is compositional abstraction if you use two levels of abstraction?</p>
+<p>STH: if you ever write .then, your system is not going to be compositional where promises are a data type (or you'll have to do extra work)</p>
+<p>WH: What is a then-able promise?</p>
+<p>DD/AVK: Just an object with a then function and you assimilate. It's &quot;promise like&quot;.</p>
+<p>WH: .then does what?</p>
+<p>DD: .then is how you extract values</p>
+<p>MM: (explains unwrapping again)</p>
+<p>WH: What is .flatMap?</p>
+<p>MM: A promise accepting another object, causes the .flatMap to</p>
+<p>CF: it's &quot;then&quot; without magic</p>
+<p>MM: it's lower level, .then is built on top of .flatMap</p>
+<p>ARB: .flatMap is parametric and does no magic on it's values, where .then does</p>
+<p>LH: the only way you can convert a thenable to a promise is return it from a promise. <code>Promise.cast</code> and <code>Promise.resolve</code> will not convert a thenable?</p>
+<p>MM/DD: no, <code>Promise.cast</code> and <code>Promise.resolve</code> work the same way, storing any thenables as their value, and then the unwrapping happens when you call <code>.then</code> on the promise who has that stored as its value.</p>
+<p>WH: What is <a href="https://github.com/domenic/promises-unwrapping#the-thenablecoercions-weak-map">&quot;The ThenableCoercions Weak Map&quot;</a></p>
+<p>MM/DD: (explanations of security concerns)</p>
+<ul>
+<li>No code contributed by the arbitrary object will execute during that call</li>
+<li>assimilation of thenables was constructed so that the object cannot cause side effects during the operation</li>
+</ul>
+<p>DD: It's clearer when the code intends to run async, vs. some code running when assimilation occurs and some code later.</p>
+<p>MM: Then I should talk about .done now</p>
+<p>AVK: I think we have consensus on promises-unwrapping, and can defer <code>.done</code>.</p>
+<p>MM: declaring consensus now is crucial to unblock the DOM. If we can defer <code>.done</code> I am fine with that.</p>
+<p>(General agreement that promises-unwrapping with .flatMap and .of has consensus and .done can be deferred.)</p>
+<p>LH: Will need to add cancellation capabilities</p>
+<ul>
+<li>Want to make sure that if we're sticking this in DOM apis, make sure there is back-compat safe to add them</li>
+</ul>
+<p>AVK: I believe that Mark and Domenic have given plenty of thought here</p>
+<p>DD: (confirms)</p>
+<p>MM: Notes that test262 will need to be extended to support async testing</p>
+<p>DH: This is really well developed and thoroughly spec'ed... what is the possibility of getting this into ES6?</p>
+<p>(murmurs of insanity)</p>
+<p>AWB: We're close approximate spec deltas here. Not quite cut and paste, but encourage that we might be able to fill in the editorial aspects.</p>
+<ul>
+<li>What about the event loop interaction</li>
+</ul>
+<p>MM: I think the right precedent is Object.observe, it was very well written, very complete and we adopted to ES7 (for as much as that means)</p>
+<p>DH: Doesn't need to be tied to the event loop</p>
+<ul>
+<li>event loop is very clear.</li>
+<li>would love to recast the loader api in terms of promises.</li>
+</ul>
+<p>MM: That's a better pay off</p>
+<p>AR: Not quite that simple... in many cases result in void return types</p>
+<p>AR/DH: agree that this is better overall</p>
+<p>AWB: More confident about Promises, vs other features. If editorially practical, we should try.</p>
+<p>AR/AWB: No syntax, so no issue there.</p>
+<p>PLH: Makes life easier for w3c specs as well.</p>
+<p>AWB: What about an ECMA technical report in the interim? Or an independant spec in the interim?</p>
+<p>DH: In practical terms, that would mean I couldn't use them in the Loader api?</p>
+<p>MM: w/r to synergy between module Loader and Promises</p>
+<ul>
+<li>how much of a difference does it make, if you could rephrase the api in terms of promises?</li>
+</ul>
+<p>STH: Many methods would change to use promises, a few cases would be drastically simpler, and all cases would be improvements in useability.</p>
+<p>MM: I would be over-joyed to have this in ES6</p>
+<p>DH: Most important to this: Domenic, Anne and whoever need to provide Allen with complete works as needed.</p>
+<p>WH: It's weird that if having a &quot;then&quot; property that's not a function is equivalent to not having a &quot;then&quot; property (the object is considered non-thenable), but having a &quot;then&quot; property that throws prevents the object from being returned from a promise. Too ad-hoc.</p>
+<p>WH: Let's say we introduce structs where if you mis-define fields it throws?</p>
+<p>DD: if you introduce changes like that, you'll have to re-factor checks throughout the spec and .then can be refactored in kind</p>
+<p>DC: To be clear, a thenable is:</p>
+<p>DD: An object that has a .then property whose value is a function (is callable)</p>
+<p>WH: understood (but don't like it)</p>
+<p>DC: ok</p>
+<p>AWB: A bit of legacy around &quot;callable&quot;...</p>
+<p>(Discussion about detecting then properties)</p>
+<p>DD/MM: JSON.stringify precedent: determining whether to return a property based on whether it's callable</p>
+<p>AWB: JSON.stringify is filtering...</p>
+<p>DD: But same meaning</p>
+<p>AWB: These callability tests are unnecessary?</p>
+<p>DD: Proven to be necessary</p>
+<p>WH: To avoid objects with .then that isn't callable... Why aren't we using [a well known symbol] instead of the string &quot;then&quot;?</p>
+<p>AR/DH: There is no way we can introduce this feature that has a change like that.</p>
+<ul>
+<li>A lot of existing code to interop with</li>
+</ul>
+<p>DC: &quot;then&quot; is the wrong word.</p>
+<p>MM: for a long time I fought for &quot;when&quot;, but there is too much web-reality that calls it &quot;then&quot; and it wasn't worth fighting</p>
+<p>WH: What happens if a thenable doesn't call onFulfilled or onRejected?</p>
+<p>DD: then it stays forever pending. This is a valid use case, e.g. a server that never responds to a request.</p>
+<p>DH: and it's actually a really nice zero of the promise algebra!</p>
+<a href="#consensusresolution-9-promises"><h4 id="consensusresolution-9-promises">Consensus/Resolution</h4></a><ul>
+<li>fast forwarding Promises into ES6 as per <a href="https://github.com/domenic/promises-unwrapping">https://github.com/domenic/promises-unwrapping</a></li>
+<li>Postpone with option of revisiting</li>
+<li>cancellation mechanism</li>
+<li>discussion of done method</li>
+</ul>
+<a href="#7-objectobserve-status-report"><h2 id="7-objectobserve-status-report">7. Object.observe status report.</h2></a><p>Rafael Weinstein
+<a href="http://slid.es/rafaelweinstein/object-observe-sept2013">Slides</a> &lt;--- etherpad fucks this up :(</p>
+<p>Discussion related to how nested observers should chain.</p>
+<p>AWB: Maybe have <code>performChange</code> do take one more parameter, that is the record a function that calls notify.</p>
+<p>NM: Or have <code>performChange</code> return the record.</p>
+<p>AVK: You can skip the <code>object</code> in the record because the notifier knows which object it is working with.</p>
+<p>MM: Does not seem like a good path to not handle expecptions???</p>
+<p>RWN: The mutation records from array methods are about the intent to mutate the object. It cannot tell what the new state is of the object.</p>
+<p>MM: If somethings fails, and you try to perform the same operation on a replica you will get the same failure on the replica.</p>
+<p>RWN: I attempted to do the work and this what I intended to do.</p>
+<p>MM: I'm fine with this as long as it maintains the ability to keep a replica consistent.</p>
+<p>AWB: Would it be ok to not record property changes on array propert changes.</p>
+<p>WH: What kind of a change record would &quot;sort&quot; generate? In particular, how would the change record describe how the array was sorted (ascending, descending, by what key?)?</p>
+<p>RWN: If the array only said it was sorted then the code would need to keep a copy around to know what happened.</p>
+<p>WH: In that case would reverse also emit a sorted change record?</p>
+<p>AVK: Is &quot;sort&quot; proposed.</p>
+<p>EA: No</p>
+<p>(discussion about observing changes of attributes such as making an object non-extensable)</p>
+<p>AWB: It is uncommon to care about property changes for lists.</p>
+<p>AVK: <input type=file>.files might want to use Array.observe. It only cares about the items in the array.</p>
+<p>AWB: It seems strange to use observer for this use case.</p>
+<p>DD: generally DOM has a lot of things where the only difference from normal ES constructs is that when the object changes, you need to update something on the user's screen. New subclasses seems unnecessary, there's no new API.</p>
+<p>AVK: Considering using array or a small sub class. Reusing array as is easier because you get a lot of things for free.</p>
+<p>AWB: Use more specific class than array.</p>
+<p>(Discussion about Array.observe vs. Object.observe.)</p>
+<p>RWN: Allen, I think what you're saying makes sense, and it's a specific instance of a more general thing of filtering, which we may want for performance. Let's defer that.</p>
+<p>CF: An API question---what about { new: newCallback, updated: updateCallback, ... }, instead of (callback, ['new', 'updated', ...]).</p>
+<p>DH: yes, callback-last is definitely important</p>
+<p>RW: (explains in depth the benefits of this)</p>
+<p>RWN: I'm not especially excited about separate callbacks, because often you want a stream of change records, and not to react individually to each of the operations.</p>
+<p>RW clarifies with some code Corey's proposal:</p>
+<pre><code class="language-js"><span class="hljs-comment">// either</span>
+
+<span class="hljs-built_in">Object</span>.observe(foo, {
+  <span class="hljs-attr">updated</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{},
+  <span class="hljs-attr">deleted</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{}
+});
+
+<span class="hljs-comment">// or</span>
+
+<span class="hljs-built_in">Object</span>.observe(foo, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{});
+</code></pre>
+<p>RWN: This is an antipattern. We don't want to split the callback like that because the change log is the important part and if you split it it is hard to get ordering right.</p>
+<p>RW: The misunderstanding: the list of change types is a &quot;white list&quot; of change types to include in the change list, not a 1-to-1 &quot;events to handle&quot; list.</p>
+<p>WH: Want the names to be consistently present tense: new, update, delete, prototype, reconfigure</p>
+<p>RWN: prototype is used when [[Prototype]] is changed</p>
+<p>WH: how often do you observe an object whose prototype chain changes?</p>
+<p>RWN: well, a common use case is using the prototype chain to represent concentric scopes, e.g. Angular</p>
+<p>RW: It is valid to want to observe changes in the prototype chain, but I don't think Angular is a good supporting argument.</p>
+<p>DD/RW: Object.setPrototypeOf is the supporting case for observing prototype replacement</p>
+<p>DD: so then why not include observing the changing of extensibility</p>
+<p>AR/AWB/RW: I think we need that for completeness anyway.</p>
+<p>MM: yes, any mutable state should be observable; as long as it is observable by polling, <code>Object.observe</code> should work.</p>
+<p>RW: agreed, you could definitely implement it.</p>
+<p>Moved on to &quot;Thought Experimental&quot; slide.</p>
+<p>WH/DD: the names on this slide are weird. &quot;deleted&quot; doesn't work (it's already used by normal objects). &quot;set&quot; vs. &quot;updated&quot;. It seems like namespacing is necessary.</p>
+<p>RWN: Agreed, there is a namespacing issue.</p>
+<p>WH: Would prefer to keep the simple notification names (&quot;splice&quot;, &quot;set&quot;, etc.) to match method names that generate those notifications. It would be bad if we got into a pattern where method Foo generated ArrayFoo notifications when used on arrays, MapFoo notifications when used on maps, etc. This would be an annoying abstraction leak for observers who don't care which particular data structure is used to store the things being observed.</p>
+<p>RW: Map and Set operations have potential to be deceptive; since the actual data is held internally, freeze operations have no effect (freeze is on the surface for tamper proofing), so there might be a situation where a Map or Set is &quot;accidentally&quot; assumed to be locked down but is still observable. FWIW, I do like the addition of change observation for Map and Set.</p>
+<p>MM: Freeze is not about freezing the object, it is about making it tamper proof. I think we can postpone this to ES7.</p>
+<p>RW: (to RWS) we can talk about this more offline</p>
+<p>AVK: it would be nice if there was a recommendation for how to do namespacing, for other specs etc.</p>
+<p>WH: Asks about ordering semantics</p>
+<p>RWN: there is an unresolved issue about ordering of different types of work in microtasks (promises vs. <code>MutationObserver</code>s vs. <code>Object.observe</code>); this is still undecided.</p>
+<p>... Moved on to the performance slides.</p>
+<p>WH: The slides are comparing the proposed language mechanism to polling, which is a bad choice for the comparison control group. If I were implementing observers in existing ES5, I definitely would not do polling; I'd set dirty flags and keep a list of dirty things. That should be the control group for the performance comparisons.</p>
+<p>RWN: the point of these graphs was not to show anything particularly interesting, but to show that there were no major surprises awaiting implementations.</p>
+<p>AR: What do you need from this group? How close are we to being &quot;done&quot;?</p>
+<p>RWN: Got good feedback on a few things to change. Maybe next meeting we'll have something that's really &quot;done&quot; and we can't go any further without implementations.</p>
+<p>AVK/RW: just be sure to update us on es-discuss when you make changes.</p>
+<a href="#consensusresolution-7-objectobserve-status-report"><h4 id="consensusresolution-7-objectobserve-status-report">Consensus/Resolution</h4></a><ul>
+<li>failure cases, what to do when an exception happens midway through performChange</li>
+<li>change type naming, eg. &quot;sorted&quot; =&gt; &quot;sort&quot;</li>
+<li>2nd/3rd argument order (offline discussion)</li>
+<li>Post to es-discuss when wiki page is updated.</li>
+</ul>
+<a href="#licensing-concerns"><h3 id="licensing-concerns">Licensing Concerns?</h3></a><p>AWB: there was some discussion on the mailing list...</p>
+<p>RW: I am pretty sure that was a troll.</p>
+<p>STH: So this same guy actually came on the scheme mailing list and behaved similarly. It seems he just wanted to upload the PDFs somewhere, and did not actually care about the contents of the spec.</p>
+<a href="#8-data-parallelism"><h3 id="8-data-parallelism">8. Data Parallelism</h3></a><p>Dave Herman &amp; Niko Matsakis</p>
+<p>DH: I wanted to explain why the issue of sequential fallback is not as simple as &quot;we should just throw&quot; for synchronous code.</p>
+<p>NM: I want to separate out throwing on non-parallelized execution vs. non-parallelizable execution. The former is not what people want.</p>
+<p>(General agreement.)</p>
+<p>DH: yes, you want the engine to be able to make dynamic decisions about whether parallelism is profitable.</p>
+<p>NM: it turns out there are many reasons why an execution may be non-parallelizable, not all of which a user should concern themselves with. There are implementation constraints that make it very hard to parallelize in some cases, but in theory they should be parallelizable. For example, in SpiderMonkey, string operations: they are currently implemented in a very scary imperative way that is hard to make threadsafe, but from a high-level perspective it should be obviously parallelizable. (It's not mutating shared state.)</p>
+<p>NM: Our conclusion was, we would instrument our JIT compiler to generate parallel-safe code, which needs a warmup; we'll run sequentially for a while, before we're ready to <em>try</em> parallel execution. It's going to be hard to implement a parellization strategy that doesn't work like this.</p>
+<p>ARB: I totally agree.</p>
+<p>DH: Cannot get to paralelizing until have done some serial exucution to gather information.</p>
+<p>NM: Implementations will grow the set of code it can parallelize over time. Cannot force any constraints on the closure. The alternative would be to instrument the entire the engine ot keep track of what cannot be parallelized.</p>
+<p>NM: The other option is to formalize what can be parelized in the spec. For the end user they will still not know what will run in parallel.</p>
+<p>EA: What is preventing engines for running Array map/filter etc in paralel if it cannot be detected.</p>
+<p>DH: It would be an interesting thing to try out.</p>
+<p>NM: There are other methods like reduce that cannot be parallelized. We therefore still need the par* methods.</p>
+<p>ARB: Throwing if it is not parallelized is not sensible because it is too hard to specify what things can be parallelized.</p>
+<p>DH: The order is non deterministic. That is the big difference. And this makes it easier to parallelized.</p>
+<p>NM: THe order is only crucial for reduce.</p>
+<p>WH: Even if an operation has no side effects, if several of the constituents of a map throws, you might get the wrong exception.</p>
+<p>WH/NM: (discussion about definition of side effect, whether throw is a side effect.)</p>
+<p>NM: 1) mutation of external state; throws; and straying into native code (that we don't have a safe version of).</p>
+<p>LH: if I'm interpreting this correctly, it sounds like the whole parallel JS thing becomes less of a standards thing, and more of an implementation concern, except there will also be some non-deterministic parallelizable array method.</p>
+<p>DH: but it's also important to give the parallelism recommendations teeth because then authors can depend on it.</p>
+<p>NM: it's also useful to have a specification available for users to read to understand what works where. It doesn't effect the semantics, and it probably doesn't belong in ES spec, but it would be useful to have to point users to.</p>
+<p>NM: for example we only lazily make <code>function.arguments</code> do crazy things, so that's not an easy thing to spec.</p>
+<p>WH: do we really need new nondeterministic array methods? I agree that you don't want reduce operations that have serial semantics (add first element to second, the sum to the third, the sum to fourth, etc.) but could deterministic tree operations (add elements pairwise, then add the pair sums, then add those in paris, etc.) be sufficient?</p>
+<p>NM: the main one is <code>reduce</code>. You <em>can</em> do a tree-reduction, but that is not always the right thing to do on all architectures; it has a performance cost.</p>
+<p>DH: also, we want to have developer tools give feedback on what can be parallelized; we are talking with a PhD student about working on this.</p>
+<p>ARB: How does this interact with GC?</p>
+<p>NM: Works well using nurseries.</p>
+<p>AWS: A version of region based collection.</p>
+<a href="#newly-added-to-global-object"><h2 id="newly-added-to-global-object">Newly Added to Global Object</h2></a><p>DH: Straw proposal <code>Symbol.iterator</code>, <code>Symbol.create</code></p>
+<p>AWS: A single method on Symbol, <code>Symbol.for('iterator')</code></p>
+<p>EA: You can have get and set and use set to register user defined known symbols.</p>
+<p>MM: registration needs to be like interning</p>
+<p>DH: We're only talking about location of these new things.</p>
+<p>EA: Libraries want to register well known symbols</p>
+<p>DH: This is not what LH is trying to address</p>
+<p>MM: Built-in symbols, as specified by the spec: no mutation and no global channel</p>
+<p>Well-Known Symbols available on the Symbol object itself</p>
+<p>LH:</p>
+<ul>
+<li>well-known symbols</li>
+<li>Symbol</li>
+<li>Reflect</li>
+<li>System</li>
+</ul>
+<p>LH: We should be designing the library system independent of modules</p>
+<p>DH: (clarifies) Implementation dependency graph, can't rely on these new objects without knowing where they come from (modules)</p>
+<p>LH: We need to decide, concretely, if these are exposed on the Global Object.</p>
+<p>(RW clarifies for MM)</p>
+<p>MM: Will this break the web?</p>
+<p>LH: Conflicts are soft conflicts because the objects are configurable</p>
+<p>LH: How will symbols be held?</p>
+<pre><code class="language-js"><span class="hljs-built_in">Symbol</span>.iterator = @@iterator
+<span class="hljs-built_in">Symbol</span>.create = @@create
+</code></pre>
+<p>The value is the <em>initial</em> value (as done with other items in the spec)</p>
+<p>writable: false
+configurable: true
+enumerable: ?</p>
+<p>AWB: need to discuss @@toPrimitive</p>
+<p>RW: Does this really need to be exposed?</p>
+<p>AWB: It's useful for any objects that have internal data (like Date)</p>
+<a href="#consensusresolution-newly-added-to-global-object"><h4 id="consensusresolution-newly-added-to-global-object">Consensus/Resolution</h4></a><ul>
+<li><p>Global</p></li>
+<li><p>Symbol</p></li>
+<li><p>Reflect</p></li>
+<li><p>System</p></li>
+<li><p>Well-known symbols defined as properties of Symbol</p></li>
+<li><p>using given name, no &quot;@@&quot;</p></li>
+<li><p><a href="https://people.mozilla.org/~jorendorff/es6-draft.html#table-6">https://people.mozilla.org/~jorendorff/es6-draft.html#table-6</a></p></li>
+</ul>
+<p>Next Meeting:</p>
+<p>Nov 19 - 21 at PayPal</p>
+
+</body>

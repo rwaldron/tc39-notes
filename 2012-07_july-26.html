@@ -1,0 +1,523 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 26, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-26-2012-meeting-notes"><h1 id="july-26-2012-meeting-notes">July 26, 2012 Meeting Notes</h1></a><hr>
+<p>Mark S. Miller (MM), Brendan Eich (BE), Yehuda Katz (YK), Luke Hoban (LH), Rick Waldron (RW), Alex Russell (AR), Tom Van-Cutsem (TVC), Bill Ticehurst (BT), Sam Tobin-Hochstadt (STH), Allen Wirfs-Brock (AWB), Doug Crockford (DC), John Neumann (JN), Erik Arvidsson (EA), Dave Herman (DH), Norbert Lindenberg (NL), Oliver Hunt (OH)</p>
+<hr>
+<a href="#maxmin-class-semantics"><h2 id="maxmin-class-semantics">Maxmin class semantics</h2></a><p>YK: namespacing pattern: class that goes inside existing object; like
+Ember.View</p>
+<p>DH: <code>Ember.View = class ...</code></p>
+<p>AWB: or <code>Ember = { View: class ... }</code></p>
+<p>AWB: early error list</p>
+<ul>
+<li>naming class eval/arguments</li>
+<li>duplicate class element names</li>
+<li>extends expression contains a <code>yield</code></li>
+<li>method name constructor used on get, set, or generator</li>
+</ul>
+<p>MM: <code>yield</code> should not be an error!</p>
+<p>DH: definitely not! burden of proof is on the rejector; there's no reason
+to reject here</p>
+<p>YK: why can't we do a getter?</p>
+<p>DH: there's no way to declaratively figure out what the actual function for
+the class is, because the getter <em>returns</em> the function</p>
+<p>AWB: class declarations create const bindings</p>
+<p>AR: can you justify?</p>
+<p>AWB: why would you want to overwrite it?</p>
+<p>RW: what about builtins needing to be patched?</p>
+<p>DH: those are independently specified to be writable; the relevant question
+is whether user programs will want to patch up local class bindings</p>
+<p>AWB: whether this is a good idea probably depends on whether you're a
+library writer or application writer; if you aren't exporting class
+definitions</p>
+<p>AR: you could still say <code>const x = class</code></p>
+<p>YK: that distinction isn't useful; every app has stuff like libraries</p>
+<p>AR: restriction needs justification</p>
+<p>DC: my preference is only for the expression form so there's no confusion</p>
+<p>RW: surveyed ~200 developers, majority did not want const bindings by
+default</p>
+<p>MM: I like crock's suggestion, just don't do the declarative one</p>
+<p>EA: what?</p>
+<p>LH: that's just putting cost on everyone else rather than us</p>
+<p>MM: no, I'm talking about saving the cognitive cost to user</p>
+<p>YK: if we went with const by default, I'd agree we shouldn't do declarative</p>
+<p>AR: goal is most value for shortest syntax, without footguns; the analogy
+with const seems tenuous</p>
+<p>AWB: this is subtle, and most people won't even notice</p>
+<p>DH: I don't buy that there are significant errors being caught, there's no
+benefit to engines, there's not enough benefit to users, and it's clear
+there are costs. so I don't see any reason to do const binding by default</p>
+<p><em>general agreement</em></p>
+<p>MM: I'm opposed to declarative form. but if it is going to be declarative,
+should pick a declarative form and say it's the same as that, and let is
+the only clear candidate</p>
+<p>DH: I'm not convinced function is impossible</p>
+<p>MM: the expression extends is the killer. makes it impossible</p>
+<p>LH: I'm convinced it can't hoist</p>
+<p>DH: why not a more restricted syntax for declarative form in order to get
+hoisting?</p>
+<pre><code class="language-js">{
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Sup</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{ ... }
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Sub</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Sup</span> </span>{ ... }
+}
+</code></pre>
+<p>LH: surprising that you can't compute the parent</p>
+<p>DH: there are surprises in each alternative we've talked about here; but I
+claim it's surprising to lose hoisting</p>
+<p>OH: relevant analogy here is the fact that other languages with declarative
+classes don't care about order</p>
+<p>LH: CoffeeScript does; it translates to <code>var x = ...</code></p>
+<p>AR: pulse?</p>
+<p>DH: I think we all acknowledge this is tricky; I feel strongest that
+leaving out the declarative is failing in our duty</p>
+<p>MM: if we leave out the declarative, then people will simply learn that the
+language is let c = class</p>
+<p>BE: why are we debating this?</p>
+<p>STH: Mark and Doug are arguing it</p>
+<p>BE: over-minimizing and failing at usability</p>
+<p>YK: <code>let x = class extends Bar { }</code> is just crazy</p>
+<p>DH: that's laughable as the common case</p>
+<p>AWB: this came from the hoisting debate</p>
+<p>BE: I thought we agreed to dead zone. if we get stuck on this we'll never
+finish classes</p>
+<p>LH: agreed; we need a separate proposal for hoisting</p>
+<p>DH: happy to revisit later if I can come up with better alternatives</p>
+<p>MM: we have adequate consensus that declarative desugars to let</p>
+<p>AWB: classes are strict?</p>
+<p>STH: I thought class did <em>not</em> imply strict mode</p>
+<p>AR: does <em>anyone</em> want that?</p>
+<p><em>no</em></p>
+<p>AWB: default constructor has empty body? we'll get back to this</p>
+<p>AWB: local class name scoping? similar to named function expression, but
+const bound?</p>
+<p>DH: const bound?</p>
+<p>AWB: just like NFE</p>
+<p>DH: I actually didn't know NFE's had a const binding!</p>
+<p>AWB: is this a bug? should we reconsider?</p>
+<p>MM: avoids refactoring hazard</p>
+<p>MM: my first choice would be to fix function: within function body its name
+is const; second choice is for class to be consistent</p>
+<p>BE: not sure why we're talking about this, can't be changed</p>
+<p>MM: in that case the class expression form should follow NFE</p>
+<p><em>general agreement</em></p>
+<p>DC: I disagree with the scoping decision about class declarations</p>
+<p>DH: confused what we're talking about</p>
+<p>STH: in body of class declaration, should there be a fresh scope contour</p>
+<p>OH: it's not uncommon to overwrite the class</p>
+<p>MM: example:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+    self() { <span class="hljs-keyword">return</span> Foo }
+}
+...
+new Foo().self() === Foo <span class="hljs-comment">// can fail</span>
+</code></pre>
+<p>this is very confusing for this to fail</p>
+<p>DH: why would you ever want the extra scope contour?</p>
+<p>STH: Rick gave a good example:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+    m(x) { <span class="hljs-keyword">return</span> x <span class="hljs-keyword">instanceof</span> C }
+}
+<span class="hljs-keyword">var</span> y = <span class="hljs-keyword">new</span> C;
+C = <span class="hljs-number">17</span>
+y.m(y)
+</code></pre>
+<p>DH: not compelling; you mutated C! if you need the earlier value, you
+should save it; the confusion would only arise if you expected C to be a
+static class like in Java, but that's not how JavaScript bindings work</p>
+<p>RW: the common pattern being the defensive-constructor pattern:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">C</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">if</span> (!(<span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> C)) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> C();
+     }
+     ...
+}
+</code></pre>
+<p>DH: now I'm that much more confident that there should not be another scope
+contour; I don't see any compelling argument</p>
+<p>AWB: let me throw up another justification: class declarations often appear
+at global scope, not uncommon for somebody to write class body where there
+are references to the class; at global scope, anybody could have assigned
+to that value</p>
+<p>DH: I don't want to poison non-global cases just to protect against one
+hazard of global code, when global code is hazardous anyway</p>
+<p>AWB: I would put protecting global code at a higher priority than a
+subtlety of inner bindings, but I'll go with the flow if I can't convince
+you</p>
+<p>DC: I don't want to hold this up</p>
+<p>MM: are you willing to go with the function parallel?</p>
+<p>DC: yes; I don't prefer it but I won't hold this up</p>
+<p>AWB: missing extends, what's the default? intrinsics</p>
+<p><em>agreement</em></p>
+<p>AWB: extends null: prototype is null, Foo.[[Prototype]] extends intrinsic
+Function.prototype</p>
+<p><em>agreement</em></p>
+<p>AWB: extends a constructor:</p>
+<pre><code class="language-js">
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{ }
+Foo.[[Prototype]]: (<span class="hljs-built_in">Object</span>)
+Foo.prototype.[[Prototype]]: (<span class="hljs-built_in">Object</span>).prototype
+
+</code></pre>
+<p>IOW, class-side inheritance</p>
+<p>MM: I disagree, the history of JS does not have it</p>
+<p>BE: I disagree with that claim, history shows some examples on both sides</p>
+<p>EA: people do refer to <code>this</code> in static functions; they have the freedom to
+use the class name or <code>this</code>, and they do both</p>
+<p>LH: CoffeeScript does class-side inheritance, but they don't do it like
+this -- they copy</p>
+<p>BE: but they will avoid the copy once you implement dunder-proto</p>
+<p>MM: you can't depend on it</p>
+<p>BE: this gives programmers more flexibility to do it however they want</p>
+<p>MM: but then people can't use a this-sensitive function!</p>
+<p>BE: not true, the contract of a JS function includes its this-sensitivity</p>
+<p>Arv, AR: <em>nod visibly</em></p>
+<p>LH: at end of day, plenty of static functions in JS that are this-sensitive</p>
+<p>YK: that's the style of program that I write</p>
+<p>EA: some style guides say don't do it</p>
+<p>LH: backbone does this</p>
+<p>MM: so Foo will inherit <code>Object.create</code>, <code>Object.getOwnPropertyDescriptor</code>, etc?</p>
+<p>DH: that does mean we'll be more and more hampered from adding methods to
+Object</p>
+<p>EA: but now we have modules</p>
+<p>BE: true, that's the right answer</p>
+<p>MM: polluting of statics with everything in Object is fatal; those are just
+not relevant to most of the class abstractions people write; when I write</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{ }
+</code></pre>
+<p>I don't want <code>Point.getOwnPropertyDescriptor</code></p>
+<p>AWB: you only opt into that with <code>class Point extends Object</code>; with <code>class Point { }</code> you don't get any of that stuff</p>
+<p>DH: <em>feels giddy and sees the clouds part and sun shining through, with
+angels singing from on high</em></p>
+<p>YK: also, there are override hazards of pollution: if someone freezes
+Object, then you wouldn't be able to override sweet class method names like
+keys(), so the ability to avoid that pollution is important</p>
+<p>MM: valid point. thing is, we don't have static form b/c you can supposedly
+use imperative assignment, but that won't work for frozen classes</p>
+<p>BE: that's just an argument for statics in the future</p>
+<p>AWB: minimality ftw</p>
+<p>AWB: <code>class Foo extends Object.prototype</code>?</p>
+<p>LH: this surprised me when I saw it in the spec</p>
+<p>AWB: older version of class proposal had a &quot;prototype&quot; contextual keyword
+for this case</p>
+<p>DH: what happens if you're defining a meta-class? you can't tell whether
+it's a prototype or a constructor</p>
+<p>BE: that's a smell</p>
+<p>AWB: constructor trumps object</p>
+<p>BE: YAGNI, cut it</p>
+<p>AWB: so what do we do if it's not a constructor?</p>
+<p>DH: throw</p>
+<p>BE: that's more future-proof</p>
+<p><em>general agreement</em></p>
+<p>AWB: extends neither an object nor null: type error</p>
+<p>DH: actual type errors in JS, yay!</p>
+<p>RW: curious: what if Foo extends { ... }</p>
+<p>DH: non-constructable, so error; but could use a function literal</p>
+<p>AWB: extends value is constructor but its prototype value is neither an
+object nor null: type error (existing semantics of new: silently uses
+Object.prototype)</p>
+<p><em>agreement</em></p>
+<p>AWB: <code>Foo.prototype</code> is an immutable binding? builtin constructors are
+immutable, user function(){} mutable</p>
+<p><em>some surprise</em></p>
+<p>MM: make <code>.constructor</code> mutable but <code>.prototype</code> immutable</p>
+<p>YK: why? (I want mutable)</p>
+<p>MM: nice for classes for instanceof to be a reliable test</p>
+<p>YK: why?</p>
+<p>AWB: classes are higher integrity; association between constructor and
+prototype actually means something now</p>
+<p>BE: I'm moved by higher-integrity, self-hosting with minimal work</p>
+<p>STH: not compelling to make self-hosting <em>easy</em>, just possible;
+defineProperty is just fine for that</p>
+<p>DH: most everyone seems to agree that .prototype is immutable, .constructor
+is mutable. Arv and AR, thoughts?</p>
+<p>EA: that's fine</p>
+<p>AR: yup, that's fine</p>
+<p>AWB: method attributes: sealed? (<code>{ writeable: true, configurable: false, enumerable: false}</code>)</p>
+<ul>
+<li>configurable: false -- you've established a specific shape</li>
+</ul>
+<p>YK: you don't want to switch from a data property to an accessor?</p>
+<p>AWB: non-configurable but writable is reasonable</p>
+<p>MM: this depends crucially on our stance on override mistake; this prevents
+me from making an accessor</p>
+<p>AR: I don't see why we're considering making this anything other than
+writeable: true, configurable: true</p>
+<p>BE: Allen feels having the shape be fixed is useful</p>
+<p><em>discussion</em></p>
+<p>BE: so consensus is writable: true, configurable: true</p>
+<p><em>agreement</em></p>
+<p>AWB: methods are not constructable?</p>
+<p>DH: what?</p>
+<p>MM: biggest benefit: this further aligns classes with builtins</p>
+<p>MM: three reasons for this:</p>
+<ol>
+<li>precedent in builtins</li>
+<li>using a method as a constructor is generally nonsense</li>
+<li>to freeze a class, I have to freeze the .prototype of the methods on the
+prototype!!</li>
+</ol>
+<p>LH: compelling for me: never seen a class-like abstraction on a prototype
+of a class-like abstraction</p>
+<p>MM: I have, but you still can; just do it in a way that's obvious, don't do
+it with method syntax</p>
+<p>BE: hard cases make bad law! (agreeing with MM -- use a longhand)</p>
+<p>YK: so you can say classes really only existed as builtins, now they're
+expressible</p>
+<p>AWB: get/set accessors <em>are</em> constructors? that's just the way they are in
+ES5</p>
+<p>BE: is there precedent in builtins?</p>
+<p>AWB: nothing explicit</p>
+<p>YK: I'd prefer consistency between these last two cases</p>
+<p>AWB: accessor properties on prototype are enumerable</p>
+<p>BE: what about DOM/WebIDL? accessors on prototype?</p>
+<p>LH: they're enumerable, yes</p>
+<p>AWB: suggestion: concise methods should be the same for both classes and
+object literals</p>
+<ul>
+<li>strictness</li>
+<li>enumerability</li>
+<li>constructability</li>
+<li>attributes</li>
+</ul>
+<p>AWB: breaking change from ES5: get/set functions non-constructable</p>
+<p>AWB: class accessor properties:</p>
+<ul>
+<li>enumerable: false, configurable: false</li>
+</ul>
+<p>AR: no</p>
+<p>EA: no</p>
+<p>YK: when you use an accessor you're trying to act like a data property</p>
+<p>BE: so compelling argument is: accessors are enumerable, configurable, and
+writable</p>
+<p>AWB: Luke suggests that default constructor should do a super-constructor
+call with same arguments <code>constructor(...args) {super(...args)}</code></p>
+<p>BE: default constructor in CoffeeScript, Ruby</p>
+<p>AWB: perhaps needs to test for Object constructor and not call it</p>
+<p>DH: no observable difference!</p>
+<p>MM: if there's no observable difference, go with simplest spec</p>
+<p>AWB: other places where we do implicit super call? I say no</p>
+<p>DH: I say no.</p>
+<p>LH: I agree, I think there's no clear way for us to do it, but I also think
+there will be many, many bugs</p>
+<p>BE: irreducible complexity  here, caveat refactorer</p>
+<a href="#getprototypeof-trap"><h2 id="getprototypeof-trap">getPrototypeOf trap</h2></a><p>TVC: (introduction)</p>
+<p><code>__proto__</code> writable destroys invariant that [[Prototype]] link is stable</p>
+<p>Frozen objects should continue to have stable prototype chain</p>
+<p>getPrototypeOf trap result should be consistent wth target object's proto</p>
+<p>MM: if the proto can be changed, the proxy should...?</p>
+<p>TVC: spec interceptable [[Prototype]]</p>
+<p>[[Prototype]] is currently an internal prop</p>
+<p>Would need to become internal accessor prop or split into [[GetProto]] /
+[[SetProto]]</p>
+<p>[[GetProto]] / [[SetProto]] would trigger traps for proxies</p>
+<p>AWB/BE: This is good</p>
+<p>YK: Do we want an analogous setPrototypeOf trap?</p>
+<p>TVC: Yes</p>
+<p>AWB: If you have capability to set prototype ?</p>
+<p>TVC: <code>proxy.__proto__</code> should just trigger the proxy's get trap</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> p = <span class="hljs-built_in">Proxy</span>(target, handler)
+
+p.__proto__ <span class="hljs-comment">// =&gt; handler.get(target, "__proto__", p)</span>
+p.__proto__ = x <span class="hljs-comment">// =&gt; handler.set(target, "__proto__", x, p)</span>
+</code></pre>
+<p>...</p>
+<p>Trapping instanceof</p>
+<p>Function [[HasInstance]]</p>
+<p>x instanceof Global answering true if x and Global live in separate
+frames/windows</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> fp = <span class="hljs-built_in">Proxy</span>(targetFunction, handler);
+
+x <span class="hljs-keyword">instanceof</span> fp <span class="hljs-comment">// handler.hasInstance(targetFunction, x)</span>
+</code></pre>
+<p>MM: Explains concerns originally raised on es-discuss list by David Bruant,
+but shows the cap-leak is tolerable
+...</p>
+<p>DH: if hasInstance private name on instanceof RHS...</p>
+<p>MM: What <code>Object.prototype</code> does private name inherit from?</p>
+<p>AWB: Probably null</p>
+<p>BE: the E4X any (*) name had null proto in SpiderMonkey, was true singleton
+in VM</p>
+<p>AWB: functions have home context, but no reason for objects to</p>
+<p>DH: this is a new idea of value that is not really any object</p>
+<p>OH: if it has no properties and no prototype</p>
+<p>BE: cannot be forged.</p>
+<p>Discussion about unforgeability.</p>
+<p>DH: Trapping instanceof use case</p>
+<p>Trapping Object.isExtensible</p>
+<p>Currently Object.isExtensible doesnt trap same for isSealed isFrozen</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> p = <span class="hljs-built_in">Proxy</span>(target, handler)
+
+<span class="hljs-built_in">Object</span>.isExtensible( p ) =&gt; <span class="hljs-built_in">Object</span>.isExtensible
+</code></pre>
+<p>Direct Proxies: &quot;internal&quot; properties</p>
+<p>Issue raised by Jason Orendorff; auto unwrapping is dangerous if built-in
+methods return non-primitive values</p>
+<p>Case:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> arr = [o1, o2, o3];
+<span class="hljs-keyword">var</span> it = arr.iterator();
+
+<span class="hljs-keyword">var</span> membraneP = wrap(it);
+
+it.next.call(membraneP)
+</code></pre>
+<p>Solution (?)</p>
+<p>Instead of auto-unwrapping, delegate to a nativeCall trap (which
+auto-unwraps by default)</p>
+<p>[[PrimitiveValue]]</p>
+<p>BE: nativeCall trap is back door between built-in this-type-specific method
+impls and proxies. Not good for standardization. Better to make such
+built-ins generic via Name object internal property identifiers, a la AWB's
+subclassing built-ins strawman</p>
+<p>Discussion moved to Subclassing...</p>
+<p>MM: re: what you want syntax wise</p>
+<p>AWB: one way to address, not use instance that is automattically created,
+create new array and patch the proto</p>
+<p>... BE: (back to nativeCall trap)</p>
+<p>AWB: Let's continue the issue of subclassability on es-discuss</p>
+<p>TVC: defaultValue slide</p>
+<p>See slide?</p>
+<p>BE/AWB: defer this to reflect spec handling, non-observable way.</p>
+<a href="#proxies-and-private-names"><h2 id="proxies-and-private-names">Proxies and private names</h2></a><p>TVC: getName(target, name.public) instead of get(target, name.public) --
+this way get trap that doesn't expect name objects won't break on
+unexpected inputs</p>
+<p>DH: has, delete, ...? bigger surface area</p>
+<p>TVC: you'd still have to branch in the code, so this is cleaner for user</p>
+<p>YK: debugging tool will want to be able to see these things</p>
+<p>OH: a built-in debugger will have hooks into the VM</p>
+<p>YK: many debuggers use reflection</p>
+<p>BE: so it's just a matter of having a bunch of XXXName traps. in for a
+penny, in for a pound</p>
+<p>STH: this is simple and straightforward, we know how to do it</p>
+<p>BE: when in doubt use brute force (K. Thompson)</p>
+<p>STH: when brute force doesn't work, you're not using enough of it</p>
+<p>TVC: if getName returns undefined, forwards to target; so default behavior
+is transparent proxying</p>
+<p>TVC: otherwise, getName takes public name and returns [privateName, value]
+to show that you know the private name and produce the value</p>
+<p>STH: what about set?</p>
+<p>TVC: returns name and success value</p>
+<p>DH: what about unique names?</p>
+<p>TVC: same mechanism</p>
+<p>DH: so name.public === name?</p>
+<p>MM: I like that</p>
+<p>MM: are unique names in?</p>
+<p>DH: I think so</p>
+<p>BE: are they actually distinguishable?</p>
+<p>MM: have to be if name.public === name or name.public !== name distinction</p>
+<p>DH: (named) boolean flag to Name constructor</p>
+<p>DH: do we have some way of reflecting unique names?</p>
+<p>TVC: Object.getNames() ?</p>
+<p>DH: ugh...</p>
+<p>AWB: maybe a flag to Object.getOwnPropertyNames({ unique: true })</p>
+<p>BE (editing notes): flags to methods are an API design anti-pattern</p>
+<p>TVC: VirtualHandler fundamental traps throw, should they forward instead?</p>
+<p><em>agreement</em></p>
+<p>TVC: and rename to Handler?</p>
+<p><em>agreement</em></p>
+<p>MM: next issue: freeze, seal, defineOwnProperties each modify configuration
+of bunches of separate properties, and can fail partway through; we tried &amp;
+failed in ES5 to make it atomic</p>
+<p>MM: current unspecified order means could break</p>
+<p>MM: tom did something in his code that's beautiful: order-independent. just
+keep going, remember you failed, do as many as you can, and then throw at
+the end</p>
+<p>STH: if target is proxy, weird unpredictably stuff can happen</p>
+<p>DH: no worse than anything that does for-in loops, right?</p>
+<p>TVC: well, it's getOwnPropertyNames</p>
+<p>MM: that's specified to for-in order, right?</p>
+<p>DH: but what does for-in order say about non-enumerable properties? <em>evil
+grin</em></p>
+<p>MM: <em>cracks up</em></p>
+<p>AWB: sounds like an ES5 bug!</p>
+<a href="#virtualhandler"><h2 id="virtualhandler">VirtualHandler</h2></a><p>VirtualHandler
+Rename VirtualHandler to just Handler?</p>
+<p>Tom Van-Cutsem's Proxy presentation slides:</p>
+<p><a href="http://soft.vub.ac.be/~tvcutsem/invokedynamic/presentations/TC39-Proxies-July2012.pdf">http://soft.vub.ac.be/~tvcutsem/invokedynamic/presentations/TC39-Proxies-July2012.pdf</a></p>
+<a href="#template-strings"><h2 id="template-strings">Template strings</h2></a><p>(<a href="http://wiki.ecmascript.org/doku.php?id=harmony:quasis">http://wiki.ecmascript.org/doku.php?id=harmony:quasis</a>)</p>
+<p>AWB: first order of business, to ban the term &quot;quasis&quot;</p>
+<p><em>applause</em></p>
+<p>AWB: proposing &quot;string templates&quot; (note: settled on <em>Template Strings</em> ^RW)</p>
+<p>DH: a lot of people say &quot;string interpolation&quot; in other languages</p>
+<p>AWB: <em>must use ${identifier}, don't allow $identifier</em></p>
+<p>EA: uncomfortable with that</p>
+<p>BE: troublesome to identify right end of identifier</p>
+<p>EA: withdraw my objection</p>
+<p>AWB: untagged quasi is PrimaryExpression, tagged quasi is CallExpression</p>
+<p>AWB: at runtime, tag must evaluate to a function</p>
+<p>DH: well, you just do a call and <em>that</em> does the check</p>
+<p>AWB: lexing treated similarly to regexp; add a new context called &quot;lexical
+goal&quot; so lexer can tell what a curly means (like a flex(1) mode)</p>
+<p>AWB: default escaping should be equivalent to normal strings</p>
+<p>BE: we should canonicalize line separators to \n</p>
+<p>AWB: for both cooked and raw?</p>
+<p>BE: raw should be raw!</p>
+<p>AWB: raw tag is a property of the String constructor:</p>
+<pre><code class="language-js"><span class="hljs-built_in">String</span>.raw<span class="hljs-string">`In Javascript '\n' is a line-feed.`</span>
+</code></pre>
+<p>DH: that's pretty badass</p>
+<p>BE: too long a name; wanna import a small name from a module</p>
+<p>AWB: well, importing takes more characters than renaming with a var
+declaration</p>
+<p>BE: let's put off the bikeshed in the interest of time</p>
+<p>AWB: simplify call site object (first arg to prefix-tag function): it's
+just an array of the cooked elements since that's the common case, with a
+.raw expando holding array of the raw elements, both arrays frozen</p>
+<p>BE: is there a grawlix problem with ` syntax?</p>
+<p>DH: I've tried polling and opinions are utterly mutually incompatible</p>
+<p>BE: what about mandated prefix but with existing e.g. ' or &quot; quotes</p>
+<p>LH: that's just wrong, the most common case will be unprefixed</p>
+<p>MM: proposal for object literals inside ${...} context, based on object
+literal shorthand {foo} meaning not {foo:foo} but rather {get foo() foo,
+set foo(bar) {foo=bar}} to sync variable foo with property (!)</p>
+<p>STH: that is going to be utterly unexpected</p>
+<p>MM: ok, not gonna argue for it</p>
+<p>AWB: what's left on the agenda?</p>
+<p>RW: Erik is gonna take another whack at the error stack proposal</p>
+<a href="#map-and-set-methods-conclusion-template-strings"><h2 id="map-and-set-methods-conclusion-template-strings">Map and Set methods: conclusion</h2></a><p>BE: forEach on maps and sets -- how about common signature, set passes e as
+index:</p>
+<pre><code class="language-js">array    a.forEach(<span class="hljs-function">(<span class="hljs-params">e, i, a</span>) =&gt;</span> ~~~)
+map    m.forEach(<span class="hljs-function">(<span class="hljs-params">v, k, m</span>) =&gt;</span> ~~~)
+set    s.forEach(<span class="hljs-function">(<span class="hljs-params">e, e, s</span>) =&gt;</span> ~~~)
+</code></pre>
+<p>FILED: <a href="https://bugs.ecmascript.org/show_bug.cgi?id=591">https://bugs.ecmascript.org/show_bug.cgi?id=591</a>
+FILED: <a href="https://bugs.ecmascript.org/show_bug.cgi?id=592">https://bugs.ecmascript.org/show_bug.cgi?id=592</a></p>
+<a href="#wiki"><h2 id="wiki">Wiki</h2></a><p>DH: I'd love help with a documentation hack day for the wiki</p>
+<a href="#scoping-for-c-style-loops"><h2 id="scoping-for-c-style-loops">Scoping for C-style loops</h2></a><!--
+NL: the wiki page for `` makes it sounds like they solve problems for
+internationalization/localization, and they don't
+<p>--&gt;</p>
+<p>LH: another agenda item we skipped: for (let ; ; ) binding semantics</p>
+<p>DH: I thought we came to agreement on that at the Yahoo! meeting?</p>
+<p>AWB: we had a long discussion and consensus was to make for (let ; ;) bind
+on each iteration</p>
+<p>AWB: subsequent to that, considerable discussion on es-discuss about that,
+issues associated with closure capture occurring in the initialization
+expressions; couple different semantics to work around that, with more
+complex copying at each iteration; another approach is a new kind of
+Reference value, got really complex</p>
+<p>AWB: working on the specs, I took easy way out for now; defined it a la C#
+(per-loop lexical binding); just for now b/c it's simple, understandable,
+and there's still controversy</p>
+<p>AWB: another option is not to have a let for of C-style loops</p>
+<p>STH, DH, OH: no!!!</p>
+<p>DH: this needs another trip around the block but no time today</p>
+<p>MM: my opinion is it doesn't matter what happens with closure capture in
+the head, b/c it's an esoteric case that will be extremely rare</p>
+<p>BE: I think the January semantics is still probably the right answer:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> g;
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> f = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> f; ; ) {
+    g = f;
+    <span class="hljs-keyword">break</span>;
+}
+g(); <span class="hljs-comment">// returns () =&gt; f</span>
+</code></pre>
+<p>OH: it logically makes sense</p>
+
+</body>

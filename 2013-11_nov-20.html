@@ -1,0 +1,416 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 20, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-20-2013-meeting-notes"><h1 id="november-20-2013-meeting-notes">November 20, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Yehuda Katz (YK), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Rick Hudson (RH), Matt Sweeney (MS), Rick Waldron (RW), Dmitry Soshnikov (DS), Sebastian Markbåge (SM), Ben Newman (BN), Reid Burke (RB), Waldemar Horwat (WH), Doug Crockford (DC), Tom Van-Cutsem (TVC), Mark S. Miller (MM), Brian Terlson (BT), Andreas Rossberg (ARB), Alex Russell (AR)</p>
+<hr>
+<a href="#report-from-the-ecma-secretariat-cc-report"><h2 id="report-from-the-ecma-secretariat-cc-report">Report from the Ecma Secretariat (CC Report)</h2></a><p>(István Sebestyén)</p>
+<a href="#status-of-the-tc39-rftg"><h3 id="status-of-the-tc39-rftg">Status of the TC39 RFTG</h3></a><p>January 2014 Meeting deadline</p>
+<a href="#42-clarification-of-the-interaction-of-unicode-escapes-and-identification-syntax"><h2 id="42-clarification-of-the-interaction-of-unicode-escapes-and-identification-syntax">4.2 Clarification of the interaction of unicode escapes and identification syntax</h2></a><p>(Waldemar Horwat)</p>
+<p>WH: In ES3 we added the ability to use unicode escape sequences in Identifiers, ie.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> f\u1234o = <span class="hljs-number">17</span>;
+</code></pre>
+<p>The restriction was that the unicode escape sequence still had to be a valid identifier. ES3 and ES5 never allowed unicode escapes to substitute non-user-data characters of other tokens such as reserved words or punctuation.</p>
+<p>the contention is that ES6 has an incompatible lexical grammar change that lets you write things like:</p>
+<pre><code class="language-js">\u0069f(x===<span class="hljs-number">15</span>)
+
+<span class="hljs-comment">// if(x===15)</span>
+
+
+There also was a bit confusion about whether <span class="hljs-built_in">escape</span> sequences can occur <span class="hljs-keyword">in</span> regexp flags, even though the grammar never allowed them there either:
+
+<span class="hljs-regexp">/abc/</span>\u...
+
+<span class="hljs-comment">// unicode for the flags</span>
+
+</code></pre>
+<p>AWB: Things that came up in ES5:</p>
+<ul>
+<li>can you declare a variable that has the same unicode escape sequence as a keyword?</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> f\u0
+
+</code></pre>
+<ul>
+<li>introduced in ES5:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-comment">// allow</span>
+foo.for()
+</code></pre>
+<p>ie. Identifier vs IdentifierName</p>
+<p>WH: Cannot use escapes to create identifiers that would be invalid. Also opposed to allowing escapes inside keywords; there should be just one spelling of the keyword <code>if</code>, and it should not include <code>\u0069f</code>.</p>
+<p>So what should we do about \u0069f(x===15) ? It depends on how we interpret the ES3/ES5 rule that states that escapes cannot be used to create identifiernames that don't conform to the identifiername grammar.</p>
+<p>Option A: Treat the if there as an identifier because there are some contexts in which &quot;if&quot; can be used as an identifier (notably after a dot), making this into a function call.</p>
+<p>Option B: The if there cannot be an identifier in this context, so it's a syntax error because we're trying to spell a reserved word with an escape.</p>
+<p>AWB: Agree there is ambiguity</p>
+<p>MM: <a href="https://code.google.com/p/google-caja/wiki/SecurityAdvisory20131121">https://code.google.com/p/google-caja/wiki/SecurityAdvisory20131121</a>
+&quot;Handling of unicode escapes in identifiers can lead to security issues&quot;
+Records the vulnerability that has now been fixed in Caja at the price of additional pre-processing. This vulnerability which was caused by ambiguity in interpretations of the ES5 spec by different browser makers.</p>
+<p>STH: If there are systems that need to search code for specific forms</p>
+<p>MM: It would be harmful to code that looked at keywords, then this could circumvent those assumptions.</p>
+<p>AWB/WH: (recapping acceptable use of reserved words as identifiernames)</p>
+<p>BE: We can fix it, but it's just not how ES6 spec works</p>
+<p>WH: If it is a ReservedWord, it may not be spelled with an escape.</p>
+<p>MM: This solves Sam's static code case</p>
+<p>BE: No escape processing upstream?</p>
+<p>WH: (agreeing)</p>
+<p>AWB: We can specify in the grammar that where we write &quot;if&quot; it means that exact character sequence</p>
+<p>...Anywhere we express literal keywords, we mean those character sequences.</p>
+<a href="#consensusresolution-42-clarification-of-the-interaction-of-unicode-escapes-and-identification-syntax"><h4 id="consensusresolution-42-clarification-of-the-interaction-of-unicode-escapes-and-identification-syntax">Consensus/Resolution</h4></a><ul>
+<li>ReservedWords, including contextual, can only be spelled with ascii characters, ie. the literal character sequence.</li>
+<li>No escapes allowed in such ReservedWords</li>
+</ul>
+<a href="#performance-impact-of-tail-calls"><h2 id="performance-impact-of-tail-calls">Performance impact of Tail Calls</h2></a><p>(Brian Terlson)</p>
+<p>BT: Wondering if any implementors have begun work on these? Are there considerations for existing code that will become tail call?</p>
+<p>YK/AWB: Any examples?</p>
+<p>BT: Stack frame manipulation</p>
+<p>BE: It's not a zero work to new work, it's an old work to different work.</p>
+<p>STH: There's a lot of work on this subject, presumably tail calls should be able to run as fast as it does currently. No advice that's implementation independent.</p>
+<p>ARB: Standard techniques should be applicable. Foresee a lot of work.</p>
+<p>YK: The only real value for practioners is for compile-to-js cases.</p>
+<p>DC: This is actually the most exciting feature for me, because it allows</p>
+<p>BE: Will have someone work on this for SpiderMonkey</p>
+<p>RW: Agree that implementors will feel the pressure once practioners experience the benefits that Doug describes.</p>
+<p>DH: Allows for real cps transformations that won't blow the stack and don't require awful setTimeout hacks. FP idioms being available to JS.</p>
+<a href="#consensusresolution-performance-impact-of-tail-calls"><h4 id="consensusresolution-performance-impact-of-tail-calls">Consensus/Resolution</h4></a><ul>
+<li>Share implementation experience</li>
+</ul>
+<a href="#super-and-object-literals"><h2 id="super-and-object-literals">super and object literals</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>(needs slides)</p>
+<p>AWB: Issue: how do you mixin some methods that reference super?</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.mixin(obj, ???);
+</code></pre>
+<p>In the process of mixing, Object.mixin will rebind super references to the target. The big problem: <code>super</code> is currently explicitly illegal within an object literal:</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.mixin(obj, {
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`mixed(super.toString())`</span>;
+  }
+});
+</code></pre>
+<p>BE: are we asking to allow super anywhere?</p>
+<p>MM: We're not adding a restriction?</p>
+<p>AWB: No, removing.</p>
+<p>MM: Strictly a simplification.</p>
+<p>Discussion re: Object.mixin</p>
+<p>WH: Curious about the design of exposing super to user code, but only via the Object.mixin API. If we're going to be storing and retrieving super from a hidden slot, this seems a very roundabout API that's going to bite us.</p>
+<p>AWB: Allow super in concise methods</p>
+<p>EA: All object literals?</p>
+<p>RW: No, because the property value could be defined elsewhere. Ensure invalid in function and it's ok</p>
+<p>EA/AWB/RW: Allow super in concise methods within object literals.</p>
+<p>Clarification of Object.mixin capabilities.</p>
+<p>MM: (has issue with the naming)</p>
+<p>AWB: Let's defer discussion of naming.</p>
+<p>YK: We should allow super in function expressions within object literals</p>
+<p>MM: Refactoring hazard</p>
+<p>DH: There is always a refactoring hazard when scope is involved (super)</p>
+<p>RW: On board with Erik and Yehuda, super should be allowed in both concise methods and function expression literals that are the value of properties defined in an object literal.</p>
+<p>DH: <code>Object.mixin</code> creates a new function when rebound?</p>
+<p>AWB: Yes.</p>
+<p>MM: (whiteboard)</p>
+<pre><code class="language-js">
+{ foo() {}, ... }
+
+<span class="hljs-comment">// vs</span>
+
+{ <span class="hljs-attr">foo</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{}, ... }
+
+<span class="hljs-comment">// vs</span>
+
+{ <span class="hljs-attr">foo</span>: (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{}; })(), ... }
+
+</code></pre>
+<p>DS: Concern about having a reference to a function object that doesn't equal the rebound method</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">super</span>.foo(); }
+
+<span class="hljs-built_in">Object</span>.mixin(o, {
+  <span class="hljs-attr">f</span>: f
+});
+
+o.f !== f;
+</code></pre>
+<p>BE: No way to define a property on a concise method declaratively.</p>
+<p>WH: RebindSuper doesn't copy expandos (referring to Allen's claim that it does) <a href="http://people.mozilla.org/~jorendorff/es6-draft.html#sec-rebindsuper">http://people.mozilla.org/~jorendorff/es6-draft.html#sec-rebindsuper</a>
+(The actual copying of expandos takes place in MixinProperties <a href="http://people.mozilla.org/~jorendorff/es6-draft.html#sec-mixinproperties">http://people.mozilla.org/~jorendorff/es6-draft.html#sec-mixinproperties</a></p>
+<p>DH: Issue: bind does a similar operation, but doesn't copy expandos.
+... Any other deep traversals? If you have a non-callable object, it only does a shallow copy?
+... The existance of super creates an inconsistency.</p>
+<p>AWB: Alternatives are always clone or never.</p>
+<p>DS: All methods should be copied to avoid the distinction</p>
+<p>YK: Don't copy exandos?</p>
+<p>EA: Happy to go back to Object.defineMethod</p>
+<p>YK: Still need to decide if it copies expandos</p>
+<p>DH: That's the smallest operation that you can build on</p>
+<p>WH: Object.mixin breaks membranes, no way to intercept the super rebinding when the method is a proxy.</p>
+<p>AWB: There are many operations like this</p>
+<p>EA: No different from Function.prototype.bind</p>
+<p>MM: What happens when the method is a Proxy?</p>
+<p>AWB: A proxy for a method is not a function.</p>
+<p>MM: A Proxy whose target is a function?</p>
+<p>AWB: It's not an ordinary ECMAScript function</p>
+<p>MM: Anything we do, we should ask &quot;What does it do across membranes?&quot; There are two criteria that often come into conflict:</p>
+<ul>
+<li>Security</li>
+<li>Transparency</li>
+</ul>
+<p>Discussion about Security vs. Transparency</p>
+<p>EA: What happens when do bind on a function proxy?</p>
+<p>MM: fail?</p>
+<p>DH: This is shocking.</p>
+<p>MM: bind is a perfect example, there is no conflict between security and transparency. You'd like bind to work on proxy functions</p>
+<p>EA: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-built_in">Function</span>.prototype.bindSuper
+</code></pre>
+<p>MM: They're saying, do the [[get]] on the proxy, you don't get bindSuper back, you get a proxy for bindSuper
+... membrane safe.</p>
+<p>YK: Change bind?</p>
+<p>DH: Can't change bind, varargs</p>
+<p>Mixed discussion re: home binding.</p>
+<p>AWB: Expose the home binding via trap?</p>
+<p>DH: trap makes sense to me</p>
+<p>MM: From the method you have access to the home binding?</p>
+<p>AWB: yes</p>
+<p>MM: Don't like that</p>
+<p>AWB: Another way</p>
+<p>WH: The method calls &quot;super&quot; and expects to reach it's super</p>
+<p>AWB: There could be a super call trap</p>
+<p>YK: Any objects to bindSuper?</p>
+<p>DH: No idea what this means.</p>
+<p>BN: What is the material difference between defineMethod and bindSuper?</p>
+<p>bindSuper: like bind, but only changes super. Could be defined in terms of Object.defineMethod:</p>
+<pre><code class="language-js"><span class="hljs-comment">// illustrative only</span>
+<span class="hljs-built_in">Function</span>.prototype.bindSuper = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">homeObj</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.defineMethod(homeObj, <span class="hljs-keyword">this</span>);
+};
+</code></pre>
+<p>changing this and super is a two step change:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">super</span>.foo(<span class="hljs-keyword">this</span>); }
+
+<span class="hljs-keyword">var</span> o = {
+  foo(target) {
+
+  }
+}
+(fill <span class="hljs-keyword">in</span> later
+</code></pre>
+<p>DH: bindSuper is the max/min of define</p>
+<ul>
+<li>takes one target argument</li>
+<li>copies code and changes super references to target</li>
+</ul>
+<p>on a bound function?</p>
+<p>BE: On a function with this and super, changing both will create two new functions</p>
+<p>AWB: This is a &quot;clone function&quot;</p>
+<p>DH: Meaning, only clone the this-binding, not the expandos</p>
+<p>...</p>
+<p>AWB: you'll need to bindSuper, then bind</p>
+<p>AWB: If you want it to work in either direction</p>
+<p>WH: binding super after binding this will cause problems. That would be an anti-feature that breaks abstraction. A lot of times, code will return a bound function specifically to prevent you from changing this. Changing super in such a function would break the abstraction.</p>
+<p>?: Want bind and bindSuper to commute</p>
+<p>WH: Don't want them to commute. They're fundamentally different. bind can only be done once and freezes the this binding. bindSuper can be done repeatedly and doesn't freeze the super binding.</p>
+<p>?: You can already rebind this in a bound function</p>
+<p>MM: No. If you bind it again, it doesn't mutate the bound this value; the second one is ignored.</p>
+<p>DH: (whiteboard)</p>
+<ul>
+<li>mixin -&gt; defer, focus on primitive</li>
+<li>defineMethod -&gt; not proxyable</li>
+<li>bindSuper -&gt; good</li>
+<li>proxying -&gt; good</li>
+<li>composition with bind
+bind().bindSuper() -&gt; ERROR.
+bindSuper().bind() -&gt; OK.</li>
+</ul>
+<p>bindSuper can be called on the result of bindSuper (which is why YK/MM dislike the use of &quot;bind&quot;)</p>
+<p>Alternative names:
+resuper, bindSuper, supersede, withSuper, super?</p>
+<p>withSuper, bindSuper?</p>
+<p>bindSuper(obj[, ...])</p>
+<p>BN: what does super.valueOf() return?</p>
+<p>DH: should be this, similar to what super evaluates to in Smalltalk (according to AWB)</p>
+<ul>
+<li>static error vs dynamic error? DYNAMIC.</li>
+<li>where is super given a binding (other then class)?
+<ul>
+<li>class methods</li>
+<li>method shorthand</li>
+<li>in obj literal wherever name inferrable</li>
+</ul></li>
+</ul>
+<p>Discussion re: naming. The shed is pink? It's more of a mauve, I think. You would.</p>
+<a href="#consensusresolution-super-and-object-literals"><h4 id="consensusresolution-super-and-object-literals">Consensus/Resolution</h4></a><ul>
+<li>Remove Object.mixin</li>
+<li>&quot;toMethod()&quot; wins -- debate about argument order</li>
+<li>debate about what [[MName]] is and what it's derived from
+<ul>
+<li>super delegation uses [[Name]]</li>
+<li>there's a prototype property for name as well</li>
+<li>and functions with names have an own property that's .name, while function.prototype has a .name that's a null string</li>
+<li>.name is configurable, non-writeable, but not necessarialy an own property -- depends on how the function was defined</li>
+<li>clarification that &quot;.name&quot; has no effect on [[Name]]</li>
+<li>clarification that &quot;.name&quot; has no semantic effect on other methods that might consume a name</li>
+<li>copied: length</li>
+<li>result name: whatever we decided [[mname]] was</li>
+<li>bound functions cannot be converted to methods</li>
+<li>bind().toMethod() -&gt; throws</li>
+</ul></li>
+</ul>
+<p>Function.prototype.toMethod(home[, mname])</p>
+<p>Dave, please review the details above.</p>
+<a href="#reconsidering-the-map-custom-comparator-api"><h2 id="reconsidering-the-map-custom-comparator-api">Reconsidering the Map custom comparator API</h2></a><p>(Dave Herman)</p>
+<p>DH: Something incredibly gross about having an API that allows exactly one string, but I know we need to solve the bigger problem which is being able to provide performant custom comparators.</p>
+<p>Can we just get rid of this argument?</p>
+<p>WH: [Recaps consensus decision from prior meeting and the reasoning route by which we arrived at it.]</p>
+<p>MM: (gives memoization example)</p>
+<p>DH: This can be addressed in ES7</p>
+<p>Discussion re: -0/+0 difference.</p>
+<p>It was pointed out the only difference between the default comparator and the is comparation is the handling of -0/+0 and that a subclass of Map that ditingishes between +0 and -1 using Object.is can easily be written in ES code.</p>
+<a href="#consensusresolution-reconsidering-the-map-custom-comparator-api"><h4 id="consensusresolution-reconsidering-the-map-custom-comparator-api">Consensus/Resolution</h4></a><ul>
+<li>Remove second param to Map and Set constructor</li>
+<li>Defer to ES7</li>
+</ul>
+<a href="#mathhypot-and-precision"><h2 id="mathhypot-and-precision">Math.hypot() and precision</h2></a><p>(Dave Herman)</p>
+<p><a href="http://people.mozilla.org/~jorendorff/es6-draft.html#sec-math.hypot">http://people.mozilla.org/~jorendorff/es6-draft.html#sec-math.hypot</a></p>
+<p>DH: Oliver Hunt brought this up, do we want to maximize precision (by sorting) and take the performance hit? Or do them in the provided order.
+Prefer the latter. Oliver prefererred sorting for precision but taking the performance hit.</p>
+<p>BE/DH: He's not here.</p>
+<p>Referring to IEEE 754</p>
+<p>Luke provided the original spec text, but it's changed since then.</p>
+<p>BE: need to look at SpiderMonkey implementation and possibly provide new spec text.</p>
+<p>WH: Sorting doesn't matter much in this case; it's a second-order effect. Cancellation is impossible because all squares being added are  nonnegative.</p>
+<p>WH: What does greatly matter is not overflowing for values &gt; sqrt(largest finite double). What does hypot(1e200, 1e210) do?
+BE (runs it on bleeding edge Firefox): About 1e210
+WH: Good. We do want to avoid the intermediate overflow that would turn this into +?.</p>
+<p>[ more discussion ]</p>
+<p>?: This isn't just about hypot. How should we specify precision in general for things such as transcendental function.</p>
+<p>WH: It's a moving target. Do not want to encode precision requirements in the standard on anything other than basic arithmetic or number?string conversion in the spec because those are complicated and how to specify them varies depending on the function. Best thing to do is link to some existing writeup describing best practices.</p>
+<p>BE: I'll beat the drum to get a spec. Dave's right that it's bad language.</p>
+<a href="#consensusresolution-mathhypot-and-precision"><h4 id="consensusresolution-mathhypot-and-precision">Consensus/Resolution</h4></a><ul>
+<li>Brendan to propose replacement for last two steps.</li>
+</ul>
+<a href="#410-generator-arrow-function-syntax"><h2 id="410-generator-arrow-function-syntax">4.10 Generator arrow function syntax</h2></a><p>(Brendan Eich)</p>
+<p>BE: This isn't a big deal and should be easy to bring into ES6. Experience so far has been that people love arrow functions and generators and want a generator arrow</p>
+<p>(whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-comment">// current</span>
+x =&gt; x * x;
+<span class="hljs-function">(<span class="hljs-params">...</span>) =&gt;</span> { statements }
+(...) =&gt; ( expr )
+
+<span class="hljs-comment">// proposed generator arrows...</span>
+
+<span class="hljs-comment">// Irregular</span>
+() =*&gt;
+
+<span class="hljs-comment">// Hostile to ! (async function)</span>
+() =&gt; * { ...yield... }
+
+<span class="hljs-comment">// Not good</span>
+() =&gt; * (<span class="hljs-keyword">yield</span> a, <span class="hljs-keyword">yield</span> b)
+
+<span class="hljs-comment">// Ok if 1 token</span>
+x *=&gt; x * x;
+
+<span class="hljs-comment">// Bad (ASI)</span>
+*<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ...
+
+<span class="hljs-comment">// Hostile to !</span>
+(x) =* {...}
+
+</code></pre>
+<p>WH: Don't like <em>=&gt; because it swaps the order from function</em>.</p>
+<p>WH: The ! problem in =&gt;* can be solved by using % or ? instead of !. Would prefer those characters anyway.</p>
+<p>BN: Another (strawman) possibility is the presense of yield.</p>
+<p>BE/WH: No</p>
+<p>DH: Recalls implied generator (yield presense) footgun</p>
+<p>DH: There is not a 1-to-1 correspondance to where you'd use function or function *. Arrow is not a replacement for all functions that want lexical this.</p>
+<a href="#consensusresolution-410-generator-arrow-function-syntax"><h4 id="consensusresolution-410-generator-arrow-function-syntax">Consensus/Resolution</h4></a><ul>
+<li>No addition, revisit for ES7</li>
+</ul>
+<a href="#for-let"><h2 id="for-let">for-let</h2></a><p>(Brian Terlson)</p>
+<p>BT: We've shipped for-let without fresh bindings per iteration (according to the current spec) but we're ok with updating.</p>
+<p>MM: Consensus?</p>
+<p>RW: recalling the consensus from yahoo 2012</p>
+<p>DH: Need consensus on the semantics of capturing in the expression positions</p>
+<p>DH: if there's something that &quot;closes over&quot; that variable, what's that referring to? I remember that thead, but I don't reacall the otucome</p>
+<p>AWB: no definitive outcome... no satisfactory solutions</p>
+<p>DH: we have this job on this committee... ;-)</p>
+<p>BT: that we shipped in IE has no weighting on this?</p>
+<p>AWB: nope. Should have looked at the spec which has notes to this effect</p>
+<p>(discussion about binding per iteration)</p>
+<p>AWB: C# addresses this by saying &quot;this is insane, so for C-style of or, we have per-iteration bindings, not per-loop bindings&quot;</p>
+<p>MM: so let in the head of the loop creates only one location?</p>
+<p>(yes)</p>
+<p>EA: if we don't resolve this today, we sould fallback to what IE 11 does.</p>
+<p>DH: sure, but we have to go through this thread</p>
+<p>AWB: The first time you initialize, create an extra scope contour, the zeroth iteration. This is where the capture occurs and the subsequent iterations propagate to that scope.</p>
+<p>AWB: if you order these things right, the 3rd part happens at the end, but before your propagate</p>
+<p>MM: you mutate and then the value gets copied... seems fine</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> a = [];
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>, f = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> i * i, a.push(f); i &lt; N; i++) {
+  a.push(f);
+}
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> f <span class="hljs-keyword">of</span> a) {
+    <span class="hljs-built_in">console</span>.log(f());
+}
+</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>, f = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> i++; i &lt; <span class="hljs-number">1</span>; f()) {
+}
+</code></pre>
+<p>This is an infinite loop. Reasoning:
+1) The outer scope receives its initial value for i and f. Critically, f's i now binds to this outer binding.
+2) The outer scope forwards these values into the first iteration of the loop
+3) In the beginning of the 1st loop iteration, the test is executed. At this point, i is still zero.
+4) After, still on the first iteration, the test for i &lt; 1 fails because i is zero.
+5) Since we never modify the loop variable, this must be an infinite loop.</p>
+<p>BE: FWIW, Dart has the same semantics.</p>
+<pre><code class="language-dart"><span class="hljs-keyword">void</span> main() {
+  foo(fun) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'pre'</span>);
+    <span class="hljs-built_in">print</span>(fun());
+  }
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, inc = () =&gt; i++, j = foo(inc); i &lt; <span class="hljs-number">5</span>; inc = () =&gt; i++) {
+    <span class="hljs-built_in">print</span>(i);
+    inc();
+  }
+}
+</code></pre>
+<p>outputs</p>
+<pre><code>pre
+<span class="hljs-number">0</span>
+<span class="hljs-number">1</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span>
+</code></pre>
+<a href="#consensusresolution-for-let"><h4 id="consensusresolution-for-let">Consensus/Resolution</h4></a><ul>
+<li>Brand new outer scope created around the entire loop that has variables that are declared in the loop head, and it gets the initial values</li>
+<li>There is a new scope for each iteration that receives values from the previous iteration</li>
+</ul>
+<a href="#5-post-es6-spec-process"><h2 id="5-post-es6-spec-process">5 Post ES6 Spec Process.</h2></a><p>(Rafael Weinstein)</p>
+<p>Train model.</p>
+<a href="#consensusresolution-5-post-es6-spec-process"><h4 id="consensusresolution-5-post-es6-spec-process">Consensus/Resolution</h4></a><ul>
+<li>Sounds reasonable, we're going to try it.</li>
+</ul>
+<a href="#ordering-of-scheduling-of-microtasks"><h2 id="ordering-of-scheduling-of-microtasks">Ordering of scheduling of microtasks</h2></a><p>BE: FIFO</p>
+<p>AWB: In the ES6 we need to say something.</p>
+<p>?: Examples of why browsers want to use priority queues to schedule tasks</p>
+<p>[ Debate about whether in ES6 we need to mention the priority queues ]</p>
+<p>?: DOM and other tasks are beyond the scope of the standard. Just say that ES6 tasks are in FIFO.</p>
+<p>WH: Would prefer to mention a richer priority structure in the spec; otherwise other groups (W3C) will want to fit their tasks into our FIFO, which is not desirable. At the very least we must say that other tasks with visible effects may get arbitrarily interleaved between the ES6 tasks we talk about in the spec, so don't assume that nothing can come between adjacent ES6 tasks in the FIFO.</p>
+<p>MM: Rafael and I went throught the existing DOM behavior...</p>
+<p>YK: Disagrees with Rafael. Bucketing. Series of buckets. The first bucket is the cheapest operations and the last bucket is the most expensive bucket. If a bucket adds something to an earlier bucket then you go back to to earliest bucket that has items in it. Each bucket is a FIFO queue.</p>
+<p>WH: Can you reorder the operations so that the DOM operation happens next to each other.</p>
+<p>YK: I think a priority queue is isomorphic to buckets.</p>
+<p>AWB: In ES6 we only have one class of priority which is the priority of Promises. We do not need to spec that there might be different priorities.</p>
+<a href="#consensusresolution-ordering-of-scheduling-of-microtasks"><h4 id="consensusresolution-ordering-of-scheduling-of-microtasks">Consensus/Resolution</h4></a><ul>
+<li>ES6 spec needs to spec that Promises are serviced in a FIFO queue</li>
+<li>Other non ES6 tasks might be interleaved arbitrarily</li>
+<li>Interleaving of the Promise queue by other non ES6 operations</li>
+</ul>
+
+</body>

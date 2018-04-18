@@ -1,0 +1,597 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 27, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-27-2016-meeting-notes"><h1 id="september-27-2016-meeting-notes">September 27, 2016 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (MS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Domenic Denicola (DD), Rick Waldron (RW), John Buchanan (JB), Kevin Gibbons (KG), Peter Jensen (PJ), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Dean Tribble (DT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Daniel Rosenwasser (DRR), Mikeal Rogers (MRS), Jean-Francis Paradis (JFP), Sathya Gunasekasan (SGN), Juan Dopazo (JDO), Bert Belder (BBR), James Snell (JSL), Shu-yu Guo (SYG), Eric Ferraiuolo (EF), Caridy Patiño (CP), Allen Wirfs-Brock (AWB), Brendan Eich (BE)</p>
+<hr>
+<a href="#introduction"><h2 id="introduction">Introduction</h2></a><p>Template link: <a href="https://github.com/tc39/Reflector/issues/19#issuecomment-234276510">https://github.com/tc39/Reflector/issues/19#issuecomment-234276510</a></p>
+<p>AWB: Will ne sitting in for John Neumann</p>
+<p>RW: Notes at reflector</p>
+<ul>
+<li>Note taking TBD by subject</li>
+</ul>
+<p>AWB: Agenda approval?</p>
+<ul>
+<li><p><a href="https://github.com/tc39/agendas/blob/master/2016/09.md">https://github.com/tc39/agendas/blob/master/2016/09.md</a></p></li>
+<li><p>Approved</p></li>
+</ul>
+<p>AWB: Previous meeting notes approval?</p>
+<ul>
+<li>Approved</li>
+</ul>
+<p>AWB: ECMA414 Approval?</p>
+<ul>
+<li>Feedback was: missing normative text</li>
+<li>Second edition written to address those issues</li>
+</ul>
+<p>MM: (clarifying motivation?)</p>
+<p>WH: I had the same feedback when this initially came up in TC39. A standard can't be just a bibliography; it needs to state what it's standardizing.
+István SEBESTYEN: Waldemar, it is more than a bibliography. It is a compilation of normative and not-normative ECMAScript components, with normative and informative links. What is important that it is standard that will not change every year, and when fast-tracked is fine under the RAND IPR Regime of ISO/IEC. This solves the problem that Ecma will not have to fast-track its RF ECMASCript standards every year, which would not work...Too fast, for keeping the Ecma and ISO specs in synchronization.</p>
+<p>AWB: Please look at linked pdf, review and have decision for Thursday</p>
+<p>WH: Little bug in ECMA414: What's a &quot;share conform&quot;?</p>
+<p>DH: Someone on my team can archive ecmascript.org in a way which is more maintainable. Are we OK with keeping a static snapshot of bugzilla as well as the wiki?</p>
+<p>DE: preserve open/unaddressed items?</p>
+<p>DH: Looking for approval of snap shot?</p>
+<ul>
+<li>Approval</li>
+</ul>
+<a href="#conclusionresolution-introduction"><h4 id="conclusionresolution-introduction">Conclusion/Resolution</h4></a><ul>
+<li>Agenda Approved</li>
+<li>July Notes Approved</li>
+<li>Snapshot of bugs.ecmascript.org approved</li>
+<li>Review ECMA414</li>
+</ul>
+<a href="#contributor-agreement-for-guests"><h2 id="contributor-agreement-for-guests">Contributor Agreement for Guests</h2></a><p>AWB: Individuals who are not currently representing an ECMA member, please talk to Brian and make sure to sign the contributors' royalty free patent grant.</p>
+<p>BT: <a href="https://github.com/tc39/ecma262/blob/master/CONTRIBUTING.md">https://github.com/tc39/ecma262/blob/master/CONTRIBUTING.md</a> , please sign the document listed there</p>
+<a href="#agenda-scheduling"><h2 id="agenda-scheduling">Agenda scheduling</h2></a><ul>
+<li>Proxy integrity checks discussion first thing Wednesday morning</li>
+<li>Node module discussion 11-3 (at least)</li>
+<li>Saam is here for Tuesday, wants to present OrdinarySetPrototypeOf</li>
+<li>Rest/Spread property review not ready Tuesday</li>
+<li>Target 12:30 for lunch</li>
+</ul>
+<a href="#7-ecma262-status"><h2 id="7-ecma262-status">7 ECMA262 Status</h2></a><p>(Brian Terlson)</p>
+<p>BT: Tooling: Ecmarkup is now much faster, and written in TypeScript</p>
+<p>YK: We are writing the Handlebars spec in Ecmarkup, and it is definitely helpful.</p>
+<p>RW: We are using it to specify the IO Plugin standard for Nodebots</p>
+<p>BT: TypeScript is using it and C# is considering using it as well. The question for me is, what kind of changes does it make sense to add, when there are feature requests that aren't used in ECMA262? E.g., * and + for grammars. My feeling is to add things when they don't compromise 262. I would break out a separate notational conventions document, including * and +, which had all of the features of the tool. This potentially impacts the editorial conventions in 262, though I will work to not require those changes.</p>
+<p>WH: I wouldn't want to use * and + in the ECMAScript grammar.</p>
+<p>BT: Agree; these are meant only for other languages.</p>
+<p>BT: With Domenic, I am working on integrating better with the spec authoring tools in HTML-land. This includes standardizing on a bibliography format so we can share symbols and cross-reference well.</p>
+<p>BT: Spec fixes since the last meeting:</p>
+<ul>
+<li>Fix to GetOwnPropertyDescriptors (discussed at last meeting)</li>
+<li>Editorial fixes</li>
+<li>Async functions PR is out
+<ul>
+<li>Editorial flux</li>
+<li>Please review PR</li>
+</ul></li>
+</ul>
+<p>AWB: Any observable changes?</p>
+<p>DE: One semantic bug reported</p>
+<p>BT: But no major changes</p>
+<p>BT: Grammar plumbing in spec, previously &quot;hand waved&quot;, but now fully written</p>
+<p>AWB: How many implementations are?</p>
+<p>BT: At least two</p>
+<p>EFT: We have full patches, I think that's implementation experience</p>
+<p>AWB: If we found bugs, they should be reported</p>
+<p>BT: A small bug was fixed</p>
+<p>BT: Editorial fix: UniqueFormalParameters is the new StrictFormalParameters</p>
+<p>BT: Normative bug fix: toPrecision</p>
+<p>BT: new.target/super inside eval; needs consensus?</p>
+<p>KG: The spec previously allowed super calls inside functions inside eval, even though they are prohibited by static semantics in the main function</p>
+<p>AWB: I believe this is a hanging loose end from when we stripped out super from normal functions</p>
+<p>BT: Yes, and it is actually disallowed within arrow functions. It's weird.</p>
+<p>AWB: Now, with the PR, there are &quot;static semantics&quot; that apply to the eval that prohibit super in exactly the same situations where they would be prohibited not in eval.</p>
+<p>BT: Sounds like we have consensus. Also, same deal with new.target? Good, I'll take those PRs then. There are some further needs-consensus PRs later in the agenda.</p>
+<p>AWB: We have two more meetings before ES2017 is done. If there are things that are targeting that release, the clock is running. If there are things in Stage 3 waiting for two implementations, there's not a lot of time left--the champions of those features need to be championing getting things implemented.</p>
+<p>SG: For SharedArrayBuffer, we have implementations well underway and fairly mature in multiple browsers, but the memory model is still under development. How should this apply?</p>
+<p>AWB: The memory model is part of the spec, and you need this to verify that the implementations match the spec.</p>
+<p>BT: From my async function experience, I can also suggest that you keep in mind that the PR to merge into the spec is a lot of work. We may want to put PR work as part of Stage 4 requirements, as the standalone spec often has some hand-waving.</p>
+<p>RW: I agree; even for exponentiation, a much smaller proposal, it was a bunch of work to integrate everything and make it all concrete</p>
+<p>YK: implementors hesitant when issues are left open, concerns that these maybe long term issues.</p>
+<p>SYG: [For SharedArrayBuffer] Implementations will do what will work out for real chips; we have to capture a memory model that other people can reason about, but the implementation won't change since the hardware does something. I don't want to speak for everyone, but I think SpiderMonkey and V8 agree on this.</p>
+<p>WH: The bug we ran into was that the memory model formalism was allowing synchronization without atomics; that's not something we want to allow but is hard to fix.</p>
+<a href="#conclusionresolution-7-ecma262-status"><h4 id="conclusionresolution-7-ecma262-status">Conclusion/Resolution</h4></a><ul>
+<li>Please review async functions PR</li>
+</ul>
+<a href="#stage-4-process-update"><h2 id="stage-4-process-update">Stage 4 Process Update</h2></a><p>BT: Include PR for Stage 4 approval?</p>
+<p>&quot;Editor has signed off on your PR&quot;</p>
+<a href="#conclusionresolution-stage-4-process-update"><h4 id="conclusionresolution-stage-4-process-update">Conclusion/Resolution</h4></a><ul>
+<li>Editor Sign Off on PR</li>
+<li>Done: <a href="https://github.com/tc39/process-document/commit/e0009705959360f35cf44468c5568e9d5bdbae0d">https://github.com/tc39/process-document/commit/e0009705959360f35cf44468c5568e9d5bdbae0d</a></li>
+</ul>
+<a href="#8-ecma402-status"><h2 id="8-ecma402-status">8 ECMA402 Status</h2></a><p>DE: formatToParts has been removed from draft due to missing implementation. The only implementation was Intl.js</p>
+<ul>
+<li>Would like to roll back to Stage 3</li>
+<li>Spec can easily accommodate reintroduction</li>
+</ul>
+<a href="#conclusionresolution-8-ecma402-status"><h4 id="conclusionresolution-8-ecma402-status">Conclusion/Resolution</h4></a><ul>
+<li>Set back to Stage 3</li>
+</ul>
+<a href="#9-test262-status"><h2 id="9-test262-status">9 Test262 Status</h2></a><p>(Leo Balter)</p>
+<p>LBR: Small updates, harness, etc. I would like some help on reviewing test262 patches and writing tests, as I don't have enough time for everything.</p>
+<p>BT: If used node harness in the past and didn't like it, try it again!</p>
+<ul>
+<li>host specific stuff separated</li>
+<li></li>
+</ul>
+<p>LBR: Need to work on update for TR104</p>
+<p>DE: Were we going to retract this document?</p>
+<p>AWB: This document is informatively referenced by ECMA 414; István was suggesting to retitle as TR414? (since it also includes ECMA-402 tests)
+István Sebestyén (sitting in CH...): No, that was a mistake on my side... Sorry... I wanted to keep the original TR number (but 2nd Edition), which I think it is TR/104? I do not have the Ecma TR list in front of me....</p>
+<p>LBR: Need to arrange further Test262 work</p>
+<p>(discussion, re: agenda ordering, etc)</p>
+<p>(break)</p>
+<a href="#112f-ordinarysetprototypeof-fix--prototype-loops-and-proxy-objects"><h2 id="112f-ordinarysetprototypeof-fix--prototype-loops-and-proxy-objects">11.2.f OrdinarySetPrototypeOf fix / Prototype loops and Proxy objects</h2></a><p>(Michael Saboff)</p>
+<p><a href="https://docs.google.com/presentation/d/1kHuEtVc-GPp3rbddMVBATKYQ5qLz2o4LnNGUNg8cCz4/edit?usp=sharing">https://docs.google.com/presentation/d/1kHuEtVc-GPp3rbddMVBATKYQ5qLz2o4LnNGUNg8cCz4/edit?usp=sharing</a></p>
+<p>SBI: The cycle check in OrdinarySetPrototypeOf bails out on Proxies, which it has to, as it can run any code for the prototype. It's only possible to really validate in that case.</p>
+<ul>
+<li>bug: anything with setPrototypeOf</li>
+</ul>
+<p>MM: Does this allow users to detect whether an object is a Proxy?</p>
+<p>MS: Let's discuss the feature first</p>
+<p>SBI: Maybe, we'll have to think about this</p>
+<p>SBI: The general motivation is to make Window or Location, which use the ordinary get/set prototype methods, but still make sense to have cycle checks for.</p>
+<p>EFT: We ran into this in Firefox as well</p>
+<p>SBI: Do we think it's a goal to prevent prototype loops? I'm thinking about cases that use [[Prototype]], which ordinary objects use, and host objects like Window and Location should have these checks as well</p>
+<p>MM: disagree, re: proxy</p>
+<p>SBI: The proposal is: embedders like HTML should have the benefits of this cycle check</p>
+<ul>
+<li>get the benefit of the cycle trap</li>
+</ul>
+<p>BT: objects that have exotic GetPrototypeOf should be allowed to have cycle trap?</p>
+<p>AWB: You have to be more restrictive than simply an exotic SetPrototypeOf</p>
+<p>SBI: Can you detect whether something is a Proxy by trying to induce a cycle check?</p>
+<p>MM: The simplest stance would be to drop the cycle prohibition altogether, since it can't coherently be enforced</p>
+<p>AWB: Spec has no cycle prohibition</p>
+<p>SBI: Proxy not have [[Prototype]] ...</p>
+<p>MM: If circularity requirement dropped...</p>
+<p>DH:</p>
+<ol>
+<li>OrdinarySetPrototypeOf does cycle check? Yes</li>
+<li>Impossible to set prototypes with proxy without cycles? Seems wrong</li>
+</ol>
+<p>MM: Last time we discussed this, one proposal was to use the [[Prototype]] of the target for the loop checks (going down the target chain as necessary). That's coherent because it proves there can't be an instant in time where there's a cycle.</p>
+<p>SBI: I think this is not what I'm trying to argue. I'm saying, consider other objects, do we care about cycle checks? I am proposing</p>
+<p>MM: w/o proxy no cycle checks agree. But we have proxy, so disagree</p>
+<p>SBI: This spec proposal is just to keep Proxies with the same behavior, and bail out in that case as we do now, but allow embedder exotic objects to have the cycle check.</p>
+<p>Proposal:</p>
+<p>As was mentioned in the original bug (comments 9 &amp; 11), a loop check could be performed through ordinary lookup of each object’s [[Prototype]] without trapping to any handler.  Specifically:
+Eliminate step 8.c.1 from 9.1.2.1
+Change 26.2.2 Properties of the Proxy Constructor to state that proxy exotic objects have an immutable [[Prototype]] property of null.
+Remove the comment in section 6 of the possibility of prototype loops.</p>
+<p>AWB: to host objects, ie. location. Anything else where host might create, but not using proxy, defining non-standard behavior—there is any easy out. Existing cases are doing checks.</p>
+<ul>
+<li>An exotic object that uses [[Prototype]], can override GetPrototypeOf, but has to be idempotent.</li>
+</ul>
+<p>EFT:</p>
+<p>DD: Doesn't work because document.domain, which allows to change whether window is same origin or cross origin. Window will change from prototype to null</p>
+<p>AWB: If you can only change to null, can't create a circularity</p>
+<p>SBI: Could give Proxy [[Prototype]] of null just for this case</p>
+<p>AWB: How?</p>
+<p>DD: This would blacklist proxy</p>
+<p>SBI: some flag? A square-bracket whatever, my GetPrototypeOf should make me terminate the lookup</p>
+<p>MM: Using the proxy target's prototype, follow the target's chain?</p>
+<p>SBI: Would work</p>
+<p>AWB: How relates to HTML problem?</p>
+<p>EFT: Don't know</p>
+<p>KG: Instead of whitelisting ordinary objects, we would change this loop for Proxy.</p>
+<p>AWB: Decided that proxy isn't the problem.</p>
+<ul>
+<li>issue is non-Proxy</li>
+</ul>
+<p>MS: The catch is too broad and catches the wrong things</p>
+<p>KG: (Kevin, you had a point here and I missed it, please fill in if you can)</p>
+<p>MM: only w/r to the cycle check. Anyway, I see that my proposal does not add value. I withdraw the objections.</p>
+<p>YK: I assume you don't want to be able to detect whether something is a Proxy.</p>
+<p>AWB: You could detect whether something is a Proxy by &lt;insert exact procedure, which would throw only if not a Proxy&gt;</p>
+<p>MM: A Proxy could throw to prevent it from being detected in this way.</p>
+<p>DH: Is it sometimes poss if it's a proxy, or</p>
+<p>DD: Glad we nailed that down; I think whatever we do here will work with that.</p>
+<p>YK: reads are always exact same to Proxy.</p>
+<ul>
+<li>Presently stop you anytime you enter a cycle</li>
+<li>if restriction on the [[Get]] side, always have to do it</li>
+</ul>
+<p>AWB: Have now is what we want. Overhead on a [[Set]], which almost never happens. Allows optimization on [[Get]].</p>
+<p>MM: I think it's important to note that we have a &quot;yes&quot; for the ability for Proxies to be undetectable</p>
+<p>SBI: This proposal, with respect to Proxies, is indistinguishable from current behavior</p>
+<p>YK: if possible to demonstrate that a proxy can evade, then we need to be aware of that</p>
+<p>MM: if proxy chooses to evade, then it always evades. Not all proxies evade, just those that already.</p>
+<p>MS: I agree that we don't want to change the observability of whether something is a Proxy. I don't want to go down the rabbit hole of whether we have that or not. We can just discuss whether we change that observability.</p>
+<p>MM: Agree</p>
+<p>AWB: host objects allowed to define GetPrototypeOf behavior, but doing it in SetPrototypeOf</p>
+<p>MS: Discussion is to change on the [[Set]] side</p>
+<p>DD: Some mechanism to allow host objects to &quot;opt-in&quot; to this check</p>
+<p>BT: an opt-in seems better</p>
+<ul>
+<li>Can blacklist proxy, but then implementations have to think about how that effects</li>
+<li>An additional flag?</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Provide hooks in the spec?
+<ul>
+<li>Opt-in or Opt-out</li>
+</ul></li>
+<li>Problem for HTML spec? It can just say so: &quot;this object must be included in ...&quot;</li>
+</ul>
+<p>BT: Let's have a separate discussion about whether we should have either no affordances for HTML, whether we should have prose allowances, or whether we should be completely formal. This should be a separate agenda item.</p>
+<p>AWB: Do we need affordance for <em>this</em> particular case?</p>
+<p>BT: This case: reasonable for impl to want to have a custom SetPrototypeOf trap for the purpose of stability</p>
+<p>EFT: We have hit the end of the timebox</p>
+<p>BT: Should be possible for impl to impl HTML and ES and conform to the spec. Arguably, Normative prose: an impl &quot;might&quot; say &quot;do circ check...&quot;</p>
+<p>DE: Let's put smallcaps MIGHT all over the place in the spec!</p>
+<p>AWB: Spec language that checks &quot;has OrdinarySetPrototypeOf&quot;, do...</p>
+<p>AWB/BT: agree to find some language to resolve? For example, some prose indicating whether a [[GetPrototypeOf]] internal method is suitable for these circularity checks</p>
+<p>BT: Or, add an additional slot to all objects that's called [[GetPrototypeOfForCircularityCheck]], which has sane defaults, opts in or out. Allows host objects to set as necessary</p>
+<p>BT: Or, Domenic's proposal, give a host callback which you pass the object to to do this sort of check (like the loader hook)</p>
+<a href="#conclusionresolution-112f-ordinarysetprototypeof-fix--prototype-loops-and-proxy-objects"><h4 id="conclusionresolution-112f-ordinarysetprototypeof-fix--prototype-loops-and-proxy-objects">Conclusion/Resolution</h4></a><ul>
+<li>Allow host objects to participate in circuluarity checks</li>
+<li>Need a way to allow opt in/opt out. Editor discretion and review required</li>
+<li>Mark Miller is a reviewer</li>
+</ul>
+<a href="#11ia-arraybuffertransfer-retraction"><h2 id="11ia-arraybuffertransfer-retraction">11.i.a ArrayBuffer.transfer retraction</h2></a><p>(Shu-yu Guo)</p>
+<p>SYG: There was a proposal to transfer one ArrayBuffer to another, and detach the source. This was implemented in Firefox, and removed. I think no browser currently ships it. I talked with the original champion, Luke Wagner, and he is happy with this.</p>
+<p>AWB: The actual design was proposed by Google initially, this was about resizing ArrayBuffers. One use case was drop the size to 0, and the transfer was a kind of realloc. The transfer was proposed as a cleaner semantics</p>
+<p>SYG: Originally, this was for asm.js. The particular need for this is reduced by WebAssembly. Given all of these considerations, I am retracting the proposal, in case anyone feels strongly about not retracting the proposal. There is a particular use case for transferring regular ArrayBuffers into SharedArrayBuffers, but I think that should be handled by a separate proposal.</p>
+<p>YK: So no one implemented it?</p>
+<p>DE: This feature work is continuing under ChangeHeap in WASM, which does this in an instruction, with implementation underway in V8. Also, I think Chakra has some version of this.</p>
+<p>DD: Some more context, transferring ArrayBuffers is something we do all the time, e.g., in Streams, which also does resizing</p>
+<p>AWB: original motivation was resizing without copying</p>
+<p>(This is an updated link to the original gist: <a href="https://gist.github.com/lukewagner/2735af7eea411e18cf20">https://gist.github.com/lukewagner/2735af7eea411e18cf20</a> )</p>
+<a href="#conclusionresolution-11ia-arraybuffertransfer-retraction"><h4 id="conclusionresolution-11ia-arraybuffertransfer-retraction">Conclusion/Resolution</h4></a><ul>
+<li>Retracted</li>
+</ul>
+<a href="#102a-legacy-regexp-features"><h2 id="102a-legacy-regexp-features">10.2.a Legacy RegExp Features</h2></a><p>(Claude Pache, Mark Miller)</p>
+<p><a href="https://github.com/claudepache/es-regexp-legacy-static-properties">https://github.com/claudepache/es-regexp-legacy-static-properties</a></p>
+<p>MM: All credit goes to Claude Pache, I am championing this proposal as he does not sit on TC39. I'd like to ask for Stage 1.</p>
+<p>MM: The RegExp constructor has always had these bizarre properties like RegExp.$0. These are spooky action-at-a-distance global communication channels. The last RegExp match by any RegExp instance in that realm, the result of the match results in all of this extra information on the static properties. The good news, historically, has been that we never made it official, but unfortunately all browsers implement it, and so cross-browser JavaScript counts on it. At this point, we're better off codifying it so we're all in agreement on the precise semantics. We went through the same reasoning with <code>__proto__</code>, and it was great that we did that, as previously there was cross-browser disagreement. Like <code>__proto__</code>, this would specified as normative-optional, Annex B, so that environments which remove it (e.g., SES) can claim to be compliant without this feature. The properties are specified as configurable and actually deletable. Because a realm is not in a position to police other realms, this only updates from changes made in the same realm, and it also doesn't apply to subclasses. We are only providing this weird, non-local behavior in the narrowest box that we can, which accounts for what is needed to accommodate web reality.</p>
+<p>DE: Big fan of documenting web reality in specs like this, so that people can implement a real web browser just based on specs. seems implementable. realm check not trivial, but possible. Does change things, but worth trying. Will try in canary and assess what happens.</p>
+<p>YK: Recently bitten by statefulness of RegExp, lastIndex</p>
+<p>DD: (question about matchAll)</p>
+<p>MM: Orthogonal to this</p>
+<p>YK: Can we make a new RegExp that doesn't have these things?</p>
+<ul>
+<li>Used <code>const r = /.../g</code> and had state changes :(</li>
+</ul>
+<p>MM: No relationship between these issues and the proposal</p>
+<p>YK: Agree, was asking if there was a way to downplay existing problems if there is a way to do that?</p>
+<p>AWB: Can we also apply this to <code>/u</code>?</p>
+<p>MM: Don't believe that use of that feature cuts off spooky action-at-a-distance behavior</p>
+<p>DE: Impls shipping unicode regexp, don't want to break web</p>
+<p>JHD: This is a refactoring hazard, in case someone adds /u to an existing RegExp</p>
+<p>MM: I'm proposing that we leave these on for Unicode RegExps, as per Claude's proposal, which just cuts things off for subclassing</p>
+<p>DE: Claude's proposal stashes the Realm on the RegExp in RegExpAlloc, and checks it from RegExpBuiltinExec</p>
+<p>MM: We should revisit this mechanism after Stage 1</p>
+<p>MS: How should we discourage people from using it?</p>
+<p>EF: How about we put that language on MDN?</p>
+<p>JHD: Annex B says that programmers should not use the features</p>
+<p>YK: In some ways, Annex B is necessary, actually.</p>
+<p>DE: We can discuss this proposal without discussing the nature of Annex B</p>
+<p>YK: Can we discourage?</p>
+<p>JHD: Yes, we already do</p>
+<p>WH: The proposed spec has headings such as &quot;get RegExp.$+&quot;. I assume that this means that the RegExp object has a property named &quot;$+&quot;, but &quot;get RegExp.$+&quot; doesn't really parse as spec text because + is an operator. What formalism should the spec use for referring to these?</p>
+<p>MS: is this list the intersection or the union of what browsers already ship?</p>
+<p>JHD: based on my previous testing, the intersection</p>
+<p>AWB/MM/MS all agree that with verification, intersection is best</p>
+<a href="#conclusionresolution-102a-legacy-regexp-features"><h4 id="conclusionresolution-102a-legacy-regexp-features">Conclusion/Resolution</h4></a><ul>
+<li><p>Stage 1 Approval</p></li>
+<li><p>Stage 2 Approval</p></li>
+<li><p>More work needed to come to clarity on the realm issue, namely when realms are saved and checked against what</p></li>
+<li><p>Move repo to tc39</p></li>
+</ul>
+<p>Reviewers:</p>
+<ul>
+<li>DD or DE</li>
+<li>AWB</li>
+<li>BT will review as editor</li>
+</ul>
+<a href="#11id-uleo-undefined-like-exotic-object"><h2 id="11id-uleo-undefined-like-exotic-object">11.i.d ULEO, Undefined-Like Exotic Object</h2></a><p>(Brian Terlson)</p>
+<p>BT: Let's discuss intent first: Layering of HTML and ECMAScript. In some cases, HTML hand-waves some prose to do things differently for the ECMAScript spec, or actually has some spec text to replace ECMAScript spec text. Currently, you cannot be conformant with both HTML and ECMAScript at the same time, so browsers choose HTML compliance and are not fully ECMAScript-conformant. There are several issues here, probably dozens.</p>
+<p>WH: Clarify?</p>
+<p>BT: From a spec perspective, it's not possible to be spec compliant in a browser. Several issues</p>
+<ul>
+<li><code>document.all</code>: an object that appears to be undefined for ToBoolean, typeof, abstract equality, however it's actually an object, and if you array index it, you get properties.</li>
+<li>This was born of code written to detect not-IE with <code>typeof document.all === &quot;undefined&quot;</code>, but still used <code>document.all</code> directly, eg. <code>document.all[0]</code></li>
+</ul>
+<p>(Does someone want to put some examples?)</p>
+<p>HTML has some sort of legacy constraints, and to the extent that we want web browsers to have ECMAScript-compliant implementations, those legacy constraints apply to us as well.</p>
+<p>AWB: Doesn't bother me that the implementation is a &quot;dialect&quot;. What bothers me is introduction of features that specify host implementations, eg. HTML</p>
+<p>YK: I think what you're saying is overly broad.</p>
+<ul>
+<li>legacy constraints can be addressed through some other -</li>
+</ul>
+<p>DD: We should not be making a spec which is bullet-proof against bad actors in other specs.</p>
+<p>BE: Not proposing a general purpose escape hatch for all actors</p>
+<p>MM: Can you show the details of your proposal?</p>
+<p>BT: believe that it's valuable to have the spec reflect reality of today, ie. HTML in browsers, even if it adds complexity.</p>
+<ul>
+<li>ULEO: do not want to give random host permission to have these and call it conformant</li>
+<li>Link to a specific HTML clause, &quot;if you are implementing this specific spec text, then you can use this, but otherwise cannot&quot;</li>
+</ul>
+<p>YK: That would be a cycle in the spec text</p>
+<p>DH: We could say, we don't want to add ULEOs in Node, and this upreference would prohibit that. How would that be for JSDOM?</p>
+<p>YK: If we give people general-purpose hooks, people may end up getting boxed-in and abuse it.</p>
+<p>MM: Do you create a JavaScript platform where users are able to write everything in JS?</p>
+<p>BT: I am proposing that JSDOM would not be able to have a ULEO. It would be a spec violation for Node to expose an API for this.</p>
+<p>DD: I think that's fine that JSDOM doesn't emulate document.all</p>
+<p>BFS: I think that's fine; I don't think Node cares</p>
+<p>DH: Either nobody wants this, in which case why write it in the spec, or it is wanted, in which case we need to expose it more generally.</p>
+<p>BT: No, there's a middle ground</p>
+<p>YK/DH: (discussing reality of prohibiting hosts from implementing)</p>
+<p>DD: What if we identify this as a mechanism for &quot;legacy host&quot;...</p>
+<p>DH: Why do anything at all?</p>
+<p>BT: Should be possible for an ES implementer to read this spec and know how the platform works. <code>document.all</code> cannot be described by the spec.</p>
+<p>YK: You can use the V8 API for this from any native Node module?</p>
+<p>DD: Yes, unfortunately</p>
+<p>BT: Practically speaking, we do not want ULEO to be encouraged to use this feature.</p>
+<p>DH: <code>document.all</code> is not something that real code in browsers are having problems with</p>
+<p>AWB: Happy to have the HTML spec handle this, replace <code>ToBoolean</code></p>
+<p>BT: That's what this does</p>
+<p>DH: As soon as there is a thing in the spec, it's very hard to stop people from using it. This requirement comes from building a web browser, and it's platonically a real case for when monkey-patching makes sense.</p>
+<ul>
+<li>There is a delta to JS semantics that is the browser semantics</li>
+</ul>
+<p>Discussion re: Annex B reality.</p>
+<ul>
+<li>The uplink won't prevent anyone from using it</li>
+</ul>
+<p>YK: If we make this restriction and there are other use cases, we can loosen it later</p>
+<p>BT: But I don't think there are other use cases</p>
+<p>DH:</p>
+<p>CM: All for implementors to break the rules if they need?</p>
+<p>DD: Where does that stop?</p>
+<p>AWB: Annex B is exclusively about things that are already in the language</p>
+<p>RW: We added the dunders to Annex B, which were host extensions but reflected reality</p>
+<p>EFT: Agrees</p>
+<p>AWB: But those pertain to Object</p>
+<p>RW: Are you keying on <code>document</code> as an entity specified elsewhere?</p>
+<p>AWB: Yes, or any</p>
+<p>(missed discussion due to etherpad fail, but here's the thing: you don't want to know what was said.)</p>
+<p>DH: it's important that we make people feel bad about using these features</p>
+<p>Repeated discussion about ownership of this behavior</p>
+<p>KG: (attempting to bring it back together)</p>
+<p>BT: Nice to normatively &quot;uplink&quot; to HTML spec</p>
+<p>BE: So ECMA262 is going to depend on HTML?</p>
+<p>BT: Just trying to explain the requirements.</p>
+<p>BE: (describes concerns about falsey objects b/c value objects) (eg throwing the baby out with the bathwater)</p>
+<p>DE: This is OK, they are both editing some of the same abstract operations, but one is horrible and scoped, and the other is general and clean; no contradiction.</p>
+<p>BT: The baby is safe</p>
+<p>BT: So, we are in grudging agreement that we do want to make such allowances, with appropriate scoping. Some changes are needed for the uplink to scope it.
+(recaps changes, will offer for review)</p>
+<p>AWB: Let's call it something referring to HTML, rather than ULEO.</p>
+<a href="#conclusionresolution-11id-uleo-undefined-like-exotic-object"><h4 id="conclusionresolution-11id-uleo-undefined-like-exotic-object">Conclusion/Resolution</h4></a><ul>
+<li>Review feedback</li>
+<li>HTMLDocumentDotAllObject</li>
+<li>Annex B
+<ul>
+<li>Revising the introductory text to Annex B</li>
+</ul></li>
+</ul>
+<a href="#hostobjectdefinepropertyreturnfalse"><h2 id="hostobjectdefinepropertyreturnfalse">HostObjectDefinePropertyReturnFalse</h2></a><p>DD: HTML has <code>WindowProxy</code>, when you navigate: things change. Configurable properties disappear. Thought we had a fix, Firefox implemented it, had a signfiicant number of websites that it broke, though it was implementable.</p>
+<p>From proposed PR:</p>
+<blockquote>
+<p>This allows host environments which need to override the Object.defineProperty behavior, for legacy compatibility, to preserve invariants while avoiding breaking web applications that depend on not-throwing when defining non-configurable, non-writable properties on WindowProxy. This does not alter the behavior of Reflect.defineProperty or [[DefineOwnProperty]].</p>
+</blockquote>
+<p>It was not web compatible.</p>
+<p>For web compatibility, either:</p>
+<ul>
+<li>HTML could monkey-patch JavaScript, or</li>
+<li>We could modify the essential object invariants</li>
+</ul>
+<p>MM: This approach takes the least weakening we came up with to be web-compatible.</p>
+<p>DD: The invariants said Object.defineProperty would throw on failure, but in this proposal:</p>
+<ul>
+<li>Allow certain objects to define properties where the operation returns false after failure, but does not throw. <a href="https://github.com/tc39/ecma262/pull/688/files#diff-3540caefa502006d8a33cb1385720803R22682">https://github.com/tc39/ecma262/pull/688/files#diff-3540caefa502006d8a33cb1385720803R22682</a></li>
+</ul>
+<p>AWB: Why can't we add something Annex B, as we just did? To specifically address this one case?</p>
+<p>YK: Why don't we just say that, if a Proxy fails, then it also returns false?</p>
+<p>DD: Why?</p>
+<p>YK: We used to have a rock-solid guarantee that Object.defineProperty throws on failure, and this is reliable. However, we are now deviating from that.</p>
+<p>MM: If we could enforce that, then we would. Firefox tried this, and we didn't achieve web compatibility. I am nervous about this issue too, but it seems necessary.</p>
+<p>YK: Then let's make it always return false.</p>
+<p>DE: That's probably not web-compatible either</p>
+<p>AWB: If you want a reliable check that returns false, use Reflect.defineProperty. Object.defineProperty has been there since ES5. The normal return for defineProperty is the receiver, so it's a big distinguishable value (as false is not an object). It hasn't thrown since the very beginning because of the WindowProxy behavior.</p>
+<p>MM: It didn't throw, not because it failed silently, but because it succeeded in a way that broke the invariants, which is worse.</p>
+<p>YK: So, this is the best we can do?</p>
+<p>MM: This is the best we can do.</p>
+<p>BT: The intention is that HTML would define this method, which would...</p>
+<p>MM: It can just call the internal define property and then make a decision?</p>
+<p>DD: Yes, but pass along all three arguments, because it needs to forward them</p>
+<p>DD: I was hoping for a general hook, but OK, we can scope it like this.</p>
+<p>MM: only care if the object is WindowProxy and the underlying define failed</p>
+<p>DD: Want to check for many cases</p>
+<p>AWB: Impl. do this now?</p>
+<p>DD: No, they just violate the spec</p>
+<p>BT: agrees overly complex. will have to do it as you've asked, but with very specific case rules.</p>
+<a href="#conclusionresolution-hostobjectdefinepropertyreturnfalse"><h4 id="conclusionresolution-hostobjectdefinepropertyreturnfalse">Conclusion/Resolution</h4></a><ul>
+<li>Add the new definition of Object.defineProperty in Annex B, scoped with an upreference to what HTML needs</li>
+</ul>
+<a href="#global-jordan-harband"><h2 id="global-jordan-harband">global (Jordan Harband)</h2></a><p>(Jordan Harband)</p>
+<p><a href="http://tc39.github.io/proposal-global/">http://tc39.github.io/proposal-global/</a></p>
+<p>JHD: Last remaining issue was Mark's concern, which is no longer present.</p>
+<ul>
+<li>renamed <code>System.global</code> =&gt; <code>global</code></li>
+</ul>
+<p>JHD: The spec text is based on calling ResolveThisValue</p>
+<p>DE: Should work with whtaever the spec calls the global?</p>
+<p>DD: No, need to return the global <code>this</code></p>
+<p>DE: timing wise, problematic to call ResolveThisValue (when is this executed?). The WindowProxy/Window/global object issue is separate, and needs to be resolved with a separate spec change.</p>
+<p>DD: Disagree, but confident in Jordan's intent, will not block consensus</p>
+<p>YK: For the user perspective: returns</p>
+<ul>
+<li><code>window</code> in browser?</li>
+<li><code>global</code> in node?</li>
+</ul>
+<p>JHD: Yes</p>
+<p>JHD: Node semantics are a little different, since it's enumerable and writable.</p>
+<p>BFS: It doesn't seem like this should be a problem, to make it non-enumerable and configurable and non-writable.</p>
+<p>MF: Wasn't this supposed to be reliable? Making it configurable makes it unreliable.</p>
+<p>JHD: On first run, needs to be reliable as first run. Can be locked down via SES</p>
+<p>KG: if we make it non-writable and there is existing code that does <code>global = 1</code>, that will break.</p>
+<p>DD/RW: <code>writable: true</code>, can still be locked down by SES</p>
+<p>DE: We should require browser-based web-compatibility evidence before bringing something like this to Stage 4</p>
+<p>AWB: This is going to be web-incompatible</p>
+<p>(General agreement that we should make it writable)</p>
+<p>RW: w/r to enumerability: <a href="https://github.com/search?p=2&amp;q=Object.keys%28global%29&amp;type=Code&amp;utf8=%E2%9C%93">https://github.com/search?p=2&amp;q=Object.keys%28global%29&amp;type=Code&amp;utf8=%E2%9C%93</a>
+(Note: this was a misapplication of enumerable, configurable, writable. Specifically: was not thinking about <code>global</code> the property <em>itself</em>, but the contents of that object. - Rick)</p>
+<p>DE: This should have browser web compatibility evidence before reaching Stage 4.</p>
+<a href="#conclusionresolution-global-jordan-harband"><h4 id="conclusionresolution-global-jordan-harband">Conclusion/Resolution</h4></a><ul>
+<li>Change to writable, non-enumerable, configurable</li>
+<li>Will revisit after changes; seems on track for Stage 3</li>
+</ul>
+<a href="#11ib-mixins-or-class-extends-plain-object"><h2 id="11ib-mixins-or-class-extends-plain-object">11.i.b Mixins or class extends plain object</h2></a><p>(Rick Waldron)</p>
+<p>RW: In our Maxmin class semantics, we came to the intermediate conclusion that you can't subclass something that's not constructible. However, should we reconsider inheriting from objects?</p>
+<p>MM: We did this because we realized that we could make a function that returns a constructor for this object. This was a nice aha moment.</p>
+<p>Discussion, re: mechanisms that can be written in userland code today.</p>
+<p>RW: But this creates a bunch of extra lifting that they have to do; why can't they have this in class syntax? Do we want to try to solve this problem?</p>
+<p>WH: This is like asking, why can't you subtract two strings? What does that mean?</p>
+<p>YK: It would be nice to the community to come to a more crisp answer.</p>
+<p>RW: I did present these things to the community about how to do things, but got feedback that that seemed like it was a hack.</p>
+<p>YK: Our crisp story: Our class syntax is for subclassing a class.</p>
+<p>RW: The alternative I proposed was actually even smaller than the example that they gave, where the mixin would be based on a superclass with methods.</p>
+<p>EF: I recognize that there are no proposed semantics at the moment. Is this supposed to actually be syntactic sugar for synthesizing the constructor, getting super semantics, etc</p>
+<p>AWB: super semantics work out just fine with a parameterized class [function that evaluates to a class]</p>
+<p>DD: There are a lot of notions of mixins; let's scope this discussion to 'classes extending objects'</p>
+<p>YK: Actually, extending objects reintroduces all of the ambiguity of ES5</p>
+<p>BFS: Let's take a step back from the syntax, and from making this on classes. People want mixins. People want to set the prototype of something. They have a big grab bag of objects, and a big grab bag of things they want to attach with a prototype. They see that class is a way of setting the prototype syntactically, in a manner. I'm asking, do they really want it on a class, or do they really want this syntactic prototype delegation? <strong>proto</strong> feels like a second-class citizen.</p>
+<p>RW: My question to this room is, should we put time into the syntax like class-mixin-basic.js?</p>
+<p>YK: Can already synthesize this today by using <code>class A extends obj(O) {...}</code></p>
+<p>YK: Seems like there should be a really compelling reason, since it would just be a few lines of code to make a function which synthesizes this constructor, instead of being built-in.</p>
+<p>MF: Is this proposal dependent on this particular syntax, or would you be open to using a distinct syntax for using this?</p>
+<p>RW: I just want to raise the general discussion. Would the committee be interested in pursuing this concept of inheriting from an object?</p>
+<p>BFS: I'm not in favor of this current proposal, with a runtime check</p>
+<p>DE: Can we discuss mixins generally?</p>
+<p>DD: In a separate topic</p>
+<p>WH: I'm pretty convinced by Yehuda's example that this feature is not needed.</p>
+<p>DD: However, we are generally interested in mixins</p>
+<p>SM: You might want to have static methods on your mixins. You may also want to have super calls in mixins. React has to interact with whole ecosystems, like Scala.js, which doesn't have the ability to inherit from super. I would not want to encourage these patterns proliferating.</p>
+<a href="#conclusionresolution-11ib-mixins-or-class-extends-plain-object"><h4 id="conclusionresolution-11ib-mixins-or-class-extends-plain-object">Conclusion/Resolution</h4></a><ul>
+<li>Committee is interested in mixins, but this particular proposal is not a direction we want to go in</li>
+</ul>
+<a href="#11ic-generator-arrow-functions"><h2 id="11ic-generator-arrow-functions">11.i.c Generator arrow functions</h2></a><p>(Brendan Eich)</p>
+<p>BE: We passed on generator arrow functions after looking through a few alternatives. The only one that seemed feasible was =<em>&gt;. We passed, and said &quot;revisit for ES7&quot;. But actually, people are writing code which uses function</em>() {}.bind(this)--once you're in class world, you want instance-bound this.</p>
+<p>(General confusion about the example shown)</p>
+<p>DH: call it back to order, this is too distracting because too much going on \</p>
+<ul>
+<li>refocus on generator arrows</li>
+</ul>
+<p>DH: Here's a case where you have a generator which closes over this: tree traversal</p>
+<p>YK: closing over <code>this</code> in the generator is more prone to leaks</p>
+<p>BE: It's not closing over in the generator, it's closing over in the constructor</p>
+<p>BT: Maybe we want an auto-binding declaration form</p>
+<p>MR: Don't all these arguments apply against arrow functions in general?</p>
+<p>BE: We had ASI issues with some things, but the version that works (in the middle)</p>
+<ul>
+<li><code>x =&gt; x + x</code></li>
+<li><code>x =*&gt; yield x + x // missing (obvious?) combination</code></li>
+<li><code>async x =&gt; await x + x</code></li>
+</ul>
+<p>RW: There is also:</p>
+<ul>
+<li><code>* (x) =&gt; yield x;</code></li>
+</ul>
+<p>... But has ASI</p>
+<p>JM: problematic with multiplication: <code>var a = foo * (x) =&gt; yield x;</code></p>
+<p>DH: Adding syntax is serious business. We're not taking the union, but the intersection, of these use cases. How often do you need a callback that's a generator function? Each feature needs to pay for itself.</p>
+<p>DD: This composes nicely for async generator arrows: async x =*&gt; yield await x</p>
+<p>JH: This kind of pattern shows up in observables, so it could have more utility</p>
+<p>DH: syntactic sugar should map to strong idiomatic programming concepts, not just for the sake of having all combinations.</p>
+<p>DE: Jafar made the case that this is a nice pattern</p>
+<p>Too much disagreement?</p>
+<p>BE: The case for arrows was strong; this comes up less frequently, since it's for callbacks which bind a generator function.</p>
+<p>AWB: In the context of the method pattern like</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+    method = <span class="hljs-function">(<span class="hljs-params">args</span>) =&gt;</span> {
+        ...
+    }
+}
+</code></pre>
+<p>The generator arrow makes sense as being analogous</p>
+<p>WH: Don't like =<em>&gt;. At the very least, we should use =&gt;</em> instead.</p>
+<p>BE: No, that syntax doesn't work; See the notes from the Nov 2013 meeting</p>
+<p>WH: [after looking at notes] The rationale from those notes no longer applies since we're not using ! for async arrow function syntax. We can use =&gt;*</p>
+<p>BE: Now agree. We can now use =&gt;*</p>
+<p>DE: Doesn't this prohibit * as a prefix operator for the future?</p>
+<p>MF, WH: Already taken by yield*</p>
+<p>DD: Path foward: Write out this case, with all the justifications, and explaining why the alternatives are not true; find existing user libraries where it'd be helpful to have a generator arrow function, etc.</p>
+<p>JM: This case comes up not just for Redux Saga but rather whenever you have a callback which is a generator</p>
+<p>DR: You need to create some kind of closure for these sort of situation</p>
+<a href="#conclusionresolution-11ic-generator-arrow-functions"><h4 id="conclusionresolution-11ic-generator-arrow-functions">Conclusion/Resolution</h4></a><ul>
+<li>There is some interest from the committee, but concern that the feature does not pull its weight for adding a new piece of syntax</li>
+<li>Plan to revisit on Day 3 to see if we can get =&gt;* to stage 0 at least, as part of DD's async iteration proposal</li>
+</ul>
+<a href="#112a-named-capture-groups"><h2 id="112a-named-capture-groups">11.2.a Named Capture Groups</h2></a><p>(Daniel Ehrenberg)</p>
+<p>Slides: <a href="https://docs.google.com/presentation/d/1b3CigDqepiupv7jQbHyKVkRG72t2qIxeN_DnX75jTY8/edit">https://docs.google.com/presentation/d/1b3CigDqepiupv7jQbHyKVkRG72t2qIxeN_DnX75jTY8/edit</a></p>
+<p><a href="https://github.com/littledan/es-regexp-named-groups">https://github.com/littledan/es-regexp-named-groups</a></p>
+<p>DE: (presents from slides)</p>
+<p>DH: IdentifierName, not Identifier</p>
+<p>WH: Named back-references have nothing to do with Unicode; would be much happier if they were usable in any regular expression. The question we don't have enough data on is whether this would be web-compatible.</p>
+<p>Discussion of syntax, there are alternatives</p>
+<p>Discussing</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> re = <span class="hljs-regexp">/(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})/</span>;
+<span class="hljs-keyword">let</span> result = <span class="hljs-string">'2015-01-02'</span>.replace(re, <span class="hljs-string">'$&lt;day&gt;/$&lt;month&gt;/$&lt;year&gt;'</span>);
+</code></pre>
+<p>KG: A web-compatible option would be to make <code>\k</code> be <code>k</code> in legacy regexps unless there is a <code>(?&lt;</code> in the regexp.</p>
+<p>WH: Yes! That would be web-compatible for non-Unicode regexps.</p>
+<p>BT: Any data collection on <code>\k</code>, also collect data on all escape sequences</p>
+<p><code>\k&lt;</code>?</p>
+<p>BT: valid today?</p>
+<p>Yes</p>
+<p>DE:</p>
+<ul>
+<li>\k not available in non-Unicode RegExps (backwards compatibility)</li>
+<li>Option: Python-style backreference syntax (?P=name)</li>
+<li>Option: Revisit (with data) whether it’s possible to add this new escape</li>
+</ul>
+<p>DE: group names overlap with of match object</p>
+<ul>
+<li>Early Error</li>
+<li>Put names in separate inconvenient &quot;groups&quot; object.</li>
+</ul>
+<p>DE: Can develop as early error that can be revisited</p>
+<p>JHD: Can we prefix with <code>$</code>?</p>
+<p>Properties:</p>
+<ul>
+<li>length</li>
+<li>input</li>
+<li>index</li>
+</ul>
+<p><a href="https://github.com/littledan/es-regexp-named-groups#overlapping-group-names">https://github.com/littledan/es-regexp-named-groups#overlapping-group-names</a></p>
+<a href="#conclusionresolution-112a-named-capture-groups"><h4 id="conclusionresolution-112a-named-capture-groups">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>Property Smashing</li>
+</ul>
+<a href="#11iie-unicode-property-escapes-in-regular-expressions"><h2 id="11iie-unicode-property-escapes-in-regular-expressions">11.ii.e Unicode property escapes in regular expressions</h2></a><p>(Daniel Ehrenberg, Mathias Bynens)</p>
+<p><a href="https://docs.google.com/presentation/d/1o31S9RqDdkoWW2zfPMNIZdPDIp25Rr0-XW0gro_cskk/edit#slide=id.p">https://docs.google.com/presentation/d/1o31S9RqDdkoWW2zfPMNIZdPDIp25Rr0-XW0gro_cskk/edit#slide=id.p</a></p>
+<p>DE: Why <code>\P</code></p>
+<ul>
+<li>The Unicode Consortium’s UTS 18 recommends it</li>
+<li>All other programming languages surveyed follow UTS 18 here</li>
+<li>According to Mark Davis, there are many overlaps between property values and keys, so clever abbreviations are not recommended</li>
+</ul>
+<p>DE:</p>
+<ul>
+<li>Disallow extending Unicode property support for optimal interoperability <a href="https://github.com/mathiasbynens/es-regexp-unicode-property-escapes/commit/4a5f49d19eb5651467e04d84c660a6230dad8334">https://github.com/mathiasbynens/es-regexp-unicode-property-escapes/commit/4a5f49d19eb5651467e04d84c660a6230dad8334</a></li>
+</ul>
+<a href="#conclusionresolution-11iie-unicode-property-escapes-in-regular-expressions"><h4 id="conclusionresolution-11iie-unicode-property-escapes-in-regular-expressions">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Reviewers:
+<ul>
+<li>Bradley Farias</li>
+<li>Waldemar Horwat</li>
+<li>Allen Wirfs-Brock</li>
+</ul></li>
+</ul>
+
+</body>

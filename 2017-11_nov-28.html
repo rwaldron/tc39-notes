@@ -1,0 +1,475 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 28, 2017 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-28-2017-meeting-notes"><h1 id="november-28-2017-meeting-notes">November 28, 2017 Meeting Notes</h1></a><hr>
+<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CPO), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (ARE), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM)</p>
+<p>Remote:
+István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
+<hr>
+<a href="#1-opening-welcome-and-roll-call"><h2 id="1-opening-welcome-and-roll-call">1. Opening, welcome and roll call</h2></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2017/11.md">Agenda</a></li>
+</ul>
+<a href="#7i-ecma262-status-updates-15m"><h2 id="7i-ecma262-status-updates-15m">7.i ECMA262 Status Updates (15m)</h2></a><p>BT: I've updated the queue tool</p>
+<p>BT: The only topics which I'm aware of for Stage 4 in ES2018 seem to be the RegExp proposals. If there are any more things for ES2018, then please get the pull request ready by January. If it's not in by January, it's probably not getting into the final spec.</p>
+<p>BT: Post-2018, I'd like to pass the torch to someone else. If you're interested in editing, please get in touch with me. Hopefully we can get someone else to ramp up on this role.</p>
+<p>KCL: Is Object spread possible to make it into es2018?</p>
+<p>BT: If someone can make a PR and get it on the January agenda then we can put it in.</p>
+<a href="#7ii-ecma-402-status-updates-15m"><h2 id="7ii-ecma-402-status-updates-15m">7.ii ECMA-402 Status Updates (15m)</h2></a><p>CP: No significant changes. A lot of editorial work, thanks to @anba and @littledan for all the help.</p>
+<p>CP: Intl.PluralRules is stage 4, and we keep working on the PR to get that merged. We have identified few areas that were underspecified, and we are finishing it. Should be merged in the next few days.</p>
+<p>CP: There are a couple of features that we might reach stage 4 before January, and I can work on getting them into the next release.</p>
+<a href="#7iii-ecma-404-status-updates-15m"><h2 id="7iii-ecma-404-status-updates-15m">7.iii ECMA-404 Status Updates (15m)</h2></a><p>CM: We're on the fast track to have 404 as an ISO standard early/mid December.</p>
+<a href="#7iv-test262-status-updates-15m"><h2 id="7iv-test262-status-updates-15m">7.iv Test262 Status Updates (15m)</h2></a><p>LBR: Looking for volunteers all the time. Good coverage coming in: class fields and object spread. Those are all big features in test-262. Coverage is great, looking forward to what is next. We discussed possible changes to help external committers and published a document explaining the rationale of code review criteria.</p>
+<a href="#10-timeboxed-agenda-items-15-minute-items"><h2 id="10-timeboxed-agenda-items-15-minute-items">10 Timeboxed agenda items (15 Minute Items)</h2></a><a href="#10ia-arrayprototypeflatten--arrayprototypeflatmap-for-stage-3"><h2 id="10ia-arrayprototypeflatten--arrayprototypeflatmap-for-stage-3">10.i.a Array.prototype.flatten &amp; Array.prototype.flatMap for Stage 3</h2></a><p>(Michael Ficarra)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-flatMap">proposal</a></li>
+</ul>
+<p>MF: We decided to use the IsArray test for flattenability. We decided to wait for this meeting to advance to stage 3 to give time for feedback. There's been no feedback so I'm looking to make this stage 3.</p>
+<p>AK: Whats the state of the reviewers?</p>
+<p>MF: We have reviewers; Jordan and Rick. Rick gave verbal approval but I have yet to get him to commit this to the tracker. It has review from Domenic and other TC39 members. If you'd prefer we can get other reviewers - the spec text hasnt changed other than IsArray</p>
+<p>MM: The test is IsArray?</p>
+<p>MF: Yes!</p>
+<p>RW: I'm sorry I didn't post a final review, but I'm 100% behind this.</p>
+<p>MM: Could you reiterate the motivation for flatten? I don't see the motivation.</p>
+<p>MF: We see this often with things like array prototype concat as a way to flatten array-likes. We want to make it a common pattern for people to use.</p>
+<p>MM: What do people use it for?</p>
+<p>MF: Well to make arrays of arrays of things into arrays of things. We have depth argument - Brian was the main proponent of the depth part, especially allowing infinite depth. The case of a depth of 1 - the default - is a common pattern.</p>
+<p>JHD: Are you asking for common usecases?</p>
+<p>MM: Yes. Many patterns exist, some good some bad.</p>
+<p>JHD: It's tough to come up with a concrete example; I could go through the AirBnB codebase to provide examples</p>
+<p>MF: You can imagine someone building an array that contains arrays through an iterative or evented process. Once they've built this up they can flatten this value.</p>
+<p>DH: So let's you have an online streaming service and you have an array of titles grouped by genre, so an array of arrays.</p>
+<p>GCN: Let's say you're getting a resource over JSON, it's paginated, you want to go through all pages and collate them; each page has 10 results, you make 10 requests, you have a 10x10 array you want to flatten.</p>
+<p>MM: Okay, yes, I withdraw my objections then.</p>
+<p>YK: JSON Data doesn't support Set/Map. Arrays are the main data type in that case.</p>
+<p>MF: I want to point out one of the justifications for choosing IsArray is that if we do end up adding Set.prototype.flatten,0 we'd want to use Set as the determinant. So people remember that <code>thing.prototype.flatten</code> will use <code>thing</code> as the determinant.</p>
+<p>DE: Let's go to the question queue.</p>
+<p>RBN: We use this a lot in the TypeScript codebase. An example of going through source files and flatmapping diagnostics of the sourcefile. Concern of examples for these was already addressed though.</p>
+<p>JRL: Why is flatten not static?</p>
+<p>MF: The things being flattened are always themselves arrays, when the <code>this</code> value is always an instanceof the same thing we tend to put them on the prototype. I've not considered making this static, during development. Do you see a reason to make it static?</p>
+<p>JRL: I'm just concerned that we'll use flatten the same as concat; you'll make a new array just to call flatten on it.</p>
+<p>MF: Can you give an example?</p>
+<p>JRL: ... not quite yet</p>
+<p>MF: Can I suggest we don't hold stage 3 for this then?</p>
+<p>YK: People might pull this out, but its not a hazard. This is what we have with mutable prototypes.</p>
+<p>MF: Does anyone have <em>significant</em> concerns that need addressing for stage 3? No? So we can make this stage 3?</p>
+<p>Everyone: signs of agreement.</p>
+<p>MF: Thank you.</p>
+<p>JRL: Examples (from Babel):</p>
+<pre><code>- https://github.com/babel/babel/blob/18c8d97c3d872735097d9610bc2c8a02155a40a1/packages/babel-generator/test/index.js#L40-L43
+- https://github.com/babel/babel/blob/18c8d97c3d872735097d9610bc2c8a02155a40a1/packages/babel-types/src/index.js#L476
+- https://github.com/babel/babel/blob/18c8d97c3d872735097d9610bc2c8a02155a40a1/packages/babel-types/src/retrievers.js#L12
+- https://github.com/babel/babel/blob/18c8d97c3d872735097d9610bc2c8a02155a40a1/packages/babel-traverse/src/visitors.js#L169
+- https://github.com/babel/babel/blob/18c8d97c3d872735097d9610bc2c8a02155a40a1/packages/babel-traverse/src/visitors.js#L282
+</code></pre>
+<p>JRL: Seems weird to create the initial array just to call flatten on it.</p>
+<a href="#conclusionresolution-10ia-arrayprototypeflatten--arrayprototypeflatmap-for-stage-3"><h4 id="conclusionresolution-10ia-arrayprototypeflatten--arrayprototypeflatmap-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+</ul>
+<a href="#10ic-numeric-separators-for-stage-3"><h2 id="10ic-numeric-separators-for-stage-3">10.i.c Numeric separators for Stage 3</h2></a><p>(Rick Waldron)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1E8yKRJwA4iX_EctpY48KGBwAsCtNZpTOz4wu7tbxTqE">slides</a></li>
+<li><a href="https://github.com/tc39/proposal-numeric-separator">explainer</a></li>
+</ul>
+<p>RW: (Presenting slides)</p>
+<p>RW: We'd like to make this stage 3.</p>
+<p>MF: Can I confirm legacy octal integers don't allow underscores?</p>
+<p>RW: Hell yeah my friend, there are explicit rules for exactly this. It cannot have numeric separators.</p>
+<p>ZB: Is there a reason why we can use multiple consecutive underscores?</p>
+<p>RW: There is no support for multiple separators in sequence. An early decision was to have this. It's an unnecessary additional complication and serves no clear benefit. It was a decision to go one way or another and we've we landed on this and have upheld it.</p>
+<p>ZB: Could you update examples on the proposal it has this as an example.</p>
+<p>RW: Yeah don't read that! Read the spec. Apologies that the readme is out of date.</p>
+<p>AK: Champions, please keep your explainers up to date.</p>
+<p>JHD: You can use multiple separators, just not sequentially right?</p>
+<p>RW: Yes! For example a binary literal might be separated every 4 digits. This has test262 coverage. Sorry for not having an example on the slides.</p>
+<p>RW: So, stage 3?</p>
+<p>AK: Prohibiting underscores in ToString - can you explain what the spec does. Does it disallow underscores when things are being implicitly converted to number?</p>
+<p>RW: It had an STR decimal literal. Decimal digits, space, decimal digits. The solution is to mirror the spec of today and prefix those with STR.</p>
+<p>AK: I'm more interested in behavior than spec text. 1_0 as a string, does that fail to convert to string?</p>
+<p>RW: That's the number 10 in parseFloat</p>
+<p>AK: So a string being implicitly converted to a number</p>
+<p>RW: The underscores have no mathematical value so they get ignored. Implicit conversion of <code>'1_0'</code> is <code>10</code>.  T</p>
+<p>(RW: Important to note that I was presenting remotely and misheard Adam's question, which is why my answer &quot;broke the web&quot;—sorry for any confusion there. The correct answer is that there is NO CHANGE to the existing behavior of implicitly coerced strings that contain an underscore, eg: <code>1 + &quot;1_0&quot; === &quot;11_0&quot;</code> and <code>&quot;1_0&quot; + 1 === &quot;1_01&quot;</code>)</p>
+<p>RJE: We've used up the time slot. How much more do you need?</p>
+<p>DE: From the spec text, it doesn't draw a distinction from Number constructor and ToNumber.</p>
+<p>RW: Existing behaviours do not change from today. It will do what it does now.</p>
+<p>RW: So, stage 3? No objections?</p>
+<p>RJE: No objections.</p>
+<a href="#conclusionresolution-10ic-numeric-separators-for-stage-3"><h4 id="conclusionresolution-10ic-numeric-separators-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+<li>Follow up: the spec text should define ToNumber and Number semantics equivalently regarding separators</li>
+</ul>
+<a href="#10if-interpreterdirective"><h2 id="10if-interpreterdirective">10.i.f InterpreterDirective</h2></a><p>(Bradley Farias)</p>
+<ul>
+<li><a href="https://gist.github.com/bmeck/59cf8c16959eccffd8b7e9828826a842">explainer</a></li>
+</ul>
+<p>BFS: (Presenting)</p>
+<p>MF: What does DirectivePrologue have to do with HashBang?</p>
+<p>....</p>
+<p>BFS: No objections? Stage 1?</p>
+<p>MS: Is it a syntax error for private fields?</p>
+<p>BFS: Yes currently.</p>
+<p>MM: Negation of a private field is !# not #!</p>
+<p>BFS: Stage 1? Stage 1 yay!</p>
+<a href="#conclusionresolution-10if-interpreterdirective"><h4 id="conclusionresolution-10if-interpreterdirective">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#10ih-stringprototypereplaceall-for-stage-1"><h2 id="10ih-stringprototypereplaceall-for-stage-1">10.i.h String.prototype.replaceAll for Stage 1</h2></a><ul>
+<li><a href="https://github.com/psmarshall/string-replace-all-proposal">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/10yrU2Jw4-mOIHU7-rL8sugEHgWMNIJVjPRRQ4DvrA2A/edit#slide=id.g32d5be78b3_0_0">slides</a></li>
+</ul>
+<p>(Mathias Bynens)</p>
+<p>MB: (Presenting slides)</p>
+<p>MM: Can you use a function for replaceAll in replaceValue?</p>
+<p>MB: This is part of the complexity of replace, but we don;t need to make replaceAll as complex as replace. If we want more compatibility we could do the same thing, but it could be more efficient to not.</p>
+<p>MM: For me cognitive load is the opposite of what your preference is. It violates principle of least surprise. replaceAll should only be a generalised replace, with the same semantics on the arguments.</p>
+<p>BE: I was going to approach it differently, if you want a flat string replacer function don't use &quot;replace&quot; in the name. The function has room to diverge semantics then. Also we have the same problem with matchAll right?</p>
+<p>JHD: It's notable that the original plan for matchAll was your option 3: cloning the regex and forcing the &quot;g&quot; flag, but we moved away from that so matchAll could delegate full responsibility to the regex.</p>
+<p>MB: So if we change the method we can get away with just using simple strings?</p>
+<p>MS: I agree with that. If we can simplify the method then that's preferred. We should change the name.</p>
+<p>MB: So substituteAll or something? We can bikeshed the name.</p>
+<p>YK: I am missing this cognitive load point, what's the point?</p>
+<p>MM: Well replaceAll should match semantics for replace in terms of the supported arguments and features</p>
+<p>DE: I disagree with the cognitive load point. replace is really complex, I'd wager no one in this room can describe the specs of replace, for example all of the $ patterns you can put in the replacement string.</p>
+<p>MS: But someone schooled in replace knows what they expect and so it does carry over.</p>
+<p>DE: It would not be more cognitive load if we left out obscure features of replace in replaceAll; it would only be less load.</p>
+<p>BE: No one uses Perl these days!</p>
+<p>ZB: We can optimise for fast passes if the arguments are strings so performance isn't a concern. Im not concerned of cognitive load but I am around principle of least surprise which should prevent us from reusing <code>replace*</code> if we change the signature. On the other hand bringing <code>replace</code> and <code>substiute</code> into JS feels an inconsistent large-scale language API.</p>
+<p>MS: Yeah the issue with replaceAll is that if it has the same semantics, whats the use? Just tack on a <code>g</code> to the RegExp flags.</p>
+<p>BE: Having simple methods that just work on strings is useful, but replace/replaceAll is something to think about.</p>
+<p>MB: Okay, so I guess this isn't a concern for Stage 1 - I'm after Stage 1 so can we push this to Stage 1?</p>
+<p>MF: RegExp escape might be a better option - when this last came up I was the main objector, but perhaps we could reinvestigate this.</p>
+<p>MM: Theres a RegExp template literal tag proposal which escapes a lot of the pitfalls of RegExp, maybe this could be something to look at?</p>
+<p>MF: So yes this doesn't block Stage 1 or 2 - but it'd be good to research these alternatives before promoting</p>
+<p>MB: That's fair.</p>
+<p>YK: I don't think simple strings even reaches the 80% case from my perspective. I would say having &quot;replace&quot; and &quot;substitute&quot; would lead to confusion. Ruby has <code>sub</code> and <code>gsub</code> - going for something like this would be preferential.</p>
+<p>MM: Yes. If it seems synonymous then we lose the value of renaming. I dont have a concrete example of a good name.</p>
+<p>ZB: Do we have stats on how many people use replace with g? Maybe we could get stats?</p>
+<p>MB: Yes I will add a use counter I think. Yehuda: why do you need regexp support in replaceAll? Why not just use existing replace?</p>
+<p>YK: It's just a case of confusion. I agree with Mark's original case.</p>
+<p>MB: So can we say stage 1 still though?</p>
+<p>MM: It certainly qualifies, and I won't object. But my preference is we drop it. One of the functions of the committee is to be the guardian of the overall language complexity. We lose sight when we look at each proposal in isolation. We should ask ourselves if the benefit this brings is worth the extra surface. My opinion is no.</p>
+<p>MB: My opinion is different. Whether it’s worth it depends on the exact shape of the solution.</p>
+<p>MS: To counter Mark, there is no good way to do a global string search of another string without regular expressions.</p>
+<p>MM: Hmm, this is a significant point I hadn't considered.</p>
+<p>YK: This case and others from earlier is making the case that a better API for &quot;just use /g&quot; is important.</p>
+<p>MB: So stage 1?</p>
+<a href="#conclusionresolution-10ih-stringprototypereplaceall-for-stage-1"><h4 id="conclusionresolution-10ih-stringprototypereplaceall-for-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#10ii-throw-expressions-request-for-reviewers-for-stage-3-brian-terlson-ron-buckton"><h3 id="10ii-throw-expressions-request-for-reviewers-for-stage-3-brian-terlson-ron-buckton">10.i.i Throw expressions request for reviewers for Stage 3 (Brian Terlson, Ron Buckton).</h3></a><a href="#10ij-additional-intl-options-for-addition-by-needs-consensus-pr"><h3 id="10ij-additional-intl-options-for-addition-by-needs-consensus-pr">10.i.j Additional Intl options, for addition by needs-consensus PR</h3></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/ecma402/pull/175">pr</a></li>
+</ul>
+<p>DE: (Presenting)</p>
+<p>DE: Any objections to this normative PR?</p>
+<p>YK: Is this landed in v8?</p>
+<p>DE: Not yet; I was waiting to land it until it got TC39 buy-in.</p>
+<p>YK: And it's web compatible?</p>
+<p>DE: I can't imagine it breaking the web.</p>
+<p>DE: The other thing is we have good cadence in GitHub that these small normative changes get good feedback on GitHub PRs. There are a few more normative PRs coming, and it's not clear whether we should be getting review for all of these in TC39, or if it's OK to discuss it just on GitHub. Would you all prefer if we went to TC39 with all of these changes, or would you mind merging these changes based on discussion which takes place outside of committee?</p>
+<p>ZB: Historically we have a slim number of people interested in ECMA-402. It was natural for us to come to TC39 to propose the first revision for these, then for the second we were trying to extend that. As we progress we're going in 2 directions. We're looking for use cases to solve problems, and bringing those into TC39 to improve JS overall. Then theres a number of smaller issues which are small in scope - like &quot;we need to know how + and - is represented in asian languages&quot; - this is a small change and we should question if we need to come in to TC39 with every tiny change. Should we (without abusing the process) just come every now and then to show a summary of things that have changed, rather than presenting each individual one?</p>
+<p>??: So these changes are just small corrections to language data?</p>
+<p>ZB: Yes. For example formatting currencies - someone brought up that currencies have 2 formats: accounting and non accounting formats. Its a small feature as part of the existing API but do we really need to go through all 4 TC39 stages or just merge a PR?</p>
+<p>DE: It'd be great to get more of all of you involved in ECMA-402 and watching the repo - there's lots of smaller activities there.</p>
+<p>CP: Most of these changes are simply adding wording and options for conformance, it does not require changes in algorithms or steps.</p>
+<p>YK: Yes, maybe follow the staging process yourself but move it along quicker - external to TC39. I would hope you would still follow a staging process for the same reasons we do.</p>
+<p>DE: We have the ECMA 402 update at the beginning of each meeting so we could use that time to discuss these changes rather than these additional 15 minute timeboxes.</p>
+<p>DE: Any other questions? No? Thank you!</p>
+<a href="#10ik-bigint-status-update"><h2 id="10ik-bigint-status-update">10.i.k BigInt status update</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1u2xXRokUBPMjBsTL_ZCDghA16cH5FI0m1kLOczm1oMw/edit#slide=id.p">slides</a></li>
+</ul>
+<p>DE: (Presenting)</p>
+<p>DE: Should we have BigInt &lt;&lt; Number rather than BigInt &lt;&lt; BigInt?</p>
+<p>MB: It seems very strange to disallow BigInt &lt;&lt; BigInt.</p>
+<p>BE: There was a decision to make shift operators unary but we went away from that because of the right shifts?</p>
+<p>DE: The concern was that programs may depend on idioms like <code>x &gt;&gt;&gt; 0</code> to always return a 32-bit unsigned integer <em>Number</em>, which would no longer be the case if we allowed overloading just one side. However, this is not an invariant used by asm.js.</p>
+<p>YK: Its common to end up doing operations like this, where you will have a BigInt or a Number, and the thing you put after the shift operator might be a constant; in this case,</p>
+<p>DE: The idea of the proposal is you have casts.</p>
+<p>YK: because we decided anything other than a 64 bit number...</p>
+<p>DE: The current spec says they both have to be BigInts or they both have to be Numbers</p>
+<p>YK: It'd be pretty common to want to get the right argument variable, possibly varying in types, while the left argument stays the same, possibly due to getting something out of a TypedArray which may be a BigInt64Array or a smaller type.</p>
+<p>DE: I don't quite understand; I think the left argument is more likely to vary.</p>
+<p>JHD: I said last time could we make BigInt throw if it will lose precision and I was told that was not a good idea. There are some operations where the value will lose precision and some where it will never do that. Is this right?</p>
+<p>DE: Yes; we don't want to lose precision, but  let's come back after the rest of the slides.</p>
+<p>DE: (Presenting)</p>
+<p>JHD: How does BigInt.parseInt interoperate with numerical separators?</p>
+<p>DE: BigInt literals will support numeric separators. We will follow the semantics of Number here.</p>
+<p>DE: We have 3 options here. Remove parseInt, give it a different grammar (e.g. the grammar for BigInt(string) but with a radix argument) or we stick with Number.parseInt semantics warts and all.</p>
+<p>BE: Remember in July we raised an issue of oddities with Number.parseInt cleanups around null and radixes greater than 23. If we have BigInt.parseInt let's have it with cleanups of Number.parseInt</p>
+<p>DE: Does BigInt.parseInt pay for itself?</p>
+<p>AK: having looked at the implementation of parseInt it does a bunch of weird stuff that you don't want.</p>
+<p>DE: Ignoring trailing garbage is perhaps the worst of those things.</p>
+<p>AK: Also the 0x prefix support is very bad.</p>
+<p>BE: Do these criticisms apply to any Number.parseInt, BigInt.parseInt, Decimal.parseInt?</p>
+<p>DE: Number.parseInt is still bad after the cleanup. We could change the method name to <code>BigInt.fromString</code> and have a cleaned up grammar. Or would that be weird?</p>
+<p>BE: Yes we can call it fromString and cleanup. The global imprint becomes bigger - we now have a fromString convention. But if parseInt stinks up the place lets just diverge and call it fromString.</p>
+<p>YK:</p>
+<p>AK: This is a good argument for leaving it out and adding it later I guess.</p>
+<p>DE: Any feeling in the room of preference among these options then? Absent any feedback I'll go for fromString.</p>
+<p>AK: I'd say leave it out for now.</p>
+<p>YK: I agree</p>
+<p>JHD: As a general temperature for the room - what would consensus be for Number.fromString etc for consistency? In the future would this be welcome? If no one immediately objects to that concept - then we could leave this out for now.</p>
+<p>BE: We should keep in mind the &quot;browser game theory&quot; here. We have a shot to get something in now; later it could be harder.</p>
+<p>DE: So we could leave it out and have a later proposal</p>
+<p>BFS: The main thing I've seen is JSON apis returning strings with large numbers (beyond number maxint) but Ive never seen anyone do math on these, they're always identifiers. I think there is maybe a usecase but not to my knowledge.</p>
+<p>JHD: When I left, Twitter Ads did hex encoding of these numbers</p>
+<p>DE: Well that's a usecase for toString with radix, but not parsing.</p>
+<p>BE: I'm of the opinion we should just take it out.</p>
+<p>DE: Okay I'll take it out.</p>
+<p>DE: (Presenting)</p>
+<p>RJE: Let's break for lunch</p>
+<a href="#conclusionresolution-10ik-bigint-status-update"><h4 id="conclusionresolution-10ik-bigint-status-update">Conclusion/Resolution</h4></a><ul>
+<li>No real support for changing types for some binary operators, or range limits for shift</li>
+<li>Remove BigInt.parseInt and pursue Number/BigInt.fromString in a follow-on proposal</li>
+</ul>
+<a href="#10ii-throw-expressions-request-for-reviewers-for-stage-3"><h2 id="10ii-throw-expressions-request-for-reviewers-for-stage-3">10.i.i Throw expressions request for reviewers for Stage 3</h2></a><p>(Ron Buckton)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-throw-expressions#readme">proposal</a></li>
+</ul>
+<p>RBN: Can we get stage 3 reviewers?</p>
+<p>TST: Me</p>
+<p>KCL: Me</p>
+<a href="#conclusionsresolutions-10ii-throw-expressions-request-for-reviewers-for-stage-3"><h3 id="conclusionsresolutions-10ii-throw-expressions-request-for-reviewers-for-stage-3">Conclusions/Resolutions</h3></a><ul>
+<li>Till Schneidereit &amp; Keith Cirkel to review</li>
+</ul>
+<a href="#10iia-clarifyredefine-stage-4-requirements"><h2 id="10iia-clarifyredefine-stage-4-requirements">10.ii.a Clarify/redefine Stage 4 requirements</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/process-document/pull/15">pr</a></li>
+</ul>
+<p>DE: (Presenting)</p>
+<p>KM: A lot of proposals make it to stage 3, get implemented by 1 or 2 engines, and for whatever reason they die. For example SIMD. If it had shipped, they'd be locked into it - but it would never make it into the standard. The problem is shipping features that - beyond a reasonable doubt - wont make it into the spec locks us into shipping non-spec features.</p>
+<p>MS: Keith and I are in alignment. SIMD sat at stage 3 for a long time.</p>
+<p>DE: It's not at Stage 3 anymore.</p>
+<p>MS: No, but it did stay there. Also sometimes things change in stage 3 that are significant changes, if we ship prior to these changes, we end up with web compat issues. The intent here is to kick the tires. Historically, Apple can't help in this process though; historically we ship one stable version of Safari per year, this year we shipped two. I don't know if we'll dramatically change that. It doesn't make sense for the committee to wait for us to ship. Its unlikely we'll ever have a stage 3 feature sitting in Safari stable.</p>
+<p>YK: Is the goal that users are happy with the feature or is it a case of finding out web compatibility issues. I also want to strongly disagree with what the criteria for an implementation is. I understand that people think asm/JIT is a privileged implementation, personally I think we'd be better served amount making requirements on testing - for example C++ committee doesn't require a running version over tests. It should be a case that we can run an implementation against tests.</p>
+<p>DE: If we accept javascript to javascript compilers, what happens if browsers were to disappear from this group? We want to stay in alignment as a group - and this should be a rate limiting step. Some committee members were concerned about the bar for approval being way to low. We need to have a criteria that validates the features.</p>
+<p>YK: So are we saying just browsers should be this?</p>
+<p>DE: Or any native engine, like Nashorn</p>
+<p>YK: So what about a JavaScript engine? Like a JavaScript to JavaScript compiler?</p>
+<p>DE: The implementation should represent the whole thing. It shouldn't defer to underlying existing features.</p>
+<p>YK: That's an incoherent line though, it's a slippery slope argument.</p>
+<p>JHD: Dan I agree, should we have a strict requirement for every proposal? To what you're asking Yehuda - part of this is about implementability. We need to learn can we implement this in the engines? There have been cases where something has been easier to implement in Babel and hard to implement in an engine. We need to evaluate the web compat risk for each proposal. For each one figuring out what is the requirements. For example <code>global</code> has 0 implementer concern but a huge web compat risk. Object spread on the other hand has a larger implementability concern.</p>
+<p>DE: Yes, I'm not sure; it's sort of case-by-case which engines have a web compatibility risk.</p>
+<p>JHD: If we're concerned about web compat risk, shipping in stable browsers, unflagged, applies. If we're talking about implementability then flagged is okay - its been implemented, so we know it will work. For some proposals these things dont matter.</p>
+<p>DE: I still think we require implementations for stage 4. Implementors give really strong feedback because they look at the proposals differently to others.</p>
+<p>JHD: If a proposal is determined to have no web-compat concerns, could we just allow this - as a comittee - to have looser criteria. I'm hoping we can come to a codified decision tree where some proposals fall down the strict route and some fall down the loose route.</p>
+<p>TST: The two most prominent examples of things being unshipped: Array.prototype.values and Array.prototype.contains which turned out to not be web compatible. We shipped them in Firefox up to beta, but not stable. I can't think of an example with the new staging process where things like this <em>weren't caught</em> so maybe this is just discussing theoretical things which will be caught anyway.</p>
+<p>MS: Its the duty of this committee to tell the world what the 1 JS is that people use. For an implementation to say its compliant, we want to make sure it implements what this comittee produces. So they need to count towards saying what is in the standard. Any engine - in my mind - that says it is ECMAScript compliant needs to have a say as to what gets standardised. Predominantly this is browsers but we shouldn't leave out other engines. Yehuda brought up a JS to JS implementation. People use this for their daily work - we'd get more feedback from these because websites wait for critical mass support from browsers. If a browser implementor says: &quot;I implemented it and its good&quot; and we ship it - but its not ergonomically compliant or maybe some tweaks would improve it - we won't get this feedback at the browser, we get this from Babel though. We can't discount that feedback.</p>
+<p>DE: Sure - I wasn't discounting that feedback, I'm saying that we can have early babel feedback but stage 4 should require actual implementations. In this PR it doesn't say the feature has to be shipped unflagged.</p>
+<p>MS: I'm just saying we should say non browser implementations</p>
+<p>DE: It doesn't say browser here, it says native.</p>
+<p>MS: I'm not sure we want all implementations from stage 3 to 4 have to have implementations be native.</p>
+<p>ZB: Depending on the feature we worried about different things, as Jordan was saying. We don't want to end up at a stage where edge and chrome have it and safari doesn't or something. We try to cover this with the stage process but we're not looking at each case. An example of global vs something else... we should have the proposal include concerns for stage 4 - in some cases we're concerned around web compat, in others we'll get more feedback from a polyfill where people can use it and give us feedback. We shipped PluralRules in firefox - we proved its implementable but no one uses it, we dont know if its useful or not. global though - we know its useful, but we want to make sure implementors can implement and there are no web compat issues. We need to ensure we're writing proposals that are useful for people. I don't think we can hardcode this in a document, I think the comittee and champions should work through this in their proposals.</p>
+<p>DE: It seems good to allow champions to identify problems in their proposals. But the browser implementation thing also records buy in from the browsers. Not just web compat or implementability. Sometimes standards bodies get into modes where they end up producing specs and features that never get shipped. The two implementations thing gives us a barrier to ensure we're shipping things that people want and engines want and can do.</p>
+<p>ZB: I'm not saying we drop the two engines thing, just we identify issues per proposal.</p>
+<p>DE: Yeah that seems good.</p>
+<p>GCN: It seems like to resolve this we should explicitly say what we want the stage 4 criteria for. Like performance, web compat, etc. The two implementation requirement isn't serving any particular one of those goals and causes confusion</p>
+<p>DH: It could be valuable to try to spell out what we're trying to achieve here. As usual there's different interests - not in conflict but some care more about one thing over another. It could be a good excercise to see these. I think its okay if our process does not spell out - formally - everything we want to achieve. Conensus is about how we want to operate and not try to hold ourselves to what requirements and constraints are. That is to say; just because its not in the formal process doesn't mean its something the comittee doesnt do. Dan you're trying to address one constraint which is we don't want to make it too easy for things to permanently end up in the spec without the right scrutiny. We don't want the floodgates to open. Perhaps whats missing is we have nothing inbetween &quot;I'm onboard&quot; and &quot;I object&quot;. When someone feels like this is moving to fast - we have no way of saying &quot;not yet&quot;. It does mean yes or no, just that they're not convinced its ready yet. So having norms to formally say this doesn't really change the process.</p>
+<p>DE: This proposal was created to solve a concrete problem. At the last meeting, we weren't able to move a RegExp proposal forward just because it hadn't shipped to two stable implementations, only to browser preview implementations.</p>
+<p>DH: So you think the requirements are too strict?</p>
+<p>DE: Well, the objection presented in committee was actionable; we had Chrome and Safari implementing it, and we just needed to wait for another browser to implement which has a different sort of shipping policy from Safari to meet the requirement stated by a committee memer.</p>
+<p>AK: I don't think not going to stage 4 is a concrete problem. What Godfrey said was good - let's think about what are we trying to get out of the process, rather than focusing too much on the process.</p>
+<p>BT: From the ChakraCore perspective we're in the similar boat to JSC - around what we can implement. We don't have a rapid shipping channel to the public, I definitely don't like the idea of waiting for implementations in stable browsers. I also agree that we shouldn't nail down a hard process here. I like the idea of champions identifying risk areas. That info will be different per proposal.</p>
+<p>AK: As Domenic is not here I'm going to try and express his feelings. He doesn't want things to end up in the spec that are not supported by JavaScript implementations; e.g., SIMD.js could have ended up getting to stage 4 given the relaxed requirements (read in isolation). Domenic is worried that the way to block something is to hold up the consensus.</p>
+<p>DE: Maybe we could have signoff from implementations?</p>
+<p>AK: Well getting to any stage at all is effective signoff. I'm worried that this takes power from the committee to say that if you're stage 3 two implementations means you're stage 4 - without committee involvement.</p>
+<p>SYG: What was the original motivation for this PR? To reduce the deadlock situation? That we can be blocked waiting for another implementor?</p>
+<p>DE: Yeah, that and balancing it with wanting to ensure theres sufficient buy-in.</p>
+<p>SYG: I don't see this helping that then. Nobody is going to go back to their team and say &quot;well the document says we have to do this now&quot; you have to get buy-in, you have to talk to people.</p>
+<p>JHD: Why don't we come up with a concrete list of the categories of concerns from promoting to a stage? Then we can as a committee agree to what categories a proposal fall into. So we can say a proposal needs browser buy in, then theres an actionable thing for the proposal to do. We then don't end up doing this process-lawyering by stonewalling proposals or using the proposal wording to push proposals through.</p>
+<p>YK: This happens informally which I like. We often say &quot;I agree to stage 1 but for stage 2 you best do a b and c&quot;. This gives clear indications for what a proposal should come back with. I know there's strong norms against objecting - but it would be problematic if stage 4 was a list of checkboxes - you check them off and boom you win. We should have proposals where browsers can say they don't want to advance it and thats okay. People should feel comfortable - with rationalises - to say they don't like a proposal.</p>
+<p>DE: Do you think the current process document specifies implicitly that 2 vendors are shipping?</p>
+<p>MS: I don't think the current criteria is clear. We're arguing over Domenic's vs other interpretations of this. I'm going to read this spec verbatim. The term &quot;significant&quot; - I don't know how to qualify that. &quot;such as&quot; - is that really &quot;such as&quot;?</p>
+<p>YK: Point of order - I wanted &quot;such as&quot; added because Domenic wanted concrete browser list and I wanted to keep things open</p>
+<p>BE: Yes, I was advocating for this too. The ambiguity was a feature not a bug. It allows us to have a conversation on a feature by feature basis. Maybe this was a bad idea though.</p>
+<p>MB: The problem is it makes no distinction of stable vs not, or flagged vs unflagged. That's the problem right?</p>
+<p>RJE: We're 20 minutes over so...</p>
+<p>DE: Oh sorry!</p>
+<p>JHD: Shall I make a PR proposing my idea of categorising concerns?</p>
+<p>DE: Maybe we don't need to formalise this right now.</p>
+<p>MB: Jordan if you do that you're going to need to address &quot;significant&quot; and &quot;such as&quot;.</p>
+<p>AK: The ambiguity was here so we keep talking about this. This is the discussion we wanted per feature when we added this ambiguity.</p>
+<a href="#conclusionresolution-10iia-clarifyredefine-stage-4-requirements"><h4 id="conclusionresolution-10iia-clarifyredefine-stage-4-requirements">Conclusion/Resolution</h4></a><ul>
+<li>The process document is deliberately ambiguous, allowing a feature-by-feature discussion of what requirements are</li>
+<li>We should become more explicit about discussing what requirements are required for a particular feature to advance to the next stage</li>
+<li>Process doc PR not merging</li>
+</ul>
+<a href="#9il-intllistformat-find-stage-3-reviewers"><h2 id="9il-intllistformat-find-stage-3-reviewers">9.i.l Intl.ListFormat find Stage 3 reviewers</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39-transfer/proposal-intl-list-format">proposal</a></li>
+</ul>
+<p>DE: (Presenting)</p>
+<p>MB: I'll review</p>
+<p>FRA: Me too</p>
+<a href="#conclusionresolution-9il-intllistformat-find-stage-3-reviewers"><h4 id="conclusionresolution-9il-intllistformat-find-stage-3-reviewers">Conclusion/Resolution</h4></a><ul>
+<li>Mathias Bynens and Fabio Rocha to review</li>
+</ul>
+<a href="#9im-intlrelativetimeformat-for-stage-3"><h2 id="9im-intlrelativetimeformat-for-stage-3">9.i.m Intl.RelativeTimeFormat for Stage 3</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-intl-relative-time">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1TdThcywfZWpAhC41DyllFP7gVxQjdfRCYGJKlxoHWls/edit#slide=id.p">slides</a></li>
+</ul>
+<p>DE: (presenting)</p>
+<p>ZB: During implementation we realised there are subtle cultural consequences thinking about relative time. &quot;Tomorrow&quot; is not 24 hours from now for example, it could just be 2 hours from now. In December &quot;next year&quot; is only a month away, while in January &quot;next year&quot; is 12 months way. Other libraries implementations we're basing this off of have the two &quot;numerical&quot; and &quot;textual&quot; forms which toggle between this loose format.</p>
+<p>DE: Do we have feedback about the two values for single/plural thing?</p>
+<p>MB: It seems simpler to explain to developers this way.</p>
+<p>DE: And the three values for the length seems fine too?</p>
+<a href="#conclusionresolution-9im-intlrelativetimeformat-for-stage-3"><h4 id="conclusionresolution-9im-intlrelativetimeformat-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Not promoted to stage 3</li>
+<li>Consensus on the previous previously contentious questions about the singular+plural unit names as well as the size names</li>
+</ul>
+<p>MM: Side note, I'd like to withdraw my proposal for Repair Proxy Transparency.
+<a href="https://github.com/tvcutsem/es-lab/issues/21">https://github.com/tvcutsem/es-lab/issues/21</a> explains why.</p>
+<p>RJE: Okay, removed.</p>
+<a href="#9iic-make-ecmascript-a-syntactic-superset-of-json-for-stage-2"><h2 id="9iic-make-ecmascript-a-syntactic-superset-of-json-for-stage-2">9.ii.c Make ECMAScript a syntactic superset of JSON for Stage 2</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-json-superset">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/12z_3OqQOA2a6hioWZWDa9cj8kEJw4FlhR4_pZhhKA-U/edit?usp=sharing">slides</a></li>
+</ul>
+<p>MB: (Presenting)</p>
+<p>MM: It's essential that we do not introduce other newline characters which can introduce vulnerabilities. I'm confident we can never remove line terminators.</p>
+<p>MM: I'm convinced the transition problem is worse.</p>
+<p>MF: Why? I asked last time to get usage numbers.</p>
+<p>MM: With regards to the vector for attack, the usage numbers are irrelevant.</p>
+<p>MB: If we were to make this change these checkers would have to replace such characters with newlines.</p>
+<p>MM: They would have to check both. Code that is deployed should work before or after browser.</p>
+<p>YK: This proposal is good, I've worked on Rails code that hits this. If we cant fix anything else fixing the polyglot case is worth it.</p>
+<p>MB: Any objection to stage 2? Stage 2 it is then</p>
+<a href="#conclusionresolution-9iic-make-ecmascript-a-syntactic-superset-of-json-for-stage-2"><h4 id="conclusionresolution-9iic-make-ecmascript-a-syntactic-superset-of-json-for-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Reviewers for Stage 3:
+<ul>
+<li>Michael Ficarra</li>
+<li>Jordan Harband</li>
+</ul></li>
+</ul>
+<a href="#9ie-regexp-dotall-status-update"><h2 id="9ie-regexp-dotall-status-update">9.i.e RegExp dotAll status update</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-dotall-flag">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/10yrU2Jw4-mOIHU7-rL8sugEHgWMNIJVjPRRQ4DvrA2A/edit?usp=sharing">slides</a></li>
+</ul>
+<p>MB: (Presenting)</p>
+<p>MB: Stage 4?</p>
+<a href="#conclusionresolution-9ie-regexp-dotall-status-update"><h4 id="conclusionresolution-9ie-regexp-dotall-status-update">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4 pending editor approval</li>
+</ul>
+<a href="#9if-regexp-named-captures-status-update"><h2 id="9if-regexp-named-captures-status-update">9.i.f RegExp named captures status update</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-named-groups">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/10yrU2Jw4-mOIHU7-rL8sugEHgWMNIJVjPRRQ4DvrA2A/edit?usp=sharing">slides</a></li>
+</ul>
+<p>MB: (Presenting)</p>
+<p>MB: Stage 4?</p>
+<a href="#conclusionresolution-9if-regexp-named-captures-status-update"><h4 id="conclusionresolution-9if-regexp-named-captures-status-update">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4 pending editor approval</li>
+</ul>
+<a href="#9ig-regexp-lookbehind-assertions-status-update"><h2 id="9ig-regexp-lookbehind-assertions-status-update">9.i.g RegExp lookbehind assertions status update</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-lookbehind">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/10yrU2Jw4-mOIHU7-rL8sugEHgWMNIJVjPRRQ4DvrA2A/edit?usp=sharing">slides</a></li>
+</ul>
+<p>MB: (Presenting)</p>
+<p>MB: Not yet ready for stage 4 as there aren't enough implementations yet</p>
+<a href="#conclusionresolution-9ig-regexp-lookbehind-assertions-status-update"><h4 id="conclusionresolution-9ig-regexp-lookbehind-assertions-status-update">Conclusion/Resolution</h4></a><ul>
+<li>Not moving to stage 4</li>
+</ul>
+<a href="#9ig-regexp-unicode-property-escapes-status-update"><h2 id="9ig-regexp-unicode-property-escapes-status-update">9.i.g RegExp Unicode property escapes status update</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-unicode-property-escapes">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/10yrU2Jw4-mOIHU7-rL8sugEHgWMNIJVjPRRQ4DvrA2A/edit?usp=sharing">slides</a></li>
+</ul>
+<p>MB: (Presenting)</p>
+<p>MB: Ready for stage 4 soon, spec needs some final non-normative tweaks to the spec text</p>
+<p>CM: So you have a test suite generated by automated means? How do you know it's right?</p>
+<p>MB: I have three different mechanisms for generating the data - and they all pass.</p>
+<p>MB: I've yet to submit a PR for the spec text so this is not stage 4 ready</p>
+<a href="#conclusionresolution-9ig-regexp-unicode-property-escapes-status-update"><h4 id="conclusionresolution-9ig-regexp-unicode-property-escapes-status-update">Conclusion/Resolution</h4></a><ul>
+<li>Not moving to stage 4</li>
+</ul>
+<a href="#9iie-discuss-module-order-instantiationevaluation-guarantees"><h2 id="9iie-discuss-module-order-instantiationevaluation-guarantees">9.ii.e Discuss module order instantiation/evaluation guarantees</h2></a><p>(Bradley Farias)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1RXvvScD8ce2FyLY2aYhbas83WCiBqzIOqdMt4OpkCJM/view">slides</a></li>
+</ul>
+<p>BFS: (Presenting)</p>
+<p>JHD: If we have for example <code>import 'es5-shim'; import 'es6-shim';</code> that order absolutely matters. The order is completely critical. We absolutely want the invariant.</p>
+<p>DH: You can't guarantee that A is evaluated before B because B could have been evaluated already.</p>
+<p>DH: Why do you want to change the order to evaluate B first?</p>
+<p>BFS: There was a PR against Node that was seeking to do this. It was one route towards providing Babel like named exports from CJS</p>
+<p>AK: I'm glad this has landed I dont think we should do a TopLevelModuleEvaluationJob - I dont think it really does anything. Concrete html implementation of the loader does not use TopLevelModuleEvaluationJob.</p>
+<p>BFS: Node does the same</p>
+<p>AK: I don't think its reasonable to add normative text to the spec</p>
+<p>DH: Bradley's  instinct here is good, we have to know what we can reasonably say. How do we specify this invariant? We can add English language invariants, they are in the spec already for example Array.prototype.sort. I want to point out we have discussed this exact topic at some length. In Portland a few years ago we did this. We landed on semantics where async execution of subgraphs are possible but only if they follow the ordering. The goal is to allow browsers to fetch modules and evaluate them as they come available while still respect ordering. In reality its a meek optimisation. Serious webapps will use offline transformations, not modules. The optimisations are useful for small to medium apps but don't scale to big apps. Maintaining ordering invariance is worthwhile.</p>
+<p>YK: For a given graph you're allowed to execute from the leaf backwards as long the children of your module are present and executed - in source order. You are also allowed to spread these evaluations across turns. I think Dave is correct - we want to have a description of what we're trying to accomplish. Executing in source order is important. I agree with David about the meek optimisation. Offline tools work better here.</p>
+<p>BFS: Yes Google came to the same conclusion around ASAP evaluation.</p>
+<p>YK: The guarantee isn't complete though; <code>import a; import b; import c;</code> looks like a, b then c, but if a imports c you actually get c a b.</p>
+<p>JHD: Can we add to meeting notes that we want this to happen but don't know how to put it in the spec?</p>
+<p>DH: The reason I believe this is hard is because its dependent on the current module graph for which loading and evaluation has been kicked off. We don't have the entry point as its host specific. TopLevelModuleEvaluationJob was supposed to suggest this but its not used. There are some subtle questions about races where you have interleaving modules. I suspect we haven't thought hard enough about all the race cases. We don't have a way about talking what the session is because its host specific.</p>
+<p>BFS: I'm not eager to try to move the host specific stuff to where it could be described in spec</p>
+<p>DH: It feels like sometimes a spec is trailing reality, not leading it. We can just go away to implementations and after studying what the implementation details are we can spec it. I feel from the room we have a consensus of wanting something in spec but not knowing enough about the problem.</p>
+<p>AK: Agreed that the race cases may be fatal to having normative language around this.</p>
+<p>BFS: This feels right.</p>
+<a href="#conclusionresolution-9iie-discuss-module-order-instantiationevaluation-guarantees"><h4 id="conclusionresolution-9iie-discuss-module-order-instantiationevaluation-guarantees">Conclusion/Resolution</h4></a><p>This goes against the sort of spirit of the specification, though we have no particular normative spec text to add right now. Spec may in the future add normative text around this.</p>
+<a href="#arrayspecies-array-index-accessors-and-security"><h2 id="arrayspecies-array-index-accessors-and-security">Array[@@Species], Array Index Accessors and Security</h2></a><p>(Natalie Silvanovich)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/11fkQeEisoszNGF8SrautVT1ltSnsQBWRxJ4usoc-g_o/edit?usp=sharing">slides</a></li>
+</ul>
+<p>NSH: (Presenting)</p>
+<p>DH: Firstly the work you're doing is super important. Thank you for your awesome work. The usage though - I wouldn't expect high usage, its a power feature. Low level meta object protocol hooks take longer for developers to figure out how to make use of them. The thing missing from the analysis is how these features were designed. Deprecating a new feature because its had little usage and some vulnerabilities is premature because of this. Again the work is super important, but my conclusion is not &quot;lets get rid of this feature&quot; but instead &quot;lets work on hardening this&quot;. Developer education is not an issue here, weird things can happen in javascript.</p>
+<p>NSH: Sure - perhaps we could say &quot;is it worth relooking at deprecating in 5 years if usage is still low&quot;</p>
+<p>KM: What are the semantics of index array accessors?</p>
+<p>MM: Back in ES3 days accessors were not part of the standard but most browsers implemented them. The detailed semantics were never written down - so I cant tell you semantics for them. I will say there is a Frozen Realm proposal which allows for an environment of secure execution. Primordial objects like prototypes are frozen before the environment executes.</p>
+<p>DE: Do you know when array index accessors was added to JS?</p>
+<p>MM: You'd have to ask Waldemar, I can speak to ES3. Originally they walk the prototype chain. Some implementations may have treated them specially but only in the sense that they were buggy.</p>
+<p>NSH: Inside every script engine is different. Even if at the superficial level they look the same.</p>
+<p>DH: Sorry I thought we were talking about JS developers not JS engine developers. For engine developers its seems like a reasonable thing to add guidance notes for engine developers.</p>
+<p>DE: I really like the idea of guidance notes like that. Empathy with JS engine developers is important, we often talk about empathy for JS devs but engine devs are people too.</p>
+<p>NSH: I think specs should offer more of this kind of guidance. Array detatched buffer is a good example of this. For sort for example it says to be aware that your sort function could detatch a buffer.</p>
+<p>SYG: Its all about optimisations right? This is the place where things can get screwed up.</p>
+<p>CM: This is brilliant stuff but its a specific case of a more general issue. We have entangled semantics where you can rewrite the rules of reality underneath your feet. That we feel its essential this is the case I wonder if we should prune back the philosohpy of redifining everything.</p>
+<p>BFS: You can do odd things with string prototype accessors. Have you done research on this?</p>
+<p>NSH: I've looked at this a little but engines with this I've found tend not to work. Stuff is so optimised it doesn't really even notice the accessors are there.</p>
+<p>BFS: Have you encountered anything with Promise[@@species]? Async functions always return regular promise, not Promise[@@species]</p>
+<p>NSH: Promise implementations are extremely complex in every engine. I haven't found any bugs but it doesn't mean there aren't any.</p>
+<p>TST: Did SpiderMonkey just get lucky or did you not test it?</p>
+<p>NHS: Yes its funny a few Firefox developers come up to me with this. I haven't found any bugs. Something I have observed is that in more complex situations it behaves differently, for example pushing into an array - does it trigger the accessor? It didnt in Spidermonkey but does in the other 3 engines.</p>
+<p>YK: If you discover a thing that is security sensitive and not all browsers are implemented - that <em>is</em> something we can consider removing.</p>
+<p>NHS: Yes I have a very long list of divergent behaviors across implementations.</p>
+<p>DE: It'd be great to publish this list.</p>
+<p>DH: Species was intentionally extensibility design. Subclassing an OO were key goals and continues to be a valid usecase. So if the sentiment in the room is &quot;what did we do?!&quot; then I want to defend the design decisions. We should have just called it out sooner that low level language hooks are rife for vulnerabilities. Let's not have the takeaway that extensibility is a non-goal for JS due to security concerns.</p>
+<p>NSH: Yes this is all easy to say in hindsight, I don't want to attack the original decisions just highlight the vulnerabilities.</p>
+<p>JRL: Surely test262 coverage could add this.</p>
+<p>AK: Well in my experience conformance testing is not right for this. Fuzz testing or security analysis is how we get these.</p>
+<p>NSH: I think we should add shared tests for known vulnerabilities.</p>
+<a href="#conclusionresolution-arrayspecies-array-index-accessors-and-security"><h4 id="conclusionresolution-arrayspecies-array-index-accessors-and-security">Conclusion/Resolution</h4></a><ul>
+<li>Explore adding vulnerability tests to Test262</li>
+<li>Improve guidance for implementers in new language features, documenting potential vulnerabilities</li>
+</ul>
+<a href="#9iih-intllocale-for-stage-2"><h2 id="9iih-intllocale-for-stage-2">9.ii.h Intl.Locale for Stage 2</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-intl-locale">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1Pe2D_w891Wr8EaJ-r9LiegLgwcMNHxKuOM7fvlylpak/edit#slide=id.g2af58290b6_0_0">slides</a></li>
+</ul>
+<p>DE: (Presenting)</p>
+<p>DE: Stage 2?</p>
+<p>YK: Generally speaking I agree that we should be extracting things that are floating around in the OS - like &quot;give me a list of countries&quot;. Theres a lot like that in the intl space. Exposing that is a good thing.</p>
+<p>DE: Yes, for a country selector that's one of the hardest parts--just having a list of countries.</p>
+<p>ZB: One use case where this is important is any operations on languages you have to parse the language tag. Any negotiation of the desired language - e.g. <code>en-GB</code> vs <code>en-US</code> will need to parse this. We do this internally in engines anyway so this just exposes that.</p>
+<p>CP: So we're saying that Intl.Locale does not throw a RangeError for underscore while other libraries do? Should other Intl APIs be changed to be more flexible and support underscore as well in  locale's value?</p>
+<p>DE: I don't have an opinion so I'll have to go back and check this.</p>
+<p>DE: Who wants to be stage 3 reviewers?</p>
+<p>BFS: I will</p>
+<p>KCL: I will</p>
+<a href="#conclusionresolution-9iih-intllocale-for-stage-2"><h4 id="conclusionresolution-9iih-intllocale-for-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Reviewers for stage 3: Bradley Farias, Keith Cirkel</li>
+</ul>
+
+</body>

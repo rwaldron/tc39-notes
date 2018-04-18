@@ -1,0 +1,146 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 21, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-21-2013-meeting-notes"><h1 id="may-21-2013-meeting-notes">May 21, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Luke Hoban (LH), Doug Crockford (DC), Yehuda Katz (YK),
+Brendan Eich (BE), Sam Tobin-Hochstadt (STH), Alex Russell (AR), Dave Herman (DH), Bernd Mathiske (BM), Andreas Rossberg (ARB), Mark S. Miller (MM), Tom Van-Cutsem (TVC), Jasvir Naga (JNA), István Sebestyén (IS)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>JN: Going through the agenda
+Adding <strong>proto</strong>
+Unifying iterator/generator APIs
+Talking about getting user stats for test-262...
+YK: Prioritize ES6 items. So that we don't get do ES7+ items before</p>
+<p>Minutes approved unanimously</p>
+<a href="#41-objectfreeze"><h2 id="41-objectfreeze">4.1 Object.freeze</h2></a><p>DC: Today Object.freeze throws when primitives are passed in. Suggesting
+not throwing when a value type is passed in.</p>
+<p>MM: Object.isExtensible would return false for primitives</p>
+<p>EA: This would give an inconstint view for primitives.</p>
+<p>AWB/YK: (In strict mode) numbers and strings lazily box so the assignment
+never fails.</p>
+<p>MM: Proxies are allowed to be non extensible and throw away.</p>
+<p>ARB: Is the suggestion to lazily wrap primitives?</p>
+<p>MM: No, then <code>Object.isExtensible(7)</code> would return true because the wrapper is
+extensible.</p>
+<p>AWB: In most of the new changes we are not doing unnecessary coercion.</p>
+<p>YK: The Chrome dev tools, <code>console.dir(7)</code>, says &quot;no properties&quot; which
+supports treating these as empty objects.</p>
+<p>MM: The only observable wrapper is the <code>this</code> wrapper in non strict mode.</p>
+<p>AWB: In the new spec, <code>Object.setPrototypeOf(7)</code> throws.</p>
+<p>MM: Agrees violently!</p>
+<a href="#conclusionresolution-41-objectfreeze"><h4 id="conclusionresolution-41-objectfreeze">Conclusion/Resolution</h4></a><ul>
+<li>DC+AWB to work out the details</li>
+</ul>
+<a href="#42-weakset"><h2 id="42-weakset">4.2 WeakSet</h2></a><p>Do we need them?</p>
+<p>MM: Trivial shim around WeakMap.</p>
+<p>YK: Often wanted it</p>
+<p>AWB: Adds no new capabilities.</p>
+<p>AR: We should not limit ourselves to what is a new primitive capabilities</p>
+<p>AI(AWB): add to spec</p>
+<a href="#consensusresolution-42-weakset"><h4 id="consensusresolution-42-weakset">Consensus/Resolution:</h4></a><ul>
+<li>Add WeakSet in ES6</li>
+</ul>
+<a href="#44-proxies"><h2 id="44-proxies">4.4 Proxies</h2></a><p>TVC's presentation on Notification Proxies:
+<a href="https://docs.google.com/file/d/0B9iYRsLxmdqUd1RsdHZtazliWmc/edit?usp=sharing">https://docs.google.com/file/d/0B9iYRsLxmdqUd1RsdHZtazliWmc/edit?usp=sharing</a></p>
+<p>Arguments against:</p>
+<ul>
+<li>shifts the burden from spec writers/implementors to users (need to use shadow target even for non-frozen objects)</li>
+<li>implementors will deal with spec bugs related to invariant violations as they come up</li>
+</ul>
+<a href="#consensusresolution-44-proxies"><h4 id="consensusresolution-44-proxies">Consensus/Resolution:</h4></a><ul>
+<li>Notification proxies are not approved.</li>
+<li>MM &amp; TVC are still happy with direct proxies.</li>
+</ul>
+<a href="#proxy-invoke-trap-and-wrong-this-binding-on-built-in-methods"><h2 id="proxy-invoke-trap-and-wrong-this-binding-on-built-in-methods">Proxy Invoke Trap and wrong |this|-binding on built-in methods</h2></a><p>AWB: with current default behavior of &quot;get&quot;, &quot;Caretaker&quot; will break on built-ins such as Date, because the |this| binding is by default set to the proxy, so the Date built-in method will not find the correct private state.</p>
+<p>ARB: Same issue with binary methods</p>
+<p>STH: We should add invoke trap but not change the object model</p>
+<p>MM: Pleasant to have. Separate from private state.</p>
+<p>AWB: used to think this was an issue with proxies, but convinced that it's an API issue: we need to provide default handlers that do the right thing, and which users can subclass. In particular, want a handler that, on forwarding, rebinds |this| to the target.</p>
+<p>STH: If you want to proxy a Date method the underlying <code>this</code> needs to be a non wrapped Date object.</p>
+<p>TVC: previously proposed a Handler API that defines derived traps and fundamental traps, allows you to subclass and inherit correct behavior for derived traps. Can be used as the basis.</p>
+<p>AWB/TVC: invoke trap would make it easier to control |this|-binding</p>
+<p>DH: Never liked breaking the semantics of [[Get]] + [[Call]]</p>
+<p>TVC: there already exist invoke-only properties on platforms with <code>__noSuchMethod__</code></p>
+<p>AWB: For a [[Call]] it might be important to control <code>this</code> but by the time the [[Call]] is happening you do not know what <code>this</code> to use.</p>
+<p>DH: ActionScript has a proxy and they do have an invoke trap.</p>
+<p>BM: The most common action is to invoke a method.</p>
+<p>? : we already gave up on the |this| invariant for accessors: in ES5, if obj.x is a getter, |this| will always be bound to obj in the getter. With proxies this is no longer true.</p>
+<p>AI(AWB, TVC): Add spec for invoke. Tom and Allen to work out details of a Handler API that accommodates both &quot;caretaker&quot; (aka forwarding) and &quot;virtual object&quot; use cases.</p>
+<a href="#consensusresolution-proxy-invoke-trap-and-wrong-this-binding-on-built-in-methods"><h4 id="consensusresolution-proxy-invoke-trap-and-wrong-this-binding-on-built-in-methods">Consensus/Resolution:</h4></a><ul>
+<li>Add invoke trap.</li>
+</ul>
+<a href="#411"><h2 id="411">4.11</h2></a><p>MM: Everybody in this room wants classes and want to post pone private state to after ES6</p>
+<p>ARB: Disagrees.</p>
+<p>ARB: Based on feedback, people do not want unique symbols, only private symbols.</p>
+<p>MM: Private symbols do not work with proxies.</p>
+<p>TVC: can still use WeakMap for private state.</p>
+<p>DH: The most common cases where true information hiding is self hosting. The stakes are too high for the browser engines.</p>
+<p>YK: If &quot;iterator&quot; would be a private symbol, you cannot create a proxy that will work with for-of loops.</p>
+<p>ARB: Symbols (unique and private) and relations overlap.</p>
+<p>BE: If we add symbols now we are stuck with them.</p>
+<p>LH: Future users will be confused. They will not know what to use</p>
+<p>BE: Unique symbol is very different from class private syntax.</p>
+<p>AWB/MM: If we first did relationships we might not need symbols.</p>
+<p>MM: Relationship published but not reflective.</p>
+<p>MM: Difference between relationships and symbols: where is the mutability? This forces us to have both relationships and unique symbols.</p>
+<a href="#consensusresolution-411"><h4 id="consensusresolution-411">Consensus/Resolution:</h4></a><ul>
+<li>?</li>
+</ul>
+<a href="#413-endianness-of-typed-array"><h2 id="413-endianness-of-typed-array">4.13 Endianness of Typed array</h2></a><p>ARB: Remember it as if we should specify this.</p>
+<p>BE: Endianness in Typed Arrays is unspecified.</p>
+<p>DH: Keep it open for now... Same system to same system. Using data view, which is explicit, there is no problem.</p>
+<p>STH: We don't know what WiiU will do?</p>
+<p>AWB: Or they decide not to comply to the spec</p>
+<p>DH: WebGL is endian agnostic.</p>
+<a href="#consensusresolution-413-endianness-of-typed-array"><h4 id="consensusresolution-413-endianness-of-typed-array">Consensus/Resolution:</h4></a><ul>
+<li>Leaving it unspecified in ES6.</li>
+</ul>
+<a href="#418-__proto__"><h2 id="418-__proto__">4.18 <strong>proto</strong></h2></a><p>STH: Recollection, first as data property, then as an accessor. Then discussed the power of that setter. Set the [[Prototype]] in the [[Realm]]. Then Allen wrote the spec. Realized that there were some problems with that design. Roughly the same power as <code>Object.setPrototypeOf</code>.</p>
+<p>MM: Existence of a setter... as long as we have the extensibility restriction, that is sufficient.</p>
+<p>AWB: Why restrict <code>__proto__</code> and not other</p>
+<p>DH: Objects belonging to a realm is a bad idea.</p>
+<p>MM: No more reason to restrict the setter.</p>
+<p>STH: Bind <code>__proto__</code> setter to the object upon extraction</p>
+<p>MM: In SES objects that are non extensible. Not going to remove <code>__proto__</code> going forward.</p>
+<p>ARB: If <code>Object.prototype.__proto__</code> is a data property, making it non writable prevents other objects to use assign to set <code>__proto__</code>.</p>
+<p>AWB: If <code>Object.prototype.__proto__</code> is an accessor that just calls <code>Object.{set,get}PrototypeOf</code>.</p>
+<p>AR: Best practice on the web is important even in the future.</p>
+<p>TVC: If we have <code>Object.prototype.__proto__</code> do we want <code>Object.setPrototypeOf</code> or just
+<code>Reflect.setPrototypeOf</code>?</p>
+<p>AWB: Makes sense to have <code>Object.setPrototypeOf</code> for consistency.</p>
+<p>EA: Where do we draw the line (<code>Object.x</code> or <code>Reflect.x</code>)?</p>
+<p>DH: People will need to be able to get this before we have a reflect module.</p>
+<p>TVC: We need both because they have different return value (<code>Reflect.setPrototypeOf</code> returns boolean success value).</p>
+<a href="#consensusresolution-418-__proto__"><h4 id="consensusresolution-418-__proto__">Consensus/Resolution:</h4></a><ul>
+<li><code>__proto__</code> is an accessor on <code>Object.prototype</code>.
+<ul>
+<li>The setter mutates [[Prototype]].</li>
+<li>There is no &quot;poison pill&quot;.</li>
+</ul></li>
+<li>Add <code>Object.setPrototypeOf</code> and <code>std:reflect setPrototypeOf</code>.</li>
+</ul>
+<a href="#naming-of-iterator"><h2 id="naming-of-iterator">Naming of @@iterator</h2></a><p>AWB: Suffix with $</p>
+<p>STH: Opposed to special naming. People don't do this kind of naming convention. Why do we want to introduce this concept?</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+  *[iterator]() {
+    <span class="hljs-keyword">yield</span> ...
+  }
+}
+</code></pre>
+<a href="#consensusresolution-naming-of-iterator"><h4 id="consensusresolution-naming-of-iterator">Consensus/Resolution:</h4></a><ul>
+<li>No special naming</li>
+</ul>
+<a href="#generators-and-iterators"><h2 id="generators-and-iterators">Generators and iterators</h2></a><p>AWB: <code>send</code> is gone in favor of <code>next(arg)</code> (only first arg is passed through in <code>yield*</code>)</p>
+<p>YK: Whether generators return a frozen object or not?</p>
+<p>BE: <code>close</code> is gone</p>
+<a href="#consensusresolution-generators-and-iterators"><h4 id="consensusresolution-generators-and-iterators">Consensus/Resolution:</h4></a><ul>
+<li>Removed: <code>send</code> and <code>close</code></li>
+</ul>
+
+</body>

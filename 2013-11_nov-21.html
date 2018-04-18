@@ -1,0 +1,540 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>November 21, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#november-21-2013-meeting-notes"><h1 id="november-21-2013-meeting-notes">November 21, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Yehuda Katz (YK), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Rick Hudson (RH), Matt Sweeney (MS), Rick Waldron (RW), Dmitry Soshnikov (DS), Sebastian Markbåge (SM), Ben Newman (BN), Jeff Morrison (JM), Reid Burke (RB), Waldemar Horwat (WH), Doug Crockford (DC), Tom Van-Cutsem (TVC), Mark S. Miller (MM), Brian Terlson (BT), Andreas Rossberg (ARB), Alex Russell (AR), Mark S. Miller (MM)</p>
+<hr>
+<a href="#follow-up-on-ietf-json-wg-communication-document"><h2 id="follow-up-on-ietf-json-wg-communication-document">Follow Up on IETF JSON WG Communication document</h2></a><p>(review)</p>
+<a href="#conclusionresolution-follow-up-on-ietf-json-wg-communication-document"><h4 id="conclusionresolution-follow-up-on-ietf-json-wg-communication-document">Conclusion/Resolution</h4></a><ul>
+<li>Unanimous consent</li>
+</ul>
+<a href="#45-modules"><h2 id="45-modules">4.5 Modules</h2></a><p>(Dave Herman, Sam Tobin-Hochstadt)</p>
+<p>(request slides)</p>
+<p>(fighting Google Hangouts for fun and profit)</p>
+<p>DH: Spec draft: Done.
+Initial implementation for Firefox, POC for spec: <a href="https://github.com/jorendorff/js-loaders">https://github.com/jorendorff/js-loaders</a></p>
+<p>End-to-End Draft Done:</p>
+<ul>
+<li>Linking semantics</li>
+<li>Loading semantics</li>
+<li>Execution semantics</li>
+<li>Loader API</li>
+<li>Dynamic: CommonJS, AMD, Node compatibility layer</li>
+<li>Bonus: literate implementation starting to pass simple tests</li>
+</ul>
+<p>DH: there's a compat layer for dynamic import systems. Hope is that in a couple of months it can ship in nightly FF.</p>
+<p>EA: is there a license on this?</p>
+<p>DH: no, but we'll add one.</p>
+<p>AWB: if you're contributing to ECMA, it has to be under the ECMA software contribution rules (ie, BSD license)</p>
+<p>AR: can you add a license today?</p>
+<p>ARB: how are these files related to each other?</p>
+<p>DH: things are extracted from the source, and the short version is that the actual wording is now done. Then next steps are to improve the formatting and work with AWB to reconcile editorial issues.</p>
+<p>AWB: yes, this is what we've done with Proxies/Promises/etc. Something we know how todo. if there are normative changes, they'll get resolved.</p>
+<p>ES6 Draft</p>
+<ul>
+<li>Updated syntax for new parameterized grammar</li>
+<li>Static semantics done and implemented</li>
+</ul>
+<p>DH: stuff that has been through the editorial process are the syntax, the static grammar, and static semantic rules. Don't have a doc dump this morning but can generate one today and send it around.</p>
+<p>DH: didn't have a chance this morning to do it yet.</p>
+<p>ARB: was only looking at the docx fragments so far...</p>
+<p>DH: wanted to talk a bit about the last bits of the semantic cleanups. The distinction between scripts and modules and the browser integration: <code>&lt;script async&gt;</code> was a way to allow you to use the module system at the top level. This creates 3 global non-terminals. I say you dont' need <code>&lt;script async&gt;</code>.</p>
+<p>Clean Ups</p>
+<ul>
+<li>Scripts and Modules</li>
+</ul>
+<ul>
+<li>Three goal non-terminals (Modules, Script, ScriptAsync) is one too many</li>
+<li>Elimintaing imports from scripts simplifies the Loader API—loading is purely about modules</li>
+<li><code>&lt;script async&gt;</code> was a non-start anyway</li>
+</ul>
+<p>DH: in additon, the idea of using <code>&lt;script async&gt;</code> was misguided.</p>
+<p>AR: no, we can fix <code>&lt;script async&gt;</code></p>
+<p>WH: we discussed this at previous meetings, what happened to the need for script async?</p>
+<p>DH: <code>&lt;module&gt;</code> instead.  A nicer path forward for the web. Automatic async semantics. More concise than <code>&lt;script async&gt;</code>.</p>
+<ul>
+<li>Not part of ECMAScript</li>
+<li>As concise as <code>&lt;script&gt;</code></li>
+<li>More concise than <code>&lt;script async&gt;</code></li>
+<li>allows inline source</li>
+<li>implicitly strict (as all modules are)</li>
+<li>Named <code>&lt;module&gt;</code> provide source up front</li>
+<li>Anonymous <code>&lt;module&gt;</code> async but force exec</li>
+</ul>
+<p>AR: this has real security issues.</p>
+<p>YK: this can have other forms -- <code>&lt;script type=&quot;module&quot;&gt;</code>...etc...</p>
+<p>DH: the goal here is to come up with the cleanest design we can come up with on the JS side and drawing a sharper distinction between scripts and modules. You get to start in a clean scope. Top-level decls are scoped to the module.</p>
+<p>DH: you also get implicit strict mode. And inline source.</p>
+<p>AR: this is never going to work in the field. This will violate expectations.</p>
+<p>YK: can you show me what's secure today that does blacklisting?</p>
+<p>AR: no, but that's not the argument.</p>
+<p><code>&lt;module&gt;</code> is a better 1JS</p>
+<ul>
+<li>Better global scoping: starts in a nested scope</li>
+<li>To Create persistent globals, must opt in, by mutating window/this</li>
+<li>Conservation of concepts: no special semantics required for reforming global scope, just a module</li>
+<li>A carrot to lead away from blocking scripts</li>
+<li>still accessible to scripts via <code>System.import</code></li>
+</ul>
+<p>WH: Universal parsing is a problem. HTML parsers know that escaping rules are different within a script tag but not within some other random tags such as module.</p>
+<p>EA: you can see a transition path that starts with <code>&lt;script type=&quot;module&quot;&gt;</code> and move to <code>&lt;module&gt;</code> later</p>
+<p>(some agreement)</p>
+<p>DH: if <code>&lt;module&gt;</code> turns out not to work, we have other options. One of these is likely to work</p>
+<p>AR: agree.</p>
+<p>Alternatives:</p>
+<ul>
+<li>script module</li>
+<li>script type=&quot;module&quot;</li>
+</ul>
+<p>DH: benefits include: top-level decls are local. You can persist by opting in (window.foo = ...), but it's not a foot gun via var. No special semantics for the global scope; it's jsut a module. Still accessible via System.import.</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">module</span>&gt;</span>
+var foo = 1;
+<span class="hljs-tag">&lt;/<span class="hljs-name">module</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+foo; <span class="hljs-comment">// undefined.</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>DH: Recapping the concatenation story.</p>
+<p>(didn't we all do this before?)</p>
+<p>YK: <code>&lt;module&gt;</code> and <code>&lt;script module&gt;</code> are morally equivalent</p>
+<p>STH: to address issues with <code>&lt;script async&gt;</code>, we need a separate entry point. Any of the others listed here address the use cases brought up that <code>&lt;script async&gt;</code> addresses.</p>
+<p>WH:now you have 3 things</p>
+<p>(emphatic disagreement)</p>
+<p>DH: there are 2 terminals in the global of JS in this world, not 3. <code>&lt;script&gt;</code> and <code>&lt;script async&gt;</code> have the same terminal production</p>
+<p>DH: we've had a hard time working through the global scoping semantics. We don't need special semantics for a reformed global scope. Deflty avoids implicating global semantics. Just write modules.</p>
+<p>ARB: you still need the lexical contour, no?</p>
+<p>DH: yes, but lets talk about that at the end.</p>
+<p>DH/YK: there's an unnamed module loading timing that's before <code>&lt;script defer&gt;</code></p>
+<p>EA: you can't wait till domcontentloaded to run stuff. Need stuff running sooner.</p>
+<p>ARB: Multiple module elements?</p>
+<p>AR: Document order</p>
+<p>EA: I jsut don't want us to cripple the system for this use-case, e.g. the HTML5 doc.</p>
+<p>AR: you need both.</p>
+<p>YK: a sync attr seems fine.</p>
+<p>DH: we can't operate as if the web didn't exist, but we can't define HTML elements, so we need a story but not the answer.</p>
+<p>BE: partial progress if possible</p>
+<p>DH: lets talk about the loader API. Will send out slides soon;</p>
+<p>Loader API</p>
+<ul>
+<li><a href="https://gist.github.com/dherman/7568080">https://gist.github.com/dherman/7568080</a></li>
+</ul>
+<pre><code class="language-js">
+<span class="hljs-keyword">var</span> l = <span class="hljs-keyword">new</span> Loader({
+  <span class="hljs-attr">normalize</span>: n,  <span class="hljs-comment">// Promise&lt;stringable&gt;</span>
+  locate l,      <span class="hljs-comment">// Promise&lt;address&gt;, formerly "resolve"</span>
+  fetch f,       <span class="hljs-comment">// Promise&lt;source&gt;</span>
+  translate t,   <span class="hljs-comment">// Promise&lt;source&gt;</span>
+  instantiate f, <span class="hljs-comment">// Promise&lt;factory?&gt;, formerly "link"</span>
+});
+</code></pre>
+<p>address -&gt; where to find this
+source -&gt; the source text</p>
+<p>WH: what's fetch for?</p>
+<p>DH: gets the bits that are stored. The translate hook provides ways of transforming bits into other bits.</p>
+<p>YK: <code>instantiate</code> is the bridge for legacy module forms: amd, node, etc.</p>
+<p>WH: What exactly is promised in each step?
+(see gist)</p>
+<p>Core API</p>
+<pre><code class="language-js"><span class="hljs-comment">// Loader API</span>
+<span class="hljs-comment">// Promise&lt;void&gt;</span>
+l.load(name[, opts]);
+
+<span class="hljs-comment">// Promise&lt;void&gt;</span>
+l.define(name, src[, opts]);
+
+<span class="hljs-comment">// Promise&lt;Module&gt;</span>
+l.module(src[, opts]);
+</code></pre>
+<p>WH: If load is called twice, does it reuse the same module?</p>
+<p>DH: Yes</p>
+<p>WH: Concerned about options. How close do the options have to be to reuse instead of loading twice?</p>
+<p>DH: the main option here is that you can skip the locate step. Load lets you start at multiple places.</p>
+<p>DH: define() lets you do things after the fetch step, while module() lets you do the anonymous module thing.</p>
+<p>EA: I'm worried that define() is a new eval().</p>
+<p>DH: yes, that's what it's about. Downloading and evaulating code. Some people say &quot;eval is evil&quot; and I say &quot;there would be no JS on the web without it&quot;. This is a more controlled and sandboxed way of doing it.</p>
+<p>WH: define returns a promise of void. How do you safely use the defined module?</p>
+<p>EA: I'm worried about CSP.</p>
+<p>DH: l.import() as a convenience api. Kicks off a load and forces an execution of the module. Resolves to the module object. It's a nice way of doing it all in one shot.</p>
+<p>DH: the registry API</p>
+<pre><code><span class="hljs-comment">// Registry API, methods on a Loader instance</span>
+<span class="hljs-selector-tag">l</span><span class="hljs-selector-class">.get</span>(name)    <span class="hljs-comment">// Module?</span>
+<span class="hljs-selector-tag">l</span><span class="hljs-selector-class">.set</span>(name, m) <span class="hljs-comment">// void</span>
+<span class="hljs-selector-tag">l</span><span class="hljs-selector-class">.has</span>(name)    <span class="hljs-comment">// boolean</span>
+<span class="hljs-selector-tag">l</span><span class="hljs-selector-class">.keys</span>()       <span class="hljs-comment">// Iter&lt;string&gt;</span>
+<span class="hljs-selector-tag">l</span><span class="hljs-selector-class">.values</span>()     <span class="hljs-comment">// Iter&lt;Module&gt;</span>
+<span class="hljs-selector-tag">l</span><span class="hljs-selector-class">.entries</span>()    <span class="hljs-comment">// Iter&lt;[string, Module]&gt;</span>
+</code></pre>
+<p>MM: delete?</p>
+<p>BE/RW: size property?</p>
+<p>AR: if you can change it, you can delete...why not have it?</p>
+<p>DH: you might astonish a running system</p>
+<p>STH: it only removes it from the mapping. Agree with the misgivvings, but we should have it.</p>
+<p>YK: I can imagine delete for security purposes</p>
+<p>STH: clear() would be insane to use, but....</p>
+<p>MM: if we have an existing contract, we should have it, else we should define some supertype</p>
+<p>DH: it's a no-op in JS to do that. People are warming up on delete()</p>
+<p>WH: what do these things actually do? eg. <code>l.define(name, ...);</code> then <code>l.get(name)</code>?</p>
+<p>YK: there's a turn between when things are done and when they're ocmmitte. You see the &quot;old&quot; view.</p>
+<p>WH: What happens when you call define twice with the same name?</p>
+<p>DH: They race. Name stays what it was until one of them gets fulfilled; it's nondeterministic which one.</p>
+<p>WH: How do you find out if there's a pending define on a name?</p>
+<p>DH: You can't.</p>
+<p>WH: That makes it impossible to write safe modular code unless you're the very first thing to run. Otherwise anything you try to define could be racing with something already started.</p>
+<p>DH: <code>set</code> is synchronous &quot;add this eagerly&quot;. Get is sync get.</p>
+<p>DH: this is an inherently racy API because module loading is racy.</p>
+<p>WH: why not placeholders indicating that a load is in progress?</p>
+<p>DH: there's an implicit one in the system, and we try to have sanity checks, but ....</p>
+<p>STH: now it's observable that things are loading in some order</p>
+<p>WH: That turns a race condition into a reliable fail.
+If someone tries to load a module and then I load a module of the same name, I want that to fail.</p>
+<p>STH: (explains pollyfill)</p>
+<p>WH: True, but don't see how that's relevant. I have no problem with module replacing. I want it done in a safe way, not in a racy way.</p>
+<p>DH: We have handling</p>
+<p>EF: Do yo have slides for all the exceptions?</p>
+<p>DH: Do not, Jason has it documented, but could not be here.</p>
+<p>STH: There are thousands of lines that explain all of this very precisely.</p>
+<p>WH: I asked this earlier, what happens when I call define with the same name twice and was told it's non-deterministic.</p>
+<p>DH: I stand by the statement that this is non-deterministic, there are too many cases.
+(explains several common and uncommon cases)</p>
+<p>e.g., jquery dep fails, but something else depends on it. zero refcount. Common deps may cause successful subsets to succeed or fail together.</p>
+<p>WH: agree that you'll get non-determinism. But should we hide the started/unstarted state from the user?</p>
+<p>(discussion of observability)</p>
+<p>BE: Let's take</p>
+<p>DS: The registry is global or tied to a particular loader</p>
+<p>DH: A built in loader called &quot;System&quot;</p>
+<p>Decoupling Realms from Loaders</p>
+<p>(smells)</p>
+<ul>
+<li>Loaders are really about modules, but eval/evalAsync represnt scripts</li>
+<li>Mixing concerns: scripts vs modules</li>
+<li>Mixing concerns: module loading vs sandboxing</li>
+<li>Capability hazard: <code>new Loader({ intrinsics: otherLoader })</code></li>
+</ul>
+<p>Realms: Globals, Intrinsics, Eval Hooks</p>
+<p>(facts)</p>
+<ul>
+<li>Global object &amp; Function/eval are &quot;intertwingled&quot;</li>
+<li>Intrinsics and standard constructors, prototypes are &quot;intertwingled&quot;</li>
+<li>Realm and intrinsics are &quot;intertwingled&quot;</li>
+<li>Everything is deeply &quot;intertwingled&quot;</li>
+</ul>
+<p>YK: (explains import from registry)
+... Can create a different Loader for maintaining state in a specific module while loading another module of the same name.</p>
+<p>Realm API</p>
+<p>A realm object abstracts the notion of a distinct global environment.</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> loader = <span class="hljs-keyword">new</span> Loader({
+<span class="hljs-attr">realm</span>: r, <span class="hljs-comment">// a Realm object</span>
+});
+</code></pre>
+<p><a href="https://gist.github.com/dherman/7568885">https://gist.github.com/dherman/7568885</a></p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> r = <span class="hljs-keyword">new</span> Realm({ ... });
+
+r.global.myGlobal = <span class="hljs-number">17</span>;
+
+r.eval(...);
+</code></pre>
+<p>AWB: This &quot;Realm&quot; as a global object is questionable.</p>
+<p>DH: Talking about &quot;Realm&quot;, &quot;Loader&quot; and &quot;Module&quot;, likely should be in a &quot;module&quot; module.</p>
+<p>Seperable From Loader API</p>
+<ul>
+<li>Important, but it's a separate concern</li>
+<li>Loader defaults to its own realm</li>
+<li>Realms; sandboxing, sync script executuon</li>
+<li>Loaders: async module execution</li>
+</ul>
+<p>DH: a &quot;Realm&quot; is a &quot;virtual iframe&quot; from the same domain. It's a global with the DOM stripped out of it.</p>
+<p>WH: Think there should be commonalities between API surface of Realm and Worker</p>
+<p>MM: When you create a new Realm, what do you provide in order to give it initial state?
+... Let's just keep this in mind.</p>
+<p>Realm API</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> realm = <span class="hljs-keyword">new</span> Realm({
+<span class="hljs-attr">eval</span>: ...,
+<span class="hljs-attr">Function</span>: ...
+}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">builtins</span>) </span>{
+
+  <span class="hljs-comment">// global object starts empty</span>
+  <span class="hljs-comment">// populate with standard builtins</span>
+
+  mixin(<span class="hljs-keyword">this</span>.global, builtins);
+});
+</code></pre>
+<p>DH: First object contains things to explicitly add to the Realm's global.</p>
+<p>EA: What happens when you omit it.</p>
+<p>DH: you get an object that inherits from <code>Object.prototype</code></p>
+<p>WH: Is the global object always accessible at <code>this.global</code>?</p>
+<p>DH: Yes</p>
+<p>EA: This is the wrong default, we need something else.</p>
+<p>MM: The only properties on global object that are non-configurable are <code>NaN</code>, <code>Infinity</code>, and <code>undefined</code></p>
+<p>DH: Better to start out empty and fill it yourself then to create something that almost looks like global</p>
+<p>EA: The most common case is a global environment with all the builtins, should be the default</p>
+<p>RW: agree</p>
+<p>MM: So, if the callback is omitted, you get a realm that is the default environment with all the builtins.</p>
+<p>EA/RW/DH: yes</p>
+<p>STH: If the callback is provide, the realm's global is a null prototype object</p>
+<p>(summarize change)</p>
+<ul>
+<li>no callback, default environment with all the builtins</li>
+<li>w/ callback, object with null [[Prototype]]</li>
+</ul>
+<p>WH: What does the init provide?</p>
+<p>DH: Allows you to whitelist what goes into your realm</p>
+<p>AR: what about the second arg? can that be folded into the first?</p>
+<p>DH: yes, perhaps &quot;init: function(...) { }&quot;</p>
+<p>Indirect Eval</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> caja = <span class="hljs-keyword">new</span> Realm({
+<span class="hljs-attr">indirectEval</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">args</span>) </span>{
+    <span class="hljs-keyword">return</span> anything
+}
+});
+
+caja.eval(<span class="hljs-string">`
+  (0, eval)("1 + 2")
+`</span>);
+</code></pre>
+<p>STH: I was really skeptical of this, but I was persuaded.</p>
+<p>WH: Why not use something simpler such as define realm.evalToken as the function to compare against what the eval identifier evaluates to in order to check for direct vs. indirect eval?</p>
+<p>(Offline conversation with MM/DH/YK/BT: indirectEval hook returning the result of eval wont' work without a way to refer to eval. Fix is to make indrectEval a translate hook similar to directEval.)</p>
+<p>Direct Eval</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">let</span> caja = <span class="hljs-keyword">new</span> Realm({
+  <span class="hljs-attr">eval</span>: {
+    <span class="hljs-attr">direct</span>: {
+      <span class="hljs-attr">translate</span>: <span class="hljs-function">(<span class="hljs-params">s</span>) =&gt;</span> { ... }
+    }
+  }
+});
+
+caja.eval(<span class="hljs-string">`{ let tmp = f();
+             eval("tmp") }`</span>);
+</code></pre>
+<p>Direct Eval</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">let</span> caja = <span class="hljs-keyword">new</span> Realm({
+  <span class="hljs-attr">eval</span>: {
+    <span class="hljs-attr">direct</span>: {
+      <span class="hljs-attr">fallback</span>: <span class="hljs-function">(<span class="hljs-params">f, ...rest</span>) =&gt;</span> { ... }
+    }
+  }
+});
+
+caja.eval(<span class="hljs-string">`{ let tmp = f();
+             eval("tmp") }`</span>);
+</code></pre>
+<p>WH: Why so many levels of destructuring in the first parameter to the Realm constructor? Do we need then all?</p>
+<p>Function</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> caja = <span class="hljs-keyword">new</span> Realm({
+  <span class="hljs-attr">Function</span>: <span class="hljs-function">(<span class="hljs-params">args, body</span>) =&gt;</span> { ... }
+});
+
+caja.eval(<span class="hljs-string">`
+  Function("x", "return x + 1")
+`</span>);
+</code></pre>
+<p>ARB: Why not spec it by defined concatenation plus eval?</p>
+<p>STH: Explains the issues the exist with toString.</p>
+<p>WH: If the engine validates the arguments before calling Function then that limits the ability to provide new syntax for Function (for transpilers).</p>
+<p>DH:</p>
+<ul>
+<li>Can't create new arguments syntax</li>
+<li>Simpler apis lose strong guarantees from validation?</li>
+<li>(need the third reason)</li>
+</ul>
+<p>Function*</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> caja = <span class="hljs-keyword">new</span> Realm({
+  <span class="hljs-attr">Function</span>: <span class="hljs-function">(<span class="hljs-params">args, body, prefix</span>) =&gt;</span> { ... }
+});
+
+caja.eval(<span class="hljs-string">`
+  (function*().constructor("x", "return  x + 1")
+`</span>);
+</code></pre>
+<p><code>prefix</code> is the string that is either &quot;function&quot; or &quot;function *&quot;</p>
+<p>DS: concern for changes in semantics of</p>
+<p>discussion re: eval of source code</p>
+<p>DH: Returning source code is the more conservative</p>
+<p>MM: script injection problems because people want to create source from concatenation. If we translate an array of source pieces, then we're not doing concatenation in the spec.</p>
+<p>MM: The string that's the prefix piece determines the constructor. &quot;function&quot; =&gt; Function, &quot;function*&quot; =&gt; Generator</p>
+<p>DH: two place you can reach the function constructor</p>
+<ul>
+<li><code>Function</code> global</li>
+<li><code>Function.prototype.constructor</code></li>
+</ul>
+<p>If you mutate <code>Function.prototype.constructor</code></p>
+<ol>
+<li>Create a new Realm</li>
+<li>Save the original <code>Function.prototype.constructor</code> to the side</li>
+<li>Create a new <code>Function</code> in that global</li>
+<li>Mutate its <code>Function.prototype.constructor</code> to whatever you want</li>
+</ol>
+<p>MM: This strategy has been field tested in SES</p>
+<p>STH: Function.prototype.<strong>proto</strong>?</p>
+<p>BT: Object.prototype</p>
+<p>Realm API</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> r = <span class="hljs-keyword">new</span> Realm({
+  <span class="hljs-attr">eval</span>: {
+    indirect,
+    <span class="hljs-attr">direct</span>: {
+      translate, fallback
+    }
+  },
+  <span class="hljs-built_in">Function</span>
+});
+</code></pre>
+<p>DH: A compiler for ES7 -&gt; ES6. The compiler has some static source its carrying around and comes to:</p>
+<pre><code class="language-js">|-
+|-
+|-
+<span class="hljs-built_in">eval</span>(x)
+</code></pre>
+<p>And contains source:</p>
+<pre><code class="language-js">{t1, t2, t3}
+</code></pre>
+<p>Translate to an Identifier &quot;eval&quot;, no way around this</p>
+<pre><code class="language-js">...
+translate: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">s, src</span>) </span>{
+  <span class="hljs-keyword">return</span> compile(s, src);
+}
+
+fallback: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">f, ...rest</span>) </span>{
+  <span class="hljs-keyword">return</span> f(...rest);
+}
+</code></pre>
+<p>WH: Fallback needs a this binding to handle cases with 'with' such as this one:
+a.eval = <something user-defined>
+with (a) {
+eval(b)
+}</p>
+<p>[ agreed ]</p>
+<p>Cross-Domain Modules</p>
+<ul>
+<li>browser loader should allow cross-domain loads</li>
+<li>ServiceWorker requires cross-domain sources (XHR) and sinks (<code>img</code>, <code>script</code>, etc)</li>
+<li>Browser's <code>System.define</code> should be a sink</li>
+<li>No Problem:  type of src parameter unconstrained in ES Semantics—polymorphism to the rescue</li>
+<li>IOW each loader determines for itself what types are allowed for source</li>
+</ul>
+<p>Streaming Modules</p>
+<ul>
+<li><p>Might want to support streaming I/O in the future</p></li>
+<li><p>Polymorphism allows admitting stream objects for <code>.define</code> and <code>.module</code> in future</p></li>
+</ul>
+<p>YK: We've built a layer under the new constructs and CSP can work at that level: <code>loader.eval</code>, etc. A small core that we can build on top of.</p>
+<a href="#conclusionresolution-45-modules"><h4 id="conclusionresolution-45-modules">Conclusion/Resolution</h4></a><p>Realm constructor semantics changes:</p>
+<ul>
+<li>changing &quot;eval&quot; to:
+<ul>
+<li>directEval</li>
+<li>indirectEval</li>
+</ul></li>
+<li>Remove &quot;Function&quot; hook</li>
+<li>no callback, default environment with all the builtins</li>
+<li>w/ callback, object with null [[Prototype]]</li>
+<li>fold callback into first argument as option, eg. <code>init: function(...) { }</code></li>
+<li>&quot;fallback&quot; hook needs an additional first argument: <code>this</code> binding</li>
+</ul>
+<p>Dave and Allen, follow up on:</p>
+<p>AWB: Not all intrinsics are named?</p>
+<p>DH: Yes. Don't need to be hookable, create a new Realm and get the intrinsics.</p>
+<p>AWB: Do you only have to define the constructor of the intrinsic? Wire up first?</p>
+<p>DH: Don't think those things need ot be customizable. We can extend the optional named parameters of the Realm constructor in a compatible way.</p>
+<p>... Can fully customize the relationship between a Loader and Realm.</p>
+<p>EA: Does modules have a hard dependency on Realms?</p>
+<p>DH: no</p>
+<p>AR: Seems like it's adding?</p>
+<p>DH: Nothing new, we're just defining what was there.</p>
+<p>AWB: Prioritize?</p>
+<p>DH: Modules, Module loader first. Realms later.</p>
+<p>STH: (explains that Module Loader can't be deferred, needed by browsers)</p>
+<p>AWB: Realm seems very essential...</p>
+<p>DH: Not necessary, don't put off the Loader API</p>
+<p>ARB: What is the confidence level of this spec?</p>
+<p>AR/DH: Very confident, but assume there are small bugs to address.</p>
+<p>AWB: Very excited, feel like we've finally gotten it.</p>
+<p>MM: Really like this, but would like to attempt reimplement SES on top of this and Realms API</p>
+<p>ARB: (likes Realms as well)</p>
+<p>STH: re: confidence in design... Dave, Yehuda, Jason and I have made revisions for a few cases:</p>
+<ul>
+<li>making sure everything held together at the lowest level</li>
+<li>have addressed all of the use cases that were necessary</li>
+</ul>
+<p>DH: No more use cases, no more churn. There will be bugs, but we will discover these during implementation and address accordingly.</p>
+<p>ARB: Happy with the design now, this is great. I agree that there wont be major changes anymore. Realistically no way to know if the spec is spec'ing what we think it is, until we get to it. What damage would it cause if we defer this?</p>
+<p>AR: Alot</p>
+<p>DH: Massive</p>
+<p>BE: You'll lose momentum and gain a perceived failure hazard.</p>
+<p>DH: JS Community will walk away.</p>
+<p>ARB: is this all true?</p>
+<p>YK/AR/RW: Yes.</p>
+<p>Discussion about time line of ES6 implementation</p>
+<p>(break)</p>
+<a href="#46-the-global-scope-contour"><h2 id="46-the-global-scope-contour">4.6 The global scope contour</h2></a><p>(Dave Herman)</p>
+<p>Relevant:</p>
+<ul>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2012-07/july-25.md#scoping-rules-for-global-lexical-declaration">https://github.com/rwaldron/tc39-notes/blob/master/es6/2012-07/july-25.md#scoping-rules-for-global-lexical-declaration</a></li>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2012-09/sept-19.md#global-scope-revisit">https://github.com/rwaldron/tc39-notes/blob/master/es6/2012-09/sept-19.md#global-scope-revisit</a></li>
+</ul>
+<p>DH: I want to make the case that we don't think we need a second global scope contour.</p>
+<p>AWB: We require a different set of rules for how to interact with new binding forms</p>
+<p>DH:</p>
+<ul>
+<li>A clean story for what the development model is for how you share code</li>
+<li>Starting your script in a module, you're already in local scope</li>
+<li>no need to be scoping bindings in a global scope</li>
+<li>if you want to scope things, use a module</li>
+<li>if you want mutation, use a script</li>
+</ul>
+<p>AWB: Can let, const, class be script scoped?</p>
+<p>DH: Could disallow let, const, class in Script</p>
+<p>EA/RW/WH: no.</p>
+<p>ARB: How does that not violate 1JS</p>
+<p>Propose:
+let, const, class scoped to Script, as if it had an implicit scope</p>
+<p>EA: This would prevent people from transitioning from function to class.</p>
+<p>RW: Developer console hazard.</p>
+<p>ARB: class has TDZ
+ARB: HTML event attributes might need to see the declarations</p>
+<p>RW: Use developer tools as an example. The transition has hazards where user code thinks it has created a global binding, but actually hasn't.</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">let</span> foo = <span class="hljs-number">1</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p><code>foo</code> appears undefined in the console.</p>
+<p>YK/JM: discussing concerns about fragmentation of the mental model of global binding in scripts</p>
+<p>BE: Again, we have a consensus on this subject.</p>
+<p>MM: In the body of a <code>with() {}</code>, what does let, const, class do?</p>
+<p>AWB: It's a block. They're scoped to the block.</p>
+<p>BE: What is the new input that we're reopening this for?</p>
+<p>DH: The new input is that the module tag or type=module is a better model</p>
+<p>RW: Concerns that there will be transitional inconsistency across browsers.</p>
+<p>EA: The status quo would allow you to see the binding in a later script</p>
+<p>Proposed scoping won't allow this.</p>
+<p>EA/RW: let, const, class should be &quot;var like&quot; at the global level in Script.</p>
+<p>DH: There is a potential confusion. The local scope contour is less confusing than the extensible contour.</p>
+<p>BE: It's bad if people type:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>And C disappears after the <code>&lt;/script&gt;</code></p>
+<p>EA/WH/RW: Agree.</p>
+<p>DH:</p>
+<ul>
+<li>let is the same as var globally</li>
+<li>const is the same as Object.defineProperty(...)</li>
+<li>class is the same as var globally</li>
+</ul>
+<p>EA/RW: ^^^^^ Agreed.</p>
+<p>BE: Speculation about module uptake doesn't trump the expectation of cross script global bindings.</p>
+<a href="#conclusionresolution-46-the-global-scope-contour"><h4 id="conclusionresolution-46-the-global-scope-contour">Conclusion/Resolution</h4></a><p>Status Quo. Yehuda commits to work through existing issues for alternate paths.</p>
+<p>Next meeting agenda:
+<a href="https://github.com/tc39/agendas/blob/master/2014/01.md">https://github.com/tc39/agendas/blob/master/2014/01.md</a></p>
+
+</body>

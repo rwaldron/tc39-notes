@@ -1,0 +1,215 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 22, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-22-2013-meeting-notes"><h1 id="may-22-2013-meeting-notes">May 22, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Luke Hoban (LH), Doug Crockford (DC), Yehuda Katz (YK), Brendan Eich (BE), Sam Tobin-Hochstadt (STH), Alex Russell (AR), Dave Herman (DH), Bernd Mathiske (BM), Andreas Rossberg (ARB), Mark S. Miller (MM), Tom Van-Cutsem (TVC), István Sebestyén (IS), Jasvir Naga (JNA)</p>
+<hr>
+<a href="#416-spec-update"><h2 id="416-spec-update">4.16 Spec update</h2></a><p><a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts</a></p>
+<p>YK: <code>ToPositiveInteger</code> is needed by JSIDL</p>
+<p>AI(YK+AWB): Put an algorithm in the spec that DOM can use so that we get the same behavior in JS and DOM.</p>
+<p>6 General implementation experiences</p>
+<p>ARB: We started implementing generators but things are pretty smooth.</p>
+<p>BE: Doing modules at the moment.</p>
+<p>AWB: Bunch of bug fixes in the spec related to classes.</p>
+<a href="#49-template-strings-template-literals"><h2 id="49-template-strings-template-literals">4.9 Template Strings (Template Literals)</h2></a><p>MM: Suggests status quo.</p>
+<p>AR: <em>Objects</em></p>
+<p>MM: Controversy related to tag-less templates. Alternatives include making tag-less templates an error, delayed evaluation (contextually provided)</p>
+<p>AR: Econics: naked interpolation is too attractive. Should always have a tag to encourage users to think about which behavior is correct.</p>
+<p>YK: I cannot support Alex's proposal.</p>
+<p>STH: What would the name of this tag be?</p>
+<p>AR: Something that is imported from a module.</p>
+<p>STH: Concerned about short names and conflicts.</p>
+<p>YK: People will just use 's' without thinking.</p>
+<p>YK: People should use HTML templating engines.</p>
+<p>DC: Alex's testimony about application developer feedback is relevant.</p>
+<p>LH: it sounded like Google engineers were using a template system</p>
+<p>EA: Correct.</p>
+<p>MM: Does anyone prefer taking out TS if they don't get tag-less TS?</p>
+<p>Everyone: Agrees that it is better to require tag than to remove TS from ES6.</p>
+<p>AR: Strings are always used later in some context. Communicating the intent</p>
+<p>AWB: String concat vs string interpolation have the same issue.</p>
+<p>LH: Assumes that maybe only 20% of the uses of TS are susceptible to XSS</p>
+<p>MM: Removing tag-less does not reduce XSS because people will just use</p>
+<pre><code class="language-js">s<span class="hljs-string">`...`</span>
+</code></pre>
+<p>TS helps people transition to a better world. Once they have have a TS it will be easy to add  an html tag at the front as needed.</p>
+<p>ST: It will be painful to import String raw and alias that to s.</p>
+<p>MM: Maybe put tag-less in appendix?  Withdrawn idea because no one likes it.</p>
+<p>YK: You should not have use string based APIs.</p>
+<p>AR: Willing to abstain but &quot;Y'all are making a big mess&quot;</p>
+<p>BM: Half convinced by Alex.</p>
+<p>LH: Different code bases will use different tags for normal string interpolation so moving between code bases will be hard to.</p>
+<p>AR: That is a good thing. Forces people to think.</p>
+<p>MM: Template strings in E.</p>
+<p>STH: Lots of contexts where XSS is not an issue.</p>
+<p>BM: More ways to XSS is a bad thing.</p>
+<p>BE: if people have to import s then the economics change and people will stick to +</p>
+<a href="#consensusresolution-49-template-strings-template-literals"><h4 id="consensusresolution-49-template-strings-template-literals">Consensus/Resolution:</h4></a><ul>
+<li>AR and BM sustains.</li>
+<li>Continue with the status quo (tag-less TS is supported)</li>
+</ul>
+<a href="#json"><h2 id="json">JSON</h2></a><p>DC: IETF wants to change JSON</p>
+<p>MM: The 2 documents should have exactly the same text except for boilerplate.</p>
+<p>IS: Should it be done in TC39?</p>
+<p>DC: Most of the work will be on the mailing lists</p>
+<p>AWB: Who will be the editor?</p>
+<p>DC: Hopes they (IETF) will provide an editor.</p>
+<p>JN: Should this be fast tracked to ISO?</p>
+<p>DC: That makes sense.</p>
+<p>JN: How long do you expect this to take?</p>
+<p>DC: Has taken a long time to coordinate and get started. 5.1 specs the 2 functions that uses the JSON format.</p>
+<a href="#410-modules"><h2 id="410-modules">4.10 Modules</h2></a><p>STH: Progress since last meeting. Discuss &quot;module naming&quot;, &quot;naming standard modules&quot;.
+<a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules">http://wiki.ecmascript.org/doku.php?id=harmony:modules</a>
+Wiki is up to date with the current proposal. Spec is &quot;wiki complete&quot;.</p>
+<p>Jason Orendorff of Mozilla has worked on flushing out semantic issues. Moz is implementing parsing of modules.</p>
+<p>STH: Syntax: Made a couple of changes.</p>
+<p>A. To support anonymous exports</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> expr;
+
+<span class="hljs-keyword">import</span> $ <span class="hljs-keyword">from</span> <span class="hljs-string">"jquery"</span>;  <span class="hljs-comment">// imports default anonymous export</span>
+</code></pre>
+<p>If there is no default then the above is an error</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {ajax} <span class="hljs-keyword">from</span> <span class="hljs-string">"jquery"</span>;
+
+<span class="hljs-keyword">import</span> {ajax <span class="hljs-keyword">as</span> A} <span class="hljs-keyword">from</span> <span class="hljs-string">"jquery"</span>;
+</code></pre>
+<p>to reduce confusion and to make it clear that this is not destructuring.</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">"js/fs"</span>
+</code></pre>
+<ul>
+<li>fs is a module instance object</li>
+</ul>
+<p>The following is not valid:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {...} <span class="hljs-keyword">from</span> fs;  <span class="hljs-comment">// SyntaxError</span>
+</code></pre>
+<p>Renaming on export:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> foo = <span class="hljs-number">13</span>;
+<span class="hljs-keyword">export</span> { foo <span class="hljs-keyword">as</span> bar };
+<span class="hljs-keyword">export</span> { foo };
+</code></pre>
+<p>The following is not valid:</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> foo;
+</code></pre>
+<p>STH: The only evaluation here is &quot;13&quot;. The rest are just bindings that are shared with the outside/module importer.</p>
+<p>MM: Bad idea to allow external modules to assign to imports.</p>
+<p>DH: Imported bindings are read only to the importer.</p>
+<p>AWB: This is new semantics to the language. Is there a list of these new semantics modules introduce?</p>
+<p>AWB: Is there a way to get the default export from the instance module obejct.</p>
+<p>STH: There will be a well known symbol name to get to it.</p>
+<p>AWB: Does module instance objects inherit from Object.prototype.</p>
+<p>DH: No. Because we do not want any pollution.</p>
+<p>JNA: Is it an error to assign to an imported binding?</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {ajax} <span class="hljs-keyword">from</span> <span class="hljs-string">"jquery"</span>;
+ajax = <span class="hljs-number">14</span>;  <span class="hljs-comment">// Error</span>
+</code></pre>
+<p>AR: What is the reason for not extending <code>Object.prototype</code> or some other
+object?</p>
+<p>YK: To prevent people from expecting <code>toString</code> to be there (???)</p>
+<p>DH: <code>fs.readFile</code> We don't want to statically check this deeply inside an expression.</p>
+<pre><code class="language-js">fs.toString
+</code></pre>
+<p>THS: The plan is to allow the above to be a static error in the future.</p>
+<p>DH: To keep things clean.</p>
+<p>AWB: Concerned about the dot operator</p>
+<p>ARB: Don't want less checking if you do not use import.</p>
+<p>DH: Do not want refactoring hazards.</p>
+<p>ARB: This only affect the static semantics.</p>
+<p>AWB: Can you use square bracket?</p>
+<p>STH: Square bracket is dynamic.</p>
+<p>AR: This is only a static check that is lost. At runtime there will still be errors.</p>
+<p>LH: Concerned about default export. Now people will have to decide which approach to use.</p>
+<p>STH: This is already the case in Node.js today.</p>
+<p>LH: Today you might get any object, it might be callable with properties.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">"fs"</span>);  <span class="hljs-comment">// module instance</span>
+<span class="hljs-keyword">var</span> glob = <span class="hljs-built_in">require</span>(<span class="hljs-string">"glob"</span>);  <span class="hljs-comment">// function with properties</span>
+<span class="hljs-keyword">var</span> parse = <span class="hljs-built_in">require</span>(<span class="hljs-string">"parse"</span>);  <span class="hljs-comment">// function</span>
+
+<span class="hljs-built_in">module</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">"fs"</span>;
+<span class="hljs-keyword">import</span> glob <span class="hljs-keyword">from</span> <span class="hljs-string">"glob"</span>;
+<span class="hljs-keyword">import</span> {sync} <span class="hljs-keyword">from</span> <span class="hljs-string">"glob"</span>;
+<span class="hljs-keyword">import</span> parse <span class="hljs-keyword">from</span> <span class="hljs-string">"parse"</span>;
+</code></pre>
+<p>Lots of discussion...</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {sync} <span class="hljs-keyword">from</span> <span class="hljs-string">"glob"</span>;
+</code></pre>
+<p><em>alt</em></p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> glob <span class="hljs-keyword">from</span> <span class="hljs-string">"glob"</span>;
+<span class="hljs-keyword">var</span> {sync} = glob;
+<span class="hljs-keyword">import</span> {ajax} <span class="hljs-keyword">from</span> <span class="hljs-string">"jquery"</span>;
+</code></pre>
+<p>LH: Prefers <code>export =</code> and lose static checking when people opt in to single anonymous export.</p>
+<p>STH/YK: We already agreed that we want static checking.</p>
+<p>LH: Even for new things being built, this is causing a confusion.</p>
+<p>AWB: It is unclear when and what you want to export as the default export.</p>
+<p>BM: Wants</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-keyword">default</span> $ <span class="hljs-keyword">from</span> <span class="hljs-string">"jquery"</span>
+</code></pre>
+<p>...to ensure that people have to be explicit about what they import.</p>
+<p>DH: This is just syntax and we are wasting time &quot;bikeshedding&quot;</p>
+<p>AWB: What is the best practice? Is there a single module containing Map, Set &amp; WeakMap or...</p>
+<p>YK: WeakMap should be its own import:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> <span class="hljs-built_in">WeakMap</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"collections/WeakMap"</span>;
+</code></pre>
+<p>BE: We have to pay attention to what Node/AMD do today.</p>
+<p>YK: AMD tries to make modules small to reduced byte size of the dependencies.</p>
+<p>STH: And now to semantics
+<a href="https://github.com/jorendorff/js-loaders/blob/master/browser-loader.js">https://github.com/jorendorff/js-loaders/blob/master/browser-loader.js</a></p>
+<p>Major things that changed. Use options object more consistently. The wiki page is up to date. Need to decide whether the browser loader is in the appendix or if it is in some w3c spec. Want core language semantics to treat the names as strings, not the semantics of these strings. Bulk loading. One HTTP request to load multiple modules. Possible to implement. Create fecth hook. Stores module notations in a side table. In the xhr response, split the result and call the different fulfill hooks.</p>
+<p>EF: Sounds like what we do today in YUI loaders. How would you write the HTML?</p>
+<p>DH: Initial script tag with configuration. Second script tag as usual. Alt 2 is to have configuration and dynamic module load in the same script block.</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="undefined">
+ondemand
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"main.js"</span> <span class="hljs-attr">async</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>alt 2</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+ondemand
+System.require(<span class="hljs-string">"main.js"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{ .... });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>DH: script[async] today have to use an external src.</p>
+<p>STH: Naming and declarations of modules.</p>
+<p>ARB: Presenting slides...</p>
+<p>AWB: The rate that internal vs external names changes is very different.</p>
+<p>STH:</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> <span class="hljs-string">"m"</span> { ... }
+<span class="hljs-built_in">module</span> <span class="hljs-string">"n"</span> {
+  <span class="hljs-keyword">import</span> x <span class="hljs-keyword">from</span> <span class="hljs-string">"m"</span>;
+  ...<span class="hljs-comment">// this part is not executed.</span>
+}
+<span class="hljs-keyword">import</span> x <span class="hljs-keyword">from</span> <span class="hljs-string">"m"</span>;
+</code></pre>
+<p>STH: Configuration step is mostly about other people's code.</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-built_in">module</span> <span class="hljs-string">"m"</span> { ... }
+<span class="hljs-built_in">module</span> <span class="hljs-string">"n"</span> {
+  <span class="hljs-keyword">import</span> m <span class="hljs-keyword">from</span> <span class="hljs-string">"m"</span>;
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+    Loader.eval(<span class="hljs-string">"import m from 'n'"</span>);
+  }
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p><code>m</code> is fixed at compile time</p>
+<p>ARB: Not opposed to logical modules. Wants both lexical and logical</p>
+<p>DH: Not opposed to lexical modules.</p>
+<p>YK: Too late to work out lexical modules for ES6.</p>
+<p>ARB: If we wait we will have redundancy.</p>
+<p>YK: Want declarative form to be able to prefetch etc.</p>
+<p>BE: I want lexical modules (in the future) but logical modules are easier to use.</p>
+<p>ARB: Since I don't seem to be able to convince anyone I'm going to drop this</p>
+<p>ARB: For the record. Major concern about the global registry becoming the new global object.</p>
+<a href="#consensusresolution-410-modules"><h4 id="consensusresolution-410-modules">Consensus/Resolution:</h4></a><ul>
+<li>Move along with Dave and Sam's proposal.</li>
+<li>Work on lexical modules for ES7</li>
+</ul>
+
+</body>

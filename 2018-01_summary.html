@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>Summary for the 62nd meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="#summary-for-the-62nd-meeting-of-ecma-tc39"><h1 id="summary-for-the-62nd-meeting-of-ecma-tc39">Summary for the 62nd meeting of Ecma TC39</h1></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2018/01.md">Agenda</a></li>
+</ul>
+<a href="#general"><h2 id="general">General</h2></a><ul>
+<li><a href="2018-01_jan-23.html#13iie-code-of-conduct-committee-update-prs-call-for-participants">Code of Conduct updates</a> properly forming a list of members for its enforcement team.</li>
+<li>ECMA404 is an <a href="2018-01_jan-23.html#9-ecma404-status-updates">ISO standard (ISO-21778)</a></li>
+<li>TC39 <a href="2018-01_jan-23.html#13ia-tc39-logo">adopted</a> an <a href="https://github.com/tc39/logo">official logo</a></li>
+<li>Mathias Bynens introduced jsvu to provide <a href="2018-01_jan-23.html#13iia-making-eshost-workflow-more-accessible-with-jsvu">an easier use of eshost workflow</a></li>
+<li>A <a href="2018-01_jan-23.html#13iig-invited-expertspecification-contributor-forms">new form for contributions is adopted</a>. It's already applied for the <a href="http://tc39.github.io/test262-cla/">Test262 CLA sign up</a>.</li>
+<li>The Chair group (Rex, Dan, Leo) was <a href="2018-01_jan-24.html#6i-chair-group-in-2018">unanimously reelected for 2018</a>.</li>
+<li>TC39 has now an Editor Group with Brian Terlson, Jordan Harbard, and Bradley Farias <a href="2018-01_jan-24.html#6ii-editor-group">to present in March, tentatively planning for the three of them to be joint editors</a>.</li>
+<li>Status updates on Test262 with <a href="2018-01_jan-23.html#11-test262-status-updates">contribution reports and lists of recent coverages, improvements, a non-browsers community users</a>.</li>
+</ul>
+<a href="#new-proposals"><h3 id="new-proposals">New Proposals</h3></a><ul>
+<li><a href="2018-01_jan-23.html#13iic-bigintnumberfromstring-for-stage-1">{BigInt,Number}.fromString</a> Stage 1</li>
+<li><a href="2018-01_jan-23.html#13iif-mathseededrandoms-for-stage-1">Math.seededRandoms()</a> Stage 1</li>
+<li><a href="2018-01_jan-23.html#functionprototypetostring-censorship-for-stage-1">Function.prototype.toString() censorship</a> Stage 1</li>
+<li><a href="2018-01_jan-24.html#13iiil-top-level-await-for-stage-0">Top-level await</a> to Stage 1</li>
+<li><a href="2018-01_jan-23.html#13iiie-maximally-minimal-mixins-proposal">Maximally minimal mixins proposal</a> to <a href="2018-01_jan-24.html#revisiting-mixins-vs-protocols-proposal">Stage 1</a>.</li>
+<li><a href="2018-01_jan-24.html#13iiim-getting-last-item-from-array-for-stage-2">Getting last item from Array</a> to Stage 1 with plans for further work.</li>
+</ul>
+<a href="#moving-forward"><h3 id="moving-forward">Moving Forward</h3></a><ul>
+<li><a href="2018-01_jan-23.html#13iib-make-ecmascript-a-syntactic-superset-of-json-for-stage-3">ECMAScript as a syntatic superset of JSON</a> to Stage 3</li>
+<li><a href="2018-01_jan-23.html#13iid-stringprototypetrimstarttrimend-for-stage-3">String.prototype.{trimStart,trimEnd}</a> to Stage 3</li>
+<li>Several advancements for new RegExp features.
+<ul>
+<li><a href="2018-01_jan-23.html#13iij-regexp-lookbehind-assertions-for-stage-4">dotAll</a> to Stage 4</li>
+<li><a href="2018-01_jan-23.html#13iij-regexp-lookbehind-assertions-for-stage-4">named capture groups</a> to Stage 4</li>
+<li><a href="2018-01_jan-24.html#13iij-regexp-lookbehind-assertions-for-stage-4">lookbehind</a> to Stage 4</li>
+<li><a href="2018-01_jan-24.html#13iik-regexp-unicode-property-escapes-for-stage-4">Unicode property escapes</a> to Stage 4</li>
+</ul></li>
+<li><a href="2018-01_jan-23.html#13iiib-stringprototypematchall-for-stage-3">String.prototype.matchAll</a> to Stage 3</li>
+<li><a href="2018-01_jan-23.html#13iiid-symbolprototypedescription">Symbol.prototype.description</a> to Stage 2</li>
+<li><a href="2018-01_jan-23.html#restspread-properties-for-stage-4">Rest/Spread properties</a> to Stage 4</li>
+<li><a href="2018-01_jan-24.html#13iiia-promiseprototypefinally-for-stage-4">Promise.prototype.finally</a> to Stage 4</li>
+<li><a href="2018-01_jan-24.html#13iiio-intl-proposals-for-stage-3-intllistformat-intlrelativetimeformat">Intl.ListFormat, Intl.RelativeTimeFormat</a> to Stage 3</li>
+<li><a href="2018-01_jan-25.html#13iih-async-iteration-for-stage-4">Async Iteration</a> to Stage 4</li>
+<li><a href="2018-01_jan-25.html#13iiio-intlrelativetimeformat-intllocale-for-stage-3">Intl.RelativeTimeFormat, Intl.Locale</a> to Stage 3</li>
+</ul>
+<a href="#others"><h3 id="others">Others</h3></a><p><em>Proposals not advancing to new a new stage. e.g.: development updates, needs work, no consensus, etc).</em></p>
+<ul>
+<li><a href="2018-01_jan-23.html#13iiic-functionprototypetostring-pr-for-stage-4">Function.prototype.toString</a> still on Stage 3 with plans for a follow up work.</li>
+<li><a href="2018-01_jan-23.html#13iiif-pr-making-nullish-values-iterable-or-at-least-array-spreadable">Making nullish values iterable, or at least array-spreadable</a> discussion to follow up on the respective <a href="https://github.com/tc39/ecma262/pull/1069">PR</a>.</li>
+<li><a href="2018-01_jan-23.html#13iiik-new-set-builtin-methods-for-stage-2">new Set builtin methods</a> for further discussion before advancing to Stage 2.</li>
+<li><a href="2018-01_jan-24.html#13iiin-optional-chaining-update">Optional Chaining updates</a>.</li>
+<li>Discussion on <a href="2018-01_jan-24.html#13vd-operator-overloading-for-stage-1">operator overloading</a>, not advancing to Stage 1 for now to collect requirements.</li>
+<li><a href="2018-01_jan-24.html#15iiia-tc39-should-endorse-use-of-a-one-of-several-not-one-specific-recommended-parsing-linter-or-actual-compiler-not-any-particular-semicolon-style">TC39 should endorse use of a (one-of-several, not one specific recommended) parsing linter or actual compiler, not any particular semicolon style</a>.</li>
+<li>Discussion on <a href="2018-01_jan-24.html#13iiij-decorators-use-cases">use cases of Decorators</a>.</li>
+<li>Updates on <a href="2018-01_jan-25.html#13vc-decorators-towards-stage-3">Decorators</a> to further advancement to Stage 3.</li>
+<li>Updates on <a href="2018-01_jan-25.html#13vb-static-class-features-proposal">Static Class features</a>, no advancement.</li>
+<li>Updates on <a href="2018-01_jan-25.html#13va-bigint-status-update-significant-recent-change">BigInt</a> status.</li>
+<li><a href="2018-01_jan-25.html#open-ended-discussion-exploring-statements-as-expressions">Open-ended discussion: Exploring Statements as Expressions.</a>, not advancing yet, some concerns to be addressed first.</li>
+<li><a href="2018-01_jan-25.html#issue-about-process-coordinating-with-other-standards-bodies">issue about process, coordinating with other standards bodies</a>.</li>
+</ul>
+
+</body>

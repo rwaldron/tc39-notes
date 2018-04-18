@@ -1,0 +1,832 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 23, 2018 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-23-2018-meeting-notes"><h1 id="january-23-2018-meeting-notes">January 23, 2018 Meeting Notes</h1></a><hr>
+<p>Sebastian Markbåge (SM), Lin Clark (LCK), Waldemar Horwat (WH), Dean Tribble (DT), Chip Morningstar (CM), Brian Warner (BWR), Mark S. Miller (MM), Till Schneidereit (TST), Michael Saboff (MS), JF Bastien (JFB), Mattijs Hoitink (MHK), Kyle Verrier (KVR), Brian Terlson (BT), Shu-yu Guo (SYG), Ron Buckton (RBN), Michael Ficarra (MF), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Tab Atkins-Bittner (TAB), Kevin Gibbons (KG), Domenic Denicola (DD), Mariko Kosaka (MKA), Myles Borins (MBS), Peter Hoddie (PHE), Jordan Harband (JHD), Justin Fagniani (JFI), Caridy Patiño (CP), Zibi Braniecki (ZB), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Mathias Bynens (MB), Patrick Soquet (PST), Nathan Hammond (NHD), Stephen Murphy (SMY), Adam Klein (AK), Sathya Gunasekaran (SGN), Gabriel Isenberg (GI), John Lenz (JLZ), Diego Ferreiro Val (DFV), Maggie Pint (MPT), Thomas Nattestad (TND), Isabelle Valet-Harper (IVH), Peter Jensen (PJ), Brad Nelson (BNN), Godfrey Chan (GCN), Sri Pillalamarri (SPI), Eric Holk (EHK), Reefath Rajali (RRI), Rebecca Turner (RTR), Natalie Silvanovich (NSH), Sam Mussell (SML), Sebastian McKenzie (SMK), Daniel Rosenwasser (DRR), Qiuyi Zhang (QZG), Rob Palmer (RPR), Sean Larkin (SLN)</p>
+<p>Remote: Bradley Farias (BFS), Thomas Wood (TW), Ben Newman (BN), Rick Waldron (RW), Valerie Young (VYG), David Turissini (DTI)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>RJE: Welcome</p>
+<p>SGN: New member get-together at 5 PM on Tuesday, dinner Wednesday at 6:30 PM</p>
+<p>BT: Use the #tc39-delegates IRC channel on Freenode, ask me for help</p>
+<a href="#3-adoption-of-agenda"><h2 id="3-adoption-of-agenda">3. Adoption of Agenda</h2></a><p>(Rex Jaeschke)</p>
+<p><a href="https://github.com/tc39/agendas/blob/master/2018/01.md">https://github.com/tc39/agendas/blob/master/2018/01.md</a></p>
+<p>RJE: (agenda construction?)</p>
+<a href="#conclusionresolution-3-adoption-of-agenda"><h4 id="conclusionresolution-3-adoption-of-agenda">Conclusion/Resolution</h4></a><ul>
+<li>Adopted</li>
+</ul>
+<a href="#5-report-from-the-ecma-secretariat"><h2 id="5-report-from-the-ecma-secretariat">5. Report from the Ecma Secretariat</h2></a><p>RJE: Report of the Secretariat - István has the flu, won't attend.</p>
+<p>RJE: I've been working behind the scenes with ECMA for membership issues. She's coming to the dinner, and I'll be meeting with her Thursday night clarifying things for the not-for-profit membership, and see if projects like Babel can be included. Also, a non-voting membership, like distinguished membership or Fellow; discussion seems quite positive.</p>
+<p>RJE: Officers positions: we'll take a formal vote, unusual in TCs. Need to ascertain the voting members, will discuss tomorrow. Unless I got objection, it's my intent to have one motion for all three positions as a slate; if not we'll take them one-by-one. Should be straightforward to do tomorrow.</p>
+<p>YK: Can I request we attempt to approve through unanimous consent and avoid a formal vote?</p>
+<p>RJE: Sounds good.</p>
+<a href="#7-ecma262-status-updates"><h2 id="7-ecma262-status-updates">7. ECMA262 status updates</h2></a><p>(Brian Terlson)</p>
+<p>BT: Most critical is royalty-free opt-out period. I'll talk about what proposals make the cut. Shooting to start this period the first week of Feb if possible. What that means for you is you need to get your lawyers to examine the doc, and tell TC39 if you want to exercise your patents over part of the spec. Hopefully not - we're not sure what would happen, hasn't happened yet - but I'm sure your lawyers will love reading the spec.</p>
+<p>YK: Nothing to do if we have no patents?</p>
+<p>BT: Yes.</p>
+<p>BT: Two new things - regex dotall flag and template literal. Reviewing regex unicode property escapes and lookbehind. Also looking for Stage 4 is Promise.finally(). I've also review rest spread.</p>
+<p>BT: Big thing is async iteration, that will probably take me a while. I'm comfortable with it from a tech perspective. Are you looking for it to reach Stage 4 this meeting?</p>
+<p>DD: Yeah, but I'm fine if it slips to Stage 4, whatever.</p>
+<p>BT: I'd like to get it in 2018 if possible. Anyone else have a proposal not mentioned that they want on the 2018 train?</p>
+<p>no hands for additional proposals that want to get on the 2018 train</p>
+<p>DE: Did you say all 4 regex proposals? Dotall, unicode property escape, lookbehind, and named capture groups.</p>
+<p>BT: Didn't see named capture groups yet. We'll discuss named-captures groups during the meeting</p>
+<p>MF: Named capture groups not in the agenda.</p>
+<p>BT: Ah, miss the train then I guess. Weird since it does have implementations.</p>
+<p>BT: So nothing else for 2018. My work going forward is going to be finishing the normative PRs, I have editorial work to do. Once the changes stop coming in, I'm gonna do the major change of autolinking for syntax-directed operations. Major source of merge-conflict pain, so I've been putting it off til we stabilize. Probably spending like 5 days to make a PDF.</p>
+<p>BT: looking for ways to turn a website into a PDF</p>
+<p>DD: We have a script we use for HTML, I can show it to you.</p>
+<p>BT: Would love to try it.</p>
+<p>BT: The royalty-free opt-out period I'm shooting for the beginning of Feb. I believe that's a 60-day period within which you can opt-out. I won't make any non-editorial changes from then. I'll also make a branch for this; that's what you'll want your lawyers to look at.</p>
+<a href="#conclusionresolution-7-ecma262-status-updates"><h4 id="conclusionresolution-7-ecma262-status-updates">Conclusion/Resolution</h4></a><ul>
+<li>RF opt-out begins in Feb. (Brian Terlson to fill exact date)</li>
+</ul>
+<a href="#4-ecma402-status-updates"><h2 id="4-ecma402-status-updates">4. ECMA402 status updates</h2></a><p>(Caridy Patiño)</p>
+<p>CP: We finally merged Intl.PluralRules, this is first time a new type of Intl object is added since 2013 (first edition).  Aside from that, a bunch of editorial changes. Two things to notice - for two years we've been trying to remove usage of dynamic fields from objects in the editorial text, we finally removed it. Second, we're trying to specify things that were unspecified, we've covered a lot of ground here. Not much pending for the Feb cut. Getting some traction for another meeting in another month.</p>
+<p>DE: We've been having ecma 402 meetings</p>
+<p>ZB: Summary is we have good traction on a call, people not in this meeting. We didn't expect that much attendance, almost 20 people on the last 402 call a week ago. It's pretty useful for us, we were able to review the proposals for Stage 3/4, and we'll present in our timebox.</p>
+<p>DE: This is the timebox for that.</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1JlVOkn21jyF4YlsxBeisfvyYKzf5AZYNUzrUeZD12CQ/edit#slide=id.g2e1d914bb7_0_47">slides</a></li>
+</ul>
+<p>ZB: Started a 2-hour meeting, open to invited experts, got more attendees than expected, awesome. First meeting in Dec, did current workings of 402, in this meeting we reviewed proposals going to Stage 3/4. If you want to join, contact Ben and he'll put you on the list.</p>
+<p>ZB: Minor additions like hourCycle to the option bag.</p>
+<p>ZB: Reviewing Stage 4 features, we had reps from all major browser engines, was useful to verify that we have no reason to worry about non-impl. There has been convos with Edge about timing, they're locked on stable features in ICU than we are, but that's all a 3-4 month period we think.</p>
+<p>ZB: So pluralRules, hourCycle, and formatToParts are all good to go.</p>
+<p>ZB: Stage 3, Segmenter, Locale, RelativeTimeFormat, Listformat, we got support from all attendees on the call to promote them to next stage.</p>
+<a href="#conclusionresolution-4-ecma402-status-updates"><h4 id="conclusionresolution-4-ecma402-status-updates">Conclusion/Resolution</h4></a><ul>
+<li>WG will propose Intl.Locale, Intl.RelativeTimeFormat and Intl.ListFormat for Stage 3 later at this meeting</li>
+</ul>
+<a href="#9-ecma404-status-updates"><h2 id="9-ecma404-status-updates">9. ECMA404 status updates</h2></a><p>(Chip Morningstar)</p>
+<p>CM: Summary - no news is good news. What they call &quot;fast track&quot; thru ISO has happened, 404 is now ISO-21778, that's it.</p>
+<a href="#conclusionresolution-9-ecma404-status-updates"><h4 id="conclusionresolution-9-ecma404-status-updates">Conclusion/Resolution</h4></a><ul>
+<li>ECMA404 is an ISO standard (ISO-21778)</li>
+</ul>
+<a href="#10-ecma414-status-updates"><h2 id="10-ecma414-status-updates">10. ECMA414 status updates</h2></a><p>(Brian Terlson)</p>
+<p>BT: No updates. The suite is ready.</p>
+<p>RJE: Seems like we don't need this for future updates</p>
+<a href="#conclusionresolution-10-ecma414-status-updates"><h4 id="conclusionresolution-10-ecma414-status-updates">Conclusion/Resolution</h4></a><ul>
+<li>No updates</li>
+</ul>
+<a href="#11-test262-status-updates"><h2 id="11-test262-status-updates">11. Test262 status updates</h2></a><p>BT: am I really on the hook for this?</p>
+<p>BT: 262 is going excellently. Vague improvements since the last meeting - I don't know if I can actually update this meeting. I'll get some info, present tomorrow.</p>
+<p>RW: (added post meeting)</p>
+<ul>
+<li><p>Actively maintained, has good Ecma member organization support</p></li>
+<li><p>Some stats...</p>
+<ul>
+<li>29765 test files</li>
+<li>Contributors
+<ul>
+<li>2014: 16</li>
+<li>2015: 22</li>
+<li>2016: 35</li>
+<li>2017: 47</li>
+</ul></li>
+<li>Contributors with more than 1 commit...
+<ul>
+<li>2014: 8</li>
+<li>2015: 13</li>
+<li>2016: 19</li>
+<li>2017: 31</li>
+</ul></li>
+<li>Commits
+<ul>
+<li>2014: 78</li>
+<li>2015: 415</li>
+<li>2016: 439</li>
+<li>2017: 726</li>
+</ul></li>
+<li>Additions/Deletions:
+<ul>
+<li>2014: 676,247 ++ 2,986,311 --</li>
+<li>2015: 146,134 ++ 102,655 --</li>
+<li>2016: 496,517 ++ 43,504 --</li>
+<li>2017: 654,330 ++ 244,488 --</li>
+</ul></li>
+</ul></li>
+<li><p>Coverage for...</p>
+<ul>
+<li>SharedArrayBuffer and Atomics</li>
+<li>BigInt</li>
+<li>Improvements for Type Coercion</li>
+<li>String.prototype.trimEnd, trimStart</li>
+<li>Promise.prototype.finally</li>
+<li>Array.prototype.flatten &amp; flatMap</li>
+<li>async generators and async iteration
+<ul>
+<li>async function *</li>
+<li>for await of</li>
+</ul></li>
+<li>class fields (private and public)</li>
+<li>new RegExp features</li>
+<li>Unicode test maintenance</li>
+<li>new Intl feature</li>
+<li>Object Rest &amp; Spread</li>
+</ul></li>
+<li><p>Improvements for parsers:</p>
+<ul>
+<li>support negative tests that are more explicit about where and when they occur:
+<ul>
+<li>parse: occurs while parsing the source text.</li>
+<li>early: occurs prior to evaluation.</li>
+<li>resolution: occurs during module resolution.</li>
+<li>runtime: occurs during evaluation.</li>
+</ul></li>
+<li>previously this was just &quot;early&quot; and &quot;runtime&quot;</li>
+</ul></li>
+<li><p>test-harness code is now also tested</p></li>
+<li><p>Community users, non-browser JS engines and tools:</p>
+<ul>
+<li>Acorn</li>
+<li>Babel</li>
+<li>Babylon</li>
+<li>Brackets</li>
+<li>Caja</li>
+<li>cherow</li>
+<li>Code.org JS interpreter</li>
+<li>DMDScript</li>
+<li>duktape</li>
+<li>Esprima</li>
+<li>Flow</li>
+<li>JerryScript</li>
+<li>Jint</li>
+<li>JSHint</li>
+<li>Moddable</li>
+<li>Open SE Bench</li>
+<li>PhantomJS</li>
+<li>Prepack</li>
+<li>rjs (JavaScript on Rust)</li>
+<li>SES</li>
+<li>Shift</li>
+<li>spdy web compiler</li>
+<li>TypeScript</li>
+<li>Three.js</li>
+<li>UglifyJS</li>
+<li>zeparser
+(are testing against test262 or some part of test262)</li>
+</ul></li>
+<li><p>New tools to make test consumption easier:</p>
+<ul>
+<li>test262-stream
+<ul>
+<li>Produces a stream of &quot;compiled&quot; test sources, with both strict and non-strict
+versions (as needed) of each test; ready to be executed in a given runtime or engine
+<ul>
+<li>bootstrapped with harness, assert and helper code (as needed)</li>
+</ul></li>
+</ul></li>
+<li>test262-features
+<ul>
+<li>In progress!</li>
+<li>Detect and validate features tag</li>
+<li>autofix features tag lists</li>
+<li>automate upkeep of features tag</li>
+</ul></li>
+</ul></li>
+<li><p>In 2018</p>
+<ul>
+<li>Continue growing coverage for old and new features</li>
+<li>Experiment with &quot;upstream sync&quot; and &quot;2-way sync&quot; of
+engine implementor's feature tests
+<ul>
+<li>implementor contributed...
+<ul>
+<li>feature implementation tests</li>
+<li>stress tests</li>
+<li>regression tests</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<a href="#conclusionresolution-11-test262-status-updates"><h4 id="conclusionresolution-11-test262-status-updates">Conclusion/Resolution</h4></a><ul>
+<li>Cruising right along!</li>
+</ul>
+<a href="#13ia-tc39-logo"><h2 id="13ia-tc39-logo">13.i.a. TC39 Logo</h2></a><p>(Shu-yu Guo)</p>
+<ul>
+<li><a href="https://github.com/tc39/tc39-logo">repo</a></li>
+</ul>
+<p>SGO: Has everyone seen the logo on the repo? That's the ECMA orange (it looks like JS yellow on the projector). Is there any objection to using this in communications/repo/etc?</p>
+<p>(No Objections)</p>
+<p>SGO: If people want to use it, Illustrator, PDF, SVG, all there.</p>
+<p>DD: License?</p>
+<p>SGO: Public domain?</p>
+<p>BT: Better as CC0</p>
+<p>YK: Are we okay with it being public domain? If people use this to impersonate us...</p>
+<p>BT: That's Trademark, not copyright.</p>
+<p>YK: People generally intend CC0 to also mean they won't enforce the trademark.</p>
+<p>DD: Don't make that assumption...</p>
+<p>BT: ECMA will enforce the trademark.</p>
+<p>DD: I support putting logo contents as CC0</p>
+<a href="#conclusionresolution-13ia-tc39-logo"><h4 id="conclusionresolution-13ia-tc39-logo">Conclusion/Resolution</h4></a><ul>
+<li>Consensus on logo: yes! will adopt.</li>
+<li>Trademark/license to decide later, RJE to take as action item</li>
+</ul>
+<a href="#13iia-making-eshost-workflow-more-accessible-with-jsvu"><h2 id="13iia-making-eshost-workflow-more-accessible-with-jsvu">13.ii.a. Making eshost workflow more accessible with jsvu</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/bterlson/eshost-cli">eshost-cli</a></li>
+<li><a href="https://github.com/GoogleChromeLabs/jsvu">jsvu</a></li>
+</ul>
+<p>MB: (Presenting)</p>
+<p>MB: Wanted to start with something small and talk about ESHost... talking about command-line utilities. Useful for people on the community. Makes it really easy to run a piece of JS code in various engines from the command line. On a system with Node and npm, you just install ESHost-CLI (demonstrates).  It runs a given code snippet in all the engines it knows about. For it to know about these engines you have to tell it &quot;I have a V8 binary here, Chakra there...&quot;.  You do have to set up build systems, compile from source, repeat every few weeks to get up-to-date engine builds. This was painful unless you're already working on these. So now I want to talk about a new tool to set these up locally rather than doing the whole compile dance. It's called JSVU (version updater) and it's also a command-line utility. On a system with Node and npm, you just install jsvu globally, and then run it (demonstrates). The first time it asks for confirmation on which engines + arch, then it does its thing, figures out the latest version of each engine, downloads and installs the binaries, and that's it. So you only have to remember a single command, jsvu, and run it whenever you want to auto-update all those engines to the latest version. Then you can directly use the JS engines from the command line.</p>
+<p>MB: Specifically for eshost-cli, you just need to install eshost and tell it where the engines are, which for jsvu is all in the same directory, and that's it. Immensely useful for compat testing. Any time you find yourself in need of a JS engine binary you can use jsvu to easily automate the install and get a recent version. I'm interested in other use-cases, too, like web assembly waterfall — in that project, a lot of engineering time is spent maintaining the build infrastructure for all JS engines. This can be avoided by just using jsvu instead of building it all from source. If you use this, let me know what you use it for. And shoutout to eshost, it's a very nice tool.</p>
+<p>YK: At minimum, a use-case in my space is having JS code that you expect to not need browser code (I write a library like this), this is a quick way to ensure it runs on all the engines.</p>
+<p>MB: Note that there's still some difference in what REPLs offer, e.g. most of them include a non-standard print() function. But yes, you're closer to the metal — Node is a wrapper around V8, while this lets you test directly in V8.</p>
+<p>MM: This is awesome. With regard to what it takes to extend jsvu to know about a new engine, for example how would the Moddable team add their engine (XS)?</p>
+<p>MB: There's a support statement in the README — JSC on Linux isn't maintained. I'd love to add Moddable support. We first need precompiled binaries at a predictable URL, then some way to programmatically determine which is the latest version. After that it's an easy PR to add it, look at the existing scripts in the <code>engines</code> folder: they codify how to detect the version number, what the checksum is, what the URL format is, and how to test whether the binary works.</p>
+<p>MB: The thing about browser JS engines is that they were already compiling these binaries for their testing infra anyway — they just weren’t uploading them anywhere afterwards. The biggest part of working on this project was convincing browser vendors to host the binaries publicly, rather than discarding them after every test run.</p>
+<p>BT: I’d love to add Moddable's XS support to eshost as well — eshost needs to know how to print to the console, how to create a new realm, etc. Happy to do that work if you can give me pointers to your docs.</p>
+<p>PST: Shouldn't be too complicated. We support all the architectures jsvu mentions in its README.</p>
+<p>MB: You don't even have to, to have it added to jsvu!</p>
+<p>BT: Let's get it figured out.</p>
+<p>TST: Another thing for easier use-cases within the shell itself.</p>
+<p>MB: To make it easier to publish in jsvu, you can host a <code>LATEST</code> file somewhere with the URL/checksums/etc. Right now I have to do terrible things like parsing HTML with regex just to get the version number.  For one of the engines I have to look at the GitHub Releases page for the official mirror of the project; at some point GH changed their HTML and my regex broke. :(</p>
+<p>BT: (To TST) I've got a couple bugs open on your bug tracker, requests for SpiderMonkey. One I know of is SM is the only engine that doesn't let you eval some text as a module without passing a root module on the command line. If you don't have a module file to start with... There's another I can't remember.</p>
+<p>TST: I'll look into those, ping me.</p>
+<p>DE: Igalia is maintaining JSC on Linux and working on exposing the binaries in a URL that's more friendly to jsvu.</p>
+<p>BT: How about a way to run JSC on Windows without having to install iTunes? ;)</p>
+<p>JFB: There's no official JSC maintainer for Windows, but someone can volunteer on the WebKit mailing list.</p>
+<p>CP: Only Chakra is missing <code>Intl</code> here, is there any particular reason?</p>
+<p>MB: I'm just using the binaries the Chakra team provides; not sure why they're missing <code>Intl</code>. BT?</p>
+<p>BT: The Windows binaries have it disabled on <code>Intl</code> right now because it's not done, but you can flag to turn it on and experiment. I'm actually a little surprised it's not on by default.</p>
+<p>KCL: Re scraping GitHub HTML, there is a REST (<a href="https://developer.github.com/v3/repos/releases/">https://developer.github.com/v3/repos/releases/</a>) and GraphQL (<a href="https://developer.github.com/v4/object/release/">https://developer.github.com/v4/object/release/</a>) API for that...</p>
+<p>MB: Ok, maybe part of the problem is that I'm lazy, kinda. <sup>_</sup> Best solution would be if each engine hosted an official <code>LATEST</code> file with metadata for each engine.</p>
+<a href="#conclusionresolution-13iia-making-eshost-workflow-more-accessible-with-jsvu"><h4 id="conclusionresolution-13iia-making-eshost-workflow-more-accessible-with-jsvu">Conclusion/Resolution</h4></a><ul>
+<li>Issue already opened</li>
+</ul>
+<a href="#13iib-make-ecmascript-a-syntactic-superset-of-json-for-stage-3"><h2 id="13iib-make-ecmascript-a-syntactic-superset-of-json-for-stage-3">13.ii.b. Make ECMAScript a syntactic superset of JSON for Stage 3</h2></a><ul>
+<li><a href="https://github.com/tc39/proposal-json-superset">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1eDW_u6dI8iFUx77m8rjRbF6C0grLZuVFJmJq620qD-I/edit">slides</a></li>
+</ul>
+<p>MB: Back onto ECMAScript being a syntactic superset of JSON, a proposal by Richard Gibson.</p>
+<p>MB: Simple idea, make ES a superset of JSON. It’s not right now, because JS strings can't contain two unescaped characters (U+2028, U+2029), while JSON can. This proposal aims to fix that. We can't fix JSON, it's set in stone, but we can change ES. So this proposal changes ES to extend double and single-quoted strings to accept these two chars. Can't imagine anyone depending on this not working. (demonstrates the spec edit) This is a rare proposal that actually simplifies the current spec — ECMAScript benefits from the similarity in its definition of JSON.parse, so we can drop some of the extra code specializing this. Jordan and Michael Ficarra were Stage 3 reviewers and gave their blessing, so I'm asking for Stage 3. Any objections?</p>
+<p>(No Objections)</p>
+<p>WH: I also have reviewed this and I approve it</p>
+<a href="#conclusionresolution-13iib-make-ecmascript-a-syntactic-superset-of-json-for-stage-3"><h4 id="conclusionresolution-13iib-make-ecmascript-a-syntactic-superset-of-json-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+</ul>
+<a href="#13iic-bigintnumberfromstring-for-stage-1"><h2 id="13iic-bigintnumberfromstring-for-stage-1">13.ii.c. {BigInt,Number}.fromString for Stage 1</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/mathiasbynens/proposal-number-fromstring">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1Cs3FcclB_Vsb3YqU7dLRbsBqLmn7Bb4qEYs7bX8lOsQ/edit">slides</a></li>
+</ul>
+<p>MB: BigInt used to have .parseInt(), but it was removed because parseInt behavior is weird. So conclusion was to remove it and come up with something more sensible. This is that proposal.</p>
+<p>... discussion about the pronunciation of &quot;radix&quot;; loosely settled on &quot;radd-ix&quot; ...</p>
+<p>MB: Suggestion is {BigInt, Number}.fromString(). Symmetric with toString. We want something to BigInt that fulfills this functionality and we can add the same thing to Number.  Main problem that motivates this is there's no way to do the inverse — go from string back to number — but Number can through parseInt, although in a surprising way.</p>
+<p>MB: Reasons parseInt is weird: gives NaN when string is bad, gives NaN when radix is bad, accepts radix 0 and pretends it's 10, accepts hex literal prefixes but not the octal and binary prefixes. Can't go back and add support, might be backwards-incompatible. It also ignores leading whitespace and trailing non-digits.  And having some support for integer literal prefixes means it's not the inverse of toString - it accepts some things that toString can't produce.</p>
+<p>MM: one more way - case sensitive.</p>
+<p>MB: Ah yes, we’ll talk about this as we move along.</p>
+<p>WH: I have some concerns on this proposal</p>
+<p>MB: Note this is stage 0, trying to hit 1 today. Let’s not get too hung up on the exact shape of the current proposal.</p>
+<p>DD: It'd be good to get the committee’s opinion on case sensitivity.</p>
+<p>WH: There are some real fundamental problems.</p>
+<p>DD: We'll get there.</p>
+<p>MB: The idea is that anything that can be produced by toString with some radix is accepted by fromString with that radix. Easy to say, hard to spec, but here are some examples.</p>
+<p>MS: Do you expect BigInt.fromString to accept the trailing <code>n</code>?</p>
+<p>MB: I have a slide on that later, and the answer is no.</p>
+<p>(slides)</p>
+<p>MB: We can avoid all these problems in fromString by throwing an error for anything that can't be produced by toString.</p>
+<p>WH: You don't want to throw an error for everything that can't be produced by toString, e.g., &quot;1&quot; or &quot;1.5&quot; can be produced by toString, but &quot;1.0&quot; or &quot;1.50&quot; will never be produced.</p>
+<p>TAB: that would imply that anything which can't be expressed as a dyadic fraction would have to throw.</p>
+<p>WH: Another problem: Number toString will never produce the output &quot;9999999999999999999999&quot; because there is no such exact IEEE double, but rejecting it would be weird.</p>
+<p>MB: Depends on what we want to limit ourselves to.</p>
+<p>MM: I think we absolutely want to accept this. Narrowly perceived as &quot;what toString accepts, exactly&quot; is too narrow. The useful use-case is that we have a string we want to produce a number from.  If you don't accept everything that's valid as floating point and produce a number close to that, you've thrown away too much.</p>
+<p>DD: I was first firmly on the side of this should be symmetric, I'm looking for some guiding principle to spec this that excludes the prefixes, but the 1.0 example is very compelling. I'd urge us to find some principle accepting 1.0 but not 0x0, maybe we won't find it in 6 minutes.</p>
+<p>JRL: To reiterate. Imagine coming from a backend with a different language that doesn't follow toString's api.</p>
+<p>MB: How does parseInt not solve that?</p>
+<p>JRL: It does but it's bad.</p>
+<p>YK: It's a problem in the sense that the person writing the backend code has to understand ..</p>
+<p>DE: Mathias wrote a bunch of slides, can we move through them?</p>
+<p>MB: Doesn't the backend always have to know the rules either way?</p>
+<p>YK: you have to know what the rules are, but the more complicated they are, the more likely you are to mess up, this was hard for Rails</p>
+<p>MM: I’d like to propose a guiding principle — the number syntax that this accepts should be a superset of &quot;standard number interchange&quot; defined by JSON. (Amusing similarity to previous item on being a superset of JSON.)</p>
+<p>WH: Another issue is &quot;1e20&quot;, in base 10 that's <code>10 ** 20</code>. If you set radix to 16 what do you get?</p>
+<p>WH: If you do toString with radix 36, you can get &quot;infinity&quot; in a couple different ways: either supplying an actual ∞ or an integer that's spelled &quot;infinity&quot; in base 36.</p>
+<p>MB: The infinity example - we can fix by not allowing case-insensitivity.  This slide shows some hex digits - <code>C0FFEE</code> is uppercase, should that throw, and work only with <code>c0ffee</code>? Latter is what toString produces.</p>
+<p>MB: We use parseInt, if something isn't a number it produces NaN. With fromString we can throw for anything that toString can’t produce. For nonsensical radix values, the new proposal can also be strict and throw RangeErrors. Legacy octal integers, we can choose to be strict and not support these. No need to support numeric separators either. The n suffix for BigInt, we wouldn't support; symmetry principle says no, and also &quot;1n&quot; is a valid digit with a radix of e.g. 32, so it would be ambiguous.</p>
+<p>MB: So does the committee want to advance to stage 1 and investigate this further, or should we not pursue this further and just say that using parseInt is fine?</p>
+<p>MM: I'm in favor of advancing to stage 1; I want to see what solutions emerge from this discussion</p>
+<p>WH: Agree. I support stage 1 as well. I'm also curious about the solutions to some of these problems.  I was concerned I was getting dismissed bringing them up on GH.</p>
+<p>MB: Sorry for making you feel that way - didn't want us to focus too much on the current spec text. It's intentionally vague right now - I wasn't intending to go straight to Stage 4 in this form.</p>
+<p>DD: I'm also very happy that this will presumably clarify parseInt spec text. I'm hopeful in the course of defining this spec algo it'll be natural to define one for parseInt.  It currently says &quot;the mathematical number value corresponding to this string&quot;.</p>
+<p>MM: Is parseInt not clarified?</p>
+<p>WH: Presumably BigInt.fromString works on integers, but Number.fromString would work on decimals, including &quot;decimals&quot; representing non-integral numbers in bases other than 10.</p>
+<p>MB: Any suggestions on what the guiding principle should be, let us know. <a href="https://github.com/mathiasbynens/proposal-number-fromstring">The link to the proposal repo is in the agenda.</a></p>
+<a href="#conclusionresolution-13iic-bigintnumberfromstring-for-stage-1"><h4 id="conclusionresolution-13iic-bigintnumberfromstring-for-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#13iid-stringprototypetrimstarttrimend-for-stage-3"><h2 id="13iid-stringprototypetrimstarttrimend-for-stage-3">13.ii.d. String.prototype.{trimStart,trimEnd} for stage 3</h2></a><p>(Sebastian Markbåge)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-string-left-right-trim/">proposal</a></li>
+</ul>
+<p>SM: We're also adding a new property to string.prototype with ..</p>
+<p>DT: what happened to the old one?</p>
+<p>DT: is it aliased, or does old code break?</p>
+<p>SM: it's aliased. So Stage 3?</p>
+<p>MB: Did you mention <a href="https://bugs.chromium.org/p/v8/issues/detail?id=6530">the V8 implementation</a>?</p>
+<p>SM: There's a V8 implementation</p>
+<p>DE: JHD and I were stage 3 reviewers. Seems good to me</p>
+<p>MB: I had one comment on the Test262 tests: the README mentions that e.g. <code>String.prototype.trimLeft.name === 'trimStart'</code> but the Test262 tests expect <code>'trimLeft'</code> instead. This should be made explicit in the spec text.</p>
+<p>SM: this is a confusion in the spec, depending on how we do this aliasing, since they have the same name as the original, and in this case they get reversed, we need to find a better way to spec that</p>
+<p>MB: Stage 3 <em>thumbs up</em></p>
+<a href="#conclusionresolution-13iid-stringprototypetrimstarttrimend-for-stage-3"><h4 id="conclusionresolution-13iid-stringprototypetrimstarttrimend-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+</ul>
+<a href="#13iie-code-of-conduct-committee-update-prs-call-for-participants"><h2 id="13iie-code-of-conduct-committee-update-prs-call-for-participants">13.ii.e Code of Conduct Committee update (PRs, call for participants)</h2></a><p>(Jordan Harband, Jory Burson)</p>
+<ul>
+<li><a href="https://github.com/tc39/code-of-conduct/pulls">PRs</a></li>
+<li><a href="https://github.com/tc39/Reflector/issues/86">call for participants</a></li>
+</ul>
+<p>JHD: status update, thanks to Jory and Dan for helping with slides. 3 meetings so far, every two weeks, lots of good discussions, what our role and obligations are, reporting mechanisms. learning from Node's approach to online discussions, they have a good model.</p>
+<p>JHD: there were three open PRs: member list, confidentiality guarantees, clarification role of chair group. created a separate moderation repo, exploring how to use it, e.g. in the node community, when anything that is published in a public venue needs attention ,t it is called out in the moderation repo, all delegates (and maybe invited experts) have access, if any</p>
+<p>JHD: proposed list of membership of CoC committee. Anyone on this list can leave the room so everyone else can discuss them privately. If anyone wants to be added to this list, let Jordan/John/Dan know. They'll leave the room after the slides.</p>
+<p>JHD: PR about confidentiality: original idea was to have reports go to an email list, but what if the issue involves someone on the list? This PR says you can email anyone individually and will be guaranteed confidentiality unless you explicitly opt-in to sharing with others, including rest of CoC</p>
+<p>WH: very uncomfortable with this change, this is creating opportunities for a hostile environment. I've been in an organization with rules like this and it's turned out very badly. What this allows is somebody to email complaints to one person on the CoC and they're not allowed to share the substance of the complaint with anyone else, so one person on the CoC has absolute power over decision making, and aren't allowed to share the complaint with the person being accused. In the case I'm familiar with, the wrong person got ejected from the group, and didn't get to learn why, later turned out to be a case of mistaken identity. This is such a radical change, I understand the desire for sensitivity, but we already have a clause that says if anyone on the CoC has a conflict of interest (for example, is accused or the accuser), they are recused from discussions. We need to have the CoC committee discuss complaints as a whole, except for the cases where they are the accuser or accused. We must also guarantee that the person being accused of something is told what they're being accused of before making any decisions. This change doesn't allow that.</p>
+<p>JHD: base on that , that's a very valid concern, that's not the intent of this change. we need further discussion on this</p>
+<p>WH: I'm also concerned about already having made a non-editorial change to Code of Conduct without consulting those covered by it.</p>
+<p>JHD: We'll revert it. Sounds like we need a new PR, we'll post it on the Reflector. The scenario you're describing is not one we mean to create</p>
+<p>WH: I'm all in favor of improving this</p>
+<p>DE: to be clear, in the CoC we discussed whether to merge this before or after presenting it to the group, we can discuss this in the github issue</p>
+<p>JHD: further thoughts let's discuss in the Reflector. thanks.</p>
+<p>JHD: next PR is about chair participation. Not everyone in the chair group will be in the CoC committee, this PR removes the requirement that chairs participate. They're still allowed to, but it isn't automatic. The CoC is meant to be a living document, we're not going to evolve it unilaterally</p>
+<p>JHD: next ideas: communication and Action &quot;playbooks&quot;: document how CoC members should address things, will evolve over time, taking inspiration from Node for a lot of things</p>
+<p>JHD: engagement, need enough people on the committee to have &quot;quorum&quot;</p>
+<p>JHD: (Presenting)</p>
+<p>JHD: next steps: publish list of committee members, iterate on moderation repo and find out what works for us, identify patterns: lay the ground work so if you're faced with a situation, you know how to address it</p>
+<p>YK: is this list supposed to be in perpetutilty? is there a normal &quot;re-upping&quot; process?</p>
+<p>JHD: no, we want to re-validate everybody periodically, maybe after a year. CoC says tc39 will periodically review the membership list.</p>
+<p>JHD: Proposed members of CoC please walk out of the room now (or disconnect from call)</p>
+<p>(notes suspended while they're out)</p>
+<p>RJE: Would anyone else like to join this list?</p>
+<p>KCL: I would like to join the list</p>
+<p>RJE: We will revisit this later in the meeting then.</p>
+<p>Proposed members:</p>
+<ul>
+<li>Brian Terlson (<a href="mailto:brian.terlson@microsoft.com">brian.terlson@microsoft.com</a>)</li>
+<li>Jory Burson (<a href="mailto:jory@bocoup.com">jory@bocoup.com</a>)</li>
+<li>Aki Rose (<a href="mailto:hi@akibraun.com">hi@akibraun.com</a>) (on leave)</li>
+<li>Jordan Harband (<a href="mailto:ljharb@gmail.com">ljharb@gmail.com</a>)</li>
+<li>Leo Balter (<a href="mailto:leo@bocoup.com">leo@bocoup.com</a>) (on leave until February)</li>
+<li>Myles Borins (<a href="mailto:mborins@google.com">mborins@google.com</a>)</li>
+<li>Daniel Ehrenberg (<a href="mailto:littledan@igalia.com">littledan@igalia.com</a>)</li>
+<li>Keith Cirkel (<a href="mailto:keithamus@github.com">keithamus@github.com</a>)</li>
+</ul>
+<a href="#conclusionresolution-13iie-code-of-conduct-committee-update-prs-call-for-participants"><h4 id="conclusionresolution-13iie-code-of-conduct-committee-update-prs-call-for-participants">Conclusion/Resolution</h4></a><ul>
+<li>Committee members should privately email RJE before end of meeting if they have objections to CoC committee member list</li>
+<li>Keith Cirkel added to the committee member list</li>
+</ul>
+<a href="#13iif-mathseededrandoms-for-stage-1"><h2 id="13iif-mathseededrandoms-for-stage-1">13.ii.f Math.seededRandoms() for Stage 1</h2></a><p>(Tab Atkins)</p>
+<ul>
+<li><a href="https://github.com/tabatkins/js-seeded-random">proposal</a></li>
+<li><a href="https://lab.iamvdo.me/houdini/rough-boxes/">slides</a></li>
+</ul>
+<p>TAB: (Presenting)</p>
+<p>TAB: code that generates rough borders,they jiggle randomly as you repaint or scale the page, because the random values change each time they're called</p>
+<p>&quot;LCG&quot; is a linear congruential generator, simplest form of thing that looks random. Not good randomness, but good enough for graphic layout stuff. Similar use cases in gaming, want reproducible &quot;random&quot; numbers.</p>
+<p>Add something to JS that allows seeded random numbers</p>
+<p>TAB: proposal is <code>Math.seededRandoms(seed)</code>, produces a generator function</p>
+<p>TAB: based on feedback in the issues: important to specify exactly what random function we're using, should be predictable across versions and engines. No opinion on what the generator ought to be, but there should be exactly one. Should specify what the range of possible seeds are, also to maximize the possible entropy of the output.</p>
+<p>TAB: not sure what the output ought to be, a lot of generators return numbers from 0 to 1, or integers. If you want to resume a sequence from later, if the output is between 0 and 1 it's not sure whta you would feed in a seed to make that happen again</p>
+<p>WH: I'm confused. Normally in a RNG the last number you generate is not its current seed, what's going on here?</p>
+<p>TAB: that's a relevant question: how do you resume a value? you could just be outputting the state, which makes it easy to resume</p>
+<p>TAB: a lot of other languages have their normal RNG function take a seed to make &quot;seeded test runs&quot;. But most use cases don't want just a single predictable RNG, they want multiple ones. Ok, questions.</p>
+<p>YK: seeded test run case is important, most of the use cases I see are for test runs, cross-user-agent is important for the reasons you described, also for CI environments to locally reproduce a failure seen on remote CI</p>
+<p>MF: feeding the output of the RNG back in as a seed really limits the set of algorithms we could use. But resumption is really valuable. First we need to decide what are the kinds of use cases we need to support, which way to we lean there.</p>
+<p>TAB: the use cases we know about now are the Houdini APIs (would prefer to be predictable), games, test runs. I don't know which are relevant for our decisions, not sure.</p>
+<p>MM: first, terminology clarification: never use the phrase &quot;Random Number Generator&quot; for this, always use Pseudo-random number generator. I'm very glad to see the mutable state in this proposal is only instance state, not global.</p>
+<p>TAB: that was intentional</p>
+<p>MM: there's an inherent tradeoff between speed and good randomness, the right way to approach that question is not &quot;we choose one point in that space&quot;, but &quot;here's an API into which other RNGs &quot;.. nothing here is incompatible with that stance. I like having the particular function chosen being part of the spec, not left to the implementation. There's good work on &quot;Splittable Pseudorandom generators&quot; to look at. The seed is not revealed by the output, but .. that raises the interesting question of how to save/resume the input. I'll point you at some references.</p>
+<p>JFB: don't need to answer this question, but: is it in scope to deal with distributions or not (uniform vs normal, etc)</p>
+<p>TAB: can't just modulo to safely get the right range:</p>
+<p>WH: what is the C++ problem you mentioned exactly?</p>
+<p>JFB: C++ has a ton of detail, but then just shrugs about how to get particular distributions out of the generator, and so impls aren't interoperable.</p>
+<p>TAB: that's probably related to MM's third point, good separable discussion</p>
+<p>DD: Michael was talking about use cases, Mark about algorithms, I think we should be clear in the spec that like Math.random, this is not a cryptographically-secure RNG, so that should not constrain our choice of algorithm</p>
+<p>MM: but itr should constrain our choice of API to one that could be safely built with a secure RNG</p>
+<p>WH: my feeling is there should be two interfaces, one to get random numbers, one to get the current seed. The seed could be large.</p>
+<p>TAB: every reasonable RNG these days have more than 53 bits of state, so the state will have to be returned as a typedarray or bigint</p>
+<p>WH: And of course the RNG needs to accept one of those large states as the initial seed.</p>
+<p>TAB: agreed we should give a way to explicitly get the seed out, in addition/instead of the value. So maybe not use a generator, but a seededRandom object, with a generator hanging off of it</p>
+<p>DD: or a generator with additional properties</p>
+<p>MM: it needs to be possible to naturally give out the ability to ask for more random numbers, without giving the ability to ask for the seed</p>
+<p>YK: the save/resume use case is important for the testing use case, you should be able to pick up after a failure without needing to repeat what you already did</p>
+<p>KG: the API should accept an options bag, not just a single number as seed, maybe a simple case that just takes a number, but with complex state we want an options bag</p>
+<pre><code class="language-js"><span class="hljs-built_in">Math</span>.seededRandoms({ ... })
+</code></pre>
+<p>TAB: usual thought is that things which are required are positional? But fine with either using solely an options bag, or unioning the types for simplicity.</p>
+<p>KG: maybe the options bag just contains all of the state</p>
+<p>KG: the current design is a generator, rather than a function you call repeatedly, for my use cases I want a function to call repeatedly. For test cases, I'd just swap out Math.random with this deterministic thing. Harder to do with a generator</p>
+<p>TAB: the non-determinancy of the call is exactly what I'm worried about, which is why I want instance-based</p>
+<p>KG: I wouldn't want this on a web page</p>
+<p>TAB: To replace Math.random, you can just sub in <code>Math.seededRandoms().next</code>.</p>
+<p>DD: are you ever going to iterate over this?</p>
+<p>TAB: In the rough-borders example I led with, yeah, you just want to do some simple iteration.</p>
+<p>KG: ok this is a later-stage concern</p>
+<p>SM: one use case, one source of non-determinism in their ? is to hard-code a seed, but current Math.random is used in both the use case of ?? (ed: didn't understand, sorry)</p>
+<a href="#conclusionresolution-13iif-mathseededrandoms-for-stage-1"><h4 id="conclusionresolution-13iif-mathseededrandoms-for-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#13iig-invited-expertspecification-contributor-forms"><h2 id="13iig-invited-expertspecification-contributor-forms">13.ii.g. Invited expert/specification contributor forms</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/Reflector/issues/104">Issue</a></li>
+<li><a href="http://tc39.github.io/test262-cla/">old form</a></li>
+<li><a href="https://tc39.github.io/agreements/contributor/">new form</a></li>
+</ul>
+<p>DE: Since 2015 we've been using GitHub for development, accepting contributions on GitHub. Have occasional non-members attending meetings. We need confirmation that contributions can be legal (patent/IPR). We ask them to sign a web form. There are technical issues with this form. To fix those, we made a second form, with different text about the agreements/licensing, for non-members to sign when making contributions. Thomas Wood of Imperial College London has promised to help with automating.</p>
+<p>DE: Proposal is to retire the old form and switch to the new form. Proposal: for each contribution for normative changes, check that the contributor is of a member company, or has signed form. For new attendees, declare whether they're an observer (and not make contributions), or a prospective Ecma members can attend as guests or invited experts and sign the form (and talk and contribute, with contributions licensed to ecma).</p>
+<p>DE: This plan has been developed with Allen Wirfs-Brock and István Sebastyen. See Reflector thread for discussion about text.</p>
+<p>DE: if there are no objections, I'll move the new form to tc39, will start enforcing it for patches/PRs</p>
+<p>DE: i hear no objections. Is there anything I should do beyond the reflector thread and updating the contributor.md?</p>
+<p>(No Objections)</p>
+<a href="#conclusionresolution-13iig-invited-expertspecification-contributor-forms"><h4 id="conclusionresolution-13iig-invited-expertspecification-contributor-forms">Conclusion/Resolution</h4></a><ul>
+<li>Consensus on using new form</li>
+</ul>
+<a href="#13iih-async-iteration-for-stage-4"><h2 id="13iih-async-iteration-for-stage-4">13.ii.h Async iteration for stage 4</h2></a><p>(Domenic Denicola)</p>
+<ul>
+<li><a href="https://github.com/tc39/ecma262/pull/1066">proposal</a></li>
+</ul>
+<p>DD: been pretty stable since changes in stage 3, shipping in at least two browsers, I've submitted PR, BT is reviewing notes</p>
+<p>BT: I reviewed at Stage 3. Do I need to sign off again for stage 4?</p>
+<p>DD: editor has signed off on PR</p>
+<p>BT: Can we defer?</p>
+<a href="#conclusionresolution-13iih-async-iteration-for-stage-4"><h4 id="conclusionresolution-13iih-async-iteration-for-stage-4">Conclusion/Resolution</h4></a><ul>
+<li>Defer to tomorrow</li>
+</ul>
+<a href="#13iii-followup-to-discussion-from-previous-meeting-identifying-risk-areas"><h2 id="13iii-followup-to-discussion-from-previous-meeting-identifying-risk-areas">13.ii.i Followup to discussion from previous meeting: identifying risk areas</h2></a><p>(Jordan Harband)</p>
+<ul>
+<li><a href="https://github.com/tc39/process-document/pull/18">PR</a></li>
+</ul>
+<p>JHD: trying to be more precise about the requirement, to reduce need for debate. &quot;significant experience with deployment in the field&quot;, specifically two VMs</p>
+<p>JHD: different proposals have different risk areas: interoperability, ergonomic, etc. Things with a web-compatibility risk, it's not controversial to require two implementations (to minimize that risk). But committee sometimes interpreted requirements differently: flagged, canary, nightly or a babel implementation might qualify.</p>
+<p>JHD: explicitly mention possible risk areas (&quot;this proposal may create compatibility risk&quot;) in proposals, stage 4 requirement would mean the committee would agree that the risk areas identified had in fact been met before reaching stage 4. E.g. web-compatibility may require two non-flagged non-nightly browsers have the feature.</p>
+<p>JHD: that was my take on the conversation, wanted to get the comittee thoughts on if that would be useful/palatable, to reduce debate in the cases where two unflagged browers aren't really necessary, without allowing some risky changes to squeak through. Wanted to open the floor for thoughts.</p>
+<p>BT: this doesn't imply any change to the process, right?</p>
+<p>JHD: the only change would be that, as part of going to stage 2, is to identify the risk areas. And then as part of the discussion about &quot;significant in-the-field experience&quot; that we already have for going to stage 4, we use those risk areas to refine that conversation. The PR has explicit language to continue to allow the committee to do whatever it wants, so the intent isn't to constrain the committee, but to debate more efficiently.</p>
+<p>MF: Can we make sure this doesn't go into effect for this meeting, but for some later one</p>
+<p>JHD: sure. No rush, don't have to merge before March, but maybe the meeting after that, after we've gotten comfortable with the language. Maybe a year from now, we can have a lot less debates.</p>
+<p>YK: I'm fine to update the process document but it should not affect the process per se. It doesn't seem problematic for someone today to say these things.</p>
+<p>JHD: the hope is that it adds extra information to the process, to let things go through the process quicker when appropriate, and slower when appropriate</p>
+<p>AK: I'd like this better if it was non-normative, sounds like good advice for champions, to identify risk areas and show that they've been addressed. Kinda the champion's job already. Adding new things to entrance criteria opens the door to long discussions: have we identified all the risk areas for stage 2? Having the same &quot;what risks are there&quot; conversation multiple times</p>
+<p>JHD: not expected to be an exhaustive list at stage 2 time, committee at any time can add/remove risk areas</p>
+<p>MS: if there are risk areas that can be identified, they should be tracked. Stage 2 and stage 4 are very far apart. These should be implementation risk areas, not other kinds of risk. Maybe during stage 3 more risks are added.</p>
+<p>JHD: making it a stage-2 entrance criteria means to me that it's being tracked. Making it clear that these are implementation risks sounds good to me.</p>
+<p>YK: most of my concerns have to do with usability, so e.g. &quot;I'd like to see more feedback from Babel users&quot;, doesn't sound like an implementation risk, but I'd like to see it get tracked. General desire to see more concerns raised earlier in the process, so folks don't get blindsided by it later.</p>
+<p>JHD: specific debate is whether it must be in two unflagged web browsers, we have this debate a lot. For some issues this is unnecessary.</p>
+<p>PST: overall this is great, one small point: when two unflagged browsers aren't necessary, then what <em>is</em> necessary? Text talks about other browsers, polyfills, etc. Let's remove ? from the &quot;etc&quot; category and be listed as a non-browser web engine.</p>
+<p>AK:  text changes, &quot;how do I champion a spec&quot; rather than entrance/exit criteria</p>
+<p>JHD: i can make all the editorial suggestions that have been made, but maybe I should remove it from the stage2 criteria</p>
+<p>YK: my recollection was that we were trying to give people a way to add things to the exit criteria at the time when we enter stage2, so people will remember it before it finally exits. Github issues might be a way to do this, but there are a lot of issues, maybe we could flag them as important or &quot;exit criteria&quot;, but I thought the goal was to make sure somebody tracks this issue.</p>
+<p>DE: maybe this could go into a new &quot;how to champion a proposal&quot; document instead of the criteria</p>
+<p>JHD: ok but my specific goal was to clarify the &quot;significant in-the-field experience&quot; clause to make our discussions more efficient. I added the stage-2 criteria because that seemed like a sensible place to do it, but if removing that will remove the contention, then great.</p>
+<p>JHD: let's discuss further in the PR</p>
+<a href="#conclusionresolution-13iii-followup-to-discussion-from-previous-meeting-identifying-risk-areas"><h4 id="conclusionresolution-13iii-followup-to-discussion-from-previous-meeting-identifying-risk-areas">Conclusion/Resolution</h4></a><ul>
+<li>will talk more at the break, and will revisit in future meetings</li>
+</ul>
+<a href="#13iij-regexp-lookbehind-assertions-for-stage-4"><h2 id="13iij-regexp-lookbehind-assertions-for-stage-4">13.ii.j RegExp lookbehind assertions for Stage 4?</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-lookbehind">proposal</a></li>
+</ul>
+<p>MB: I want to give a status update on the RegExp proposals. I’ll present the first half today, but I’d like to defer the rest until tomorrow. You’ll see why in a minute.</p>
+<p>MB: dotAll mode (s flag): advanced to stage 4 at the November meeting, then merged PR (#1028). This feature will be part of ES2018!</p>
+<p>MB: named capture groups: advanced to stage 4 at the November meeting; the PR got merged just recently (#1027). Moddable/XS engine now has an implementation too, by the way (brand new RegExp engine)</p>
+<p>MB: lookbehind assertions: I didn't nominate it for stage 4 at the last meeting because there was only one implementation (Chrome/V8), but now it’s in XS too. And we’ve had Test262 tests for a while. Any objections to moving to stage 4?</p>
+<p>WH: I was told in private communication prior to this meeting that this wouldn't be proposed for stage 4, so I haven't reviewed it thoroughly yet. I shall do so within the next day and report back to Mathias.</p>
+<p>MB: the XS impl is really recent, so I hadn't been planning to go for stage 4 at this meeting. Let's give you a chance to review it more thoroughly and revisit this on Wed/Thu.</p>
+<p>MB: Unicode property escapes: Waldemar has some new feedback that I want to address first, so I’m deferring this item.</p>
+<p>WH: there are enough bugs in the proposed Unicode property escape spec that I don't understand what parts of the proposed spec are supposed to do. I've been filing GitHub comments.</p>
+<p>MB: Let's revisit Wed/Thu for maybe moving to stage 4.</p>
+<p>AK: It'd be nice if these managed to move to stage 4; there are lots of RegExp things going into ES2018.</p>
+<p>BT: Keep in mind the deadline: changes need to be made before the first week of February.</p>
+<p>MB: Noted. I'll work with Waldemar to fix the spec issues and bring this up again on Wednesday/Thursday.</p>
+<a href="#conclusionresolution-13iij-regexp-lookbehind-assertions-for-stage-4"><h4 id="conclusionresolution-13iij-regexp-lookbehind-assertions-for-stage-4">Conclusion/Resolution</h4></a><ul>
+<li>dotAll mode advanced to Stage 4 (PR merged)</li>
+<li>named capture groups advanced to Stage 4 (PR merged)</li>
+<li>lookbehind assertions to revisit later in meeting, otherwise still Stage 3</li>
+<li>revisit Unicode property escapes later in meeting, otherwise still Stage 3</li>
+</ul>
+<a href="#13iiia-promiseprototypefinally-for-stage-4"><h2 id="13iiia-promiseprototypefinally-for-stage-4">13.iii.a Promise.prototype.finally for stage 4</h2></a><p>(Jordan Harband)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-promise-finally/">proposal</a></li>
+</ul>
+<p>JHD: Promise.prototype.finally is stage 3, shipped in Firefox and chrome and Webkit nightly, two polyfill implementations. Hoping to get committee approval for stage 4 (pending approval of PR). There are already test262 tests written and merged.</p>
+<p>AK: we had another thing like this, do you want to defer this?</p>
+<p>JHD: didn't want to rush the PR if there were other objections</p>
+<p>BT: I don't think I'll have time to get to approving this before async iteration.</p>
+<p>JHD: sounds like no objections, except it might not fit into BT's schedule. Will write PR, bring back up thursday, else bring up in a future meeting.</p>
+<a href="#conclusionresolution-13iiia-promiseprototypefinally-for-stage-4"><h4 id="conclusionresolution-13iiia-promiseprototypefinally-for-stage-4">Conclusion/Resolution</h4></a><ul>
+<li>Deferred to later if BT has time to review, or else still Stage 3</li>
+</ul>
+<a href="#13iiib-stringprototypematchall-for-stage-3"><h2 id="13iiib-stringprototypematchall-for-stage-3">13.iii.b String.prototype.matchAll for stage 3?</h2></a><p>(Jordan Harband)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-string-matchall">proposal</a></li>
+</ul>
+<p>JHD: was originally hoping to ask for stage 3, but issues raised. when you pass a string argument, the orig semantics was to convert it into a regexp like the way match does. I was discussing with Dan about making that regexp automatically have the Global flag, but two other questions came up. Should that regexp be in full unicode mode? Bigger question is the replaceAll proposal from the last meeting was looking for ways to do exact string searches in the absence of a regexp.escape function, if you pass a string into matchall, instead of a regexp lookup, could it do a substring search. My initial reaction was that solving that one API method at a time wasn't great, doubles spec complexity, need a different well-known symbol to handle exact string searches. Wanted the committee's thoughts on how to pass an exact string in here. Committee rejected my original proposal to throw exception. Not asking for stage 3.</p>
+<p>DE: example of distinction: x.matchall(&quot;.&quot;) : original semantics is to throw because that's not a regexp. Current semantics return one match. Half of existing regexp functions have special behavior for passing in strings. WH? do you remember why they have this divergent behavior?</p>
+<p>WH: nope</p>
+<p>JHD: if we felt it should have the regexp coercing behavior of .match(), we could ask for stage 3 now. If not, I'll write different spec text and some back later.</p>
+<p>DE: why do we need a second symbol?</p>
+<p>JHD: maybe it doesn't, maybe the mechanism doesn't need to be exposed, we can review that in the PR that adds the spec text. But it adds a lot of algorithm text to the spec, branches for the different types. It's an iterator, do we can't just re-use the algorithm in split(), which is fine but we'd like to hear about the intuitiveness of one vs the other</p>
+<p>Dan?: the second issue subsumes the first one</p>
+<p>?: didn't we say last time that matchall would be just like match, and we were going to add a replaceAll?</p>
+<p>JHD: stage1 for replaceAll was, given a string, do the exact match</p>
+<p>WH: for ergonomics we want matchAll and match to be similar</p>
+<p>JHD: does anyone want to argue for anything but exact string matching? current behavior when given a string is to call new RegExp(string) with &quot;undefined&quot; as the flags argument</p>
+<p>WH: it's unfortunate, but match and matchAll should probably match. It'd be very confusing to remember which has which behavior on strings if they diverge</p>
+<p>?: I don't want it to require the unicode flag. matchAll makes it hard to say what the &quot;global&quot; flag means</p>
+<p>JHD: if we say that consistency with match() is most important, so coerce into regexp, with no global flag, then you get an iterator which can only fire once</p>
+<p>MS: implicitly adding the global flag seems like a reasonable way to handle this</p>
+<p>JHD: if we agree to coerce to regexp and add global flag, then I <em>am</em> comfortable asking for stage-3 now, since the rest of the spec text has been reviewed.</p>
+<p>YK: I thought there was more momentum behind using a new name last time. If we call it matchAll then it should be like match, but we could use a new name to avoid that</p>
+<p>JHD: committee had talked about that</p>
+<p>YK: ok</p>
+<p>JHD: any objections to moving this to stage 3?</p>
+<p>(No Objections)</p>
+<a href="#conclusionresolution-13iiib-stringprototypematchall-for-stage-3"><h4 id="conclusionresolution-13iiib-stringprototypematchall-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>move to stage 3 with semantics of: coerce to regexp, add global flag</li>
+</ul>
+<a href="#13iiic-functionprototypetostring-pr-for-stage-4"><h2 id="13iiic-functionprototypetostring-pr-for-stage-4">13.iii.c Function.prototype.toString (PR) for stage 4</h2></a><p>(Michael Ficarra)</p>
+<ul>
+<li><a href="https://github.com/tc39/Function-prototype-toString-revision">proposal</a></li>
+</ul>
+<p>MF: has been sitting in stage 3 for a while, spec text hasn't changed for a year. Now have multiple implementations..</p>
+<p>AK: Chrome implementation went to canary (unflagged) just a week ago, not in beta yet</p>
+<p>MF: ok, didn't realize it wasn't out yet, will remove this item</p>
+<p>BT: can we discuss an implementation that does not provide the original source code?</p>
+<p>MF: after making this well defined, we can declare this to be conditional upon having access to the original source. Annex B?</p>
+<p>WH: toString is currently fairly loose, allows implementations to avoid retaining source. Creating a proposal which prohibits that for a short time, followed by a second proposal to allow it again; don't like that flip-flopping. I understand how that's useful from the committee side of things, but from an external point of view it seems odd.</p>
+<p>MF: do you think we should fold this into the proposal?</p>
+<p>WH: I'm not too concerned about the exact process. Just concerned about disallowing then allowing implementations that don't want to save the source text.</p>
+<p>BT: this is stage-3 feedback. Effectively restoring a bullet point in the original text saying if you can't do this, you can't eval</p>
+<p>MF: ok, thanks for feedback</p>
+<a href="#conclusionresolution-13iiic-functionprototypetostring-pr-for-stage-4"><h4 id="conclusionresolution-13iiic-functionprototypetostring-pr-for-stage-4">Conclusion/Resolution</h4></a><ul>
+<li>still stage 3</li>
+<li>include as part of this proposal a way for engines which cannot produce function source text to provide some alternative (involve Moddable reps + DD)</li>
+</ul>
+<a href="#13iiid-symbolprototypedescription"><h2 id="13iiid-symbolprototypedescription">13.iii.d Symbol.prototype.description</h2></a><p>(Michael Ficarra)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-Symbol-description">proposal</a></li>
+</ul>
+<p>MF: currently stage 1, looking for stage 2 and reviewers. Has full spec text, general idea is that you can give a symbol ..</p>
+<p>MF: getter on Symbol.prototype, currently too hard to get the name out of the object</p>
+<p>JHD: I'll be a reviewer</p>
+<p>DE: should we add this to ..  private name to use in a decorator??</p>
+<p>MF: sounds related, but not something I know enough to champion</p>
+<p>KG: currently a corner case where you don't provide any string to the Symbol function, then use toString, can't tell the difference between an empty string and this other undefined thing</p>
+<p>MM: this is serialization for humans? or for deserialization?</p>
+<p>MF: was intended to be for deserialization, but ..</p>
+<p>MM: I think the possible name collisions make this a bad mechanism for this purpose</p>
+<p>MF: I'm retaining the identity too</p>
+<p>MM: ok</p>
+<p>YK: main use case is debugging, but serializing for emitting debugging information is helpful, maybe it gets sent to an external server, you want to include as much human-readable information as possible. Not just about the browser doing the debugging.</p>
+<p>MM: for symbols created by the platform, does the spec say what description they carry?</p>
+<p>yes</p>
+<p>MF: but some don't have a description?</p>
+<p>JHD: well-known symbols like Symbol.iterator have a description such as <code>Symbol(Symbol.iterator)</code></p>
+<p>MF: any objections to move to stage 2?</p>
+<p>(No Objections)</p>
+<p>MM: I'll be a reviewer
+JHD: I'll be a reviewer
+KCL: me too</p>
+<a href="#conclusionresolution-13iiid-symbolprototypedescription"><h4 id="conclusionresolution-13iiid-symbolprototypedescription">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Reviewers:
+<ul>
+<li>Mark Miller</li>
+<li>Jordan Harband</li>
+<li>Keith Cirkel</li>
+</ul></li>
+</ul>
+<a href="#13iiie-maximally-minimal-mixins-proposal"><h2 id="13iiie-maximally-minimal-mixins-proposal">13.iii.e Maximally minimal mixins proposal</h2></a><p>(Justin Fagnani)</p>
+<ul>
+<li><a href="https://gist.github.com/justinfagnani/9502b5f46599f474a67a5fce2f7af910">proposal</a></li>
+</ul>
+<p>JFI: I'm going to propose a mixin idea. This my first time ,here, not sure of the process, wanted to spark a discussion. I'm at google, use mixins a lot. Want to inspire a champion or find a mentor for this. Maybe this is stage 0. Non goal: get agreement on any specifics. Not as important. Goals: pave existing cowpaths for mixins, improve their ergonomics, improve static analysis, leverage classes, be compatible with existing APIs.</p>
+<p>JFI: currently lots of patterns in use (pre-Classes), variations of Object.assign(MyClsas.prototype, mxin). I claim ES2015 already added mixins. Subclass Factory Mixins. Takes advantange of the fact that extends accepts an arbitrary expression. Works today, with built-in classes like Array and Map. USed by Polymer, others. Example. (see slides).</p>
+<p>JFI: this pattern avoids difficult problems: by creating a fresh prototype for each mixin application, it avoids multiple prototypes, no changes to property lookup.</p>
+<p>JFI: proposal is to add syntax for this kind of mixin. e.g. <code>class C extends S with M</code>, desugars to.. . Or declarative form.</p>
+<p>WH: does this allow multiple mixins? In what order?</p>
+<p>JFI: yes, maybe <code>class C extends S with M1, M2</code>. S is innermost, M1 is next, M2 is outermost.</p>
+<p>JFI: nice feature is backwards/forwards compatibility with the desugaring.</p>
+<p>JFI: Why do this? It's strictly less powerful than what's already there. Allows static analysis, improves ergonomics, encourages class-compatible mixins. Static analysis: TypeScript has a (cumbersome) syntax to teach the compiler about what is a mixin, can't refer to the type defined by the mixin without a duplicate definition.</p>
+<p>YK: one other gotcha, TS can't have abstract members for other reasons, whenever the encoding of the function gets to complicated, typescript fails</p>
+<p>JFI: Closure is even worse, more code. Flow has a very similar syntax to this proposal. JSDoc is even simpler.</p>
+<p>BT: clarifying question: we've heard a similar proposal, First Class Protocols, how does this differ?</p>
+<p>JFI: will explain later</p>
+<p>RBN: what happens when you mix in two mixins that share the same base, do you override something?</p>
+<p>JFI: will explain later, but one advantage of mixins is that you don't have the diamond problem</p>
+<p>MM: in the mixin form, can you write a constructor? yes, so I will have many questions about constructor chaining</p>
+<p>JFI: difficulty with static analysis: recognizing a function is a mixin, etc</p>
+<p>JFI: what kind of future evolution this would enable: mixins can evolve independently from classes. Class features are inherited by mixins: member visibility, namespacing, requirements/interface checking.</p>
+<p>JFI: Member namespacing: declare and use a symbol in a single place. Gets you close to the namespacing in First Class Protocols proposal. Need a new scheme for defining it.</p>
+<p>YK: could use private</p>
+<p>JFI: most trait implementations can require that your mixin requires a member. Not critical to proposal, but nice to have.</p>
+<p>JFI: (Presenting)</p>
+<p>JFI: reserving MyMixin.prototype for future use, by adding a non-configurable non-readable(?) property under that name</p>
+<p>WH: What would you want to put onto a mixin's prototype? I don't understand how the inheritance would work were that to exist.</p>
+<p>MM: more coherent without adding .prototype. Desugaring into an arrow function is good, no prototype, not callable as a constructor.</p>
+<p>JFI: ok</p>
+<p>YK: I like it. Very similar to the ruby mixin system, which more or less copied gillad(?)'s paper, and the things people think will break don't actually break. Linearization is underappreciated. Mixins and Classes have a natural correspondence, nice to have that. &quot;why is this better than protocols&quot;&gt; we don't have a complete proposal, hard to compare. Broadly, I like this direction. Two ways to think about this: there are existing cowpaths that people use (typescript special-cases this), and we should just go with the flow (like how ES2015 went with classes). Other way is: we could do better, the cowpath is broken, let's avoid it.. reasonable perspective (but I don't have it). Protocol proposal is trying to build something new.</p>
+<p>JFI: this seems compatible, maybe we can layer them.</p>
+<p>DT: I currently use mixins in ruby and suffer from them every day :). Lots of work is being done with classes, but haven't seen mixins as much (except in React). Is this prevalent enough to justify new syntax? And it will complicate further discussion of classes: when we add something to a class, do we also have to add it to mixins?</p>
+<p>JFI: there are hundreds of pacakges on npm that do some bespoke mixin mechanism, so the concept seems heavily used. Lots of pendulum swinging about whether it's actually a good idea. Having syntax makes tools better: typescript can jump to definition of a mixin. Polymer and WebComponents use pieces like this.</p>
+<p>YK: basically every web framework has mixins of some sort. Ember in ES5 tried to copy this, but with changes. When we migrate ES5 to ES6, we'll tell people who need mixins to move to this kind of pattern.</p>
+<p>DT: great</p>
+<p>DE: lots of things happen when you evaluate a class expression, some make sense to run each time you inherit, others could be run less (e.g. evaluating computed property names?). Might want some things to be evaluated once per mixin declaration. YK, MM</p>
+<p>KCL: why is this different than Protocols? doesn't that cover everything this does?</p>
+<p>JFI: Protocols don't focus on interface checking. Mixins are required to override existing APIs, Protocols don't allow those collisions(?).</p>
+<p>KCL: latest Protocols spec lets you depend upon string-based property names, but not provide new ones, to avoid collisions</p>
+<p>MF: The Protocol spec allows you to rely on string based methods that exist in the class, but you cannot provide string based method names.</p>
+<p>JFI: depends upon whether a feature to avoid collisions must be tightly coupled or not</p>
+<p>KCL: So when do I use a mixin, when do I use a protocol? We could enable string-based names for protocols, or move away from protocols and move to mixins. But having a big bag of class features to enable this feels like a step too far.</p>
+<p>JFI: so, does anyone want to champion/mentor? What stage is this?</p>
+<p>YK: I will help, stage-0 is fine.</p>
+<p>MM: I see no reason not to go for stage-1 already, given the quality of the presentation</p>
+<p>BT: we approved Protocols for stage-1 because of a lot of existing usage. I don't see a future with both Protocols and Mixins, so I think you should talk to people doing Protocols and come to some kind of consensus</p>
+<p>?: next step is talking, maybe we will come to the committee with two proposals and must decide which direction to go</p>
+<p>YK: my agreement to stage-1 of Protocols was largely because I was waiting for something like these Mixins to come along, so I could back it</p>
+<p>BT: reasonable to ask anyone working in this space to work together to define their direction, maybe report back with &quot;we can't agree&quot;</p>
+<p>MM: does anyone object to stage 1?</p>
+<p>YK: there's definitely a problem space to explore</p>
+<p>MM: does YK object to this proposal going to stage 1 (separate from Protocols) with the understanding that they'll talk it out</p>
+<p>KG: object, we should not have two proposals in the same space</p>
+<p>MM: I object to restricting ourselves to multiple stage-1 proposals for a single area. But limiting to a single stage-3 proposal per area is good.</p>
+<p>RJE: let's think about it over the break</p>
+<p>(Break)</p>
+<p>RJE: allocate 10min to close this</p>
+<p>JFI: obvious opportunity to collaborate with the Protocols folks, to at least identify the different problems we're trying to solve. To best reflect reality: two line items, both at stage 1, or one item with two links.</p>
+<p>BT: having two repos for this would be hard for people to track. Other proposals have had multiple alternatives in the same, repo, this seems similar, would be nice to have a single place for this discussion. What's the benefit for having two separate repos?</p>
+<p>MB: what if we have two repos, let both advance to stage 1, but require that they converge before moving to stage 2 or 3?</p>
+<p>YK: seems fine</p>
+<p>BT: which repo should host that discussion?</p>
+<p>JFI: I don't even have a repo yet, just this gist</p>
+<p>AK: you could file an issue on the Protocols repo with your gist, seems expedient</p>
+<p>JFI: a single issue tracker seems like a big advantage</p>
+<p>KG: README of Protocols proposal should be updated. Maybe it should be renamed Protixins</p>
+<p>(Laughter)</p>
+<p>JFI: So how about a new README with two sub-READMEs. Top level README being something like &quot;Mixins, Protocols, yada yada&quot;</p>
+<p>MM: if the champion is fine with attaching these, that's ok. I want to make it explicit that accepting that is not a precedent for the proposal process. At what point during advancement does overlap between proposals need to be resolved? I'm strongly against requiring that before stage 1.</p>
+<p>JFI: it'd be nice if the committee made it clear that these things are of equal weight</p>
+<p>MM: anyone else want to say something?</p>
+<p>WH: in favor of this being stage 1</p>
+<p>?: having these combined seems confusing</p>
+<p>MM: Protocols-vs-Mixins have a lot of overlap, but the problem statement looks very different depending upon which one you start from. We say that stage 1 is about a problem statement. But there are good reasons why the artifact we examine in stage 1 is a rough proposal for how to solve the problem. Often, such a sketch of an approach to a solution is the clearest initial expression of what the problem is that is being solved. The proposal expresses a philosophical approach for solving a problem which it understands from the perspective of that philosophical approach. Different approaches will have different ways of categorizing the world. To make progress, we need to come to better understanding of these problems, arriving at common terms so we can see how they overlap. But this takes discussion and discovery --- precisely the kind of effort that often only starts once a proposal is at stage 1.</p>
+<p>(Note: AWB apparently was not here for this topic, but it worth noting the following text from his paper on standards participation:</p>
+<blockquote>
+<p>A majority of the delegates may approach a problem in a manner that you believe won’t work but you cannot convince them that they are going down the wrong path. Instead of wasting additional time trying to convince them, work on developing an alternative solution. If you are right, the majority will eventually recognize their mistake and your solution will be available to take its place.
+)</p>
+</blockquote>
+<p>RJE: let's talk about this offline and revisit it later</p>
+<a href="#conclusionresolution-13iiie-maximally-minimal-mixins-proposal"><h4 id="conclusionresolution-13iiie-maximally-minimal-mixins-proposal">Conclusion/Resolution</h4></a><ul>
+<li>talk to Protocols people</li>
+<li>talk more offline, revisit it later with a plan for the next step</li>
+</ul>
+<a href="#13iiif-pr-making-nullish-values-iterable-or-at-least-array-spreadable"><h2 id="13iiif-pr-making-nullish-values-iterable-or-at-least-array-spreadable">13.iii.f PR: Making nullish values iterable, or at least array-spreadable</h2></a><p>(Mathias Bynens)</p>
+<ul>
+<li><a href="https://github.com/tc39/ecma262/pull/1069">PR</a></li>
+<li><a href="https://docs.google.com/presentation/d/1SWf5ZN2C-CFTde0SBdo01eZKwcYPAJUfPTCZf54VCB8/edit">slides</a></li>
+</ul>
+<p>MB: array spread and object spread aren't consistent, should we fix it? Option 1: leave it alone, live with the inconsistency. 2: make object spread match array spread: throw when spreading null or undefined (explicit and helps find bugs, but still not consistent with Object.assign and similar userland utilities)</p>
+<p>MB: option 3: null/undefined spread to nothing. seems like smallest possible non-breaking change, and consistent with object spread, but hides bugs (accidental undefined), and not consistent with iteration</p>
+<p>MF: do you have a survey of cases, where how they differ?, to know the current status of each. Would be nice to know how consistent/inconsistent the rest of the API is</p>
+<p>MB: nope, would be nice to build that list. grep the spec for GetIterator?</p>
+<p>MB: option 4: make null/undefined iterable, but producing no values. Would fix this behavior in general (not just for array spread), but hides bugs like accidental undefined</p>
+<p>YK: um, how do you do that?</p>
+<p>MB: The current PR checks for null/undefined and exits early within array spread. We can just move that check to GetIterator to return an empty iterator.</p>
+<p>YK: But it won’t have [Symbol.iterator]</p>
+<p>MB: No</p>
+<p>MB: <a href="https://twitter.com/mathias/status/954455439101562881">Did a Twitter poll</a> with ~1300 responses, got 52% wanting exception, 42% wanting silent spread-to-nothing. Not scientific.</p>
+<p>SM: rational for object spread was consistency with for..in and Object.assign, but let's not force a decision for legacy reasons. Very common to have types that are null | undefined for a lack of value, e.g. <code>null | undefined| Point3D</code>, but less common to have empty objects in that place, e.g. <code>{} | Point3D</code>. We generally don't recommend using <code>{ ...obj || {} }</code></p>
+<p>WH: the <code>{ ...obj || {} }</code> pattern also catches e.g. 0</p>
+<p>SM: examples of usage</p>
+<p>BFS: for option 4, making these things iterable, what's the result of <code>yield *</code>?</p>
+<p>YK: Its the same as <code>done: true</code> as the first return value.</p>
+<p>TAB: old use cases that needed this are mostly not needed any more: default arguments, for..in (?). Wants object spread to be defined on iterator protocol like array spread</p>
+<p>SM: we've discussed having a metaprotocol for spread, might address that concern, parallel protocol to iteration</p>
+<p>JHD: when talking about object spread, we talked about reserving a symbol to allow objects to opt-in to being iterable (?)</p>
+<p>SM: but then a class can't add it later, as it would break child objects which depends upon iteration behavior</p>
+<p>TAB: seems bad that so many spreadable/iteratable cases are inconsistent. destructuring assignment.</p>
+<p>YK: for better or worse we decided to cowpath-pave this behavior multiple times before, but this specific case is new. surprised we're willing to make things iterable without having an iteratable symbol, doesn't think we should change that</p>
+<p>YK: no objection to keeping the current behavior, it's a false symmetry to keep the object and array versions behave the same way. That ship has sailed. Wouldn't object to throwing, but fine with current behavior.</p>
+<p>WH: for object spread I was surprised to learn the semantics convert primitives to an object before spreading, if you spread a number <code>...3</code> then you get the own-properties of the wrapper — that's odd. In the stricter alternative <code>...null</code> would throw which would be inconsistent with how primitives are treated, so the way it is now is good. But why did we decide to allow object <code>...</code> to spread primitives in the first place?</p>
+<p>YK: probably because object.assign did it</p>
+<p>MB: John-David Dalton <a href="https://github.com/tc39/tc39-notes/blob/master/es6/2014-07/jul-29.md#revisit-objectassign">advocated</a> to match existing userland library behavior. There is precedent outside of the language itself.</p>
+<p>SM: array spread also works on strings</p>
+<p>MB: yes because strings are iterable</p>
+<p>MB: what should be do next? WH says he doesn't want to change object spread, do we want to change array spread?</p>
+<p>MF: I don't think we can make a decision without knowing a list of what it will impact</p>
+<p>AK: I'd oppose changing iteration at this point, I don't see the value. are there programming patterns that would be opened up by allowing you to pass null wher ean iterator is expected?</p>
+<p>MB: so you want to see more use cases before we make a change?</p>
+<p>AK: any change needs pretty strong use cases, not just consistency</p>
+<p>MB: we could revisit this later</p>
+<a href="#conclusionresolution-13iiif-pr-making-nullish-values-iterable-or-at-least-array-spreadable"><h4 id="conclusionresolution-13iiif-pr-making-nullish-values-iterable-or-at-least-array-spreadable">Conclusion/Resolution</h4></a><ul>
+<li>shrug emoji, continue to discuss on PR</li>
+</ul>
+<a href="#restspread-properties-for-stage-4"><h2 id="restspread-properties-for-stage-4">Rest/Spread properties for stage 4</h2></a><ul>
+<li><a href="https://github.com/tc39/ecma262/pull/1048">pull</a></li>
+</ul>
+<p>(Sebastian Markbåge)</p>
+<p>SM: making objects spreadable. All the implementations are there, we have spec tests approved by Brian, looking for stage 4.</p>
+<p>MM: approves</p>
+<p>(No Objections)</p>
+<a href="#conclusionresolution-restspread-properties-for-stage-4"><h4 id="conclusionresolution-restspread-properties-for-stage-4">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4</li>
+</ul>
+<a href="#functionprototypetostring-censorship-for-stage-1"><h2 id="functionprototypetostring-censorship-for-stage-1">Function.prototype.toString() censorship for stage 1</h2></a><p>(Domenic Denicola)</p>
+<p>DD: let's censor Function.prototype.toString(). Might be unnecessary if Michael's proposal allows implemenations to just return &quot;native code&quot;. Arguments for not returning original source: 1 someone (Angular) could parse your code and wind up depending upon what toString returns, makes it hard to refactor your code. 2 reveals how function was created: bound, generator, native/not. Makes faithful polyfills difficult, leads to things like adding an own-property of &quot;[native code]&quot; to make it look native when it's not. Also problematic for refactoring between classes or not.</p>
+<p>DD: but carrying around the entire source text of your program in memory, just in case, it not great for performance/memory on low-end devices, pretty significant fraction in some cases.</p>
+<p>DD: want to provide an option to censor this. Things to discuss: how much to censor (whole realm? one source file? one function?). How to indicate this: external-to-JS flag, source-level parseable annotation, runtime dynamic switch on the function object. For dynamic switch, must be one-way, so you can't uncensor later.</p>
+<p>DD: what is the new censored output? Don't want something newly unparseable.</p>
+<p>DD: most folks I've talked to want to do this at the file level, or file-before-bundling. Important to be able to censor third-party libraries. If done by modifying their source text, must be an easy modification.</p>
+<p>DD: some proposals, want opinions before writing up specs. 1: new pragma, e.g.<code>&quot;use no function.prototype.toString&quot;</code>. Works downwards (censors nearest enclosing function plus later internal functions).</p>
+<p>YK: use strict had the parsing problem, does this have the same?</p>
+<p>MM: no difference in the treatment of the text that appears before the directive</p>
+<p>AK: so you have to hold on to the source text until you finish parsing</p>
+<p>DD: strengths of this are similar to those of use strict: can bundle together censored/non-censored code, makes it easy to censor a whole file. cons: can't opt out from within a censored scope, not immediately obvious why a given function is censored (like use strict). Would need to introduce pramgas into class bodies. Not trivial to censor third-party libraries (must preprocess their source files)</p>
+<p>DD: proposal 2: external-to-JS flag, let implementations return a censored string under host-defined conditions. E.g. <code>node --no-fn-tostring myapp.js</code>. Makes it trivial to censor third-party libraries. But now code is less portable, libraries can't depend upon themselves being censored.</p>
+<p>DD: rejected alternatives: one-time censorship <code>f.censor()</code>, permanently censors that one function. Hard to censor third-party libraries (lots of inserted calls), must be done at runtime (so source must be retained until runtime).</p>
+<p>DD: <code>delete Function.prototype.toString</code>: blunt, doesn't work with multiple realms</p>
+<p>DD: should this censor the function name itself? What about a meta-API with a well-known symbol? (but enables uncensoring later, messy)</p>
+<p>DD: pragma variant is opt-in by author of the library, external version is opt-in by host or by user of the library. Pragma doesn't break existing code. Lots of ways to modify behavior of code included in the app that don't edit your source text, this would add another one, apps are already making choices about whether to depend upon such things.</p>
+<p>DD: requires only minimal preprocessing</p>
+<p>DD: precedent for out-of-band controls :CSP disallows eval(), proposed realms API is controlled externally, Node.js enables/disables i18n features with flags</p>
+<p>DD: please give me feedback</p>
+<p>YK: seems fine, agree with your arguments. Test environments want toString, so maybe this API would be enabled in production environments but not during development. Any kind of self-hosting probably needs this behavior. The inline pragma probably works better with existing bundling tools, people today are still taking source code and assembling them into a single script. If it couldn't be used in existing bundling strategies, it wouldn't be used as much. Testing tools could un-insert the pragma.</p>
+<p>KCL: testing is important, it's hard enough to just get the name of a function. I can imagine folks cargo-culting the pragma in their libraries which will coincide with a lack of introspection in testing environments like Chai. I can imagine us getting tons of issues about this. I prefer option 2.</p>
+<p>BFS: binary AST would also lose the source code, we haven't yet objected to that</p>
+<p>MM: I think breaking old code is the central topic. The switch option is not worse (than the pragma option) because the build tools can insert it. But of course then the pragma is not worse either. What is the disadvantage of the pragma if the build tools are managing everything?</p>
+<p>DD: neither seems to have an advantage</p>
+<p>MM: Then I believe the global switch has a strong disadvantage, the author of the code cannot make predictions about the behavior of their code. I prefer the pragma. We'd like to encourage separation of concerns, and the pragma does that well</p>
+<p>DD: why is that not an argument against the realms API?</p>
+<p>MM has an answer. let's intervene at the finest-grain that we can</p>
+<p>MF: the pragma route would make functions inside the censored function to also be censored, right?</p>
+<p>DD: yes, main goal is to make it easy to censor a whole hierarchy</p>
+<p>MF: would you want an uncensor pragma to turn it off inside?</p>
+<p>DD: we could, if necessary. wants to see a more compelling use case.</p>
+<p>MF: might be where we pass a function object to something that we know needs the source</p>
+<p>TST: for memory usage concerns: we need it to apply to all contained functions, and to not be turn-offable, so we can discard the source as quickly as possible</p>
+<p>DT: for censored code, it's hard to debug. could we add a hash of the source into the censored representation, so debug tools can trace back to the original source?</p>
+<p>DD: interesting. sounds complicated, but maybe useful.</p>
+<p>MF: there's telemetry, and then there's a debugger, and without source that's hard, is that the intent?</p>
+<p>DD: not the intent to prevent debugging in a trusted environment. Devtools should fetch source code from disk, instead of from memory. Engine could save source to disk as it arrives. If you care about saving memory, don't open devtools. Not intention to impact stack traces, but might affect it. Don't want to censor function names, but that does that change offsets in stack frames or line offsets?</p>
+<p>KCL: With the option 2 proposal - a meta tag could be toggled off with a staff cookie, reload to see code with .toString() working</p>
+<p>JHD: my proposal doesn't yet have a way to censor function names for specific stack frames, must address this before stage-2. Should we censor entire stack frames? Kinda requires per-function pragma control. Hiding internal helper functions. Pragma approach seems likely to handle this. Seems like there's some overlap between these proposals. Call it a potential cross-cutting concern to be addressed in stage 1.</p>
+<p>TST: We added support for essentially this in spidermonkey based on memory concerns in FxOS, could have disabled it in more places if we could have done it in a more granular level, there were extensions that depended upon toSource that we didn't want to break. This was before lazy parsing of functions and &quot;relazification&quot; (unparse a function and discard bytecode after it hasn't been used for a while).</p>
+<p>DD: I was talking to Adam and he said it wouldn't be a quick change because of similar issues. But given how much memory it involves, this is worth pursuing.</p>
+<p>MS?: maybe pass a function <em>into</em> some feature to ask for its source code (?)</p>
+<p>DD: seems isomorphic. Hard to mass-censor a lot of functions if you use a runtime <code>f.censor()</code>.</p>
+<p>Andrew: we globally enable CSP, so there is no eval(), the only reason we don't censor functions is because we get it for free with spidermonkey's disassembler (we don't need the original source), we'd like a global switch since we don't need/want it</p>
+<p>BFS (via ?): node should be fine with a per-package switch</p>
+<p>CP: how will people know that their code will actually work or not, it doesn't throw an error when you call .toString, hard to discover revealed problems. Maybe throw an exception?</p>
+<p>DD: like any other change to the global environment, use the test suite to discover problems. Haven't considered throwing exception, seemed needlessly painful given how many functions already return &quot;[native code]&quot;.</p>
+<p>CP: we usually create a bundle, during that process we can discover which functions we never call .toString, we could add the pragma on those functions just like we do tree shaking.</p>
+<p>DD: that's an argument for the pragma form, right?</p>
+<p>CP: yes, but for tools to mark it, rather than people</p>
+<p>MM: regarding exceptions vs &quot;native code&quot; string. The &quot;[native code]&quot; string was chosen specifically to <em>not</em> evaluate to anything (eval will throw with a syntax error).</p>
+<p>SGO: are these mutually exclusive? two separate problems: author tries to protect their own code from leaking, vs consumer trying to reduce their memory usage. pragma is good for the former, switch is better for the latter, neither address both.</p>
+<p>DD: yeah, they both sound useful. with enough preprocessing either one could be used, but maybe we should provide both.</p>
+<p>DD: will work with michael to add the .toString flag, and also work separately on a pragma proposal.</p>
+<p>DD: propose stage-1 with that plan (both). Who would I need to talk to to do both?</p>
+<p>MM: I'm up for stage-1 but not for doing both.</p>
+<a href="#conclusionresolution-functionprototypetostring-censorship-for-stage-1"><h4 id="conclusionresolution-functionprototypetostring-censorship-for-stage-1">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#13iiik-new-set-builtin-methods-for-stage-2"><h2 id="13iiik-new-set-builtin-methods-for-stage-2">13.iii.k new Set builtin methods for stage 2</h2></a><p>(Sathya Gunasekaran)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/e/2PACX-1vR3U78vWdnSujZoGKR1EZOvhrIDJMcypwq3T0FY4bz-lG8LncSD_x89N2eS8anu5adviz1mhSrnf9lG/pub?start=false&amp;loop=false&amp;delayms=3000">slides</a></li>
+</ul>
+<p>SGN: I'm championing a proposal by michael wadas, add Set.prototype.union(iterable), returns new Set with the intersection. Also Set.prototype.difference, symmetricDifference. Also all the other Array methods: filter, map, find, etc</p>
+<p>SGN: omits some that don't make sense: fill, findIndex, includes (already has <code>has</code>), shift/unshift/pop/push, reduceRight, sort (sets are unordered, no indexes)</p>
+<p>SGN: questions: include these on Map too? Or make two separate proposals (one for Map, one for Set). Also should we use the existing naming convention, or Set-specific names? addAll/union, removeAll/subtract</p>
+<p>JFI: I'd like to see the array-like methods for any iterable, not just Set/Map</p>
+<p>MM: addAll/removeAll sounds like it should be imperative (modify existing array), union/subtract return new object.</p>
+<p>TAB: Python has both, with different (maybe bad) names</p>
+<p>TAB: &quot;difference&quot; doesn't suggest which side is which (A-B vs B-A), docs are opposite of what python does. &quot;subtract&quot;/&quot;minus&quot; is more clear. &quot;symmetricDifference&quot; is a very complicated spelling, &quot;xor&quot; would be better.</p>
+<p>SGN: major programming languages use &quot;symmetricDifference&quot;. Please comment on the issue</p>
+<p>RBN: would like methods to test sets: is A a proper subset of B? etc. I like the proposal, would like to see more operations</p>
+<p>SGN: sounds good, I have an issue up with extra methods (isDisjoint, etc), please comment on that</p>
+<p>JHD: want an is-it-the-same-set method, sounds like shallowEqual, sounds like Sebastien's proposal from several meetings ago, which wasn't received with warmth</p>
+<p>MM: that was because it doesn't generalize. With a set, &quot;shallow compare&quot; is clear, but in other areas it doesn't make as much sense. There is no general abstraction-independent meaning to &quot;shallow&quot;.</p>
+<p>JHD: I wouldn't want to see these useful Set methods blocked because we're waiting to figure out the Map methods. But, looking to the future, being able to say &quot;collections of things have a unified way to deal with them&quot; would be important. Might want to consider carefully before breaking naming consistency with e.g. Array, the naming choices might be subpar, but consistency is good, so maybe avoid shipping some methods now if that breaks consistency in the future.</p>
+<p>DD: methods on iterator.prototype isn't sufficiently ergonomic, you need an extra set at the end to re-convert it into a map or set, which is silly. you should be able to map over a set and get another set.</p>
+<p>AK: the Set-specific operations are useful and independent enough that maybe they should be in a separate proposal, unblocked by deciding the other method names</p>
+<p>WH: what happens when the set behaves like a multiset?</p>
+<p>SGN: no current way to write equality. haven't looked into multisets</p>
+<p>WH: You can encounter altered equality in the proposal. The operations like union, difference, symmetricDifference, etc. are generic; they call generic operations to test, insert, and delete elements. I was asking what happens when those latter operations behave in a multiset manner.</p>
+<p>KVR: sets plus equality provides non-intuitive properties</p>
+<p>SM: it should be clear from the naming convention which methods return a new set and which modify the target</p>
+<p>SGN: It sounds like we want to split this into two proposals: Array-like methods, and Set-specific methods. Shall I split these up? Can I go to Stage 2 for Set-specific methods?</p>
+<p>MF: I think you should look at Ron's suggestions before you go to Stage 2.</p>
+<p>SGN: So.. Stage 1?</p>
+<p>MM: I support both at stage 1</p>
+<a href="#conclusionresolution-13iiik-new-set-builtin-methods-for-stage-2"><h4 id="conclusionresolution-13iiik-new-set-builtin-methods-for-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 for Set-specific methods</li>
+<li>Stage 1 for the more generic methods Array-like methods (for both Set and Map)</li>
+</ul>
+
+</body>

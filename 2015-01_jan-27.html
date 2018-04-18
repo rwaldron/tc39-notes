@@ -1,0 +1,282 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 27, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-27-2015-meeting-notes"><h1 id="january-27-2015-meeting-notes">January 27, 2015 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Jonathan Turner (JT), Jordan Harband (JHD), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jeff Morrison (JM), Sebastian Markbåge (SM), Erik Arvidsson (EA), Peter Jensen (PJ), Yehuda Katz (YK), Dave Herman (DH), Waldemar Horwat (WH), Alan Schmitt (AS), Michael Ficarra (MF), Lee Byron (LB), Dmitry Lomov (DL), Arnaud Le Hors (ALH), Chip Morningstar (CM), Caridy Patiño (CP), Domenic Denicola (DD), Mark S. Miller (MM), Kevin Smith (KS), Andreas Rossberg (ARB), István Sebestyén (IS), Sam Tobin-Hochstadt (STH), Brendan Eich (BE), Jafar Husain (JH)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>JN: No changes to agenda? We can change the order as we go</p>
+<p>JN: Any objections?</p>
+<p>JN: No objections</p>
+<p>JN: Previous meeting minutes?</p>
+<a href="#conclusionresolution-welcome"><h4 id="conclusionresolution-welcome">Conclusion/Resolution</h4></a><ul>
+<li>Approval of agenda</li>
+<li>Approval of minutes</li>
+</ul>
+<a href="#41-es6-end-game-schedule-review"><h2 id="41-es6-end-game-schedule-review">4.1 ES6 End-game schedule review</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>(include link to slides)</p>
+<p>AWB: June, Ecma GA meeting:</p>
+<ul>
+<li>Approve standards</li>
+<li>Meet twice a year, next in Dec</li>
+</ul>
+<p>AWB: We want ES6 to approved in June this year. What does it take to achieve that?</p>
+<p>AWB: Final editorial works needs to be done. Takes a couple of months. Needs to start April 1st.</p>
+<p>AWB: Before that TC39 needs to approve the ES6 spec. March 24-26 meeting...</p>
+<p>Content is in slides…</p>
+<p>IS: Question about different dates and document versions. His problem was that the documents for opt out are not the final documents that go to the GA for approval.</p>
+<p>AWB: Will get to it on the next slide</p>
+<p>AWB: Everything I say here also applies to ECMA 402 (the i18n spec). Rick Waldron is responsible for that and it needs to follow the same milestones.</p>
+<p>RW: This will not be a problem for 402</p>
+<p>IS: The opt out period needs to be over before June 17 latest, because that is the day of the Ecma GA, when Edition 6 is up for approval. This means that theoretically we may start the opt-out on April 17 the latest. In practice of course that is too late, we should find an earlier opt-out starting date.</p>
+<p>IS: Anticipate large changes?</p>
+<p>AWB: No, I hope not.</p>
+<p>DH: Had some module related issues but did not want to bother Allen since he was busy related to subclassing issues. If we don't resolve these issues then we will not be done.</p>
+<p>AWB: Does anyone expect to have issues that will cause the spec to slip?</p>
+<p>DH: There are issues that need to be addressed, regardless of consequence.</p>
+<p>AWB: Need to resolve those issues at this meeting. These dates are really hard deadlines.</p>
+<p>DH: Can try to assemble a list of these issues this week.</p>
+<p>IS: Is the opt out going to be on revision 31 or the final spec?</p>
+<p>AWB: Can we do that with the final? Can we start the opt out on April 1st?</p>
+<p>IS: Why don't we start the opt out on Feb 20, and use whatever spec draft we have then?</p>
+<p>RW: Why can't the opt out start on Apr 1st.</p>
+<p>IS: Would also work. But earlier is better.</p>
+<p>RW: Gived more time to wrap up more issues.</p>
+<p>AWB: It does not really change much.</p>
+<p>AWB: 2 things going on: 1) TC39 approving the spec.</p>
+<p>AWB: Feb 20 gives us (TC39) 30 days before the f2f meeting to review the last spec. <em>Feb 20 is the day!</em></p>
+<p>AWB: We don't need multiple opt outs. So the opt out period can start on Feb 20th (instead of Feb 1st as in the presentation).</p>
+<a href="#43-es6-draft-status-report"><h2 id="43-es6-draft-status-report">4.3 ES6 draft status report</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>(Same slides as previous item)</p>
+<p>AWB: Three drops since last meeting, changes in the slides as well as <a href="http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts">http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts</a></p>
+<p>AWB: The HTML comment extensions in B.1.3 need to be reviewed against what browsers actually do.</p>
+<p>WH: I'm validating grammar from main body of the standard (and found some minor bugs), but not going to validate browser extensions.</p>
+<p>DD: I will try to do that, maybe.</p>
+<p>EA: If we add the module tag (script[type=module]) do we need to keep this open?</p>
+<p>DH: We can always remove the forbidding phrase if we see a need for it.</p>
+<p>MM: Want to forbid in strict mode...</p>
+<p>AWB: Not possible.</p>
+<p>MM: Ok.</p>
+<p>JHD: Browsers (IE vs Safari vs Chrome/Firefox) do different things in regards to HTML comments. In fact, even a single browser does different things depending on where the source code is coming from (script block, eval, console, ...)</p>
+<p>MM: if you don't require [HTML comments] or forbid it, it's optional, [which makes it hard to fix in modules later]</p>
+<p>WH: I'm objecting to have different behavior for browser ECMAScript vs non browser ECMAScript.</p>
+<p>DH: The following program is valid when HTML comments are not supported</p>
+<pre><code class="language-js">x
+&lt;!--y--&gt;
+z
+</code></pre>
+<p>MM: This is enough to show that there is an XSS issue. If the defender assumes HTML comments works or not.</p>
+<p>WH: You can't go down the combinatorial explosion of different browsers' or different contexts' parses. The only sane thing is to reject this of you are writing a validator.</p>
+<p>MM: Waldemar do you agree with if we cannot prohibit it everywhere we have to allow it everywhere?</p>
+<p>WH: No.</p>
+<p>MM: Would it be more predictable if it were allowed everywhere?</p>
+<p>WH: Not in practice because existing browsers differ in parsing the extensions. Regardless of what we enact for ES6, for security purposes you have to handle the browser diversity anyway.</p>
+<p>MM: I give up.</p>
+<p>YK: You can use CSP to prevent eval.</p>
+<p>MM: I think the current spec is fine. It is no worse thatn the current situation.</p>
+<p>AWB: We need some eyes on this grammar.</p>
+<a href="#conclusionresoltuoin-43-es6-draft-status-report"><h4 id="conclusionresoltuoin-43-es6-draft-status-report">Conclusion/resoltuoin</h4></a><ul>
+<li>Use the new annex spec for html comments as in the latest draft</li>
+<li>Need to review the grammar</li>
+</ul>
+<p>AWB:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = expr
+</code></pre>
+<p>gets to <code>x</code>, captures that identifier, then evaluates <code>expr</code>.</p>
+<p>ARB: Not clear when this is observable?</p>
+<p>DH:</p>
+<pre><code class="language-js">obj = {<span class="hljs-attr">x</span>: <span class="hljs-string">'here'</span>};
+<span class="hljs-keyword">with</span> (obj) {
+  x = (<span class="hljs-keyword">delete</span> obj.x, <span class="hljs-number">42</span>);
+  <span class="hljs-comment">// {x} = (delete obj.x, {x: 42});</span>
+}
+</code></pre>
+<p><a href="https://bugs.ecmascript.org/show_bug.cgi?id=3463">https://bugs.ecmascript.org/show_bug.cgi?id=3463</a></p>
+<p>AWB: New document title</p>
+<p>YK: I recalled that we talked about not changing the name until we announced the new train model.</p>
+<p>(still during the break) discussion between MM and YK: about Window/WindowProxy issue, discussing concerns, esp as relates to jQuery.
+MM: preferred to keep invariants, add test262 tests, wait for browsers to fix
+YK: points out Object.prototype.toString.call(window) results differ (Chrome: 'global', Safari: 'window', eg)
+… more discussion about configurability, differences between Window and a WindowProxy …</p>
+<a href="#44-subclass-instantiation-reformation-status-and-open-issues"><h2 id="44-subclass-instantiation-reformation-status-and-open-issues">4.4 Subclass instantiation reformation: status and open issues</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>The presentation continues</p>
+<p>AWB: Walks through consensus from Jan 7 ad-hoc meeting (see slides)</p>
+<p>YK: We should opt on the side of future proofing and fewer features.</p>
+<p>WH: Is there any cases where these uniitiallized objects can escape?</p>
+<p>AWB: Only if the constructor calls out before it is done with the initialization.</p>
+<p>AWB: Not having to worry about reentrancy or uninitialized objects leaking allowed AWB to eliminate 20-25 pages of spec.</p>
+<p>WH: Where exactly does a constructor's [[Prototype]] point in the no-extends, extends null, and extends non-null cases?</p>
+<p>AWB:</p>
+<ul>
+<li>extends non-null: the superclass</li>
+<li>extends null: Function.prototype</li>
+<li>No extends: Function.prototype</li>
+</ul>
+<p>WH: If someone mutates prototypes, the code uses the new superclass in some cases and the old one in other cases. In particular, the extends-null case uses the old one, while replacing a non-null case with another non-null case uses the new one.</p>
+<p>AWB: Have ideas on fixing that.</p>
+<p>YK: Can we make returning anything but undefined or an Object throw an exception?</p>
+<p>AWB: Then we would have different sementics between class constructors an FunctionDeclarations/FunctionExpression</p>
+<p>WH: Why are the exceptions in points 8 and 9 of AWB's slides different? That seems weird.</p>
+<ol start="8">
+<li>When a function implicitly returns from a [[Construct]] invocation, if its this binding is still uninitialized a ReferenceError is thrown.</li>
+<li>When a function explicitly returns a non-object from a [[Construct]] invocation and its this binding is still uninitialized, a TypeError is thrown.</li>
+</ol>
+<p>YK, MM, WH: Thought there was agreement on the list to make class constructors non-callable.</p>
+<p>ARB: What about arrow functions?</p>
+<p>AWB: super (like this) needs to work inside arrow functions. And it needs to work as if the super call was done outside the arrow function. This more or less means that the lookup of NewTarget, HomeObject etc is looked up in the outer scope of the arrow function.</p>
+<p>WH: What if super is reentrant? Stashing it away via arrow functions allows code to reenter it.</p>
+<p>ARB: Surprised and concerned about this as well. Implications unclear when super() is allowed to leak from constructor through an arrow function.</p>
+<p>AWB: You can call super twice but you will get an exception when you try to bind this after the second call.</p>
+<p>ARB: Possible implementation concerns?</p>
+<p>DL: Should work fine.</p>
+<p>WH: Wondering about calling super twice and having it throw only after the second call completes and tries to assign to this. Not sure about all the implications yet, but ok with it — the alternatives are worse.</p>
+<p>MM: TCP for <code>super.foo</code> is clear bt what about <code>super()</code> in a constructor?</p>
+<p>AWB: Both works in the latest draft.</p>
+<p>WH: What is the NewTarget in the case of <code>new super()</code>?</p>
+<p>AWB: The NewTarget is whatever was part of the <code>new func</code> so in this case <code>funct</code>. The NewTarget gets forwarded down.</p>
+<p>WH: OK, so if you have a chain of [[construct]] calls, it's the base of the chain. What happens when new super() gets called from a function invoked via [[call]] instead of [[construct]]?</p>
+<p>AWB: Error. Have to verify how it is specced.</p>
+<p>DL: We could also use the function itself.</p>
+<p>AWB: That is an option. [Checking spec.] -- throws a refernce error if there is no NewTarget which is the case when the function was [[Call]ed and not [[Constructed]].</p>
+<p>AWB: My suggestion is to keep <code>new super()</code>.</p>
+<p>YK: Wants to dissallow all forms of super outside of class bodies</p>
+<p>AWB: The primary utility is that you can use it in cases where <code>super()</code> does not work.</p>
+<p>DL: You cannot use <code>new super()</code> in method.</p>
+<p>YK: Wants to do a max-min approach here.</p>
+<p>DL: are there critical use cases for new super() in constructors? I guess no</p>
+<p>AWB: confirms</p>
+<p>BT: how concern are you about removing <code>new super</code>?</p>
+<p>AWB: Should not be too bad. Pretty self contained.</p>
+<p>BT: Anyone defending new Super()? <em>crickets</em></p>
+<p>AWB: Next, do we need syntax to manifest NewTarget?</p>
+<p>YK: Early strawman was <code>arguments.constructor</code>.</p>
+<p>MM: <code>&lt;keyword&gt;</code>.prop gives us new</p>
+<p>AWB: Sees options in the future to add things like <code>function.callee</code></p>
+<p>AWB: Maybe it could be <code>class.target</code> but <code>new.target</code> is more accurate. These are called MetaProperties in the spec.</p>
+<p>MM: Thinks that we should include <code>new.target</code>. Understands the objections but it is a very useful thing to have and it reads very well.</p>
+<p>MM: Anyone object to have <code>new.target</code> in ES6?</p>
+<p>YK: Wants to talk about callable constructors before we make a call [no pun intended].</p>
+<p>YK: OK with <code>new.target</code> if constructors are not callabele.</p>
+<p>AWB: Where is <code>super()</code> allowed? Currently only allowed in class constructor bodies.</p>
+<p>ARB: Makes sense at this point. We have had multiple threads about this?</p>
+<p>DD: Would <code>new.target</code> work in FunctionDeclaration/FunctionExpression?</p>
+<p>AWB: Should work.</p>
+<p>YK: Objects. We should only allow <code>new.target</code> in places where super is allowed.</p>
+<p>AWB: <code>new.target</code> can be used anywhere where [[Construct]] is used</p>
+<p>DL: <code>new.target</code> gets set/bound when [[Construct]] is done. This is valid for normal functions as well constructors</p>
+<p>ARB: There is no design issues here. It can only mean one thing.</p>
+<p>EA: <code>new.target</code> is tied to [[Construct]], not super.</p>
+<p>YK: OK.</p>
+<p>WH: What happens if you do ES3 style constructor/prototype?</p>
+<p>AWB: The NewTarget gets set as you do [[Construct]]</p>
+<p>EA: You can pass along NewTarget if you use <code>Reflect.construct</code></p>
+<p>YK: A possible semantics for new.target on [[Call]] is to throw.</p>
+<p>MM: represents YK's point. If class constructors are not constructable and we disallow new.target in function declarations, then we don't have to answer the question of what happens with new.target on [[Call]]</p>
+<p>AWB: ???</p>
+<p>DD: Do we want people to refactor functions to classes. Then supporting [[Call]] and [[Construct]] is important.</p>
+<p>AWB: Not sure if we are going to resolve these things quickly post ES6?</p>
+<p>YK: No chance of getting concensus for ES6.</p>
+<p>DD: If someone writes a FunctionDeclaration and wants to enforce that it is called with new, then if we don't have <code>new.target</code> people will go back to instanceof and other broken heuristics.</p>
+<p>DL: You could also use new.target usefully in a [[Call]] context - to assert that it is not a [[Construct]] context</p>
+<p>BE: We don't know what the future holds but we do know that functions in the past have been callable and constructable. What we do know is that <code>new.target</code> is useful.</p>
+<p>WH: If we're going to use new.target === undefined to distinguish [[Call]] from [[Construct]] contexts: Is is possible for new.target to be undefined inside a [[Construct]] context? Even if it's called via reflection?</p>
+<p>AWB: No, that's never possible.</p>
+<p>MM: Reflect.construct(??, null) is a type error?</p>
+<p>AWB: Yes, it is a TypeError</p>
+<p>AWB: null or undefined</p>
+<p>MM: undefined is least surprising.</p>
+<p>EA: Because missing is often signalled with undefined.</p>
+<p>BE: Strict functions uses undefined for missing this.</p>
+<p>BT: Is <code>new.target</code> undefined in global scope.</p>
+<p>AWB: It is SyntaxError in global scope, just like super and return.</p>
+<p>MM: Is it a syntax error in concise methods? They do not have a construct.</p>
+<p>AWB: That would include more exceptions and reduce consistency.</p>
+<p>MM: <code>new.target</code> is also tcp through arrow functions.</p>
+<a href="#conclusionresolution-44-subclass-instantiation-reformation-status-and-open-issues"><h4 id="conclusionresolution-44-subclass-instantiation-reformation-status-and-open-issues">Conclusion/resolution</h4></a><ul>
+<li>Remove <code>new super()</code></li>
+<li><code>new.target</code> is available in all functions. It is <code>undefined</code> in a non [[Construct]] call.</li>
+<li><code>new.target</code> in arrow functions gets the NewTarget of the outer context (not the arrow funciton context).</li>
+</ul>
+<a href="#super-outside-class-constructor-body"><h2 id="super-outside-class-constructor-body">super() outside class constructor body</h2></a><p>(Champion???)</p>
+<p>DH: ????</p>
+<p>YK: A constructor is both callable and constructable. If you use <code>super()</code> in call context you do not know if it is a call or construct.</p>
+<p>BE: super-dot is orhtogonal to super-call</p>
+<p>MM: Do we have concensus on super() is only allowed in constructor? And constructors are only [[Construct]]able, i.e. their [[Call]] trap throws?</p>
+<p>MM: Would like to postpone toMethod post ES6?</p>
+<p>YK: Current design is insufficient.</p>
+<p>DD: What about if someone wants to use super in functions'</p>
+<p>YK: They should just use classes.</p>
+<p>BE: Deferring toMethod and making a call on a class throw seems like the most future proofing.</p>
+<p>WH: Can you explain what toMethod is?</p>
+<p>AWB: Explains the spec</p>
+<p>YK: Concerned about having <code>toMethod(homeObject)</code> and then change the arity to <code>toMethod(homeObject, propertyName)</code>.</p>
+<p>AWB: Just reserve the second argument.</p>
+<p>DL: As a user, what do I pass?</p>
+<p>WH: Also wants to defer toMethod.</p>
+<p>AWB: Wants one more go and then I'll give up</p>
+<p>AWB: People that wants to do meta programming. Polyfills, compilers. All of these people are now shut out.</p>
+<p>DD: Without toMethod you cannot add a method that wants to call super to an existing class. E.g. for a polyfill on a DOM class; especially custom element callbacks.</p>
+<p>MM: When we started we set out with a design that could explain classes using ES5 semantics. We've lost this with TDZ.</p>
+<p>DD: Feels strongly that classes should desugar to smaller primitives. Since we have already lost that we can/should come up with a more consistent design post es6.</p>
+<p>DH: We have to go from both ends. We are not abandoning, just deferring.</p>
+<p>BE: We want kernel semantics. But we should not rush this. We will regret rushed decisions. We do not have solid design at this time so we must defer.</p>
+<p>DL: No <code>super()</code> outside class constructors since this is already initialized.</p>
+<p>AWB: My bottom line; <code>new.target</code> and <code>super.property</code> are the essential things.</p>
+<p>DL: extends null?</p>
+<p>AWB: We can drop the special dynamic case for extends null. Can have the constructor return an object it makes itself via Object.create.</p>
+<p>EA: If you have an extends clause, the default constructor calls super. If the extends expression evaluates to null then the super() call will throw. So you have to provide your own constructor</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">null</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.create(<span class="hljs-keyword">new</span>.target.prototype);
+  }
+}
+</code></pre>
+<p>AWB: If not null then the extends expression must be IsConstructable.</p>
+<p>DL: What is the canonical way to create a class that has null as the [[Prototype]] of the instance</p>
+<p>MM:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.create(<span class="hljs-keyword">new</span>.target.prototype);
+  }
+}
+C.prototype.__proto__ = <span class="hljs-literal">null</span>;
+</code></pre>
+<p>WH: We special case the null value in the extends clause. If null we use %FunctionPrototype% as the superParent. We use null as the protoParent. Get rid of the specialized treatment of super() for null extends; instead, use the same semantics for null and non-null extends, which will make any attempt to call super() with a null extends throw.</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">null</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.create(<span class="hljs-keyword">new</span>.target.prototype);
+  }
+}
+</code></pre>
+<p>AWB: <code>super.property</code> in object literals works in concise methods and accessors.</p>
+<p>AWB: Do we have concensus to remove <code>super.property</code> from concise methods in object literals.</p>
+<p>YK: I think that is unfair. We have made a lot of changes.</p>
+<p>DL: Concise methods are not constructable. Correct?</p>
+<p>AWB: Correct.</p>
+<p>DD: We cannot reopen unrelated issues at this time of the process.</p>
+<p>YK: I'm passionate about the syntactic sugar related to <code>super()</code> for <code>super.propertyName()</code>. This syntax got removed and we had to do some fairly significant changes. And this is related.</p>
+<p>WH: Was under the impression that <code>super.property</code> was only going to be available inside class methods.</p>
+<p>AWB: There is no distinction between class methods and object methods.</p>
+<p>MM: When we talked about this before I was also under the assumption that this was about inside classes and outside classes.</p>
+<a href="#conclusionresolution-super-outside-class-constructor-body"><h4 id="conclusionresolution-super-outside-class-constructor-body">Conclusion/resolution</h4></a><ul>
+<li>Dropping toMethod from ES6.</li>
+<li>No <code>super.property</code> in FunctionExpression/FunctionDeclaration (as well as generators).</li>
+<li>No <code>super()</code> outside class constructors.</li>
+<li>Class constructor [[Call]] always throws.</li>
+<li><code>extends null</code> does not have special dynamic default constructor. The syntactic presence of extends clause causes [[ConstructorKind]] to be derived.</li>
+<li>No concensus on super inside concise methods of object literals. (to be revisited)</li>
+</ul>
+<a href="#methods-in-class-bodies-enumerability"><h2 id="methods-in-class-bodies-enumerability">Methods in class bodies enumerability?</h2></a><p>AWB: Is anyone objecting to making methods in class literals non enumerable?</p>
+<p>No objections.</p>
+<a href="#conclusionresolution-methods-in-class-bodies-enumerability"><h4 id="conclusionresolution-methods-in-class-bodies-enumerability">Conclusion/resolution</h4></a><ul>
+<li>Methods in class bodies are non enumerable.</li>
+<li>Concise methods in object literals are still enumerable.</li>
+</ul>
+
+</body>

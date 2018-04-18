@@ -1,0 +1,746 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 28, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-28-2016-meeting-notes"><h1 id="july-28-2016-meeting-notes">July 28, 2016 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff(phone) (MS), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD), Rick Waldron (RW), Stefan Penner (SP), Jonathan Sampson (JSN), Caridy Patiño (CP), Sam Tobin-Hochstadt (STH), John Buchanan (JB), Kevin Gibbons (KG), Lars Hansen (LHN), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Kris Gray (KGY), Adam Klein (AK), Dean Tribble (DT), Eric Faust (EFT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Ben Newman (BN), Morgan Phillips (MPS), Shu-yu Guo (SYG), Paul Leathers (PL), Ben Smith (BS), Zibi Braniecki (ZB)</p>
+<hr>
+<a href="#10iia-shared-memory-and-atomics"><h2 id="10iia-shared-memory-and-atomics">10.ii.a Shared Memory And Atomics</h2></a><p>Lars Hansen</p>
+<p><a href="https://github.com/tc39/ecmascript_sharedmem">https://github.com/tc39/ecmascript_sharedmem</a></p>
+<p>LHN:</p>
+<a href="#agent-semantics"><h3 id="agent-semantics">Agent Semantics</h3></a><p>Blocking: an agent can block waiting to be woken without returning to its event loop</p>
+<p>Web awareness: an embedding can deny some agents the ability to block (eg. browsers main thread)</p>
+<p>Forward progress: agents must eventually advance if</p>
+<p>All agents die at the same time</p>
+<a href="#sharedarraybuffer"><h3 id="sharedarraybuffer">SharedArrayBuffer</h3></a><ul>
+<li>New Data Type
+<ul>
+<li><p>Like ArrayBuffer</p>
+<ul>
+<li>map TypedArray and DataView onto it</li>
+</ul></li>
+<li><p>Unlike (see slide)</p></li>
+</ul></li>
+</ul>
+<p>Sharing Memory</p>
+<a href="#atomics"><h3 id="atomics"><code>Atomics</code></h3></a><p>The global <code>Atomics</code> namespace has static methods that operate on TypedArrays</p>
+<p>Atomic access:</p>
+<ul>
+<li><code>load</code></li>
+<li><code>store</code></li>
+<li><code>add</code></li>
+<li><code>sub</code></li>
+<li><code>and</code></li>
+<li><code>or</code></li>
+<li><code>xor</code></li>
+<li><code>exchange</code></li>
+<li><code>compareExchange</code></li>
+</ul>
+<p>BFS: Is it possible to have another worker store between wake?</p>
+<p>EFT: Yes</p>
+<p>DT: A spin instruction that doesn't spin, on x86?</p>
+<p>LHN: Yes</p>
+<ul>
+<li>Investigated <code>pause</code> as a lightweight <code>wait</code>, that wouldn't go into a spin, but <code>wait</code> for a short time</li>
+<li>if hot <code>wait</code>, could've used <code>pause</code> before going into a <code>wait</code></li>
+<li>you could use <code>pause</code> instead of direct into <code>wait</code></li>
+</ul>
+<p>(I'm not sure I captured this as well as it could be, would appreciate more eyes/brains to revise appropriately)</p>
+<a href="#memory-model"><h3 id="memory-model">Memory Model</h3></a><p>... see slide</p>
+<a href="#challenges"><h3 id="challenges">Challenges</h3></a><p>... see slide</p>
+<a href="#opportunities"><h3 id="opportunities">Opportunities</h3></a><p>ES is &quot;easier&quot; than C/C++</p>
+<ul>
+<li>Performance demands slightly lower</li>
+<li>Shared Memory sep. from non-shared</li>
+<li>Only flat shared memory, no pointers or objects</li>
+</ul>
+<p>... see slide</p>
+<a href="#two-level-memory-model-1"><h3 id="two-level-memory-model-1">Two Level memory model 1</h3></a><p>Conventional axiomatic high level model</p>
+<ul>
+<li>Defines sync accesses</li>
+<li>sync order</li>
+<li>&quot;happens=before&quot; relationship</li>
+</ul>
+<p>... see slide</p>
+<a href="#two-level-memory-model-2"><h3 id="two-level-memory-model-2">Two Level memory model 2</h3></a><p>... see slide</p>
+<a href="#synchronization-order"><h3 id="synchronization-order">Synchronization Order</h3></a><p>... see slide</p>
+<a href="#viability-1"><h3 id="viability-1">Viability 1</h3></a><p>... see slide</p>
+<a href="#viability-2"><h3 id="viability-2">Viability 2</h3></a><p>... see slide</p>
+<p>LHN: WH found an important bug in the memory model's definition of viability that causes the synchronization order to not be well-defined. Without a well-defined synchronization order we don't have a workable model. This will require a rewrite using an operational approach instead of the current two-phase viability and synchronization approach.</p>
+<p>LHN: [talking about slide] Races &quot;leaking&quot; into the memory model of the sequential language.</p>
+<p>WH: Agree that they don't leak (and must not leak). The price we pay for that is significant loss of opportunities for optimizations. It remains to be seen whether that's a reasonable price, but I assume it is for now for the purposes of this proposal.</p>
+<p>LHN: [talking about slide] Security issues are the &quot;cost of doing business&quot; of shipping shared memory, at least according to one major browser vendor. Mozilla is less sanguine about that.</p>
+<p>MM: Is there any way to ameliorate this?</p>
+<p>LHN: Add a switch to settings to turn multithreading off.</p>
+<p>(discussion, re: changes that need to be made)</p>
+<p>WH: The memory model will need to be rewritten.</p>
+<p>?: Why rewrite? Can't we just fix the bugs that WH found in the presented memory model?</p>
+<p>LHN: What I just presented is the new memory model I'm developing to fix the bugs, not the one currently in the spec.</p>
+<ul>
+<li>Avoid a circular</li>
+</ul>
+<p>WH: What was in the spec had fundamental incorrect assumptions such as defining viability as a separate phase before synchronization, or the ability to put all memory accesses (including non-atomic ones) into a global total order, which just isn't true.</p>
+<p>WH: We all agree on what the simple cases where everything is synchronized properly ought to do, such as what happens in an atomic load that sees the result of a prior atomic store. It's in the other cases that need to be nailed down where the big memory model issues lie.</p>
+<p>SYG: How to test?</p>
+<ul>
+<li>An impl to be compliant, must be able to observe the memory model</li>
+<li>Is that possible?</li>
+</ul>
+<p>BS: without particular axiom, here is X that breaks.</p>
+<p>SYG:</p>
+<p>STH: Write the memory model, rep. all the legal executions. Run X times, ensure that all</p>
+<p>SYG: How to test the actual implementation</p>
+<a href="#conclusionresolution-10iia-shared-memory-and-atomics"><h4 id="conclusionresolution-10iia-shared-memory-and-atomics">Conclusion/Resolution</h4></a><ul>
+<li>API freeze granted?</li>
+<li>Stage 3 after Waldemar is satisfied with rewrite of memory model</li>
+</ul>
+<a href="#10ib-disregard-lastindex-for-non-global-non-sticky-regexps"><h2 id="10ib-disregard-lastindex-for-non-global-non-sticky-regexps">10.i.b Disregard lastIndex for non-global non-sticky regexps</h2></a><p>Leo Balter</p>
+<p>PR from Claude Pache <a href="https://github.com/tc39/ecma262/pull/627">https://github.com/tc39/ecma262/pull/627</a></p>
+<p>LBR: The change is: &quot;don't do the lastIndex step unless isn't actually necessary&quot;
+<a href="https://github.com/tc39/ecma262/issues/625">https://github.com/tc39/ecma262/issues/625</a></p>
+<p>DE: Global regexps don't make sense when frozen</p>
+<ul>
+<li>Some programs freeze regexps, unsure why.</li>
+<li>This is in use, received bug reports</li>
+</ul>
+<p>(discussion, re: how long this might've been allowed?)</p>
+<p>AWB: user-freezable properties and strict mode introduced in ES5</p>
+<p>DE: Doesn't make sense to read/write lastIndex unless actually necessary.</p>
+<p>AWB: Could break something</p>
+<p>DE: True</p>
+<ul>
+<li>The plan is to attempt the fix, ship on chrome/canary and see what happens</li>
+</ul>
+<p>AWB: (recapping the proposed fix)</p>
+<p>LBR: This PR also adds a change to avoid get and ToLength operations on lastIndex for the same regexps. A poisoned RegExp lastIndex property wouldn't affect it.</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params">rx</span>) </span>{
+    rx.lastIndex = { <span class="hljs-attr">valueOf</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">throw</span> <span class="hljs-string">"ok"</span> } }
+    <span class="hljs-keyword">try</span> {
+        rx.exec(<span class="hljs-string">'foo'</span>)
+    }
+    <span class="hljs-keyword">catch</span> (e) {
+        <span class="hljs-keyword">if</span> (e === <span class="hljs-string">"ok"</span>)
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+}
+</code></pre>
+<p>LBR: After this patch, a <code>test(/a/)</code> should return false.</p>
+<p>MM: That does not only address the web compatibility issue, but does a clean-up on the lastIndex.</p>
+<a href="#conclusionresolution-10ib-disregard-lastindex-for-non-global-non-sticky-regexps"><h4 id="conclusionresolution-10ib-disregard-lastindex-for-non-global-non-sticky-regexps">Conclusion/Resolution</h4></a><ul>
+<li>Merge it</li>
+<li>Implement in canary and report what happens</li>
+</ul>
+<a href="#10iiid-objectshallowequal"><h2 id="10iiid-objectshallowequal">10.iii.d Object.shallowEqual</h2></a><p>Sebastian Markbage</p>
+<p><a href="https://github.com/sebmarkbage/ecmascript-shallow-equal">https://github.com/sebmarkbage/ecmascript-shallow-equal</a></p>
+<p>SBI: Problem...</p>
+<a href="#memoization"><h3 id="memoization">Memoization</h3></a><p>... see slide</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eq</span>(<span class="hljs-params">a, b</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.is(a, b);
+}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">memoize</span>(<span class="hljs-params">fn</span>) </span>{
+  <span class="hljs-keyword">let</span> lastArg, lastResult;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">arg</span>) </span>{
+    <span class="hljs-keyword">if</span> (lastArg !== <span class="hljs-literal">undefined</span> &amp;&amp; eq(lastArg, arg)) {
+      <span class="hljs-keyword">return</span> lastResult;
+    }
+    lastArg = arg;
+    lastResult = fn(arg);
+    <span class="hljs-keyword">return</span> lastResult;
+  };
+}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">calc</span>(<span class="hljs-params">obj</span>) </span>{
+  <span class="hljs-keyword">return</span> obj.x + obj.y;
+}
+<span class="hljs-keyword">let</span> memoizedCalc = memoize(calc);
+<span class="hljs-keyword">let</span> obj = { <span class="hljs-attr">x</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">2</span> };
+<span class="hljs-keyword">let</span> res1 = memoizedCalc(obj); <span class="hljs-comment">// slow</span>
+<span class="hljs-keyword">let</span> res2 = memoizedCalc(obj); <span class="hljs-comment">// quick</span>
+<span class="hljs-keyword">let</span> res3 = memoizedCalc({ <span class="hljs-attr">x</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">4</span> }); <span class="hljs-comment">// slow</span>
+</code></pre>
+<p>SM: Would like to be able to compare only the own property values</p>
+<p>WH/MM: (discussion about concerns and objections that have been previously discussed)</p>
+<p>YK: Does this anticipate being faster on value types?</p>
+<p>WH: As an evil villain I love the ability this might give me to compare the internal variables captured inside closures [scary emoji]. Mwa ha ha ha ha!</p>
+<p>MM: That's one of the issues I had raised.</p>
+<p>YK: ?</p>
+<p>SM: Most of the time, returns false.</p>
+<p>YK: (equating semantics to memcmp)</p>
+<p>AK: No, memcmp is just implementation suggestion</p>
+<p>MM: The semantics:</p>
+<ul>
+<li>If the answer is true, guarantees follow</li>
+<li>If returns false, no guarantees follow</li>
+</ul>
+<p>YK: The guarantee using Object.is?</p>
+<p>MM: Uses identity</p>
+<p>SM: Compare objects across realms is also a question</p>
+<p>YK: Ok, the intended implementation is memcmp</p>
+<p>(confirm)</p>
+<p>FST: There's a browser war on. If [browser x] returns true 30% of the time in this case, then I must return true at least 25% of the time.</p>
+<p>AWB: Are there other approaches you could use to obtain much better performance?</p>
+<p>YK: The whole thing is a performance detail which we don't really specify. There are some things that look like value types but in fact have expensive === operations.</p>
+<p>AWB: We chose to have multiple representations of things like strings for performance reasons. Now they will cost us. It's hard to specify semantics.</p>
+<p>FST: As a browser vendor I don't want to constrain otherwise efficient representations due to the performance implications of wanting to return true from this feature.</p>
+<p>MM: This is affected by the transposed implementation of weak maps.</p>
+<p>WH: And it leaks information about what's in the weak map.</p>
+<p>MM: You'd want closure state to not be part of the comparison.</p>
+<p>MM: We want to store private state in object slots, but we want object scans to not reveal anything about the private state.</p>
+<p>FST: Implementations will need to distinguish different kinds of internal slots anyway.</p>
+<p>WH: This presents similar issues to NaN comparison, but for strings. As the example in the presentation showed, now you can figure out the pedigree of whether a string was constructed in one piece or as a rope by something on the other side of an abstraction boundary — something that must not be leaked for security reasons.</p>
+<p>BE: leaking string implementation details (Rope vs. Flat representation) has been constructive for Heartbleed-like security attacks in past.</p>
+<p>STH: evidence of the code you've written being slow enough</p>
+<p>SM: no evidence yet</p>
+<p>AWB: Here's another path... bring the slow path code to implementors and try to optimize in the runtime. Then with this experience, determine a proposal for language or built-in library changes</p>
+<p>SM: Will try</p>
+<p>WH: Do implementations ever store hashes along with strings to be able to quickly determine that they are not equal?</p>
+<p>FST: We intern some strings, but not all.</p>
+<p>(discussion, re: hashing, string interning)</p>
+<p>YK: MM, are you not worried about the moving GC leak?</p>
+<p>MM: I am.</p>
+<p>YK: Moving GC... do a comparison, it's true. The object is changed by GC, and becomes false</p>
+<p>STH: No</p>
+<p>EFT: If there is a concrete case that shows instability, we can explore</p>
+<p>WH: Can discover if implementations do lazy string interning</p>
+<p>MM: Do meet S1 criteria, but not worth trying to move this forward because this doesn't have a chance of advancing further. Identified real issues, that we can find a way to address. Sam's suggestion might be the only viable</p>
+<p>STH: Actual shallow comparison, implement that in VM and work on optimizing.</p>
+<p>AWB: Essentially same as my suggestion</p>
+<p>Agreement, but comments from implementors that I didn't quite catch</p>
+<p>SM: Object.assign could be done much faster in VM, WeakRefs... Plausible to find other ways to accomplish same thing. Difficult to reach non-leaking solution.</p>
+<p>MM:</p>
+<p>Something about exploring alternative solutions</p>
+<p>It's hard to hear because they are across the room and basically mumbling as far as I can tell. Mark is facing away and it sounds like &quot;mmph mm-mmmph err mmph foo sh mmph sh&quot;</p>
+<p>(discussing &quot;fast&quot;)</p>
+<p>YK: VM authors recognize security issue of fast</p>
+<p>MM: How much slower would be an accurate implementation of shallow comparison be?</p>
+<p>SM: Would it be possible to expose the ability to compare shapes [or use the shape as a key in a map]?</p>
+<p>MM: The nondeterminism arguments apply to anything that assumes same shape.</p>
+<a href="#conclusionresolution-10iiid-objectshallowequal"><h4 id="conclusionresolution-10iiid-objectshallowequal">Conclusion/Resolution</h4></a><ul>
+<li>Explore STH/AWB recommendations</li>
+</ul>
+<a href="#10iiib-promiseprototypefinally"><h2 id="10iiib-promiseprototypefinally">10.iii.b Promise.prototype.finally</h2></a><p>Jordan Harband</p>
+<p><a href="https://github.com/ljharb/proposal-promise-finally">https://github.com/ljharb/proposal-promise-finally</a></p>
+<p>JHD: (presenting from the link above)</p>
+<p>AWB: How would a user write something that is rejected from a finalizer?</p>
+<p>WH: What does finally return?</p>
+<p>JHD: A new promise</p>
+<p>DD: Conceptually wrong to overwrite return values</p>
+<p>YK: There is control flow model and have way to...</p>
+<p>WH: How does this interact with thenables?</p>
+<p>JHD: If the finally return value is a thenable that's resolved normally then it gets replaced with the prior resolved value.</p>
+<p>WH: Does this introduce a notion of finally-able with parts of the system probing for the presence of a &quot;finally&quot; method analogous to what they do with probing for a &quot;then&quot; method?</p>
+<p>MM/JHD: No, just like we don't have a &quot;catchable&quot;</p>
+<p>JHD: (explanation of naming, can be reviewed in proposal)</p>
+<p>BE: names are metaphorical and analogical, not only identical up to isomorphism; finally seems good to me.</p>
+<ul>
+<li>Existing implementations noted as well</li>
+</ul>
+<p>MM: Some &quot;wrinkle&quot; in Q?</p>
+<p>JHD: Will identify and note if necessary</p>
+<p>DD: Could be naming, ie. &quot;fin&quot; for ES3?</p>
+<p>BE: <code>promise['finally'](...)</code></p>
+<p>JHD: No conflict re: cancelable promises proposal</p>
+<p>YK: Might be good to have finally in language, before 3rd state</p>
+<p>JHD: Same</p>
+<ul>
+<li>Devs can proactively use finally where semantics match</li>
+</ul>
+<p>YK: Might be hard to convince that finally is the right thing to do</p>
+<p>AWB: Why wasn't finally included in ES6?</p>
+<p>YK/MM: The ES6 Promise feature was &quot;maximally minimal&quot;, so finally, along with others, eg. queue, were postponed</p>
+<p>JHD: Stage 1? Note that this meets the Stage 2 requirements.</p>
+<p>JHD: Stage 2?</p>
+<p>DD/DE: There are issues that need to be addressed in this spec text</p>
+<p>JHD: changes needed in this spec, to reach Stage 3</p>
+<ul>
+<li>PromiseReactionJob needs attention</li>
+</ul>
+<p>MM: Want to revert my Stage 2 agreement...?</p>
+<p>JHD: (cites Stage 2 from process doc)</p>
+<p>MM: (something about Stages)</p>
+<p>JHD: If I get Stage 2 now, I can work towards Stage 3 in September</p>
+<p>(General discussion about process)</p>
+<p>YK: We frequently have disagreements about the process.</p>
+<p>DD: Disagreements on process aren't helpful</p>
+<p>AWB: Don't want to jump feature two stages in one meeting</p>
+<p>YK: The criteria is met</p>
+<ul>
+<li>I want criteria that's objectively applicable</li>
+</ul>
+<p>AK: The criteria is &quot;there is spec text to review&quot;</p>
+<p>JHD: Since this was on the agenda for May, then everyone diligently reviewed, right?</p>
+<p>AK: There is no review requirement on Stage 2 spec text. Achieving Stage 3 requires review and revision, etc.</p>
+<p>JHD: So, AWB objects to Stage 2 on the grounds that it's two stages in one meeting.</p>
+<p>AWB: Won't block if the rest of the room wants to advance</p>
+<p>WH: Have no objection to this, but in the future I'd love a prior notice on the agenda for any item that wants to jump more than one stage so I can look at it much more carefully before the meeting.</p>
+<a href="#conclusionresolution-10iiib-promiseprototypefinally"><h4 id="conclusionresolution-10iiib-promiseprototypefinally">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 approved</li>
+<li>Stage 2 approved</li>
+</ul>
+<a href="#10ivb-cancelable-promises-update"><h2 id="10ivb-cancelable-promises-update">10.iv.b Cancelable promises update</h2></a><p>Domenic Denicola</p>
+<p>Slides: <a href="https://docs.google.com/presentation/d/1kSY7X1ymw5f2oatDrZaMJh4Z_wpd0ynZIimhUyqhbrY/edit#slide=id.g15f86355f5_0_55">https://docs.google.com/presentation/d/1kSY7X1ymw5f2oatDrZaMJh4Z_wpd0ynZIimhUyqhbrY/edit#slide=id.g15f86355f5_0_55</a></p>
+<p>DD: Major change: third state</p>
+<ul>
+<li>A new completion type is unable to achieve consensus</li>
+<li>Concern:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
+  f();
+  g();
+} <span class="hljs-keyword">catch</span> (e) {
+  h();
+}
+</code></pre>
+<p>A new exception that is not an error: Cancel</p>
+<ul>
+<li>Does not subclass Error</li>
+<li>Branded with a [[CancelBrand]] internal slot</li>
+<li>Does not get reported to the host
+<ul>
+<li>window.onerror</li>
+<li>process.on(&quot;uncaughtException&quot;, …)</li>
+</ul></li>
+<li>Does not get tracked as an unhandled rejection either</li>
+<li>throw Cancel(&quot;message&quot;)</li>
+</ul>
+<p>Making it easy to treat cancelations as non-errors</p>
+<p>Bad code...</p>
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">await</span> fetch(...);
+} <span class="hljs-keyword">catch</span> (e) {
+  <span class="hljs-keyword">if</span> (!(e <span class="hljs-keyword">instanceof</span> CancelError)) {
+        showUserMessage(<span class="hljs-string">"No data for you, sorry."</span>);
+  }
+} <span class="hljs-keyword">finally</span> {
+  stopLoadingSpinner();
+}
+</code></pre>
+<p>Proposal:</p>
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">await</span> fetch(...);
+} <span class="hljs-keyword">else</span> (e) {
+  showUserMessage(<span class="hljs-string">"No data for you, sorry."</span>);
+} <span class="hljs-keyword">finally</span> {
+  stopLoadingSpinner();
+}
+
+<span class="hljs-comment">// Also, Promise.prototype.else</span>
+</code></pre>
+<p>Addresses the new code, old code issue, because no old code will have this form,</p>
+<p>JHD: (question about brand checks)</p>
+<p>WH: Can you do try/catch/else?</p>
+<p>DD: No</p>
+<p>JHD: Any catch cancel?</p>
+<p>DD: No, this is everything <em>but</em></p>
+<p>Cancel token’s cancel() always creates a Cancel</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> { token, cancel } = CancelToken.source();
+
+cancel(<span class="hljs-string">"message"</span>);
+<span class="hljs-comment">// internally does: new Cancel("message") and stores</span>
+
+token.throwIfRequested(); <span class="hljs-comment">// throws the stored Cancel</span>
+
+token.promise.then(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> {
+  <span class="hljs-comment">// value is the stored Cancel</span>
+});
+</code></pre>
+<p>MM: Then still invokes the second callback?</p>
+<p>DD: Always has been</p>
+<ul>
+<li>source of bugs</li>
+<li>throws happen, people expect their catch handler to be called</li>
+</ul>
+<p>MM: I disagree with your opinion on the usefulness of <code>.then</code>'s second argument</p>
+<p>DD: it's more of a power user feature.</p>
+<p>DE: This works better with the two argument <code>then</code>.  previously there was a back compat concern (with third state), and with this proposal, it's more compatible with 2-arg then.</p>
+<p>MM: Having <code>else</code> in relation to <code>then</code>..,</p>
+<p>Cut off by other members who are time constrained</p>
+<p>BE: Is dependent on state of the stack?</p>
+<p>DD: No</p>
+<p>DE: Sounds like this is analogous to then/else, letting cancels propagate, where 'then' handles the next try and 'else' captures the non-cancel reject; I think this is consistent with the two-argument form</p>
+<p>DT: A wants to suppress errors if A is being canceled, regardless of what B does. If B errors, it goes up to A and A can decide what to do.</p>
+<p>DD: I recall this concern, I disagree that this matches all reality</p>
+<p>DT: Back to try/else. Q: try this thing and my local token is canceling, suppress error, otherwise...</p>
+<ul>
+<li>Need</li>
+</ul>
+<p>MM: The test: is it a cancelation?</p>
+<p>DT: A cancelation is a fine way to implement shut down</p>
+<ul>
+<li>Need to allow the shutdown, avoid thrashing</li>
+</ul>
+<p>DD: Experience shows that it's important to suppress the...</p>
+<p>DE: Sounds like the disagreement between Dean and Domenic is whether to just suppress the one cancelation, right?</p>
+<p>MM: Asking for: source of information is a distinct thing, expanding the syntax taking into account the token as a source of information.</p>
+<p>DT: I'm saying we can get a syntactic form that can do both</p>
+<p>DD: I'm only trying to address this problem,</p>
+<p>DT: (describing example of cancelation where a download was stopped, but results in a parse error of the incompletely downloaded contents)</p>
+<p>YK: hard to imagine a library creating a cancel token... (I missed the entire scenario, Dean started talking)</p>
+<p>DT: I create a file and a cancel token and hand the file to the parser, then trigger the cancel token, which stops the parser. For example, stopping a page</p>
+<p>DD: Stopping a page is a bigger deal</p>
+<p>BE: (asking for summary of what needs to actually be addressed)</p>
+<p>DD: The question is, is there an unobtrusive way to have syntax that provides the semantics that Dean wants?</p>
+<p>DT: The Question: The indirect cancelation, does it turn into an error?</p>
+<p>DD: Don't think we need to address the case of &quot;buggy code&quot;</p>
+<ul>
+<li>Part of why no longer championing try/catch/else</li>
+</ul>
+<p>DD: The concern is about calling into a library which, you cancel the library's overall operation, and it gives you an error rather than a cancelation. The conclusion is that that is very hard for the library to do; these syntactic affordances make it hard to do as you'd have to do a catch, followed by a brand check, which is intentionally hard.</p>
+<p>DD: I'd like the committee's feedback on the full spec, which is now much smaller due to fewer modifications to promises, etc.</p>
+<p>DD: Some more ideas on making Promsies more ergonomic: Make cancelation easy in async functions.</p>
+<p>More Ideas...</p>
+<ul>
+<li>Inserting cancelation opportunities into async functions</li>
+</ul>
+<p>Simplest case, pass the token:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params">cancelToken</span>) </span>{
+  doSyncThing();
+  <span class="hljs-keyword">await</span> doAsyncThing(cancelToken);
+  <span class="hljs-keyword">await</span> anotherOne(cancelToken);
+}
+</code></pre>
+<p>What about uncancelable things?</p>
+<p>With the current proposal...</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params">cancelToken</span>) </span>{
+  doSyncThing();
+  cancelToken.throwIfRequested();
+  <span class="hljs-keyword">await</span> doAsyncUncancelableThing();
+  cancelToken.throwIfRequested();
+  <span class="hljs-keyword">await</span> anotherOne();
+}
+</code></pre>
+<p>Probably want...</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params">cancelToken</span>) </span>{
+  doSyncThing();
+  <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.race([
+    doAsyncUncancelableThing(),
+    cancelToken.promise.then(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> { <span class="hljs-keyword">throw</span> c; })
+  ]);
+  <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.race([
+    anotherOne(),
+    cancelToken.promise.then(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> { <span class="hljs-keyword">throw</span> c; })
+  ]);
+}
+</code></pre>
+<p>...But that's gross.</p>
+<p>This is better:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params">cancelToken</span>) </span>{
+  <span class="hljs-keyword">await</span>.cancelToken = cancelToken;
+  doSyncThing();
+  <span class="hljs-keyword">await</span> doAsyncUncancelableThing();
+  <span class="hljs-keyword">await</span> anotherOne();
+}
+</code></pre>
+<p>Defines a new meta property:</p>
+<pre><code>await<span class="hljs-selector-class">.cancelToken</span>
+</code></pre>
+<p>MM: Which awaits does that change?</p>
+<p>DD: The ones afterward?</p>
+<p>DP: How do you get rid of it in that execution?</p>
+<p>DD: Set to <code>null</code></p>
+<p>SP: An await inside an arrow function?</p>
+<ul>
+<li>Carry over?</li>
+</ul>
+<p>DD: Syntax error</p>
+<p>DT: Do uncancelable thing might be multi-turn, the only reason for race is you might want to do the stuff after as a result of cancelation
+(I need that double checked, I don't think I got it correctly)</p>
+<p>(We're looking at...)</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params">cancelToken</span>) </span>{
+  doSyncThing();
+  <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.race([
+    doAsyncUncancelableThing(),
+    cancelToken.promise.then(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> { <span class="hljs-keyword">throw</span> c; })
+  ]);
+  <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.race([
+    anotherOne(),
+    cancelToken.promise.then(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> { <span class="hljs-keyword">throw</span> c; })
+  ]);
+}
+</code></pre>
+<p>DT: Moves final behavior from the end, to middle</p>
+<p>DD:</p>
+<p>DT: The conse. not obvious, not possible to test, is the &quot;re-ordering&quot;</p>
+<p>DD: Not reordering</p>
+<p>DT: it's fundamental reordering. You're moving something that is syntactically ordered, to execute out of order</p>
+<p>YK: When async thing, await means &quot;some promise&quot;. await.cancelToken is a new promise.</p>
+<p>EFT: (confirm)</p>
+<p>YK: Arrow functions do not inherit await.cancelToken because they do not generally inherit control-flow (like return) and async/await is control-flow</p>
+<p>...</p>
+<p>SP: There is a potential memory leak to discuss.</p>
+<p>DD: Can we defer that?</p>
+<p>SP: Yes.</p>
+<p>(discussion, re: es-discuss request for changes to this proposal)</p>
+<p>SP: Scope of cancel? Race and All</p>
+<p>DD: coming...</p>
+<p>(next)</p>
+<p>With the proposal as it is:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">delay</span>(<span class="hljs-params">ms, cancelToken</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject, cancel</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> id = setTimeout(resolve, ms);
+
+    <span class="hljs-keyword">if</span> (!cancelToken) <span class="hljs-keyword">return</span>;
+    cancelToken.promise.then(<span class="hljs-function"><span class="hljs-params">cancelation</span> =&gt;</span> {
+      cancel(cancelation);
+      clearTimeout(id);
+    });
+  });
+}
+</code></pre>
+<p>JHD: Would have to pass cancelation through that cancel function?</p>
+<p>DD: Yes</p>
+<p>Similar for XHR...</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">xhrAdapted</span>(<span class="hljs-params">url, { cancelToken } = {}</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject, cancel</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
+    xhr.addEventListener(<span class="hljs-string">"load"</span>, () =&gt; resolve(xhr.responseText));
+    xhr.addEventListener(<span class="hljs-string">"error"</span>, () =&gt; reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"could not XHR"</span>)));
+
+    <span class="hljs-keyword">if</span> (!cancelToken) <span class="hljs-keyword">return</span>;
+    cancelToken.promise.then(<span class="hljs-function"><span class="hljs-params">cancelation</span> =&gt;</span> {
+      cancel(cancelation);
+      xhr.abort();
+    });
+  });
+}
+</code></pre>
+<p>DD: Note using <code>new Promise</code> which really only used when your doing async that doesn't use promises</p>
+<p>New API:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">delay</span>(<span class="hljs-params">ms, cancelToken</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.cancelable(cancelToken, resolve =&gt; {
+    <span class="hljs-keyword">const</span> id = setTimeout(resolve, ms);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> clearTimeout(id);
+  });
+}
+</code></pre>
+<p>SP: want to make async function cancelable...?</p>
+<p>DD: Still use promise constr with legacy code that doesn't use promises</p>
+<p>DT: question about [token].promise.then...?</p>
+<p>DD: Come back to it.</p>
+<p>Cancel Token Composition?</p>
+<p>Precedent from .NET:</p>
+<p><code>const { token, cancel } = CancelToken.linked([ct1, ct2, …]);</code>
+Here token is canceled if any of the following is true:
+cancel() is called
+ct1 becomes canceled
+ct2 becomes canceled
+…
+I haven’t really investigated what this is used for in the .NET ecosystem…</p>
+<p>The extra cancel() seems useless and an artifact of the .NET setup, so instead:</p>
+<p>.NET’s version but a little better</p>
+<p><code>const token = CancelToken.some([ct1, ct2, …]);</code>
+Here token is canceled if any of the following is true:
+ct1 becomes canceled
+ct2 becomes canceled
+...
+Still unsure what the exact use cases are, but it seems plausible.</p>
+<p>DD: Call it &quot;some&quot; or &quot;any&quot;</p>
+<p>SP: The leak: scenario where cancel token is much longer lived than the code being canceled.</p>
+<p>DD: You have one cancel token with long lifetime and components with shorter lifetime</p>
+<p>YK: In Ember's cases, you rapidly get into situations where the cancelation is complicated to thread, e.g., async methods.</p>
+<p>DT: You end up creating links at different points in lifecycles</p>
+<p>DD: So there are good use cases, for CancelToken.some.</p>
+<p>Strike: &quot;Still unsure what the exact use cases are, but it seems plausible.&quot;</p>
+<p>DD: So does anyone need CancelToken.every? .NET doesn't have it.</p>
+<p>DT: Never needed it [in Midori]</p>
+<p>YK: We should think about it because it's symmetric</p>
+<p>DT: It's asymmetric; cancelation is monotonoic. We just don't get this pattern in Midori.</p>
+<p>SP: Doesn't sound useful</p>
+<p>DT: You might end up with some nice usages of 'some', so it is a good thing to have.</p>
+<p>RW: Why not call it CancelToken.all?</p>
+<p>DD: I should think about that harder; there was some argument about all rather than every. Anyway, this is more about 'some' given that 'every' is not useful.</p>
+<p>RW: In favor of 'all': For explanation purposes, it would be nice to have this analogy. Apply what you already know.</p>
+<p>YK: I have become comfortable with a cancel token as a parameter.</p>
+<p>DD: The concern Yehuda has raised is, the semantic burden on developers of threading the cancel tokens through all the APIs, and changing all the signatures, is an issue. Should we mostly do options objects or bare parameters?</p>
+<p>YK: Seems difficult to have a universal convention</p>
+<p>DD: In .NET you have static types and overloads so it's easier.</p>
+<p>DD: YK's idea was to introduce syntax for allowing cancelTokens and awaits to work better together:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params">cancelToken</span>) </span>{
+  doSyncThing();
+  <span class="hljs-keyword">await</span> doAsyncUncancelableThing(cancelToken);
+  <span class="hljs-keyword">await</span> anotherOne(cancelToken);
+}
+</code></pre>
+<p>To...</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params"></span>) </span>{
+  doSyncThing();
+  <span class="hljs-keyword">await</span> doAsyncUncancelableThing(<span class="hljs-keyword">await</span>.cancelToken);
+  <span class="hljs-keyword">await</span> anotherOne(<span class="hljs-keyword">await</span>.cancelToken);
+}
+</code></pre>
+<p>YK: This would continue with our tradition of implicit parameters, e.g. implicitly passing 'this'.  You don't want to have to add it explicitly</p>
+<p>YK:</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params"></span>) </span>{
+  doSyncThing();
+  <span class="hljs-keyword">await</span> doAsyncUncancelableThing(<span class="hljs-keyword">await</span>.cancelToken);
+  <span class="hljs-keyword">await</span> anotherOne(<span class="hljs-keyword">await</span>.cancelToken);
+}
+
+<span class="hljs-keyword">let</span> [cancelToken, promise] = [some ambiguous token] fetch(...);
+</code></pre>
+<p>MM: What would this correspond to with explicit characterization?</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetch</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span>.cancelToken;
+}
+</code></pre>
+<p>YK: There is a pervasive threading problem. This is analogous to new.target.</p>
+<p>YK: <code>[some ambiguous token]</code> is the machinery that represents the longhand that Domenic showed</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">let</span> token = <span class="hljs-keyword">new</span> CancelToken(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">c</span>) </span>{
+  
+});
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetch</span>(<span class="hljs-params">
+
+@Yehuda, can you fill in this example with some code that illustrates whatever you were going to write, 
+
+</span></span></code></pre>
+<p>DD: What I'm hearing is that people are not heavily concerned. Sounds like this might be worth pursuing. Cancelation already has a lot of stuff in it, and it's hard to get a read on how many people are going to have objections. Dean already raised several objections and we didn't have time in the timebox to raise all of them.</p>
+<p>DT: good effort and really want something along the lines</p>
+<p>YK: If the implicit argument fails, I'm not sure whether I'll be OK with this whole proposal.</p>
+<p>DD: There is some enthusiasm for this proposal, it seems, including some of the additions.  More is available in the repo. I'll add more spec'd things, including await.cancelToken, Promise.cancelable, and CancelToken.any</p>
+<p>BT: What do cancelable promises change about async functions? Seems purely additive.</p>
+<p>DD: Yes, seems purely additive. We don't have third state.</p>
+<p>YK: It'd be possible for await to send cancelation tokens, but only if you do extra things to thread things through.</p>
+<p>BT: Another question about Domenic's proposal: Is the rationale for why third state is bad documented?</p>
+<p>DD: I'll write it up.</p>
+<p>BT: I think it needs to be reflected, so we know years from now why we didn't go with third state.</p>
+<a href="#conclusionresolution-10ivb-cancelable-promises-update"><h4 id="conclusionresolution-10ivb-cancelable-promises-update">Conclusion/Resolution</h4></a><ul>
+<li>Continued development based on today's discussion</li>
+<li>await.cancelToken</li>
+<li>Promise.cancelable(...)</li>
+<li>CancelToken.any|some (whichever?)</li>
+<li>DT to provide direct feedback</li>
+<li>DD to write up reasons why not going with third state: <a href="https://gist.github.com/domenic/f3ecf2dd1b27409567ba59e3fabbc047">https://gist.github.com/domenic/f3ecf2dd1b27409567ba59e3fabbc047</a> documents the reasons briefly, as well as arguments against those reasons which were not found compelling enough to re-gain consensus on it.</li>
+<li>Next meeting, I'd like to move to Stage 2</li>
+</ul>
+<a href="#10iv-async-functions"><h2 id="10iv-async-functions">10.iv Async functions</h2></a><p>Brian Terlson</p>
+<p><a href="https://tc39.github.io/ecmascript-asyncawait">https://tc39.github.io/ecmascript-asyncawait</a></p>
+<p>BT: When we got async functions to Stage 3, we did spend hours talking about possible futures for cancelation and how those futures would impact async functions. We found that additive things to async functions would also be additive things to Promises. So whatever you would add to one that would be a breaking change would be a breaking change for the other. I didn't see anything in Domenic's preentation that made me think otherwise. Even the third state proposal, I'm not sure would run afoul of that.</p>
+<p>YK: The only issue is that, in the syntactic form there's a try/catch/finally, and in the method form there isn't</p>
+<p>AK: There is also a concern about using try and catch, without finally</p>
+<p>YK: And it's just worse in Promises anyway</p>
+<p>MM: The only one that makes me nervous about a possible cross-cutting concern is getting a syntax for passing the cancel token. That's the one most likely to be one where we might end up regretting simply accepting async functions as is, without also having it be a lifting mechanism for threading the cancel token.</p>
+<p>YK: I feel pretty confident that the kind of syntaxes that we would want to use would be the same syntax for regular functions. We need the same mechanism to work within functions that aren't async functions anyway, as they need to have the parallel calling convention.</p>
+<p>MM: of the things we heard in the previous conversation. the only cross-coupling concern is the issue that YK brought up is trying ot get some useful syntax for threading the cancelToken.</p>
+<p>MM: I don't think we should implicitly pass a parameter to existing sync function calls and change the semantics retroactively. Anyway, given the overall situation, I'm not arguing that we should hold async functions back.</p>
+<p>WH: The grammar is both impressive and really scary, trying to see how much it can dance on the edge of a cliff without falling over — cover grammars inside of cover grammars — but I haven't found any flaws yet.</p>
+<p>When is &quot;await&quot; usable as an identifier?</p>
+<p>DE: anytime you are not in an async function.  <then more details> We implemented it all in V8</p>
+<p>BT: It's just like yield</p>
+<p>WH: await is different from yield in that it appears at a much higher precedence than yield.</p>
+<p>YK: What are you worried about?</p>
+<p>WH: Ambiguities on code sequences that start with await/ and then get interpreted in diverging ways (due to the await-as-identifier vs await-as-operator distinction that flips the / between division and starting a regexp) by cover grammars vs. real grammars. It's a potential bug farm.</p>
+<p>WH: I am not opposed to Stage 4, just noting the potential danger.</p>
+<p>BE: is there a way to look at the grammar of &quot;yield&quot; to have it work?</p>
+<a href="#conclusionresolution-10iv-async-functions"><h4 id="conclusionresolution-10iv-async-functions">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4</li>
+</ul>
+<a href="#9iiic-decorators"><h2 id="9iiic-decorators">9.iii.c Decorators</h2></a><p>Yehuda Katz and Brian Terlson</p>
+<p><a href="http://tc39.github.io/proposal-decorators/">http://tc39.github.io/proposal-decorators/</a></p>
+<p>YK: Has been working closely with Dan since the last meeting to come up with how to move forward. I want to address the technical issues. The spec is now in a Stage 2 complete state. Many have asked, why can't this be a transpiler feature. I think it's possible in principle for that to be true, but it's not as cut and dry. One problem is that it absorbs a bunch of syntax from the class body; it's important to coordinate that somewhere. You'd imagine that private state could use the @ sign, and you would want to understand that this is reserved for decorators. Also, it would be difficult to have a conversation in this committee about the class evaluation order (as last time) and interaction with features like private state. We have a lot of cross-cutting concerns to think through. The concerns from implementors is that adding more syntax features slows down the parser, which affects startup time.</p>
+<p>MM: I was surprised by the idea of just doing this in the transpiler world.</p>
+<p>YK: This will be standardized somehow; there are already two implementations. We should have a document that defines it, with some sort of spec.  So it would have to be a delta on top of the JavaScript spec, if we keep it in transpiler land.</p>
+<p>AWB: if it's done as a preprocessor, you'd have to do it to standard JavaScript semantics. So everything would have to be expressible in terms of the core syntax/semantics. So if the core isn't sufficient, it won't be possible to do it correctly.</p>
+<p>YK: In order to get the semantics for high fidelity, the preprocessor will have to target ES5.</p>
+<p>AWB: But then you can't get classes completely correct. If you were going to go the route of a preprocessor, what changes would you have to make to the current spec?</p>
+<p>YK: We've been doing some refactoring. But it'll be hard to target ES6</p>
+<p>MM: The decorator proposal allows a decorated constructor to result in a wrapping of the constructor. But since it's only recognized as a constructor in ES6 if it's written as a constructor, there's no way to translate</p>
+<p>BT: In practice, you have to target functions, not classes. We will have responsibility for the problem no matter how we decide to layer it.</p>
+<p>MM: Creating high-fidelity transpilation options on the way is a perfectly fine sequence of activity.</p>
+<p>YK: And we will give this spec to the current transpilers. The only question is whether it's done here, or actually my opinion is that it would be somewhat possible to do as a layering</p>
+<p>AWB: I don't think it's possible</p>
+<p>YK: Anyone opposed to this spec being eventually in the language?</p>
+<p>DE: I'm not convinced this spec should be in the language. Looking at Angular use cases, this doesn't support annotating parameters and other things, and there is no clear migration path to supporting those from this proposal.</p>
+<p>DE: There is a competing feature from Angular for annotations</p>
+<p>(There is no spec, but it's documented)</p>
+<p>YK: I object to Angular approach, there are very real issues with that proposal that are unexplainable</p>
+<p>JHD: The things they want don't block the addition of this feature? Why not add the other kinds of decorators later?</p>
+<p>DE: Hard for me to see how imperative decorators like in this proposal would map to declarative ones that annotate parameters.</p>
+<p>BE: Not here to future proof against all possible proposals by champions not in the room</p>
+<p>YK: There is a spec here, this has years of development.</p>
+<p>BE: too far to block</p>
+<p>YK: Are you saying these use cases are insufficient</p>
+<p>WH: Concerns about missing capabilities. Want to see a consistent path to annotating properties.</p>
+<p>YK: This has become maximally minimal</p>
+<p>DE: Concerns Andreas has raised: the decorator can run and do all kinds of things, which prevents optimizations</p>
+<p>JHD: This is no different than the inelegant solution of O.dP after the class is defined.</p>
+<p>BE: The question is: are we saying that we <em>never</em> want to do this?</p>
+<p>EFT: Surprised that this feature is being shied from when it's beloved and widely used in other languages.</p>
+<p>WH: I like decorators! I just want to make sure that we create a consistent design of decorators for various kinds of entities and needs rather than falling into a max-min tarpit that supports some but then precludes others due to poor design choices.</p>
+<p>YK: Willing to champion additions to this proposal to satisfy outstanding needs.</p>
+<ul>
+<li>The interop issue (with &quot;annotations&quot;) has existed for some time, we can keep coming back with new features</li>
+<li>The work can be done in Stage 2</li>
+<li>Babel is skeptical now</li>
+<li>Stage 2 signals to community</li>
+</ul>
+<p>AWB: My understanding is that Stage 2 is &quot;not locked down&quot;, the language wants to solve this problem and will eventually include the feature.</p>
+<p>Massive agreement.</p>
+<p>BE: Are we in favor of adding a decorators thing?</p>
+<p>DE: Not convinced an imperative decorator is the way to go</p>
+<p>YK: Agree to explore decorators in other positions before Stage 3</p>
+<p>WH: Concerns about missing capabilties. Want to see a consistent path to annotating properties.</p>
+<p>BE: (@Dan) Worry about dynamic meta programming in class declarations?</p>
+<p>DE: (some kind of agreement)</p>
+<p>BE: Would love static decorators, but it's a hard problem and</p>
+<p>YK: The Annotations feature requires evaluation of expressions, is not itself static</p>
+<p>(discussion re: static decorators)</p>
+<p>YK: Is the concern that adding this encourages too much dynamism in class declaration code?</p>
+<p>SM: Will existence slow it down?</p>
+<ul>
+<li>Believes optimizations can be made to mitigate</li>
+</ul>
+<p>YK: The decorator returns a descriptor that can be used, but cannot have effects on the object itself.</p>
+<p>BT: Want to push for Stage 2</p>
+<p>WH: If we approve this, are you committing to explore property and parameter annotations?</p>
+<p>YK: Yes, I will do that before stage 3.</p>
+<p>BT: Fair to make that separate?</p>
+<p>NO.</p>
+<a href="#conclusionresolution-9iiic-decorators"><h4 id="conclusionresolution-9iiic-decorators">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2 Approval</li>
+</ul>
+<a href="#9iiib-private-state"><h2 id="9iiib-private-state">9.iii.b Private State</h2></a><p>Daniel Ehrenberg</p>
+<p><a href="https://github.com/tc39/proposal-private-fields">https://github.com/tc39/proposal-private-fields</a></p>
+<p>Slides: <a href="https://docs.google.com/presentation/d/1RM_DEWAYh8PmJRt02IunIRaUNjlwprXF3yPW6NltuMA/edit">https://docs.google.com/presentation/d/1RM_DEWAYh8PmJRt02IunIRaUNjlwprXF3yPW6NltuMA/edit</a></p>
+<p>DE: I've taken on Private State proposal from Kevin Smith</p>
+<p>AWB: Get WeakMaps out of the proposal! I don't want to see them anywhere near this proposal, whether in implementation or spec language.</p>
+<ul>
+<li>Remove the layering violation</li>
+</ul>
+<p>WH: Don't want proposal formalized in terms of weak maps either because of GC correctness concerns.</p>
+<p>See slides</p>
+<p>DE: Should this be &quot;actually private&quot;?</p>
+<p>WH: Yes</p>
+<p>AWB: Yes</p>
+<p>DE: Or Reflective?</p>
+<p>No.</p>
+<p>See &quot;Why inaccessible private state?&quot; slide</p>
+<p>&quot;Soft Private&quot; already available through explicit Symbol use</p>
+<p>AWB: Big issue: we changed class instantiation to predictable shapes at the request of Google. This completely throws that away</p>
+<p>DE: We addressed that two meetings ago.</p>
+<p>MM: The shape is static enough for the fast path to be fast. The only things that cause it not to have the shape that you expect are bizarre, rare things such as a return override or prototype mutations. Engines can still optimize for the fast path.</p>
+<p>DE: two things we want to optimize for: 1) at the allocation site, how large (allocation size). 2) map transitions between different object states.</p>
+<p>AWB: that's plausible; i'll need to think through it and reserve the right to bring it up again.</p>
+<p>YK: I realize a lot of people disagree with me wanting soft-private, but we actually have to discuss it.</p>
+<p>BT: could you expose a lower-level capability without syntax for now? (i.e., with computed properties + private symbols)</p>
+<p>MM: private symbols don't work</p>
+<p>YK: proposal would be a private object that looks a lot like a WeakMap</p>
+<p>DE: one option is as YK said; another option would be trying private symbols, and we could work through the issue with them.</p>
+<p>MM: if you reify private symbols, you break membranes.</p>
+<p>MM: We're rehashing arguments we had years ago like &quot;should private be soft or hard&quot;. There are notes.</p>
+<p>YK: I object to the precedent &quot;we had a binding conversation 5 years ago&quot;</p>
+<p>Call for Stage 2?</p>
+<a href="#conclusionresolution-9iiib-private-state"><h4 id="conclusionresolution-9iiib-private-state">Conclusion/Resolution</h4></a><ul>
+<li>We don't have enough time?</li>
+</ul>
+
+</body>

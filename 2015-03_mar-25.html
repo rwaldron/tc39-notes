@@ -1,0 +1,391 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 25, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-25-2015-meeting-notes"><h1 id="march-25-2015-meeting-notes">March 25, 2015 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Allen Wirfs-Brock (AWB), John Neumann (JN), Jeff Morrison (JM), Sebastian Markbåge (SM), Yehuda Katz (YK), Dave Herman (DH), Alan Schmitt (AS), Lee Byron (LB), Domenic Denicola (DD), Kevin Smith (KS), Andreas Rossberg (ARB), Brendan Eich (BE), Erik Arvidsson (EA), Adam Klein (AK), Jordan Harband (JHD), Mark S. Miller (MM), István Sebestyén (IS), Jafar Husain (JH), Rick Waldron (RW)</p>
+<hr>
+<a href="#6iv-a-declarative-alternative-to-tomethod-allen-wirfs-brock"><h2 id="6iv-a-declarative-alternative-to-tomethod-allen-wirfs-brock">6(iv) A Declarative Alternative to toMethod (Allen Wirfs-Brock)</h2></a><p>AWB presents <a href="https://github.com/allenwb/ESideas/blob/master/dcltomethod.md">https://github.com/allenwb/ESideas/blob/master/dcltomethod.md</a>.</p>
+<p>Object.assign with 2nd arg object literal has a <code>super</code> hazard.</p>
+<p><code>toMethod</code> was previous workaround, but easy to forget and hard to use with object literals.</p>
+<p>YK notes <code>toMethod</code> still valuable addition to meta-programming API.</p>
+<p>AWB detials further issue of deep-clone vs. shallow-, unresolved (esp. viz <code>.prototype</code>).</p>
+<p>Discussion of whether we can avoid <code>toMethod</code> entirely, not just for this use-case.
+MM hopes so, YK dashes hope by assertion -- to be continued later.</p>
+<p>AWB observes that object literals and classes handle <code>super</code> and other contextual forms fine, by being special forms affording sound [[HomeObject]] initialization opportunity.
+Therefore proposes <code>mixin</code> contextual-keyword operator to extend object literal special form for this use-case.</p>
+<p>NB: <code>mixin</code> is postfix operator with what looks like an object literal after it -- not binary operator.</p>
+<p>MM: I suggested to AWB that the operator should be named <code>mixin=</code>, so it resembles the assignment operators (<code>+=</code>, <code>*=</code>, etc.).</p>
+<p>All object literal syntax on right of <code>mixin</code> is allowed, <em>except</em> for <code>__proto__</code>.</p>
+<p><code>mixin</code> does [[DefineOwnProperty]] based on object literal contents (unlike <code>Object.assign</code> which uses [[Set]]).</p>
+<p>Name abstraction of object literal for later param to <code>Object.assign</code> (still permitted, a bug if <code>super</code> used) doesn't work:</p>
+<pre><code class="language-js">    <span class="hljs-keyword">let</span> mixins = {...}; <span class="hljs-built_in">Object</span>.assign(target, mixins); <span class="hljs-comment">// how to do this with mixin operator?</span>
+</code></pre>
+<p>Use an arrow:</p>
+<pre><code class="language-js">    <span class="hljs-keyword">let</span> mixins = <span class="hljs-function"><span class="hljs-params">obj</span> =&gt;</span> obj mixin {...}; mixins(target);
+</code></pre>
+<p>Some inconveniences with classes (see URL). Solution is <code>mixin class {...}</code> extended special form.
+Throws if left-hand side is not a constructor (spec <code>IsConstructor</code> test returns false).
+Class body to right cannot include <code>constructor</code>.
+Gets non-enumerability of methods, static methods, right.</p>
+<p>DH: question of user expectation of what's expected &quot;moving&quot; method from object to object.
+<code>this</code> as dynamically bound, lexically bound for arrows, understood; ditto lexically scoped upvars.
+Supposes we would have preferred <code>super</code> to be implicit parameter, akin to <code>this</code>, but we didn't do that.
+JS made method extraction easy, so it's common -- <code>super</code> as distinct from <code>this</code> goes against grain.
+So extracting a method with rebound <code>super</code> still wants <code>toMethod</code> -- <code>mixin</code> doesn't help.</p>
+<p>AWB: &quot;if we had been braver, maybe we could have made <code>super</code> be dynamically bound... but we didn't.&quot;
+(supposes JITs would have optimized away unnecessary super-params)
+DH: right, too late -- and who knows if it would have worked...
+but we cannot dismiss <code>toMethod</code> use-case for single-method extraction, even with cloning issues.
+DD/EA: agree, cannot desugar to existing functions not expressed as method of <code>mixin</code> right-part literal forms.</p>
+<p>MM: no matter what we do, we can't make ES5-ish method-extracting code continue to work with <code>super</code> added somewhere in the method body
+DH: This is a regression of expressiveness.
+MM: Old library code that does mixins the old way is ok if used only in ES5-ish way.
+YK: If <code>toMethod</code> available, people will write patches to fix such library code.</p>
+<p>Group debates exact method-extraction expressiveness/safety regression, mourns the loss.
+Some general sense that we should not throw <code>toMethod</code> baby out with bath-water.</p>
+<p>ARB: this proposal is very imperative. If we want provide high-level support for mixins, especially with suggestive syntax, then it should be declarative, e.g. like traits.
+e.g. Scala <code>class Foo extends Bar with Baz...</code> or early ES6 class proposals
+DH: real problem with syntax that hides mutation, misuses <code>mixin</code>.
+AWB: can bikeshed operator name.
+DD: <code>mixin</code> is already variously defined by ecosystem, wrong word here.</p>
+<p>MM: This is mid-level abstraction, should we do it or provide only high-level traits as ARB suggests?
+plus <code>toMethod</code> as low-level -- if high- and low- without mid-, would we need this mid-level proposal?
+AWB: &quot;a lot of stuff in JS happens at mid-level.&quot;
+MM: if high-level needs language extension, doubts mid-level; if mid-level enables self-hosted high-level, may be ok.</p>
+<p>DD: if <code>mixin</code> misnomer not used, then this would probably be uncontroversial.
+(BE: not uncontroversial with ARB)
+DH: been down design path of fake object literals (with triangle), hard to avoid kooky outcomes.
+DD: really need some syntax for [[DefineOwnProperty]], must avoid connoting &quot;assignment&quot; that runs setters.
+MM: if we used <code>:= value</code> then value would not be property descriptor, so <code>:=</code> ain't right either.</p>
+<p>BE: beware justifying more kludges because JS is kludgey. There i said it!</p>
+<p>MM: how do you write the trait to be mixed in? Lambda-abstracted form (obj =&gt; obj mixin {...}) pleasant.
+AWB: dares to write <code>:={...}</code> instead of <code>mixin {...}</code>, DH calls it the barkeep operator. :={</p>
+<p>DH: is this about 1. a collection of properties from which 2. to mutate the target? Need something connoting that double meaning.</p>
+<p>YK: re: MM's lambda-abstracted point, can linearize mixins along prototype chain and get <code>super</code> chaining to work.
+YK shows Ember's <code>Mixin.create</code> example (LINK NEEDED) demonstrating this.
+Distinct from AWB's proposal, more about traits in JS than about define-properties-on-target mid-level.
+DD: back when Chrome Canary had toMethod, I was able to use it to create these kind of mixin-proto-chain things: <a href="http://jsbin.com/fepudi/2/edit?html">http://jsbin.com/fepudi/2/edit?html</a></p>
+<p>YK: my Ember-based lambda-abstracted class-extends expression is a bit too much mechanism
+BE: or ceremony?
+YK: see <a href="https://gist.github.com/wycats/f79fe019d4bf29177b6c">https://gist.github.com/wycats/f79fe019d4bf29177b6c</a> part-way down.
+MM: I like it, what's the problem?
+YK: wouldn't it be better to support high-level mixin syntax:</p>
+<pre><code class="language-js">mixin TextSupport {...}
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">EmberComponent</span> <span class="hljs-title">with</span> <span class="hljs-title">TextSupport</span> </span>{...}
+</code></pre>
+<p>MM: don't need more syntax
+YK: indeed, could just have</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">mixin</span>(<span class="hljs-title">EmberComponent</span>, <span class="hljs-title">TextSupport</span>) </span>{...}
+</code></pre>
+<p>YK: I'm personally ok with this.</p>
+<p>EA/DH: want happy-path &quot;blessed syntax&quot;.
+DH: but let's not rush to design it here!</p>
+<p>MM: with arrow-based lambda-abstraction + YK's <code>class extends</code> chaining for linearized <code>super</code>-preserving mixins, I don't want <code>mixin</code>.
+Chaining multiple <code>super</code> calls is winning here.</p>
+<p>AWB: still leaves a mid-level gap, for define-these-properties-on-this-target.
+MM: is cost of plugging this hole worth the benefit, given new syntax very-high costs as noted?
+AWB: we need a stage 0 proposal for at least some two of three {low,mid,high}-level ideas.</p>
+<p>BE: did we not agree that low-level <code>toMethod</code> is needed.
+Group: not in light of new news.</p>
+<p>DH: advocates <code>toMethod</code> as analogous to <code>bind</code>
+AWB: not so, clone issue
+MM: not so, more important: <code>bind</code> does not allow <code>this</code> rebinding, <code>toMethod</code> allows generating new <code>super</code> bindings in new cloned methods
+If you could write function with free <code>super</code> that would throw without <code>toMethod</code>, then ok -- but we don't have that
+If you were constrained by new syntax to write a factory of super-bound methods, then ok too.
+YK: some extra boilerplate.</p>
+<p>AWB: want to use concise method syntax since it handles super correctly, somehow
+thus the idea of <code>target mixin { method() {...} }</code>.</p>
+<p>MM: difference between method-with-unbound-super and lamba-abstracted class-extends mixin/trait chaining: latter does not imply <code>toMethod</code>
+plausible to have low- and high-level that cover the space without AWB's <code>mixin</code> mid-level.
+MM: kind of want function-bearing-unbound-super to be not callable.
+AWB/YK/BE: function* vs. function precedent, but don't want more sigils/function-suffix-punctuators</p>
+<p>MM: sketch of special form that allows unbound <code>super</code>:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">super</span>) <span class="hljs-title">foo</span> (<span class="hljs-params">x, y</span>) </span>{ ...super ...x ...y }
+</code></pre>
+<p>Factory of methods with unbound <code>super</code> uses.
+Trying for low-level principled alternative to <code>toMethod</code>.</p>
+<p>AWB: alternative I prefer would leave function with unbound <code>super</code> uncallable, add <code>Reflect.toMethod</code> API for people to build libraries.
+BE: syntax for low-level is unusual, really prefer API
+high-level as ARB suggested (Scala) would be new syntax
+MM: lambda-abstracted class-extends relieves me of wanting anything like that high-form
+BE: true, although new users and mass-market programmers still &quot;WAT&quot; at the boilerplate
+but it's not that bad here (vs., e.g., the module pattern)</p>
+<p>KS: painful if unbound-<code>super</code> in functions allowed, because define-properties-on-target requires long-hand unconcise-method syntax
+ARB: why not allow <code>function f(super, a, b) {...}</code> and (in concise method position) <code>m(super, x, y) {...}</code> instead?
+MM: Oh!
+YK: probably few can track our discussion at this point!</p>
+<p>YK: want to avoid &quot;harsh end of life&quot; outcome for ES5-ish libraries.</p>
+<p>KS: if we had not bound <code>super</code> in concise methods in object literals, then we could use concise methods without wrong-super fear.
+BE: is ARB's leading <code>super</code> parameter dead?
+YK: it's easy to forget and kind of weird
+DH: It's like default-final, you have to opt out too much and people forget.</p>
+<p>AWB: need some stage 0 proposals, at two of three levels.
+YK: not sure we want Babel implementing this yet.
+YK: Babel should not implement stage 0, wait for stage 1 or later. Actually use stage-N as flag.
+EA: Babel can do whatever they want
+DH: We should care, because ecosystem effects, premature de-facto standards</p>
+<p>Agreement that Babel (and other compilers) need to flag early-stage stuff, not expose prematurely, message well.</p>
+<a href="#6v-additional-meta-properties-in-es7-allen-wirfs-brock"><h2 id="6v-additional-meta-properties-in-es7-allen-wirfs-brock">6(v) Additional Meta-Properties in ES7 (Allen Wirfs-Brock)</h2></a><p>(<a href="https://github.com/allenwb/ESideas/blob/master/ES7MetaProps.md">https://github.com/allenwb/ESideas/blob/master/ES7MetaProps.md</a> )</p>
+<p>AWB: [presents slides (link?)]</p>
+<p>AWB: function.callee: refers to the currently-executing function</p>
+<p>MM: What's the use case for <code>function.callee</code>?</p>
+<p>AWB: Referring to anonymous functions, or arrow functions</p>
+<p>MM: Just assign it a binding in the containing scope. Say, a let binding.</p>
+<p>AWB: Lots of requests to support callee, even though there are these other ways of supporting it.</p>
+<p>JH: New syntax should start &quot;10000 points down&quot;</p>
+<p>MM: Possible use case: referring to a concise method from inside the method's body</p>
+<p>DH: Or inline event handlers in HTML</p>
+<p>YK: I really hope people don't use it in that case</p>
+<p>EA: Even for addEventListener, some people want this, since it's common to just pass the function as an argument without naming it</p>
+<p>BE: You could have concise methods bring their name into scope, but that runs afoil of the same issue with dual class bindings in ES6 (immutable in the class body, mutable in the containing scope)</p>
+<p>DH: There seems to be a disconnect between this committee's confusion over why anyone would need this feature and emphatic requests from the community for its inclusion</p>
+<p>YK: The biggest use-case is callback-based APIs where the function needs to use its own identity to refer to itself, say to call <code>removeEventListener</code></p>
+<p>DH: That sounds like the best argument so far. Maybe the problem is the name? It sounds fancy, but it's statically always <em>this function</em></p>
+<p>MM: How does <code>function.callee</code> interact with arrow functions? It seems like it must refer to the enclosing function, just as <code>this</code> does</p>
+<p>DH: Agree</p>
+<p>DD: Disagree</p>
+<p>DH: Explaining why arrow functions are treated specially: arrow is not syntactic sugar for <code>function</code>, they are a different kind of thing, as close to TCP as possible, unlike concise methods, which are &quot;close to&quot; sugar over <code>name: function() {}</code></p>
+<p>DD: But concise methods are not just sugar: see super bindings</p>
+<p>YK: People who have tried to replace all functions with arrow functions find that they do not behave the same</p>
+<p>MM: The analogy for arrow functions is to blocks, not functions</p>
+<p>JH: Is &quot;block&quot; really a good metaphor, given that ES5 did not have any block scoping?</p>
+<p>MM: That's the best I've been able to come up with</p>
+<p>YK: It's really close to blocks in Ruby</p>
+<p>BE: &quot;function&quot; is much too long. Maybe there's another keyword we could use? &quot;function&quot; is both too long, and confusing due to arrows.</p>
+<p>DH: Do we even want this to refer to arrow functions, syntax aside? I say no.</p>
+<p>DD: But if the main use case is event listeners, then that doesn't help</p>
+<p>DH: Major problem is that referring to the arrow function is a refactoring hazard (e.g., moving it inside a forEach will result in a different answer). But maybe the argument is that it's a reflection feature, and reflection features are already refactoring hazards.</p>
+<p>YK: There are two kinds of callback-based APIs in JS: synchronous and asynchronous. In the sync case, you want TCP. But for the async case, you don't.</p>
+<p>JM: The explanation to the average programmer can't be &quot;because TCP&quot;; people won't understand that</p>
+<p>MM: Before arrow functions, programmers constantly used <code>this</code> inside a callback and expected it to refer to the <code>this</code> of the containing function. The reason I explain arrow functions as blocks is that it's just &quot;I want to run this code as a callback&quot;, with all bindings identical.</p>
+<p>JM: I think the problem is just that I've tried to explain TCP to people</p>
+<p>YK: Don't try to explain it that way. Maybe the problem is that we only have fat-arrow (designed for the synchronous callback case), but people want something that also works in the async case (which could have been thin-arrow).</p>
+<p>DD: Rethinking, due to the forEach case. Maybe I do want <code>function.callee</code> to refer to the outer function.</p>
+<p>YK: I think we need two things: one that refers to &quot;this function&quot; (including arrows), and one that does not include arrows.</p>
+<p>ARB: Where does that end? Why not add more levels of function?</p>
+<p>YK: We already have these two levels that have different behavior (arrow and non-arrow)</p>
+<p>DD: Is it fair to say the argument is between 0 and 2 ways of refererring to a callee?</p>
+<p>MM: Do we have any quantification of the need for this field?</p>
+<p>YK: It used to be a big deal for me in ES5, but I got over it</p>
+<p>DD: My problem with having 2 ways is it adds a cognitive burden whenever I want to use this thing.</p>
+<p>YK: I agree that it's a cognitive burden to have 2, and that that may point towards having 0</p>
+<p>AWB: I'd make an argument for 1: it refers to the innermost function, whatever kind of function it is (including arrows)</p>
+<p>MM: This whole discussion is the result of an anti-pattern, that there's a requirement to refer to function identity to interact with, e.g., <code>addEventListener</code>, instead of having it return a token</p>
+<p>YK: <code>addEventListener</code> is a void function, so it could be fixed in DOM</p>
+<p>DH: Someone would have to do that</p>
+<p>DD: setTimeout already returns a token, and in Node it's the right thing, rather than a number like on the web</p>
+<p>MM: Caja actually wraps setTimeout and has never run into compatibility problems (jQuery works fine)</p>
+<p>...moving on with AWB's slides...</p>
+<p>AWB: function.count to find out how many arguments were actually passed.</p>
+<p>ARB: Why are we working on this now? We don't have much experience with how people are using ES6 in the wild.</p>
+<p>DH: Now is a good time to explore this space. In strict mode, we got away from using magically-scoped variables for introspecting on certain kinds of things. <code>new.target</code> provides the blueprint for a new way to expose these things, so it seems reasonable to consider adding such things with this new syntax.</p>
+<p>AWB: ES6 provides lots of new ways to pass arguments, but doesn't provide an easy way to answer the question &quot;how many arguments were passed&quot;? This is useful for overloading based on the number of arguments. Using <code>...args</code> and destructuring is a pain.</p>
+<p>DH: Why not <code>function.length</code>?</p>
+<p>AWB: To avoid confusion with the <code>length</code> property of Function instances</p>
+<p>ARB: Don't we have the same issue with arrows again?</p>
+<p>AWB: Yes.</p>
+<p>DH: We could make each decision at a local maxima, and end up with a completely confusing set of cases. Another option would be to have <code>function.callee</code> be a record, with other properties hanging off of it to ensure consistency between the different properties.</p>
+<p>DH: The two concepts are &quot;nearest enclosing function&quot; and &quot;nearest enclosing callable thing&quot;</p>
+<p>AWB: next up, <code>function.arguments</code>: the actual argument values</p>
+<p>MM: How is this different from <code>arguments</code></p>
+<p>AWB: You get a fresh array each time you ask for it</p>
+<p>DH: Why?</p>
+<p>DD: It could be a frozen array and always return the same one</p>
+<p>MM: I still don't understand what advantage this has over <code>arguments</code>?</p>
+<p>AWB: It's a real array</p>
+<p>YK: Use case is to name individual arguments, and then pass <code>...args</code> to some other function</p>
+<p>MM: But why couldn't you use <code>arguments</code> for that case?</p>
+<p>AWB: The difference is that it's a real array. Also, we're walking the line of whether <code>arguments</code> is considered deprecated.</p>
+<p>DD: And it works in arrow functions.</p>
+<p>DH: I agree with AWB's vision that <code>arguments</code> is deprecated, and that's the argument that makes <code>function.arguments</code> make sense</p>
+<p>MM: What is the evil of the strict arguments object such that we would want to deprecated that and not deprecate this?</p>
+<p>DH: Strict arguments is TCP-violating</p>
+<p>MM: So is <code>function.arguments</code></p>
+<p>DH: I admit it's not a strong argument</p>
+<p>JH: How bad is using <code>...args</code> and having to use destructuring on the next line?</p>
+<p>EA: You lose documentation of what the actual arguments are expected to be.</p>
+<p>DH: Options are you use one of 3:
+1. ...args and destructuring (bad for documentation)
+2. named params and ...args (have to do math)
+3. <code>arguments</code></p>
+<p>AWB: But won't <code>arguments.length</code> materialize the arguments object?</p>
+<p>BE: Not in Spidermonkey, or in V8</p>
+<p>YK: If we're going to go with <code>arguments</code>, then we need to stop saying it's deprecated</p>
+<p>DH: So which parts of <code>arguments</code> are still deprecated? We all agree that <code>arguments.callee</code>, <code>arguments.caller</code>, and <code>Function.arguments</code> are deprecated.</p>
+<p>YK: Indexing <code>arguments</code> still seems like a bad practice in ES6. Spread is OK, though.</p>
+<p>DH: That is not a coherent position.</p>
+<p>YK: The thing that's not OK is treating <code>arguments</code> as first-class value</p>
+<p>DH: That seems like a very fine distinction</p>
+<p>DD: Can we pop the stack here?</p>
+<p>AK: The question about whether we can do indexing seems separable from whether to call the array-like thing <code>arguments</code> or <code>function.arguments</code></p>
+<p>DH: It's important to get clear on what to say about <code>function.arguments</code>, and what to say about deprecation</p>
+<p>BE: I think it's fair to say we don't want to spend all afternoon on this</p>
+<p>...break...</p>
+<a href="#initial-value-passed-to-first-call-of-a-generator-next-function"><h2 id="initial-value-passed-to-first-call-of-a-generator-next-function">Initial Value Passed to first call of a Generator next function</h2></a><pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">gen</span>(<span class="hljs-params">a</span>)  </span>{
+
+}
+
+<span class="hljs-keyword">var</span> g = gen(<span class="hljs-number">1</span>); <span class="hljs-comment">// this?</span>
+g.next(<span class="hljs-number">1</span>); <span class="hljs-comment">// this?</span>
+
+</code></pre>
+<p>AWB: <code>function.next</code>: the current yield result</p>
+<p>MM: Of all of these, this is the one I find compelling</p>
+<p>AWB: These don't have to all be in a package. We can do one of these without the others</p>
+<p>MM: I think we should do that with this proposal and move it through the process</p>
+<p>YK: Can someone state the compelling use-case?</p>
+<p>JH: A good usecase is a lexer. You need to get access to the first character that was passed to <code>next()</code>.</p>
+<p>...next slide...</p>
+<p>AWB: <code>function.thisGenerator</code>: current generator instance</p>
+<p>MM: If you want this, you can wrap your generator function with another function, bind the generator in the function scope, and then you can refer to that from within the generator function.</p>
+<p>YK: But what's the use case?</p>
+<p>MM: That's a separate question, as the above suggestion allows referring to the generator if there are use cases</p>
+<p>BE: Is this something people asked for? It doesn't seem that important.</p>
+<p>...next slide...</p>
+<p>AWB: <code>export.name</code>: current module identifier</p>
+<p>DH: Do we need <code>export.name</code> if we have <code>import from this</code>?</p>
+<p>DD: I thought it was <code>import from this module</code></p>
+<p>DH: Don't like compound keywords</p>
+<p>YK: I'm still opposed to <code>import from this</code>.</p>
+<p>AWB: Other proposals: <code>import.this</code>, <code>import.meta</code></p>
+<p>DH: Let's discuss separately.</p>
+<p>...end of slide deck...</p>
+<p>AWB: So I'd like to put all these at stage 0.</p>
+<p>MM: I propose we make <code>function.next</code> stage 0 and leave the rest.</p>
+<p>DD: I got the impression that we rejected the rest.</p>
+<p>AWB: That's not my impression</p>
+<p>MM: What does stage 0 require?</p>
+<p>DD: Only being not categorically rejected</p>
+<p>[discussion of how to handle organization of stage 0 proposals; how to make it clearer which stage 0 things we'll do and which we won't]</p>
+<p>MM: So can we list these as rejected proposals and bring them back later if we change our mind?</p>
+<p>AWB: I think that would be a mistake. That seems too strong for these.</p>
+<a href="#conclusion-resolution-initial-value-passed-to-first-call-of-a-generator-next-function"><h4 id="conclusion-resolution-initial-value-passed-to-first-call-of-a-generator-next-function">Conclusion/ Resolution</h4></a><ul>
+<li><code>function.next</code> to be split out into its own proposal</li>
+<li>AWB to keep the rest alive for now at stage 0</li>
+</ul>
+<a href="#report-on-402"><h2 id="report-on-402">Report on 402</h2></a><p>(Rick Waldron)</p>
+<p>RW: Complete, barring any editorial bugs.</p>
+<ul>
+<li>Has been reviewed by Norbert Lindenberg and Andrée Bargul.</li>
+<li>Assembled a whole team to read the extensions to the spec.</li>
+<li>Added 402 repo to Github. With same proposal pipeline as 262.</li>
+</ul>
+<p>Making a motion for acceptance/ratification/whatnot of 402 2nd edition... forward to the ecma assembly, subject to the rf opt out...</p>
+<p>Unanimous approval to forward this to TC39 rftg.</p>
+<p>TC39 vote 6 in favor. 1 abstains (JH, Netflix)</p>
+<p>IS: Shall 402 be submitted for ISO fast-track? Or leave it ECMA-only like the first edition?</p>
+<p>JN: Send it to ISO and see what they say</p>
+<a href="#conclusion-resolution-report-on-402"><h4 id="conclusion-resolution-report-on-402">Conclusion/ Resolution</h4></a><ul>
+<li>Submit to Ecma GA</li>
+<li>Submit to ISO</li>
+</ul>
+<a href="#6vi-function-bind-and-private-fields-redux-kevin-smith"><h2 id="6vi-function-bind-and-private-fields-redux-kevin-smith">6(vi) Function Bind and Private Fields Redux (Kevin Smith)</h2></a><p><a href="https://github.com/zenparsing/es-function-bind">https://github.com/zenparsing/es-function-bind</a>
+<a href="https://github.com/zenparsing/es-private-fields">https://github.com/zenparsing/es-private-fields</a></p>
+<p>KS: [presents slides (link?)]</p>
+<p>KS: Abstract references recap.</p>
+<p>KS: Problems with combining the various use cases. Instead, provide two different syntaxes, one for function binding and one for private state.</p>
+<p>KS: Part One: Function Bind via <code>::</code></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.x }
+<span class="hljs-keyword">let</span> bound = ({ <span class="hljs-attr">x</span>: <span class="hljs-number">100</span> })::f;
+bound(); <span class="hljs-comment">// -&gt; 100</span>
+</code></pre>
+<p>DH: This could be really nice in that you don't have to use <code>bind</code> anymore</p>
+<p>KS: <code>::</code> doesn't take care of all of <code>bind</code>: only binds <code>this</code>, not any arguments</p>
+<p>ARB: Syntax somewhat in conflict with <code>::</code> in C++, inverts the meaning of '::' vs '.'</p>
+<p>AWB: Prior to ES6 there was a lot of confusion about what <code>this</code> means. With ES6 classes (and arrow functions) we made the story a lot cleaner. Maybe it is better to let this cool down a bit and see how things turn out in a few years.</p>
+<p>MM: This is only an argument against the infix operator.</p>
+<p>DD: Also, the example uses <code>function</code> instead of being a method in class.</p>
+<p>KS: Unary Function Bind</p>
+<pre><code class="language-js">::<span class="hljs-built_in">console</span>.log  <span class="hljs-comment">// -&gt; console.log.bind(console)</span>
+</code></pre>
+<p>AWB: This seems perfectly reasonable</p>
+<p>MM: We could do the prefix notation without the infix notation</p>
+<p>YK: What's the pedagogy here? When should programmers use <code>::</code>?
+MM: If you're calling a method, use dot. If you're extracting a method, use <code>::</code>
+YK: Why didn't we fix this with classes?
+MM: That's water under the bridge.</p>
+<p>KS: Back to the infix operator. If the function is immediately called, then I'd like to be able to desugar to call:</p>
+<pre><code class="language-js">obj::f();
+<span class="hljs-comment">// -&gt; f.call(obj);</span>
+</code></pre>
+<p>DD: What about with <code>new</code>?</p>
+<p>KS: Don't do this desugaring with <code>new</code></p>
+<p>AWB: [back to the unary operator] I like this because it's an operation on a reference</p>
+<p>MM: Can you write other expressions on the right-hand-side that evaluate to a reference?</p>
+<p>AWB: DH's prior proposal allowed it</p>
+<p>MM: The case I can think of is a variable reference, inside a <code>with</code>, that's resolved to an object property</p>
+<p>AWB: No, that won't work in this case because it's not [...the right kind of reference?...]. The base is an object environment record in this case.</p>
+<p>KS: Can this be a syntax error if it's not a property lookup?</p>
+<p>DH: Why not require it to be a member reference?</p>
+<p>MM: I don't see any reason not to statically constrain this to property lookup, either dot or square bracket</p>
+<p>AWB: Some concerns, will consider offline</p>
+<p>KS: [new slide: Bind, The Big Picture] the infix operator is an alternative to the adapter pattern or extension methods.</p>
+<p>MM: <code>this</code> should really be passed as the first argument.</p>
+<p>KS: The implicit <code>this</code> is really the first argument.</p>
+<p>DH: Worried about the additional overhead this syntax adds to the language [referring to the infix operator]. Having to make the decision between <code>.</code> and <code>::</code> seems problematic.</p>
+<p>JH: And in C# you always use <code>.</code></p>
+<p>YK: The alternative is you use an adapter first, and then <code>.</code> the rest of the way to the right</p>
+<p>JH: Yes, you can do this with an adapter pattern, but then you need to build an adapter layer and decide how to do it.</p>
+<p>BE: The infix operator seems attractive for extension methods</p>
+<p>JH: I agree that it's sensitive to add new syntax, but this has been done in other languages and people adapt to it</p>
+<p>DH: The way forward seems to be to get large-scale feedback about using this [maybe from Babel users?]</p>
+<p>DD: React developers using Babel are already using the existing <code>::</code> implementation, and filed bugs when KS changed the semantics</p>
+<p>BE: Agree with DH, need more data to see how users like it</p>
+<p>EA: What AWB said earlier about the use of <code>this</code> rings true, ES6 just changed the uses of <code>this</code> (with classes and arrows)</p>
+<p>[lots of discussion of other tokens: <code>-&gt;</code>, <code>.:</code>, <code>.?</code>]</p>
+<a href="#conclusion-on-bind-6vi-function-bind-and-private-fields-redux-kevin-smith"><h4 id="conclusion-on-bind-6vi-function-bind-and-private-fields-redux-kevin-smith">Conclusion on bind</h4></a><ul>
+<li>Get more feedback from users of Babel</li>
+</ul>
+<a href="#part-2-of-ks-presentation-private-fields"><h2 id="part-2-of-ks-presentation-private-fields">Part 2 of KS presentation: Private Fields</h2></a><p>KS: Preface: this conflicts somewhat with decorators, in that it makes use of <code>@</code> for its syntax. Will focus on the semantics in this presentation.</p>
+<p>KS: [slides]</p>
+<p>JM: Is there something essential to private fields that makes it important that private fields are created at construct time and guaranteed to all be present on instances?</p>
+<p>MM: It's important because you'd like to maintain invariants in your implementation, invariants you don't get anyway for public fields [due to them being public]</p>
+<p>KS: Private fields should not write through the prototype chain [example from slides]</p>
+<p>AWB: This just fails because the imposter object doesn't have the private field, nothing to do with prototypes</p>
+<p>KS: Private fields should also not read through the prototype chain</p>
+<p>AWB: It seems like that just falls out of the fact that the field isn't present on the receiver</p>
+<p>JM: Trying to find common ground between private fields and initializers for instance properties</p>
+<p>KS: Two main options around initialization: either initialize all private fields to <code>undefined</code>, then initialize them one by one, or run all initializers first, then create and write all fields at the same time. In the latter case, referring to <code>this</code> in the initializer expressions must be disallowed.</p>
+<p>[lots of discussion about initialization, resulting in punting and moving on to discussion of how these things work after initialization]</p>
+<p>KS: [presenting spec on github] <a href="https://github.com/zenparsing/es-private-fields">https://github.com/zenparsing/es-private-fields</a></p>
+<p>[discussion of the use of <code>PrivateMap</code> in the spec language]</p>
+<p>MM: The PrivateMap is not reified in the spec text, which should avoid any complaints related to WeakMaps and the transposed representation</p>
+<p>KS: Initialization: current spec text takes the &quot;batching&quot; approach discussed previously</p>
+<p>AWB: Initialization of private slots involves walking through the inheritance hiearchy, gathering private field requirements at each level, and that gives us the necessary information for allocation. Then there's a staged initialization, where at each base class, the initializers end up running before super returns.</p>
+<p>YK: Worried about return-override from super constructors. You have to add the private fields to whatever object is returned from super</p>
+<p>ARB: Can we get away from the details of the initialization and step up to finish KS's presentation?</p>
+<p>KS: Brand checks pass once initializers have run for a particular level of the inheritance hierarchy.</p>
+<p>YK: Due to return override, you can't simply walk the inheritance hierarchy to gather the set of private fields.</p>
+<p>AWB: It's important to me that the private fields are atomically allocated across the whole inheritance hierarchy.</p>
+<p>BE: But you can't do that with return override.</p>
+<p>BE: We could decide that return override is incompatible with these private fields.</p>
+<p>BE: Or we could just figure out a way to let private fields be added each time super() returns</p>
+<p>AWB: How do these things interact with proxies?</p>
+<p>MM: You get a type error if you try to look up the the field on something that fails the brand check, and proxies fail the brand check.</p>
+<p>MM: Another advantage to this proposal is that you can still add private fields to frozen objects.</p>
+<p>--- MM branches off to talk about initializers, asking for them to initialize instead of assign, which would allow data-dependent const fields --</p>
+<p>[discussion of possible constructor syntaxes for initialization]</p>
+<p>YK: Worried that moving declaration of instance properties (private and public) into constructor would break decorators</p>
+<p>MM: But then how do you decorate fields whose initialization is data-dependent?</p>
+<p>YK: That's not a case that comes up very often.</p>
+<p>DD strawman:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    private @x = x;
+    public y = y;
+  }
+  
+  get x() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.@x;
+  }
+}
+</code></pre>
+<a href="#presentation-continued-on-next-day2015-03_mar-26html"><h4 id="presentation-continued-on-next-day2015-03_mar-26html">Presentation continued on <a href="2015-03_mar-26.html">next day</a></h4></a>
+</body>

@@ -1,0 +1,379 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 23, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-23-2014-meeting-notes"><h1 id="september-23-2014-meeting-notes">September 23, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jeff Morrison (JM), Jonathan Turner (JT), Sebastian Markbåge (SM), Erik Arvidsson (EA), Brendan Eich (BE), Domenic Denicola (DD), Peter Jensen (PJ), Eric Toth (ET), Yehuda Katz (YK), Dave Herman (DH), Brendan Eich (BE), Simon Kaegi (SK), Boris Zbarsky (BZ), Andreas Rossberg (ARB), Caridy Patiño (CP), Niko Matsakis (NM), Mark S. Miller (MM), Matt Miller (MMR), Jaswanth Sreeram (JS)</p>
+<p>Remote:
+István Sebestyén (IS)</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>RW: (explanation of evening meetup)</p>
+<p>TC39 expresses its appreciate to Bocoup for hosting and ECMA for dinner.</p>
+<p>JN: Adoption of agenda?</p>
+<p>Approved: <a href="https://github.com/tc39/agendas/blob/master/2014/09.md">https://github.com/tc39/agendas/blob/master/2014/09.md</a></p>
+<p>JN: Approval of minutes (July 2014)</p>
+<a href="#conclusionresolution-welcome"><h4 id="conclusionresolution-welcome">Conclusion/Resolution</h4></a><ul>
+<li>Agenda approved</li>
+<li>Previous Minutes approved.`</li>
+</ul>
+<a href="#41-spec-status-report"><h2 id="41-spec-status-report">4.1 Spec status report</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="./Rev27meeting_review.pdf">Rev27meeting_review.pdf</a></p>
+<p>AWB:</p>
+<ul>
+<li>Added %IteratorPrototype% that all built-in iterators inherit from.</li>
+</ul>
+<p>Issue:</p>
+<p>Should %IteratorPrototype% define an @@iterator method?</p>
+<ul>
+<li>Definition: return this value</li>
+<li>Currently defined in %GeneratorPrototype% and in the prototype for all built-in iterators.</li>
+<li><a href="https://bugs.ecmascript.org/show_bug.cgi?id=3104">https://bugs.ecmascript.org/show_bug.cgi?id=3104</a></li>
+</ul>
+<p>DD: This supports the established convention</p>
+<p>YK: There was objection from Jafar
+DH: but that was to iterator as self-iterable in whole, not this Iterator.prototype which we want</p>
+<p>AWB: (summary in slides)</p>
+<ul>
+<li>Destructuring performs ToObject</li>
+<li>Array and generator comprehensions removed</li>
+<li>Realm removed</li>
+<li>Revised @@unscopable</li>
+<li>Object.assign ignores null and undefined sources</li>
+<li>An error to reentrantly enter generator via next/throw/return</li>
+<li>String(sym) now returns the symbol's description. Does not change ToString(symbol) throwing</li>
+<li><code>sym === Object(sym)</code> is now true</li>
+<li>Tighten specification for when <code>Array.prototype.sort</code> is undefined</li>
+</ul>
+<p>AWB: Things being removed should be added to <a href="https://github.com/tc39/ecma262">https://github.com/tc39/ecma262</a></p>
+<p>EA: @@unscopables shipping in v8 (needed for Array.prototype.values)</p>
+<p>AWB:</p>
+<ul>
+<li>Added 16.1 that lists forbidden extensions</li>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/jul-29.md#49-argumentscaller-poisoning-on-new-syntactic-forms---arrows-generators">Discussion</a></li>
+<li>Removed all explicit poison pill methods on functions (except Function.prototype)</li>
+</ul>
+<p><a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-forbidden-extensions">16.1 Forbidden Extensions</a></p>
+<p>AWB: Mark's concern was stack walking capabilities</p>
+<p>DH: At odds with proper tail calls</p>
+<p>AWB: In ES5 we added things to spec PTC</p>
+<p>YK: Of note: the new JDK's JavaScript engine is claiming to be &quot;spec compliant&quot;, but implements racy threads.</p>
+<p>DH: Most of the algorithms will fall down because they're not designed for threaded environments</p>
+<p>Should Ecma-262 section 16 say something about cases like this?</p>
+<p>AWB: We can express the &quot;intent&quot;, that these are meant to be run atomically</p>
+<p>DH: Memory models are hard.</p>
+<p>ARB: Just say something informally to the effect that all algorithms in this spec are assumed to be executed atomically, i.e., are never observably interleaved with, or concurrent with, any other mutation of the programs state.</p>
+<p>ARB: What specifically does &quot;Extensions&quot; refer to?</p>
+<p>AWB: Specifically the definition in <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-error-handling-and-language-extensions">16</a>, bullet 2.</p>
+<p>AWB: w/r to Mark's concerns, we may want to specifically say that we don't want implementors to implement stack walking outside of devtools.</p>
+<p>AWB: Open work items:</p>
+<ul>
+<li>Update Introduction (BE)</li>
+<li>Update Language Overview (RW)</li>
+<li>RegExp normative and Annex B issues</li>
+<li>Lexical Grammar may need work</li>
+<li>Annex B spec for HTML style <code>&lt;!-- --&gt;</code> comments</li>
+<li>Module spec work closing in</li>
+<li>Instantiation reform, language + built-ins</li>
+</ul>
+<p>AWB: Is anyone interesting in analysing the changes in ES5 to determine things that may have been wrong and need to be rolled back?</p>
+<p>RW: Should reach out to Mathias Bynens</p>
+<p>AWB: Ideally someone willing to become fully aware of the issues and propose/execute on solutions (if necessary)</p>
+<p>AWB: Outline of final spec review process from January through June.</p>
+<p>JN: Confirm RFTG opt-out</p>
+<p>RW: <a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/jul-30.md#rftg-admin-es6-opt-out-period">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/jul-30.md#rftg-admin-es6-opt-out-period</a></p>
+<a href="#conclusionresolution-41-spec-status-report"><h4 id="conclusionresolution-41-spec-status-report">Conclusion/Resolution</h4></a><ul>
+<li>Add <code>Symbol.iterator</code> on the %IteratorPrototype% that returns <code>this</code>.</li>
+<li>Due for November meeting</li>
+<li>Language Overview draft (RW)</li>
+<li>Introduction (BE)</li>
+</ul>
+<a href="#43-legacy-decimal-integer-literals-starting-with-0-and-containing-8-or-9"><h2 id="43-legacy-decimal-integer-literals-starting-with-0-and-containing-8-or-9">4.3 Legacy Decimal Integer Literals starting with 0 and containing 8 or 9.</h2></a><p>(Allen Wirfs-Brock, Jason Orendorff, Boris Zbarsky)</p>
+<p><a href="http://esdiscuss.org/topic/early-error-on-0-followed-by-8-or-9-in-numeric-literals-does-not-seem-to-be-web-compatible">http://esdiscuss.org/topic/early-error-on-0-followed-by-8-or-9-in-numeric-literals-does-not-seem-to-be-web-compatible</a></p>
+<p>AWB: Octals beginning with <code>0</code> are restricted in strict mode</p>
+<p>BZ: Credit card and telephone numbers</p>
+<p>AWB: Dates</p>
+<p>AWB: In non-strict, where <code>0</code> normally means an octal, unless it contains an 8 or 9.</p>
+<p>MM: Any program that relies on this will break</p>
+<pre><code class="language-js">&gt; <span class="hljs-number">055</span> 
+<span class="hljs-number">45</span> 
+&gt; <span class="hljs-number">089</span> 
+<span class="hljs-number">89</span> 
+&gt; <span class="hljs-number">051082</span> 
+<span class="hljs-number">51082</span> 
+&gt; (<span class="hljs-number">051082</span>).toString() 
+<span class="hljs-string">"51082"</span> 
+&gt; (<span class="hljs-number">051078</span>).toString() 
+<span class="hljs-string">"51078"</span> 
+&gt; (<span class="hljs-number">051077</span>).toString() 
+<span class="hljs-string">"21055"</span>
+</code></pre>
+<p>(Discussion about use of broken features)</p>
+<p>MM: Want to preserve the restriction as currently written in strict mode. Strict mode program, testing during August, evals <code>08</code> will pass, in January it will not.</p>
+<p>AWB: Any browser incompatibilities?</p>
+<p>BZ: Anyone writing strict mode code won't be writing code like this. For strict mode there is no hazard.</p>
+<p>AWB: For Annex B?</p>
+<p>BZ: Pull</p>
+<p>MM: All strict mode behaviour is normative</p>
+<p>AWB: + Annex B</p>
+<p>Discussion re: <em>EscapeCharacter</em></p>
+<p><a href="https://bugs.ecmascript.org/show_bug.cgi?id=3212">https://bugs.ecmascript.org/show_bug.cgi?id=3212</a></p>
+<p>BE: It was changed in ES3 to use DecimalDigit (from ES1's OctalDigit), would need to ask Waldemar</p>
+<a href="#conclusionresolution-43-legacy-decimal-integer-literals-starting-with-0-and-containing-8-or-9"><h4 id="conclusionresolution-43-legacy-decimal-integer-literals-starting-with-0-and-containing-8-or-9">Conclusion/Resolution</h4></a><ul>
+<li>Leave strict mode as-is</li>
+<li>Disallow leading zeroes, except for the constant 0 (and 0.1234 etc)</li>
+<li>Annex B non-strict: explicitly define the current interoperable behavior</li>
+<li><code>\8</code> and <code>\9</code> are equivalent to literal 8 and 9</li>
+<li>'\08' is NUL char and then '8', '\08'.length is 2</li>
+</ul>
+<a href="#44-number0b0101-nan-or-not"><h2 id="44-number0b0101-nan-or-not">4.4 Number('0b0101'). NaN or not?</h2></a><p>(Erik Arvidsson)</p>
+<p>EA: Previous discussion: <a href="https://github.com/rwaldron/tc39-notes/blob/c61f48cea5f2339a1ec65ca89827c8cff170779b/es6/2014-04/apr-9.md#46-updates-to-parseint">https://github.com/rwaldron/tc39-notes/blob/c61f48cea5f2339a1ec65ca89827c8cff170779b/es6/2014-04/apr-9.md#46-updates-to-parseint</a></p>
+<p>Should <code>Number</code> be able to parse the string &quot;0b0&quot; or &quot;0o1&quot;</p>
+<p>(Discussion of people (ab)using Number for converting user input and whether this should affect things.)</p>
+<p>Yes.</p>
+<a href="#conclusionresolution-44-number0b0101-nan-or-not"><h4 id="conclusionresolution-44-number0b0101-nan-or-not">Conclusion/Resolution</h4></a><ul>
+<li>Use spec-internal <code>ToNumber</code> via userland <code>Number</code> called as a function will convert (ie <code>Number('0b101') === 5)</code>.</li>
+<li>Upholding previous consensus on <code>parseInt</code></li>
+<li>Note in Annex C that this extension is a potentially breaking change</li>
+</ul>
+<a href="#45-more-function-in-block"><h2 id="45-more-function-in-block">4.5 More Function-in-Block</h2></a><p>(Brian Terlson)</p>
+<p>BT: (covers current spec)</p>
+<p>AWB: Exactly the strict modes semantics of functions in blocks</p>
+<p>BT: Don't hoist past/up-to nearest function</p>
+<p>New issue:</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (cond) {
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">F</span>(<span class="hljs-params"></span>) </span>{}
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">G</span>(<span class="hljs-params"></span>) </span>{ F() }
+}
+
+<span class="hljs-comment">// sometime later</span>
+<span class="hljs-keyword">if</span> (cond) {
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">F</span>(<span class="hljs-params"></span>) </span>{}   
+}
+
+G();
+</code></pre>
+<p>In today's semantics, when <code>G();</code> is called, it calls the second <code>F();</code>. In the new design, it would be the first, which is a breaking change. This code actually exists in some ad code somewhere.</p>
+<p>BT: No one else has implemented this yet, need to know if IE will be out there alone, or will other browsers stand with IE and break that unusual ad code?</p>
+<p>DH: If v8 and spidermonkey post bugs that indicate the intention to implement, then it shows support among implementors and is valuable.</p>
+<a href="#conclusionresolution-45-more-function-in-block"><h4 id="conclusionresolution-45-more-function-in-block">Conclusion/Resolution</h4></a><ul>
+<li>No spec change</li>
+<li>Implementors will file intention commitment bugs
+<a href="https://code.google.com/p/v8/issues/detail?id=3594">V8 bug</a>
+<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1071646">SpiderMonkey bug</a></li>
+</ul>
+<a href="#intro-to-matt-miller-from-ietf-liaison-manager"><h2 id="intro-to-matt-miller-from-ietf-liaison-manager">Intro to Matt Miller from IETF (Liaison manager)</h2></a><p>MMR: (Role as liaison from IETF, to establish a productive relationship, specifically w/r to JSON)</p>
+<p>AWB: IETF Documents, eg. JavaScript mimetype references to ES3. Far behind considering ES5 and soon ES6</p>
+<p>MMR: The RFCs are stable documents. When a document receives a number, it's set. If it needs to be updated, it can be replaced.</p>
+<p>Discussion about interoperability and incompatibility breaks.</p>
+<a href="#conclusionresolution-intro-to-matt-miller-from-ietf-liaison-manager"><h4 id="conclusionresolution-intro-to-matt-miller-from-ietf-liaison-manager">Conclusion/Resolution</h4></a><ul>
+<li>Improved communication</li>
+</ul>
+<a href="#revisiting-161-forbidden-extensions"><h2 id="revisiting-161-forbidden-extensions">Revisiting 16.1, Forbidden Extensions</h2></a><p>MM: SpiderMonkey removed own caller and own arguments from all function forms
+... Needs to be clear: if the this binding is strict or built-in.</p>
+<p>AWB: interpret: If it isn't a non-strict function, it behaves exactly as spec'ed.</p>
+<p>Discussion of strict/non-strict w/r to built-ins</p>
+<p>MM: Applied to anything other than a non-strict function?</p>
+<p>(10 minute back and forth about the definitions of &quot;strict function&quot; and &quot;ECMAScript function&quot;)</p>
+<p>MM's overall concern is to make sure the behavior is nailed down for built-ins as well as for strict functions.</p>
+<a href="#somehow-we-started-talking-about-test262"><h2 id="somehow-we-started-talking-about-test262">Somehow we started talking about test262</h2></a><p>Discussion of test262's (lack of) coverage.</p>
+<p>BT: We didn't have coverage in test262 of a non-enumerable property shadowing an enumerable property.</p>
+<p>JM: it would be good to have a place to list the open coverage holes.</p>
+<p>SK/DD: while reviewing sections of the spec, people should write down a list of test cases that should be written (e.g. <a href="https://github.com/domenic/Array.prototype.contains/issues/1">https://github.com/domenic/Array.prototype.contains/issues/1</a> )</p>
+<p>AWB: Perhaps we should try to get a rough statement of what our coverage areas are. Some areas are covered because they were in ES3 tests; Microsoft contributed a lot of standard library tests; there are probably lots of gaps.</p>
+<p>(Discussion of running test262 tests against implementations, especially given their optimizations.)</p>
+<p>YK: ideally we should not run the tests in interpreted mode.</p>
+<p>AR: there is no hot code in test262, so right now we only run in interpreted mode.</p>
+<p>YK: could we use switches to turn up optimizations?</p>
+<p>AR: there are complications that in V8 at least make that unlikely to be useful.</p>
+<p>(Back to topic of a statement of coverage)</p>
+<p>AWB: I'm mostly interested in whether there is a useful set of tests for most areas of the spec</p>
+<p>BT: was this the test262 agenda item?</p>
+<p>BE: this was the &quot;depress the room&quot; agenda item</p>
+<p>DD/BT: (discussion of poisoning built-ins before running tests)</p>
+<p>YK: Value of poisioning?</p>
+<p>BT: Implementations have to take care to not rely on user modifiable built-ins.</p>
+<ul>
+<li>Test262 attempts to walk a balance, if there are known examples that break runtime, there will be tests, but we don't go looking for them.</li>
+</ul>
+<a href="#conclusionresolution-somehow-we-started-talking-about-test262"><h4 id="conclusionresolution-somehow-we-started-talking-about-test262">Conclusion/Resolution</h4></a><ul>
+<li>It's impossible to test ECMAScript</li>
+<li>Testing is hard</li>
+</ul>
+<a href="#test-262-update"><h2 id="test-262-update">Test 262 Update</h2></a><p>(Brian Terlson)</p>
+<p>BT: A number of PRs remain open from the Test The Web Forward event: people haven't signed CLA despite request, haven't updated patch according to review feedback. These will be closed.</p>
+<ul>
+<li>Browser will currently hang on 2**32 ToLength tests; these are initializing and iterating</li>
+<li>Previous consensus was to not update test262 on ecmascript.org. Any objections to creating a preview of ES6 test262?</li>
+<li>extracted test runner harness, wip.</li>
+<li>Suggest transferring test harness to ecma</li>
+</ul>
+<p>DD: Have two official runners?</p>
+<p>DD/BT: Deprecating the python runner?</p>
+<p>ARB: Have to check with testing infrastructure</p>
+<p>DD: But can we &quot;deprecate&quot;, in the</p>
+<ul>
+<li>Repository organization?</li>
+</ul>
+<p>BT: Move all tests from present locations to new homes in new directory heirarchy</p>
+<ul>
+<li>someone, or something, needs to move 11,500 tests from their current location to their new location</li>
+<li>Leave all ES5 where they are?</li>
+<li>Create new tests under named feature.</li>
+</ul>
+<p>AWB: As tests are updated, they could be moved?</p>
+<p>BT: confirm</p>
+<p>BT: who moved the ES3 tests to ES5 organization?</p>
+<p>MM: that was me</p>
+<p>BT: that was fun?</p>
+<p>MM: I have experienced traumas in my life that were less fun</p>
+<p>(Discussion of whether we should move the ES5 stuff piecemeal, e.g. as they get fixed.)</p>
+<p>BT: It might be OK to move by feature, e.g. all the Array.prototype.forEach tests could move at once.</p>
+<p>(Discussion of how to incorporate post-ES6 tests into the repo, as they are written, but before ES6 tests are finalized.)</p>
+<p>AWB: when running &quot;the ES6 test suite,&quot; it should only be things that are officially in ES6. But the JS community cares about what they can use in a browser. We should not create impressions that things are done or stable until they have worked through the process.</p>
+<p>AR: so we should put experimental things into a separate directory</p>
+<p>YK: no. You don't do that in Chrome; you use feature flags.</p>
+<p>(Discussion of folder vs. feature flags for new test262 tests for post-ES6 experimental features.)</p>
+<p>AWB: ok with stage 3 being in the repo</p>
+<p>DD: needs to be stage 1 and onward</p>
+<p>AWB: At stage 1, it's just the champion</p>
+<p>BT: Prerequisite to stage 3: have a PR open with your test</p>
+<p>DD: Just need a way to flag something as experimental</p>
+<p>BT: Accept Allen's proposal?</p>
+<p>DD/YK: nooooo</p>
+<p>ARB: Fine to have early stage features, as long as they're not intermingled.</p>
+<p>BT: The file system isn't ideal.</p>
+<p>(Discussion of whether to accept stage 1 onward into test262.)</p>
+<p>DD: Want to make test262 writing easy, so will be adding helpers.</p>
+<a href="#conclusionresolution-test-262-update"><h4 id="conclusionresolution-test-262-update">Conclusion/Resolution</h4></a><ul>
+<li>Create a subdomain to host test262's ES6 tests</li>
+<li>Deprecation plan for Python harness: contact</li>
+<li>Domenic or Andreas for V8</li>
+<li>Dave for SpiderMonkey</li>
+<li>Overturn previous consensus, leave ES5 tests where they are.</li>
+<li>Let Brian decide which features to pull in</li>
+<li>Stage 3 features (and onward) shows up on the experimental public site</li>
+<li>Add helpers, that's good.</li>
+</ul>
+<a href="#51-trailing-commas-in-function-call-expressions-and-declarations"><h2 id="51-trailing-commas-in-function-call-expressions-and-declarations">5.1 Trailing Commas in Function Call Expressions and Declarations</h2></a><p>(Jeff Morrison)</p>
+<p>JM: Useful for diffs in version control systems, especially Git blame. In other languages they often do a comma at the end of each line. We do for commas too.</p>
+<p>BE: arrays aren't parameter lists. What other languages allow this?</p>
+<p>JM: Python, D, Hack, probably others</p>
+<p>JM: you don't have to do this if you don't want to; it's easy to lint for...</p>
+<p>MM: just use comma-first style?</p>
+<p>JM: doesn't work well for the first argument</p>
+<p>AWB: What about rest parameter position? Should it be a syntax error after a rest param?</p>
+<p>JM: Hadn't thought about it. No strong feelings. Makes sense to me to be invalid after a trailing rest param</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">
+a, 
+b, 
+...c
+    </span>) </span>{
+<span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;        
+}
+</code></pre>
+<p>MM: what's the argument against this?</p>
+<p>JM: if people use this, old engines won't be able to run that code.</p>
+<p>AWB: it's the &quot;no new syntax&quot; argument.</p>
+<p>BE: the funny thing is in C you can't have enums with trailing commas but you can have them in array and struct initializers. That was a botch.</p>
+<a href="#conclusionresolution-51-trailing-commas-in-function-call-expressions-and-declarations"><h4 id="conclusionresolution-51-trailing-commas-in-function-call-expressions-and-declarations">Conclusion/Resolution</h4></a><p>BE: let's sleep on it</p>
+<ul>
+<li>No decision yet, revisit tomorrow.</li>
+</ul>
+<a href="#-process"><h2 id="-process">?.? Process</h2></a><p>AWB: When something reaches stage 1 we should create a repo at TC39. And use that issue tracker for discussion instead of es-discuss or bugs.ecmascript.org or other ad-hoc locations.</p>
+<a href="#52-flush-denorm-to-zero"><h2 id="52-flush-denorm-to-zero">5.2 Flush denorm to zero</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="http://esdiscuss.org/topic/float-denormal-issue-in-javascript-processor-node-in-web-audio-api">http://esdiscuss.org/topic/float-denormal-issue-in-javascript-processor-node-in-web-audio-api</a>
+<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1027624#c30">https://bugzilla.mozilla.org/show_bug.cgi?id=1027624#c30</a></p>
+<p>AWB/BE: Explanation of &quot;flush to denorm&quot;</p>
+<p><a href="https://en.wikipedia.org/wiki/Denormal_number">https://en.wikipedia.org/wiki/Denormal_number</a></p>
+<p>Denorm values appear in audio algorithms. Modes exist to prevent producing denorms.</p>
+<p>MM: Not just wasted precision:</p>
+<pre><code>|<span class="hljs-string">-</span>|<span class="hljs-string">-</span>|<span class="hljs-string">-</span>|<span class="hljs-string">-------</span>|<span class="hljs-string">-------</span>|<span class="hljs-string">-</span>|<span class="hljs-string">-</span>|<span class="hljs-string">-</span>|
+      ^       0       ^
+largest               smallest 
+negative              positive
+normal                normal
+</code></pre>
+<p>AWB: Specifically desirable from people writing audio algorithms in JavaScript.</p>
+<p>BE:</p>
+<pre><code class="language-js"><span class="hljs-built_in">Math</span>.denormz(x);
+<span class="hljs-built_in">Math</span>.fdenormz(x);
+</code></pre>
+<pre><code class="language-js"><span class="hljs-built_in">Math</span>.fdenormz(x) === <span class="hljs-built_in">Math</span>.denormz(<span class="hljs-built_in">Math</span>.fround(x));
+</code></pre>
+<p>PJ: Another suggestion to have an FPU mode-setting function?</p>
+<p>BE/AWB: That's the big red switch.</p>
+<p>BE: Leads to all black-box/other-module functions needing save/restore advice around calls from your module</p>
+<ul>
+<li>Stage 1?</li>
+</ul>
+<a href="#conclusionresolution-52-flush-denorm-to-zero"><h4 id="conclusionresolution-52-flush-denorm-to-zero">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#53-arraybuffertransfer"><h2 id="53-arraybuffertransfer">5.3 ArrayBuffer.transfer</h2></a><p>(Brendan Eich, Allen Wirfs-Brock for Luke Wagner)</p>
+<p><a href="https://gist.github.com/andhow/95fb9e49996615764eff">https://gist.github.com/andhow/95fb9e49996615764eff</a></p>
+<p>AWB: (summarizes rationale)</p>
+<p>(Discussion re detaching, immutability, freezing, and how they may or may not be related)</p>
+<p>BE: ArrayBuffer.transfer seems safe, considering.</p>
+<p>Discussion of whether it should be static on ArrayBuffer or a method on the prototype - it's an alternative constructor</p>
+<p>Suggestion that ArrayBuffer.transfer(b1, 0) return a zero-length b2, not null. Consensus favors.</p>
+<p>AWB: Subclass of <code>ArrayBuffer</code>? What is the class of the object returned by <code>transfer(...)</code>?</p>
+<a href="#conclusionresolution-53-arraybuffertransfer"><h4 id="conclusionresolution-53-arraybuffertransfer">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#56-nosuchproperty-built-in-proxy"><h2 id="56-nosuchproperty-built-in-proxy">5.6 NoSuchProperty built-in proxy</h2></a><p>(Brendan Eich for Nicholas C. Zakas)</p>
+<p>BE: Want to be able to throw if a property access occurs for something that doesn't exist.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> NoSuchProperty = <span class="hljs-built_in">Proxy</span>({}, {   
+  has(target, name) {     
+   <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;   
+  },   
+  get(target, name, receiver) {      
+    <span class="hljs-keyword">if</span> (name <span class="hljs-keyword">in</span> <span class="hljs-built_in">Object</span>.prototype) {        
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.prototype[name];     
+    }     
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(name + <span class="hljs-string">" is not a defined property"</span>);   
+  } 
+});
+</code></pre>
+<p>BE: JS1 was a rush, didn't have time for try/catch, so I was very shy about errors. This should be something that can be made an error. Too much fail-soft where things should've error'ed.</p>
+<p>MM: If it's doable in library code, then we should wait until we see more activity.</p>
+<p>YK/DD/RW: There are more Proxy related patterns that would more valuable to address before NoSuchProperty, considering it's possible in library code.</p>
+<p>DH: (comments on likelihood of actual use)</p>
+<p>BE: This will be slow</p>
+<p>BZ: It will be fine until you hit the Proxy, based on real engine DOM (nodelist etc.) experience.</p>
+<a href="#conclusionresolution-56-nosuchproperty-built-in-proxy"><h4 id="conclusionresolution-56-nosuchproperty-built-in-proxy">Conclusion/Resolution</h4></a><ul>
+<li>Keep in library code which others should develop and user-test at scale</li>
+</ul>
+<a href="#58-exponentiation-operator-update"><h2 id="58-exponentiation-operator-update">5.8 Exponentiation Operator Update</h2></a><p>(Rick Waldron)</p>
+<p>RW: Presenting updates to feature proposal:</p>
+<ul>
+<li>Stage 1: <a href="https://github.com/rwaldron/exponentiation-operator/issues/1">https://github.com/rwaldron/exponentiation-operator/issues/1</a></li>
+<li>Stage 2: <a href="https://github.com/rwaldron/exponentiation-operator/issues/2">https://github.com/rwaldron/exponentiation-operator/issues/2</a></li>
+</ul>
+<p>Progress to Stage 2?</p>
+<p>Confirm.</p>
+<a href="#conclusionresolution-58-exponentiation-operator-update"><h4 id="conclusionresolution-58-exponentiation-operator-update">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+</ul>
+<a href="#55-mathiaddh-etc-polyfillable-64-bit-int-helpers"><h2 id="55-mathiaddh-etc-polyfillable-64-bit-int-helpers">5.5 Math.iaddh, etc. polyfillable 64-bit int helpers</h2></a><p>(Brendan Eich for Fabrice Bellard)</p>
+<p><a href="http://esdiscuss.org/topic/efficient-64-bit-arithmetic">http://esdiscuss.org/topic/efficient-64-bit-arithmetic</a>
+<a href="https://gist.github.com/BrendanEich/4294d5c212a6d2254703">https://gist.github.com/BrendanEich/4294d5c212a6d2254703</a></p>
+<p>MM: Recognizes &quot;bigit&quot; as good for bignum big decimal etc. digit, not just for int64 emu</p>
+<p>(<a href="http://hackage.haskell.org/package/double-conversion-0.2.0.6/src/double-conversion/src/bignum.cc">http://hackage.haskell.org/package/double-conversion-0.2.0.6/src/double-conversion/src/bignum.cc</a>, <a href="http://code.ohloh.net/file?fid=J9lbBTlP__EhaF2Zrwq6Sk38lZE&amp;cid=891oM4GeZTE&amp;s=&amp;fp=282835&amp;mp&amp;projSelected=true#L0">http://code.ohloh.net/file?fid=J9lbBTlP__EhaF2Zrwq6Sk38lZE&amp;cid=891oM4GeZTE&amp;s=&amp;fp=282835&amp;mp&amp;projSelected=true#L0</a> )</p>
+<p>Concrete proposal:</p>
+<pre><code class="language-js"><span class="hljs-built_in">Math</span>.imulh();
+<span class="hljs-built_in">Math</span>.imuluh();
+<span class="hljs-built_in">Math</span>.iaddh();
+<span class="hljs-built_in">Math</span>.isubh();
+</code></pre>
+<a href="#conclusionresolution-55-mathiaddh-etc-polyfillable-64-bit-int-helpers"><h4 id="conclusionresolution-55-mathiaddh-etc-polyfillable-64-bit-int-helpers">Conclusion/Resolution</h4></a><ul>
+<li>Rename imuluh to umulh</li>
+<li>Stage 0</li>
+</ul>
+
+</body>

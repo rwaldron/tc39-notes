@@ -1,0 +1,590 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 26, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-26-2016-meeting-notes"><h1 id="january-26-2016-meeting-notes">January 26, 2016 Meeting Notes</h1></a><hr>
+<p>Eric Ferraiuolo (EF), Caridy Patiño (CP), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Leland Richardson (LM), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Stefan Penner (SP), Sebastian McKenzie (SMK), Waldemar Horwat (WH), Mark S. Miller (MM), Paul Leathers (PL), Sebastian Markbåge (SM), Zibi Braniecki (ZB), Andreas Rossberg (ARB), Ian Halliday (IH), Keith Miller (KM), Tim Disney (TD), Miško Hevery (MHY), Brad Green (BG), Kevin Smith (KS), Brad Nelson (BNN), JF Bastien (JFB), Shu-yu Guo (SYG), Rick Waldron (RW), Staś Małolepszy (STM), Dean Tribble (DT)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p><a href="https://github.com/tc39/agendas/blob/master/2016/01.md">https://github.com/tc39/agendas/blob/master/2016/01.md</a></p>
+<a href="#approval-of-the-minutes-from-november-2015"><h2 id="approval-of-the-minutes-from-november-2015">Approval of the minutes from November 2015</h2></a><p>WH: what sort of changes?</p>
+<p>JHD: some editorial cleanup</p>
+<a href="#conclusionresolution-approval-of-the-minutes-from-november-2015"><h4 id="conclusionresolution-approval-of-the-minutes-from-november-2015">Conclusion/Resolution</h4></a><ul>
+<li>Minutes approved.</li>
+</ul>
+<a href="#5-proposals-for-future-editions"><h2 id="5-proposals-for-future-editions">5. Proposals for Future Editions</h2></a><a href="#5i-zones"><h2 id="5i-zones">5.i Zones</h2></a><p>DD: Misko is presenting, zones.</p>
+<p><a href="https://docs.google.com/presentation/d/1H3E2ToJ8VHgZS8eS6bRv-vg5OksObj5wv6gyzJJwOK0/edit#slide=id.p">https://docs.google.com/presentation/d/1H3E2ToJ8VHgZS8eS6bRv-vg5OksObj5wv6gyzJJwOK0/edit#slide=id.p</a></p>
+<p>MH: Writing async code is hard, specifically book keeping of (begin/end of async tasks). Specifically for framework authoring, and cooperation between various components. In other langauges, this may be &quot;domains&quot; or &quot;contexts&quot;.</p>
+<p>MH: some existing implementations, Angular Zone.js, Zone, Dart Zones, Node.js domains/continuation local storage/asyncwrap, c# logical call context etc.</p>
+<p>MH: this has been around for some time, but the lack of standarization prevents interopt and may also prevent more ideal solutions.</p>
+<p>MH: Frameworks often what to know when work has begun and completing, this allows for batching.</p>
+<p>WH: Can you clarify the example?</p>
+<p>MH: In a typical application, a whole orchestration of async tasks occurs</p>
+<p>YK: browser do this already, flush work -&gt; calculate changes -&gt; paint.</p>
+<p>MH: by annotating different context, prioritizing is possible. One example would be animation context vs ..</p>
+<p>WH: thanks</p>
+<p>MH: another example is testing, existing solutions result in test &quot;flickering&quot;, but using zones would enable some determism.</p>
+<p>BT: test262 would benefit from this, existing solutions require manual book keeping and tracking. No way to tell in the browser when a set of async operations have completed.</p>
+<p>SP: it adds determism</p>
+<p>MH: another use-case, is for measuring and instrumentation.</p>
+<p>SP: you may also have interleaving plans, this helps group them and mitigate some common related issues</p>
+<p>MH: good error handling, with zones you get the error handling for free. Global error handling lacks sufficient context</p>
+<p>MH: You can also associate errors with the originating/initiating event for tracing/debugging scenarios.</p>
+<p>DD: these actions can happen concurrently, an example would be an HTTP server serving many requests, each would want a zone To associated relevant signals.</p>
+<p>MH: When you have unit test you want to know when everything is done so you can clean up to prepare for the next test in a clean state.</p>
+<p>MH: this would also prevent test pollution</p>
+<p>MH: How would this work?  Zone.current</p>
+<p>MM: are you proposing global state that yields different values over time</p>
+<p>MF: would a meta property be ok</p>
+<p>MM: I had not considered this, it raises other questions</p>
+<p>YK: this is a hypothetical API</p>
+<p>MM: I understand this</p>
+<p>MH: Time changes over time as well, but you cannot mutatie it yourself. <code>Zone.current</code> is similar in this regard.</p>
+<p>...</p>
+<p>MH: in a promise example, the callback would be associated with the zone it was instantiated in. So when invoked, it would remember its zone.</p>
+<p>JM: how do zones change</p>
+<p>DD: it hasn't been presented yet</p>
+<p>YK: it is possible to create this API self hosted</p>
+<p>DD: only if all async was hooked, and a transpiler for async/await</p>
+<p>YK: I meant, if a user wrote this manually it would work</p>
+<p>MH: Correct.</p>
+<p>MH: We could monkey patch the then method, but their are limitations. These limitations include user-land task-queues, and other foreign async.</p>
+<p>YK: and its common</p>
+<p>MH: if they don't properly capture the zone, the value diminishes.</p>
+<p>MH:</p>
+<p>YK: ember has a mechanism, but without a standard interopt is hard.</p>
+<p>MH: yes</p>
+<p>DH: TLS analogy is the strongest one, async in JS is cooperative userland threads. What i haven't seen is, how to create such zones.</p>
+<p>BT: So you said current implementation have holes?</p>
+<p>MH/YK: It's insufficient to monkey-patch everything because frameworks might have their own event loop.</p>
+<p>MH:  we need to provide the right primites so the platforms do the right thing.</p>
+<p>MH: Now how to make new zones &quot;slide: more realistic Example&quot;</p>
+<p>MH: Zones also offer local storage, and it is valuable</p>
+<p>DD: The &quot;node cloud team at google&quot; wants TLS.</p>
+<p>MH: ... describes other details, and suggests to look at the repository...</p>
+<p>MM: What prevents you from calling a zone transition sync</p>
+<p>BT: that is embers use-case</p>
+<p>MM: run calls the provided closure sync?</p>
+<p>MH: correct, the only way to change the zone is to call run or to call a wrapped function.</p>
+<p>DD: run is to wrap, as call is to bind.</p>
+<p>MM: the binding of rURL is it mutable? (referring to slide #12 &quot;More Realistic Example&quot;)</p>
+<p>MH: they are immutable</p>
+<p>DD: one can put in a mutable structure</p>
+<p>MM: the accessors are referenced via string, is that important?</p>
+<p>MH: doesn't seem so.</p>
+<p>MH: child zones inherit the parents zones</p>
+<p>DT: can you arrange to merge multiple ancestors</p>
+<p>DD: you can arrange manually yes</p>
+<p>MH: we don't support that today.</p>
+<p>(MM: Somewhere in here I made the point that asynchronous causality is a graph, but Zones needs to treat it as a tree.
+At the base, the triggering of a callback has two causal ancestors, the registration of the callback and the triggering
+of the condition that the callback should be notified about. In promises, these are respectively the .then and the settling
+of the promise. All is a higher level pattern in which an outcome has more than two causal inputs.</p>
+<p>What I finally understood from the discussion is that Zone's always follows only the registration, not the triggering, and
+this does always pick a tree out of the causality graph. However, it is often not the tree that most intuitively corresponds
+to the programmer's understanding of causality in their programs.
+See <a href="http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html">http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html</a>)</p>
+<p>MM: let me share when this would come in force, a Promise.all where the promise inputs were sourced from multiple zones.</p>
+<p>SP: Only the callbacks will capture the zone, Promise.all itself wont' capture the zone, rather the callback passed to resulting promise one.</p>
+<p>YK: i think we are making the graph vs tree mistake here</p>
+<p>MH: the registration captures the zone</p>
+<p>YK: I think MM is saying multiple consumer may want to be part of the causality</p>
+<p>MM: Whoever invoked the then sets the zone</p>
+<p>YK: that may not be correct</p>
+<p>YK: let me try to say what the two use-cases are:</p>
+<pre><code>1. somethingly ike TLS, sounds good. 
+2. life-cycles hooks around stack pushing and popping, and that is extremely importent for flushing and rendering.
+</code></pre>
+<p>DD: i don't want to get into the hooks discussion yet</p>
+<p>MM:  We need a standard API for the &quot;wrap&quot;, the implementation isn't that important.</p>
+<p>YK: The DOM has to do something, we will have to standardize.</p>
+<p>DD: the host environment needs to register a callback, so a hook could be imagined.</p>
+<p>MM: the fact that you are propagating from the registration, but that conflicts with the addEventListener example</p>
+<p>SP: no this will work as expected as it will merely be another fork.</p>
+<p>MM: If the first thing a zone does is execute a zone.wrap then the invoking zone gets throw away?</p>
+<p>MH: The first thing I do in a click handler is to ask for a zone and do all the work in it.</p>
+<p>MM: Okay.</p>
+<p>YK: I agree that you could make these be trees, but I think it's bad that you can't handle multiple sources.</p>
+<p>DD: Disagree as apps aren't trying to track this.  We can take this offline to discuss more though.</p>
+<p>YK: the concern that i have, is that causality and execution branching are intermixed. Frameworks will be the same place we are today, enumerating all the potential entry points.</p>
+<p>MH: I'm having a hard time understanding</p>
+<p>YK: do you enumerate all eventHandlers?</p>
+<p>MH: no</p>
+<p>MH: I want to make sure angular knows about everything, a second problem is to track user behavior flow. I would argue this requires hand tuning.</p>
+<p>MH: Usually, zones trigger on router changes.  App changes route and a new zone handles tracking from there.</p>
+<p>WH: How do zones interact with iterators and generators? What happens if you start one from zone A and then call next from zone B?</p>
+<p>DD: you suspect the execution context from the generator</p>
+<p>MH: is this not the same as async</p>
+<p>YK: presumably</p>
+<p>YK: the data is stored on the execution context, pause resume should work.</p>
+<p>MH: presents a strawman &quot;slide: MVP API&quot;</p>
+<p>MH this is missing error handling, but that is handled by zone spec. Zone spec describes the details.</p>
+<p>DD: having the fully customized wrap may not make it, as it makes some of us nervous.</p>
+<p>MH: You get to wrap the callback into the wrap, but at the end of the day you don't get to override the Zone.  Fundamentally, the result will be on the zone that was wrapped.</p>
+<p>DD: Browser engineers are very unhappy about having to call code whenever setTimeout is called</p>
+<p>YK: await having to do this is quite scary.</p>
+<p>YK: if you don't monkey patch the world, the platform can be performant. This makes it somewhat scary.</p>
+<p>WH: What's so special about 'then'? If a user implemented his own scheduling and callback mechanism analogous to 'then', would that capture and propagate zones from the creators of the callbacks or would it propagate them from the callers of the callbacks?</p>
+<p>YK: i would hope async/await offers possibilities for optimization</p>
+<p>SP: I believe async function would capture the zone</p>
+<p>YK: await having different semantics seems like a refactoring hazard.</p>
+<p>DD: if there is no callback, then there is no wrap.</p>
+<p>SP: YK is the concern that the refactor from .then(...) -&gt; await shouldn't change the instrumentation calls?</p>
+<p>YK: yes</p>
+<p>YK: wrapping allows you to intercept the scheudling</p>
+<p>MH: no, wrapping is only post scheduling</p>
+<p>MM: what about realms? onFulfilled could be in a different realm. The execution stack can thread through many realms.</p>
+<p><em>various members mime mushroom clouds</em></p>
+<p>** collective brain splosion**</p>
+<p>MH: passing a callback from iframe1 -&gt; frame2,</p>
+<p>DD: we could handle this like bind, and let it work.</p>
+<p>SP: what about cross realm data leaks.</p>
+<p>DD: i think this is solvable, but the cross realm point is a good catch. We will need to explore this.</p>
+<p>...: Examples have a then block presented statically, if the function</p>
+<p>MM: it is the registration of the callback not the instantiation of the promise nor the function.</p>
+<p>DH: I have questions about intra-thread uses of the API.  Two questions:</p>
+<pre><code>1. You have .get but not .set you can put immutable things in the .get so I'm not sure what it buys you to make it immutable.  
+</code></pre>
+<p>MH: One property I'd like to have is that for apps that expect zone behavior, when you fork a child zone, application should behave the same way as without the fork.</p>
+<p>DH: Only true if users don't mutate things.  Is it vital for the language to enforce this guarantee?</p>
+<p>MH: You can certainly override a property and that COULD break behavior.  If code running in a child zone could mutate the parent then you couldn't see it in the parent.</p>
+<p>DH: I didn't understand</p>
+<p>DD: I'll rephrase -- if you allow children to set new properties, then they don't share the idea across the boundary.  This is more of a path we want to guide you down rather than a path that must be enforced.</p>
+<p>DH: I have a question that may clarify around lack of .set.  There's history for other languages with TLS with use cases for what has historically been achieved through dynamic scope.  A concrete example program would be a recursive descent JS parser.  You have certain context being passed around like the labeles currently in scope.  Only used a few places in the parser.  It's a total pain to keep track.  Other option is to use an OO pattern to carry context in a class/object so it's still explicit, but it's shrunk to one place.  Another mechanism is to use a TLS (thread local storage) like mechansim or dynamic scoping so this becomes implicit.  Only operations that need to access the state go through this.  One answer could be we disavow this and say the OO way is the right way to do this.  Another answer is to say this (zone) is right for doing this.  Creating new zones is a heavy-weight api.  Is there a lightweight user-land abstraction?  Is there no place for .set there?</p>
+<p>YK: why not just provide set</p>
+<p>MH: get will walk up the hirachy but set will not hence get/set are not symmetric.</p>
+<p>YK: sounds like prototypes</p>
+<p>WH: what you are after is dynamic scoping, and this is not dynamic scoping.</p>
+<p>MM: two ways to implement dynamic scoping, shallow binding or deep binding. This is deep binding</p>
+<p>DH: set is not a distraction here, the temp modify and revert is orthogonal, but in particulate in the dynamic set you actually want to use mutation.</p>
+<p>MM: this sounds ok</p>
+<p>DH: what does the UX look and feel like, when you are actually doing this. We may say, we don't care because its not a valid use-case. Could we build a library on top of this to improve the ergonomics</p>
+<p>CM: if you make the zone mutable, you have taken away the immutability.</p>
+<p>DH: yes</p>
+<p>YK:  I am not wrong that using a mutable object in the slot. The parent zone will see mutation in the values.</p>
+<p>DE: a problem with dynamic scoping with set, is that you may have  an outer scope that introduces a var, and an inner scope that defines a different variable. The hazard is accidentally overriding an unintentially is common, so disallowing set fixes this issue.</p>
+<p>DH: we should do some exploration, using this API in those use-case and see if it falls over. We may decide that is not appropriate at all. OO may be a better way to solve this problem, although I myself am unsure what is the</p>
+<p>DT: If A passes a zone to B and then to C, A could arrange so that B could change the state the C sees. A may want to arrange so that they are isolated very specifically. A needs to be sure, B cannot interfere with C etc. If we add set, A would need to add many defensive layers in-case of a malicious actor.</p>
+<p>YK: a symmetrical problem is users may not realize the deep mutability.</p>
+<p>SP: think prototype.value = {}  vs prototype.value = 1;, the former shares state the later cannot.</p>
+<p>MH: I feel zones are more like an observer like a logging service.  They get to watch over how an app runs and notify you to do something about it.  Whether it's there or not, the app should function the same way.</p>
+<p>DH: maybe the answer if you are using thread local dynamic scoping, it should not be built on top of zones.</p>
+<p>YK: Arriving at &quot;you should not put mutable objects there&quot; is good. (referring to values passed into the zone)</p>
+<p>MM: The proposal as it stand, there are some good goals that we should seek a way to address.  Kudos on the good goals.  The mechanisms as proposed combine several nightmares -- mutable global state, dynamic scoping, and before/after hooks. Before/after hooks reminds me of the nightmare of aspect oriented programming. They introduce an attack vector of invoking someone else's code during a turn while invariants are supended. Classically a thread is a sequential program, TLS (thread local storage) is a global variable for that sequential program.  In TC39, we have successfully avoided global state -- if you lock down all the primordials, everything still works so far. We must keep that property.  LISP has dynamic scoping.  Scheme has fluid scoping. In Fluid scoping, thing that changes depending on the context you're in is the value of a lexical variable.  You cannot see the values or rebind that var if you're not in the lexical scope.  The strings are worse than classical dynamic scoping because the program can calculate the strings.  Making them something first class or record based -- we should look how to restrict how you name those things.  Otherwise you have a truly global variable.</p>
+<p>YK: if you are too restrictive, people will end up virtualizing again.</p>
+<p>MM: If you have fluid variables, you don't need to reinvent dynamic variables.  They're still bad, but less bad.  I'm firmly on the lexical scoping side of the debate.</p>
+<p>YK: i think everyone agrees with that. Lexical scoping is the 99.9% case, some things don't quite fit in that. You can use globals or OO, all of them have issues. If you end up restricting, users will end up approximating the same thing.</p>
+<p>MM: for most of the motivating problems for dynamic scoping, if rethought, lexical scoping patterns typically address the issues nicely.</p>
+<p>YK: Who is the one rethinking it?  If it's an app developer, they won't end up doing it.</p>
+<p>MM: I want to think through the concepts presented here without being anti-modular.</p>
+<p>DD: to draw this to a close, why does this need to be in the language. Patching is hazardous, coordination between many collaborators is of value. We would like to move this to stage 0</p>
+<p>MM: what does it mean to approve something to stage 0</p>
+<p>DH: I think it's well motivated problem.</p>
+<p>YK: well motivated problem</p>
+<p>MM: if I endorse some of the goals but not the mechanisms, can I approve stage 0?</p>
+<p>DD: Yes, and we encourage collaboration with the champions.  Just want to move to stage zero if we can.</p>
+<p>YK: Stage zero seems fine.</p>
+<a href="#conclusionresolution-5i-zones"><h4 id="conclusionresolution-5i-zones">Conclusion/Resolution</h4></a><ul>
+<li>stage 0 approved</li>
+</ul>
+<a href="#announcement"><h3 id="announcement">Announcement</h3></a><p>MM: Does ECMA have rules for NDA's signed at these meetings? Participants should not be required to sign an NDA, the company should protect its own secrets it should not be the burden of the participants.</p>
+<p>We need to do some diligence, some work for the next meeting.</p>
+<p>SP: Lots of these NDA's are totally incompatible with the nature of this TC</p>
+<p>An email has been sent to István, and Salesforce will be contacted.</p>
+<p>Its completely not binding, if it was not obvious.</p>
+<a href="#5iii-shared-memory-and-atomics-proposal"><h2 id="5iii-shared-memory-and-atomics-proposal">5.iii Shared memory and Atomics (proposal)</h2></a><p>Presented by Lars Hansen</p>
+<p>(request slides)</p>
+<p>LHN: motivation, why we need this. We will also go over some of the september concerns</p>
+<p>(presenting slides)</p>
+<p>Slides: <a href="https://github.com/tc39/ecmascript_sharedmem/blob/master/tc39/presentation-jan-2016.odp">https://github.com/tc39/ecmascript_sharedmem/blob/master/tc39/presentation-jan-2016.odp</a></p>
+<p>LHN: Why not only for wasm?
+YK: wasm will want to be sync exposable from JS which transitively means these constructs need to shared.</p>
+<p>LHN:  next slide willl cover that</p>
+<p>LHN: Why not only for wasm (2)</p>
+<p>YK: we could say, wasm is only accesible async</p>
+<p>LHN: we can't really</p>
+<p>YK: this is a platform feature</p>
+<p>MM: workers that have access to shared memory, are only available async.</p>
+<p>LHN: what i am proposing is that we are proposing, is that JS define these semantics. This would give it some teeth, and enable healthier interopt.</p>
+<p>DH: &quot;if you're gonna drink, you're doing it under my roof&quot;?</p>
+<p>LHN: Why not only for wasm? (3)</p>
+<p>MM:  given a shared memory buffer, each worker would be seeing it through a set of types. There is nothing that enforces which types, corect?</p>
+<p>LHN: correct</p>
+<p>LHN: why not something completely different?</p>
+<p>YK: we also don't know what it is</p>
+<p>DH: if we want, I could put a team on it for a couple of years</p>
+<p>LHN: what is Pjs?</p>
+<p>** parallel JavaScript **</p>
+<p>A: Why is racy required</p>
+<p>LHN: its hard to imagine C++ program that isn't racy</p>
+<p>WH: Depends on what you mean by &quot;racy&quot;. You can trivially eliminate all data race undefined behavior from a C++ program by turning all memory accesses into atomics. The execution would still be racy (i.e. unpredictable), but it would not be racy (i.e. have races causing undefined C++ behavior according to its memory model). The two meanings of &quot;racy&quot; are quite distinct.</p>
+<p>A: one approach I could see, is the JS side only has synchronized acess to the array buffer.</p>
+<p>LHN: concerns about slow</p>
+<p>MM: pony + rust provide strong rules, can we enforce this?</p>
+<p>LHN: that is off the table</p>
+<p>DH: Don't know how to track ownership and infer types inside the asm.js typed array.</p>
+<p>MM: the point that i am making, is that the type reasoning i am speaking of is only that of the typed array.</p>
+<p>DH: but there is only 1 typed array for the program</p>
+<p>DH: I can't make sense of this</p>
+<p>YK: 1 heap, that is shared across threads, without races.</p>
+<p>MM: no runtime cost im not claiming, there is a step (from dynamic -&gt; static) that may involve an additional test.</p>
+<p>YK: do you believe this cost would be cheap?</p>
+<p>MM: im assuming (hope) it will be cheap</p>
+<p>LHN: I would like to present this proposal not what MM is speaking about, but what MM is speaking of is interesting.</p>
+<p>LHN: Some sort of integrity</p>
+<p>DH: I was thrown off, because it is much more general.</p>
+<p>...</p>
+<p>DH: imagine that we had 1 big typed array, but where you could checkout sections of the array with different permissions (rw r) the sharing would be controller based on the permissions one had. This would allow improved concurrency, and safety. It can be data-race free, but would require some clunkyness. Alll this could be done via the message passing system, this could be spec'd and implemented.</p>
+<p>LHN:  the point is, this kind of sharing DH is talking about has some issues and likely requires a better type system than JS has. Multidimensional arrays make this more complicated, (what killed it, i missed it..)</p>
+<p>LHN: for ecmascript, we likely require a better system. But we have this system today.</p>
+<p>LHN: I have decided to provide a low level system, and build a better system on top.</p>
+<p>DH: A bigger KO, is that this can't come anywhere near the performance of the pure shared array buffer. Message passing comes at a heavy cost, as the hardware support for racy shared access enables order of magnitudes better performance</p>
+<p>... Would a more constrained compile target not just solve this.</p>
+<p>LHN: unity compiled some benchmarks, using shared buffer they benifited from 4x speed-up.</p>
+<p>LHN: this API is a good basis to build a system on</p>
+<p>WH: what is the API</p>
+<p>LHN:</p>
+<p>DH: We have done multiple years exploring this. With intel + Mozilla, we looked at race free high level API's and we really couldn't come to something that would work. It's not to say we are the only people to solve this problem, but their is limit to how much we can explore.</p>
+<p>BE: WH you were ill and were not present to attend when this was presented the last time.</p>
+<p>LHN: the shared buffer spec is small and stable</p>
+<p>DE: In release behind a flag (in chrome)</p>
+<p>LHN: alpha/beta/release will be behind a flag (on FF)</p>
+<p>LHN: slide (API: Shared memory)</p>
+<p>LHN: slide (API: Atomic Operations)</p>
+<p>LHN: regular access to not guarentee tearing</p>
+<p>WH: so everything is sequentially consistent, which is far slower than acquire/release on, say, x86</p>
+<p>LHN: atomic access are sequentially consistent</p>
+<p>What is the safe guarentee?</p>
+<p>LHN: you cannot step outside the array, and the types remain safe.</p>
+<p>WH: There is more to memory safety than that. Java got into trouble with this, and it caused grief for C++. Reading a value and using it twice, due to common optimizations, could result in seeing different values. Booleans that are neiter true or false, not because of strange bit patterns, but because of optimizations affecting the order of memory operations. If you try to nail this down so that it could never happen, we must restrict the optimizations to a level that hurts performance.</p>
+<p>LHN: slide (API: Agent sleep and wakeup)</p>
+<p>LHN: futexWait must no longer be used on the main thread of the browser.</p>
+<p>LHN: slide (Agent model)</p>
+<p>DH: what does a forward progress guarentee mean</p>
+<p>LHN: more or less a fair scheduling guarentee</p>
+<p>DD: are agents continents?</p>
+<p>MM: worker goes through a sequence of jobs, there is a full ordering of jobs in any one worker. Each worker is a sequential program. Concurrency is between workers. I would be surprised if the division into jobs becomes relevant</p>
+<p>LHN: i likely misspoke, my agents are most likely similar to what you call a vat.</p>
+<p>MM: ok, so each agent executes a fully order sequences of jobs, where each job is executed to completion before starting the next job.</p>
+<p>JFB: C++ is exploring forward progress guarentees to support weaker models, such as SIMD lanes or fibers. Its more a technical point.</p>
+<p>JFB: C++ has spent many hours discussion this, it is quite complex.</p>
+<p>LHN: slide (Agent Mapping)</p>
+<p>LHN: to wrap this up, how you create agents, what they are and how you share them is all mapping specific. Browser vs node would be totally different.</p>
+<p>LHN: in a browser it would be a worker, WW semantics need much work.</p>
+<p>LHN: again, no futuxWait on the main thread.</p>
+<p>MM: you are assuming agents are only coupled via shared array buffer or asynchronously</p>
+<p>LHN: Slide (Memory model)</p>
+<p>Totally ordered relative to a thread?</p>
+<p>LHN: totally ordered base don the atomics</p>
+<p>Physics doesn't let you have that, so..</p>
+<p>WH: no you can</p>
+<p>LHN: atomic operations from JS on all shared array buffers in your browser are totally ordered</p>
+<p>JFB: the non atomic operations are all unordered, if you don't have atomics between them, everything can be re-ordered. The atomics provide ordering through happens-before with the non-atomic operations. The atomics provide inter-threads-happens-before between each other.</p>
+<p>WH: I am not sure I believe you</p>
+<p>JFB: there is a formal proof for the C++ model, there should also be a formal proof for this one before it is standardize.</p>
+<p>WH: read behaves as sequentially consistent acquire, I don't know what happens if you try to load/release in c++ memory model</p>
+<p>JFB: there is no load/release.. I believe this is beyond this content.</p>
+<p>M: any atomic operation is sequentially consistent even if it is unrelated.</p>
+<p>Browser that is spending many independent process, sharing memory is complicated. Im not sure what it means for them to be ordered</p>
+<p>LHN: total order not sequential order.</p>
+<p>LHN: slide (memory model 2)</p>
+<p>LHN: this is easy to reason about, but slower then alternatives</p>
+<p>WH: what happens during a race?</p>
+<p>MM: once you read a value, does it remain stable or can it change?</p>
+<p>WH: Do you get classical garbage or quantum garbage? (Quantum garbage is what happens in C++: reading a racy value and storing it into a temporary can cause the temporary to later spontaneously change its value).</p>
+<p>LHN: i don't believe so</p>
+<p>MM: so quantum garbage</p>
+<p>LHN: Yes, quantum garbage.</p>
+<p>JFB: architecture differences can make this impossible.</p>
+<p>LHN: im wrestling with if that is reasonable, we have already defined races will create garbage, we are defining now how bad that garbage is. Even if you read garbage, the garbage is sensible for the type that you are reading.</p>
+<p>LHN: some interesting complications, since we are using typed arrays, we can alias arrays, we can have atomic and non-atomic operations operating on the same array at the same time. Interesting problem for weakly ordered scenarios. We would like to give races a little bit of meaning. We want them to have enough meaning, so we don't crash the system</p>
+<p>MM: weakly ordered data describes this</p>
+<p>LHN: yes</p>
+<p>MM: tearing is a out of thin-air value</p>
+<p>LHN: nono that happens in a non-racy scenarios</p>
+<p>WH: That is a different concept, memory models do not always match the intuitive notion of causality. For example, the C++ memory model allows you to write programs that test whether an atomic value is 42, and set it to 42 if it was 42, and the optimizer can cause, via various memory model deduction rules, to cause the test to become self-fulfilling.</p>
+<p>LHN: relaxed atomics can cause this, we address this with strong atomics</p>
+<p>...</p>
+<p>LHN: lets  continue</p>
+<p>LHN: slide (Other memory model issues)</p>
+<p>LHN: the goal is to high performance, but we will get there</p>
+<p>WH: i am concerned that this is the wrong starting point</p>
+<p>can we get some numbers and see the difference</p>
+<p>WH: Providing a low-level library that implements sequential consistency only instead of also supporting acquire-release-relaxed seems like defeating the purpose of the effort. Requiring sequential consistency on reads/writes is several times slower than just doing acquire-release semantics on reads/writes on x86. Sequential consistency only seems like the wrong starting point because it throws away so much performance compared to acquire/release, which almost always suffices. The point of this effort is to go for high performance.</p>
+<p>LHN: any questions:</p>
+<p>MM: you mentioned we avoid blocking the main thread, can we also make it so high-speed access is ???.</p>
+<p>LHN: in principle yes, TypedArray constructers made illegal on the main thread would enable this. This may strike some people as strange, but in principle yes</p>
+<p>YK: UI and IO threads blocking is a well known thing, I suspect not one will notice</p>
+<p>LHN: I believe MM was thinking disabled access to the shared memory from the same thread. But i would suggest that would be practical.</p>
+<p>BNN: WebGL is on the main thread, not having access to shared memory on the main thread would be unfortunate</p>
+<p>LHN: i believe MM proposes workers having access to such things</p>
+<p>LHN: slide (futexWait on the main thread)</p>
+<p>LHN: slide (futuxWaitCallback)</p>
+<p>YK: isn't message channel more compisition then postMessage</p>
+<p>LHN: maybe we should hold off on this then</p>
+<p>LHN: slide (side-channel attack)</p>
+<p>LHN: slide (cache attack)</p>
+<p>YK: i have a general question, other sandboxes allow this, how are we different? iOS sandbox etc. Prior art?</p>
+<p>LHN: Im sure they have thought about this, but not alot of evidence they care about it</p>
+<p>WH: Those things were designed at a time when timing attacks just weren't on the radar. They're all vulnerable to cache timing attack mischief. A large mitigating factor is that evil apps can be reviewed and revoked with at least a modicum of success. Browsers on the other hand must deal with arbitrary evil content.</p>
+<p>DH: We live in a world, were forcing users to essentially install by merely navigating is true. Maybe we can prevent this, bringing us in-line with the iOS or similar sandboxes.</p>
+<p>DH: we have strong signals, we can detect if an API caused the navigation or a user. This may be sufficient.</p>
+<p>LHN: lets push this on the stack for two more slides</p>
+<p>LHN: Existing tech (Flash/Java/PNaCL/NaCL) already demonstrate them.</p>
+<p>MM: I would like to point out on this slide (status quo?) flash, java, nacl/pnacl are dead or dying. The fact that those exists, does not mean we need to put up with this.</p>
+<p>LHN: I'm not saying that, only stating the current state.</p>
+<p>(MM: A clearer statement I wish I said: &quot;if we find the danger is bad enough, browser makers could turn off flash, java, and nacl/pnacl. iPad has already turned off flash. Many have turned off java. No one but chrome runs nacl or pnacl. OTOH, once this goes into javascript, it becomes impossible to turn off. So these prior systems do not commit us so strongly that we can deny that our actions today make things worse.&quot; Some of this was said in the unrecorded verbal discussion, but not as clearly.)</p>
+<p>JFB: Tne google teams (chrome &amp; security team) do not believe this attack vector matters. Timing isn't the attack, rather a mechanism of leak. Non-constant time crypto can be observed. Many ways to observe this state, the google security believes the problem is with non-constant time crypto itself, which should be fixed.</p>
+<p>JFB: there is a large number of existing leaks, which need to be addressed, the timer is only the messanger not the route cause.</p>
+<p>WH: Yes, non-constant time operations are vulnerable. But constant time operations are also vulnerable, as long as they access data-dependent memory locations within a cache shared by the attacker.</p>
+<p>DH: performance.now was throttle for these reasons, was this to mitigate existing leaks, essentially buying more time?</p>
+<p>JFB: I believe it was partly that, and partly because that precision was not required. It's a cost a running close to the metal, that you can observe the metal, preventing that defeats the feature</p>
+<p>JFB: when the performance.now thing happened, it seems low cost to change (likely no-one depended on it) so given that something could be observed it was adjusted.</p>
+<p>JFB: given this is going to happen, there will be high resolution timer. The course of action is to fix the route causes.</p>
+<p>LHN: the current resolution is already sufficient for these issues.</p>
+<p>JFB: with row hammer you can flip bits without atomics, because of hardware issues.</p>
+<p>LHN: I haven't found any evidence of this making it worse.</p>
+<p>YK: it doesn't seem like we are the first to encounter this</p>
+<p>LHN: we may be exposing something, so we should becareful</p>
+<p>YK: it merely feels inappropriate to have panic mode</p>
+<p>LHN: i can agree with this.</p>
+<p>WH: I believe in defence in depth, it is extremely difficult to transition all code that handles secrets to run in constant time with data-invariant memory access patterns. It's likely impossible. This applies to all code running on the machine, not just the browser.</p>
+<p>MM: Other secrets exist, that can't be protected by constant time algorithms. For example, say some code is handed a graph containing secrets, where that code must traverse the graph to process the secrets. Clearly the pattern of memory accesses or their timing is not going to be independent of the topology of the graph. This claim that one can practically write side-channel-free constant time algorithms applies only to very specialized algorithms such as crypto.</p>
+<p>LHN: moving along</p>
+<p>LHN: slide (Mitigations for side-channel)</p>
+<p>YK: existing API/flows exist to prevent driveby</p>
+<p>DH/YK: let me unpack it, when navigating to a web app with an install banner, the JS code can trigger the install banner, but only if the browser believes it is not a drive by</p>
+<p>LHN: slide (complexity)</p>
+<p>LHN: slide (compiler can't introduce races)</p>
+<p>LHN: slide (Shared Memory)</p>
+<p>LHN: slide (User affected &quot;only&quot; by races)</p>
+<p>WH: these are easy to deal with, the quantum garbage is not</p>
+<p>LHN: yes, i believe my next slides will cover</p>
+<p>LHN: slide (Where do we stand?)</p>
+<p>LHN: do we want this?</p>
+<p>MM: let me verify, can we negotiate re: deny shared memory buffer to the main thread?</p>
+<p>LHN: we can talk about it</p>
+<p>LHN: slide (Where do we stand? 2)</p>
+<p>YK: can you do this with PNacL or flash?</p>
+<p>Yes it is possible, but it is most likely quite slow</p>
+<p>YK: stronger point, not only is it going to happen but it has already happened.</p>
+<p>WH: Quantum garbage issue is new</p>
+<p>LHN: We need more direct input, need help fixing it, or finding bugs. Stage 2 has the notion of reviewrs.</p>
+<p>For the review, memory model stuff is very hard. This one may be worth getting outside help</p>
+<p>JFB: we have contacted several and have been getting feedback from industry standards.</p>
+<p>DD: this TC can help best with integration with the language, deferring the memory model issues to the experts seems appropriate.</p>
+<p>LHN: for example WH doesn't want quantom garbage, this is good feedback. The current 2 month cycle isn't a tight enough loop.</p>
+<p>WH: in the last few months, I haven't seen much improvement. Especially with the quantom garbage</p>
+<p>LHN: Until now, it was unclear we wanted to fix that issue.</p>
+<p>WH: I haven't seen enough progress</p>
+<p>JFB: do you feel this would result in churn, or getting the entire proposal nixed.</p>
+<p>WH:  I don't want values that spontaneously change, as that will leak and break all existing invariants. This is a deal-breaker until we have a believable proposal on how to prevent quantum garbage.</p>
+<p>MM: if their was a boundary between code directly interacting with the shared buffers,  and the rest. It could prevent it the quantum garbage from leaking. If on that boundary crossing, we ensure an atomic operation. All values post the operation would be safe</p>
+<p>no</p>
+<p>LHN: if two works are running with shared memory, if X reads a value and Y writes that value. X reads into local var. It is possible to.</p>
+<pre><code>x = mem[a];
+<span class="hljs-built_in">..</span>.
+<span class="hljs-keyword">if</span> (x)
+  <span class="hljs-builtin-name">print</span>(x);
+could <span class="hljs-builtin-name">print</span> 0.
+</code></pre>
+<p>MM: <strong>ooupfh</strong>*</p>
+<p>DH: this isn't a security concern, rather an correctness concern</p>
+<p>MM: it is possible to fix it at the atomic operation level?</p>
+<p>WH: No. This problem is independent of any atomic operations.</p>
+<p>LHN: no</p>
+<ul>
+<li>lots of talking *</li>
+</ul>
+<p>?: What do other languages do?</p>
+<p>WH: C++ makes it undefined — lots of weird things can happen.</p>
+<p>DH: the reason i mentioned Java, is because they have worked very hard, and it is still full of data races. They tried to avoid synthesing pointers to objects out of thin air, that is a seperate. Did they try harder? Did they try to solve this problem?</p>
+<p>WH: Yes, they tried ;-). The first time they got it badly wrong. The second time, after a few years' work, they got it slightly wrong.</p>
+<p>DH: given that they got it wrong several times, are they relatively confident in the current result?</p>
+<p>JFB: Those researchers are worker with us.</p>
+<p>MM: Java i think is a dismal failure in this regard.</p>
+<p>DH: this is not the Java model, this isn't multi threaded objects out the wazoo.</p>
+<p>MM: I agree it isn't the full java problem, I agree we should look to java for lessons. We should be cautious of thinking java is a positive example</p>
+<p>MM: We should learn these lessons.</p>
+<p>YK: I believe what is described is a deal breaker.</p>
+<p>DE: in typed arrays they were initially spec'd outside of the TC, and now the TC and the vendors disagree. Recommendations landing sooner is healthy.</p>
+<p>JFB: C++ hasn't tried to speciy what happens in the race, it merely says its undefined. I don't know if Java tries to specify it</p>
+<p>WH: They tried it, but it was unimplementable, so no implementation was actually doing what the spec stated.</p>
+<p>JFB: I think they worked to ensure the GC did the right thing</p>
+<p>DH: that specific issue seems irrelevant, as we are only dealing with primitive values in an array buffer.</p>
+<p>JFB: We should likely define how far the poisoning spreads.</p>
+<p>DH: MM you argued that multiple nans (which is similar to this) was fine</p>
+<p>MM: I merely argued that it was not fatal, due to nearly all the language features not being able to observe the issue. In general in JavaScript, if you read a value, and re-read it you can count on it being the same. This is true of all values including NaN for old code that does not include the new binary arrays.</p>
+<p>MM: When you (Dave) figured out how to avoid the non-determinism without introducing the other problems my proposal was trying to avoid, I quickly accepted it as superior.</p>
+<p>LHN: no actually their is a distinction, compilers today can optimize this to be single lookup</p>
+<p>LHN: shared memory invalidates that, even in trivial ways</p>
+<p>MM: can this be isolated?</p>
+<p>YK: you can imagine a number leaks</p>
+<p>JFB: we should define that if it leaves the shared buffer, the value no longer change</p>
+<p>MM: could the compiler mark those object, preventing them from polluting.</p>
+<p>LHN: it could</p>
+<p>MM: it seems like we want something the same as volatile</p>
+<p>LHN: I believe the compiler could detect these cases and prevent the issues.</p>
+<p>JFB: yes, the memory model needs to be defined.</p>
+<p>BE: does this help approaching stage 2?</p>
+<p>LHN: I believe we can address the quantum garbage issue as mentioned above, we should take a pool and see if their are other blockers.</p>
+<p>WH: timing attack is still an issue</p>
+<p>YK: it seems like its going to happen (has happened)</p>
+<p>WH: The difference is that, when we get a timing attack security scare in the future, if the timing is done via something like web assembly, the advice to the general public will be to just turn web assembly off. If it's a timing attack enabled via ECMAScript, it will not be practical to tell folks to turn JavaScript off because it's relied on so widely.</p>
+<p>MM: I was prepared say no, we shouldn't move to stage two. I have reluctantly good news for you. I believe that really, shared memory should be kept out of the world of the browser. I don't think TC39 has that power, as BE mentioned. Agreeing to this, I feel like I have blood on my hands, issues will likely happen. Just  like <code>__proto__</code> it was better to define then to let it be implemented in an ad-hoc way. Given the large amount of high value pthread code in the world,  competitive pressures will force all browsers will to do this whether it is safe or not. We should work to ensure it is as good as possible</p>
+<p>M:  we should be sure we work with webasm, and be sure this is something that works well for then.</p>
+<p><em>agreement</em></p>
+<p>MM: it was the potential ability, to stop the potential propagation of quantum garbage. If we can solve it, I am reluctantly OK.</p>
+<p>WH: i would like to also see the quantum garbage issue sorted out before it moves from stage 2</p>
+<p>MM: for me, the quantum garbage problem would be fatal, do I need to block on stage 2?</p>
+<p>DD: you can stop the train at stage 4 still.</p>
+<p>DD: not every stage 2 feature makes it in the spec.</p>
+<p>YK: it is ok to say, I am willing to advance it but not beyond 3 or 4, until this issue has been addressed.</p>
+<p>LHN: Yes it has to be solved, it is rediculous for JS to have this. Even if it means we take a performance hit.</p>
+<p>DH: Helps us hans booms, yous're our only hope.</p>
+<p>... some process discussion...</p>
+<p>LHN: slide (&quot;where do we stand? 3)</p>
+<p>LHN: market place pressure, showing our seriousness is healthy. We are now at the point, were additional reviewers are important, which stage 2 is for.</p>
+<p>MM: let me rephrase, what we believe we are advancing is a proposal that includes removing the quantom garbage propagation</p>
+<p><em>agreement</em></p>
+<p>BT: It is important to advance proposals.</p>
+<p>BE: it will go into it wasm regardless we may aswell own it.</p>
+<p>WH: I go on the record as objecting to advancing to stage 2 on the basis of failure to satisfy the stage 2 prerequisites. The prerequisite &quot;spec quality: all major semantics, syntax and API are covered&quot; is not met at the moment with the race memory model and quantum garbage issues being both major and unaddressed in the current draft. However, I will not block the process.</p>
+<a href="#conclusionresolution-5iii-shared-memory-and-atomics-proposal"><h4 id="conclusionresolution-5iii-shared-memory-and-atomics-proposal">Conclusion/Resolution</h4></a><ul>
+<li>advance to stage 2</li>
+</ul>
+<a href="#weak-references"><h2 id="weak-references">Weak References</h2></a><p>(Brendan Eich)</p>
+<p>BE: quantum death drink, half of something and half of something that is incompatible</p>
+<p>BE: I'm here to discuss weakreferences, some want this but no-one is championing it.</p>
+<p>MM: i do not have the time to champion it, but I will help a champion</p>
+<p>YK: i think the main hazard alan pointed out, was that many people expect it to solve more then it should</p>
+<p>BE: weak references wont be prompt</p>
+<p>YK: you will still need to right cleanup code</p>
+<p>BE: we will decouple them from GC in general, we want to avoid people assuming they can use this for fine tuned GC</p>
+<p>MM: it may never be GC'd</p>
+<p>BE: do we think it is important</p>
+<p>yes</p>
+<p>WH: No, and I mean this as a literal answer to Brendan's question: I don't think it's important, not that I want to actively prevent it.</p>
+<p>BE: why, WH</p>
+<p>WE: We already have WeakMaps (and yes, I know they are different!)</p>
+<p>MM: WeakMaps and weak refs are totaly different. While &quot;WeakMaps&quot; is a better name than &quot;Ephemeron Table&quot;, it has caused endless confusion.</p>
+<p>YK: the fact that you can't self host addEventListener is the issue.</p>
+<p>MM: WM and WR are totally different</p>
+<p>WH: The main reason is that I don't want to make GC visible, which WeakRefs would do. I know you (MM) don't like it visible either. However, I have no antipathy to doing WeakRefs if the committee wants to.</p>
+<p>A: one data point, v8 has finalization in its C++, people report false issues all the time wondering why some things are not destroyed</p>
+<p>YK: removing all destructor logic will cause people grief, this will not replace that.</p>
+<p>BE: the C++ layer has these things, JS is used more often to implement these features. I think this is far game, I think WH is ok with it as long as it doesn't telegraph the GC.</p>
+<p>BE: I think we can do this</p>
+<p>DT: I am interested, but what does that mean</p>
+<p>MM: having worked with DT before, I am overjoyed.</p>
+<p>DT: not currently on TC-39</p>
+<p>MM: the individual who does the work, doesn't need to be on the TC, though it does help. I am happy to be the on-TC-advocate of the proposal if necessary.</p>
+<p>LHN: have you looked at guardians (paper: <a href="http://www.cs.indiana.edu/~dyb/pubs/guardians-pldi93.pdf">http://www.cs.indiana.edu/~dyb/pubs/guardians-pldi93.pdf</a> )</p>
+<p>MM: I am very much interested in looking at it, and preferring the small talk approach. In small talk 80, they added post mortem finalization.</p>
+<p>DT: I preferred the small talk approach</p>
+<p>... some talk describing the above paper ...</p>
+<p>BE: I would love a champion, but this will require cooperation with GC implementers.</p>
+<p>BE: the only practical issue is deans partnership/activity in the meeting.</p>
+<a href="#5viii-async-generators"><h2 id="5viii-async-generators">5.viii Async Generators</h2></a><p>DD: i believe JHD should present</p>
+<a href="#5xiv-objectvalues-objectentries"><h2 id="5xiv-objectvalues-objectentries">5.xiv Object.values Object.entries</h2></a><p>(Jordan Harband)</p>
+<p><a href="https://github.com/tc39/proposal-object-values-entries">https://github.com/tc39/proposal-object-values-entries</a></p>
+<p>JHD: implemented in chakra, flagged in v8, my patch into JSC is not yet patched.</p>
+<p>JHD: as part of core-js and es7-shim.</p>
+<p>DE: i have no issues with the proposal, v8 implementation is flagged. We don't pass test 262 yet. I would like to wait until we implement this in atleast 2 browsers. So I would like to suggest we wait for the next meeting.</p>
+<p>JHD: Browsers providing feedback, re: breakage or performance, should block it yes. I don't see that happening here thought</p>
+<p>BT: this meeting is the last meeting for ES2016, if it doesn't make it here, it gets deferred to the next.</p>
+<p>JHD: more then one feature on ES2016 would be good for PR.</p>
+<p>SP: last time we discussed what is 2 implementations, did we decide what that meant</p>
+<p>DD: no.</p>
+<p>BT: how did the browser do on test 262</p>
+<p>JHD: chakra passed, JSCS when it lands will be.</p>
+<p>BT: i have zero doubt that this is implementable, but the question is from a web compat standpoint?</p>
+<p>JHD: the class of problem is typically for prototype extensions not on Object.</p>
+<p>SP: subclasses of Objects may be affected</p>
+<p>JHD: it doesn't seem like their are many issues.</p>
+<p>YK: should we just wait?</p>
+<p>DD: yes</p>
+<p>JHD: i'll bring it up next meeting again, hopefully it is shipping in one or two browsers and the web compat concern has been resolved.</p>
+<p>BT: do you know what the chrome timeline is, will we have afew weeks of canary?</p>
+<p>DE: ya, afew weeks.</p>
+<p>AR: we should  land it in M50</p>
+<p>YK: People maybe confused with async/await, entries/values introduces potential web compatibility issues, which we haven't vetted yet. Async await, had technical implementation details.</p>
+<a href="#conclusionresolution-5xiv-objectvalues-objectentries"><h4 id="conclusionresolution-5xiv-objectvalues-objectentries">Conclusion/Resolution</h4></a><ul>
+<li>Stay stage 3, wait for 2 shipping browsers to confirm web compat.</li>
+</ul>
+<a href="#stringpadstartpadend-jhd"><h2 id="stringpadstartpadend-jhd"><code>String#padStart</code>/<code>padEnd</code> (JHD)</h2></a><a href="#conclusionresolution-stringpadstartpadend-jhd"><h4 id="conclusionresolution-stringpadstartpadend-jhd">Conclusion/Resolution</h4></a><ul>
+<li>stay stage 3, no further concerns about unicode/graphemes/RTL, Intl will handle that.</li>
+<li>will pursue stage 4 when enough browsers have shipped it to allay web compat concerns</li>
+</ul>
+<a href="#unicode-fix-httpsgithubcomtc39ecma262pull300-de"><h2 id="unicode-fix-httpsgithubcomtc39ecma262pull300-de">Unicode fix: <a href="https://github.com/tc39/ecma262/pull/300">https://github.com/tc39/ecma262/pull/300</a> (DE)</h2></a><p>Discussion about support for old operating systems</p>
+<p>WH: In practice the unicode version doesn't affect ES programs much. New unicode versions mainly add new characters, and those just flow through ES programs regardless of the unicode version. The places where unicode version matters are relatively obscure such as case conversions for non-BMP characters or whether you can use brand new characters in identifiers. The situation will change when we add character classes to RegExps, so we should update the required minimum unicode version of the spec then.</p>
+<p>DE: should we stay at unicode 5.1?</p>
+<p>DD: now, it seems like we should move to 8</p>
+<p>WH: I am worried this will cause too much noise in the test262 tests. I think it is legitmate for implementations to lag if they rely on the OS's support for unicode and don't want to penalize them with test262 failures for being lightweight.</p>
+<p>DD: I think its no less legitimate to implement all of ES2016</p>
+<p>DE: i don't understand your concern WH, it seems like you want to save the implementers some time, but the implementers seem on board.</p>
+<p>WH: [repeats above]</p>
+<p>DE: I don't believe this would be alot of noise</p>
+<p>BT: they way i see us implementing these tests, is to have a single file for this test, having a single test fail is fine, and implementors already have machinery to manage test failures.</p>
+<p>MF: are we doing 8 or 8 or greater?</p>
+<p>BT/DE: 8 or greater</p>
+<a href="#conclusionresolution-unicode-fix-httpsgithubcomtc39ecma262pull300-de"><h4 id="conclusionresolution-unicode-fix-httpsgithubcomtc39ecma262pull300-de">Conclusion/Resolution</h4></a><ul>
+<li>switch to 8 or greater and merge  <a href="https://github.com/tc39/ecma262/pull/300">https://github.com/tc39/ecma262/pull/300</a></li>
+</ul>
+<a href="#objectgetownpropertydescriptors-proposal-email-jhd"><h2 id="objectgetownpropertydescriptors-proposal-email-jhd">Object.getOwnPropertyDescriptors proposal email (JHD)</h2></a><p>JHD: this method instead of producing a single descriptor, this would return multiple. Ultimately being what would be passed to Object.create's second arguments</p>
+<p>JHD: can we advance it to stage 2, and we will firm it all up</p>
+<p>MM: i am happy with stage 2</p>
+<a href="#conclusionresolution-objectgetownpropertydescriptors-proposal-email-jhd"><h4 id="conclusionresolution-objectgetownpropertydescriptors-proposal-email-jhd">Conclusion/Resolution</h4></a><ul>
+<li>advance to stage 2</li>
+</ul>
+<a href="#objectgetownpropertydescriptors-object-null-or-objectprototype-as-prototype"><h2 id="objectgetownpropertydescriptors-object-null-or-objectprototype-as-prototype">Object.getOwnPropertyDescriptors object: null or Object.prototype as [[Prototype]]?</h2></a><p>DD: what is the prototype of the object it returns, null or object?</p>
+<p>YK: does anything in the spec return null prototype?</p>
+<p>SP: Does Object.create second arg us ownProperties</p>
+<p>JHD: yes</p>
+<p>MM: getOwnPropertyDescritpor returns an object with prototype of object.</p>
+<p>DD: I am fine with the prototype being object.prototype</p>
+<a href="#conclusionresolution-objectgetownpropertydescriptors-object-null-or-objectprototype-as-prototype"><h4 id="conclusionresolution-objectgetownpropertydescriptors-object-null-or-objectprototype-as-prototype">Conclusion/Resolution</h4></a><ul>
+<li>prototype stays as object, DD + SP will be reviewers.</li>
+</ul>
+<a href="#5xi-daniel-presenting-simd-changes-since-december"><h2 id="5xi-daniel-presenting-simd-changes-since-december">5.xi Daniel, presenting SIMD changes since December</h2></a><p>link: <a href="https://docs.google.com/presentation/d/1tREM-eLjadnXZogdKXlTWY8XzicXgylI_GlIxxsMNzc/edit">https://docs.google.com/presentation/d/1tREM-eLjadnXZogdKXlTWY8XzicXgylI_GlIxxsMNzc/edit</a></p>
+<p>DE: (walks through slides)</p>
+<p>DD: how do you feel about the test coverage</p>
+<p>DE: test coverage feels pretty good, the tests for the value semantics will need some more work, but largely the test suite is good.</p>
+<p>DE: we will need to do some work on the test harness, test262 would like to generate the tests precedurally</p>
+<p>DE: test harness may want sameValue sameValue0</p>
+<p>DE: do we want SIMD to be optional</p>
+<p>M: I would prefer for it to be optional, i don't see value</p>
+<p>BT: small IoT devices</p>
+<p>BE: the devices in question, have the required hardware</p>
+<p>BE: SIMD is analogous to C++ intrinsics available to mobile apps that web apps compete with and mix with via webviews,</p>
+<p>M: exactly</p>
+<p>BE: which type of device, we want to avoid the kiddie car model</p>
+<p>YK: As a practioner, I would like to have it everywhere. But if these devices don't implement it anyways then...</p>
+<p>BE: what is the pressing small device use-case, the compact profile is test</p>
+<p>DD: we could create a IoT core</p>
+<p>BE: We don't want to go back to the compact profile of 15 - 20 years ago.</p>
+<p>BT: samsung spoke about such devices</p>
+<p>M: a watch</p>
+<p>DD: Whats wrong with a fruit-like watch not supporting the full spec?</p>
+<p>BT: it is hard to not get SIMD</p>
+<p>BE: if there is a device that really cant run this, I question if it will have other features. Those devices tend to be hard targets.</p>
+<p>DH: This is the same issue, we want to maybe only provide specific instructions, feature detection may be needed anyways.</p>
+<p>DH: If it turns out a significant amount of the market can't implement we can reinvestigate.</p>
+<p>JFB: just to be clear on SIMD. it is the bare minimum, and happens to be on most devices, and devectorizing is also not hard. It becomes really hard on much wider SIMD, that will be much more effort.</p>
+<p>DE: it seems like we have a settled position</p>
+<p>DD: thanks for your update</p>
+<p>SP: can we figure out a better strategy of dealing with these problems? We continue to cover the points, and no much process is being made.</p>
+<p>DE: we should look for such devices</p>
+<p>BE: why would we look for devices to cripple the spec</p>
+<p>MM: has someone reached out to the samsung folks</p>
+<p>DH: I believe they implemented something that may support it all: <a href="https://github.com/Samsung/jerryscript">https://github.com/Samsung/jerryscript</a></p>
+<a href="#conclusion-5xi-daniel-presenting-simd-changes-since-december"><h4 id="conclusion-5xi-daniel-presenting-simd-changes-since-december">Conclusion</h4></a><ul>
+<li>successfully delivered the update to the committee</li>
+</ul>
+
+</body>

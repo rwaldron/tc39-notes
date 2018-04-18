@@ -1,0 +1,624 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 29, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-29-2016-meeting-notes"><h1 id="september-29-2016-meeting-notes">September 29, 2016 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (MS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Domenic Denicola (DD), Rick Waldron (RW), John Buchanan (JB), Kevin Gibbons (KG), Peter Jensen (PJ), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Dean Tribble (DT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Daniel Rosenwasser (DRR), Jean-Francis Paradis (JFP), Sathya Gunasekasan (SGN), Juan Dopazo (JDO), Bert Belder (BBR), Shu-yu Guo (SYG), Eric Ferraiuolo (EF), Caridy Patiño (CP), Allen Wirfs-Brock (AWB), Jacob Groundwater (JGR), Adam Klein (AK), István Sebestyén (IS), Tom Van-Cutsem (TVC), Claude Pache (CPE), James Kyle (JK)</p>
+<p>Remote:
+István Sebestyén (IS)</p>
+<hr>
+<a href="#secretariats-report"><h2 id="secretariats-report">Secretariat's Report</h2></a><p>István Sebestyén: The audio is very bad, unfortunately. ... Maybe I better write....
+Regarding the 2017 European meeting tell me when should it be. In March it would probably be cheaper. Also still skiing would be possible after or before the meeting if someone cares for that.
+May will be more expensive. Meeting place suggestion: Montreux - Royal Plaza Hotel.</p>
+<p>Something else: Status of Fast Track to ISO/IEC: The ECMA-414 needs a 2nd Edition before we can move ahead. I think this has been discussed already. On ECMA-404 JSON Fast track, the DIS voting is going on, and will end in Decmber (I think December 8, 2016). Nothing to be done right now.</p>
+<p>No European meeting in 2017, but East coast meeting instead. Host: we find it out....later. The new idea is, just to have every 2 years European meeting. We should rather have also East Coust meetings. Possible hosts: Google, Bocoup....</p>
+<p>In order not to spend too much time in the face to face meetings please address any issues on GitHub where the Secretariats issues are discussed.</p>
+<p>Have a good continuation of the meeting.</p>
+<p>Need new Chairman. Please consider.
+This is so not true. We need to look how the Chair question develops. Currently not clear.</p>
+<a href="#11ivc-consolidating-proxy-integrity-checks"><h2 id="11ivc-consolidating-proxy-integrity-checks">11.iv.c Consolidating Proxy integrity checks,</h2></a><p>(Tom Van Cutsem, Claude Pache)</p>
+<p><a href="https://github.com/claudepache/es-invariants">https://github.com/claudepache/es-invariants</a></p>
+<p>AWB: Background: There was a missing Proxy check, and in response, Tom and Claude have come up with a fix and a nice formalism. This is of interest to a few people, so let's not all talk about this for an hour.</p>
+<ul>
+<li>Propose delegating Tom, Mark and Claude to work on this</li>
+<li>Present summary</li>
+</ul>
+<p>MM: I am confident that</p>
+<p>YK: Q...</p>
+<ul>
+<li>An example of the bug?</li>
+<li>What is the fix?</li>
+<li>Any incompatible changes?</li>
+</ul>
+<p>TVC: <a href="https://github.com/tc39/ecma262/pull/666">https://github.com/tc39/ecma262/pull/666</a> . Proxies are designed to not circumvent invariants of objects, namely non-configurability and non-extensibility. The Proxy will check that the handler returns a value consistent with the target.</p>
+<p><a href="https://github.com/tc39/ecma262/pull/666#issuecomment-239512646">https://github.com/tc39/ecma262/pull/666#issuecomment-239512646</a></p>
+<ul>
+<li><p>If you have a non-configurable property on the target, and the Proxy says it's configurable, it's a violation.</p></li>
+<li><p>If &lt;invariant&gt;</p></li>
+</ul>
+<p>Claude went through and found a few missing invariant checks based on writing these things out exhaustively:</p>
+<ul>
+<li>A proxy is allowed to say a prop is non config, non write, even if only marked non config</li>
+</ul>
+<p>Bug shown:
+<a href="https://github.com/tc39/ecma262/pull/666#issuecomment-239512646">https://github.com/tc39/ecma262/pull/666#issuecomment-239512646</a></p>
+<p>A client of the object can assume x always 2 (non-writable, non-configurable), call defineProp on value, set to 3. The proxy was allowed to change the meta property settings:</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> target = <span class="hljs-built_in">Object</span>.seal({<span class="hljs-attr">x</span>: <span class="hljs-number">2</span>})
+<span class="hljs-keyword">var</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, {
+  getOwnPropertyDescriptor(o, p) { 
+    <span class="hljs-keyword">var</span> desc = <span class="hljs-built_in">Reflect</span>.getOwnPropertyDescriptor(o, p)
+    <span class="hljs-keyword">if</span> (desc &amp;&amp; <span class="hljs-string">'writable'</span> <span class="hljs-keyword">in</span> desc)
+      desc.writable = <span class="hljs-literal">false</span>
+    <span class="hljs-keyword">return</span> desc
+  }
+})
+
+<span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(proxy, <span class="hljs-string">'x'</span>) <span class="hljs-comment">// !!! should throw</span>
+<span class="hljs-comment">// { value: 2, configurable: false, writable: false }</span>
+<span class="hljs-built_in">Object</span>.defineProperty(proxy, <span class="hljs-string">'x'</span>, { <span class="hljs-attr">value</span>: <span class="hljs-number">3</span> })
+<span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(proxy, <span class="hljs-string">'x'</span>) <span class="hljs-comment">// { value: 3 }</span>
+</code></pre>
+<p>MM: Are the other two bugs analogous?</p>
+<p>TVC: The second is the same (the DefineProperty case). The third is a little different--[[Delete]] for a Proxy of a non-extensible object, which will return true without deleting it from the target. You could then see some kind of adding properties on a non-extensible object, putting them back.</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> target = <span class="hljs-built_in">Object</span>.preventExtensions({ <span class="hljs-attr">x</span>: <span class="hljs-number">1</span> })
+<span class="hljs-keyword">var</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, { 
+  deleteProperty() { <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> } 
+})
+
+<span class="hljs-built_in">Object</span>.isExtensible(proxy) <span class="hljs-comment">// false</span>
+<span class="hljs-keyword">delete</span> proxy.x <span class="hljs-comment">// true !!! should throw</span>
+proxy.hasOwnProperty(<span class="hljs-string">'x'</span>) <span class="hljs-comment">// true</span>
+</code></pre>
+<p>MM: If the object is non-extensible, a deletion of a property should succeed if the trap deletes the property from the target, right?</p>
+<p>TVC: Yes</p>
+<p>MM: Consensus?</p>
+<ul>
+<li>As a bug fix that should happen</li>
+<li>Work with implementors to avoid problems</li>
+<li>Identify further constraints</li>
+</ul>
+<p>DE: This should be doable in V8</p>
+<p>YK: Should this break any users?</p>
+<p>MM: I don't know, but it shouldn't break my patterns--all of my code which uses Proxies is for security and is insecure due to these violated invariants, and would benefit from these changes.</p>
+<p>YK: Only way this affects a proxy is author is concerned with extensibility, specifically configurability and writability. If you're trying to virtualize the invariants, then broken.</p>
+<p>Agree that's probably &quot;malware&quot;</p>
+<p>DE: I'd expect that non-security-related code using Proxies is unlikely to care much about extensibility and configurability, so it is similarly unlikely to break.</p>
+<p>AWB: is there a PR with fixes?</p>
+<p>TVC: Yes.</p>
+<p>RW: Confirm? PR for implementation or spec?</p>
+<p>AWB: Spec.</p>
+<p>Yes</p>
+<p>DE: Tests for Test262?</p>
+<ul>
+<li>Will help TVC proceed, getting oriented in test262.</li>
+</ul>
+<p>AWB: Claude's methodology for describing invariants is something we could incorporate into the spec, but this is more than the bug fix.</p>
+<p>MM: likely a separate effort, but completely agree.</p>
+<p>DD: Sounds like a good non-normative change that could be done in collaboration with the editor in a PR, appendix, etc.</p>
+<a href="#conclusionresolution-11ivc-consolidating-proxy-integrity-checks"><h4 id="conclusionresolution-11ivc-consolidating-proxy-integrity-checks">Conclusion/Resolution</h4></a><ul>
+<li>Two parts for TVC/CP as next steps:</li>
+<li>Treat PR 666 as spec bug fix, which needs test262 tests to land</li>
+<li>Treat Claude's new formalism as new content via PR to incorporate into spec</li>
+</ul>
+<a href="#10iib-restspread-properties"><h2 id="10iib-restspread-properties">10.ii.b Rest/Spread Properties</h2></a><p>(Sebastian Markbåge)</p>
+<p><a href="http://sebmarkbage.github.io/ecmascript-rest-spread/">http://sebmarkbage.github.io/ecmascript-rest-spread/</a></p>
+<p>SM: Related new proposal: getters and setters are expected to work more like fields than methods. However, they are defined on the prototype, as well as non-enumerable. Confusing when trying to deprecate a field, make it lazy, etc. However, own enumerable checks required for analogy to existing patterns.</p>
+<pre><code class="language-js"><span class="hljs-comment">// getters are non-own</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+  bar = <span class="hljs-number">123</span>;    
+}    
+
+<span class="hljs-keyword">let</span> data = {
+  ...new Foo()
+}
+
+data.bar <span class="hljs-comment">// 123</span>
+</code></pre>
+<p>Options:
+- Leave things as is, and use Object.defineProperty to make own getters/setters
+- New syntax for own getters/setters
+- Breaking: Change getters/setters in class syntax to be own properties (murmurs from room: No chance!)
+- New <code>field</code> flag in property descriptors</p>
+<p>Generally held rejection of changing getters/setters to be own properties</p>
+<p>RW: Implementors have rejected new fields in property descriptors many times before</p>
+<p>DH: Objects as a dictionary are an anti-pattern, but rest/spread are like FP OO record operations.</p>
+<p>SM: I'd like to figure out how to solve this issue</p>
+<p>WH: The field flag (from Plausible Solutions slide) would be per-property or per-object?</p>
+<p>SM: Proposal can be structured either way</p>
+<p>SM: (did he say going up the prototype chain?)</p>
+<p>JHD: If it's not restricted to own properties, wouldn't it get the getters all the way up the prototype chain? We don't have anything in the language (post-Reflect.enumerate) which goes up the prototype chain like that.</p>
+<p>YK: This sort of issue comes up if you evolve code between bare objects and classes. Getters don't interact well with adding new things in a backwards-compatible way as they don't have enumerability.</p>
+<p>DD: Some getters are fields, treat as such; some aren't and shouldn't be treated as such. (Examples: vector.length; person.fullName) don't think we should have generic mechanism to apply to all getters/setters</p>
+<ul>
+<li>The idea &quot;what are fields of an object&quot;?</li>
+<li>What are the iterated values of an object?</li>
+<li>Should there be a protocol to determine keys and values for spread?</li>
+</ul>
+<p>WH: We have a protocol: enumerable, but it doesn't quite match the concept of a field.</p>
+<p>DD: need a more general protocol where you can run arbitrary code</p>
+<p>MM: clarify: the details of no-change position?</p>
+<ul>
+<li>Things considered a field: enumerable own, a data, an accessor?</li>
+</ul>
+<p>JHD: Exactly as object.assign works now</p>
+<p>MM: Adding a field to prop descriptors is an extremely heavy weight thing and needs an earth shattering reason to consider. &quot;world needs to end&quot; importance. This is not that.</p>
+<ul>
+<li>Most compelling precedent for &quot;no change&quot;: JSON and Object.assign. We got it right when we said &quot;enumerable own&quot;</li>
+</ul>
+<p>JM: Did you discuss making getters not own and making enumerable spread--</p>
+<p>SM: I don't think that's a good idea</p>
+<p>AWB: I don't think there's an easy fix here. Objects have two roles:</p>
+<ul>
+<li><p>as tuples (value oriented abstraction, named values)</p></li>
+<li><p>instances of things you can think of as some kind of classes (behavioral)</p></li>
+<li><p>getters are <em>mostly</em> on behavorial side; you could put a getter on an instance, but atypical</p></li>
+</ul>
+<p>Normal usage is one of those two worlds. Proposal: Remove the own restriction</p>
+<p>EFT: Some getters you want to be shared, some not.</p>
+<ul>
+<li>Augment definition syntax?</li>
+</ul>
+<p>DD: Decorators will address this</p>
+<p>YK: Enumerable own is important because</p>
+<ul>
+<li>in ES3, common to override prototype properties</li>
+<li>ES3 ad-hoc mixin object chains were note commonly used as record abstractions; for-in was used in these patterns, hence enumerability</li>
+</ul>
+<p>...That has changed.</p>
+<ul>
+<li>Now, class patterns increasingly used to express record abstractions</li>
+<li>important that the cowpath does not break</li>
+<li>enumerable-own, historically a hack</li>
+<li>important that hack doesn't break</li>
+<li>in this case, that hack predates getters (RW: not sure this is true)</li>
+</ul>
+<p>MM: Given this precedent, anything nearby that can benefit is an argument for doing something analogous</p>
+<p>YK: To clarify, from jquery's perspective, this stuff is more of a feature for dictionaries, with arbitrary keys. The mismatch is that ... wants to feel like a record feature.</p>
+<p>MM: (@YK) can you write a decorator to make own?</p>
+<p>YK: Anytime you make a prototype thing, you add cost.</p>
+<p>MM: cases where you want g/s to show up as own property: make it own. The overhead of per-instance g/s to have it be own, seems like fair cost</p>
+<p>EFT: I might disagree, depending how common the pattern is. There is real memory overhead.</p>
+<p>AWB: proposing to possibly eliminate own restriction, but only for inherited enumerable getters</p>
+<p>Rest/spread would grab both:</p>
+<ul>
+<li>own properties</li>
+<li>inherited, enumerable accessor properties that have a <code>get</code></li>
+</ul>
+<p>AK: Wouldn't work well with the DOM; everything in WebIDL is an enumerable getter.</p>
+<p>SM: Syntax?</p>
+<p>AWB: No, use Object.defineProperty or a decorator</p>
+<p>MM: Theory that there is no overhead for the pattern of using own getters — can reuse same getter function objects on multiple instances</p>
+<p>EFT: It seems like there would be some overhead still</p>
+<ul>
+<li>SM proposal stay at no change</li>
+<li>given sharing of g/s is minimal enough to use as a way to work around book keeping</li>
+</ul>
+<p>JHD: This feature is syntax for a pattern that's been used for years across code bases: Object.assign. Because of this weight, we should strongly consider the no change option. APIs/ecosystem patterns haven't proven out in the ecosystem before codifying it in the language.</p>
+<p>DD: We should make sure that new syntax solves something new and important. If we're not serving the record programming model, we shouldn't bother with new syntax and just go back to using Object.assign.</p>
+<p>SM: I agree that the record use case is a different mental model than the dictionary use case. But we do have a solution, which is for library authors to define own getters.</p>
+<p>SM: So, I'd like to go to Stage 3 with the current &quot;no change&quot; proposal.</p>
+<p>DD: Suggestion: We could add a protocol later, and make this feature retroactively tie into that.</p>
+<p>YK: the reason this is coming up is that if we ship this with the specced semantics, we close the door on something like Allen's proposal of changing to enumerable not-own. I would like to know whether per-instance getters introduce new performance problems.</p>
+<p>Implementers: There will be measurable overhead, but it might not be all that expensive</p>
+<p>DH: This proposal always creates Object instances; for record programming, we may want to, in the future, add a protocol for making instances of other superclasses. Not blocking, but good to look into in the future.</p>
+<p>SM: We could also do that for Arrays.</p>
+<a href="#conclusionresolution-10iib-restspread-properties"><h4 id="conclusionresolution-10iib-restspread-properties">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3, currently with the &quot;no change&quot; option from the Plausible Solutions slide</li>
+<li>We could add a new feature in the future that overrides the default behavior, but that does not block this in any way</li>
+</ul>
+<a href="#10vb-dateutc-when-called-with-one-argument"><h2 id="10vb-dateutc-when-called-with-one-argument">10.v.b Date.UTC when called with one argument</h2></a><p>(Brian Terlson)</p>
+<p><a href="https://github.com/tc39/ecma262/pull/642">https://github.com/tc39/ecma262/pull/642</a></p>
+<p>BT: Date.UTC with one argument</p>
+<p>Last meeting:</p>
+<ul>
+<li>Date.UTC() =&gt; nan</li>
+<li>Date.UTC(_) =&gt; Implementation-defined; Chakra had different behavior</li>
+</ul>
+<p>AWB: The only two reasonable results would be to give the first instant of the year (Chakra behavior) or NaN (other implementations)</p>
+<p>Proposing: defaulting all subsequent arguments to 0 when called with only one argument</p>
+<p>MM: What's the bug we'd be fixing here by returning an error?</p>
+<p>AWB: Trying to parallel Date constructor (historic)</p>
+<p>BT: Let's go for the functionality and make it work with just a year</p>
+<a href="#conclusionresolution-10vb-dateutc-when-called-with-one-argument"><h4 id="conclusionresolution-10vb-dateutc-when-called-with-one-argument">Conclusion/Resolution</h4></a><ul>
+<li>Date.UTC(year) defaults all the other parameters to 1 or 0 (i.e. returns 00:00:00 on January 1st of that year)</li>
+</ul>
+<a href="#12ia-remove-argumentscaller"><h2 id="12ia-remove-argumentscaller">12.i.a Remove arguments.caller</h2></a><p><a href="https://github.com/tc39/ecma262/pull/689">https://github.com/tc39/ecma262/pull/689</a></p>
+<p>BT: The poisoning is pointless now, we won, let's remove it</p>
+<a href="#conclusionresolution-12ia-remove-argumentscaller"><h4 id="conclusionresolution-12ia-remove-argumentscaller">Conclusion/Resolution</h4></a><ul>
+<li>Consensus!</li>
+</ul>
+<a href="#revisit-ecma414-2nd-edition"><h2 id="revisit-ecma414-2nd-edition">Revisit ECMA414, 2nd Edition</h2></a><p>AWB: (recapping ECMA414 2nd Edition)</p>
+<p>Motion to approve ECMA414, 2nd Edition</p>
+<p>(Requires formal vote)</p>
+<p>Bocoup: Yes
+jQuery: yes
+Apple: Yes
+Microsoft: Yes
+PayPal: Yes
+Mozilla: Yes
+Google: Yes
+Yahoo: Yes
+Salesforce: Yes
+Shape Security: Yes
+Facebook: Yes
+Godaddy: Yes
+IBM: Yes
+Netflix: Yes
+Tilde: Yes
+Airbnb: Yes</p>
+<p>Next: ok to delegate TR104 updating to AWB and LBR?</p>
+<p>YES</p>
+<a href="#conclusionresolution-revisit-ecma414-2nd-edition"><h4 id="conclusionresolution-revisit-ecma414-2nd-edition">Conclusion/Resolution</h4></a><ul>
+<li>ECMA414, 2nd Edition approved, send to Ecma/GA</li>
+<li>TR104 updates to be forwarded to Ecma/GA</li>
+</ul>
+<a href="#11ivb-cancelable-promises"><h2 id="11ivb-cancelable-promises">11.iv.b Cancelable Promises</h2></a><p>(Domenic Denicola)</p>
+<p><a href="https://github.com/tc39/proposal-cancelable-promises">https://github.com/tc39/proposal-cancelable-promises</a></p>
+<p>Status: issues.</p>
+<p>DD: I don't like mics</p>
+<p>MS: What's wrong with Mikes?</p>
+<p>DD: The feedback made it in the new spec:</p>
+<ul>
+<li>had await.cancelToken idea. now fully specified. Allows the 'race' convenience semantics</li>
+<li>method: Promise.withCancelToken as a convenience method for adapting old APIs (changed from Promise.cancelable =&gt; Promise.withCancelToken) -- was this the same thing?</li>
+<li><a href="https://github.com/tc39/proposal-cancelable-promises/blob/master/Cancel%20Tokens.md">https://github.com/tc39/proposal-cancelable-promises/blob/master/Cancel%20Tokens.md</a></li>
+<li>try/else is the new try/catch which doesn't catch cancellations. For future compatibility with catch guards, we can't use a new contextual keyword</li>
+<li><a href="https://github.com/tc39/proposal-cancelable-promises/blob/master/Why%20Else.md">https://github.com/tc39/proposal-cancelable-promises/blob/master/Why%20Else.md</a></li>
+</ul>
+<p>WH: explain issues with catch guard?</p>
+<p>DD:</p>
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
+  f();
+} except (e match <span class="hljs-built_in">SyntaxError</span>) {
+  b();
+}
+except(e);
+
+{
+  c();
+}
+</code></pre>
+<p>WH: Still ambiguous with <code>else</code> and unbraced <code>if</code>, multi-else changes existing behaviour after you introduce the one-else variant</p>
+<p>DD: This is the same as the existing unbraced <code>if</code>/<code>else</code> ambiguity, and doesn't extend it further.</p>
+<p>KG: An <code>if</code> whose body is a <code>try</code> followed by an <code>else</code>?</p>
+<p>DD: Cannot do that</p>
+<p>MM: Problem: going into a similar area of <code>then</code>, but with different meaning? When you see <code>then/else</code>...</p>
+<ul>
+<li>Believe <code>then/else</code> is damaging</li>
+</ul>
+<p>AWB: These are all failure conditions? Why not <code>fail</code>?</p>
+<p>DD: Ambiguity with <code>match</code></p>
+<p>YK: <code>else</code> makes sense semantically</p>
+<p>DD: Last time, no stage 2 because</p>
+<ul>
+<li>want to use cancel tokens as a general cancellation system, including Observables, which otherwise have an <code>unsubscribe</code> method and <code>closed</code> property</li>
+<li>A polyfill implementation exposed issues</li>
+</ul>
+<p><a href="https://github.com/tc39/proposal-cancelable-promises/issues/57">https://github.com/tc39/proposal-cancelable-promises/issues/57</a></p>
+<p>Propagation is asynchronous, but needs to be synchronous for Observables.</p>
+<p>Proposed way forward: CancelToken.race has their arguments refer to their return value, so they can push the results out, rather than waiting for the Promise.</p>
+<p>When using CancelTokens more manually than race:
+- Naive solution: subscribe, and then check and bail out based on flag. May be inefficient
+- Add unsubscribe method to Promises-- .unThen()</p>
+<p>JHN: Tradeoff between complexity of CancelTokens and usability in more things such as Observables</p>
+<p>YK: Cancelation tokens have large scope than Promise?</p>
+<p>DD: Yes: streams, observables, promises (and so on)</p>
+<p>MM: Notification only delivered as <code>then</code> callbacks are, in a later turn?</p>
+<p>BBR: So the cancelation is more an &quot;intent&quot;?</p>
+<ul>
+<li><code>.reason</code> much be synchronously updated</li>
+<li>Complexity comes from dependency between Observables and Cancellation</li>
+</ul>
+<p>MM: the requirement that the notification be async isn't fatal to your design goals?</p>
+<p>No.</p>
+<p>DT: motivation for the token specified by promise underneath?</p>
+<p>DD: Public api is a <code>.promise</code> getter</p>
+<p>DT: Any reason why should be? or <code>.then</code> on a cancel token?</p>
+<p>DD: Then creating an ad hoc api for tokens? No, we have something for that: Promises</p>
+<p>DE: Some in Web standards are considering ad-hoc thenables as more ergonomic</p>
+<p>DD: This is bad, and just for web-compat reasons</p>
+<p>DT: Is it the right thing to do unThen?</p>
+<p>JH: Avoiding closures is important for some userspace Observables libraries</p>
+<p>JHD: What happens to the Promise when you unThen them?</p>
+<p>MM: Maybe cancellable registration should not be based on <code>.then</code>? <code>done</code> does not have an output Promise</p>
+<p>DD: No, don't want new unsubscription type.</p>
+<p>JH: Lots of paths seem to end up back at this</p>
+<p>MM: Could we make this work, if it's simple?</p>
+<p>DD: It'd be bad to add two things</p>
+<p>AK: Wouldn't unThen be another way to unsubscribe (aside from CancelTokens)?</p>
+<p>DD: Yes, we do have this circular dependency</p>
+<p>MM: <code>.done()</code>?</p>
+<p>DD: That has other problems, e.g., what if you throw?</p>
+<p>WH: <code>else</code> and <code>except</code> have the same issue: can have an <code>else</code> in an <code>if, try, else, else</code></p>
+<p>WH: The current proposal claims that <code>else</code> works better than <code>except</code> because supposedly <code>else</code> allows for future extensibility to multiple <code>else</code> clauses. This is incorrect.</p>
+<p>WH: The current proposal allows at most one else-type clause after a try. That works. It works regardless of whether the keyword is <code>else</code> or <code>except</code>.</p>
+<p>However, the proposal claims that <code>else</code> is better because it then allows for a future v2 proposal to introduce multiple else-type clauses after a try. That's not the case because v2 would incompatibly change the meaning of</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (...)
+<span class="hljs-keyword">try</span>
+{...}
+<span class="hljs-keyword">else</span> (e)
+{...}
+<span class="hljs-keyword">else</span> (e)
+{...}
+</code></pre>
+<p>DD: Let's follow up on GitHub with details</p>
+<a href="#conclusionresolution-11ivb-cancelable-promises"><h4 id="conclusionresolution-11ivb-cancelable-promises">Conclusion/Resolution</h4></a><ul>
+<li>Not proposed for Stage 2 at this point; too many unsolved problems.</li>
+</ul>
+<a href="#11iiic-observables"><h2 id="11iiic-observables">11.iii.c Observables</h2></a><p>(Jafar Husain)</p>
+<p><a href="https://docs.google.com/presentation/d/18KkpDm0Z-lGnUFxcK_ZJwSKCSalnBqjhGN8W--PyT88/edit#slide=id.p">https://docs.google.com/presentation/d/18KkpDm0Z-lGnUFxcK_ZJwSKCSalnBqjhGN8W--PyT88/edit#slide=id.p</a></p>
+<p>JH: Previously, <code>.subscribe()</code> would get set up using a <code>.start()</code> method which starts delivering values with the Observable once it's already set up.</p>
+<p>Having the consumer pass in the CancelToken is better because the consumer doesn't need to wait for the producer to wait to deliver the subscription.</p>
+<p>DT/MM: Ability to observe the cancelation</p>
+<p>JH:</p>
+<ul>
+<li>not designed to be dist system safe, just a primitive to design other useful classes on (EventTarget, EventEmitter)</li>
+<li>Schedules some things synchronously when it makes sense, just like EventTarget, though other times things are asynchronous (&quot;releasing zalgo&quot;). There's no real benefit to waiting asynchronously for a map, etc.</li>
+<li>observable</li>
+</ul>
+<pre><code class="language-js">
+<span class="hljs-comment">// Calling</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">zalgo</span>(<span class="hljs-params">callback</span>) </span>{
+  <span class="hljs-keyword">if</span> (someConditionIsSatifiedNow) {
+    callback();    
+  } <span class="hljs-keyword">else</span> {
+    doTheTask();
+    process.nextTick(<span class="hljs-function"><span class="hljs-params">_</span> =&gt;</span> callback());
+  }
+}
+
+zalgo(<span class="hljs-function"><span class="hljs-params">_</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"not clear if this will be invoked asynchronously or synchronously"</span>));
+</code></pre>
+<p>DD: Observables, Promises and CancelTokens compose well--Observables can have APIs that return Promises, as I presented at TPAC in this example</p>
+<p>DE: Is there a code sample which takes advantage of the synchronicity of observables here?</p>
+<p>JH: The performance benefits implicitly come up in this code</p>
+<p>DE: Well, if it were OK, then Promises could also be made faster by &quot;releasing Zalgo&quot; and not delegating everything to the microtask queue</p>
+<p>JH: Observables encourage a more functional programming style, and Promises encourage a more imperative programming style, so it's OK to be synchronous to observables.</p>
+<p>DD: if Observables are going to cover EventTarget, then must be sync</p>
+<p>MM: Do you need anything else from cancel tokens for Observables?</p>
+<p>JH: We only need the 'race' change to make the cancellations synchronous</p>
+<p>DD: Then I don't need unThen and could go to Stage 2 for CancelTokens!</p>
+<p>MM: Would this paint us into a corner, if we want to add unThen later?</p>
+<p>(Discussion about polyfills, staging, getting people to use it, etc)</p>
+<a href="#conclusionresolution-11iiic-observables"><h4 id="conclusionresolution-11iiic-observables">Conclusion/Resolution</h4></a><ul>
+<li>Not advancing, pushing the pause button for now</li>
+</ul>
+<a href="#11iid-sigil-swap-decorators--private-fields"><h2 id="11iid-sigil-swap-decorators--private-fields">11.ii.d Sigil swap: decorators &lt;-&gt; private fields</h2></a><p>(Jordan Harband)</p>
+<p>JHD: More sense to...</p>
+<p>Propose:</p>
+<ul>
+<li>@ for private</li>
+<li><a href="#for-decorator"><h1 id="for-decorator">for decorator</h1></a></li>
+</ul>
+<p>BBR: Node.js looks for <code>#</code> on first line. A decorator could be at top level, but private could not</p>
+<p>(Should key on <code>#!</code> anyway)</p>
+<pre><code class="language-js"># IdentifierName 
+</code></pre>
+<p>EFT: All other languages use @ for annotation/decorator?</p>
+<p>Generally, this is not the only cultural motivation for design decisions.</p>
+<p>DE: As private field champion, I am neutral.</p>
+<p>Kevin is strongly in favor of the sigil swap.</p>
+<ul>
+<li><code>@</code> is a very intuitive way to signify private state.</li>
+</ul>
+<p>DRR: Unclear why <code>@</code> for private is more preferrable to <code>#</code>?</p>
+<p>RW: Allen's <code>@names</code> effectively reserved this years ago, because we always wanted to revisit. Evolved into privates today</p>
+<p>...Moving to discussion about code that exists</p>
+<ul>
+<li>Angular</li>
+<li>TypeScript</li>
+</ul>
+<p>JHD: There will be code that requires no modification and code that requires <em>some</em>.</p>
+<p>AWB: There is no code that doesn't go through <em>SOME</em> kind of transpiler. Its not like web code that cannot be broken. Transpilers can handle the code generation.</p>
+<p>RW: (example where we changed exponentiation operator syntax and it was just a version bump)</p>
+<p>JHD: codemods could be used to swap the sigils; the community is new to this</p>
+<p>JK: Decorators are not part of a preset, they are part of a legacy-labeled third party preset. We have explicitly told Babel users that they will need to install something new when this comes up. We will not actually have to do a a major version change when this comes up. Specifically for changes that might occur</p>
+<p>YK: Our changes for Stage 2 were intended to allow just decorator authors to have to upgrade, and not decorator users. These things can be considered stable. Downstream consumers will not break</p>
+<p>JHD: Plugin option? Legacy sigil or not?</p>
+<p>BT: Angular and TypeScript add that option? It's not a solution.</p>
+<p>JK/YK: (discussion re: paths forward)</p>
+<p>Updrade as they write, without change.</p>
+<p>DRR: Code that wont go through transition phase. Concerns about docs and blogs with old syntax.</p>
+<p>RW: We have lived through many things changing in the ES6 process, for example generator expressions being removed</p>
+<p>JHD: And don't you have compat issues between TypeScript and CommonJS and Babel?</p>
+<p>DRR: Yes, but that's really painful and you want to avoid it</p>
+<p>JHD: If you're using a non-standard syntax, you shouldn't have expectations that it shouldn't change.</p>
+<p>YK: Generally, we should be able to make changes, but we should also be able to weigh existing users vs rational arguments</p>
+<p>BFS: JSDoc, etc use the @sigil to document something about the following declaration. If it also represents private state, I would find it confusing personally.</p>
+<p>JHD: But doc comments are entirely different from runtime decorator semantics</p>
+<p>RW: JSDoc is outside of our committee; we can't let them set the rules</p>
+<p>DRR: But there is motivation to look at what exists in programming culture</p>
+<p>DT: It'd actually be great to have a different syntax separating the comment and code syntaxes</p>
+<p>EFT: Confusion about what appears in comments vs what appears in code?</p>
+<p>No. But some think it matters what exists in the ecosystem.</p>
+<p>AWB: As a sigil for identifying special kinds of variables, like private state, @ is much more common in terms of number of languages. # as hashtag is a cultural reference, but it's completely separate from @--each of these sigils have context where they evoke something in people.</p>
+<p>JHD: This will be there for a long time; appeal to the long tail of future programmers, where &quot;hash tag&quot; is something of a &quot;categorization&quot;, decorators deal with a &quot;category&quot; of things.</p>
+<p>DH: Early adopters through transpilers give us very strong feedback and are great allies in our committee who it is important to value. This raises the bar for backwards-incompatible changes.</p>
+<p>JHD: Next versions of Babel, TypeScript could easily produce a code-mod to upgrade.</p>
+<p>DE: decorators will have to be updated between stage 1 and stage 2, but to represent the Angular team, their interest is that users of decorators don't have to change, with the expectation that most programs will not implement their own decorators but rather use decorators from the framework, which will be the only one who has to do the transition. It's not hard to imagine that it will be difficult for some build environments to update themselves.</p>
+<p>Discussion/debate of detriment of the swap. Claim: Users call all sorts of different things '.js' and don't document which build flags they need.</p>
+<p>JK: If Babel or other transpilers are blocking TC39 from work that it wants to do, then that's not what we're going for, and we should change the ecosystem on our end.</p>
+<p>AWB: If we can't make changes like this, it calls the stage process into question.</p>
+<p>YK: We can make this change, the question is: should we make this change?</p>
+<p>KG: Rough estimate of the number of people who would have to do non-trivial change?</p>
+<p>BT: Tens of thousands?</p>
+<p>KG: Compared to tens of millions later?</p>
+<p>DH: Fails to account for the trust relationship</p>
+<p>BT: On the one hand: real cost for developers today.</p>
+<p>AWB/JHD: Real cost for teaching for the next 50 years</p>
+<p>WH: # as Twitter hash-tag is not going to be around for the next 50 years</p>
+<p>JHD: multiple networks have adopted the syntax, so i think it will mean &quot;hashtag&quot; for far longer than that</p>
+<p>RW: We're setting a bad precedent in allowing Babel and TypeScript code to determine the course of ES evolution</p>
+<p>DRR: This is not the intention of TypeScript,</p>
+<a href="#conclusionresolution-11iid-sigil-swap-decorators--private-fields"><h4 id="conclusionresolution-11iid-sigil-swap-decorators--private-fields">Conclusion/Resolution</h4></a><ul>
+<li>No sigil swap at this time; seems difficult to achieve consensus on such a swap in the future.</li>
+<li>Could revisit later, but it would require a strong argument beyond this.</li>
+<li>Features that are not stabilized are subject to change in general and should not be expected to be stable at all, especially if they are at Stage 1.</li>
+</ul>
+<a href="#11iiib-async-iteration"><h2 id="11iiib-async-iteration">11.iii.b Async Iteration</h2></a><p>(Domenic Denicola)</p>
+<p><a href="https://github.com/tc39/proposal-async-iteration">https://github.com/tc39/proposal-async-iteration</a></p>
+<p>DD: I took this over from Kevin Smith and resolved a number of issues in PRs. Main issue: where does unwrapping happen?</p>
+<p>DD: Conclusion: The contract is for .next() to return a Promise of an IterationResult, not a Promise of an IterationResult of a Promise, by:</p>
+<ul>
+<li>The @@asyncIterator's .next() .value is not a Promise</li>
+<li>So, for example, %IteratorPrototype%[Symbol.asyncIterator] will do the unwrapping</li>
+<li>Previously, yield Promise.resolve(1) from within an async iterator, creates the badly behaved iterator</li>
+<li>Now, the async generator object's .next() method does the unwrapping for you. Observable case:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> asyncGen = <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">yield</span> delay(<span class="hljs-number">100</span>);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-number">1</span>);
+}
+</code></pre>
+<p>Then the print would happen right after asyncGen.next(), rather than waiting for delay to end, but the Promise that next returns would only be fulfilled when the delay is done.</p>
+<p>MM: Harm in having the <code>for await loop</code> do the double await?</p>
+<ul>
+<li>I know the benefit, but what is the harm?</li>
+</ul>
+<p>DE: From performance perspective: becomes a triple await. Expect most to use built in either async iterator or an async generator, both of which will follow the contract anyway.</p>
+<p>DD: Sync iterators have a contract which is not enforced either</p>
+<p>MM: If write something that acts like a badly behaved iterator, what ways can I &quot;surprise&quot; your for loop</p>
+<p>DD: You could keep returning values after you return a <code>done: true</code></p>
+<p>DE: fail to clean up in your return method</p>
+<p>YK: Hard to write correct, manual version of this.</p>
+<p>MM: other than performance argument, don't see another correctness downside?</p>
+<p>YK: The more you clean up after people who get manually written iterators wrong, the more likely they are to get them wrong and not notice.</p>
+<p>MM: Good point.</p>
+<p>DE: small changes after my review, havent looked at them yet.</p>
+<p>BT: Nothing missing, no major concerns</p>
+<a href="#conclusionresolution-11iiib-async-iteration"><h4 id="conclusionresolution-11iiib-async-iteration">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+</ul>
+<a href="#11iic-set-map-weakset-and-weakmap-of-and-from-methods"><h2 id="11iic-set-map-weakset-and-weakmap-of-and-from-methods">11.ii.c Set, Map, WeakSet, and WeakMap: of and from methods</h2></a><p>(Leo Balter)</p>
+<p><a href="https://github.com/leobalter/proposal-setmap-offrom">https://github.com/leobalter/proposal-setmap-offrom</a></p>
+<p>LBR: Adding <code>of</code> and <code>from</code> to <code>Map</code>, <code>Set</code>, <code>WeakMap</code> &amp; <code>WeakSet</code></p>
+<ul>
+<li>Provide collection creation symmetry with Array</li>
+</ul>
+<p>MM: What value does it add over just constructor</p>
+<p>AWB: The constructor for these all take a single argument: iterable. if you what you want to do is create, eg. a singleton set and want to be able to accommodate any value passed to you, eg. a string to set. Only safe way is to put it into square brackets.</p>
+<p>DD: Versus the constructor, I think <code>of</code> saves square brackets, and <code>from</code> is completely redundant.</p>
+<p>AWB: it's not about saving characters, it's about following a convention that's consistent with Arrays.</p>
+<p>DE: TypedArrays have <code>of</code> and <code>from</code></p>
+<p>AWB: And we added that to make a general convention</p>
+<p>YK: We have to teach people something about the idiom of the constructor. Given that we already have new Set, it would seem to make sense to use here.</p>
+<p>EFT: What is the cost of adding consistent APIs across all collection classes?</p>
+<p>DD: Not deprecating the constructor</p>
+<p>EFT: don't need to deprecate</p>
+<p>KG: insane not to provide a way to make the collection without forcing the brackets</p>
+<p>AK: Other evidence from the wild about demand? Is there a widely used library for this?</p>
+<p>LBR: When working on test262 tests, we needed many tests for the constructor taking iterables of iterables.</p>
+<p>JH: Any polymorphism involved?</p>
+<p>AWB: Subclassing or .call'ing this on other constructors would encounter this issue, yes; you'd need to call <code>.add()</code> or something.</p>
+<ul>
+<li>Inconsistencies between which collection classes have this API and which do not</li>
+</ul>
+<p>MM: A clean API surface is not necessarily a larger API surface.</p>
+<p>EFT: Without these, I would think that this would result in user &quot;wat&quot;</p>
+<p>YK: A lot of this could be avoided by giving better error messages in our implementations.</p>
+<p>DH: I don't like having brackets, but I also want to have new, which is nice, which overrides it.</p>
+<p>AWB: Our API taking an iterable for the constructors is actually a good choice for a clean, general constructor.</p>
+<p>JH: of and from can be used to create polymorphic apis</p>
+<p>[More raucous debate]</p>
+<p>MM: Don't want this in the language, but don't object to stage 1.</p>
+<a href="#conclusionresolution-11iic-set-map-weakset-and-weakmap-of-and-from-methods"><h4 id="conclusionresolution-11iic-set-map-weakset-and-weakmap-of-and-from-methods">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+</ul>
+<a href="#arrow-generator-revisit"><h2 id="arrow-generator-revisit">Arrow Generator Revisit</h2></a><p>(Domenic Denicola for Brendan Eich)</p>
+<p>?</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> f = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> * {}
+</code></pre>
+<p>DH: Argument against: We're probably not going to make <code>class *</code>, so why do need to make arrow *?</p>
+<ul>
+<li>We don't say that any two things that have syntax have to have matching syntax</li>
+</ul>
+<p>WH: What would <code>class *</code> even mean?</p>
+<p>widest class of strong idioms to support?</p>
+<p>DD: Need to go back and get more evidence.</p>
+<a href="#conclusionresolution-arrow-generator-revisit"><h4 id="conclusionresolution-arrow-generator-revisit">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>Please look into use cases</li>
+<li>Discuss syntax details and analogies further.</li>
+</ul>
+<a href="#11ivc-built-in-modules---lets-pick-a-syntax"><h2 id="11ivc-built-in-modules---lets-pick-a-syntax">11.iv.c Built-in Modules - Let's Pick a Syntax</h2></a><p>(Brian Terlson)</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> DateTime <span class="hljs-keyword">from</span> <span class="hljs-string">"_?_DateTime"</span>;
+</code></pre>
+<p>BT: There has been desire for inclusion of built-in modules since dawn of modules. Safe place to introduce new things.</p>
+<ul>
+<li>Working with moment.js to fix date things. ~10 new types.</li>
+<li>Things like DateTime</li>
+</ul>
+<p>BT: Asking... do we want built-in modules?</p>
+<p>DD: We should not move to world where features added after 2018 are in modules. Leave modules to user space.</p>
+<p>DH: Strong point, not specifically in agreement.</p>
+<p>EFT: We could make duplicate modules for existing built-in things, and maybe eventually we'll take things out of the global namespace in 10 years</p>
+<ul>
+<li>Long term cleanup? (Probably not)</li>
+</ul>
+<p>DH: One view of the future is that we wont have an enormous library, expanded without bound. Maybe individual ecosystems will introduce standard built-ins</p>
+<p>AWB: explicitly in the charter to explore standard libraries</p>
+<p>DH: Limit to how fast and how much</p>
+<p>MM: Very strongly in favor of built-in modules. Issues to be aware of and address:</p>
+<ul>
+<li>global namespaces pollution way past breaking point</li>
+<li>any built-in module needs:</li>
+<li>Polyfilling must be &quot;what becomes&quot; the standard set of modules</li>
+<li>Primordials all have the property that you can freeze and make immutable</li>
+<li>Need polyfills for built-in modules to be able to do this</li>
+</ul>
+<p>BT: Polyfills are just the start--testing hooks, etc</p>
+<p>DRR: Feature testing--you can use import() and see what kind of Promise you got out of that?</p>
+<p>DH: must have a registry API to reflect on modules</p>
+<p>WH: Underscoring polyfillability requirement</p>
+<p>WH: Also, you'd fall off a cliff when trying to use one of these built-ins from a traditional, non-module, imperative script. You'd need to convert everything for modules, since import() is asynchronous and harder to use from scripts</p>
+<p>JHD: You need to patch it in a polyfill before anyone can use it, not necessarily synchronously</p>
+<p>WH: And you'd have to await before anyone can use the thing from an async module load. It would be annoying if, for example, Date or Math had been modules that worked that way.</p>
+<p>YK: It's useful to be able to see what's already present, as you can with properties of the global object</p>
+<p>DT: We need to do this in a structured way with respect to naming, so people don't fall on landmines, to avoid colliding with user code.</p>
+<p>CP: Some Node users like to have things in modules, even when just wrapping existing globals.</p>
+<p>DD: What is the motivation?</p>
+<p>BBR: This is a matter of consistency. It's fine if TC39 adds some things to the global object, so will it get &quot;full&quot;? It would be nice to have a system way of loading libraries.</p>
+<p>JHD: Polyfillability is important, and it leads to the same collision issue with the same bad global namespace.</p>
+<p>DD:</p>
+<ul>
+<li>Fundamental tension between polyfilling/collisions vs reserving/no-polyfills.</li>
+<li>Anyway, will we do a bad job organizing the new namespace (of things like whether Foo goes into module A or module B), and regret it, so no point in changing anything.</li>
+<li>modules can be loaded asynchronously</li>
+<li>good example: SIMD</li>
+<li>globals cannot</li>
+</ul>
+<p>AK: As to breaking users by adding things to the global object: I didn't remember Set breaking anything, anyway. And modules for user code make this nicer, with the lexical tier making it even nicer and less risk of an overlap. So this does not seem to be a very strong piece of motivation for built-in modules.</p>
+<p>BFS: We have to do the global/local cache for exactly this reason, for polyfillability, namely punching something out locally so it can be replaced. This is a huge topic.</p>
+<p>MM: As a counterpoint to AK, Adding JSON broke Facebook, Facebook changed</p>
+<p>MM: They were shipping a stringifier and parser, but not to spec because it pre-dated the proposal</p>
+<p>(RW, sidenote: ironic ^^^ considering the conversation earlier)</p>
+<p>DE: We had compat issues shipping ES2015 due to polyfills as well.</p>
+<p>DH: Introducing a new namespace makes it clear that we are talking about candidate standards, rather than user code.</p>
+<p>BBR: Why polyfill?</p>
+<p>JHD: Fix browser bugs</p>
+<p>AK: Testing, replacement with different functionality</p>
+<p>DH: Maybe there should be a way to ask for the builtin thing</p>
+<p>MM: For SES, being able to get to the outer original thing would subvert the security model.</p>
+<p>JHD: I'd also like to replace things for my polyfills and not give access to the original one</p>
+<hr>
+<p>BT: And let's bikeshed on the syntax! &quot;std:...&quot;</p>
+<p>DH: Shouldn't it be / to meet the JS ecosystem where they are?</p>
+<p>BBR: That would already have a semantic</p>
+<p>BT: Another option: <code>import DateTime;</code></p>
+<p>DE: Seems a little confusing with the analog to <code>import &quot;DateTime&quot;</code> doing something completely differen</p>
+<a href="#conclusionresolution-11ivc-built-in-modules---lets-pick-a-syntax"><h4 id="conclusionresolution-11ivc-built-in-modules---lets-pick-a-syntax">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1</li>
+<li>Need to craft a plan in accordance with committee concerns</li>
+<li>Polyfillability, including Mark's concern about ensuring you can disallow access to the original</li>
+<li>Domenic's concerns about bifurcating the world between pre-2019 APIs and post-2019 APIs</li>
+<li>Eric Faust's concerns about polyfills leading to a tension with the possibility of namespace collision</li>
+</ul>
+
+</body>

@@ -1,0 +1,194 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 26, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-26-2015-meeting-notes"><h1 id="march-26-2015-meeting-notes">March 26, 2015 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Allen Wirfs-Brock (AWB), John Neumann (JN), Jeff Morrison (JM), Sebastian Markbåge (SM), Yehuda Katz (YK), Dave Herman (DH), Alan Schmitt (AS), Lee Byron (LB), Domenic Denicola (DD), Kevin Smith (KS), Andreas Rossberg (ARB), Brendan Eich (BE), Erik Arvidsson (EA), Adam Klein (AK), Jordan Harband (JHD), Mark S. Miller (MM), István Sebestyén (IS), Jafar Husain (JH), Rick Waldron (RW)</p>
+<hr>
+<a href="#private-state-continued"><h2 id="private-state-continued">Private state continued</h2></a><p>KS: the &quot;nested stuff&quot; part of the private state implementation might be more controversial, but please note that it's separable.</p>
+<p>KS: Modified the V8 self hosted Promise to see what it would look like with &quot;private state&quot;</p>
+<p>AWB: the most interesting use of private state is in the typed array hierarchy, especially in terms of subclassing</p>
+<p>KS: presents <a href="https://github.com/zenparsing/es-private-fields/blob/master/examples/promise-before.js">https://github.com/zenparsing/es-private-fields/blob/master/examples/promise-before.js</a></p>
+<p>KS: After: <a href="https://github.com/zenparsing/es-private-fields/blob/master/examples/promise-after.js">https://github.com/zenparsing/es-private-fields/blob/master/examples/promise-after.js</a></p>
+<p>ARB: The implicit <code>this</code> in <code>@name</code> is not something we have done before in JS.</p>
+<p>BE: CoffeeScript set the precedence. Are you suggesting that you always have to write <code>this.@name</code>?</p>
+<p>AWB: The semantics does not change.</p>
+<p>DD: The name is in a lexical scope</p>
+<p>AWB: We could do the same with non private. That would not be a good idea.</p>
+<p>JM: should there be symmetry between private and public properties?</p>
+<p>BE: it's part of our job to make the ergonomics sweet and competitive.</p>
+<p>KS: moving on to helper functions. If the helper function itself needs access to the private state, where can I put it? I can't put it outside the class anymore (like in promise-before.js), because then it doesn't have lexical access to the private state. So that seems to want to push that function declaration of the helper function into the class body. In the example here I'm mixing my proposals (with <code>this::_resolve(x)</code>), but you could have done it just as a function.</p>
+<p>ARB: Might be cleaner to introduce @name methods. Both static and prototype methods.</p>
+<p>JM: three alternatives here. What you have here, a lexically confined closure. Or, a static method that is &quot;private&quot;. A third way is a private instance method (on the prototype).</p>
+<p>KS: so you're talking about this kind of setup</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+  @x() {
+    C.@x(); 
+  }
+  <span class="hljs-keyword">static</span> @x() {
+
+  }
+}
+</code></pre>
+<p>I tried to go down this path. It seems weird that I have to do <code>this.constructor.@y()</code> (or C.@y()<code>) to call the</code>y<code>method from</code>x`.</p>
+<p>AWB/ARB/others: no, that seems perfectly fine to me.</p>
+<p>BE/AWB: The @x method is on the prototype.</p>
+<p>MM: The visibility is that it is only visible inside the class body.</p>
+<p>AK: I don't think <code>this.@x()</code> means the right thing, because we didn't want private field access to go through prototype chains.</p>
+<p>(general acceptance that this is a deep issue)</p>
+<p>MM: I now think they should be on the instance</p>
+<p>DD: on the instance is bad ... memory-inefficient ...</p>
+<p>BE: implementation doesn't have to work that way, even if semantics do</p>
+<p>DD: I see ... so since they're private, we can lock them down enough that such an optimization is not observable</p>
+<p>EA: These methods do not need to be properties anywhere.</p>
+<p>MM: even in the weak map explanation, it's not like the closure pattern with separate-method-per-instance; it's a separate weak map per instance, but each of those weak maps points to the same function object.</p>
+<p>(discussion of how this is related to vtables)</p>
+<p>ARB: hold on, if this is private, why do you need a vtable at all... they're completely static</p>
+<p>AWB: well ... what if you reify them ...</p>
+<p>MM: reifying them is not what we're considering today; that'll be a much bigger fight.</p>
+<p>ARB: it's basically a private scope.</p>
+<p>MM: Compile time symbol table.</p>
+<p>AWB: When you start to combine subclasses the tables makes things simpler because you can combine these tables.</p>
+<p>ARB: not for methods ... for private methods it completely doesn't matter</p>
+<p>BE: yes, it boils away. When we're talking about vtable it's purely about future things like interfaces</p>
+<p>ARB: doesn't even matter for interfaces...</p>
+<p>EA: what about call and apply? <code>this.@x.call(otherThis, ...)</code></p>
+<p>ARB: I think you can do that. And that's part of why I don't think we should allow a shorthand that omits <code>this.</code></p>
+<p>AWB: why would you ever do that?</p>
+<p>DD: can you use super inside private methods?</p>
+<p>MM: The home object for a <code>@m() {}</code> method needs to be the prototype (<code>C.prototype</code>) and similarly the constructor for a static at-method.</p>
+<p>JM: Would it make more sense to think of these as functions that are set as instance properties during the instance property initialization.</p>
+<p>MM: We want class private</p>
+<p>ARB/MM: The --weak-- map explanation vs the private symbol is that the map case the function is associated with the object ....???</p>
+<p>AWB: Or the vtable explanation.</p>
+<p>EA: What if you had C.</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+  @a;
+
+  m() {
+    <span class="hljs-keyword">let</span> somethingElse = C;  <span class="hljs-comment">// &lt;--</span>
+    somethingElse.@x();
+    
+  }
+  @x() {
+    C.@x(); 
+  }
+  <span class="hljs-keyword">static</span> @x() {
+
+  }
+}
+</code></pre>
+<p>ARB: that is a very good point; I think it means we can't have the same name as both static and instance.</p>
+<p>MM: It would force internal polymorphism; it's not good to pay the cost of this when it's essentially accidental.</p>
+<p>ARB: given a random object <code>o</code> and you do <code>o.@x</code> on it, you have no way of knowing which type of private that is referencing statically (i.e. instance method private or static method private or instance data private), and that defeats the point.</p>
+<p>MM/ARB: Do not allow them to have the same name.</p>
+<p>DD: now this is bizarre. They act too different from public methods/public static methods.</p>
+<p>EA: Kevin's original (nested declarations) idea is seeming more attractive after this exercise.</p>
+<p>KS: (presents original nested declarations idea)</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+  @a;
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">xHelper</span>(<span class="hljs-params">obj</span>) </span>{
+    obj.@a;
+  }
+  
+  m() {
+    xHelper(<span class="hljs-keyword">this</span>);
+  }
+}
+</code></pre>
+<p>(general admiration)</p>
+<p>ARB: Weird about this is that it looks like a public declaration.</p>
+<p>AWB: In this case you are not talking about dispatch.</p>
+<p>ARB: at least it should not be function, maybe <code>private xHelper() { }</code></p>
+<p>KS: the concern is that if you use <code>private</code> then people would think it's a private method...</p>
+<p>BE: <code>private function xHelper() { }</code> might help</p>
+<p>DD: Not intuitive to programmers coming from other languages. People already use external helper functions.</p>
+<p>KS: Feedback has not been too positive. The external helper function is used in Python for example.</p>
+<p>ARB: fear that most programmers will want to use method syntax and will make helpers public just to get that</p>
+<a href="#immutable-records-tuples-maps-and-sets"><h2 id="immutable-records-tuples-maps-and-sets">Immutable Records, Tuples, Maps and Sets</h2></a><p>(Sebastian Markbage and Lee Byron)</p>
+<p><a href="https://github.com/sebmarkbage/ecmascript-immutable-data-structures">https://github.com/sebmarkbage/ecmascript-immutable-data-structures</a></p>
+<p>LB: ImmutableMap reutrns a new Map when you mutate them.</p>
+<p>LB: Wants value semantics. Especially for <code>==</code> and <code>===</code>.</p>
+<p>MM: As well as <code>Object.is</code>.</p>
+<p>BE: &quot;NaNomali&quot;</p>
+<p>LB: Wants deep equality so that a Map of Maps or vector/records works too.</p>
+<p>LB: Wants to work across realms and shared memory for workers.</p>
+<p>LB: Based on Typed Objects.</p>
+<p>Wants new syntax.</p>
+<pre><code class="language-js">const xy = #{x: 1, y: 2};
+const xyz = #{...xy, z: 3};
+
+const xy = #[x, y];
+const xyz = #[...xy, z];
+</code></pre>
+<p>LB: Record is the realm specific constructor/wrapper (like String)</p>
+<p>BE: For value types we didn't want the wrappers.</p>
+<p>JHD: What happens if you pass these primitives into the <code>Object</code> function? (like <code>Object('string')</code>)</p>
+<p>LB: Works the same. It creates a wrapper of the correct type.</p>
+<p>EA: Are the keys always sorted?</p>
+<p>LB: Wants to allow implementations to do whatever what they want but...</p>
+<p>MM: I think you are doing the right thing since then the comparison is cleaner.</p>
+<p>AWB: Module namespace exports are sorted with the default comparison.</p>
+<p>ARB: When you implement immutable maps you do not use hash tables but ordered trees.</p>
+<p>MM: You cannot define an order for opaque object.</p>
+<p>MM: Can an immutable map refernce a non mutable object?</p>
+<p>ARB: You can specifiy that keys have to be deeply immutable.</p>
+<p>LB: Would like to have same keys as in ordinary maps.</p>
+<p>ARB: Then how would you implement this?</p>
+<p>LB: You would use a hash function/method and a trie. The hash is optional. That is why we want it implementation dependent.</p>
+<p>LB: Would have to define what order to use.</p>
+<p>ARB: That means undeterministic behavior.</p>
+<p>LB: In immutable.js the order is part of the equality.</p>
+<p>MM: If you want you could canoninicalize the order before comparing.</p>
+<p>LB: Most people do not depend on the order.</p>
+<p>MM: You could do insertion order and make <code>===</code> be equal but make <code>Object.is</code> return false if the order is not the same.</p>
+<p>ARB: Another option is to use value order where possible but use insertion order otherwise.</p>
+<p>MM: You could use hash consing.</p>
+<p>ARB: Does not help for ordering.</p>
+<p>MM: Need to make sure that you do not use the real physical address, due to mutually suspicious code in the same realm. Need to be unguessable or use the hash to achieve information about code it should not know about.</p>
+<p>YK: Maybe you want lower level primitives so that user code can implement this.</p>
+<p>LB: No. We need to define the semantics so that VM can optimize this.</p>
+<p>LB: A VM can use shared memory. It can use low level structs and memory to achieve.</p>
+<p>ARB: A VM can have efficient per object hash codes.</p>
+<p>JH: Also syntax.</p>
+<p>AWB: Per object hash code is the big missing building block that we do not want to provide.</p>
+<p>EA: It is not possible to make a user exposed hash code that is going to be as efficient as the internal hash code which might just be the address of the object.</p>
+<p>MM: For ordering you might get away with a not very good pseudo random generator.</p>
+<p>LB: It seems simpler and good enough to just stick with the insertion order for immutable maps.</p>
+<p>MM: Implied cost. The precise equality would have to take the ordering into consideration.</p>
+<p>LB: Batteries included philosophy.</p>
+<p>AWB: You can still have a standard library that can be implemented in JS.</p>
+<p>LB: Libraries can always provide more data structures.</p>
+<p>AWB: I don't think we should provide new libraries without providing the primitives that allows these to be implemented in user code.</p>
+<p>BE: What primitives are missing?</p>
+<p>LB: Assuming we have typed objects and value types, value semantics</p>
+<p>MM: Cryptographically safe pseudo-random numbers as a hash code.</p>
+<p>DH: Sharing immutable objects across workers.</p>
+<p>MM: Cryptographic pseudo random number generators.</p>
+<p>MM: The number has to be large because collision is fatal</p>
+<p>LB: Another issue is that we are creating a new value type for every record.</p>
+<a href="#conclusionresolution-immutable-records-tuples-maps-and-sets"><h4 id="conclusionresolution-immutable-records-tuples-maps-and-sets">Conclusion/Resolution</h4></a><ul>
+<li>Identify the requirements.</li>
+<li>Progress report at a future meeting.</li>
+</ul>
+<a href="#composition-functions"><h2 id="composition-functions">Composition Functions</h2></a><p>(Jafar presents slides)</p>
+<p>(Lots of discussion. Notes lost to a grue.)</p>
+<a href="#conclusionresolution-composition-functions"><h4 id="conclusionresolution-composition-functions">Conclusion/Resolution</h4></a><ul>
+<li>Wide agreemeent that async functions are worth generalizing</li>
+<li>Wide agreement that promises are the dominant use case and should be the default</li>
+<li>Tricky problems with hoisting semantics, need more time to woodshed that problem</li>
+<li>async/await is wanted/needed so we should urgently figure out if this can ever be made to work</li>
+</ul>
+<p>(discussion about wtf woodshed means - behind woodshed = to kill, to/inside woodshed = to spank)</p>
+<a href="#additional-export-__-from-statements"><h2 id="additional-export-__-from-statements">Additional export __ from statements</h2></a><p>(Lee Byron presents <a href="https://github.com/leebyron/ecmascript-more-export-from">https://github.com/leebyron/ecmascript-more-export-from</a> )</p>
+<p>General agreement, suggestion to add Babel transpilation and fill out spec text, bring back at next committee meeting for a fast-track through stages.</p>
+<a href="#64-bit-math"><h2 id="64-bit-math">64-bit math</h2></a><p>(Brendan Eich presents <a href="https://gist.github.com/BrendanEich/4294d5c212a6d2254703">https://gist.github.com/BrendanEich/4294d5c212a6d2254703</a>)</p>
+<p>Moves to stage</p>
+
+</body>

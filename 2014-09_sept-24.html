@@ -1,0 +1,743 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 24, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-24-2014-meeting-notes"><h1 id="september-24-2014-meeting-notes">September 24, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jeff Morrison (JM), Jonathan Turner (JT), Sebastian Markbåge (SM), Erik Arvidsson (EA), Brendan Eich (BE), Domenic Denicola (DD), Peter Jensen (PJ), Eric Toth (ET), Yehuda Katz (YK), Dave Herman (DH), Brendan Eich (BE), Simon Kaegi (SK), Boris Zbarsky (BZ), Andreas Rossberg (ARB), Caridy Patiño (CP), Niko Matsakis (NM), Mark S. Miller (MM), Matt Miller (MMR), Jaswanth Sreeram (JS)</p>
+<p>Remote:
+István Sebestyén (IS)</p>
+<hr>
+<a href="#object-instantiation-redo"><h2 id="object-instantiation-redo">Object Instantiation Redo</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="./instantiation-reform-sept2014.pdf">instantiation-reform-sept2014.pdf</a></p>
+<p>AWB: (introducing discussion from last meeting)</p>
+<p>AWB: how many people here have read these gists? (hands are raised) OK, about half the people... The others are going to have a hard time.</p>
+<p>Slide 1, 2</p>
+<p>Introductory</p>
+<p>Slide 3</p>
+<p>Main Issues</p>
+<ul>
+<li>@@create can expose uninitialized instances of built-in and host objects</li>
+<li>Necessitates numerous dynamic &quot;is it initialized&quot; checks in order to guarantee the invariants of such objects</li>
+</ul>
+<p>AWB: The design long holding consensus was found to expose uninit instances. If it's an exotic or built-in with some invariant to maintain, instances may be produced that do not uphold the invariant.</p>
+<ul>
+<li>Concerns about the complexity introduced into the specification</li>
+<li>DOM APIs suddenly required to track</li>
+<li>Looking for a solution that doesn't expose the allocated but uninitialized instance.</li>
+</ul>
+<p>Slide 4</p>
+<p>Original Idea From Claude Pache</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">B</span> </span>{
+  <span class="hljs-keyword">constructor</span>(...args) {
+    <span class="hljs-comment">/* 1: preliminary code that doesn't contain calls to a super-method */</span> 
+    <span class="hljs-comment">/* this in TDZ */</span>     
+    <span class="hljs-comment">/* 2: call to a super-constructor */</span> <span class="hljs-keyword">super</span>(...whatever);
+    <span class="hljs-comment">/* this defined */</span>     
+    <span class="hljs-comment">/* 3: the rest of the code */</span>   
+  }  
+}  
+</code></pre>
+<ul>
+<li>Added &quot;receiver&quot; argument to [[Construct]] that passes the constructor that <code>new</code> was originally applied to.</li>
+<li>Instead of pre-allocating <code>this</code> before entering the constructor, a TDZ exists until the super call</li>
+</ul>
+<p>Slide 5</p>
+<p>Addtional Idea Presented at Last Meeting</p>
+<ul>
+<li><code>new*</code> token - Value is the &quot;receiver&quot; parameter from [[Construct]] or undefined if [[Call]]</li>
+<li>Can be used to discriminate &quot;called as constructor&quot; and &quot;called as function&quot;</li>
+<li>Provides access to original constructor for object intialization/intialization
+– <code>Object.create(new*.prototype);</code></li>
+</ul>
+<p><code>new*</code> has been replaced by <code>new^</code></p>
+<ul>
+<li>Value of <code>new^</code> is the &quot;receiver&quot; argument to [[Construct]]. Undefined if called as a function otherwise.</li>
+<li><code>new^</code> chosen as alternative to <code>new*</code> since <code>new*</code> doesn't align with other uses of *, and new^ seems more appropriate.</li>
+</ul>
+<p>Slide 7</p>
+<p><code>new super()</code></p>
+<ul>
+<li><p>Use <code>new super()</code> rather than <code>super()</code> to &quot;invoke superclass&quot; constructor</p>
+<ul>
+<li><code>new super()</code> is always a [[Construct]] invocation</li>
+<li><code>super()</code>     is always a [[Call]] invocation</li>
+</ul></li>
+<li><p>Didn’t want to further confuse &quot;called as a constructor&quot; and &quot;called as a function&quot;.
+– <id>() -- always means &quot;called as function&quot;
+– new <id>() – always means &quot;called as constructor&quot;
+– Even when <id> is <code>super</code></p></li>
+</ul>
+<p>Slide 8</p>
+<p><code>this = new super()</code></p>
+<ul>
+<li>Original proposal had <code>this</code> in TDZ until explicit <code>super()</code> call. (now <code>new super()</code>)
+<ul>
+<li>Invisibly assigned to <code>this</code></li>
+</ul></li>
+<li>Update proposal eliminates the implicit assignment by <code>new super()</code>.</li>
+<li>But allows an explicit assignment to <code>this</code>
+<ul>
+<li>Only in constructors</li>
+<li>Only a single dynamic assignment</li>
+<li>Subsequent assignments <code>throw ReferenceError</code></li>
+</ul></li>
+</ul>
+<p>MM: &quot;Allows&quot; explicit assignment to <code>this</code>, implies also allowed to call <code>new super()</code> without assigning to <code>this</code>?</p>
+<p>AWB: Yes. Example is <code>Proxy(new super(), {...traps});</code></p>
+<p>Slide 9</p>
+<p><code>this = &lt;expr&gt;</code></p>
+<ul>
+<li>RHS of <code>this</code> assignment in a constructor isn't limited to <code>new super();</code></li>
+<li>May be any object valued expression:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">this</span> = <span class="hljs-keyword">new</span> <span class="hljs-keyword">super</span>();
+<span class="hljs-keyword">this</span> = {x;<span class="hljs-number">1</span>, <span class="hljs-attr">y</span>:<span class="hljs-number">2</span>};
+<span class="hljs-keyword">this</span> = <span class="hljs-built_in">Object</span>.setPrototypeOf([ ], <span class="hljs-keyword">new</span>^.prototype); 
+<span class="hljs-keyword">this</span> = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(<span class="hljs-keyword">new</span> <span class="hljs-keyword">super</span>(), handler); 
+</code></pre>
+<p>Slide 10</p>
+<p>Works in both class constructors and function constructors</p>
+<pre><code class="language-js">SubArray.__proto__=<span class="hljs-built_in">Array</span>;
+SubArray.prototype=<span class="hljs-built_in">Object</span>.create([].prototype);
+func,on SubArray(...args) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>^) <span class="hljs-keyword">this</span> = <span class="hljs-keyword">new</span> SubArray(...args);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">this</span> = <span class="hljs-keyword">new</span> <span class="hljs-keyword">super</span>(...args);
+} 
+</code></pre>
+<p>MM: You can do assignment to <code>this</code> when called as a function?</p>
+<p>AWB: No</p>
+<p>Slide 11</p>
+<p>Default object allocation (Base Classes)</p>
+<ul>
+<li>Class constructors without an <code>extends</code> and basic (function) constructors...</li>
+<li>...Assign a new oridinary object to <code>this</code> if body does not have an explicit <code>this =</code>.</li>
+<li>These continue to mean the same thing:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Base</span> </span>{
+  <span class="hljs-keyword">constructor</span>(x) {
+    <span class="hljs-keyword">this</span>.x = x;    
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Base</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-keyword">this</span>.x = x;    
+}
+</code></pre>
+<p>Slide 12</p>
+<p>Unqualified super references</p>
+<ul>
+<li>Until now ES6 has said that <code>super()</code> means the samething as <code>super.&lt;method name&gt;()</code>
+<ul>
+<li>Implicit property access</li>
+<li>Requires setup using toMethod (implicit or explicit)</li>
+</ul></li>
+<li><code>super</code> in constructor needs to means &quot;this constructor's [[Prototype]]&quot;, not &quot;[[HomeObject]].prototype.constructor&quot;</li>
+<li>It would be confusing if <code>super()</code> means something completely different in a constructor from what it means in an non-constructor method
+<ul>
+<li>Is this going to be used as a constructor or a method? function <code>f() {return super()};</code></li>
+</ul></li>
+</ul>
+<p>Slide 13</p>
+<p>Eliminate unqualified <code>super</code> reference in non-constructor methods</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Sub</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span> </span>{
+  foo() {
+    <span class="hljs-keyword">super</span>();     <span class="hljs-comment">// now a syntax error</span>
+    <span class="hljs-keyword">super</span>.foo(); <span class="hljs-comment">// must say this instead    </span>
+  }
+}
+</code></pre>
+<ul>
+<li>Unqualified <code>super</code> only allowed in class constructors and function definitions.</li>
+<li>Regular methods must qualify <code>super</code> references with a property access.</li>
+</ul>
+<p>Slide 14</p>
+<p>Default Value of <code>this</code> in derived constructors that don't assign to <code>this</code></p>
+<ul>
+<li>Some alternatives</li>
+<li><code>this = new super(); // super new with no arguments</code></li>
+<li><code>this = new super(...arguments); // siper new all args</code></li>
+<li><code>this = Object.create(new^.prototype); // oridinary obj</code></li>
+<li>no value, <code>this</code> in TDZ at constructor start</li>
+<li>Most controversial part of design discussion</li>
+</ul>
+<p>BE: Implicit object.create with new^ and subclassing a DOM base class, you end up with wrong thing</p>
+<p>DD: Error better than not</p>
+<p>(Domenic just named <code>new^</code> &quot;new-hat&quot;)</p>
+<p>AWB: Most preferred is Alternative 4.</p>
+<p>Slide 15</p>
+<p>The Winner: No Default <code>this</code></p>
+<ul>
+<li>Eliminates issues of what arguments<code>to pass to implicit</code>new super()`</li>
+<li>Must assign to <code>this</code> in derived constructor before referencing it.</li>
+</ul>
+<p>DH: In the constructor of a class that extends, no implicit this? Subclass would have to explicitly do something</p>
+<p>AWB: Yes</p>
+<p>Question about dead code removal, if <code>this =</code> is in a dead code path</p>
+<p>AWB: Tooling will have to be updated to understand new class semantics.</p>
+<ul>
+<li>Assignment to <code>this</code> in a function defintion is meaningless, only works in a class body</li>
+</ul>
+<p>MM: Any way to make derived constructor, base class and function rules?</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">this</span> = <span class="hljs-keyword">new</span> <span class="hljs-keyword">super</span>()
+  <span class="hljs-keyword">this</span>.x = <span class="hljs-number">1</span>;    
+}
+</code></pre>
+<p>MM: What happens is <code>f()</code> is called as a function?</p>
+<p>AWB: If it includes <code>this = new super()</code>: Runtime error</p>
+<p>AWB: <code>this = new super()</code> does a TDZ check</p>
+<p>Questions about multiple <code>this = ...</code></p>
+<p>JM: In terms of dead code, linters, minifiers (any tooling) will have to become aware.</p>
+<ul>
+<li>Additionally, seems there could esily be incidental refactoring hazards (large constructors getting refactored into smaller ones, moving code around, accidentally breaking contextual auto-allocation).</li>
+</ul>
+<p>AWB: Yes.</p>
+<pre><code class="language-js"><span class="hljs-comment">// Throws because </span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">this</span> = <span class="hljs-literal">undefined</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">5</span>;
+  }
+}
+</code></pre>
+<p>MM: In the absense of a valid return, what would be the problem of returning the <code>this</code> value at the end of the constructor, even if the return value is a non-object?</p>
+<p>BE/AWB: Consistency. This would be new semantics</p>
+<p>MM: Sufficiently different, maybe not worth taking a chance on.</p>
+<p>BE: I wanted allow return override. Guaranteed to return an object</p>
+<p>AWB: If don't explicitly return an object, the <code>this</code> value is returned.</p>
+<p>SM: Difference between assigning to <code>this</code> and returning an override?</p>
+<p>AWB: None</p>
+<p>YK: No TDZ?</p>
+<p>BE: Invoke a function with new, the return is 5, not an error, just returns the original object</p>
+<p>MM: comments about refactoring subclass constructor function to class constructor</p>
+<pre><code class="language-js">B.call(<span class="hljs-keyword">this</span>) =&gt; <span class="hljs-keyword">this</span> = <span class="hljs-keyword">new</span> <span class="hljs-keyword">super</span>();
+</code></pre>
+<p>(break)</p>
+<p>Dave Herman and Yehuda Katz present counter proposal</p>
+<p><a href="./atat.pdf">atat.pdf</a></p>
+<p>Slide 1</p>
+<p>Introduction</p>
+<p>Slide 2</p>
+<p>Problem: Can create half baked objects.</p>
+<p>Slide 3</p>
+<p>(examples of Foo<a href="">@@create</a>)</p>
+<p>Slide 4</p>
+<p>Slide 5</p>
+<ul>
+<li>Uninitialized instances of builtin classes have to be implemented for every tupe in the entire web platform</li>
+<li>Uninitialized state</li>
+</ul>
+<p>Slide 7</p>
+<p>Solution: both allocator and constructor get arguments</p>
+<p>Slide 8</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> C(x,  y,  z) 
+
+? 
+
+<span class="hljs-keyword">do</span> {    
+  <span class="hljs-keyword">let</span> obj = C[<span class="hljs-built_in">Symbol</span>.create](x, y, z);    
+  obj[[Construc]](x, y, z);   
+}
+</code></pre>
+<p>Slide 9</p>
+<ul>
+<li>Builtins do all their work in the allocator.</li>
+<li>Constructors are noops.</li>
+<li>Impossible to observe uninitialized objects.</li>
+<li>Abstractable by WebIDL to avoid spec boilerplate.</li>
+<li>Abstractable by WebIDL implementations to avoid implementation boilerplate.</li>
+</ul>
+<p>Slide 10</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>[<span class="hljs-built_in">Symbol</span>.create] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ 
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.create(<span class="hljs-keyword">this</span>.prototype); 
+}; 
+                                                
+<span class="hljs-built_in">Array</span>[<span class="hljs-built_in">Symbol</span>.create] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">...args</span>) </span>{ 
+  <span class="hljs-keyword">let</span> a = %CreateArray%(...args); 
+  <span class="hljs-built_in">Object</span>.setPrototypeOf(a, <span class="hljs-keyword">this</span>.prototype); <span class="hljs-keyword">return</span> a; 
+}; 
+</code></pre>
+<p>Slide 11</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stack</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{ 
+  top() { 
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.length === <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"empty stack"</span>); 
+    } 
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>[<span class="hljs-keyword">this</span>.length - <span class="hljs-number">1</span>]; 
+  } 
+} 
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Substack</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Stack</span> </span>{ 
+  meep() { 
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"moop"</span>; 
+  } 
+} 
+</code></pre>
+<p>Slide 12</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> PointType = <span class="hljs-keyword">new</span> StructType({ 
+  <span class="hljs-attr">x</span>: uint32,
+  <span class="hljs-attr">y</span>: uint32 
+}); 
+                                                
+<span class="hljs-keyword">let</span> ColorPointType = <span class="hljs-keyword">new</span> StructType({ 
+  <span class="hljs-attr">x</span>: uint32,
+  <span class="hljs-attr">y</span>: uint32,
+  <span class="hljs-attr">color</span>: string 
+}); 
+</code></pre>
+<p>Slide 13, 14</p>
+<p>TODO: Copy slide</p>
+<p>Slide 15</p>
+<p>MM: Difference between the proposals:</p>
+<ul>
+<li>In new hat, case splitting on &quot;if of new hat&quot;</li>
+<li>Whereas, in ES6 and DH present, case splitting on @@create vs. constructor</li>
+</ul>
+<p>BE/AWB/YK/DH: Agree.</p>
+<p>BE: Clarify: this pertains to cases where you have split initialization and allocation, such as exotic objects, built-ins.</p>
+<p>Discussion re: do not want to expose uninitialized stuff.</p>
+<p>DH: issues with previous proposal, aka &quot;new-hat&quot;</p>
+<ol>
+<li>new-hat syntax is there to distinguish call and construct</li>
+</ol>
+<ul>
+<li>Agree that this is an issue to address in itself</li>
+<li>There are ways to get this distinction without syntax</li>
+<li>No way to wrap call and construct path because we're in declarative code</li>
+<li>Too late for new syntax and specifically <code>new^</code> itself is not good enough to deliver to community.</li>
+</ul>
+<ol start="2">
+<li>Making <code>this</code> appear &quot;mutable&quot; (disagreements)</li>
+</ol>
+<ul>
+<li>This is a bizarre change to the mental model of JavaScript</li>
+<li>Appeared that all classes would <em>require</em> assignment to <code>this</code></li>
+</ul>
+<ol start="3">
+<li>Removal of unqualified super</li>
+<li>In OO, it's considered an anti-pattern to use explicit conditions over method dispatch</li>
+<li>Hijacking of the call path</li>
+</ol>
+<ul>
+<li>It's reserved for subclasses</li>
+</ul>
+<ol start="6">
+<li>Have to do ALL of this to participate in subclassing</li>
+</ol>
+<p>AWB: how does #5 differ from current? It's the same.</p>
+<p>DH: Any reason why it can't call the construct behavior?</p>
+<p>AWB: Construct allocates</p>
+<p>DH: Not in this proposal</p>
+<p>AWB: Haven't addressed what happens in constructor?</p>
+<p>DH: (goes back to slide 8)</p>
+<p>need more here...
+AWB: Are you proposing that all initialization and allocation happen in @@create?</p>
+<p>DH: no.</p>
+<p>MM: When D inherits from B and you <code>new Derived()</code> that construct trap of Derived gets called. When Derived constructor calls <code>super()</code> does it invoke Base's call trap or construct trap?</p>
+<p>DH: Need a way to distinguish new and call, but super or direct?</p>
+<p>YK/BE: have to write another <code>if</code> if you want to define subclassable classes</p>
+<p>DD: overriding the allocator is not part of creating a robust super class</p>
+<p>YK: argues otherwise.</p>
+<p>DD: enabling overriding the allocator of the subclass hasn't been a goal</p>
+<p>BZ: in user code, needed in DOM</p>
+<p>...continue.</p>
+<p>DH: (explaning future friendly-ness of distinguished initialization and allocation)</p>
+<p>Slide 16, 17</p>
+<p>AWB: This is speculation of new forms?</p>
+<p>YK: For illustration only. Speculate that you will have to build a constructor that defines all aspects of allocation and initialization, forced to figure out how the condition (or whatever userland pattern is)</p>
+<ul>
+<li>If we say the constructor is also the allocator, then we're boxed in and will have to deal with that.</li>
+</ul>
+<p>DH: These speculated forms only illustrate goals.</p>
+<ul>
+<li>End up having to bless some protocol that distinguishes allocation and initialization.</li>
+<li>(wrap up, summarizing)</li>
+</ul>
+<p>MM: Options?</p>
+<ol>
+<li>Implement new-hat</li>
+<li>Implement alternative @@create</li>
+<li>Slip schedule?</li>
+</ol>
+<p>3 =&gt; NO.</p>
+<p>BZ: Want to see how these prevent uninitialized instances</p>
+<p>AWB: (restating goals)</p>
+<ol>
+<li>Self hosting</li>
+<li>Subclassable built-ins and exotic object</li>
+<li></li>
+</ol>
+<p>DH: Can prevent uninitialized instances from being observed with either proposal</p>
+<p>RW: For exotic, built-ins and DOM, @@create produces the fully baked instance and constructor is just a no-op. For user code, that's uncommon.
+...</p>
+<p>BZ: I am trying to understand how you can guarantee initialization without exposing half-baked objects</p>
+<p>DH: The answer is that you move the <em>strict invariant</em> initialization into <code>@@create</code>. To avoid repetition, you use trusted functions that are allowed access to partially initialized objects and encapsulation, and you only pass the <code>this</code> value from <code>@@create</code> to those trusted functions.</p>
+<p>DH:</p>
+<p>MM: Base class, derived class. The Derived clas is a client of the base class, and it's the responsibility of the Base class. It's often the case of the base class locking down property and that's OK.</p>
+<p>BZ: Want to see some class that uses &quot;magic&quot;.</p>
+<ul>
+<li>How does ColorPointType know how to</li>
+</ul>
+<p>BZ: Does ColorPointType get to see an uninitialized PointType instance?</p>
+<p>RW: No, because it overrode the one on Point</p>
+<p>BZ: Wait so where does the initialization of ColorPointType and so forth take place?</p>
+<p>DH: That's how struct types are defined.</p>
+<p>RW: What about the examples we worked through last night.</p>
+<p>YK: I think what's getting lost is that the normal way for people to use this is to ignore @@create.</p>
+<p>BZ: The normal way is fine, I'm not worried about that.</p>
+<p>YK: To be clear, what you're saying is fine, but I think it's important for everyone else in the room to know that the normal mode of operation has not changed.</p>
+<p>AW: You're right but they also won't pass new^?</p>
+<p>YK: But they will have created a non-subclassable object</p>
+<p>ARB: I have a question. In the other design, there was a discussion about implicit calls to the superconstructor and whether we should pass the arguments. Both Marc and I made the strong argument that this was not a good idea. As far as I can see, it is doing the exact same thing, but even in a weirder sense, because you're passing the arguments through to the allocator even.</p>
+<p>DH: That's true. Allocator signatures have to track constructor signatures. This means that if you are passing extra arguments that may be ignored --</p>
+<p>?: Or used in a completely different way --</p>
+<p>DH: right -- it means that you have to override @@create if you want there to be a difference</p>
+<p>ARB: isn't that very common? in all cases where derived constructor changes what is passed to the base cosntructor</p>
+<p>YK: not my experience at all. I think the common case is that you don't really change the arguments that much or just append arguments -- whcih happens to work ok thanks to JS semantics.</p>
+<p>DD: I think what will happen is that people will say constructor is an anti-pattern, use @@create so that you only need to do one.</p>
+<p>ARB: I've not used ES6 classes naturally but I find &quot;transform&quot; is the common case by far in other languages</p>
+<p>DD: isn't that why you subclass -- to modify constructor?</p>
+<p><lots of people talking over each other></p>
+<p>MM: you have to have each level of @@create mirror the transform that occurs inside the constructor</p>
+<p>YK: right</p>
+<p>MM: do you have a pattern for that which is less onerous than the new^ pattern?</p>
+<p>YK: I think that this will happen sometime but is less bad than the <code>if (new^)</code> pattern</p>
+<p>AWB: No</p>
+<p>YK: I guess we have to discuss whether we agree that people should design for</p>
+<p>RW interjects: Here is the whiteboard example:</p>
+<pre><code><span class="hljs-type">Function</span>.prototype[@<span class="hljs-meta">@create</span>] = function() { <span class="hljs-keyword">return</span> <span class="hljs-type">O</span>.c(<span class="hljs-keyword">this</span>.prototype); };
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{ }
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>{
+    [@<span class="hljs-meta">@create</span>]() {
+    }
+    constructor() {
+    }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">G</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">B</span> </span>{
+    constructor() {
+        ...
+    }
+}
+
+<span class="hljs-keyword">var</span> g = <span class="hljs-keyword">new</span> <span class="hljs-type">G</span>();
+<span class="hljs-comment">// because G has no @@create, we execute the @@create from B</span>
+<span class="hljs-comment">// it all works out ok</span>
+</code></pre>
+<p>RW: Follow:</p>
+<pre><code class="language-js">g -&gt; <span class="hljs-keyword">new</span> G() -&gt; (no G[@@create]) -&gt; B[@@create]() <span class="hljs-comment">// done.</span>
+</code></pre>
+<p>If B had no @@create</p>
+<pre><code class="language-js">g -&gt; <span class="hljs-keyword">new</span> G() -&gt; (no G[@@create]) -&gt; (now B[@@create]) -&gt; (no A[@@create]) -&gt; <span class="hljs-keyword">default</span> <span class="hljs-comment">//  done</span>
+</code></pre>
+<p>DH: What Rick is trying to say is that for non-exotic objects, none of this matters</p>
+<p>DH: Another way of putting this is that exotic objects are a bifurcation inherent to the space we're in, it's part of JS, and it becomes important to know whether there may be exotic objects involved</p>
+<p>RW: Point I'm trying to make is that in the <em>most common case</em>, userland classes, we don't have to do anything different</p>
+<p>JM: I can't just stay quiet anymore. I feel like we're overstating how common it is to subclass these kinds of &quot;exotics&quot;/built-ins</p>
+<p>DH: I want to double down on this. Your prediction is wrong Domenic because I don't see people deciding that they should use the syntactically onerous pattern instead of just using constructor.</p>
+<p>DD: I'm saying that based on Yehuda's argument, where he says to be robust you must be prepared for exotic objects, this design is superior, it doesn't seem like this design helps. Instead you just move things to @@create.</p>
+<p>YK: That seems ok to me. To people who want to use exotic object subtyping, we can either say &quot;here are a bunch of tools you can use to create a protocool&quot;, or we can tell them &quot;here is something that works fine, but you have to use @@create&quot;</p>
+<p>DD: In that case, why constructor at all?</p>
+<p>AWB: I'd like to explain why I walked away from this design. Fundamentally BZ's issue is about data-based invariants that must be established as part of the constructor, there will be a tendency to push those things into @@create. Besides being ugly, @@create has other downsides. Here's the real issue -- establishing these invariants, what does it mean? initialized private state. Let's think about the future. That method, the @@create method is a method on the constructor itself. That means to initialize the private state of the instacnce you have a function or method that is not attached to that instance that has ability to reach inside and get private state. So over here in the @@create method, however we might define it in the future, in the @@create method you can't say &quot;this.@foo&quot;.</p>
+<p>(people talk over each other)</p>
+<p>MM: Not a capability leak -- if the @@create method is in the same class, it's fine.</p>
+<p>YK: I agree but I think that's something we have to figure out generally for private state.</p>
+<p>AWB: I'm saying that the model of putting private state into @@create, a foreign method and not the method of the instance, seems wrong.</p>
+<p>DH: Here's the thing. @@create is not given an object to produce.</p>
+<p>MM: I am confused about something Rick made. If you create a class G, just writing a constructor that calls super constructor, this is a broken class, because it didn't provide a parallel @@create that provided the same transform.</p>
+<p>JM: In case where this is not extending an exotic class, it's ok. In the case of something native, like Date, it becomes important. My overall point is that I think it far less common to subclass Date than to subclass userland/non-native classes.</p>
+<p>MM: But it's non-compositional.</p>
+<p>DD: What's attractive about this = new super() is that it works regardless of whether it's a exotic class or not. Otherwise you have to know.</p>
+<p>JM: I think you're right but we're taking what I perceive as an uncommon case and adding burden to the common case.</p>
+<p>DD: People want to subclass Array a lot.</p>
+<p>BE: Not common, not common.</p>
+<p>JM: Let me avoid word &quot;common&quot; for time being. If we're talking about subclassing an ember view, that is not a builtin. It happens a lot.</p>
+<p>DD interjects: But what if ember views want to upgrade to typed objects?</p>
+<p>YK: It makes 'magic class' a part of the public API.</p>
+<p>DH: Every class has two contracts. Contract to consumer and contract to subclasser. Magicness and exoticness is a thing subtypers have to care about regardless.</p>
+<p>AWB: Dave, array is an exotic object. I can create a subclass of array today and not care whether it's an exotic object. So one step further. In ES6 as currently spec'd, I want to create a subclass of array, in the constructor I want to do something extra. I just want to log a message or something. I have to do something. In current ES6 design, I have to say super(), decide what arguments to pass, and do my extra code. But again I didn't have to think about whether Array was exotic not. It's only if I'm doing something that somehow interacts with the exoticness that I have to think about it.</p>
+<p>BE: Domenic made a good point. I do think we have to argue about what's common though. Obviously there are piles of code building class hierarchy from plain objects -- but what if we want to go from an emberview to something using typed objects. Does one proposal require more changes than the other?</p>
+<p>DD: No</p>
+<p>NM: I disagree</p>
+<p>...</p>
+<p>YK: Answer with Ember subclassing proxies is that it is a semver incompatible change. I worked through this last night and I think it's ok.</p>
+<p>DH: It's a drop-in replacement for <em>clients</em> but not subclassers.</p>
+<p>YK: In the new proposal, it requires subtypers to type <code>this = new super()</code>, which they may not have had to do.</p>
+<p>DD: I really like <code>this= new super()</code>, it's explicit, it makes more sense to me.</p>
+<p>BE: But that's not the argument.</p>
+<p>YK: I don't think we can call it a semver compatible change.</p>
+<p>NM: Extensibility is a factor.</p>
+<p>ARB: Generally true, right?</p>
+<p>NM: Yes.</p>
+<p>MM: I'm confused -- when I bring up the transforms of the arguments, response I got is that subclassing of exotics is relatively rare, which I agree, form of the argument is that it's rare enough that we shouldn't make regular code have to pay a price for the common case. Let's stipulate this is true -- under that argument, than the <code>if (new^)</code> goes away?</p>
+<p>BE: But you still need <code>this = new super</code>, and other changes.</p>
+<p>YK: But if you remove <code>if(new^)</code> you're making decision on behalf of others?</p>
+<p>MM: If we apply the same counterargument, it doesn't need the <code>if (new^)</code>, all it needs more is <code>super()</code> becomes <code>this = new super()</code></p>
+<p>YK: I think you misunderstood the argument. I'm not saying you always have to write <code>if (new^)</code>. I'm saying that it is SOMETIMES true that you have to do it.</p>
+<p>MM: I want to split the argument. In world 1, we are saying we don't want to burden normal code with worrying about subclassing builtins. For code that does not subclass builtins, it shouldn't need to worry about possibility that it might get reused as a subclass of a builtin. We should not need to pay the price.</p>
+<p>MM: In that world, let's compare new^ to the proposal on the board. In new^, in world 1, if this is normal code, super() becomes <code>this = new super()</code></p>
+<p>YK: Yes but what this was saying is that IF YOU ARE subclasing something exotic, you need to do idiomatic things to get plausible results.</p>
+<p>MM: But only on the hypothesized small amount of code that needs to subclass builtins.</p>
+<p>YK: In the revived @@create, the burden falls on people are subclassing objects, and want to do a transform on the constructor.</p>
+<p>BZ: And people who don't know if they want to subclass an exotic.</p>
+<p>BE: I think they are lost anyway.</p>
+<p>AWB: People who want to subclass to add methods, extend or override some behavior. You're not actually <em>changing</em> the exotic type, hence the constructor signature you want is basically the same as the normal class. So you have to define a custom @@create simply to transform the arguments.</p>
+<p>ARV: I think that subclassing builtins will happen relatively frequently but it is VERY rare to then change it later.</p>
+<p>YK: For this reason, I think people will forget to use the proper pattern, and thus screw their subtypes.</p>
+<p>AWB: There is another approach. What we've done with @@create is split things into two halves. The way to solve this problem, doesn't have to be done at the spec level, one way is that you simply split out the initialization logic into a distinct method.</p>
+<p>BE: I want to revisit. We are late in the game. I'm concerned we're hanging too much onto classes. I want to maybe push builtins into syntax or something else. Inventing all this stuff in the new^ proposal is a lot of new stuff, it's too late in schedule, ahead of implementation. DH's proposal hoists new object creation out of [[Construct]] which is also a change. Can we stick with ES6 and do what we want later?</p>
+<p>DD: I see we have a few choices. Make implementors swallow @@create is designed, but implementors are very unhappy.</p>
+<p>BE: Can we do things in the spec that do not create language level lock in?</p>
+<p>MM: If we just do what's in draft ES6 there are too many observables because @@create is called by [[Construct]]?</p>
+<p>MM: Lock in is that @@create makes uninit objects observable?</p>
+<p>AWB: Nothing says an exotic object can't override it's construct internal method to not call @@create</p>
+<p>YK: I think the thing to keep in mind that we want HTML Element to be subclassabe...</p>
+<p>AWB: ...they can just keep overriding.</p>
+<p>MM: What does Date do presently?</p>
+<p>AWB: It invokes @@create and returns an uninitialized slot and blows up if you try to use its methods</p>
+<p>MM: That is an observable state that user code can come to count on so it precludes future design that breaks such user code</p>
+<p>DD: I think moving @@create into dom might work if you want to avoid locking it down at the language level</p>
+<p>AWB: DOM objects can define a new create internal method. Their method can call @@create passing all the arguments.</p>
+<p>BE: Marc's point about Date is interesting, though I believe Date can be done at user level. But since it throws, haven't we reserved right to say that we can change that in the future.</p>
+<p>MM: I haven't had enough time to think this through. I really don't want to see us get locked in to what's in Draft ES6. What i'm trying to illustrate is that even to evaluate how bad lock in IS is something we can't do with confidence during this meeting.</p>
+<p>AWB: Biggest lock-in that I see is that we lock in <code>super()</code> in a constructor. That's the path.</p>
+<p>MM: Here are the 4 choices I see. Draft ES6. New^. Dave's proposal. Slip the schedule.</p>
+<p>AWB: Or my @@create original design. Draft ES6 plus pass arguments to @@create.</p>
+<p>MM: That has same issue with transform of cosntructor arguments, but it lacks having to rethink [[Construct]] path.</p>
+<p>DD: I'd like to advocate for new^. I'd like to go through the objections and state why I don't those objections are good and I want to know the temperature of the room.</p>
+<ul>
+<li><code>new^</code> as syntax: weird but rarely used</li>
+<li><code>this = new super(...)</code> I think is great, it makes clear how JS works and how it's different from other languages</li>
+<li>hijacking call path -- I don't see a significant difference between writing two methods and writing an if statement
+<ul>
+<li>YK: There is no way to differentiate super call by subclass from client</li>
+<li>DD: I don't see that as a big problem</li>
+<li>YK: We're recasting it as &quot;call constructor without allocation&quot;</li>
+</ul></li>
+<li>requiring protocol creation between super/subclass types</li>
+<li>super.draw() --</li>
+</ul>
+<p>BE: We should take a break. But we should not slip schedule. We can talk about the rest, but I want to emphasize that <em>we should be risk averse</em> and avoid locking ourselves into a bad path.</p>
+<p>DH: the <code>this =</code> and the <code>new^</code> has a lot of machinery -- static analysis, if you say it is one thing and another. My point is not that it's absolutely wrong but it's a lot of risk.</p>
+<p>BE: I think we're out of time for 6.</p>
+<p>MM: I believe that if slipping is off the table, all the remaining choices are dangerous -- given that we have to make a decision, only one I would be willing is new^ or remove classes.</p>
+<p>(general surprise)</p>
+<p>BE: paths:</p>
+<ol>
+<li>Drop classes (generally no)</li>
+<li>Stay the course with draft ES6</li>
+<li>new^</li>
+<li>Dave &amp; Yehuda proposal</li>
+<li>DOM Overrides [[Construct]] to do its thing as necessary. Ugly. This is #2++</li>
+<li>Remove @@create, built-ins do what ES5 did: Array subclass constructor was return override</li>
+</ol>
+<ul>
+<li>Cannot subclass built-ins</li>
+</ul>
+<ol start="7">
+<li>Pass args to @@create. This is #2++</li>
+</ol>
+<p>MM: If doesn't find #2 acceptable, that includes #5, #7</p>
+<p>NM: #2 should note that it exposes uninitialized state.</p>
+<p>YK: Subclassing DOM, @@create returns dummy object, return new super</p>
+<p>BT: least risk: punt on all this discussion and let people come up with subclassing protocols that meet needs</p>
+<p>#6 results in syntactic lock-in. Devs will write <code>super()</code> and then we can't do <code>this = new super()</code> later.</p>
+<p>MM: If we do #6 does it preclude having a future proposal with TDZ, unfulfilled this</p>
+<p>DD/AWB: It would work if we do the &quot;Domenic variation&quot; in the future, with a default <code>this = Object.create(new^.prototype)</code> if there is no <code>this =</code>.</p>
+<p>RW: #6 is a failure, we've told developers for years now that classes meant subclassing built-ins and we're taking it away.</p>
+<p>DH: Unfortunately, implementors brought issues at the last minute.</p>
+<p>BE: So we're talking about #5 then</p>
+<ul>
+<li>#3 is too dangerous this late in the game</li>
+</ul>
+<p>AWB: Agree.</p>
+<ul>
+<li>#2, 5, 7 are minimal spec impact</li>
+<li>#6 big spec impact</li>
+<li>Crazy to do anything but variations of #2</li>
+</ul>
+<p>BE: Motion... w/o judging <code>new^</code>, #3 is too much and risks the slip anyway</p>
+<p>RW: Seconded.</p>
+<p>MM: By same rule, #4</p>
+<ul>
+<li>User visible, uninitialized instances are too problematic, remove #2 &amp; #5</li>
+</ul>
+<p>BE: #6 remains, the developers suffer</p>
+<p>AWB: Too much work</p>
+<p>BE: #6 is out</p>
+<p>YK: It's not clear that #2 is definitively broken, recall.</p>
+<p>AWB: It's up to @@create to return a safe object</p>
+<p>BE: BZ pointed out that there are places in the DOM where you want to alloc memory of a specific size. You don't want to alloc and re-alloc.</p>
+<p>YK: There are already checks that exist.</p>
+<p>BE: If you want to allocate the right size, you need the arguments.</p>
+<p>AWB: All the types that are in ES6, that have size constraints are actually being dealt with in the spec.</p>
+<p>BE: Mark also disliked #2 because you can call <code>B[@@create]()</code> and get back some blank object.</p>
+<p>MM: A defensive class doesn't leak <code>this</code> during the construction process and a client can't get access and therefore no data dependent access</p>
+<p>YK: Still have extra cost in addition checks</p>
+<p>MM: Two brands per object</p>
+<p>BE: Not going to work, will lose on performance</p>
+<p>DD/YK/DH: (discussion of IDL)</p>
+<p>EA: Most of the time DOM bindings don't have constructors</p>
+<p>BE: What about the size constraints?</p>
+<p>EA: Can work around it</p>
+<p>AWB: The most common case is an oridinary object</p>
+<p>MM: The zero brand and two brand cases...</p>
+<ul>
+<li>Constructor needs check the initialization brand</li>
+</ul>
+<p>AWB: There is already logic in the spec that handles multiple stage initializations</p>
+<p>ARB: Not convinced that #6 is off.</p>
+<ul>
+<li>Can we agree that #6 keeps all the other options open?</li>
+</ul>
+<p>MM: I understand the workload issue, but what are the</p>
+<p>ARB: <code>new^</code> is easier than @@create, could come sooner</p>
+<p>RW: Can you explain?</p>
+<p>ARB:</p>
+<ul>
+<li>all allocation codepaths have to change and do &quot;virtual&quot; calls</li>
+<li>adding plenty of checks for unitialized objects</li>
+<li>@@create is mutable, so every allocation gets deoptimized as soon as someone changes some @@create.</li>
+<li>can't easily be inlined</li>
+</ul>
+<p>YK: I think they have to change for new^ also</p>
+<p>ARB: no, allocation code path is neither decoupled nor exposed nor mutable under that proposal.</p>
+<p>DH: Alternative design idea: treat the allocation as a proxy trap, with special hooks in to allow you to override it, e.g. in class syntax.</p>
+<p>MM: 8. @@create -&gt; [[Create]], no Symbol.create.</p>
+<p>AWB: Instead of @@create method, have create slot on function objects and construct method calls it if it's there.</p>
+<p><a href="https://gist.github.com/bterlson/95ab741efa0bbd57f19d">https://gist.github.com/bterlson/95ab741efa0bbd57f19d</a></p>
+<p>MM/AWB: you could prevent it from being overriden in ES6</p>
+<p>AWB: it's not a trap, it's private---perhaps private-inheritable---state of the function.</p>
+<p>BE:</p>
+<ol start="8">
+<li>Constructor [[create]] slot</li>
+</ol>
+<ul>
+<li>own <em>not</em> inherited</li>
+<li>no exposed to user code</li>
+<li>DEFER Reflect API called with args</li>
+</ul>
+<p>ARB: Can mutate the the prototype after the fact, so NOT inherited</p>
+<p>DH: would implementers say that any time you subclass Array you get a deopt?</p>
+<pre><code class="language-js"><span class="hljs-built_in">Array</span>[[Create]] = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) </span>{
+    <span class="hljs-keyword">return</span> %ArrayCreate%(<span class="hljs-keyword">this</span>.prototype, ...args);
+};
+</code></pre>
+<p>MM: I'm finding this quite attractive. Let's go back to the risk issue. If this turns out to work, how can we at this meeting gain enough confidence in it?</p>
+<p>DH: biggest issue is any syntax for a custom allocator</p>
+<p>AWB/BE: we should defer</p>
+<p>DH: but note that there is no way we could do this without syntax in the meantime.</p>
+<p>(Discussion of why 7 sucks and this new 8 is not bad.)</p>
+<p>Key point: [[Create]] is NOT exposed or expressed in user ES6 code (<em>for now</em>).</p>
+<p>DD: what about the observable uninitialized object via subclasses?</p>
+<p>BE: [[Create]] is called before subclass constructor ever happens so you cannot in fact see the unobservable thing.</p>
+<p>DH: Oh i see; we don't even need a minimal reflective API.</p>
+<p>AWB: Note that, if you wanted to just define a function that was useable as a constructor but inherited/copied its create behavior from someone else, you could just do <code>class MyFuncWithCopiedCreate extends OrigFuncWithCreate {}</code></p>
+<p>MM: Does anyone object to #8</p>
+<p>DH: Making sure, #8 is similar to #4 and more similar to #7. The only diff between 4 vs 7 is in 7: construct calls @@create internally; but in 4: it's hoisted out into @@create func.</p>
+<p>ARB: Do uninitiliazed objects become unobservable?</p>
+<p>AWB: ...since these things are closely coupled, it's not observable where you do it</p>
+<p>ARB: Could remove init checks then</p>
+<p>AWB: Checks aren't observable</p>
+<p>MM: Or turn them into assertions</p>
+<p>BE: Want design by contract in the spec</p>
+<p>DH: Because you have no way to define own create slot, can't deal with arg transfers (up the create chain)</p>
+<p>AWB: You're doing subclassing because you want the allocation from the builtin. So the way its defined is subclass constructor will have, as its create slot, the value of the create slot of Array (copied down)
+AWB: When you say <code>new SubArray()</code>, you'll get Array create</p>
+<p>DH: Yes, but you can't transform the constructor args passed from SubArray to Array</p>
+<p>YK: Note that this only matters for args that affect the allocations</p>
+<p>AWB: For ex: @@create for arrays don't care what the size of the arrays is</p>
+<p>ARB: Problem: Now design of constructor signature is tied by internals of super class</p>
+<p>BE: Yes, for ES6 that's true</p>
+<p>DH: This is an inherent part of JS. Distinction between exotic types/normal types. When subclassing exotic types, you must participate in the parent's protocol. You have to know more things in these case (constructor signatures, create sigs, etc)</p>
+<p>DD: Dislike that...</p>
+<dl>
+<dt>BE: Can you get it later [post ES6]? Probably</dt>
+<dd>Can you do super.apply?
+</dd>
+<dt>BE: Depends.</dt>
+<dd>Do it in the TDZ
+</dd>
+</dl>
+<p>DH: Any new syntax is too high risk for ES6. #8 while most conservative, it introduces the transform problem without a solution</p>
+<p>MM: Can someone clarify that we can get out of the scenario in the future</p>
+<p>DH: As long as we have a way in the future of doing something like:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stack</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{   
+  <span class="hljs-keyword">new</span>() { <span class="hljs-comment">// overrides the create -- strawman syntax only!!     </span>
+    <span class="hljs-keyword">return</span> [];   
+  }      
+  <span class="hljs-keyword">constructor</span>() { ... } 
+} 
+</code></pre>
+<p>DH: Gives a way to transform the args</p>
+<p>MM: If transforming args up construct chain, need a parallel transformation up the 'new' chain?</p>
+<p>DH: Yes</p>
+<p>MM: The burden of doing the transformation twice is too awkward.</p>
+<p>DH: No question there's a cost. Seems livable to me, but...</p>
+<p>BE: What's alternative?</p>
+<p>AWB: There's kind of a workaround: Proxy. Proxy overrides construct. Could filter args in construct method of a proxy.</p>
+<p>DH: Imagine mixin that you extend from</p>
+<p>MM: Satisfied it's possible</p>
+<p>AWB: I'm satisfied it's <em>probably</em> possible -- not sure yet though</p>
+<p>DD: Should talk about promises. Specifically about subclassing: I think if we moved everything into @@create, Promise methods would call this.@@create instead of this.constructor, then could have own custom subclass constructors</p>
+<p>BT: No because .then() ...?? base class blocks all subclasses</p>
+<p>BE: There are circumstances where you walk the subclass heirarchy to base class</p>
+<p>[discussion about promise implications]</p>
+<p>DD: I haven't thought about it enough to really say. I don't like the proxy thing, but...</p>
+<p>YK: Could imagine a thing that works like a proxy, but isn't actually a proxy</p>
+<p>BE: A mixin seems good</p>
+<p>DD: Shame that we, by default, need this heirarchy.</p>
+<p>MM: Let me try out a scenario that DD and I will find attractive: If we start with #8, then after ES6 want to get to new^, if syntactic occurrance of &quot;new super&quot; then we don't call our local create, and therefore there's no prob with args transform
+MM: I think that just works</p>
+<p>YK: All I would say is that #8 seems future proof to that</p>
+<p>MM: Yes.</p>
+<p>DD: That's good, I still like new^ and would be good option for ES7</p>
+<p>AWB: Would be helpful if proponents of new^, as we update the spec, looked at the spec and made sure it works (for the future)</p>
+<p>DD: In the world of #8, user code that wants to call super class just does super()?</p>
+<p>AWB: Yes</p>
+<p>MM: With that issue resolved, anyone object to declaring concensus on #8?</p>
+<p>ARB: Should we sleep on it?</p>
+<p>RW: Lets record it, then immediately decide on it in the morning first thing.</p>
+<p>[lots of head nods and agreement mumbles]</p>
+<p>BE: Gotta revisit trailing commas from yest. I don't think there are any grammar problems, right?
+BE: I don't know, I don't care.</p>
+<p>AWB: I guess they're ok, but they have a smell</p>
+<p>DH: One clarification, is there already a create trap? Are we talking about adding one?</p>
+<p>AWB: No. There's a construct only. Not going to add one</p>
+<p>DH: I don't understand the use-a-proxy idea as a solution</p>
+<p>AWB: Construct trap gets the args, it transforms</p>
+<p>DH: Obviously sub-optimal, but at least expressable and we can work on it
+DH: [repeats] Would be nice to have good syntax eventually, but good for now.</p>
+<a href="#conclusionresolution-object-instantiation-redo"><h4 id="conclusionresolution-object-instantiation-redo">Conclusion/Resolution</h4></a><ul>
+<li>#8</li>
+<li><a href="https://gist.github.com/bterlson/1fe0b0dc0ef3e71ff6e3">https://gist.github.com/bterlson/1fe0b0dc0ef3e71ff6e3</a></li>
+</ul>
+<a href="#51-trailing-commas-in-function-call-expressions-and-declarations"><h2 id="51-trailing-commas-in-function-call-expressions-and-declarations">5.1 Trailing Commas in Function Call Expressions and Declarations</h2></a><p>(Jeff Morrison)</p>
+<p><a href="./trailing_comma_proposal.pdf">trailing_comma_proposal.pdf</a></p>
+<p>JM: Review...</p>
+<p>ARB: Supported for consistency</p>
+<p>RW: If people dont want them: use JSHint. No objections otherwise</p>
+<a href="#conclusionresolution-51-trailing-commas-in-function-call-expressions-and-declarations"><h4 id="conclusionresolution-51-trailing-commas-in-function-call-expressions-and-declarations">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 acceptance</li>
+</ul>
+<a href="#regexp-globals"><h2 id="regexp-globals">RegExp Globals</h2></a><p>DD: RegExp globals reform recap.</p>
+<p>MM: Can we test on deleted properties?</p>
+<p>BE: What about a flag?</p>
+<ul>
+<li>Per instance</li>
+<li>Flag to be determined</li>
+<li>Specified in Annex B</li>
+</ul>
+<a href="#conclusionresolution-regexp-globals"><h4 id="conclusionresolution-regexp-globals">Conclusion/Resolution</h4></a><ul>
+<li>Stage 0 acceptance</li>
+</ul>
+
+</body>

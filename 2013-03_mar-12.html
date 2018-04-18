@@ -1,0 +1,655 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 12, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-12-2013-meeting-notes"><h1 id="march-12-2013-meeting-notes">March 12, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Norbert Lindenberg (NL), Allen Wirfs-Brock (AWB), Rick Waldron (RW), Waldemar Horwat (WH), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Luke Hoban (LH), Matt Sweeney (MS), Doug Crockford (DC), Yehuda Katz (YK), Brendan Eich (BE), Sam Tobin-Hochstadt (STH), Alex Russell (AR), Dave Herman (DH), Adam Klein (AK), Edward Yang (EY), Dan Stefan (DS), Bernd Mathiske (BM), John Pampuch (JP), Avik Chaudhuri (AC), Theresa O'Connor (TOC), Rick Hudson (RH), Andreas Rossberg (ARB), Rafeal Weinstein (RWN), Mark S. Miller (MM)</p>
+<hr>
+<a href="#opening"><h2 id="opening">Opening</h2></a><a href="#introduction"><h2 id="introduction">Introduction</h2></a><a href="#logistics"><h2 id="logistics">Logistics</h2></a><a href="#adoption-of-agenda"><h2 id="adoption-of-agenda">Adoption of Agenda</h2></a><p>Mixed discussion regarding scheduling over the course of the 3 days.</p>
+<p>Approved.</p>
+<a href="#approval-of-january-2013-meeting-notes"><h2 id="approval-of-january-2013-meeting-notes">Approval of January 2013 Meeting Notes</h2></a><p>Approved.</p>
+<a href="#adobe"><h2 id="adobe">Adobe</h2></a><p>JP: Here to help accelerate the ES6 spec, positive motivation. Excited about Modules, concurrency, debugging and profiling specifications.</p>
+<p>BM: Background as trained language designers and implementors and here to help.</p>
+<p>JP: Also excited about asm.js</p>
+<p>BM: Not sure about the spec status/prospects of asm.js.</p>
+<p>Edit (2013-03-22)
+<a href="http://blogs.adobe.com/standards/2013/03/21/adobes-ecma-tc-39-involvement">http://blogs.adobe.com/standards/2013/03/21/adobes-ecma-tc-39-involvement</a></p>
+<a href="#49-json-ietf-changes"><h2 id="49-json-ietf-changes">4.9 JSON, IETF changes</h2></a><p>(Presented by DC Crockford)</p>
+<p>Currently, JSON is an RFC, informational, the IETF version will be an internet standard and there is a minor correction that affects ECMAScript.</p>
+<p>The use of &quot;should&quot; in 15.12.2</p>
+<p>AR: What is the motivation of the change?</p>
+<p>DC: The change involves the mistake of using &quot;should&quot; w/r to multiple same-named keys error. Multiple same-name keys are invalid and <em>must</em> throw an error (vs. &quot;should&quot; throw an error)</p>
+<p>LH: This is a breaking change</p>
+<p>DH: The worst being the use case of multiple, same-named keys as comments</p>
+<p>DC: That's stupid</p>
+<p>YK: That's based on on your recommendation to use a keyed entry as a comment, so people naturally used the same key, knowing they'd be ignored.</p>
+<p>DC: I would certainly never recommend that practice</p>
+<p>YK: It was a side-effect</p>
+<p>AR: Which key is used now?</p>
+<p>AWB: The last one wins.</p>
+<p>AR: Is that the root of the security vector?</p>
+<p>DC: Not in ES, but in other encodings</p>
+<p>AR: Order matters, unescaped content that follows...</p>
+<p>DC: The current spec says &quot;[they should not]&quot;, but will say &quot;[they must now]&quot;</p>
+<p>YK: Let's define an ordering and make it cryptographically secure.</p>
+<p>DC: (recapping to Mark Miller, who just arrived)</p>
+<p>MM: You can't do that.
+(laughs)</p>
+<p>MM: You can't change &quot;should&quot; to &quot;must&quot;</p>
+<p>YK: Agreed, you cannot change JSON, there are too many JSON documents in existence.</p>
+<p>MM: Agreed.</p>
+<p>AR: It's possible to ignore this change?</p>
+<p>DC: Yes</p>
+<p>DH: Then why are we creating a dead letter?</p>
+<p>MM: ES has a grammatical specification for validating and parsing JSON. Anything that is not conformant JSON, would not parse. This change loses that property.</p>
+<p>DC: Or we don't change the spec</p>
+<p>MM: The way that you properly reject our favorite fixes, I think you should apply to your favorite fixes</p>
+<p>DC: I'll consider that</p>
+<p>AR: There is considerable opposition to this change</p>
+<p>DC: Two choices...</p>
+<ol>
+<li>Make it an error</li>
+<li>Continue to take the last one</li>
+</ol>
+<p>DC: Decoders have license to do what they want with non-conformant material. Encoders <em>must</em> be conferment to new changes.</p>
+<p>MM: Our current encoder conforms...</p>
+<p>AWB: I don't think it does... reviver/replacer</p>
+<p>MM: No, can only apply objects instead of the original objects.</p>
+<p>AR: Did not realize the production/consumption distinction of this change.</p>
+<p>WH: Supports this change. ECMAScript is already conformant because it never generates duplicate keys.</p>
+<p>MM: With this change ECMAScript would have two unappealing choices:
+A. No longer be a validating parser (i.e. a parser that doesn't allow any optional syntax or extensions, even though extensions are permitted by the JSON spec).
+B. Do a breaking change by throwing errors when seeing duplicates when parsing.</p>
+<a href="#conclusionresolution-49-json-ietf-changes"><h4 id="conclusionresolution-49-json-ietf-changes">Conclusion/Resolution</h4></a><ul>
+<li>Revisit this, after DC has made a final decision.</li>
+<li>FTR: Majority opposition, no consensus.</li>
+</ul>
+<a href="#412-stopiterationgenerator"><h2 id="412-stopiterationgenerator">4.12 StopIteration/Generator</h2></a><p>(Presented by Dave Herman)</p>
+<p><a href="https://github.com/dherman/iteration-protocols">https://github.com/dherman/iteration-protocols</a></p>
+<p>DH: ...Confirms that there is lack of understanding for Generator &quot;instances&quot;</p>
+<p>MM: Clarify terminology</p>
+<p>DH: Generator objects are instances of Iterators, in that they have a <code>next</code> method. The current design is based on a thrown <code>StopIteration</code></p>
+<p>C#, Java, Python apis for comparison.</p>
+<p>My opinion, a single method is win.</p>
+<p>Concrete proposal:</p>
+<ul>
+<li>The benefit of a single method</li>
+<li>Not based on exceptions</li>
+<li>Compatible with Generator semantics</li>
+</ul>
+<p>Iterator API object has a single method:</p>
+<pre><code class="language-js">{
+  next() -&gt; { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span> , <span class="hljs-attr">value</span>: any }
+          | { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>[, <span class="hljs-attr">value</span>: any] }
+}
+</code></pre>
+<p>b/c generators can return an argument, if you're using a return value</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
+}
+</code></pre>
+<p>for <code>for-of</code> this doesn't matter, but for libs like q, task.js this is useful for pause and resume with value</p>
+<p>If we didn't care, the result value can be omitted</p>
+<p>This API was pleasant to write and works nicely with existing idioms</p>
+<p>MM: Requires allocation for every iteration?</p>
+<p>DH: Yes, will still need the object allocation, but</p>
+<p>WH: Does next return a fresh object? or can reuse the same?</p>
+<p>DH: Can reuse</p>
+<p>AWB: For every iterator in the spec, we need to specify a fresh or reused object?</p>
+<p>DH: Yes.</p>
+<p>YK: The current API, able to do yield ...returns a promise...</p>
+<p>DH: Can still do that, this change is internal and w/r to performance, this should be highly optimizable.</p>
+<p>AWB: Anything that uses a method based implementation, will be more optimizable through calls vs exception.</p>
+<p>DH: I've never seen an iterator API that didn't have some performance issues</p>
+<p>AWB: (refutes) Any method based approach can be better optimized over exception based approaches.</p>
+<p>DH: I don't have a solid performance story, but the feedback I'm getting is that there is negative concern about the StopIteration approach, whereas this approach mitigates these concerns. Issues arise when dealing with multiple iterators</p>
+<p>WH: If you try throwing StopIteration across iterators, it will be caught</p>
+<p>AWB: Or it won't</p>
+<p>EA: Surprising: If any function throws a StopIteration, it will jump out of the for-of.</p>
+<p>AWB: I noticed this in the examples shown in the github repo</p>
+<p>WH: Why I'm in favor... Throwing StopIteration across places where no iterators exist and if code is refactored so that an iterator is present, you'll experience unexpected behavior. (This suffers from the same capture flaws as Lisp's old dynamic scoping.)</p>
+<p>LH: When we last talked about this, we whiteboarded the priority order. for-of is the primary case, generator authoring is the secondary case. Cases affected by this: direct API consumption as third and direct API authoring is fourth</p>
+<p>If we're really sure the engines will do the work to optimize these things?</p>
+<p>A. will this slow down implementation?
+B. won't be willing to implement due to poor performance?</p>
+<p>AR: No implementation wants to ship something that will potentially be slow</p>
+<p>LH: Of course, but StopIteration has to go.</p>
+<p>MM: One allocation per loop</p>
+<p>WH: So is this</p>
+<p>MM: Only if you reuse the record</p>
+<p>LH/WH: Of course and that's what you want</p>
+<p>MM: Then, as Allen said we need to specify this</p>
+<p>DH: My inclination would be to use a fresh object each time</p>
+<p>AWB: ...you know the first time, because it's the first time that next is called,</p>
+<p>MM: My proposal is that you provide stop token as a parameter of next(stop), every time. next(stop) would return either the next value or the stop token.</p>
+<p>DH: (clarifying) &quot;iteration&quot; is one time around the loop. &quot;loop&quot; is the entire the operation.</p>
+<p>WH: It's possible for next(stop) to cause havoc from one iteration to another by caching one next call's stop parameter and returning it from a different next call.</p>
+<p>[Someone had also presented a variant of the proposal where <stop> was a field on the iterator instance instead of an argument to next.] WH: This would create funky failures if, for example, you had an iterator that did a deep traversal of an object tree and said tree happened to include the iterator instance.</p>
+<p>MM: In order to not allocate on every iteration, you have specify (???)</p>
+<p>MM: A new stop token would be generated per loop.</p>
+<p>WH: What's a loop? This gets confusing when you have iteration adaptors.</p>
+<p>AWB: If the client passes in the token on next(), then it's the client's burden</p>
+<p>MM: Anything that's unforgable, unique, or itself side affectable.</p>
+<p>DH: Is there support for Mark's API?</p>
+<p>RH: If you use Mark's API, overtime...</p>
+<p>MM: My API reuses the object for the iterations of the loop, by passing it back in as an argument to next()</p>
+<p>RH: To avoid the cost of allocation?</p>
+<p>MM: Yes, but only as a token</p>
+<p>EA: You can have a return value in a generator so the object passed in needs to be mutated to include the return value in case of end of iteration.</p>
+<p>MM: That is a downside of this proposal, where StopIteration would carry the value.</p>
+<p>DH: (examples of the two proposals)</p>
+<p>Dave's</p>
+<pre><code class="language-js">{
+  next() -&gt; { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span> , <span class="hljs-attr">value</span>: any }
+          | { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>[, <span class="hljs-attr">value</span>: any] }
+}
+</code></pre>
+<p>Marks's</p>
+<pre><code class="language-js">{
+  next(X) -&gt; any | X
+}
+</code></pre>
+<p>AWB: (suggests an alternative: pass an object to next, on which next sets the result)</p>
+<p>STH: ...is hostile to implementors and user code.</p>
+<p>ARB: That's the C-style of doing it.</p>
+<p>WH: Suppose the iterator takes an object and returns all the properties, but calls on itself?</p>
+<p>DH: Mark's proposal is broken, because it doesn't work with return values of generators.</p>
+<p>MM: Agreed.</p>
+<p>DH: Don't think that we're approaching consensus, but don't let your idea of perfect cloud judgement. I'm asking engine implementors if this is appealing. The concern over StopIteration is real.</p>
+<p>AWB: This is certainly better then the current plan of record</p>
+<p>AR: Agree.</p>
+<p>BM, JP, AC: Agree</p>
+<p>BM: This is also future proof and works well with concurrency and the semantics are sound. It's also easy to implement and optimize.</p>
+<p>AWB: All spec iterators/generators <em>must</em> specify a reused iterator or fresh</p>
+<p>MM: (further support for AWB's claim)</p>
+<p>DH: Not sure if we're trading short term wins for long term losses. Are there long terms</p>
+<p>ARB: There is another secondary effect that it encourages better GC</p>
+<p>AWB: This shouldn't be a problem for a good GC</p>
+<p>MM: I'm really only concerned about the loop aspect</p>
+<p>AR: We have the tools to work with hot loops</p>
+<p>WH: Alex's point about the escape valve is key</p>
+<p>DH: Not discounting the needs of the developers/user code. The method API is appealing, vs. StopIteration</p>
+<p>RW: Agree.</p>
+<p>DH: (Shows example of C#)</p>
+<p>AWB: The third use case that Luke gave, using an iterator and the fourth use case, creating an iterator.
+...This API is more complex for user code
+...More ways for client code to go wrong</p>
+<p>BM: Disagree, this is a safer.</p>
+<p>DH: Don't get out of sync. Argue that the Java and C# API are too error prone.</p>
+<p>BM: Agree, this is actually superior to the Java and C# APIs</p>
+<p>ARB: This is actually the path you'd want in typed languages, minimizes state space</p>
+<p>DH: I want to see a better overall interface for iterators and generators, without jeopardizing the acceptance.</p>
+<p>MM: In favor of this API, if the implementors are not objecting.  Although I don't like the API itself.</p>
+<p>DH: Agree, I prefer the pure, stateless proposal</p>
+<p>AWB: If an object is passed an argument, the object is used as the value bucket.</p>
+<p>DH: Still mutates the object</p>
+<p>AWB: But it mutates an object that you've explicitly provided</p>
+<p>BM: The issue is not the allocation, but that you have to go to heap at all.</p>
+<p>ARB: If you do this pre-allocation thing, it might be observable</p>
+<p>BM: But that's the case either way</p>
+<p>DH: Is the mutable version going to harm optimization?</p>
+<p>ARB: Yes: the object may be shared, in which case mutation may become observable from the distance, and cannot be optimized away</p>
+<p>RH: If the object being mutated escapes to an old mutation, this kills potential optimizations.</p>
+<p>DH: Seems like consensus on the pure, stateless version of this:</p>
+<pre><code class="language-js">{
+  next() -&gt; { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span> , <span class="hljs-attr">value</span>: any }
+          | { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>[, <span class="hljs-attr">value</span>: any] }
+}
+</code></pre>
+<p>JP: &quot;more&quot; vs. &quot;done&quot;?</p>
+<p>(can discuss further)</p>
+<a href="#conclusionresolution-412-stopiterationgenerator"><h4 id="conclusionresolution-412-stopiterationgenerator">Conclusion/Resolution</h4></a><ul>
+<li>Rough agreement (between those present) on pure, stateless version of:</li>
+</ul>
+<pre><code class="language-js">{
+  next() -&gt; { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span> , <span class="hljs-attr">value</span>: any }
+          | { <span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>[, <span class="hljs-attr">value</span>: any] }
+}
+</code></pre>
+<p>...To replace StopIteration</p>
+<ul>
+<li>Always has an own property called &quot;value&quot;:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> i1 = (<span class="hljs-function"><span class="hljs-keyword">function</span> *<span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span>;
+})();
+
+<span class="hljs-string">"value"</span> <span class="hljs-keyword">in</span> i1.next();
+
+<span class="hljs-keyword">var</span> i2 = (<span class="hljs-function"><span class="hljs-keyword">function</span> *<span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{
+})();
+
+<span class="hljs-string">"value"</span> <span class="hljs-keyword">in</span> i2.next();
+
+<span class="hljs-keyword">var</span> i3 = (<span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">h</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (<span class="hljs-keyword">void</span> <span class="hljs-number">0</span>);
+})();
+
+<span class="hljs-string">"value"</span> <span class="hljs-keyword">in</span> i3.next();
+</code></pre>
+<ul>
+<li>Built-in iterators should be specified as returning a fresh value.</li>
+<li>See: <a href="https://gist.github.com/dherman/5145925">https://gist.github.com/dherman/5145925</a></li>
+<li>Without Brendan, a champion of iterators and generators, don't have full consensus</li>
+</ul>
+<a href="#42-modules"><h2 id="42-modules">4.2 Modules</h2></a><p>(Presented by Dave Herman, Sam Tobin-Hochstadt, Yehuda Katz)</p>
+<p>See: <a href="https://gist.github.com/wycats/51c96e3adcdb3a68cbc3">https://gist.github.com/wycats/51c96e3adcdb3a68cbc3</a></p>
+<p>Slides (PDF, will prompt download): <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:modules-march-2013.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:modules-march-2013.pdf</a></p>
+<p>DH: We're committed to making this happen for ES6, it's too important to miss and I'm going to do whatever it takes. Please remember that you can always bring specific issues directly to us (DH, STH, YK).</p>
+<p>...Not going to spend time on syntax. Focus on Module loading semantics to address any outstanding issues, spent last two months working with Sam and Yehuda and polling community leaders to get use cases to work with.</p>
+<p>Recognize that some use cases may not be covered, but that's ok.</p>
+<a href="#module-loading-semantics"><h3 id="module-loading-semantics">Module Loading Semantics</h3></a><p>...Currently a notion of having a string-name registry</p>
+<p>...Move towards having a separate space for module registration</p>
+<p>Minimalism - IN
+Nested Modules - OUT</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> <span class="hljs-string">"libs/string"</span> {
+  <span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">capitalize</span>(<span class="hljs-params">str</span>) </span>{
+    <span class="hljs-keyword">return</span> (make the string capitalized)
+  };
+}
+
+<span class="hljs-built_in">module</span> <span class="hljs-string">"app"</span> {
+  <span class="hljs-keyword">import</span> { capitalize } <span class="hljs-keyword">from</span> <span class="hljs-string">"libs/string"</span>;
+}
+</code></pre>
+<p>The registry corresponds to a <code>Loader</code> which creates a <code>Realm</code></p>
+<p>MM: But you can have more then one Realm</p>
+<p>DH: Think of <code>Loader</code> as a virtual &quot;iframe&quot;, as a concrete way of describing it. When you create an &quot;iframe&quot;, you get a whole new global object with it's own DOM. A <code>Loader</code> creates a &quot;sandbox&quot; global that can share system intrinsics.</p>
+<p><em>The <code>System</code> loader.</em></p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> capitalize = System.get(<span class="hljs-string">'libs/string'</span>).capitalize;
+<span class="hljs-keyword">var</span> app = System.get(<span class="hljs-string">'app'</span>).app;
+</code></pre>
+<p><em>Custom loader:</em></p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> sandbox = <span class="hljs-keyword">new</span> Loader({ <span class="hljs-attr">intrinsics</span>: System });
+
+sandbox.set(<span class="hljs-string">'app'</span>, System.get(<span class="hljs-string">'app'</span>));
+sandbox.get(<span class="hljs-string">'app'</span>) === System.get(<span class="hljs-string">'app'</span>); <span class="hljs-comment">// true</span>
+
+sandbox.eval(<span class="hljs-string">"import { capitalize } from 'app'; capitalize('hi')"</span>); <span class="hljs-comment">// "Hi"</span>
+</code></pre>
+<p>Acts like a map, <code>.get()</code> will get the module</p>
+<p>[Module pipeline diagram]</p>
+<pre><code>             module name
+                  |
+                  V
+              normalize
+                  |
+                  V
+               resolve
+                  |
+                  V
+               fetch
+                  .
+                  .
+                  V
+              translate
+                 |
+                V
+                link
+</code></pre>
+<p>Produces one of three values:</p>
+<ul>
+<li>undefined: default linking behavior</li>
+<li>Module: registers module instance object directly</li>
+<li>{imports : [ModuleName], execute : (Module ...) -&gt; Module, exports : [String]} : invokes execute to produce module, exports optional</li>
+</ul>
+<p>...</p>
+<a href="#use-case-module-paths"><h3 id="use-case-module-paths">Use Case: Module Paths</h3></a><pre><code class="language-js">System.ondemand({
+  <span class="hljs-string">"http://code.jquery.com/jquery-2.4.js"</span>: <span class="hljs-string">"jquery"</span>,
+  <span class="hljs-string">"backbone.js"</span>: [ <span class="hljs-string">"backbone/events"</span>, <span class="hljs-string">"backbone/model"</span> ]
+});
+</code></pre>
+<p>...is sugar for...</p>
+<pre><code class="language-js">System.resolve = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">path</span>) </span>{
+  <span class="hljs-keyword">switch</span> (path) {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">"jquery"</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">"http://code.jquery.com/jquery-2.4.js"</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">"backbone/events"</span>:
+    <span class="hljs-keyword">case</span> <span class="hljs-string">"backbone/model"</span>:
+      <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">"backbone.js"</span>,
+        <span class="hljs-attr">type</span>: <span class="hljs-string">"script"</span>
+      };
+  }
+};
+</code></pre>
+<p>MM: This is changing the behavior only at the system <code>Loader</code>?</p>
+<p>DH: Yes.</p>
+<p>STH: This is the API that several people indicated was important during the last meeting.</p>
+<a href="#use-case-"><h3 id="use-case-">Use Case: ...?</h3></a><a href="#use-case-compile-to-js"><h3 id="use-case-compile-to-js">Use Case: Compile To JS</h3></a><pre><code class="language-js"> System.translate = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">src, options</span>) </span>{
+  <span class="hljs-keyword">if</span> (!options.path.match(<span class="hljs-regexp">/\.coffee$/</span>)) {
+    <span class="hljs-keyword">return</span>;
+  }
+  <span class="hljs-keyword">return</span> CoffeeScript.translate(source);
+}
+</code></pre>
+<p>LH: Is this updated on the Wiki?</p>
+<p>DH: Will update. Much of the changes are about refining API and making common things easy and most things possible</p>
+<a href="#use-case-custom-amd"><h3 id="use-case-custom-amd">Use Case: Custom AMD</h3></a><p>Creating custom translations for extensions...</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { <span class="hljs-attr">data</span>: foo } <span class="hljs-keyword">from</span> <span class="hljs-string">"text!foo"</span>;
+
+<span class="hljs-string">``</span><span class="hljs-string">`js
+System.normalize = function(path) {
+  if (/^text!/.test(mod)) {
+    return {
+      normalized: mod.substring(5) + ".txt",
+      metadata: { type: "text" }
+    };
+  }
+  // fall-through for default behavior
+}
+
+System.translate = function(src, { metadata }) {
+  if (metadata.type === "text") {
+    let escaped = escapeText(src);
+    return `</span><span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> data = <span class="hljs-string">"${escaped}"</span><span class="hljs-string">`;
+  }
+  // fall-through for default behavior
+}
+</span></code></pre>
+<p>WH: Why would you want to do it this strange way (escape text only to then eval it) instead of just letting the text be? [It feels kind of like the folks doing eval(&quot;p.&quot; + field) instead of p[field]].</p>
+<p>DH: (explains James Burke's summary of static asset loading)</p>
+<a href="#use-case-importing-legacy-libraries"><h3 id="use-case-importing-legacy-libraries">Use Case: Importing Legacy Libraries</h3></a><p>(Specifically, not libraries that use CommonJS or AMD, but libraries that mutate the global object)</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> legacy = [ <span class="hljs-string">"jquery"</span>, <span class="hljs-string">"backbone"</span>, <span class="hljs-string">"underscore"</span> ];
+
+System.resolve = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">path, options</span>) </span>{
+  <span class="hljs-keyword">if</span> (legacy.indexOf(path) &gt;= <span class="hljs-number">-1</span>) {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">name</span>: path, <span class="hljs-attr">metadata</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">"legacy"</span> }
+    };
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">name</span>: path, <span class="hljs-attr">metadata</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">"es6"</span> }
+    };
+  }
+};
+</code></pre>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractExports</span>(<span class="hljs-params">loader, original</span>) </span>{
+  <span class="hljs-keyword">var</span> original =
+    <span class="hljs-string">`var exports = {};
+    (function(window) { <span class="hljs-subst">${original}</span>; })(exports);
+    exports;`</span>
+
+  <span class="hljs-keyword">return</span> loader.eval(original);
+}
+
+System.link = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">source, options</span>) </span>{
+  <span class="hljs-keyword">if</span> (options.metadata.type === <span class="hljs-string">'legacy'</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Module(extractExports(<span class="hljs-keyword">this</span>, source));
+  }
+
+  <span class="hljs-comment">// fall-through for default</span>
+}
+</code></pre>
+<p>LH: Once we ship this, we want people to start using modules as soon as possible. How?</p>
+<p>YK: Realistically, a &quot;plugin&quot; for something like require.js will have to provide an ES6 &quot;shimming&quot; mechanism.</p>
+<p>LH: To paraphrase, we're providing the primitives that make the common cases easy to overcome. What about the legacy libraries that won't be brought up to date? Can we provide a simple mechanism?</p>
+<p>DH: No, legacy libs that just expose themselves to the global object, without any sort of shimming mechanism are out of reach</p>
+<p>LH: Thank you, that's a sufficient answer</p>
+<a href="#use-case"><h3 id="use-case">Use Case:</h3></a><p>Import AMD style modules and Node style modules. Effectively, ES6 module importing from non-ES6 module.</p>
+<p>There is no way to tell</p>
+<pre><code class="language-js">System.link = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">source, options</span>) </span>{
+  <span class="hljs-keyword">if</span> (options.metadata.type !== <span class="hljs-string">"amd"</span>) { <span class="hljs-keyword">return</span>; }
+
+  <span class="hljs-keyword">let</span> loader = <span class="hljs-keyword">new</span> Loader();
+  <span class="hljs-keyword">let</span> [ imports, factory ] = loader.eval(<span class="hljs-string">`
+    let dependencies, factory;
+    function define(dependencies, factory) {
+      imports = dependencies;
+      factory = factory;
+    }
+    <span class="hljs-subst">${source}</span>;
+    [ imports, factory ];
+  `</span>);
+
+  <span class="hljs-keyword">var</span> exportsPosition = imports.indexOf(<span class="hljs-string">"exports"</span>);
+  imports.splice(exportsPosition, <span class="hljs-number">1</span>);
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">execute</span>(<span class="hljs-params">...args</span>) </span>{
+    <span class="hljs-keyword">let</span> exports = {};
+    args.splice(exportsPosition, <span class="hljs-number">0</span>, [exports]);
+    factory(...args);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Module(exports);
+  }
+
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">imports</span>: imports, <span class="hljs-attr">execute</span>: execute };
+};
+</code></pre>
+<p>BM: Could you postulate that exports and</p>
+<p>DH: You could but, unrealistic</p>
+<p>BM: Could be optimizing for module provider, but not consumer...
+...</p>
+<p>MM: What does the <code>Module</code> constructor do?
+DH: Copies the own  properties of the given object.</p>
+<p>MM: What is the job of the <code>System.link</code> hook?</p>
+<p>STH: To go from a piece of JavaScript source code to module instance object, translate is string-&gt;string.</p>
+<p>WH: Is it a <code>module</code> or <code>Module</code> instance?</p>
+<p>DH: <code>Module</code> instance object</p>
+<p>Take the source code, all the deps, finds all the exports, links them together.</p>
+<p>The link hook can return</p>
+<ol>
+<li>undefined for the default behavior</li>
+<li>A Module instance, where everything is done and complete</li>
+<li>An object, with list of deps and factory function to execute at some later time (eg. when all deps are downloaded and ready)</li>
+</ol>
+<p>YK: Explains that a two phase system is required whether you're using node, AMD or anything. Now you can use ES6 provided hook.</p>
+<p>BM: Optionally specify the list of exports?</p>
+<p>DH: Yes.</p>
+<p>Conversation about specific example.</p>
+<p>MM: Clarify... noting that the positional args is similar to AMD positional args</p>
+<p>DH: Yes.</p>
+<p>ARB: No static checking for non-ES6 modules?</p>
+<p>DH: Yes, it's a hole that can't be filled if we want interop from AMD-&gt;ES6 and ES6-&gt;AMD (or node)</p>
+<p>ARB: Concern about having two imports, checked and unchecked. (implementation complexity concern)</p>
+<p>BM: The alternative is to not support AMD and provide only one imports</p>
+<p>STH/RW: This is an option, but a worse option.</p>
+<p>...Discussion re: static checking for non-ES6 modules</p>
+<p>ARB: Every single construct, import, loading etc now has two different semantics to support.</p>
+<p>BM: Forces users into thinking about which they need... optimizing for module authors, not module users. The wrong case... otherwise enforce static checking for all module code</p>
+<p>AR/STH: Not possible for <em>all</em> existing code</p>
+<p>STH: (whiteboard) Indirection via dynamic object makes static checking impossible.</p>
+<p>For example, if you write the code:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { a } <span class="hljs-keyword">from</span> <span class="hljs-string">"some.js"</span>
+... a ...
+</code></pre>
+<p>where <code>&quot;some.js&quot;</code> is an AMD library, then there's no static checking, but if you refactor <code>&quot;some.js&quot;</code> to be an ES6 module, you automatically get static checking.  But if you don't support this use case, then there's indirection:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> { exports } <span class="hljs-keyword">from</span> <span class="hljs-string">"some.js"</span>
+... exports.a ...
+</code></pre>
+<p>And changing <code>&quot;some.js&quot;</code> to use ES6 never results in new static semantics.</p>
+<p>...Mixed discussion re: dynamic checks vs static checks.</p>
+<p>BM: Was under the impression that the dynamic checks might be too late, but it has now become clear that they happen early enough</p>
+<p>STH: Cannot create references across <code>Module</code> instances to dynamic module code.</p>
+<p>MM: the world of JS uses feature detection, on the AMD side... can AMD code feature test?</p>
+<p>STH: (refers to an early slide, which shows example of importing module as single object, properties can then be tested for)</p>
+<p>MM: (confirms that STH answers Q)</p>
+<p>DH: Pause on the Question of dynamic import/export
+(Returns to the pipeline diagram)
+...The &quot;fetch&quot; hook is the part where you go get the bits</p>
+<p>DH:
+(Slide: 1. Load and Process Dependencies Diagram)
+(Slide: 2. Link)</p>
+<p>AR/DH: Note that browsers can provide their own plugin points for the Fetch step</p>
+<p>MM: All of the hooks have been executed and there is no user code? If this fails, there are no side effects?</p>
+<p>DH: Correct</p>
+<p>ARB/STH: During</p>
+<p>DH: Modified the registry, but there is an inflight loading happening, when the inflight is finished, it will pave the changes to registry. (last op wins)</p>
+<p>ARB: When you evaluate a script that imports module Foo, which runs hooks that in turn import Foo into the module registry, what happens?</p>
+<p>AWB: Why are they operating in the same Realm?</p>
+<p>DH: It sounds like an objection to modifying the list of modules in the registry by downloading code that modifies the list of modules in the registry...</p>
+<p>STH: Imagine we didn't have loader hooks, all you could do was eval and had two XHRs that fetched and eval'ed. We'd still have the same issues that we'd have with loader hooks, it's a problem with mutation and concurrency.</p>
+<p>ARB: Agree that the fundamental problem will always be there, but have a problem with shared global object for all modules.</p>
+<p>DH: If the same module is attempted to be defined in two places, that's an error and is a bug.</p>
+<p>ARB: Only when within the same compilation stage, silent overwriting otherwise.</p>
+<p>WH: What if module A depends on both B and C and the initialization of B fails?</p>
+<p>DH: C remains uninitialized but present in the registry</p>
+<p>WH: This breaks the model.  It's not C's fault that its initializer didn't run.</p>
+<p>AWB: Mark C as never having its initializer attempt to run and run it the next time it's imported.</p>
+<p>DH: Moving to next slide</p>
+<p>(Slide: 3. Execute)</p>
+<p>Produces &quot;Result&quot;</p>
+<p>Note that each step in the 3 parts has an Error path:</p>
+<ol>
+<li>load/syntax error</li>
+<li>link error</li>
+<li>runtime exception</li>
+</ol>
+<p>...Mixed discussion re: execution despite exceptions</p>
+<p>...Mixed discussion clarifying fetch semantics (1. Load and Process) re: dynamically building URLs to batch load? re: browser knowledge of sources?</p>
+<p>LH: What does the synchronous timeline of Slide 1 look like?</p>
+<p>DH: All normalize hooks first (need names and locations), then all resolve hooks</p>
+<a href="#use-case-importing-into-node"><h3 id="use-case-importing-into-node">Use Case: Importing into Node</h3></a><pre><code class="language-js">System.resolve = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">path, options</span>) </span>{
+  <span class="hljs-keyword">if</span> (node.indexOf(path) &gt; <span class="hljs-number">-1</span>) {
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">name</span>: path, <span class="hljs-attr">metadata</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">'node'</span> } };
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">name</span>: path, <span class="hljs-attr">metadata</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">'es6'</span> } };
+  }
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extractNodeExports</span>(<span class="hljs-params">loader, source</span>) </span>{
+  <span class="hljs-keyword">var</span> loader = <span class="hljs-keyword">new</span> Loader();
+  <span class="hljs-keyword">return</span> loader.eval(<span class="hljs-string">`
+    var exports = {};
+    <span class="hljs-subst">${source}</span>;
+    exports;
+  `</span>);
+}
+
+System.link = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">source, options</span>) </span>{
+  <span class="hljs-keyword">if</span> (options.metadata.type === <span class="hljs-string">'node'</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Module(extractNodeExports(<span class="hljs-keyword">this</span>, source));
+  }
+}
+</code></pre>
+<a href="#use-case-single-export-modules"><h3 id="use-case-single-export-modules">Use Case: Single Export Modules</h3></a><p>DH: Brought this up 2 meetings ago, had a proposal that wasn't ready, it was shot down. This is something that I'm being told is very important and I agree with them. We can accommodate single exports via design protocols, but the developer community may not like it.</p>
+<p>DH/YK: (walk through the <code>System.link</code> implementation)</p>
+<p>DH: Can, should do better. Goal: Simple syntactic sugar. <strong>It's important, we will address it and we will do so with syntactic sugar</strong>. We will create a means by providing an &quot;anonymous export&quot;. We will review the &quot;sugar&quot; at the next face-to-face meeting.</p>
+<p>...Recognizes the community frustration regarding lack single/anonymous exports.</p>
+<p>...No dissent.</p>
+<p>LH: (Questions about how this works with the previously shown use cases)</p>
+<p>...</p>
+<p>YK: (Shares anecdotal experience from developing the ES6 transpiler that was adopted by Square. Positive experience.)</p>
+<p>STH: Updated/removed junk from wiki</p>
+<p>LH: Can imports be in scripts?</p>
+<p>STH: Yes</p>
+<p>DH: There was originally a use case that involved jQuery, we can't satisfy this without breaking everything (there is no way to be ES 3, 5, 6 at the same time)</p>
+<p>But...</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (...some detection...) {
+  System.set(<span class="hljs-string">"jquery"</span>, ...);
+}
+</code></pre>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!--
+once this is loaded, the jQuery module is
+registered and available for all scripts
+--&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"jquery.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-comment">&lt;!--
+which means all future scripts may have this:
+--&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">import</span> { $ } <span class="hljs-keyword">from</span> <span class="hljs-string">"jquery"</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>LH: What about concatenation cases?</p>
+<p>DH: (whiteboards example of <code>System.ondemand</code>)</p>
+<pre><code class="language-js">System.ondemand({
+  <span class="hljs-string">"all.js"</span>: [ <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"c"</span> ]
+});
+</code></pre>
+<p>AWB/STH: (whiteboard)</p>
+<p>m.js:</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> <span class="hljs-string">"m"</span> {
+  <span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>;
+}
+</code></pre>
+<p>n.js:</p>
+<pre><code class="language-js"><span class="hljs-built_in">module</span> <span class="hljs-string">"n"</span> {
+  <span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> b = <span class="hljs-number">2</span>;
+}
+</code></pre>
+<p>Needs:</p>
+<pre><code class="language-js">System.ondemand({
+  <span class="hljs-string">"m.js"</span>: <span class="hljs-string">"m"</span>,
+  <span class="hljs-string">"n.js"</span>: <span class="hljs-string">"n"</span>
+});
+</code></pre>
+<p>If you concatenate?</p>
+<p>m.js + n.js = concat.js...</p>
+<p>Needs:</p>
+<pre><code class="language-js">System.ondemand({
+  <span class="hljs-string">"concat.js"</span>: [ <span class="hljs-string">"m"</span>, <span class="hljs-string">"n"</span> ]
+});
+</code></pre>
+<p>Arrays for files that contain multiple things</p>
+<p>...</p>
+<p>ARB: We're over-prioritizing for concatenation. The language shouldn't be hostile, but should stop at good enough. We shouldn't optimize the design of the language around a secondary concept</p>
+<p>AWB: modules are a concrete concept in the language, we need to focus on these as a building block</p>
+<p>LH:</p>
+<p>STH: The claim that concatenation is going to become a not-important part of the web is ludicrous</p>
+<p>ARB: I think that mid-term concatenation will harm performance</p>
+<p>YK: Do you think that concatenation will go away?</p>
+<p>ARB: In the long term, it might</p>
+<p>YK/STH: This is what is ludicrous</p>
+<p>...Mixed discussion re: library vs. language</p>
+<p>AWB: There is a standard loader, defined by the language</p>
+<p>...From Arv:
+AR: Joining files to optimize download and compilation</p>
+<p>STH: YUI optimized for reality and found that concatting is important</p>
+<p>YK: Should Ember ship 100 files?</p>
+<p>AR: Any modern library has a lot of files. Apps/libraries are making trade-offs to get good performance.</p>
+<p>DC: Caching is not working. Browser will get better.</p>
+<p>AR: SPDY will make things better</p>
+<p>YK: Even with SPDY, there is a lot of IO</p>
+<p>ARB: It is perfectly fine to depend on a tool for concat</p>
+<p>EA: We are designing based on concatenation. We should take that out of the picture. We can always write compilers that does the linking.</p>
+<p>ARB/LH: With a compiler you can do linking/bundling and existing and future tools can do this.</p>
+<p>STH/DH: There will be holes in these.</p>
+<p>LH: module &quot;a&quot; { ... } is leading developers down the wrong path</p>
+<p>STH: Recommmend doing modules the node style, where each file is a module</p>
+<p>YK: AMD developers use a build system that adds the name to the define(). They don't name the modules in their source. The build system names the modules.</p>
+<p>MM: AMD experience speaks in favor of a concatenator.</p>
+<p>STH: You will get a compile time error if you import a file that contains a module.
+...</p>
+<p>ARB: How about adding a way to just register a module as a string containing the source of its body as if it was a file.</p>
+<p>AR: Then you have to allocate the string
+...</p>
+<p>AWB: Wants to use module &quot;abc&quot; { ... }. It is a good way to structure code. And you don't want to tie this to your configuration management
+...</p>
+<p>STH: The strength of the system is that it supports both</p>
+<p>ARB: The approach Allen wants is not well supported because it lacks lexical scoping</p>
+<p>AR: If we use a string literal we cannot check the code to do prefetching etc</p>
+<p>ARB: It is a string so the string only needs to be lexed, then the parsing etc can be paralellized, not so with embedded module declaration
+...</p>
+<p>ARB: There is no way to not modify the global registry when defining a module.</p>
+<p>DH: The file system (in SML) is also a shared registry. The module registry is no different</p>
+<p>ARB: Disagree. There is no way to create a local module here</p>
+<p>STH: JS has a lot of ways to struccture code: functions, classes etc and modules do not need to fill this role</p>
+<p>ARB: More interested in preventing accidents due to name clashes.</p>
+<p>...Mixed discussion of module syntax related concerns</p>
+<p>DH: Ability to prevent people from using module syntax?</p>
+<p>MM: Yes</p>
+<p><strong>STH: For Andreas' concern, look for the names of module declaration strings, check the registry and if any already exist, error.</strong></p>
+<p>...Defining a loader with right hook, prevent the mutation of the registry by anyone that does not have access to the loader</p>
+<p><strong>MM: Satisfied from a security perspective.</strong></p>
+<p>ARB: Would prefer for the default behavior to error, need to be explicit if you want module to override in an imperative manner.</p>
+<p>DH: Not opposed to moving towards scoped modules in the future. Just worried about complexities.</p>
+<p>ARB: Only concerned about import scope semantics</p>
+<p>STH: concern is that polyfills have to use <code>eval</code> and then <code>System.set</code></p>
+<p>ARB: good to make it clear that polyfills are doing some special</p>
+<p>DH: agree with ARB about polyfills</p>
+<p>STH: This is something to be deferred without blocking progress, but ok with changing to error to achieve consensus.</p>
+<p>YK: agree with STH about consensus, but potentially concerned.</p>
+<a href="#conclusionresolution-42-modules"><h4 id="conclusionresolution-42-modules">Conclusion/Resolution</h4></a><ul>
+<li>Default: declarative form of a module is an error if a module of the same name already exists in the module registry.</li>
+<li>Using  <code>System.set</code> to overwrite an existing module is not an error.</li>
+<li>Behavior of errors during module initialization (when some module initializers don't even get started) is still unresolved.</li>
+</ul>
+
+</body>

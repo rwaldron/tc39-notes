@@ -1,0 +1,86 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>Summary for the 56th meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="#summary-for-the-56th-meeting-of-ecma-tc39"><h1 id="summary-for-the-56th-meeting-of-ecma-tc39">Summary for the 56th meeting of Ecma TC39</h1></a><ul>
+<li><a href="https://github.com/tc39/ecmascript_sharedmem">SharedArrayBuffer</a> reached Stage 4
+<ul>
+<li>test262 tests written</li>
+<li>Specification is done, integration in progress
+<ul>
+<li>See especially detailed notes for users and implementers about memory model</li>
+</ul></li>
+<li>Four browsers have implementations behind a flag</li>
+</ul></li>
+<li>Bug fixes
+<ul>
+<li>Another <a href="https://github.com/tc39/ecma262/pull/767">cleanup</a> to module namespace objects</li>
+<li>Considered <a href="https://github.com/tc39/ecma262/pull/762">earlier errors for bad super usage</a>; looking for implementation feedback</li>
+<li><a href="https://github.com/tc39/ecma262/pull/781">Revert</a> the semantics for <code>class extends null</code> to the ES2015 state</li>
+<li>Fixing up <a href="https://github.com/tc39/ecma262/issues/753">another funny case</a> in sloppy-mode block-scoped function hoisting--committee agrees on shape of solution; more spec mechanics work needed</li>
+</ul></li>
+<li>This is it for new features in ES2017
+<ul>
+<li>See a summary of <a href="http://www.2ality.com/2016/02/ecmascript-2017.html">features</a> by Axel Rauschmeyer</li>
+<li>Many bug fixes, web reality fixes and non-normative cleanups</li>
+<li>The branch is (logically) cut; we can still backport bug fixes.</li>
+</ul></li>
+<li>Making TC39 and specifications more accessible
+<ul>
+<li>Consider a multipage version of the specification to augment the single-page one</li>
+<li>Improve community outreach, e.g., meet with user groups to discuss their needs</li>
+<li>In the May meeting, we'll devote three days for discussing the vision for JavaScript</li>
+</ul></li>
+<li>Null propagation operator reached stage 1 <a href="https://docs.google.com/presentation/d/11O_wIBBbZgE1bMVRJI8kGnmC6dWCBOwutbN9SWOK0fU/view#slide=id.p">slides</a>
+<ul>
+<li>Strawman syntax: <code>x?.y</code> =&gt; <code>x === undefined ? x : x.y</code></li>
+</ul></li>
+<li>Intl (ECMA 402)
+<ul>
+<li>New proposals for options for DateTimeFormat: <a href="https://github.com/zbraniecki/proposal-ecma402-hourcycle">hourCycle</a> and <a href="https://github.com/tc39/ecma402/issues/108">style</a></li>
+<li>Intl in ES2017 will have <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/formatToParts">Intl.DateTimeFormat.prototype.formatToParts</a> and <a href="https://github.com/tc39/ecma402/pull/84">constructor web-compat fix</a></li>
+</ul></li>
+<li>Administration
+<ul>
+<li>TC39 is looking for a chair or other management structure! Please let us know if you have any good candidates</li>
+<li>Code of Conduct <a href="https://github.com/tkellen/tc39-code-of-conduct-proposal/blob/master/Conduct.md">proposed</a> based on JSFoundation Code of Conduct. Input wanted.</li>
+<li>Jordan Harband will be TC39's official &quot;GitHub Curator&quot;, helping keep track of current status of proposals</li>
+<li>We will have a template to help new spec authors through the process</li>
+</ul></li>
+<li><a href="https://github.com/bmeck/UnambiguousJavaScriptGrammar">Unambiguous module grammar</a> did not reach consensus</li>
+<li>Larger integer types
+<ul>
+<li>Initially, <a href="http://es.slideshare.net/BrendanEich/int64">proposal</a> for Int64/Uint64</li>
+<li>Instead, pursuing BigInts, see <a href="https://github.com/littledan/proposal-bigint">explainer</a>.</li>
+</ul></li>
+<li>Library proposals
+<ul>
+<li>New Stage 1 proposals:
+<ul>
+<li>Standardization of <a href="https://github.com/ljharb/proposal-error-stacks">Error.prototype.stack</a> and more detailed stack introspection</li>
+<li><a href="https://github.com/tc39/proposal-realms">Realm API</a> for isolation, virtualization and more in a light-weight context</li>
+</ul></li>
+<li>RegExp features
+<ul>
+<li><a href="https://mathiasbynens.be/notes/es-regexp-proposals">Overview of proposals</a> by Mathias Bynens</li>
+<li><a href="https://github.com/tc39/proposal-regexp-named-groups">Named groups</a> got to Stage 2; still working out details</li>
+<li>Other proposals had Stage 3 reviewers named; we may have a decent package of features for ES2018</li>
+</ul></li>
+<li><a href="https://github.com/tc39/proposal-promise-finally">Promise.prototype.finally</a> made tweaks, got Stage 3 reviewers</li>
+<li><a href="https://github.com/tc39/proposal-global">global</a> faces web compat issues, looking for a new name</li>
+</ul></li>
+<li>Public and private class fields
+<ul>
+<li>Remain at Stage 2</li>
+<li>May get new syntax starting with <code>own</code> for instance fields (e.g., <code>class X { own y = z; own #a = b; static c = d; }</code>)</li>
+<li>Anticipating proposal to change order of evaluation for object literals, to be consistent with <a href="https://github.com/tc39/tc39-notes/blob/master/es7/2016-05/classevalorder.pdf">Munich resolution on class evaluation order</a></li>
+</ul></li>
+</ul>
+
+</body>

@@ -1,0 +1,307 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 29, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-29-2016-meeting-notes"><h1 id="march-29-2016-meeting-notes">March 29, 2016 Meeting Notes</h1></a><hr>
+<p>Dave Herman (DH), Michael Ficarra (MF), Jordan Harband (JHD), Adam Klein (AK), Mark S. Miller (MM), Brian Terlson (BT), Domenic Denicola (DD), Brad Nelson (BNN), JF Bastien (JFB), Joe Lencioni (JLI), Sebastian Markbåge (SM), Jeff Morrison (JM), Kevin Smith (KS), Jafar Husain (JH), Lars Hansen (LHN), Saam Barati (SBI), Keith Miller (KM), Michael Saboff, Eric Ferraiuolo (EF), Eric Faust (EFT), Chip Morningstar (CM), Dean Tribble (DT), Shu-yu Guo (SYG), Tim Disney (TD), Waldemar Horwat (WH), Bert Belder (BBR), Peter Jensen (PJ), Daniel Ehrenberg (DE), Caridy Patiño (CP), Diego Ferreiro Val (DFV), Jean-Francis Paradis (JFP), Shelby Hubick (SHK), Leo Balter (LBR), Miško Hevery (MHY)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p><a href="https://github.com/tc39/agendas/blob/master/2016/03.md">https://github.com/tc39/agendas/blob/master/2016/03.md</a></p>
+<a href="#dial-in"><h2 id="dial-in">Dial-in</h2></a><p><a href="https://public.etherpad-mozilla.org/p/tc39-dialin">https://public.etherpad-mozilla.org/p/tc39-dialin</a></p>
+<p>Agenda approved.</p>
+<a href="#approving-minutes-from-last-meeting"><h2 id="approving-minutes-from-last-meeting">Approving minutes from last meeting</h2></a><p>Minutes approved.</p>
+<a href="#objectvalues--objectentries"><h2 id="objectvalues--objectentries">Object.values &amp; Object.entries</h2></a><p>(JHD)</p>
+<p>BT: This should be quick.</p>
+<p>JHD: Hoping to get into ES2016, but no need to rush. Shipping in FF47. In the next version of Edge (unflagged). In Chrome Stable behind a flag. FF Nightly since October.</p>
+<p>DD: We should wait for two shipping browsers.</p>
+<p>JHD: This seems different. Not on prototypes, low chance of conflict. I don't think it's right to compare to async functions. There continues to be a confusion about what implementation requirements can be.</p>
+<p>DH: I don't agree with the notion that there needs to be two shipping implementations.</p>
+<p>DH: I thought the focus here was on interoperability, not requiring things to be turned on. That says something about level of adoption, maybe.</p>
+<p>MM: What are the risks we're trying to mitigate for requiring two implementations shipped in a browser?</p>
+<p>DD: Lots of things are in nightlies. That's not a sufficient thing.</p>
+<p>DH: My understanding is if we only got feedback once something is pref'd on there is a chicken and egg problem where browser vendors don't want to turn something on without getting developer testing, but developers won't test without real apps. The importance of the stages approach is that there are now ways for people to dial up their level of risk tolerance for the instability of features and get developer feedback earlier in the process. It has worked. We got lots of feedback on async functions. There are a lot of things we need, including implementation experience. I'm not 100% in disagreement, having implementation experience is valuable, but orthogonal to developer feedback piece. Shipping in nightly === we have the implementation experience. The feedback we get from developers is happening earlier in the process through polyfills or transpilers.</p>
+<p>DD: I don't understand what aspect of developer feedback we've had.</p>
+<p>AK: What more committee work is there to do?</p>
+<p>DD: I thought our bar was that we had a requirement that we ship in two browsers.</p>
+<p>AK: We're still paying back stuff from ES6 that didn't go through the process, but this doesn't seem like that case.</p>
+<p>BT: We try not to ship features until they're stage 4</p>
+<p>EFT: We don't either, generally</p>
+<p>all: So we're deadlocked!</p>
+<p>MM: If two browsers are shipping behind a flag and they publicly state the only reason it's still behind a flag is that it's not stage 3 yet, it should not block movement to stage 4.</p>
+<p>JHD: Only negative feedback was performance related. Otherwise, just sadness it didn't make it in.</p>
+<p>JHD: the only negative feedback was disappointment that it didn't make it in and...</p>
+<p>BT/JHD/etc consensus agreed that it proceeds to stage 4.</p>
+<a href="#conclusionresolution-objectvalues--objectentries"><h4 id="conclusionresolution-objectvalues--objectentries">Conclusion/resolution</h4></a><ul>
+<li>Stage 4!</li>
+</ul>
+<a href="#systemglobal"><h2 id="systemglobal">System.global</h2></a><p>(JHD)</p>
+<p>JHD: I did a whole bunch of research, and found that there's a whole bunch of code that uses self, window and global which would break, as it assumes that 'global' implies Node, 'self' or 'window' imply web.</p>
+<p>JHD: global.global won't work. System.global could be ok.</p>
+<p>MM: System is a namespace is for things that should not be globally available. If we can use module imports, that would be better to address the same set of issues</p>
+<p>JHD: agrees he would refactor for that once that's available..</p>
+<p>MM: With the caveat that they woudl move to a module solution if/when available, proceeding to stage 2 with &quot;system.global&quot; would be fine.</p>
+<p>DH: looking for all of system.global, global.global, etc. seems fragile.</p>
+<p>AK: What does Stage 2 mean here?</p>
+<p>JHD: Look for reviewers; maybe Stage 3 tomorrow</p>
+<p>DD: Could you document your incompatibility work?</p>
+<p>JHD: Yes</p>
+<p>DH: Are you sure about the incompat?</p>
+<p>JHD: self might be OK, but there were a few examples; didn't find a particular compelling one</p>
+<p>MM: is opposed to having bare &quot;global&quot;. They should be gathered; having that be System is fine, but it shoudl be someplace.</p>
+<a href="#conclusionresolution-systemglobal"><h4 id="conclusionresolution-systemglobal">Conclusion/resolution</h4></a><ul>
+<li>Stage 2, reviewers for Stage 3 are Caridy Patiño, Mark Miller, Michael Ficarra</li>
+</ul>
+<a href="#stringprototypepadstartpadend"><h2 id="stringprototypepadstartpadend">String.prototype.padStart/padEnd</h2></a><p>(JHD)</p>
+<p>JHD: will ship in stable behind a flag.  Not currently trying to get to stage 4 today (currently at Stage 3). Just wanted to update because of recent discussion.  there is not enough implementations to move it forward in stage.</p>
+<p>MS: It's now in WebKit Nightly</p>
+<p>JHD: Small number of people have asked about the fill string (the second argument). If you pass anything that is not a non-empty string it defaults to a space character. Ascii space is maybe English-centric.</p>
+<p>MM: does anyone here know the I18l to comment?</p>
+<p>JHD: Japanese uses a different space (other agreed)</p>
+<p>JDH: currently if the separator is an empty string or not a string, use space.</p>
+<p>BT: the empty string is dubious. That should simply not not pad.</p>
+<p>JDH: options for empty string: use space, don't pad, or throw error.</p>
+<p>WH: Don't turn undefined into empty string. Turn it into a space.</p>
+<p>MM: proposes:  undefined defaults to space, empty string returns the original string, and a non-empty string gets used it's ok.</p>
+<p>WH: Do the empty string test after ToString.</p>
+<p>DH: We should not distinguish between undefined and absence.</p>
+<p>DH: English-centric is a carefully crafted troll (Romanian uses space as well). If there is lots of precedence, then it's doing the traditional thing. Combining these together means we can make this reasonable for the most use cases.</p>
+<p>WH: If the padding string has length &gt; 1, then it gets truncated? What if's a non-BMP character?</p>
+<p>JHB: There was a thread on GitHub, and we discussed it at past meetings. It does, potentially break up a surrogate pair</p>
+<p>JHB: If you wanted repetition, use Repeat.</p>
+<p>WH: Why not always keep the last instance of the substitution string intact?</p>
+<p>DH: POLS--disrespect Unicode. But this feels like a potential security vulnerability (injection attacks?)</p>
+<p>DD: Substitute with that (?) character?</p>
+<p>BT: But we don't substitute for String.prototype.slice(), property access</p>
+<p>DD: We do this elsewhere in the web platform, though</p>
+<p>BT: I'd really like to see a built-in module with good Unicode-aware string things</p>
+<p>JHD: Like graphemes!</p>
+<p>DE: Intl could be a good place for this; Intl.v8BreakIterator does it today but is not standardized</p>
+<a href="#conclusionresolution-stringprototypepadstartpadend"><h4 id="conclusionresolution-stringprototypepadstartpadend">Conclusion/resolution</h4></a><ol>
+<li>Absent or undefined, default to single space string.</li>
+<li>ToString the thing.</li>
+<li>If empty string, return the original string. Otherwise, pad using the pad string.</li>
+</ol>
+<a href="#objectgetownpropertydescriptors"><h2 id="objectgetownpropertydescriptors">Object.getOwnPropertyDescriptors</h2></a><p>JHD: Status update, things going well, waiting for implementors and feedback</p>
+<p>BT: You'd have to do something special to make it slow</p>
+<p>DD: Chrome has optimized Object.getOwnPropertyDescriptor over time</p>
+<p>DH: Do we have determinism for Object.getOwnPropertyKeys?</p>
+<p>BT: Yes, it's just for-in that's nondeterministic. Work is in progress. If an ordinary object has no prototype, the for-in order is deterministic</p>
+<p>MM: What if it's modified during iteration?</p>
+<p>BT: It may be nondeterministic if it's modified during iteration and has a non-null prototype</p>
+<a href="#erroriserror"><h2 id="erroriserror">Error.isError</h2></a><p>JHD: Brand checking === bad (apparently). But I forgot about error objects. There does not exist anything in the spec that throws with non-errors. Errors cannot be reliably checked for.</p>
+<p>DH: I think it's not so much the ability to do this check that bothers me, it's the blessing of an idiom.</p>
+<p>JHD: Array.isArray?</p>
+<p>DH: Not the same. isArray is an important distinction that is unique to arrays. Specifically, JS has distinct literal syntax that allows you to implement something that looks like an overload... You have an API that can take an array of things or a hash of options and it's important. The canonical way to do this is to check for arrayness first. Array is a very narrow thing and is not indicative of a general pattern that should be used for object types. That doesn't mean that I don't think it should be possible, but using the same snow clone (lol) is a message that people should design their APIs like this, which is bad. The big difference is not is it possible to do this test, but is it named appropriately to reflect that this is a low-level thing that should be used rarely.</p>
+<p>DD: Array objects are actually exotic. Error objects should not be exotic.</p>
+<p>DD: I have a PR to remove this exoticness. Another issue: error objects are actually exotic though because they have stack. That check is legit. Error.isError is not legit. Errors per spec are normal objects.</p>
+<p>MM: I will be proposing getStack and Error.prototype.stack.</p>
+<p>JHD: It is in fact a canonical pattern. Instanceof error is used all over the place to detect errors. Eg. rejected promises, they want to handle actual error objects differently. What they should be doing is a slightly different than what they are doing and people are doing this. Tonic dev.com, you can try a package in the browser, and it wants to reliably check for errors.</p>
+<p>DH: Where is the case where you're merging signals together?</p>
+<p>JHD: Tonic dev tries to accurately as possible report what happens with the module code.</p>
+<p>DH: I don't like paternalistic arguments. I'm not making a paternalistic argument. Language has a normative role.</p>
+<p>DH: Depending on MM's proposal coming 3 years from now with no polyfill path isn't good.</p>
+<p>DH: Can imagine something that is a standard way to check if an object has an associated stack.</p>
+<p>DH: I 90% agree, but I think Error.isError is the wrong name.</p>
+<p>MM: System.getStack, when applied to an error object, always gives something, and if not, throws, will this work?</p>
+<p>MM: The 4 major browsers can polyfill this. Actually, only on FF and V8 is it unspoofable, and on Edge and Safari it is spoofable.</p>
+<p>JHD: There is much urgency because a browser that has shipped Symbol.toStringTag doesn't have enough stack API to implement this.</p>
+<p>Dh: I don't understand the harm?</p>
+<p>JHD: This is not a people's websites will break thing. If more cross-realm things happen, there will be a lot of code that relies on this. Concern about things that make symbol toStringTag make objects look like an error.</p>
+<p>MM: to minimize the window, JHD should collaborate with MM on the getStack API. Hopes to have a proposal in Munich.</p>
+<a href="#conclusion-erroriserror"><h5 id="conclusion-erroriserror">Conclusion</h5></a><p>•JHD will work with MM on the stack proposal, and move this proposal into the &quot;withdrawn proposals&quot; section</p>
+<a href="#ecma402"><h3 id="ecma402">ECMA402</h3></a><p>DE: Compatibility fix for v1 -&gt; v2 (call with a receiver that is created via Object.create, it would initialize the object). For V2, spec was changed to be normal JS semantics. Tried to fix V2 semantics, but couldn't ship in V8 due to breaking websites. Now have implemented a compromise semantics: if you call the NumberFormat and DateTimeFormat constructor with a receiver that is an instance of the respective constructor and it's not initialized.... (continues to describe) details here: <a href="https://github.com/tc39/ecma402/pull/84">https://github.com/tc39/ecma402/pull/84</a>. There is a symbol that it indirects to and the fix seems to work.</p>
+<p>MM: there is a self-hosted piece of code that illustrates the algorithm.</p>
+<p>DE: has a pull request for the change.</p>
+<p>MM: As he understood it, we are expecting the kludge to be temporary. If it will be temporary, then it shoudln't make it into a standards document.</p>
+<p>CP: is there a precedent for this kind of temporary kludge</p>
+<p>MM: will we need to live with it forever. If so it shoudl be in the spec. Otherwise it shouldn't</p>
+<p>DE: really likes test 262 to cover this kind of thing. and for that it woudl need to be in the spec. We could mark it in the spec as a compat kludge.</p>
+<p>...what is forever, anyway?...</p>
+<p>BT: these semantics are required to run the web, so should be documented</p>
+<p>MM: at least annex B because it shouldn't be required outside the Web</p>
+<p>DE: Node has this problem too.</p>
+<p>AK: and people want to use hte same code in Node and Web</p>
+<p>BT: let's not open that.</p>
+<p>MM: proposes: put the tecxt and mark it non-normative</p>
+<p>DE: if it's relevant to performance tests, etc. then it's normative.  Normative optional is plausible</p>
+<p>MM: Annex B is irritataingly stronger than normative optional.</p>
+<p>DE: but we need the stronger requirement here. It's been an obstacle to being spec compliant.</p>
+<p>MM: Inlcude a non-normative note stating we hope to retrire the kludge eventually</p>
+<p>BT: what do you get from that?</p>
+<p>MM: that application code shoudl not count on the continued existence.</p>
+<p>DE: intl.js hass ben updated to not count on this.</p>
+<p>DE: we won't be able to reliably retire it within a year. we don't have the data.</p>
+<p>AK: and it's needed for additional web implementors</p>
+<p>MM: I'm no suggesitn gthat we say within a year. But of all the kludges that we've wanted to pu tin the spec, this seems the most short term.</p>
+<p>DE: I think we have consensus on inlcuding this somehow</p>
+<p>MM: in annex B</p>
+<p>DE: The ?? spec doesn't have a specific annex B.</p>
+<p>BT: including a note with the history of this issue is reasonable.</p>
+<ul>
+<li>discussion about the spec for implementors vs. developers/users.*</li>
+</ul>
+<p>CP: Daniel will update the pull request. what's he process to add to spec?</p>
+<p>DE: pull request to fix the main spec text. BT will determine as to whether it needs consensus.</p>
+<p>BT: my bar is &quot;can I imagine it being contentious, then it needs consensus&quot; Ye sit can be used fo htis spec as well.</p>
+<p>DE: Ok let's confirm that when Mark gets back.</p>
+<p>CP: Targeting edition 4.</p>
+<a href="#conclusion-erroriserror"><h5 id="conclusion-erroriserror">Conclusion</h5></a><p>PR: is ok once the editorial issues are worked out (including a non-normative note describing the back-compat requirement and other relevant information). Said note should not link to GitHub issues.</p>
+<a href="#zones-update"><h2 id="zones-update">Zones update</h2></a><p>(DD: Presenting slides)</p>
+<p>DD: Not going for stage 1 yet, but proposal has gotten more concrete</p>
+<p>MM: where is the polyfill?</p>
+<p>DD: the polyfill is in the repo</p>
+<p>MM: DE observed that wrt the dangers of global state are not dangers after all if the zone object that is passed forward is immutable.</p>
+<p>MM: because within an event loop you can get stack frames from any realm, so</p>
+<p>DE: what security property are you trying to preserve? Would be nice to start out mutable so you can use expandos (more efficient than WeakMap, maybe)</p>
+<p>MM: I will postpone answering to determine whether and hat the issue is</p>
+<p>DD: simplest thing:  expando-properties on the zone, used to implement zone-local storage</p>
+<p>....continued slides and code example...</p>
+<p>DD: *showed error handling example</p>
+<p>MM: if there anything concpetually different of the [[HostDefined]] vs. the dynamically scoped variable? because I'd prefer one mechanism</p>
+<p>DD: one is accessible to host and the other to authors.</p>
+<p>MM: if they can be treated equivalent conceptually, then reaosnaing about the model is easier.</p>
+<p>DD: yes they are otherwise the same and so could be reasoned about similarly.</p>
+<ul>
+<li>misc people expressed approval for the changes</li>
+</ul>
+<a href="#functionprototypetostring"><h2 id="functionprototypetostring">Function.prototype.toString()</h2></a><p>Michael Ficarra (MF)</p>
+<p>This will be to review spec text.</p>
+<p>MF: summarized discussion from last time</p>
+<p>MF: not discussed at last meeting is function toString for well known intrinsic objects.</p>
+<p>BT: that doesn't include the name for intrinsics without a global name?  [BT check this please]</p>
+<p>MF: those aren't covered here</p>
+<p>JHD: so GenratorFunciton is not called &quot;GeneratorFunction&quot;</p>
+<p>MF: 3 names that are not required: GeneratorFunction, AsyncFunction, and TypedArray</p>
+<p>JHD: is the naming of GeneratorFunction required?</p>
+<p>MF: no</p>
+<p>JHD: can we require that?</p>
+<p>MF: then global name will no longer have hte implicit meaning that you can say global.name</p>
+<p>MM: for intrinsics, the thing between the ?? is always an identifier?</p>
+<p>MF/DD no, doesn't work</p>
+<p>BT: change &quot;global name&quot; to &quot;friendly name&quot; and note that it's</p>
+<p>JHD: all these abstractions have a &quot;name&quot;. We can specify that the initial value of hte .name property shoudl show up as the global name for all l objects.</p>
+<p>MM: is it always fully specified?</p>
+<p>JDH: yes [and then he added some details]</p>
+<p>MF: showed tha they have spec text signoff fom the reviewers.</p>
+<p>WH: raised the question of how clear it is that these tokens should not include adjacent whitespace or comments.</p>
+<p>JHD: Yes, that's the intent.</p>
+<p>MM: notes that this is the simplest proposal that meets all requirements</p>
+<p>JHD: ??? getters and setters naming discussion</p>
+<p>?? how does this work in conjunction with multiline strings</p>
+<p>MF: explained why it is not an issue (the embedded newline is represented with a line-terminator character)</p>
+<p>MF: has an open pull request to similarly do this for async functions (<a href="https://github.com/tc39/ecmascript-asyncawait/pull/90">https://github.com/tc39/ecmascript-asyncawait/pull/90</a>)</p>
+<p>DD: you can replace the name column with &quot;initial name&quot; value</p>
+<p>AK: how does the &quot;get&quot; name spec text work with computed properties?</p>
+<p>MF: the expression is included in the name.</p>
+<a href="#conclusion-functionprototypetostring"><h5 id="conclusion-functionprototypetostring">Conclusion</h5></a><p>MF: will make changes to use the initial value of the &quot;name&quot; property as the global name of intrinsics</p>
+<p>MF: will make fix to clearly exclude surrounding whitespace: &quot;the source text matched by&quot; to mean &quot;the text form the beginning of hte first token and the end of the last token&quot;. He will attempt to get it in section 5.2</p>
+<p>MF: will bring those tomorrow to get final approval for stage 3</p>
+<a href="#reference-type-and-the-implementation-reality"><h2 id="reference-type-and-the-implementation-reality">Reference type and the implementation reality</h2></a><p><a href="https://github.com/tc39/ecma262/issues/467">https://github.com/tc39/ecma262/issues/467</a></p>
+<p>BT: presenting a summary of the issue. further Discussion to be had Thursday</p>
+<p>{BT presenting slides}</p>
+<p>Implementations are evaluating references multiple times</p>
+<p>WH: Note that side effects in LHS expressions are evaluated only once:</p>
+<pre><code>a[i++]++
+</code></pre>
+<p>doesn't increment i twice.</p>
+<p>MM: we agree that the expression is evaluated once, its the underlying reference tha tis eval'd twice.</p>
+<p>BT: yes.</p>
+<p>MM: historically Firefox has broken logjams around implementations not quite meeting spec.</p>
+<p>MM: will FireFox do the experiment</p>
+<p>DH: bad MM. no cookie.</p>
+<p>MM: I take it back.</p>
+<p>DH: the risk of &quot;break the web&quot; is only really tested by possibly affecting large numbers of customers</p>
+<p>BT: someone did in fact file a bug on IE</p>
+<p>BT: proposes the the issue should be put to rest by matching the spec to implementations.</p>
+<p>MM: he reluctantly agrees with BTs conclusion</p>
+<p>WH: I view this as an old bug. We should fix the bug in the implementations instead of copying the bug to the spec.</p>
+<p>BT: it would be nice to update test262 to test the semantics eventually</p>
+<a href="#conclusionresolution-reference-type-and-the-implementation-reality"><h4 id="conclusionresolution-reference-type-and-the-implementation-reality">Conclusion/resolution</h4></a><p>We will revisit the proposed resolution with Allen Wed.</p>
+<a href="#async-iteration"><h2 id="async-iteration">Async Iteration</h2></a><p>KS: presenting slide with the changes</p>
+<p>KS: Keys changes:  promises are not unwrapped during iteration</p>
+<p>MM: present the invariant that &quot;interleaving points are marked with await&quot;</p>
+<p>KS: within the context of an async function, interleaving points are always marked with the keyword &quot;await&quot;</p>
+<p>DH: clarified that when you compose promises with async iteration, there's no longer a special case.</p>
+<p>KS: correct. there is no longer a special case for promises</p>
+<p>JH: where before we were relying on then to do the flattening, here we are relying on the for await?</p>
+<p>*discussion</p>
+<p>MM: the typical consumer should see the flattened value.  The principle here is that for the producer yields a value, they must not get blocked because they didn't block.</p>
+<p>MM: the only alternative approach is if the async iterator did the collapsing.</p>
+<p>KS: It would be in the behavior of next()</p>
+<p>MM: next returns a promise for the iteration result. Don't resolve that value until the value is actually resolved.</p>
+<p>DE: how would this be observable?</p>
+<p>DH: ??</p>
+<p>MM: what is stage 1 and stage 2?</p>
+<p>WH: What is the controversy here?</p>
+<p>CM: we have a clear model</p>
+<p>DH: the basic policy question is whether sequences and promises should flatten?</p>
+<p>WH: we have already decided promises should flatten. This is the second meeting where we have vague objections. It's hard to get past vague objections.</p>
+<p>DH: even with good intuitions, real code examples might show us something different. So I'm reluctant to get to stage 2 without more due diligence.</p>
+<p>WH: We can still do code examples in stage 2.</p>
+<p>?: Example of a map that takes a sequence of values and returns a sequence of promises.</p>
+<p>DH: Because combinators are a good use case, and we shouldn't assume everyone uses for await, maybe we should always collapse</p>
+<p>DH: and we need code examples to understand whether they will still be well supported</p>
+<p>DD: will work with KS to explo</p>
+<p>KS: How should for await work on sync iterables? Initially, for/await fell back to sync iterables. However, concerns were raised, and now that's gone. But, at least, you should be able to yield* a regular iterable within an async iterable, right?</p>
+<p>JFB: I can wait a non-boxed value. is that the reasoning for falling back to Symbol.iterator in the async iteration support.</p>
+<p>?? if you have an async iterator of async iterators does it flatten those?</p>
+<p>DD: what if Object.prototype.iterator that returns async.iterator [check the proposal].  This was proposed to change the refactoring considerations around the proposal to failover to synchronous iteration for async iteration.</p>
+<p>MM: is there anything in the spec where we case-switch on whetehr something is iterable.</p>
+<p>JHD: <code>Array.from</code> is an example.</p>
+<p>MM: what about getting rid of Symbol.asynciterator completely, and just use Symbol.iterator. Then the iteration operations distinguish based on the type of the returned object.</p>
+<p>DD: and KS both pointed out obstacles to that.</p>
+<p>WH: Another option already mentioned was to have for await only look for Symbol.asynciterator and not default to Symbol.iterator. This would require explicit user conversions to convert sequences to async sequences, but those aren't necessarily a bad thing.</p>
+<p>DH: &quot;meh&quot;.</p>
+<p>BT: Matt the author of ReactiveX wants to work with Matt Podwysocki</p>
+<a href="#conclusion-async-iteration"><h5 id="conclusion-async-iteration">Conclusion</h5></a><p>Approved for Stage 2</p>
+<p>DD: and DH volunteered as reviewers.</p>
+<a href="#shared-memory-and-atomics"><h2 id="shared-memory-and-atomics">Shared Memory and atomics</h2></a><p>LHN: presenting</p>
+<p>DH: did we convince ourselves that using strings instead of integers for futex codes is not too onerous for asm.js?</p>
+<p>LHN: they discussed this and determined that it wasn't an issue</p>
+<p>MM: please unpack &quot;int32 sots are always lock-free&quot;?</p>
+<p>WH: Lock-free is only a performance assertion on atomics. Atomics are atomic and synchronize regardless of whether they are lock-free or not. Lock-free indicates that the atomic operation won't need to wait for another thread that might hold a lock that's used to internally implement the atomic.</p>
+<p>LHN: atomicLoad and atomicStore are atomic operations. Are you guaranteed that atomic load or store will ever need to take a lock to implement that operation</p>
+<p>MM: is it semantically a synchronizing operations rather than a racy operation?</p>
+<p>LHN: yes</p>
+<p>?? describes an example with lock-free linked list</p>
+<ul>
+<li>discussion ensues but doesn't have a resolution.</li>
+</ul>
+<p>Issue #54 discussion</p>
+<p>MM: wants to verify: there's no danger of inconsistency or blocking if your counterparty if preemptively terminated.</p>
+<p>LHN: they will come back to it.</p>
+<p>WH: Good that rematerialization producing quantum garbage is disallowed.</p>
+<p>WH: Would like to know whether it's a legal optimization to swap two adjacent non-atomic reads of distinct locations. Currently the memory model has too many self-contradictions to be able to tell, but would like that to be a valid optimization.</p>
+<p>WH: Can get tearing on racy unaligned accesses.</p>
+<p>LHN: Racy accesses are aligned</p>
+<p>WH: But in the spec you allow accesses at arbitrary unaligned byte offsets in DataViews.</p>
+<p>WH: The memory model has issues with dealing with atomic object lifetime. Suppose you're doing the asm.js thing of simulating a C++ heap in a big byte array. One object that happened to have a 1-byte atomic used to live at location X, gets (virtually) freed from the simulated C++ heap, and a new object gets (virtually) allocated with a 4-byte atomic at location X. The current memory model is not aware of the lifetime change and will turn the atomics into non-atomics. That's a flaw that needs to be fixed in the memory model.</p>
+<p>WH: What useful processors don't have lock-free 1 or 2-byte atomics?</p>
+<p>LHN: Maybe older ARM chips?</p>
+<a href="#aynsc-functions"><h2 id="aynsc-functions">Aynsc Functions</h2></a><p>BT: is summarizing status. All good, no implementation concerns raised by anyone, Chakra impl passes almost all tests, firefox implementation is making progress. I would push for Stage 4 but Google has objected so I am only giving a status update.</p>
+<p>AK: Note that we do want async functions.</p>
+<p>AK: in progress but no notable details</p>
+<p>EFT: the spec seems straightforward</p>
+<p>*unrelated promise discussion happened and various morasses were narrowly avoided.</p>
+<a href="#tco"><h2 id="tco">TCO</h2></a><p>SG, EF: Cross realm proper tail calls conflict with the SpiderMonkey security model, which needs to allocate memory (either on the stack or the heap) in order to do something on function return. You can tail call into the membrane thing, but it will take some space</p>
+<p>BT, DE: Explicit syntax could be part of addressing this</p>
+<p>MS: We'll have fixed stack space anyway; we already implemented it.</p>
+<p>SG, EF: Let's make that a separate question, and discuss it Thursday. What if we start with a pull request which encodes that cross-realm calls don't to make cross-realm tail calls not have fixed stack space, while also allowing that it <em>may</em> have fixed stack space</p>
+<p>(General consensus on at least allowing non-tail-call behavior)</p>
+<p>MM: What shows up in a stack trace? This becomes observable.</p>
+<p>EF: Let's delay this larger discussion until Thursday.</p>
+<a href="#conclusionresolution-tco"><h4 id="conclusionresolution-tco">Conclusion/resolution</h4></a><p>SM: will write spec language for tail calls (likely involving an update to PRepareForTailCAll) that will allow implementations to do a PTC across realm boundary or not (implementation defined).</p>
+<p>*** Scheduling ensued ****</p>
+<p>Wednesday</p>
+<p>weak refs</p>
+<p>frozen realms</p>
+<p>Thursday morning</p>
+<p>Tail calls</p>
+<p>Reference type</p>
+
+</body>

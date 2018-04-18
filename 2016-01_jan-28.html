@@ -1,0 +1,659 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>January 28, 2016 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#january-28-2016-meeting-notes"><h1 id="january-28-2016-meeting-notes">January 28, 2016 Meeting Notes</h1></a><hr>
+<p>Eric Ferraiuolo (EF), Caridy Patiño (CP), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Stefan Penner (SP), Sebastian McKenzie (SMK), Waldemar Horwat (WH), Mark S. Miller (MM), Sebastian Markbåge (SM), Zibi Braniecki (ZB), Andreas Rossberg (ARB), Ian Halliday (IH), Keith Miller (KM), Tim Disney (TD), Miško Hevery (MHY), Brad Green (BG), Kevin Smith (KS), Brad Nelson (BNN), JF Bastien (JFB), Shu-yu Guo (SYG), Rick Waldron (RW), Staś Małolepszy (STM), Dean Tribble (DT)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p><a href="https://github.com/tc39/agendas/blob/master/2016/01.md">https://github.com/tc39/agendas/blob/master/2016/01.md</a></p>
+<a href="#functiontostring--functionisportable-mf"><h2 id="functiontostring--functionisportable-mf">Function#toString &amp;&amp; Function#isPortable (MF)</h2></a><p>Slides: <a href="https://docs.google.com/presentation/d/1o8jVhyVHljCFyXdxe-V4X1pUmCgx0FuFvEO0fFP4LJU/edit?usp=sharing">https://docs.google.com/presentation/d/1o8jVhyVHljCFyXdxe-V4X1pUmCgx0FuFvEO0fFP4LJU/edit?usp=sharing</a>
+Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-prototype-toString-revision/fc69a0a31dc6d625736bfbb712ac782eb241ff3d/proposal.html">https://raw.githubusercontent.com/michaelficarra/Function-prototype-toString-revision/fc69a0a31dc6d625736bfbb712ac782eb241ff3d/proposal.html</a></p>
+<p>MF: No longer interested in &quot;portability&quot;</p>
+<p>YK: Do your changes cause a method with super to produce an evaluatable function with .toString()</p>
+<p>MF: No.</p>
+<p>MF: &lt; Presents new spec text &gt;</p>
+<p>MF: Either you are a bound function exotic object or other callable or throw an error.</p>
+<p>WH: What case does calling toString on Math.sin fall into?</p>
+<p>MF: The last one: [native code].</p>
+<p>AWB: What if I want Math.sin to be self-hosted in ECMAScript?</p>
+<p>MF: Host can control the internal slot...</p>
+<p>AWB: Not if it's an ecmascript function object. An ECMAScript function object is an object that is created syntactically from ECMAScript code.</p>
+<p>MF: implementation cna pretend there's a slot.</p>
+<p>AWB: Concern is for self hosted built-ins you want them to be opaque.</p>
+<p>MF: We can add a case for built-in functions. Is that something that we want to do?</p>
+<p>BT: We should mandate that built-in functions show [Native Code]</p>
+<p>YK/MF: Agree.</p>
+<p>AWB: Are implementations allowed to hide source code for ES functions?</p>
+<p>YK: toString is a defacto reflection mechanism. Web depends on it.</p>
+<p>AWB: Not all code runs on the web.</p>
+<p>AWB: Seems like a value add.</p>
+<p>MM: It would be a value add for an implementation not to support sloppy mode.... but it can't claim to be conformant.</p>
+<p>(Discussion of how imortant toString returning source is...)</p>
+<p>BT: Bound functions should show [Native Code]</p>
+<p>MF: Currently an option.</p>
+<p>(Agreement that it should be required)</p>
+<p>MF: Ok.</p>
+<p><em>discussion about what method name to use, and what if it isn't an identifier</em></p>
+<p>MM: Don't use the current value of the name property.</p>
+<p>WH: This won't solve the problem of it sometimes not being an identifier. You can have a computed property name for a method that doesn't evaluate to an identifier.</p>
+<p>MM: Treat the [computedname] expression, instead of the string it evaluates to, as part of the source code of the function?</p>
+<p>WH: That's not really part of the source code of the function. It's part of the context.</p>
+<p>MM: It's the same situation as with class extends expressions.</p>
+<p>YK: The fact that you can omit the extends clause is an issue.</p>
+<p>?: Just use the original source's AST.</p>
+<p>MM: Let them throw away comments.</p>
+<p>?: What about calls to <code>new Function</code>?</p>
+<p>WH: Don't want to require comments and whitespace to be preserved. And what about comments on the boundary of the function (before the first token or after the last one)? Are they part of the function or not?</p>
+<p><em>back and forth about preserving whitespace or not</em></p>
+<p>WH: Current engines are inconsistent about whitespace, even within one implementation. Firefox sometimes preserves whitespace, sometimes doesn't. Different implementations differ in many ways on this. Reiterate not mandating preservation of whitespace and comments.</p>
+<p>MM: Agree.</p>
+<p><em>later MM changed his mind again</em></p>
+<p>No consensus on whitespace treatment.</p>
+<a href="#conclusionresolution-functiontostring--functionisportable-mf"><h4 id="conclusionresolution-functiontostring--functionisportable-mf">Conclusion/Resolution</h4></a><p>Keep exactly the original source text starting from the position of the first token of the production and ending at the position of the last token. Within this text, keep comments and newlines. Still no conclusion about insignificant whitespace, i.e., whitespace other than newlines.</p>
+<ul>
+<li><p>MF will adapt what was discussed into the spec text, advance stage 2 that is complete</p></li>
+<li><p>Reviewers: MM, WH, YK</p></li>
+</ul>
+<a href="#larse"><h2 id="larse">larse</h2></a><p>LHN: slide (formal reviewers)</p>
+<p>LHN: looking for multiple reviewers</p>
+<p>WH: I have memory model expertise and will review that aspect. Also suggest having Hans Boehm look at it.</p>
+<p>BT: this specification requires continent etc.</p>
+<p>LHN: it doesn't have to be deep, but we require some framework to be in-place.</p>
+<p>DE: any typed array designers inovled</p>
+<p>AWB: me</p>
+<p>DD: If he comes to us in afew months, and presents the API, we would prefer to not then have to dig in</p>
+<p>DD: last time the TC made changes quite late, it would be great to catch those early</p>
+<p>...</p>
+<p>LHN: some changes to the typed array spec, to accomodate SharedArrayBuffer, should be vetted</p>
+<p>AWB: I would be happy to discuss</p>
+<a href="#conclusonresolution-larse"><h4 id="conclusonresolution-larse">Concluson/resolution</h4></a><ul>
+<li>DD DE AWB will be reviewers</li>
+</ul>
+<p>Rundown of reviewers (from LH's notes):</p>
+<ul>
+<li>littledan will represent v8</li>
+<li>brian for chakra (but he will look for a delegate)</li>
+<li>unclear for jsc (LH will ask filip pizlo)</li>
+<li>waldemar for the memory model</li>
+<li>allen (informally possibly) for TypedArray changes</li>
+<li>domenic for agents/vats/whatever</li>
+</ul>
+<p>LHN: Also desirable for everyone to read the spec and pitch in, the more eyeballs the better.</p>
+<a href="#5xix-proxy-enumerate---revisit-decision-to-exhaust-iterator"><h2 id="5xix-proxy-enumerate---revisit-decision-to-exhaust-iterator">5.xix Proxy Enumerate - revisit decision to exhaust iterator</h2></a><p>(Brian Terlson)
+<a href="https://github.com/tc39/ecma262/issues/160">https://github.com/tc39/ecma262/issues/160</a></p>
+<p>BT: issue with proxy enumerate trap and for-in, where implementations are prevented from pre-populating the list of keys in the object, because the iterator causes observable affects. Which means the iterate must be pulled for every iteration. Last meeting we thought it would be ok if the enumerate trap exhausts the iterator, we thought that would solve the problem. The issue was, now their is an observable difference between an object and proxy of that object, mainly due to delete.</p>
+<p>AWB: thats wrong</p>
+<p>AWB: if you doit as part of for-in it wont be a problem, as for-in can be specified to ignore deleted keys.</p>
+<p>BT: right now, for-in does not do a has-check for every property. If a key is deleted, it wont be seen. That is how proxies in edge work today, deleted keys (during enumeratino) are not visited.</p>
+<p>BT: We could say, for-in (or proxy enumerate trap) will exhaust the iterator and check on each iteration</p>
+<p>ARB: that is what v8 does</p>
+<p>BT: I dont want an observable difference for for-in</p>
+<p>YK: the has check on a proxy is non-observable anyways, and often it can be skipped anyways.</p>
+<p>AWB: the classic spec if i recall, you cannot get a duplicate key, if something is added during enumeration you may or may not see it, if it is deleted before you enumerate it you must not see it.</p>
+<p>ARB: enumerability is also something we need to take into account, I think more issues exist, we should likely keep it vague.</p>
+<p>YK: thats one approach, as we don't have this defined, maybe the proxy needs to reflect the implementation</p>
+<p>AWB: proxies can do very interesting things</p>
+<p>YK: the enumerability is already quite  hazardous, this isn't really anything new.</p>
+<p>MM: it seems like these rules could be specified, could we just do that?</p>
+<p>MM: v8 on normal objects does snapshot + has check, but not post-snapshot enumerability check.</p>
+<p>YK: So far, we have spec'd this as vague, to allow divergence</p>
+<p>MM: we should specify this,</p>
+<p>BT: i will need to do some exploration</p>
+<p>MM: does anyone, based on their implementation know that they would object to specifying proxy + regular objects, the semantics of snapshot + has-check</p>
+<p>BT: I would love that</p>
+<p>MM: let's leave this to you to investigate, and a future meeting.</p>
+<p>YK: we want this for es7</p>
+<p>DE: can we get consensus on GH.</p>
+<p>WH: Are we specifying a long delay before you get the first element if you begin iterating on an array with a billion elements, even if you just want the first few?</p>
+<p>BT: yes we are, but we all do this already</p>
+<p>ARB: one issue with snapshotting, is how does it relate to the prototype chain</p>
+<p>BT: yes this is under specified</p>
+<p>YK: we should try to</p>
+<p>AWB: the reason it was under specified was</p>
+<p>BT: jscript?</p>
+<p>AWB: ya sorta, minor variations among implementations. At that point in time, consensus  was dificult it seemed like we couldn't do this. If we can, we should</p>
+<p>BT: unsure</p>
+<p>YK: if we can, we should</p>
+<p>AWB: the other issue is: it isn't clear to me why we have an enumerate trap</p>
+<p>BT + ARB: me neither</p>
+<p>AWB: for-in has enough meta operations to define what we want.</p>
+<p>MM: we should ask tom, as he thought this stuff out in great detail</p>
+<p>DH: isn't that question too late?</p>
+<p>DE: it isn't a web compat issue yet.</p>
+<p>DH: it isn't obviously a mut question, but we may not be able to.</p>
+<p>DH: i do not know how often this is used, isn't enumerate a fundamental trap.</p>
+<p>YK: i agree that is a thing</p>
+<p>... discussion if enumerate is fundamental ...</p>
+<p>YK: spidermonkey people have the strongest here</p>
+<p>BT: We have internal users of proxies, we may have a constraint</p>
+<p>YK: that isn't a constraint it can be deprecated,</p>
+<p>BT: comes at as cost, but i doubt its actually used.</p>
+<p>ARB: one reason for enumerate trap may be that the set of all properties is larger then the set of properties that are enumerable, so a performance difference is pssible.</p>
+<p>YK: getOwnPropertyDescriptors + filter out enumerable, covers this</p>
+<p>BT: what is the trap name for all property names .... getOwnPropertyNames</p>
+<p>BT: should for-in just be implemented as that.</p>
+<p>BT: we would get rid of enumerate trap</p>
+<p>ARB: doesn't one return an iterator</p>
+<p>AWB: i think the enumerate trap was the only MOP operation that returned the iterator</p>
+<p>...: if we have serious performance implementations for internal, we will keep it, but wont expose it</p>
+<p>BT: it might not be possible to... we will have to give an explicit ordering for prototype properties.</p>
+<p>AWB: the only way to doit, is to set some requirements, vague or not</p>
+<a href="#conclusionresolution-5xix-proxy-enumerate---revisit-decision-to-exhaust-iterator"><h4 id="conclusionresolution-5xix-proxy-enumerate---revisit-decision-to-exhaust-iterator">Conclusion/Resolution</h4></a><ul>
+<li>provisional consensus to kill enumerate trap, contingent on running it by tom</li>
+<li>for-in does [[HasProperty]]</li>
+</ul>
+<p>************** Response from Tom: **************</p>
+<p>A few things come to mind:</p>
+<ol>
+<li><p>Faithful virtualization of the prototype chain. We decided that the Proxy should always be in control of operations involving prototype inheritance. This includes has, get, set and enumerate. For all of these operations, when executed on a normal object, they will walk the prototype chain until they hit a Proxy. After that point, full control is delegated to the Proxy. If a Proxy would only be able to override get() and set() but not enumerate(), this may lead to inconsistencies (without an enumerate() trap, the VM will have to externally walk the prototype chain of the Proxy via getPrototypeOf()).</p></li>
+<li><p>When we designed Proxies originally, we made the design decision to map many built-in operations directly to specific traps, even if these operations could be expressed in terms of more fundamental operations (get, set, has, enumerate are all examples here). The design argument here was always improved performance by reducing the number of temporary allocations.</p></li>
+</ol>
+<p>Much later in the design, others started pushing back on the number of traps, leading us to reconsider some traps, e.g. I recall the &quot;hasOwn&quot; trap was dropped in favor of checking whether (getOwnProperty() !== undefined), even though it is strictly less efficient. I don't have a view on the actual cost of expressing enumerate() in terms of lower-level MOP operations, but it seems obvious that there will be more allocation costs involved. The question is then: if enumerate() gets dropped on these grounds, why not get(), set() and has()?</p>
+<ol start="3">
+<li><p>As far as I recall, enumerate() is the only trap that actually returns an <em>iterator</em> over the property names, allowing efficient virtualization of objects with a large (or potentially, infinite) number of properties. The only other trap that returns a list of property keys, &quot;ownKeys&quot;, returns a manifest array of property names.</p></li>
+<li><p>enumerate() had weaker invariants than ownKeys() [just like all the traps that deal with prototype inheritance, since a frozen object can still inherit from a non-frozen object, leading to weaker observable invariants in general]. If one would express for-in in terms of repeated calls to ownKeys(), the invariant check overhead may be substantial compared to just calling enumerate().</p></li>
+</ol>
+<p>Unless there are really good reasons to get rid of enumerate(), I think it should remain in. For me, (1) and (3) are the killer arguments: consistency with has(),get(),set() and efficient enumeration via iteration.</p>
+<p>Feel free to forward this mail to TC39. I'm happy to engage in follow-up discussions, just ping me when needed.</p>
+<hr>
+<a href="#5xviii-exponentiation-operator-rw"><h2 id="5xviii-exponentiation-operator-rw">5.xviii Exponentiation Operator (RW)</h2></a><p>RW: i implemented the changes, tried to get brendan to review it (no luck). BT reviewed, and chakra implements</p>
+<p>RW: BT and I went over it line/line, followed up with new tests, and in the last 20 minutes per domenics suggestion I duplicated the applying ** operater tests, so both map.pow and ** tests. the SM folks will be happy that they all passed (except for one, but that's expected).</p>
+<p>RW: chakra implements, applause for OSS chakra</p>
+<p>RW: motion to include to stage 4, inclusion for 2016</p>
+<p>BT: thanks rick</p>
+<p>RW: any objections</p>
+<a href="#conclusionresolution-5xviii-exponentiation-operator-rw"><h4 id="conclusionresolution-5xviii-exponentiation-operator-rw">Conclusion/Resolution</h4></a><ul>
+<li>stage 4!</li>
+</ul>
+<p>(Lunch)</p>
+<a href="#afternoon-agenda"><h2 id="afternoon-agenda">Afternoon Agenda</h2></a><ol>
+<li>Date and place for the next meetings</li>
+</ol>
+<a href="#conclusionresolution-afternoon-agenda"><h4 id="conclusionresolution-afternoon-agenda">Conclusion/Resolution</h4></a><p>Meet in Munich Monday May 23-Wednesday May 25</p>
+<a href="#2-402-needs-reviewers-20min"><h2 id="2-402-needs-reviewers-20min">2. 402 needs reviewers (20min)</h2></a><p>CP: HTML version of the second edition is now public (<a href="http://www.ecma-international.org/ecma-402/2.0/">www.ecma-international.org/ecma-402/2.0/</a>),  just like 262. We have done some re-orgs on the spec to make the new features easier to include. Many new features have been proposed, lots of new contributors, good momentum. At this point we need reviewers</p>
+<p>DE: first we need to propose to stage 2.</p>
+<p>CP: we want to move 3 things up, and get reviewers, and one small detail</p>
+<p>AWB: before we get to stage 2 things, what is the status of 2016 402. COuld we have a summary of what is in 2016 402.</p>
+<p>CP: it will be very small, some fixes related to locale parsing. One or two functions, that will expose existing abstract operations.</p>
+<p>AWB: are those written up, you know the schedule, that means by the next meeting you have to be done</p>
+<p>CP: yup</p>
+<p>EF: we have one potential problem to discuss,</p>
+<p>EF: slide edition 1 [[CALL]] Behavior (Considered a Spec bug)</p>
+<p>AWB: thats basically, at the time the spec was drafted that was how the current thinking of internal slots to happen. This allowed internal state to be dynamically added to instances, that was decided inappropriate, and ultiamtely abondoned.</p>
+<p>EF: the problem was, a library intl, format cache. using memoizing used this pattern. This pattern was introduced in sept 2014. The issues rolled in nov 2015.</p>
+<p>EF: I fixed this in a patch release of the library</p>
+<p>EF: slide (tl;dr of intl-format-cache dep on Edition 1 Behavior)</p>
+<p>EF: slide (intl-format-cache@2.0.5)</p>
+<p>EF: slide (Potential Impact? (Excluding Yahoo's Usage)</p>
+<p>EF: slide (ative wart removal)</p>
+<p>EF: impact is likely large.</p>
+<p>AWB: in addition 1 of 402, it was possible for a single object to be multiply constructed, and get the private state of each constructor. Hopefully no-one has done that</p>
+<p>EF: ya, not our problem.</p>
+<p>AWB: it occurs me, leaving it as addition 2, their is likely a work-around. Specializing object.create for this pattern.</p>
+<p>DE: no...</p>
+<p>EF: slide (tl;dr of intl-format-cache dep on Editirion 1 behavior)</p>
+<p>DE: if we can scope these changes to the intl functions, rather then O.create</p>
+<p>AWB: you don't want this to be in the spec. So what is the smallest thing one can do to maintain the compat.</p>
+<p>EF: we can also rollback the changes in 3, and see the impact.</p>
+<p>EF: slide (active wart removal)</p>
+<p>RW: the first addition was a mistake,</p>
+<p>everyone agrees</p>
+<p>RW: we fixed it because it was broken, the fact that library relied on the brokeness is unfortunate. The only way to fix this is to re-break it.</p>
+<p>DE: What should implementations do</p>
+<p>MM: i think we can fix this</p>
+<p>RW: @MM, did you review the comment i posted?</p>
+<p>MM: please send me the link to review.</p>
+<p>EF: presents comments on GH issue 57</p>
+<p>...MM explores the code...</p>
+<p>MM: what you do, is the call behavior of Intl.Collator if its sees an object that inherits from Collator.prototype that is not a collator, it creates a new Collator and uses a unique Symbol to hang that newCollator off of that object. All the builtin Collator methods then checks whether their alleged Collator argument is a non-Collator with a property named by that Symbol. If so, it looks up the Collator state on the value of that property, i.e., it forwards all state lookup to the value of that property. A hack to deal with an emergency. No security issue here, so no problem that the Symbol can be read and used for other purposes. No accidental collisions, all the primitives must then detect the collator.</p>
+<p>SP: this isolates the fallout</p>
+<p>MM: it can be self hosted, after the emergency is over can be removed.</p>
+<p>RW: (Agree)</p>
+<p>YK: We may want to leave a note</p>
+<p>AWB: Annex in 3rd Edition that explains the compatibility issue and how to address it.</p>
+<p>YK: as long as its in the actual spec we are good</p>
+<p>EF: DE could google try Mark's suggestion of restricting .call's extra behavior to just this case, on the output of Object.create for a given Intl instance type this out?</p>
+<p>DE: yes, it seems reasonable</p>
+<a href="#conclusionresolution-2-402-needs-reviewers-20min"><h4 id="conclusionresolution-2-402-needs-reviewers-20min">Conclusion/Resolution</h4></a><ul>
+<li>wont roll it back</li>
+<li>try MM suggestion in chrome to support web compat</li>
+<li>add note to 402 annex (third edition, references second and first)</li>
+</ul>
+<a href="#5xix-revisit-proxy-enumerate---revisit-decision-to-exhaust-iterator"><h2 id="5xix-revisit-proxy-enumerate---revisit-decision-to-exhaust-iterator">5.xix (Revisit) Proxy Enumerate - revisit decision to exhaust iterator</h2></a><p>BT: Proxy.enumerate is removed, should Reflect.enumerate be removed?</p>
+<p>JDH: it would be unfortunate</p>
+<p>YK: I think its worth having a bucket that is 1:1 with the MOP operations, reflect happens to do that. If we remove Proxy traps, MOP should also see a similar removal.</p>
+<p>AWB: it seems alot harder for Reflect.enumerate then Proxy enumerate trap</p>
+<p>BT: the usecases for Reflect.enumerate outside of proxy enumerate trap isn't very compelling. If we feel comfortable removing the proxy trap, we should feel comfortable removing Reflect.enumerate</p>
+<p>MM: i think you are correct, but if some interleaving between enumeration + proxy traps</p>
+<p>MM: cross browser web-pages, can't</p>
+<p>JHD: polyfils have this</p>
+<p>YK: they will continue to work</p>
+<p>BT: any objection to remove Reflect.enumerate</p>
+<p>MM: We need to check with Tom Van Cutsem first.</p>
+<a href="#conclusionresolution-5xix-revisit-proxy-enumerate---revisit-decision-to-exhaust-iterator"><h4 id="conclusionresolution-5xix-revisit-proxy-enumerate---revisit-decision-to-exhaust-iterator">Conclusion/Resolution</h4></a><ul>
+<li>Remove Reflect.enumerate, contingent on further information from Tom</li>
+</ul>
+<p>************** Response from Tom: **************</p>
+<p>A few things come to mind:</p>
+<ol>
+<li><p>Faithful virtualization of the prototype chain. We decided that the Proxy should always be in control of operations involving prototype inheritance. This includes has, get, set and enumerate. For all of these operations, when executed on a normal object, they will walk the prototype chain until they hit a Proxy. After that point, full control is delegated to the Proxy. If a Proxy would only be able to override get() and set() but not enumerate(), this may lead to inconsistencies (without an enumerate() trap, the VM will have to externally walk the prototype chain of the Proxy via getPrototypeOf()).</p></li>
+<li><p>When we designed Proxies originally, we made the design decision to map many built-in operations directly to specific traps, even if these operations could be expressed in terms of more fundamental operations (get, set, has, enumerate are all examples here). The design argument here was always improved performance by reducing the number of temporary allocations.</p></li>
+</ol>
+<p>Much later in the design, others started pushing back on the number of traps, leading us to reconsider some traps, e.g. I recall the &quot;hasOwn&quot; trap was dropped in favor of checking whether (getOwnProperty() !== undefined), even though it is strictly less efficient. I don't have a view on the actual cost of expressing enumerate() in terms of lower-level MOP operations, but it seems obvious that there will be more allocation costs involved. The question is then: if enumerate() gets dropped on these grounds, why not get(), set() and has()?</p>
+<ol start="3">
+<li><p>As far as I recall, enumerate() is the only trap that actually returns an <em>iterator</em> over the property names, allowing efficient virtualization of objects with a large (or potentially, infinite) number of properties. The only other trap that returns a list of property keys, &quot;ownKeys&quot;, returns a manifest array of property names.</p></li>
+<li><p>enumerate() had weaker invariants than ownKeys() [just like all the traps that deal with prototype inheritance, since a frozen object can still inherit from a non-frozen object, leading to weaker observable invariants in general]. If one would express for-in in terms of repeated calls to ownKeys(), the invariant check overhead may be substantial compared to just calling enumerate().</p></li>
+</ol>
+<p>Unless there are really good reasons to get rid of enumerate(), I think it should remain in. For me, (1) and (3) are the killer arguments: consistency with has(),get(),set() and efficient enumeration via iteration.</p>
+<p>Feel free to forward this mail to TC39. I'm happy to engage in follow-up discussions, just ping me when needed.</p>
+<hr>
+<a href="#8-ecma-402-edition-3-advance-stage-2"><h2 id="8-ecma-402-edition-3-advance-stage-2">8 Ecma 402, Edition 3, Advance stage 2</h2></a><p>(Zibi Braniecki)</p>
+<p>402-related slides: <a href="https://drive.google.com/drive/u/1/folders/0B1rFz38aICo2YUpVd0VfTUdwRW8">https://drive.google.com/drive/u/1/folders/0B1rFz38aICo2YUpVd0VfTUdwRW8</a></p>
+<a href="#formattoparts"><h2 id="formattoparts">formatToParts</h2></a><p><a href="https://docs.google.com/presentation/d/1GuPC_pD84VFf4Yc8NKNDFBBmX6uY9DMA5CtKZoAdrzM/">https://docs.google.com/presentation/d/1GuPC_pD84VFf4Yc8NKNDFBBmX6uY9DMA5CtKZoAdrzM/</a></p>
+<p>ZB: slide (format to parts)</p>
+<p>ZB: further customization, requires exposes of abstract operations such as format to parts.</p>
+<p>ZB: slide (current status)</p>
+<p>ZB: polyfill has it, gecko has it behind flag</p>
+<p>ZB: we are looking for reviewers</p>
+<p>AWB: how about formatParts</p>
+<p>DE: its the output  not the input, so formatToParts</p>
+<p>DE: I will review</p>
+<p>RW: I will review</p>
+<a href="#conclusionresolution-formattoparts"><h4 id="conclusionresolution-formattoparts">Conclusion/Resolution</h4></a><ul>
+<li>stage 2</li>
+<li>Reviewers:
+<ul>
+<li>Rick Waldron</li>
+<li>Daniel Ehrenberg</li>
+</ul></li>
+</ul>
+<a href="#intlpluralrules"><h2 id="intlpluralrules">Intl.PluralRules</h2></a><p><a href="https://docs.google.com/presentation/d/1WflzD4YMOYYmJDAmjwmG0wi5GnLZd74EwvDRKSL9vA8/">https://docs.google.com/presentation/d/1WflzD4YMOYYmJDAmjwmG0wi5GnLZd74EwvDRKSL9vA8/</a></p>
+<p>ZB: slide (usage)</p>
+<p>ZB: we are just following CLDR conventions here</p>
+<p>ZB: we are at stage 1, we have spec text. Current status we worked on decimal parts, which was a previous concern</p>
+<p>WH: How do you distinguish between 1 and 1.0? These two have different plural rules in some languages but 1 === 1.0.</p>
+<p>DE: extra fields in the input to specify number of fractional digits</p>
+<p>EF: to mirror what number format has</p>
+<p>ZB: reviewers?</p>
+<p>MF: Is there a reason why we are using strings instead of other output</p>
+<p>ZB: yes, the users will use this in a switch catch, those categories are part of the CLDR</p>
+<p>MF: some other identifer could be used on a stable object</p>
+<p>YK: the web has moved away from this</p>
+<p>YK: the web has stopped to create constant that point at a number</p>
+<p>DD: yes, absolutely</p>
+<p>AR: Yes, anyone presenting a sepc with a number constant will be asked to re-work it</p>
+<p>DD: userland could implement if they want.</p>
+<p>AWB: what value would we actually deliver, in both cases they need to know the name</p>
+<p>YK: they are both constant</p>
+<p>SP: userland can do this</p>
+<p>AWB: Yes, I don't know how...</p>
+<p>ZB: reviewers?</p>
+<p>SP: me</p>
+<p>DE: me</p>
+<a href="#conclusionresolution-intlpluralrules"><h4 id="conclusionresolution-intlpluralrules">Conclusion/Resolution</h4></a><ul>
+<li>stage 2</li>
+<li>Reviewers:
+<ul>
+<li>Daniel Ehrenberg</li>
+<li>Stefan Penner</li>
+</ul></li>
+</ul>
+<p>...</p>
+<a href="#abstract-locale-operations"><h2 id="abstract-locale-operations">Abstract Locale Operations</h2></a><p><a href="https://docs.google.com/presentation/d/1JvUv_i7rb0UF6G-nl-Eu3pHvJsmhpfqV6qWwJ6yP2aA/">https://docs.google.com/presentation/d/1JvUv_i7rb0UF6G-nl-Eu3pHvJsmhpfqV6qWwJ6yP2aA/</a></p>
+<p>ZB: we wont provide all formatters, but we will all users to build their own.</p>
+<p>ZB: will allow users to build language negotiations</p>
+<p>ZB: slide (Intl.getCanoncialLocales(locales)</p>
+<p>ZB: Intl.getParentLocales(locales)</p>
+<p>ZB: many exceptions here,</p>
+<p>ZB: we have all these operations, somewhat inconsistently used internally. Now we will expose them, and also use them in-consistency</p>
+<p>ZB: there are 100 exceptions to the rules</p>
+<p>ZB: slide (Intl.resolveLocaleInfo(locale[ ,options])</p>
+<p>WH: What's the point of passing in {direction:true, firstDay:true, hour12:true} when retrieving the options object? Why not just return the whole object?</p>
+<p>CP: why filter, why not just return everything</p>
+<p>ZB: optimization? We can drop it</p>
+<p>ZB: slide (current status)</p>
+<p>MM: can we agree that the second argument that contains the filter, that we are getting rid of that</p>
+<p>ZB: yes</p>
+<p>CP: yes</p>
+<p>WH: yes</p>
+<p>MM: does the api return a fresh one?</p>
+<p>MM: It needs to either return a fresh one or a deeply frozen one. Otherwise you'd have a global communications channel.</p>
+<p>ZB: unsure</p>
+<p>DE: yes</p>
+<p>CP: whats in the content of the object returned, is it spec'd</p>
+<p>SP: needs further exploration</p>
+<a href="#conclusion-abstract-locale-operations"><h3 id="conclusion-abstract-locale-operations">Conclusion</h3></a><ul>
+<li>stage 2
+reviewers
+<ul>
+<li>Stefan Penner</li>
+<li>Daniel Ehrenberg</li>
+</ul></li>
+</ul>
+<a href="#intl-formatter-preview"><h3 id="intl-formatter-preview">Intl Formatter preview</h3></a><p>ZB: this is still exploration</p>
+<p>ZB: slide (Intl.UnitFormat)</p>
+<p>ZB: lots of un-answered questions</p>
+<p>ZB: slide (Intl.DurationFormat): Video player or timer in a watch. Distinct from UnitFormat</p>
+<p>ZB: slide (Intl.ListFormat): Localize &quot;Mary, John and Nick&quot;, including change String.prototype.toLocaleString()</p>
+<p>ZB: slide (Intl.RelativeTimeFormat): &quot;two seconds ago&quot;, etc.</p>
+<p>ZB: everything is in CLDR, and we want to expose this</p>
+<p>DH: A lot of these are solved in userland, what is the scope? Is it for things that are already there, we want to surface those? If its not in CLDR do we leave it to userland</p>
+<p>ZB: yes</p>
+<p>CP: also prioritize it on the amount of data and complexity</p>
+<p>ZB: these 4 handle the most common problems we have seen.</p>
+<p>CP: considerable existing bikeshedding, but more are invited to join.</p>
+<p>ZB: stage 0?</p>
+<a href="#conclusion-abstract-locale-operations"><h3 id="conclusion-abstract-locale-operations">Conclusion</h3></a><ul>
+<li>advanced to stage 0</li>
+</ul>
+<a href="#async-generator-functions"><h3 id="async-generator-functions">Async generator functions</h3></a><p>presenter: Kevin Smith
+link to presentation:  <a href="https://docs.google.com/presentation/d/1OwDb4WH9pkdEFVhsY5kjaJ6MF1KrxBNQWpWc9SymweQ/edit#slide=id.p">https://docs.google.com/presentation/d/1OwDb4WH9pkdEFVhsY5kjaJ6MF1KrxBNQWpWc9SymweQ/edit#slide=id.p</a></p>
+<p>KS: slide (overview)</p>
+<p>KS: Async generator functions return AsyncGenerator objects, with a for-await loop</p>
+<p>KS: Review iterator interface. Async iterators are analogous, but return a promise of the the IteratorResult, and use @@asyncIterator</p>
+<p>DH: AsyncIterator extends AsyncIterable, right&gt;?</p>
+<p>KS: Yes.</p>
+<p>KS: AsyncGenerator is what you expect, with next, throw and return. Why? Integration of existing concepts, rather than creating a new one. Pull-based, no extra backpressure protocol required, easily converted to push-based Observables. A nice feature of this, with streaming applications no backpressure is required. It can easily be converted to a push based source, by taking the async iterable and pushing it.</p>
+<p>MM: by convert you mean adapter</p>
+<p>KS: yes, exactly</p>
+<p>KS: slide (The async iteration statement) – async variant of for of</p>
+<p>KS: slide(Bikeshedding: Why for-await?)</p>
+<p>DH: pretty strongly agree, the thing that is actually signalling, is that there are additional awaits</p>
+<p>MM: additionally, these are interleaving points.</p>
+<p>KS: ctrl-f for await, makes it easy to find interleaving points</p>
+<p>YK: it is important that we are allowing two more control states to be reified through this mechanism</p>
+<p>KS: that isn't a bikeshedding concern, rather a concern about modelling...</p>
+<p>YK: No, I am fine with the modeling. I want to be sure break/continue control state to happen.</p>
+<p>YK: async modifier takes a construct..</p>
+<p>DD: it converts it into an async context, does it make it async itself.</p>
+<p>DH: i dont think thats the intention</p>
+<p>YK: Introducing more async functions would be good, but here we're talking about not introducing one so await makes sense</p>
+<p>KS: we can explore other contexts, async do etc No baring on this.</p>
+<p>KS: Slide (Details: Promise Unwrapping)</p>
+<p>SP: so yield will unwrap any thenable (not promise)</p>
+<p>DH: i am having a danger will robinson moment, composing two concepts, and now we merged them.</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">agf</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">yield</span> <span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-number">1</span>);
+}
+</code></pre>
+<p>WH: Are you proposing that the above do the same thing as replacing the yield line above by 'yield 1`?</p>
+<p>KS: Yes</p>
+<p>WH: We've had the discussion before about whether promises stack or they are idempotent. We decided that one after a long debate to prevent promises stacking.</p>
+<p>DH: yield and await merging.</p>
+<p>YK: yield and await have different precedence is pretty bad</p>
+<p>DE: doesn't it already do this, as we recursively unwrap.</p>
+<p>KS: But we recursively unwrap the IteratorResult, not the data slot!</p>
+<p>DE: Oh! So you want to await that?</p>
+<p>KS: Yes, and we await as part of yield.</p>
+<p>KS: these are still open question, what if i swap <code>yield Promise.resolve</code> with <code>yield Promise.reject</code></p>
+<p>DT: in midori we had iterator of promise, the producer can run ahead, launching the subsequent async computations.</p>
+<p>DD:  these are both handled: sync iterator for promise, async iterator for promises</p>
+<p>DT: i think it is orthogonal</p>
+<p>DD: there is no distinction, we can collapse them down to one level</p>
+<p>DH: So because we don't have promise for promise, this structure wont absorb them.</p>
+<p>DH: yield / await wanted to absorb</p>
+<p>KS: originally i didn't have this flattening, the discussion was that well we have made choices were we dont want to have promises for promises, and that would seem to make it the same as a promise for a promise with an extra done bit</p>
+<p>MM: I dont know what side of this I'm on yet, but let me put this into other terms. The things you can have a promise for are non-promises. Promises can only promise non-promises. The design question here, are async generators sources for a sequence of non-promises, or are they are source for a sequence of anything. Consistency cuts both ways, collapsing can be good. On the flip side, when you create a container, a container can contain any value not just non promises. A container can have more things over time. If you see a stream like this as simply a container. Then most containers can contain promises.</p>
+<p>DD: you can swap the word &quot;container&quot; for promise, and the argument flips.</p>
+<p>DD: complete abstract concepts should synergize</p>
+<p>WH: i don't know what that means</p>
+<p>DD: Async Iterator should have unique behavior that is the composition.</p>
+<p>DD: I think that you are saying, that a type with a certain structure, that semantics are entirely containeed rather the surrounding semantics.</p>
+<p>DD: there could be semantics on top of the compositional concepts.</p>
+<p>DH: you guys agree 90%, there could be a new type Asynciterableresult, or you are saying promises could absorb this.</p>
+<p>YK: or syntax could absorb it, but that is only half the battle</p>
+<p>DH: absorption at all?</p>
+<p>MM: Back when we were doing promises, one of the questions that came up regard the collapsing or not. Given collapsing, with the cooperation for both sides, can we still somehow express the functionality of a promise for promises? I have needed this. The work around is to wrap the promise in a cell, and the reciever needs to unwrap the cell. By a simple cooperative adaptation, can either functionality be layered on top of the other? I believe the answer is yes. Given that, the remaining design constraints should be &quot;Simple things should be simple, complex things should be possible.&quot; (Famous Alan Kay quote).</p>
+<p>DH: Are you saying async iterator can be implemented in terms of the other version?</p>
+<p>MM: either of the two forms of async iterator we are discussing can be cooperatively represented via the other, so the main criteria should be simple should be simple, complex should be possible. The dominent use-case is delivering non promises.</p>
+<p>MF: you are mistaken about several things, the goal isn't to deliver a promise of a promise. The goal is to deliver a promise of anything. We don't care about promise for promise, we care about a promise of anything. People see that as the simpler thing.</p>
+<p>MM: you are correct, simple isn't the right word as simple can be used on both sides. A consumer that knows to only deal with non-promises, is the dominant kind of consumer.</p>
+<p>MF: people write libraries that need to support this</p>
+<p>MM: general polymorphic libraries that want to support any type of input</p>
+<p>DE: we already have this precedent in promises, we should have this be an edge case.</p>
+<p>DH: i think its really important to understand, some think interms of types and parametricity. The fact of the history of promises, JS types are split tino 2 universes. (promises and non-promises)</p>
+<p>ARB: one is included in the other, which is the problem</p>
+<p>YK: it is already the case ...</p>
+<p>ARB: contents of promises is were the worlds &quot;collide&quot;, otherwise unwrapping wouldn't be useful</p>
+<p>KS: let me put a bookend on this part, clearly strong feelings on promise unwrapping.</p>
+<p>KS: the difference would be, if you didn't do the unwrapping someone would need to do yield + await</p>
+<p>MM: a worse issue, consumer side. Does it see iterations. Are we trying to define an abstraction to see an iteration of non-promises, or are we trying to define and abstraction to asynchronously deliver values.</p>
+<p>WH: Collapsing is trying to remove the need to say <code>await</code> when calling a function in a <code>yield</code>. But how does this work in a regular async function?</p>
+<p>Compare</p>
+<pre><code><span class="hljs-keyword">async</span> function* f() {
+    <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-title">h</span>(<span class="hljs-params"></span>)</span>;
+    <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-title">i</span>(<span class="hljs-params"></span>)</span>;
+}
+</code></pre>
+<p>with</p>
+<pre><code><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+    g();
+    h();
+    i();
+}
+</code></pre>
+<p>The latter one doesn't implicitly put awaits in front of the calls to g(), h(), and i(). Consistency would imply that the former shouldn't either.</p>
+<p><em>more discussion</em></p>
+<p>KS: It unwraps it recursively</p>
+<p>KS: for-await falls back to Symbol.iterator when Symbol.asyncIterator is missing</p>
+<p>DT, MF: This may be a hazard, or maybe not if you insert the right turn-taking</p>
+<p>KS: slide (Queueing). What do you do when someone calls next repeatedly without awaiting?</p>
+<p>DH: Unbounded queue?</p>
+<p>KS: You could return a rejected promise, or put it into a queue and pick them up as appropriate. I've been going back and forth on the various options. It's not essential to the design yet--at some point, I switched to rejecting, but this caused some bugs in my program, but it ended up being fixable</p>
+<p>MM: in the queueing case, it still returns the exact same thing</p>
+<p>MM: the queueing up seems much friendlier.</p>
+<p>SP: yes</p>
+<p>MM: one guy calling .next (can take an argument) because the consumer is assumed to be paused on a yield, allowing it to go to the consumer without an intermediate buffer. The whole reason for this, is 2 async coupled entities, allowing one to run ahead sounds very fine.</p>
+<p>TD: we started with &quot;it fails&quot; and worked around it, ultimately giving up. As soon as anything got speculative, it got complicated. Pushing it into the infrastructure, making it queue, up so that everyone had it.</p>
+<p>MM: This can be very useful, not buggy</p>
+<p>YK: the fact that is different that is is different from the flip side algo</p>
+<p>KS: actually, examples exist.</p>
+<p>KS: this is the same</p>
+<p>YK: ...</p>
+<p>DH:  mapping these to known analogies were i feel more confidence, falling async is JS approach to threads. The analogy from a sync threading language, I have a thread that is producing me abunch of values, I block waiting for the next value, I as the consumer should not be sensitive to if the other thread is blocked or not. It should be internal to the thread implementation details, leaking this to the cosumer isn't correct</p>
+<p>MM: both sides block, in JS that is a promise.</p>
+<p>KS: slide (current status)</p>
+<ul>
+<li>partially implemented in regenerator</li>
+<li>its in there for several months, although for await isn't</li>
+<li>read for review</li>
+</ul>
+<p>DH: please assume good faith, this is delicate. I think the space is important, we need to figure out how these concepts work together, but there is failure of our champion model, and that is over modularization...</p>
+<p>DD: in the last meeting, we requested this specifically for big paper.</p>
+<p>DH: No attack here.</p>
+<p>DH: i don't see yet, how this fits in, with the other stuff that fits in with Jafar. We have seen various variations, it is not clear to me... Maybe the intention here is to drop all that stuff (possibly implied)</p>
+<p>YK: is JH giving up on for on</p>
+<p>JH:  for on, wasn't in the proposal</p>
+<p>DH: we can't do all these things</p>
+<p>DH: we need to figure out what our are async data types, and we need to figure out the grand unified theory. KS has submitted great work, I still don't see how this all works together.</p>
+<p>DD: we said something stronger, we wanted both AsyncIterable and Observables on stage, so we can properly view this.</p>
+<p>DH: if we continue to advance these overlapping ideas, we need to be sure we don't defer how to ensure the grand unified theory works.</p>
+<p>YK: stronger concern, both proposals want to arrive at syntax. We can likely only get one of the two syntaxes.</p>
+<p>YK: we can get for on, or for await, not both.</p>
+<p>DH: it seems far less for us to imagine the coexistance of both data-types in the languages, but with the new syntactic constructs present much overlap</p>
+<p>KS: My opinion is this is await for in is the only syntax, and observables could use it. As I discussed above. In that direction, it should be complete fluid. The other direction, the subject of the await for is more complicated due to buffer differences. In my vision, observables would have a method that would allow observables to choose buffering strats, that returned an async iterable. Making it compatible with for await.</p>
+<p>JH: KS and I are in alignment, for await is what i want. We can adapt an observable to an iterator via a buffering strategy. Other types can achieve this.</p>
+<p>YK: an alternative design would be async iterable result, and we should explore</p>
+<p>DE: these things seem like refinement process tasks. They can be explored at stage 2</p>
+<p>AWB: this feels like stage 1</p>
+<p>DD: does anyone have fundamental disagreement?</p>
+<p>YK: someone needs to respond to my exploration request. I am pretty uncomfortable combining the two types.</p>
+<p>.... discussion ....</p>
+<p>DH: let me add structure</p>
+<p>DH: their are several work areas, that have been structured as independent. JH has been a champ in 1 direction, and KS in another. Several areas of unstability:</p>
+<ul>
+<li><p>work on observables + syntax</p></li>
+<li><p>work on API for async sequences + syntax</p></li>
+<li><p>it sounds like KS + JH are in aligment, observables aren't the base for syntax. And it is orthogonal</p></li>
+<li><p>observables championed by JH</p></li>
+<li><p>we want some syntax (which obviously needs a protocol)</p></li>
+<li><p>API for async sequences, but without full consensus. But we need to continue exploring.</p></li>
+</ul>
+<p>YK: I totally agree, I am concerned that I must present an adequate argument but do not feel able to at this time.</p>
+<p>DE: we should explore this explicitly</p>
+<p>DH: we should explore for await, and async sequences. We need to shake more out.</p>
+<p>DH: its obvious to me that those could be stage 0</p>
+<p>DD: my opinion is this proposal is ready for stage 2, if we can agree that the changes can be resolved during stage 2.</p>
+<p>YK: it depends how fundamental the type composition is to the proposal</p>
+<p>KS: I think that we ought to use promises for something that will be delivered async. As it works with the rest of the</p>
+<p>YK: it can be skinned many ways, additional protocols can be created.</p>
+<p>MM: await does a Promise.resolve, maps a value to a promise, and I don't want to reopen this.</p>
+<p>MM: if an AsyncIterationResult is something that is not a promise</p>
+<p>YK: is it important that it is a nominal instance of the promise constructor?</p>
+<p>MM: yes i believe so</p>
+<p>YK: i am surprised</p>
+<p>MM: if it is a thenable that it will be adapted by Promise.resolve. I am not ok with reopening await being Promise.resolve(x).then(continuation); I am not willing to change what that means</p>
+<p>DE: can we decide stage 1 or stage 2, we have more to cover.</p>
+<p>AWB: we cannot make it stage 2,</p>
+<p>DE: we can say its stage 1 pending further review.</p>
+<p>MM: (Somewhere in here I made the following unrecorded observation)</p>
+<p>There is a third alternative. The async generator can be a generator of anything. &quot;yield&quot; does not imply an implicit await, so no collapsing happens on the generation side. The async iterator that is produced is an iterator of anything. No implicit collapsing within the async iterator itself. Its API remains fully parametric. Rather, the for-await construct does the collapsing, in service of the simple-dominant-use-case consumer, who wants to see an asynchronous sequence of non-promises. Each iteration of the for-await loop does a double await -- one to get the IterationResult, and one to get the promised value.</p>
+<p>Any consumer who, instead, wishes to see an asynchronous sequence of anything, can instead write their own loop rather than using the convenient for-await sugar.</p>
+<p>Big advantages of not collapsing at the generation side:</p>
+<ul>
+<li>yielding an unresolved promise does not prevent the generator from proceeding to generate. It is not surprising stalled at the yield point.</li>
+<li>yielding a rejected promise does not cause a generation-side exception. Rather it simply transmits the rejected promise. A simple for-await consumer is stopped by the rejection throwing the reason.</li>
+<li>(Pointed out by Dean): An implicit &quot;await&quot; at the &quot;yield&quot; violates the rule that we can find all interleaving points by looking for &quot;await&quot;.</li>
+</ul>
+<a href="#conclusionresolution-abstract-locale-operations"><h3 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h3></a><ul>
+<li>Stage 1</li>
+<li>needs more exploration as per above discussion.</li>
+</ul>
+<a href="#strong-mode-discussion"><h3 id="strong-mode-discussion">Strong Mode Discussion</h3></a><p>Presenter: Andreas Rossberg
+link:</p>
+<p>ARB: slide (recap)</p>
+<p>ARB: slide (progress)</p>
+<p>ARB: slide (strong mode)</p>
+<p>ARB: slide (what worked well)</p>
+<p>ARB: Disallowed implicit conversions.</p>
+<p>WH: Even toBoolean???</p>
+<p>ARB: toBoolean is the only one that remains</p>
+<p>ARB: string conversion is used alot, but it wasn't a problem. In es6 we have template strings, which becomes explicit.</p>
+<p>AWB: what about toSelector, number -&gt; string for property</p>
+<p>ARB: ya, it comes down to some things. This one is still allowed.</p>
+<p>ARB: slide (what not worked well) Mutually recursive classes,</p>
+<p>MM: what was the motivation for unbound variable ban</p>
+<p>ARB: to make errors static and avoid runtime checks</p>
+<p>ARB: interopt made locking down classes via seal</p>
+<p>... discussion above strong vs non-string inheritance mixtures ...</p>
+<p>ARB: slide (takeaway)</p>
+<p>ARB: slide (soundscript)</p>
+<a href="#teset262"><h3 id="teset262">Teset262</h3></a><p>presenter: Dan</p>
+<p>DE: reptitive tests, lots of tests that repeat each other. Their exists a proposal to generate tests precedurally, we require implementors feedback. Ask me and I will provide more information</p>
+<a href="#conclusion--resolution-abstract-locale-operations"><h3 id="conclusion--resolution-abstract-locale-operations">Conclusion / resolution</h3></a><ul>
+<li>implementors need to provide feedback</li>
+</ul>
+<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h4></a><a href="#test262-updates"><h1 id="test262-updates">Test262 Updates</h1></a><p>Presenter: DE</p>
+<p>DE: We have some changes coming into test262, e.g., <a href="https://github.com/tc39/test262/issues/470">https://github.com/tc39/test262/issues/470</a> <a href="https://github.com/tc39/test262/issues/467">https://github.com/tc39/test262/issues/467</a>. Users, please give feedback as to whether these are appropriate for you! Please reach out to me if you have any concerns.</p>
+<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h4></a><a href="#progress-review-callable-class-constructors-allen"><h1 id="progress-review-callable-class-constructors-allen">Progress review: Callable class constructors (Allen)</h1></a><p>presenters: AWB / YK</p>
+<p>AWB: slide (callable Class Constructors)</p>
+<p>AWB: slide (refresher)</p>
+<p>AWB: slide (refresher pt.2)</p>
+<p>AWB: slide (refresher pt.3)</p>
+<p>AWB: slide (refresher pt.4)</p>
+<p>AWB: slide (interesting feedback via twitter and other channels after publicizing proposal)</p>
+<p>YK: some feel the new fork is non compositional</p>
+<p>AWB: slide (more feedback)</p>
+<p>AWB: inheriting is complicated</p>
+<p>MM: it is possible, make the default call behavior on a derived class to do a super <em>call</em> to its superclass constructor.</p>
+<p>YK: ya</p>
+<p>YK: another way to say, is that we install a constructor</p>
+<p>MM: not suggesting it is a good idea</p>
+<p>YK: not including it, caused confusing.</p>
+<p>YK: baseclass providing default functionality was a big concern</p>
+<p>AWB: we will remove the rocket</p>
+<p>AWB: we do want to enable the calling constructor</p>
+<p>YK: almost all people people want call to delegate to new</p>
+<p>AWB: ya, 99.9% case. Two bodies is confusing, it clearly seperates it for the 0.1% case, like date function.</p>
+<p>YK: it is a middle ground</p>
+<p>AWB: todays proposal (slide An alternative approach)</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RegExp</span> </span>{
+   factory <span class="hljs-keyword">constructor</span>(pattern, flags) {
+    
+    } 
+ }
+</code></pre>
+<p>MM: what about inheritance?</p>
+<p>SP: it could now just be made to work, because its a unique function body</p>
+<p>MM: does the factory bit inherit</p>
+<p>AWB: i would say no, but it could.</p>
+<p>MM: if the subclass does not say factory?</p>
+<p>AWB: it reverts back to the default behavior to throw</p>
+<p>WH: Almost the same as the original proposal. Can you use this to implement the Date use case as on the first slide?</p>
+<p>AWB: yes, if you want to implement date (slide -&gt; Use single body and new.target for date-like case)</p>
+<p>DD: something seems bad</p>
+<p>YK: i would expect, it installs new</p>
+<p>AWB: we don't quite support the date case, but the 99.9% has been sorted</p>
+<p>AWB: I will think some more about this.</p>
+<p>YK: ES5 can still be used for the edge-cases</p>
+<p>..: it will be hard to implement</p>
+<p>AWB: slide (an alternative approach)</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RegExp</span> </span>{
+   factory <span class="hljs-keyword">constructor</span>(pattern, flags) {
+       
+   }
+ }
+</code></pre>
+<p>MM the only thing that gives me pause here, if long term we will only address this with a specified mechanism. Date case goign back to es5, then we are not gaining any value from having the default constructor throwing.</p>
+<p>YK: incorrect.... i would make a looser term.</p>
+<p>YK: lets go back to es5, a massive hazard to forget use. This made many people not want the newless behavior.</p>
+<p>MM: I'm not buying this</p>
+<p>YK: the world you want to live in, they can choose new or old style, If you happen to not like new, you call without. That world only works if all the classes are es6 classes, if you encounter an es5 class you will likely encounter a hazard.</p>
+<p>MM: what I'm saying, we don't require new, the default call constructor is to <code>new</code></p>
+<p>YK: i almost proposed this...</p>
+<p>...: from an implementors perspective, we only included the new.target  in frames if we new we needed this. It is a huge pain in the neck to implement this default forwarding</p>
+<p>BE: some wont use classes anyways, we shouldn't cater to them</p>
+<p>MM: we should not help them</p>
+<p>DD: their is an implementors concern.</p>
+<p>AWB: the factory world is almost noise</p>
+<p>... discussion ...</p>
+<p>WH: This is unnecessary. It's creating a redundant way to create instance, for those who don't like <code>new</code>. Given the implementation concerns, we should not be doing this at all.</p>
+<p>...  (the implementors) it will be crappy</p>
+<p>MM: could we make something shorter than &quot;factory constructor&quot;</p>
+<p>AWB: maybe, but it is a factory call</p>
+<p>MM what about</p>
+<pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RegExp</span> </span>{
+   () {
+      <span class="hljs-comment">// ..</span>
+    }
+}
+</code></pre>
+<p>DT: seems like syntax and implementation default are two seperate issues</p>
+<p>WH: Again, we shouldn't be doing this at all. Drop it instead of bikeshedding syntax.</p>
+<p>MM: I withdraw my proposal due to the implementation concerns</p>
+<p>YK: i am on the side, that not using new is a minority opinion. We should still not lock it out</p>
+<p>DD: we should likely not provide constructs that will allow those to shoot themselves in the foot, they can just use =&gt;...</p>
+<p>YK: decorators could enable this ergonomically</p>
+<p>MM: we should drop this completely, and solve it with decorators.</p>
+<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h4></a><p>Proposal dropped.</p>
+<a href="#objectgetownpropertydescriptors-to-stage-3-jordan-harband-low-priority-but-super-quick"><h1 id="objectgetownpropertydescriptors-to-stage-3-jordan-harband-low-priority-but-super-quick">Object.getOwnPropertyDescriptors to stage 3? (Jordan Harband, low priority, but super quick!)</h1></a><p>presenter JDH:</p>
+<p>JDH: reviewers and editors +1'd, can we move to stage 3</p>
+<p>all: yes</p>
+<a href="#conclusionresolution-abstract-locale-operations"><h2 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h2></a><ul>
+<li>advance stage 3</li>
+</ul>
+<ol start="6">
+<li>private state</li>
+<li>Progress review: Callable class constructors (Allen)</li>
+<li>Module loading update (Dave Herman, Caridy Patiño)</li>
+<li>Introduce the continents concept to the spec? (Domenic Denicola; low priority)</li>
+</ol>
+<p>Pending Topics: (un-ordered)</p>
+<ol>
+<li>Class fields updates -- Semicolons: Required or optional? What to do with initializer-less declarations? (Jeff Morrison)</li>
+<li>Async generators Proposal (Kevin Smith)</li>
+<li>Private State Update (Kevin Smith, Allen Wirfs-Brock)</li>
+<li>Progress review: Callable class constructors (Allen)</li>
+<li>Module loading update (Dave Herman, Caridy Patiño)</li>
+<li>Introduce the continents concept to the spec? (Domenic Denicola; low priority)</li>
+<li>Object.getOwnPropertyDescriptors to stage 3? (Jordan Harband, low priority, but super quick!)</li>
+</ol>
+
+</body>

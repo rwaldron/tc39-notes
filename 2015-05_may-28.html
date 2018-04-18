@@ -1,0 +1,215 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 28, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-28-2015-meeting-notes"><h1 id="may-28-2015-meeting-notes">May 28, 2015 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Allen Wirfs-Brock (AWB), John Neumann (JN), Jeff Morrison (JM), Sebastian Markbåge (SM), Yehuda Katz (YK), Dave Herman (DH), Sam Tobin-Hochstadt (STH), Kevin Smith (KS), Daniel Ehrenberg (DE), Adam Klein (AK), Jordan Harband (JHD), Jafar Husain (JH), Mark S. Miller (MM), Michael Ficarra (MF), Chip Morningstar (CM), Simon Kaegi (SK), Peter Jensen (PJ), Eric Ferraiuolo (EF), Stefan Penner (SP), Paul Leathers (PL), Jonathan Turner (JT), Brendan Eich (BE), Dan Gohman (DGN), Miško Hevery (MHY), Matt Sweeney (MSY)</p>
+<hr>
+<a href="#ecma-update-istvan"><h2 id="ecma-update-istvan">ECMA Update (István)</h2></a><p>Do we still withdraw E4X and etc?</p>
+<a href="#consensus--resolution-ecma-update-istvan"><h3 id="consensus--resolution-ecma-update-istvan">Consensus / Resolution</h3></a><p>Withdraw.</p>
+<a href="#functionprototypetostring-revision-michael-ficarra-presenting"><h2 id="functionprototypetostring-revision-michael-ficarra-presenting">Function.prototype.toString revision (Michael Ficarra presenting)</h2></a><p>MF: presenting <a href="https://github.com/michaelficarra/Function-prototype-toString-revision">https://github.com/michaelficarra/Function-prototype-toString-revision</a></p>
+<p>MF: Let's review the spec for toString</p>
+<p>YK: How does it deal with default arguments?</p>
+<p>MF: The spec currently doesn't say anything about parameters</p>
+<p>MM: The requirement is that the returned function string has the same behavior when called</p>
+<p>YK: Worried about what implementations do</p>
+<p>BE: All the known implementations do source recovery</p>
+<p>MF: presenting...</p>
+<p>Open issues:</p>
+<ul>
+<li>function name property</li>
+<li>definition on MethodDefinition and GeneratorMethod is left undefined because how would you define this, new.target and super--eval'ing it couldn't let them bind properly. However, it's important to leave things open to implementations to just hold the source code as they do right now.</li>
+<li>It would be better if the spec talked about the result of evaluating [[Call]], rather than the internal steps of [[Call]], so it doesn't overspecify. This text seems to use the word 'indistinguishable' in a way that's specific to that particular paragraph; maybe it should leave the word 'indistinguishable' for what it means in the rest of the spec and use another word here or refer explicitly to the outcome of the evaluation.</li>
+<li>Add an optional FunctionBody after '[ native code ]' for the native case (suggested by MM)</li>
+<li>Require (in chapter 16) that implementations generate a SyntaxError for '[ native code ]'</li>
+</ul>
+<p>MF: Discussing the &quot;Else, if func has an [[ECMAScriptCode]] internal slot&quot; clause of the new spec text</p>
+<p>AWB: The statements &quot;func was defined using ECMAScript code&quot; and &quot;has an [[ECMAScriptCode]] internal slot&quot; have the same meaning</p>
+<p>MF: How do we handle things that were not created using the Function constructor or written in ECMAScript code? What if a host-provided exotic object has an [[ECMAScriptCode]] internal slot?</p>
+<p>AWB: Then it is, by definition, created by the Function constructor.</p>
+<p>MM: The first if should just be &quot;if func has an [[ECMAScriptCode]] internal slot and is callable...&quot;</p>
+<p>MF: But then you need a way to distinguish the case where the host environment provides some object that has an [[ECMAScriptCode]] internal slot?</p>
+<p>BE: You don't need to, it can be the &quot;else&quot; clause, along with an Assertion</p>
+<p>YK: Back to the goals: what rubric is being used to decide which cases should be defined to throw a SyntaxError when toStringed?</p>
+<p>MM: The goal is to avoid the case where toString doesn't generate an error, but evaling the result doesn't produce equivalent behavior to calling the function.</p>
+<p>YK: An alternative design is to provide source recovery. In that case, the design should be to return whatever the user typed. That obviously violates the evaluatable requirement.</p>
+<p>MF: The proposed change also defines the 'function() { [native code] }' string that must be returned.</p>
+<p>YK: Does that mean that the PS4 returns that string for all functions? Or is it non-conforming.</p>
+<p>MM: This definition means we're committing to '[ native code ]' being a syntax error.</p>
+<p>CM: Seems brittle, could we prefix the string with something instead?</p>
+<p>BE: Web code depends on that specific &quot;[native code]&quot; string -- de-facto standard</p>
+<p>MF: And the point is to be easy to parse it (paired braces, brackets, etc)</p>
+<p>MF: Proposing moving to stage 1.</p>
+<p>YK: Don't think we should move to stage 1 as this is the first time the committee has seen it.</p>
+<p>BE: This has been discussed on es-discuss, there are open bugs</p>
+<p>AWB: The problem goes back to ES6 discussions</p>
+<p>STH: Yehuda clearly disagrees with the underlying goals, which is why his complaint should be relevant to whether we move to stage 1</p>
+<p>BE: That is a very valid procedural objection; separately, I don't feel like source recovery is doable</p>
+<p>AWB: If the interest is in providing moving functions between address spaces, then maybe we should do it somewhere other than <code>Function.prototype.toString</code>, which doesn't work for all cases right now anyway.</p>
+<p>MM: Why not make toString do that job?</p>
+<p>AWB: Because it's at odds with source recovery.</p>
+<p>YK: As we add more things like 'super' to the language, there are going to be more and more cases where toString is not going to provide portability.</p>
+<p>MM: The cases I care most about are FunctionExpression, ClassExpression, GeneratorExpression; am open to producing guaranteed SyntaxErrors for things like GeneratorMethod.</p>
+<p>CM: But that's still going to put pressure to try to generate things that work for round-tripping behavior and are further from the source recovery usecase</p>
+<p>MM: The de facto standard in ES6 was already to generate an error at eval time for methods, I'm only trying to make that explicit in the spec</p>
+<p>YK: I don't want the addition of 'super' in a method to change the output of a test suite from the source text to a syntax error</p>
+<p>MM: What if we inject a guaranteed syntax error [like &quot;[native code]&quot;] in to the toString? Or alternatively guaranteed that method syntax is a syntax error in an expression.</p>
+<p>YK: I would be open to that if it's easy to strip out.</p>
+<p>AWB: This whole thing bothers me, toString seems like a debugging/recovery thing, even if it's been historically used with eval. I don't like that, in a debugging session,  toString will not return the source that I typed.</p>
+<p>CM: It really sounds like these goals are at odds</p>
+<pre><code>&gt; (function() { /* hello */ }).toString()
+&quot;function () { /* hello */ }&quot;
+&gt; (function() { /* hello */   }).toString()
+&quot;function () { /* hello */   }&quot;
+&gt; (function( foo ) { /* hello */   }).toString()
+&quot;function ( foo ) { /* hello */   }&quot;
+</code></pre>
+<p>JHD:  <code>Function.prototype.toString.call({foo() { return foo }}.foo)</code> in firefox returns &quot;function foo() { return foo }&quot; but in v8/chrome returns &quot;foo() { return foo }&quot; which are not functionally equivalent</p>
+<p>JHD: also, <code>Function.prototype.toString.call(Object.getOwnPropertyDescriptor({get a() { return 3 }}, 'a').get)</code> in FF returns &quot;function () { return 3 }&quot; but v8/chrome returns &quot;</p>
+<p>YK: Can we agree that source recovery should be a goal of this proposal?</p>
+<p>MF: It wasn't originally my goal in putting together this presentation.</p>
+<p>MM: I agree that implementations seem to be aiming for that goal, though it's not a goal of mine.</p>
+<p>SP: Another use case is detecting what features a function is using (say, 'super')</p>
+<p>MM: The injected syntax error solution supports that use case</p>
+<p>MM: I only care about a certain set of cases</p>
+<p>YK: What about arrow functions?</p>
+<p>[...lunchtime discussion...]</p>
+<p>YK: There are a set of things that do not have unserializable state (FunctionExpression, ClassExpression, GeneratorFunctionExpression, and some declaration forms of those). There a whole other set of forms (arrow functions, concise methods) that may have unserializable state.</p>
+<p>YK: The proposal is to add a new predicate (strawman: &quot;Reflect.isPortable&quot;) that can be used to determine which of these forms a given function falls into.</p>
+<p>YK: The predicate could even return more information, such as a list of free variables in the function.</p>
+<p>YK: Given the above predicate, I am satisfied that moving MF's toString proposal to stage 1 will satisfy both the source recovery use cases and MM's portability uses cases.</p>
+<a href="#resolution-functionprototypetostring-revision-michael-ficarra-presenting"><h3 id="resolution-functionprototypetostring-revision-michael-ficarra-presenting">Resolution</h3></a><p>Move MF's Function.prototype.toString proposal to stage 1, with a dependency on the Reflect.isPortable predicate (which is effectively a stage 0 proposal) and an added goal of supporting the source recovery use cases.</p>
+<a href="#decorators-yehuda-katz-jonathan-turner-need-slides"><h2 id="decorators-yehuda-katz-jonathan-turner-need-slides">Decorators (Yehuda Katz, Jonathan Turner) (Need slides)</h2></a><p>YK: Used to be against decorating function decls which hoist. Also, having decorators on exprs and decls was bad.  However, I've come to peace with hoisting the execution of the decorator expression. Seems plausible.</p>
+<p>AWB: Function declarations are created before there's any environment. If you introduce something that can execute at that time it changes all of the semantics.</p>
+<p>YK: This is hard. We need to think hard. What Allen said was true.</p>
+<p>DH: We shouldn't rathole for too long on what the answer is because we don't have one yet. There is no obvious right answer. Easiest not to support this at all, but this is a mistake - people want to use function declarations, and if decorators don't work on function declarations, people won't use function decls. We have a few tools - 1 is imports.</p>
+<p>YK: The semantics will be rough no matter what. We can prototype and see if in real world code this is a problem.</p>
+<p>JM: Prototyping is great but it doesn't find footguns well because it's a small module.</p>
+<p>JT: We can put it in typescript. We get good feedback. If it's just in experimental, it's possible to remove later.</p>
+<p>AWB: Clarifying module initialization: when a module is instantiated, one of the first thing that happens before it finds any imports, it instantiates any function declarations.</p>
+<p>DH: You could observe that a binding isn't initialized yet. Could introduce TDZ?</p>
+<p>[Problem: If you make a let binding and refer to that in a decorator parameter, you will hit a TDZ]</p>
+<p>AWB: Creates opportunity for fatal circularities that weren't a problem before.</p>
+<p>YK: We should get our transipler friends to try it out and see.</p>
+<p>DH: There needs to be work on this... need a plausible design.</p>
+<p>YK: I agree.</p>
+<p>AWB: Would it be an acceptable semantics if we can't figure it out we say that decorated decls don't hoist?</p>
+<p>DH: Sure. There will be inconsistencies any way.</p>
+<p>YK: People depend on hoisting. What it would mean is that occasionally their code wouldn't work and they wouldn't use decorators. Maybe that's ok.</p>
+<p>AWB: Maybe that's ok! Could be same as classes. Could have good error message.</p>
+<p>[ Presents on parameter decorators ]</p>
+<p>YK: Parameter decorators work on Parameter descriptors.</p>
+<p>JM: Couldn't I just decorate the entire function and use the reflective API to touch the parameters?</p>
+<p>JT: Yes.</p>
+<p>AWB: What do we statically know and what is knowable dynamically. Do we statically know there is a formal parameter named &quot;f&quot;?</p>
+<p>YK: You can't change type or name of the parameter descriptor. The main thing is metadata. Possibly wrapping the default expression.</p>
+<p>AWB: Root of the question is about the fact that a function definition starting with name and parameers through the body is something that is statically analyzed as a unit independent of evaluation. This injects in essence evaluation semantics into the middle of the static analysis...</p>
+<p>YK: I Wouldn't think of it that way. I would think about it that you create a function in the first step and then you go through the formal parameters and get their descriptors and you could modify them, but the modifications you can make are limited to things we can accept.</p>
+<p>AWB: Ok, different question. Last question assumed the decorator was evaluated at func definition time. But another way is that they are evaluated on each invocation.</p>
+<p>YK: One goal of decorators is that they don't introduce call-time overhead.</p>
+<p>BE: Need to clearly define the evaluation model.</p>
+<p>YK: Started with the reflection API as I'd like to desugar to two reflection APIs.</p>
+<p>AWB: Here's the trap: If I wanted to write a static compiler for ECMAScript, how does this impact those uses?</p>
+<p>YK: The simplest thing this is doing is adding metadata which seems equivalent to adding to weakmap.</p>
+<p>AWB: If evaluation happens after the class... if it doesn't require anything at compilation time...</p>
+<p>YK: I think that's a sticky question..</p>
+<p>AWB: It looks like it's inside the function.</p>
+<p>YK: It's outside.</p>
+<p>AWB: What's the scope of param decorators? Are params in scope like they are with defaults.</p>
+<p>YK: All decorators, no matter where they are placed inside the class body, have the scope of the outer scope. It's possibly confusing.</p>
+<p>AWB: I think it's totally confusing.</p>
+<p>BE: It seems confusing.</p>
+<p>BE: ARB sees wanting decorators on static constructs like modules and other decls. There is a tension between static and dynamic.</p>
+<p>YK: In practice the case that Allen mentions won't happen.</p>
+<p>YK: Originally thought that param decorators didn't fit into this, but everyone wants this so...</p>
+<p>AWB: What about destructuring?</p>
+<p>JT: (Answering what is done in TS) Param decorators have outer scope.</p>
+<p>AWB: Violates rule we had in ES6.</p>
+<p>YK: Need to work out the semantics.</p>
+<p>AWB: What about patterns [destructuring bind]?</p>
+<p>JT: I think TS doesn't allow now.</p>
+<p>DE: Must be hard to even reflect on destructuring bind</p>
+<p>AWB: It would be bad if the decorators worked only some of the time, and then not on destructuring bind. Good to capture all the hard problems.</p>
+<p>[Discussion between AWB/YK Regarding when evaluation occurs for various decorator constructs]</p>
+<p>JT: Imagine we had a reflect.decorate API that was capable of composing for you. The other way would be to form a decorator pipeline of sorts.</p>
+<p>YK: Completely replacing a class with a new class seems bad.</p>
+<p>JT: We want to create a reflect API for self-hosting decorators with a step-by-step thing.</p>
+<p>[ More presentation and discussion missing from here ]</p>
+<a href="#observable-nominal-type-jh-ks"><h3 id="observable-nominal-type-jh-ks">Observable Nominal Type (JH, KS)</h3></a><p>JH: Presenting slides TODO(JH): add link</p>
+<p>Issues with async generator proposal [expanding on bits where slides are terse]:</p>
+<ul>
+<li>General agreement that async function* should return an &quot;async iterator&quot; instead of an Observable, as observabe's push model is not necessarily asynchronous, example being sync DOM events</li>
+</ul>
+<p>Questions on <code>Array.prototype[Symbol.observer]</code> slide:</p>
+<p>DH: Why the check for falsiness of iterResult?</p>
+<p>JH: Just being safe, agree that if |generator| is a real generator it's not possible for iterResult to be falsy.</p>
+<p>MM: Why are you calling generator.return()? That's normally meant for early exit.</p>
+<p>JH: In this case the generator is being used as a sink, rather than a source....no, sorry, the slide is wrong [live coding].</p>
+<p>Questions on WebSocket slide</p>
+<p>MF: Why arrow functions?</p>
+<p>JH: No particular reason, other than those that refer to 'this'.</p>
+<p>JH: [...continues...]</p>
+<p>SP: What happens when errors occur? Error propogation?</p>
+<p>JH: When an error occurs in a Promise, the Promise is &quot;dead&quot;. That's not the case with Observables, since other observers could still be added by subscribing. But an error signals the end of a single subscription. Every observation ends with either &quot;done&quot; or &quot;error&quot;.</p>
+<p>SP: I think that subscribe() seems like it conceptually should return a Promise, with the only callback passed into subscribe() is &quot;next&quot;. That would make this compose better with other Promise code.</p>
+<p>JH: That's exactly what Observable.prototype.forEach does. But there you don't get the subscription back, so you can't unsubscribe. Unless you have cancelable Promises.</p>
+<p>MM: Alternatively you could return a pair of [subscription, promise] from subscribe(). But that has the problem that a single subscriber could end the whole observation.</p>
+<p>SP: OK, now I'm seeing that this is the same issue as cancelable promises.</p>
+<p>Side bar:</p>
+<p>[discussion among YK and MM about having then() return a subscription, and why we didn't do that]</p>
+<p>MM: You could have a lower-level operation than then() that returns a pair of [promise, subscription] where unsubscribing only cancels the particular callback passed in, not the whole promise. And you could have async functions make use of this, which makes it not so bad that you have a pair returned. This might provide an answer for cancelable promises.</p>
+<p>[TODO(YK, MM): More detail here if you want it pulled out of this presentation]</p>
+<p>...back to Observables...</p>
+<p>MM: Does calling unsubscribe() cause return() to be called on the argument to subscribe()?</p>
+<p>JH: No, I don't think so...KS?</p>
+<p>KS: Yes, a well-behaved Observable should call return().</p>
+<p>CM: I don't think that makes sense, return() should only be called when the Observable's stream is complete.</p>
+<p>MM: Doesn't that break the compositional cleanup semantics?</p>
+<p>KS: The way I designed the polyfill was more in line with that thinking [that return should be called on unsubscribe], will sync up with JH to sort that out.</p>
+<p>YK: I think SP was getting at this: we shouild make sure that we [learn the lessons from Promises] and have error propagation work well.</p>
+<p>DH: Comments on Event Composition slide. Trying to describe Hot/Cold language. For mouse moves, it seems like once you have no more subscribers, you want to stop receiving mouse events.</p>
+<p>DH: trying to understand hot vs cold observables: mousemove is an example where once you reach zero subscribers there's no point in continuing to receive events, so the data source cancels</p>
+<p>JH: Yes, that's &quot;hot&quot;</p>
+<p>DH: whereas a cold one might be like a network fetch where when the subscriber count reaches zero that doesn't mean you won't have new subscribers and you don't necessarily want to cancel the underlying request</p>
+<p>DH: but the decision to be hot vs cold is at the data source, and Observable combinators are about subscription, so one set of combinators works for both hot and cold?</p>
+<p>JH: well yes but there are plenty of combinators and inevitably some only make sense for hot or cold, and it's IMO more reasonable just to have one set of combinators and have some that simply don't do anything reasonable when called on the wrong type of data source; so that's a leaky abstraction but more practical</p>
+<p>MM: Proposes <code>Observable.prototype.then()</code>.</p>
+<p>KS: Considered that in the polyfill, but ran into possible other things that .then() should do. Will continue consideration.</p>
+<p>JH: Continuing Event Composition use cases...</p>
+<p>MF: These new methods, are you planning to put them on Observable.prototype? Won't that cause problems if people start monkeypatching?</p>
+<p>JH: Yes, something to be considered.</p>
+<p>YK: Promises got fast-tracked because of use-cases in ES6 and the DOM. Have you gotten a lot of feedback from DOM folks that want this? I'd imagine that there would be people chomping at the bit to use Observables for events.</p>
+<p>JH: Have only heard a bit from DOM, regarding filesystem APIs. Not a lot of feedback from that side.</p>
+<p>YK: In the meantime, I encourage JH to work on &quot;Observables A+&quot;, with a test suite</p>
+<p>MM: With the goal of working with other Observable libraries and getting them all on the same page</p>
+<p>JH: I've been in discussion with those libraries</p>
+<p>YK: You don't even have to write the reference library, but it would help to have lots of examples (IndexedDB, other web APIs) showing the value, as was done for Promises.</p>
+<p>JH: I think it would be nice to explain DOM events in terms of Observables; at the least we should be able to adapt them.</p>
+<p>MM: Naming concern: this name seems close to &quot;Object.observe&quot;. If it didn't exist, &quot;Observable&quot; would be the right name.</p>
+<p>DE: We could defer this question until one of the two proposals makes its way further along.</p>
+<p>JH: Could Object.observe be in terms of Observables?</p>
+<p>MM: Would Object.observe folks object to that?</p>
+<p>AK: I'm probably the best person to speak to that, and it seems like a reasonable thing for Object.observe to be in terms of Observable</p>
+<p>JH: Also, ideally &quot;subscribe&quot; would be called &quot;observe&quot;</p>
+<p>CM: I think &quot;subscribe&quot; actually has something to recommend it -- gives rise to Subscription as name for thing you get back (Observation doesn't work, singular)</p>
+<p>AK: No one is currently working on pushing Object.observe to stage 3, but I'd be happy to have contributions or feedback.</p>
+<p>BE: There are objections to it; some people think it shouldn't be there (see Nov 2014 meeting notes)</p>
+<p>JH: Including me</p>
+<p>DE: Let's say neither Object.observe nor Observable can get to stage 3 until we get some resolution on the naming conflict</p>
+<p>[ General agreement, moving on ]</p>
+<p>[lots of discussion about hazards of sync Observables; <code>Observable.prototype.subscribe()</code> only actually subscribes at the end of the turn to avoid one such hazard (see slide)]</p>
+<p>MM: Basically, in Promises, there's a guarantee that the callback is called from a clean stack. For Observables, the only guarantee is that the callback is not called from the callback provider's stack. Which is still a pretty good guarantee.</p>
+<p>JH: Right. We put the burden on Observables that, if they act synchronously, they be careful that they don't depend on state that might change while they act.</p>
+<p>MH: We [Angular] can confirm that this is a good tradeoff.</p>
+<p>JH: The motivation for not forcing next() to be scheduled in a new job is to be maximally efficient.</p>
+<p>MM: Something I've expressed before, and I'll reiterate, is that I worry about all this new syntax, and would like to see some way to use composition to avoid adding new syntax for each combination of these things.</p>
+<p>DH: I think the exploration is great, but I also have concerns about proliferating syntax.</p>
+<a href="#resolution-decorators-yehuda-katz-jonathan-turner-need-slides"><h3 id="resolution-decorators-yehuda-katz-jonathan-turner-need-slides">Resolution</h3></a><p>Move to stage 1, keeping in mind DOM events especially</p>
+
+</body>

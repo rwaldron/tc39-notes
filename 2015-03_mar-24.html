@@ -1,0 +1,345 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>March 24, 2015 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#march-24-2015-meeting-notes"><h1 id="march-24-2015-meeting-notes">March 24, 2015 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Allen Wirfs-Brock (AWB), John Neumann (JN), Jeff Morrison (JM), Sebastian Markbåge (SM), Yehuda Katz (YK), Dave Herman (DH), Alan Schmitt (AS), Lee Byron (LB), Domenic Denicola (DD), Kevin Smith (KS), Andreas Rossberg (ARB), Brendan Eich (BE), Erik Arvidsson (EA), Adam Klein (AK), Jordan Harband (JHD), Mark S. Miller (MM), István Sebestyén (IS), Jafar Husain (JH), Rick Waldron (RW)</p>
+<hr>
+<a href="#4-ecma-262-6th-edition"><h2 id="4-ecma-262-6th-edition">4 ECMA-262 6th Edition</h2></a><p>(AWB)</p>
+<p>AWB: (presents slides)</p>
+<p>AWB: release candidates are intended to be complete subject to bugs so everyone could review them. RC1 was the review draft for the RF opt-out period.</p>
+<p>AWB: bug count fluctuates toward zero and back up; minor technical or editorial issues. Waldemar found some small issues in the grammar (unnecessary parametrization, Unicode regexp grammar, ...). Bugs that come up between now and June will be fixed as practical, or deferred to ES7 if not.</p>
+<p>AWB: any last minute issues!?</p>
+<p>BE: what about the things that are backward-incompatible?</p>
+<p>AWB: e.g. Brian has some issues around the function name property</p>
+<p>BT: i.e., the assignment of names when assigning a function to a var declaration</p>
+<p>AWB: EA has an issue around [[DefineOwnProperty]] on module namespace objects...</p>
+<p>BE: built-in prototypes?</p>
+<p>AWB: in RC1 it became pretty clear that at least making Array.prototype not-an-array would break at least some peoples' code. So for RC1 I reverted Array.prototype back to an Array exotic object. There was similar discussion about RegExp.prototype. For RC1 I did an experiment with some hacks that I thought would maybe give us a middle path. But that got reverted back.</p>
+<p>BE: not sure there's any profit in trying to change it in the spec.</p>
+<p>BT: that's what IE has: RegExp.prototype is an ordinary object; the only prototypes that are not ordinary objects are Function.prototype and Array.prototype.</p>
+<p>BE: what about <code>Object.prototype.toString</code> on those prototypes? [Actually I was asking what RegExp.prototype.toString() returns. /be]</p>
+<p>BT: it gives <code>[object Object]</code>. We haven't come across any code yet that breaks because of these changes, and to put that in perspective we have 3 or 4 sites that break due to the function name thing.</p>
+<a href="#module-namespace-exotic-objects"><h2 id="module-namespace-exotic-objects">Module Namespace Exotic Objects</h2></a><p>DH: I think there was a minor issue with the module namespace objects...</p>
+<p>EA: my concern here is that we're introducing a new exotic object.</p>
+<p>DH: that has been my intention for fully six years. (For some value of six.)</p>
+<p>DD: I think the wiki said &quot;<code>Object.create(null)</code> with getters&quot;...</p>
+<p>DH: yeah you're right, the exoticness is not the higher-order bit.</p>
+<p>AWB: let me run through the things you can do with a MNS exotic object. A get; no set; a get with a symbol; enumerate; has-own (name or symbol); and that's pretty much it. Everything else fails (false return or throw). So e.g. Object.getOwnPropertyDescriptor will throw on one of these.</p>
+<p>EA: a solution is to simply return a data property descriptor. Then code that uses Object.getOwnPropertyDescriptor, e.g. for mixins, will work.</p>
+<p>AWB: the reason I made it throw is that the MOP lets you define things that are neither data properties nor accessors, and this is one of those cases, and the MOP lets you throw in those cases, so we could.</p>
+<p>DH: it is self-evidently possible to write the spec as it's written now, but the question is whether we should.</p>
+<p>MM: I would find it more useful to not throw.</p>
+<p>AWB: even though it's not really writable?</p>
+<p>YK: it <em>is</em> writable, but it's not writable by you.</p>
+<p>AWB: I worry that we're establishing a precedent that we're going to make [[GetOwnProperty]] behave that way.</p>
+<p>DH: there's a lot of code out there that has expectations about objects you give it, and if you build an object that breaks those expectations, then that particular class of object becomes rounded up and treated as toxic and people say to never use these objects, or alternately it starts to poison the well of these common operations, which is even worse. For example we did a similar thing with enumerate. Module objects ought to behave as close to normal objects as possible. It's a much narrower diversion to have an object which says it's writable but you can't write to it, than one that throws when you try to get a descriptor for its properties. On top of that, there is precedent for property writes quietly failing...</p>
+<p>MM: you could write something with an accessor that has that behavior, but it's not normal... non-writable properties normally throw in strict, fail silently in sloppy.</p>
+<p>AWB: being a data property means that if you get the descriptor you get the value of it. That means in [[GetOwnProperty]] I have to access the value, which could fail because of TDZ.</p>
+<p>DH: this is the MOP. TDZ is part of the core semantics. How do we reflect TDZ in the MOP. We could throw, or we could have some special representation of TDZ state in the MOP (e.g. undefined). A throw seems better at this stage, in the case where you hit TDZ.</p>
+<p>ARB: what happens when you do a [[Get]] in the TDZ?</p>
+<p>DH: it throws</p>
+<p>YK: why is it not just a getter</p>
+<p>ARB/MM/AWB: then you have to reify the getter, and it's annoying to implement</p>
+<a href="#conclusionresolution-module-namespace-exotic-objects"><h4 id="conclusionresolution-module-namespace-exotic-objects">Conclusion/Resolution</h4></a><ul>
+<li>Change module namespace exotic object [[GetOwnProperty]] to reflect as a writable data property.</li>
+<li>[[Set]] continues to throw in strict mode.</li>
+</ul>
+<a href="#function-name-issue"><h2 id="function-name-issue">Function Name Issue</h2></a><p>BT: we found several sites that are broken by the new function.name algorithm. One site we found is using function objects as maps, and so doing e.g. <code>if (func[key]) { ... }</code>. Since ES6 defines new semantics for <code>func.name</code>, this breaks the site. We have enough information such that we're not going to ship this. We could perhaps only infer for assignments to <code>let</code> and <code>const</code>, not <code>var</code>.</p>
+<p>AWB: we infer lots of places...</p>
+<p>BT: we've only seen problems for assignments to <code>var</code>.</p>
+<p>MM: so if we removed it from <code>var</code> everything would work?</p>
+<p>BT: yes, but it seems a bit hasty to make that change without testing...</p>
+<p>MM: at what point in the process can changes like this not go in.</p>
+<p>JN/AWB: we're there now.</p>
+<p>DD: it's not a big deal if we have a different function.name algorithm in ES7.</p>
+<p>DH: no, really!? If we have something that pretty clearly needs to be fixed, we should be able to change right up until the GA votes.</p>
+<p>AWB: the GA needs the time to review it...</p>
+<p>DH: in a 1300-page spec, a small change like this is not going to change anyone's opinion about ES6.</p>
+<p>AWB: it's a process thing. This is about a feature, and it's either in or not in.</p>
+<p>DH: the feature is in. I'm saying this is at the level of bugfix.</p>
+<p>ARB: in Chrome every function has a name property....</p>
+<p>BT: the problem is that it switches from falsy to truthy when it becomes a non-empty string.</p>
+<p>BE: why are we changing anonymous function names?</p>
+<p>MM: we're not changing anonymous function names, we're changing which functions are anonymous :)</p>
+<p>ARB: which is one of these webpages?</p>
+<p>BT: cheezburger.com, the comments won't load.</p>
+<p>BE: stop ship bug, then!</p>
+<p>ARB: cheeseburger.com?</p>
+<p>AK: no, cheezburger.com.</p>
+<p>DH: we should at least have a GitHub errata page where we can enumerate these things...</p>
+<p>DD: once the great tooling revolution arrives, there will be a live GitHub version of the spec that implementers consult.</p>
+<p>DH: yeah, but until the Great Leap Forward arrives, we need something in place.</p>
+<p>YK: let's put errata in tc39/ecma262.</p>
+<p>MM: having this be an errata-managed issue seems fine to me.</p>
+<p>BE: what about a new property, instead of .name?</p>
+<p>AWB: on Twitter somebody suggested it should be a symbol</p>
+<p>MM: we're standardizing the de-facto precedent. The reasonable backoff suggested by the data is to not infer the data from the var assignment.</p>
+<p>DD: two options. Make the change now with no var; or, leave the spec as is, let Microsoft accumulate more data to see if no-var-assignment is sufficient; if so then use errata to officially recommend those.</p>
+<p>MM: let the ES6 spec and Microsoft's implementation diverge, and use that to figure out exactly what the right fix is.</p>
+<p>EA: we should either do full inferencing or revert to ES5 semantics.</p>
+<p>MM: what about concise methods?</p>
+<p>EA: that's fine; they're new syntax</p>
+<p>AWB: removing name inference would be a big deal.</p>
+<p>BT: there are going to be more issues like this; errata management seems like the way to go.</p>
+<p>AWB: indeed, the nature of the process is that we don't get this level of information until we're at this point in the process, with implementations.</p>
+<p>BT: honestly, this issue is small compared to sloppy mode const semantics, which we've found issues with as well.</p>
+<p>(general consternation)</p>
+<p>MM: did we have a resolution for the class bindings issue raised on list?</p>
+<p>AWB: probably leave as status quo...</p>
+<p>DD: what about making them const?</p>
+<p>AWB: that was the other possibility...</p>
+<p>YK: there was a reason we didn't do that... I remember feeling strongly at the time.</p>
+<p>DH: global?</p>
+<p>YK: in the global space, people want to replace things that are global.</p>
+<p>MM: I retreat...</p>
+<p>AWB: OK, so, I don't think we should keep fishing on &quot;is there anything else we should change&quot;?</p>
+<a href="#conclusionresolution-for-functionname-issue-function-name-issue"><h4 id="conclusionresolution-for-functionname-issue-function-name-issue">Conclusion/Resolution (for function.name issue)</h4></a><ul>
+<li>Leave the spec as-is</li>
+<li>Let Microsoft experiment with more web-compatible versions of the algorithm, e.g. not-for-<code>var</code></li>
+<li>Have a public place to track and post errata regarding this issue, until the Great Tooling Revolution of 2015 arrives</li>
+</ul>
+<a href="#lets-ship-this-thing"><h2 id="lets-ship-this-thing">Let's Ship This Thing</h2></a><p>JN: we need two votes; we vote to refer the spec to ourselves, then we vote to approve the spec.</p>
+<p>(general confusion, slowly turning to incredulity and then acceptance)</p>
+<p>AWB: (presents slide titled &quot;A Motion&quot;)</p>
+<p>DH: (joking) I filed a patent for the Window object. It is a very unique design.</p>
+<p>MM: (joking) if you get it granted, <em>don't license it to anybody</em>.</p>
+<p>AWB: we intend to approve the final draft here, but conditional upon completion of the RF opt-out period.</p>
+<p>JN: (conducts a vote)</p>
+<p>the TC39 RFTG has approved referring ES2015 to the TC39 TC (unanimous)</p>
+<p>the TC39 TC has approved referring ES2015 to the Ecma GA (unanimous: Google, Microsoft, Mozilla, jQuery, Facebook, Inria)</p>
+<p>JN: one last vote! should we recommend to the GA that they refer ES2015 to the GA for fast-track approval. During ES5, the Japanese national body of the ISO recommended a large number of changes which we incorporated as ES5.1. If we refer this document to ISO for fast-track, then we can assume Japan and others will make comments. Those comments will be approved.</p>
+<p>AWB: this is the complication of this fast-track stuff. &quot;Fast&quot; means &quot;about a year.&quot; If we start this down the fast-track, it will interfere with ES7; about the time we exit the fast-track process for ES6, we will also have ES7.</p>
+<p>MM: we do need to figure out how to get this working, but the entire thing is worth it if for no other reason than the high-quality contributions of that one reviewer at the ISO. I don't know how else to engage him.</p>
+<p>(discussion of new text vs. old text, will reviewers look at the deltas)</p>
+<p>DD: there may be sections that are untouched, but they are very few.</p>
+<p>AWB: there may be sentences that are untouched...</p>
+<p>IS: it would be very unkind not to refer this to them. My suggestion would be that we should go ahead for the fast-track but it should be a conditional go-ahead on myself and John sitting down with ISO management and discussing a way to find a solution to integrate the different cycles. It would be ugly if there was a large delta between ISO's version (~ES5) and ours.</p>
+<p>JN: it exacerbates the system right now. We have a four-year window between ES5 and ES6 and the plan is to have one-year windows. ISO may choose to wait until ES8 or ES9 to fast-track, bypassing ES7. They want to pick up the massive changes between ES5 and ES6. So I think it's important to do it this time and less important to do it next time.</p>
+<p>DD: couldn't we just do this because it's good but not spend much time worrying about it?</p>
+<p>AWB: unfortunately it's not that simple. The manpower to publish documents is not free; it would take away resources from feature work etc.</p>
+<p>MM: Allen what's your opinion?</p>
+<p>AWB: I think we need to do ISO. There is significance involved in that.</p>
+<p>MM: so going forward with our new process do we do ISO every year?</p>
+<p>AWB: I don't know, I only did it once and it took a year.</p>
+<p>JN: it could take a longer this time, fast-track has changed.</p>
+<p>AWB: should we do a partition standard?</p>
+<p>JN: we don't want to go down that road...</p>
+<p>AWB: maybe it would help make this maintainable over time?</p>
+<p>JN: I'm not opposed, but it needs to be thought out...</p>
+<p>AWB: maybe a partition standard could be moved through the ISO process independently...</p>
+<p>IS: there should be minimal market confusion because most people download the Ecma version, not the ISO version...</p>
+<p>DD: most people download the version on Jason Orendorff's personal web page...</p>
+<p>IS: download counts support many more Ecma downloads than ISO downloads (&quot;much much much much smaller&quot;)</p>
+<p>AWB: that is probably why it is hard to get people in this room excited about ISO...</p>
+<p>JN: so I think what we want to do is fast-track this year, but future fast-tracks would be questionable.</p>
+<p>JN: so, let's vote (per company): do we approve submission to ISO for fast-track.</p>
+<p>approve: Google, Microsoft, Mozilla, jQuery, Facebook, Inria, Netflix</p>
+<p>opposed: (none)</p>
+<p>abstain: jQuery</p>
+<p>IS: ECMA 402 can be an ECMA-only standard according to Patrick. ECMA-only standards can be used as normative standards, so it's up to us whether we want to fast-track. Doesn't seem critical. ECMA-404 is the more interesting one.</p>
+<p>AWB: Rick isn't here - are we also going to approve 402 right now?</p>
+<p>YK: Is 402 aligned with ES6?</p>
+<p>AWB: I hope so, ES6 normatively references it.</p>
+<p>YK: Will ECMA be upset if we normatively reference a non-normative spec?</p>
+<p>AWB: Yes.</p>
+<p>AWB: István, do we need a opt-out period for ECMA-402.</p>
+<p>IS: Yes.</p>
+<p>AWB: My understanding is that Rick has created the final draft and it has been available for a month for people to review.</p>
+<p>IS: It would be nice if we could approve at this meeting, as far as I know this was the intention of the editor. So seems like we have a small problem.</p>
+<p>AWB: Check with Rick. If people here take the time to look at the draft, by the end of the week we could vote to refer 402 to GA.</p>
+<p>IS: We can't reference 402 edition 1 from ES6?</p>
+<p>AWB: No.</p>
+<a href="#conclusionresolution-lets-ship-this-thing"><h4 id="conclusionresolution-lets-ship-this-thing">Conclusion/Resolution</h4></a><ul>
+<li>Everyone to review or do what is necessary to vote to pass along 402 on Thursday.</li>
+</ul>
+<a href="#what-to-do-with-compact-profile-ecma-327-and-e4x-ecma-357"><h2 id="what-to-do-with-compact-profile-ecma-327-and-e4x-ecma-357">What to do with compact profile (ECMA-327) and E4X (ECMA-357)</h2></a><p>AWB: These are still active standards. E4X still gets downloads. We can withdraw the standards.</p>
+<p>BE: ActionScript 3 in Flash implements E4X.</p>
+<p>IS: We had this on the agenda when we did ES5. At that time the point was that even if it was out of date, if implementers wanted to implement the old one they could. Adobe may have wanted this. 357 is often downloaded. But I don't know how serious this is.</p>
+<p>AWB: E4X is not aligned with ES6 so it seems misleading for it to be out there.</p>
+<p>IS: Some people may have used it with edition 3.</p>
+<p>AWB: We had this conversation 5 years ago. Things have evolved. Maybe adobe still cares, or maybe they don't.</p>
+<p>BE: It can be withdrawn without breaking other standards.</p>
+<p>IS: We approved ECMA404 before we had the RF agreement. Should we start an opt-out period for ECMA404?</p>
+<a href="#conclusionresolution-what-to-do-with-compact-profile-ecma-327-and-e4x-ecma-357"><h4 id="conclusionresolution-what-to-do-with-compact-profile-ecma-327-and-e4x-ecma-357">Conclusion/Resolution</h4></a><ul>
+<li>István to follow up with Adobe and the CC to see if they would object to withdrawing E4X</li>
+</ul>
+<a href="#ecma404-rf"><h2 id="ecma404-rf">ECMA404 RF?</h2></a><p>IS: We approved ECMA404 before we had the RF agreement. Should we start an opt-out period for ECMA404?</p>
+<p>AWB: Can we retroactively make ECMA-404 Royalty Free?</p>
+<p>IS: Yes</p>
+<p>AWB: We should have an opt-out period then.</p>
+<a href="#conclusionresolution-ecma404-rf"><h4 id="conclusionresolution-ecma404-rf">Conclusion/Resolution</h4></a><ul>
+<li>Start an opt-out period.</li>
+</ul>
+<a href="#compact-profile"><h3 id="compact-profile">Compact profile</h3></a><p>DH: People who are interested in this can start doing work. Once there is actual demand work will happen. We shouldn't just make standards because someone might use it.</p>
+<p>AWB: I think there is consensus to kill 327.</p>
+<a href="#conclusionresolution-ecma404-rf"><h4 id="conclusionresolution-ecma404-rf">Conclusion/Resolution</h4></a><ul>
+<li>István to follow up with Adobe and the CC to see if they would object to withdrawing the compact profile.</li>
+</ul>
+<a href="#fast-track-ecma-404"><h2 id="fast-track-ecma-404">Fast track ECMA-404</h2></a><p>IS: The actual standard document is not ready, maybe ready for this afternooon. Then we can publish it for fast track.</p>
+<a href="#conclusionresolution-fast-track-ecma-404"><h4 id="conclusionresolution-fast-track-ecma-404">Conclusion/Resolution</h4></a><ul>
+<li>Revisit tomorrow.</li>
+</ul>
+<a href="#61-es6-class-properties"><h2 id="61-es6-class-properties">6.1 ES6 Class Properties</h2></a><p>(Jeff Morrison)</p>
+<p><a href="https://gist.github.com/jeffmo/054df782c05639da2adb">https://gist.github.com/jeffmo/054df782c05639da2adb</a></p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Counter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ReactComponent</span> </span>{
+  <span class="hljs-keyword">constructor</span>(props) {
+    <span class="hljs-keyword">super</span>(props);
+    state = {<span class="hljs-attr">count</span>: <span class="hljs-keyword">this</span>.props.initialCount};
+  }
+}
+Counter.propTypes = {<span class="hljs-attr">initialCount</span>: React.PropTypes.numer};
+</code></pre>
+<p>JM: React ends up with some boiler plate code because it wants to add an own instance property.</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Counter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ReactComponent</span> </span>{
+  <span class="hljs-keyword">static</span> propTypes = {<span class="hljs-attr">initialCount</span>: React.PropTypes.numer};
+  state = {<span class="hljs-attr">count</span>: <span class="hljs-keyword">this</span>.props.initialCount};
+</code></pre>
+<p>JM: Issues with storing instance values on the prototype. Reference types shared between instances.</p>
+<p>JM: Transpose initializer into the constructor has issues with the scope.</p>
+<p>JM: Wrap each initializer in its own closure from within the class-body environment.</p>
+<p>JM: Store the closure as an 'initializer' value in a property descriptor on the prototype.</p>
+<p>MM: Hold on. Adding another field in a property descriptor is very heavy handed and has to go through the whole proxy design.</p>
+<p>YK: This is needed by other proposals. Not in the MOP though. Opposed to add new features that are not reflected.</p>
+<p>AWB: Need to define when this happens. End of <code>super()</code>?</p>
+<p>JM: Wants to move passed where the initializer is stored.</p>
+<p>JM: Last step of construct. Immediately after calling super()</p>
+<p>AWB: Inconsistent. In a non derived you cannot access the own instance field.</p>
+<p>JM: That is by design. Sorry, it is the other way around. The initializer is executed in the base class before the constructor body is entered.</p>
+<p>AWB: It is important to create properties up front (with an unitialized state or undefined).</p>
+<p>YK: It is important to put these on the prototype because it allows reflection.</p>
+<p>AWB: By putting these on the prototype they are visible to the application. If these have privileges then those privileges will leak.</p>
+<p>DH: Not convinced that this is important. The important part is that we need to store the initializer behavior somewhere.</p>
+<p>MM: Is it configurable?</p>
+<p>DH: Not fundamental. JS assignment creates the configurable writable enumerable.</p>
+<p>DH: With decorators one can create non writable etc.</p>
+<p>MM: I would think that non configurable would be good so that the shape is guaranteed.</p>
+<p>DH: For backwards compat we should stick with the old behavior.</p>
+<p>AWB: This is about creating the instance shape. What new thing is this getting into. It provides, prior to construction, information about the shape.</p>
+<p>DH: When we provide new syntax it is tempting to alter the semantics instead of following the patterns used today.</p>
+<p>AWB: It is possible that the shape is all about private state and this is all about classic prototype oop.</p>
+<p>MM: Using a descriptor is very heavy handed.</p>
+<p>YK: I want it to be pervasive so a descriptor is good.</p>
+<p>MM: If you put it in the descriptor.</p>
+<p>FM: You can use any object as a prototype.</p>
+<p>YK: And if a class constructor uses that as a prototype then you can get own instance properties.</p>
+<p>AWB: What are the implications if every descriptor needs to have this new property?</p>
+<p>AWB: Are you assuming that the current design with property descriptor is a good model to extend for reflection mechanism.</p>
+<p>MM: The concern I have is that there is a property with the same name on the prototype but its purpose is not the same.</p>
+<p>MM: What you want is something whose value is the initializer function.</p>
+<p>DH: What you want is some association with the name and the initializer function</p>
+<p>MM: What you want is that your initializer function returns a descriptor. Then the decorator can operate on that descriptor.</p>
+<p>DH: Some way to associate the initializer. You can use a symbol.</p>
+<p>DD: The decorators already act differently. prototype or on the constructor.</p>
+<p>YK: Wants to operator on more than the value. Same way for methods as for inst props.</p>
+<p>DH: API like method decorators.</p>
+<pre><code class="language-js">sidetable.myinstprop = {<span class="hljs-attr">value</span>: func () {}, <span class="hljs-attr">configurable</span>: ..., ...};
+</code></pre>
+<p>YK: It is important to distinguish these from value properties. For example there migh be a use for creating own instance methods. Therefore using initializer instead of value is important.</p>
+<p>AWB: When I create lots of objects I don't want to have to pay for all these internal MOP.</p>
+<p>YK: The reified methods only come into play if you use reflection and decorators.</p>
+<p>AWB: What if someone modifies these descriptors.</p>
+<p>EA: It is important that the descriptor of these own instance properties is immutable, or at that you cannot change these afterwards because then the constructor function has to change its behavior after the fact.</p>
+<a href="#conclusionresolution-61-es6-class-properties"><h4 id="conclusionresolution-61-es6-class-properties">Conclusion/Resolution</h4></a><ul>
+<li>Stage 0</li>
+<li>Do not use descriptors for initializer state.</li>
+</ul>
+<a href="#62-decorators"><h2 id="62-decorators">6.2 Decorators</h2></a><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> </span>{
+    @readonly name() { }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readonly</span>(<span class="hljs-params">prototype, name, desc</span>) </span>{    
+     desc.writable = <span class="hljs-literal">false</span>;     
+     <span class="hljs-keyword">return</span> desc; 
+}  
+<span class="hljs-built_in">Object</span>.defineProperty(Person.prototype, <span class="hljs-string">'name'</span>, 
+  readonly(Person.prototype, <span class="hljs-string">'name'</span>, {
+    <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">configurable</span>: <span class="hljs-literal">true</span>,    
+    <span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span>,     
+    <span class="hljs-attr">value</span>: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">closure</span>&gt;</span>   
+})); 
+</span></code></pre>
+<p>MM: When defineProperty runs, does Person.prototype have an undecorated name property?</p>
+<p>YK: No.  The thing that you pass to the decorator looks like a descriptor, but is just an object.</p>
+<p>AWB: We need to think about what the built in ones should be.</p>
+<p>YK: Things that update descriptors seem like good candidates.</p>
+<p><a href="http://bit.ly/ember-js-classes">http://bit.ly/ember-js-classes</a></p>
+<p>Examples of things that Ember might do with decorators.</p>
+<p>YK:  Shows example of more complex decorator usage:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{   
+    firstName = “…”;   
+    lastName = “…”;   
+    @concat(<span class="hljs-string">'firstName'</span>, <span class="hljs-string">'lastName'</span>, <span class="hljs-string">' '</span>) fullName;   
+    @concat(<span class="hljs-string">'lastName'</span>, <span class="hljs-string">'firstName'</span>, <span class="hljs-string">', '</span>) formalName; } 
+</code></pre>
+<p>MM:  Can create a read-only getter from a declared property</p>
+<p>AWB:  Do you have a more plausible use case for more complex decorators</p>
+<p>YK:  (Shows ember gist.  Shows @service which does dependency injection.)</p>
+<p>AWB:  Why would I use a decorator instead of a property initializer?</p>
+<p>YK:  More complex</p>
+<p>JM:  Decorators run once per class</p>
+<p>AWB:  This is an own property?</p>
+<p>YK:  The decorator would attach a more complex getter.  @service does a lazy lookup.</p>
+<p>DD:  When you return a descriptor does it return an own property?</p>
+<p>YK:  ?</p>
+<p>MM:  Since this is integrated into TypeScript, how does TypeScript type the decorator method?</p>
+<p>YK:  Another way to ask question is I would prefer a more immutable API so that I know what the type is.  Decorators themselves are typed,
+but they can mutate.</p>
+<p>MM:  It's a functional transformation of a descriptor.  There's nothing being mutated on.</p>
+<p>ARB:  This is reified as a first class value.  How can you track that without a full blown dependent type system?</p>
+<p>YK:  (Shows examples of decorators with no mutating effect).</p>
+<p>DH:  ARB is saying that the set of properties that end of being in the class ends up depending on what happens with these decorators.<br>
+Mutation is a red herring. The issue is computably determining the class type.  You're saying that there is an expressive subset of this
+system for which this is not a problem.</p>
+<p>ARB:  To know what to reject you'd have to know the returned value at type-check time.</p>
+<p>JM:  ARB is saying that the value is dependent on runtime.  Enumerable true and enumerable false produce very different things.</p>
+<p>ARB:  Hard to forsee the implications, because annotations will want to spread.</p>
+<p>YK:  We should consider them on a case-by-case basis, but I am conservative.  I'm not proposing targeting general declarations.<br>
+Use case is that with class syntax we aren't able to do things we could with object literals.</p>
+<p>MM:  Are you proposing that you can decorate fields in an object literal?</p>
+<p>YK:  I don't consider it fundamental but there is a symmetry concern.</p>
+<p>ARB:  Still missing the big picture.  Don't you ever want to decorate parameters and other things?</p>
+<p>YK:  These are things we might want to consider.</p>
+<p>ARB:  Take modules, it seems like people will want to do some metaprogramming by annotating imports.</p>
+<p>YK:  Proposal is addressing an expressive hole introduced by ES6.  There is not a way  to do higher order things with methods.</p>
+<p>DH:  We're targeting the class syntax but we need to focus on the whole and not the part. The broad category is metaprogramming.  What is our model?<br>
+In Scheme, it's static.  In Ruby, it's dynamic.  We should do a zoom out and look at what metaprogramming might mean for the language.</p>
+<p>ARB:  (Objects to saying that JS implies dynamic metaprogramming.)</p>
+<p>DH:  (Mentions objection to staging.)  With a first class class system, a lot of meta- programming stuff you just do at runtime.  If
+you've gone down the path of dynamic  metaprogramming, then it's probably best to keep going that way.  ARB:  I think class expressions are a
+red herring.</p>
+<p>DH:  I just don't believe that we should do staging.</p>
+<p>BE: staging not seriously proposed but noted as possible accidental outcome of generalizing decorators across first- and second-class parts of ES6.
+We want a principled approach that's not just for classes.</p>
+<p>AWB:  Say you had a decorator that was enumerable or non-enumerable...</p>
+<p>YK:  Users will want to apply descriptor decorators to object literals as well.</p>
+<p>YK: Don't see why we should restrict class features to static</p>
+<p>DH: Javascript is fundamentally a dynamic language and we shouldn't try to make it static</p>
+<p>ARB:  The dynamic stuff will remain, but we'll have these conflicts.</p>
+<p>ARB:  Original question was what problem are we solving?</p>
+<p>DH: Need a more general system for &quot;twiddling&quot; knobs.</p>
+<p>ARB:  My question is how does this generalize?</p>
+<p>DH: Current instinct is that first class things (classes, object literals) are easy to apply this to, but for second class things
+we'll fall off a complexity cliff.  Agree that we should look at the bigger picture.</p>
+<p>ARB:  readonly is an example that we might want to have a more direct way.</p>
+<p>YK:  If readonly were built-in and you imported it, then the engine could do smarter things.</p>
+<p>DH: Suggests stage 1, but audit the space which may lead to changes.</p>
+<a href="#conclusion-62-decorators"><h4 id="conclusion-62-decorators">Conclusion</h4></a><ul>
+<li>Stage 1, YK will audit the space.</li>
+</ul>
+<a href="#63-reverseiterable-interface"><h2 id="63-reverseiterable-interface">6.3 ReverseIterable interface</h2></a><p>(Lee Byron)</p>
+<p>Proposal: <a href="https://github.com/leebyron/ecmascript-reverse-iterator">https://github.com/leebyron/ecmascript-reverse-iterator</a></p>
+<p>LB: <a href="https://github.com/leebyron/ecmascript-reverse-iterable/blob/master/TC39-March2015.pdf">presents slides</a></p>
+<p>[lots of discussion about how to extend iterators/iterables]</p>
+<a href="#conclusion-63-reverseiterable-interface"><h4 id="conclusion-63-reverseiterable-interface">Conclusion</h4></a><ul>
+<li>More work to be done in breakouts to figure out path forward for iteration.</li>
+</ul>
+
+</body>

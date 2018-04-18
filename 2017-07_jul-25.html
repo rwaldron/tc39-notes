@@ -1,0 +1,296 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 25, 2017 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-25-2017-meeting-notes"><h1 id="july-25-2017-meeting-notes">July 25, 2017 Meeting Notes</h1></a><hr>
+<p>Adam Klein (AK), Allen Wirfs-Brock (AWB), Andrew Burgese (ABE),Andrew Paprocki (API), Ben Newman (BN), Benoit Girard (BGD), Bradley Farias (BFS), Brendan Eich (BE), Brian Terlson (BT), Caridy Patiño (CP), Chip Morningstar (CM), Chris Hyle (CHE), Claude Pache (CPE), Dave Herman (DH), David Teller (DTL), David Turissini (DTI), Dean Tribble (DT), Diego Ferreiro Val (DFV), Domenic Denicola (DD), Gabriel Isenberg (GI), István Sebestyén (IS), Jeff Morrison (JM), John-David Dalton (JDD), Jonathan Keslin (JKN), Jordan Harband (JHD), Jorge Lopez (JLZ), Kent C. Dodds (KCD), Kevin Gibbons (KG), Kevin Venkiteswaran (KVN), Leo Balter (LBR), Maggie Pint (MPT), Mariko Kosaka (MKA), Mark S. Miller (MM), Michael Ficarra (MF), Michael Saboff (MS), Nathan Hammond (NHD), Patrick Soquet (PST), Peter Hoddie (PHE), Pierre-Marie Dartus (PMD), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Vladan Djeric (VDC), Waldemar Horwat (WH), Yehuda Katz (YK),</p>
+<hr>
+<a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>IS: Introduced Rex Jaeschke.</p>
+<p>IS: ECMA Executive Committee agreed to trying the Code of Conduct in TC39 on an experimental basis (that's typical of new ECMA policies and has happened with things like the TC39 RF patent policy; if the experiment works, they become permanent after a while).</p>
+<p>IS: Presented ECMA award to Caridy Patiño. Congratulations!</p>
+<p>RJE: Presented his background, has worked on C# spec, PHP spec, involved with language specs for 20 years, here to observe at first and see what involvement may be useful in the future.</p>
+<a href="#3-adoption-of-the-agenda"><h2 id="3-adoption-of-the-agenda">3. Adoption of the agenda</h2></a><a href="#4-approval-of-the-minutes-from-last-meeting"><h2 id="4-approval-of-the-minutes-from-last-meeting">4. Approval of the minutes from last meeting</h2></a><p>LBR: Any objections to adopting the agenda?</p>
+<p>MS: Question about three related 60-minute slots for class fields-related proposals. Why don't the proposers coordinate a consistent story in advance?</p>
+<p>YK: We did.</p>
+<p>(Debate about length of time slot)</p>
+<p>MS: High-order concern was divergence among the proposals</p>
+<p>YK: Tomorrow will present a 15-minute overview</p>
+<p>MS: My concern has been addressed.</p>
+<p>KG/LBR: Can we adopt the agenda anyway?</p>
+<p>IS: 15 minutes for ECMA GA administration and status report tomorrow.</p>
+<p>LBR: Adopting the minutes from the last meeting?</p>
+<a href="#conclusionresolution-4-approval-of-the-minutes-from-last-meeting"><h4 id="conclusionresolution-4-approval-of-the-minutes-from-last-meeting">Conclusion/Resolution</h4></a><ul>
+<li>Adopted agenda</li>
+<li>Approved minutes</li>
+</ul>
+<a href="#6-ecma-262-status-updates"><h2 id="6-ecma-262-status-updates">6. ECMA-262 Status Updates</h2></a><p>(Brian Terlson)</p>
+<p>BT: (Describes his recent work on the spec)</p>
+<p>BT: Planning to merge <a href="https://github.com/tc39/ecma262/pull/916">https://github.com/tc39/ecma262/pull/916</a> soon.</p>
+<p>BT: Plenty of stuff to give feedback on</p>
+<a href="#7-ecma-402-status-updates"><h2 id="7-ecma-402-status-updates">7. ECMA-402 Status Updates</h2></a><p>(Caridy Patiño)</p>
+<p>CP: Small editorial changes, and hourCycle option for DateTimeFormat to replace hour12.</p>
+<p>DE, CP: Implementations close to shipping in two engines, which could be included in ECMA 402-2018: NumberFormat.formatToParts (Stage 3), PluralRules (stage 3), both waiting for two implementations and almost there</p>
+<p>DE: There are two other features which may reach 2018, which have presentations today, Intl.RelativeTimeFormat and Intl.Segmenter, which are less far along</p>
+<a href="#8-test262-status-updates"><h2 id="8-test262-status-updates">8. Test262 Status Updates</h2></a><a href="#8i-follow-up-use-the-default-license-file-for-tests-files"><h3 id="8i-follow-up-use-the-default-license-file-for-tests-files">8.i Follow up: Use the default license file for tests files</h3></a><p>LBR: Now using a default license so test files don't have to contain copyright notice. Ecma is fine with using a root license file.</p>
+<p>AWB: Does the contributor agreement change the ownership of the original copyright?</p>
+<p>LBR: You can still specify the author of each test.</p>
+<p>YK: Copyright belongs to both the author and contributors?</p>
+<p>MP: Microsoft's CLA transfers ownership of copyright.</p>
+<p>AWB: Ours doesn't do that, though.</p>
+<p>DT: Add something to the pull request template prompting the contributor to address licensing?</p>
+<p>IS: I think I understand the problem, and Ecma will look into solutions that are acceptable. I will report in the next meeting.</p>
+<p>LBR: Would appreciate legal feedback, e.g. from Brian Terlson.</p>
+<p>IS: Please write down your proposal and Ecma will review it.</p>
+<p>LBR: Please reach out to me by this weekend if you're interested in being involved.</p>
+<a href="#8ii-using-frontmatter-tags-that-matter"><h3 id="8ii-using-frontmatter-tags-that-matter">8.ii Using Frontmatter tags that matter</h3></a><p>LBR: <a href="https://github.com/tc39/test262/blob/master/features.txt">https://github.com/tc39/test262/blob/master/features.txt</a> defines features that can be used to filter or group tests.</p>
+<p>MM: Is this for semantic purposes, or just organization?</p>
+<p>LBR: Organization, and also to avoid running tests you expect to fail, and to skip unrelated tests.</p>
+<p>LBR: Bocoup is looking for more contributors to test262!</p>
+<p>KG: I'm working with projects like Babel (and other projects that parse/process ECMAScript) to integrate test262.</p>
+<p>LBR: Would love to have a compatibility table that ensures features are fully implemented, not just that the API seems to exist (e.g. typeof Map === &quot;function&quot;).</p>
+<p>AWB: When test262 was started, the original understanding was there wouldn't be any comparison of engines/browsers.</p>
+<p>LBR: The compatibility table is being done by Bocoup. We don't intend to only compare, but provide a good compatibility perspective as WPT does.</p>
+<p>MM: Feelings may have changed, since more browsers pass many more of the tests now.</p>
+<a href="#2-note-taking"><h2 id="2-note-taking">2. Note taking</h2></a><p>BT: Make sure to include the proper consensus/resolution in the notes; we had an error there last time</p>
+<p>RW: You have a full week to review the notes before they are published</p>
+<p>DH: There's a technical problem with Etherpad where it won't let too many people be on at once (which is the best time to review the notes)</p>
+<p>BT: Suggestions for a better tool?</p>
+<p>DH: Google Docs?</p>
+<p>?: Google Docs have a similar problem with lots of folks accessing them simultaneously</p>
+<p>DE: IRC?</p>
+<p>RW: (object to IRC, on grounds: I don't want to have to do the work of making IRC logs markdown friendly. Impossible to record code examples that change over a discussion)</p>
+<p>LBR: Perhaps every champion should review the discussion about their own presentation.</p>
+<p>JHD: Seems like a good contract!</p>
+<a href="#conclusionresolution-2-note-taking"><h4 id="conclusionresolution-2-note-taking">Conclusion/Resolution</h4></a><ul>
+<li>No IRC</li>
+<li>Champions review your discussions</li>
+</ul>
+<a href="#agenda-item-deadline"><h2 id="agenda-item-deadline">Agenda item deadline</h2></a><p>LBR: It would be good to add items to the agenda 10 days prior to the meeting. This is not always happening; we do not have strict process on this. I'd kindly ask people to add the agenda items ahead of time. I plan to notify people 10 days ahead of time to ask them to add their items.</p>
+<p>YK: Could have an agenda section for last-minute additions, in case there's time to get to them (lower priority).</p>
+<p>AWB: The important thing is for proposals which want to advance to be given ahead of time, so that people have time to give input.</p>
+<p>BT: I generally agree; must be true for Stage 2 and above. But Stage 0-&gt;1? That just means, we should investigate the problem.</p>
+<p>AWB: OK with not requiring 10 days for 0-&gt;1, probably.</p>
+<p>MM: People who are present in the room should be able to hear 0-&gt;1 proposals.</p>
+<p>BT: Anecdotally, all of the stage-0 proposals I've made have been in the 2-week ramp up to a TC39 meeting, so I agree 0-&gt;1 should have lighter documentation requirements.</p>
+<p>DE: Even for a 0-&gt;1 transition, if you're in a larger organization, you'll be able to give more useful feedback if you have the agenda item further in advance.</p>
+<a href="#10ii-vision-thing"><h2 id="10ii-vision-thing">10.ii Vision Thing</h2></a><p>(Chip Morningstar)</p>
+<p>TODO: link to slides</p>
+<p>CM: We (TC39) have a love / hate relationship with JS..  Our Prime Directive is &quot;Don't break the web&quot;.  Fixes can break crappy software, which breaks the web.  Opinion is that this crappy software is an obstacle to innovation.  Our current tool is Compartmentalization.  Limit the scope of changes to avoid interference.  Examples from past / current work.  Lexical scoping, modules, realms and frozen realms.  These are &quot;Islands of Sanity&quot;.  Many are asking for JavaScript to morph into language XXX.  &quot;JavaScript should be more like JavaScript&quot;   Quote from Tony Hoare - &quot;Inside every large program is a small program struggling to get out.&quot;</p>
+<p>WH: It's easier to compartmentalize syntax features, like &quot;use strict&quot; or modules do. What about semantic quirks, e.g. if you want to forbid <code>__proto__</code>?</p>
+<p>CM: Frozen realms allow bringing in two separate pieces of SW and limiting there linking to a small surface area</p>
+<p>BFS: Are you proposing more compartments like &quot;use strict&quot;?</p>
+<p>CM: We learned from strict mode that if we continued that model it would be a recipe for chaos.
+CM: Experimenting with new compartments needs to be independent from the language specification process, ideally.</p>
+<p>DH: Is the cure (compartmentalization or dialects) not worse than the disease? Ecosystem fragmentation? I'm fine with user-land experimentation, transpilers. Not so much with new modes for the JS engine to support.</p>
+<p>CM: My target is it ought to be possible to take any random crappy software, load it, run it and nothing bad happens.</p>
+<p>DH: Maybe people would like to treat certain features as if they didn't exist.</p>
+<p>CM: Individual companies do self-censor themselves with linters and compan, etc.</p>
+<p>CM: Programmers think about taking out certain features and that makes things better.  While taking out other things make things worse.</p>
+<p>DH: (BN: Not sure I caught this accurately) Want to avoid mandating fragmentation at the engine level.</p>
+<p>CM: It may be the case that users can try out things that are actually &quot;dangerous&quot;, but with realms and the like, they can try this in a safe way.</p>
+<p>AWB: I take it by compartmentalization you mean true isolation, a la browser tabs/workers. Totally isolated except for some communications channel? Isn't that essentially what an operating system gives you? Do we still have to think of the isolated things as using the same language, then?</p>
+<p>CM: I think there is something there to what your are saying.  There are some things that JS does that is different to the way other software works,  e.g. loaded immediately before use, or different set of services.</p>
+<p>BN: Need to get the communications channel right between the compartments. WASM already has an import mechanism of its own, not exactly the same as ES modules. Should we standardize this?</p>
+<p>BFS: That may not be within our scope as TC39.</p>
+<p>MS: Browsers are already basically OSes in that there is JS, WASM, Workers, memory protection, scheduling, thread, ...</p>
+<p>MS: Multiple standards bodies and engine implementors are all standardizing JS and the browser environment. Experiments become de facto standards. But everyone's hoping for eventual convergence/standardization.</p>
+<p>MM: It goes back to the notion of the good parts vs the bad parts and being conscious about each.  They takes judgement.</p>
+<p>CM: There are lots of little sharp edges and corners inadvertently added that would be good to take out.</p>
+<p>DH: This question of other languages compiling to the platform...</p>
+<p>CM: I'm not talking about that.</p>
+<p>AWB: Is your min point that there is JavaScript and JavaScript prime and we can try things out and expand that way?</p>
+<p>CM: If we're successful in creating an island that is sounder and more successful, that compartment should win, and others should fade away.</p>
+<p>AWB: Sounds kind of like the world I stepped into with ES4.</p>
+<p>SYG: It seems that to avoid ecosystem problems is that there needs to be tighter integration with other standard efforts.</p>
+<p>CM: We do have members that are involved in other efforts, e.g. WASM.</p>
+<p>SYG: TC39 is good to get diverse stack holders to come to the table.</p>
+<a href="#11ia-intlsegmenter-for-stage-3"><h2 id="11ia-intlsegmenter-for-stage-3">11.i.a. Intl.Segmenter for Stage 3</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-intl-segmenter">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1KC-qBVqsUdTiePWmSextuMGVIsUa3Tb9EOcVNIj8eOA/edit#slide=id.p">slides</a></li>
+</ul>
+<p>DE: Main change from last meeting (May 2017): word type boundaries were previously specified to have 5-6 types, now cut down to two.</p>
+<p>DH: How often have we shipped something under-specified, and implementations actually changed over time?</p>
+<p>DE: Time zone changes are very common.</p>
+<p>BT: Not much has changed since last meeting except that I found out Windows is shipping with ICU, and Chakra core will use it.</p>
+<p>BT: Chakra includes bidi markers in en-us dates resulting in compatibility surprises for those expecting ICU behavior, which includes those only in RTL contexts.</p>
+<p>BT: I still think we're walking into a situation where ICU is the only reasonable choice for implementations, in reality. Hard to make changes to the specification that disagree with ICU.</p>
+<p>YK: Is the problem that the spec is well-specified but too coupled to ICU, or that the spec leaves gaps that are de facto standardized by whatever ICU does?</p>
+<p>BT: A little bit of both.</p>
+<p>DE: James Taylor looked into more officially standardizing on ICU, and we agreed: it's good for the spec to reflect all the properties we expect from the database, and we should document more of the things that are necessary for compatibility, without just saying &quot;refer to the current version of ICU.&quot;</p>
+<p>BT: The only reason we have compatibility data is because we have a non-ICU implementation, and we're losing that. We won't really know what the web depends on, unless someone (e.g. Microsoft?) tries to use something other than ICU.</p>
+<p>CP: segmenter is very different from formatting a date. it is rare to compare a formatted date, usually in tests, while segment will probably be about algos in your code.</p>
+<p>AWB: Just had an epiphany: we should keep a rule of thumb that things that go in ECMA-262 cannot have dependencies on ICU or other equivalent datasets.</p>
+<p>DD: The ICU folks aren't exactly writing a spec, but they are trying to create a reference implementation through their code, so it has some of the value of a spec, so we could consider treating it that way?</p>
+<p>BT: That's what the discussion of a &quot;normative reference&quot; to ICU was about in the last meeting.</p>
+<p>DE: That's unfriendly to alternate implementations.</p>
+<p>DD: If the ICU folks wrote an ECMA262-style specification, would we be more willing to reference it normatively?</p>
+<p>BT: How much leeway do we want to give these implementations? Alternate implementations are good, but the web reality will probably select one implementation.</p>
+<p>DE: So should we keep this at stage 2?</p>
+<p>BT: I don't want to hold this proposal back, since the Intl API is important to me.</p>
+<p>DE: Need to think about how to strengthen the specification we write, so that it specifies more aspects of implementations.</p>
+<p>BT: We may just not learn about what things need to be specified if we have only one implementation.</p>
+<a href="#conclusionresolution-11ia-intlsegmenter-for-stage-3"><h4 id="conclusionresolution-11ia-intlsegmenter-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>No resolution; or, in other words, leave the proposal at stage 2.</li>
+</ul>
+<a href="#9iva-cancellation"><h2 id="9iva-cancellation">9.iv.a. Cancellation</h2></a><p>(Ron Buckton)</p>
+<ul>
+<li><a href="https://tc39.github.io/proposal-cancellation/CancellationPrimitives-tc39.pptx">slides</a></li>
+<li><a href="https://github.com/tc39/proposal-cancellation#readme">proposal</a></li>
+</ul>
+<p>RBN: Cancellation is for all environments, web, Node, IOT. We also have to work out the interaction with the WHATWG cancellation controller proposal</p>
+<p>DD: To be clear, the WHATWG thing is a standard, not a proposal.</p>
+<p>RBN: Cancellation separates source and observation. Asynchronous observation can be used for some things, other things want synchronous notification</p>
+<p>WH: By &quot;synchronous&quot; you mean, asking if I am cancelled?</p>
+<p>RBN: Yes.</p>
+<p>RBN: There also needs to be notification when an action completes, so that the cancellation response datastructures can be brought up</p>
+<p>MM: You have a function that emits a token that's cancelled if any of the input tokens is cancelled. Why not also have one that does a logical-AND instead of a logical-OR?</p>
+<p>DT: We haven't had a need for it yet.</p>
+<p>WH: Imagine a library combining requests from multiple customers that wants to cancel itself only if all customers cancel.</p>
+<p>DT: Ah, right. We had a need for that as well and implemented it.</p>
+<p>MM: Concerned whether cancelation status is a property of the activity, or a property of the cancellation token. Has implications for terminology like token.cancellationRequested and token.canBeCancelled.</p>
+<p>JHD: I'm wondering if the word canceling is the right word since it seems that we have conflicting naming semantics.</p>
+<p>DD: Lets postpone the discussion until we reach Stage 1</p>
+<p>DD: Chrome is concerned about this proposal's API not being compatible with <a href="https://dom.spec.whatwg.org/#aborting-ongoing-activities">AbortSignal and AbortController</a>.</p>
+<p>MP: Could we reduce the surface area of this API to make it more palatable?</p>
+<p>DD: Whatever cancellation/abort API TC39 produces, it must be compatible with <a href="https://dom.spec.whatwg.org/#interface-abortcontroller">https://dom.spec.whatwg.org/#interface-abortcontroller</a>, since Chrome and Firefox are shipping that soon. The requirements are:</p>
+<ul>
+<li>Any code written against the existing <code>AbortSignal</code>/<code>AbortController</code> API must not break or change semantics. Anything produced by TC39 must be compatibly layered on top.</li>
+<li>We are not interested in shipping two separate aborting mechanisms (e.g., <code>AbortController</code> for the web platform plus a TC39-specific <code>CancellationToken</code>).</li>
+<li>We must reuse the same eventing mechanism as the rest of the platform: <code>EventTarget</code></li>
+<li>We must be extensible with other events, for other signals we plan to add to fetch (e.g. progress)</li>
+<li>We must be extensible with other controls, for other controls we plan to add to fetch (e.g. changing priority)</li>
+<li>We should reuse the exception type used by other aborts on the web platform, i.e. <code>DOMException</code> &quot;<code>AbortError</code>&quot;. This could potentially be changed if it proves to be web-compatible (e.g., perhaps another exception with <code>.name === &quot;AbortError&quot;</code>) by the time TC39 gets to stage 3.</li>
+</ul>
+<p>YK: Ember has a cancelation framework, and the conclusion we drew is that we can't use async as is, we need to use generators. Its concerning that we couldn figure out how to make people understand async.</p>
+<p>AWB: The criteria for stage 1 are just that people think JavaScript needs some sort of cancellation mechanism, not that it be strictly compatible with a certain set of requirements.</p>
+<p>DD: We are not interested in exploring the general space of cancellation mechanisms. We are interested in exploring the space of cancellation mechanisms compatible with AbortSignal/AbortController.</p>
+<p>AWB: Is AbortController applicable to platforms other than the web/DOM?</p>
+<p>DD: Yes, we have a Node implementation.</p>
+<p>RBN: I don't feel that the <code>DOMException</code> requirement is a blocker. If you are able to observe the signal, you can observe whatever you want.</p>
+<p>RBN: Might be a way forward that does not require convergence between AbortController and CancellationToken based on symbol to act as an interop layer.</p>
+<p>DD: We are not interested in having two different classes, one pushed by DOM and one by TC39, that do the same thing, even if they are convertible between each other.</p>
+<p>DT: Is there a write up of the gap between between the two approaches, are they compatible enough (architecturally speaking)? If is reasonable to explore both directions?</p>
+<p>RBN: The only gross incompatibility between the two APIs is the AbortController requirement of EventTarget as the base class.</p>
+<p>DD: In general, we do not stand in the way of this proposal proceeding if it can meet the above requirements. For example, in earlier discussion with Ron, he mentioned that we could have a host-specific inheritance chain and exception type, and that he'd be amenable to changing the names and surface APIs.</p>
+<p>YK: I would object to a host-specific inheritance chain.</p>
+<p>BFS: I would object to a web compatible EventTarget-based API, since Node's abstraction is EventEmitter.</p>
+<p>BT: Cancelation is something that is very important, and while this proposal is just API, I imagine that ECMA will grow to support other async operations that needs cancelation tokens. How do we make it interoperable, I don't know, but we should  pursue looking for a solution and solve, regardless of the host.
+In some fashion, TC39 must support a cancellation primitive, since our async APIs are only going to grow (e.g. dynamic import). If we don't want to change the AbortController API, then TC39 needs to bring the AbortController API into this standards process. I worry that we're leading with the browser and not making sure this is a primitive that works with different host environments.</p>
+<p>DD: I'm not convince that we will be (Ecma) specifying asynchronous operations. For example, import() is not asynchronous in all hosts, and cannot be canceled in all hosts, so it would be a mistake to tie it to a host-independent cancelation mechanism. I also disagree that we (TC39) have to specify every API that our specification depends on.</p>
+<p>AWB: TC39 has the charter to look at uses of ECMAScript across other communities and standards bodies, so this should be our concern.</p>
+<p>MM: Its a refactoring issue.</p>
+<p>YK: Ember does not want to use async function, and this proposal would not improve those ergonomics.</p>
+<p>DD: An &quot;investigate cancelation&quot; proposal would be more acceptable than than this specific solution, as a Stage1 proposal.</p>
+<p>YK: This particular proposal seems to be going to a death end.</p>
+<p>CM: Clearly we have cross-platform concerns that plausibly affect what WHATWG decides to standardize. But saying that just because you've done some work (e.g. AbortController) already, then other proposals should be blocked from stage 1, sounds like &quot;my way or the highway.&quot;</p>
+<p>DD: That's not at all what I was saying. We're happy to collaborate on designing abort primitives, as long as there are no breaking changes to the existing standard.</p>
+<p>BE: How many browsers implement this?</p>
+<p>BT: Zero (but two are implementing)</p>
+<p>YK: (to BFS) Would you object to add EventTarget API?</p>
+<p>BFS: Node OK with the EventTarget API but not the exact .prototype inheritance chain.</p>
+<p>BT: It seems like a red flag that AbortController (extending EventTarget) may not necessarily be compatible with Node.</p>
+<p>DD: This proposal (CancellationToken) is not compatible with the one in the web platform.</p>
+<p>AWB: It feels that we need a champions group to explore the cancellation proposal with different perspectives. Arguably the same thing for Events.</p>
+<p>MM: When we introduced promises, we had the same problems with interoperability and existing libraries, but we were able to standardize the &quot;Promises A+&quot; subset, and allowed any object with a .then method to act as a Promise, and it worked beautifully (I think we called this &quot;assimilation&quot;). I think it's worth investigating whether we could achieve interop by taking a lesson from Promise assimilation, rather than requiring things like <code>instanceof EventTarget</code>. I'm being deliberately vague because I'm not sure this will work out.</p>
+<p>RBN: What I can summarize with:</p>
+<ul>
+<li>Proposal to investigate cancellations API that is compatible across platforms.</li>
+<li>Investigate syntactic additions to the language that can help achieve this (such as Promises and async).</li>
+</ul>
+<a href="#conclusionresolution-9iva-cancellation"><h4 id="conclusionresolution-9iva-cancellation">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 effort to investigate cancellation among the champions may proceed.</li>
+<li>Champions:</li>
+<li>Yehuda Katz (YK)</li>
+<li>Brian Terlson (BT)</li>
+<li>Ron Buckton (RBN)</li>
+<li>Domenic Denicola (DD)</li>
+<li>Bradley Farias (BFS)</li>
+<li>Dean Tribble (DT)</li>
+</ul>
+<a href="#10iii-expanding-vision-for-tc39"><h2 id="10iii-expanding-vision-for-tc39">10.iii Expanding Vision for TC39</h2></a><p>(Leo Balter)</p>
+<p>LBR: (Presents vision talk)</p>
+<p>LBR: (closes the vision talk with suggestions)</p>
+<ul>
+<li>Establish a public meta repo on GitHub for open and general discussions.</li>
+<li>Recognize ECMAScript as a living standard, refer to the <a href="https://tc39.github.io/ecma262">latest draft</a> and skip the year or edition numbers.</li>
+</ul>
+<p>(the suggestions are not necessarily being applied to TC39, this is an async work that still requires further discussion)</p>
+<a href="#11iia-functionprototypetostring-looking-for-stage-4"><h2 id="11iia-functionprototypetostring-looking-for-stage-4">11.ii.a. Function.prototype.toString looking for stage 4</h2></a><p>(Michael Ficarra)</p>
+<ul>
+<li><a href="http://kangax.github.io/compat-table/esnext/#test-Function.prototype.toString_revision">http://kangax.github.io/compat-table/esnext/#test-Function.prototype.toString_revision</a></li>
+</ul>
+<p>MF: (displays compatibility table showing that Firefox and Chrome are passing some/most F.p.toString tests)</p>
+<p>AK: Browsers that partially pass the tests didn't necessarily decide to implement the proposal. The proposal captured what browsers were doing, and so some browsers are passing most tests. Not sure that counts as &quot;in-the-field experience.&quot; I'm working on a deliberate implementation of the proposal this quarter.</p>
+<p>MF: I showed this to demonstrate that there are no implementation difficulties.</p>
+<p>AWB: The purpose of stage 3 is to get feedback from implementation and usage.</p>
+<p>BT: I would like to see two full-green columns before stage 4, though I'm curious why Edge is not passing more of the tests. We haven't gotten any bugs as a result of implementing this spec, though.</p>
+<p>PHE: Source code typically doesn't make it onto embedded devices (although neither does the parser).</p>
+<p>MF: I think the benefits of having F.p.toString standardized still remain.</p>
+<p>PST: Why would it be a problem to make returning the source code optional? Couldn't you return a string that gives a syntax error? Like <code>function () { [native code ] }</code>?</p>
+<p>MF: Forward compatibility: can't produce something now that is guaranteed to be a syntax error in the future.</p>
+<p>MF: I will bring this proposal back later, when we have alleviated concerns about web compatibility.</p>
+<p>AWB: The XS embedded JavaScript implementors are providing legitimate feedback by saying they won't/can't implement this feature.</p>
+<p>AK: This proposal has an issue tracker where we can continue detailed discussion.</p>
+<p>PHE: Content Security Policies can forbid compiling/eval'ing strings, and this is kind of the inverse: the environment might declare that it can't decompile functions.</p>
+<p>JHD: If you're not going to implement the feature at all, what does it matter what the spec for it says?</p>
+<p>PST: I would rather it was configurable than for XS to refuse to implement something required.</p>
+<p>PHE: I would have no problem moving the sentence that requires F.p.toString to implement this proposal to Annex B (web compatibility).</p>
+<a href="#conclusionresolution-11iia-functionprototypetostring-looking-for-stage-4"><h4 id="conclusionresolution-11iia-functionprototypetostring-looking-for-stage-4">Conclusion/Resolution</h4></a><ul>
+<li>Wait for intentional implementation feedback, not just compatibility data.</li>
+<li>Make sure to talk with XS implementors, on the issue tracker for this proposal.</li>
+</ul>
+<a href="#11iib-symbolprototypedescription"><h2 id="11iib-symbolprototypedescription">11.ii.b. Symbol.prototype.description</h2></a><p>(Michael Ficarra)</p>
+<ul>
+<li><a href="https://tc39.github.io/proposal-Symbol-description/">proposal</a></li>
+</ul>
+<p>MF: Proposal to put a &quot;description&quot; getter on Symbol.prototype that returns <code>desc</code> given a symbol created with <code>Symbol(desc)</code></p>
+<p>YK: The most common reason is to writing another debugging output. They don't necessary want to write Symbol(...).</p>
+<p>??: Its documentation, why woulnd't you want it?</p>
+<p>WH: There are at least two ways in the existing spec to get at the description:</p>
+<ul>
+<li><code>Symbol.prototype.toString</code></li>
+<li><em>SetFunctionName</em></li>
+</ul>
+<p>...They differ in their treatment of undefined descriptions. <code>Symbol.prototype.toString</code> treats it as though it were an empty description, while <em>SetFunctionName</em> distinguishes it. Do we want to distinguish between undefined and empty string?</p>
+<p>?: String slicing Object.prototype.toString.call(symbol) gets undefined/&quot;&quot; names wrong.</p>
+<p>BN: It feels legitimate to support cases like this.</p>
+<p>AWB: Feels like a footgun.</p>
+<p>MS: Isn't this only a stage 0-&gt;1 proposal? Sounds like the committee is interested in discussing it!</p>
+<a href="#conclusionresolution-11iib-symbolprototypedescription"><h4 id="conclusionresolution-11iib-symbolprototypedescription">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1, committee will continue entertaining Symbol.prototype.description, or some means of getting the Symbol description more easily.</li>
+</ul>
+<a href="#11iic-promiseprototypefinally-seeking-stage-3"><h2 id="11iic-promiseprototypefinally-seeking-stage-3">11.ii.c. Promise.prototype.finally seeking stage 3</h2></a><p>(Jordan Harband)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-promise-finally/">proposal</a></li>
+</ul>
+<p>JHD: I'm hoping to advance it to Stage 3</p>
+<a href="#conclusionresolution-11iic-promiseprototypefinally-seeking-stage-3"><h4 id="conclusionresolution-11iic-promiseprototypefinally-seeking-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+</ul>
+<a href="#11iid-intlrelativetimeformat-for-stage-2"><h2 id="11iid-intlrelativetimeformat-for-stage-2">11.ii.d. Intl.RelativeTimeFormat for Stage 2</h2></a><p>(Daniel Ehrenberg)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-intl-relative-time">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1QCum8K8XRGhjh94a2Gp2bhRmhbSnJUbhASsQm54tp8I/edit#slide=id.g248f03fd42_0_6">slides</a></li>
+</ul>
+<p>MPT: (a maintainer of moment.js): Moment reviewed the proposal and we are generally happy with this.</p>
+<p>DE: As with most polyfills, this proposal will be most useful once all clients have it, and no polyfill is necessary.</p>
+<p>MPT: I have a slight concern around the durations. I think <code>rtf.format(-1, &quot;day&quot;)</code> should be plural: <code>rtf.format(-1, &quot;days&quot;)</code>. In the temporal proposal we are using plural, so both APIs will be consistent.</p>
+<p>DE: Great idea, I'll make that change.</p>
+<p>??: How you come up with the three styles &quot;long, short, narrow&quot;</p>
+<p>DE: Coming from CLDR and exposed to ICU. We are looking to exposing more of those forms.</p>
+<p>??:  From an Apple's internal perspective: &quot;short&quot;,  &quot;medium&quot;, &quot;long&quot;, &quot;full&quot;.</p>
+<p>CP: We are open to change them.</p>
+<p>AWB: Seem that those are things that we can flush out  in Stage 2</p>
+<a href="#conclusionresolution-11iid-intlrelativetimeformat-for-stage-2"><h4 id="conclusionresolution-11iid-intlrelativetimeformat-for-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Short/medium/long/narrow terminology can be discussed in an issue thread during Stage 2</li>
+</ul>
+
+</body>

@@ -1,0 +1,265 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 22, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-22-2012-meeting-notes"><h1 id="may-22-2012-meeting-notes">May 22, 2012 Meeting Notes</h1></a><hr>
+<p>This pre-dates the recording of a complete attendees list.</p>
+<hr>
+<a href="#binary-data"><h2 id="binary-data">Binary Data</h2></a><p>Dave Herman:</p>
+<ul>
+<li>explains CPU -&gt; GPU</li>
+<li>state of endianness</li>
+<li>leading into DataView</li>
+</ul>
+<p>web being written as little endian</p>
+<p>cpu little endian
+file format big endian</p>
+<p>should default for DataView be changed to little endian?</p>
+<p>can it be changed still?</p>
+<p>Yehuda Katz:</p>
+<ul>
+<li>Is this a compelling issue to address?</li>
+<li>Agrees we should default to little endian</li>
+<li>Hard to reason about this subject matter?</li>
+</ul>
+<p>Allen Wirfs-Brock:</p>
+<ul>
+<li>Applies to many things you may program</li>
+</ul>
+<p>Luke Hoban:</p>
+<ul>
+<li>Historically, binary data wasn't accessible</li>
+<li>Now there is more need</li>
+<li></li>
+</ul>
+<p>YK:</p>
+<ul>
+<li>Are we expecting a large use case for binary data?</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>I do expect that this will be the beginning of a larger use</li>
+<li></li>
+</ul>
+<p>LH:</p>
+<ul>
+<li>Not sure about q?</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Historic debate</li>
+</ul>
+<p>General discussion about real use cases...</p>
+<p>DH, AWB:</p>
+<ul>
+<li>Agree that most developers are not going to understand the difference
+between endianness</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>Explains float explorer that checked little endianness</li>
+</ul>
+<p>LH, DH:</p>
+<ul>
+<li>Expect big endianness as well as more common little endianness</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li><p>File &lt;-&gt; CPU is the well define use case for little endianness</p></li>
+<li><p>webGL is determined by system</p></li>
+<li><p>Doesn't have raw data, colleagues have evidence of assumed little endianness - without checks</p></li>
+<li><p>So what happens when people are implementing for big endianness?</p></li>
+<li><p>Game consoles have little endian modes</p></li>
+<li><p>How robust is that harder support? Unknown</p></li>
+<li><p>Alternative: Instead of allocating little, work harder to simulate little
+when shader is compiled, implement byte swapping.</p></li>
+<li><p>There is no one making the case - but the web is illustrating the behaviour</p></li>
+</ul>
+<p>YK:</p>
+<ul>
+<li>Will this limit the discover-ability?</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>If we make it little, you will no longer be able to discover endianness</li>
+<li>Willing to do this and see what happens, if there are performance issues - they can be addressed</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>If we're talking about integers, this is easy, but eg. doubles, there is more complexity</li>
+</ul>
+<p>DH, AWB:</p>
+<ul>
+<li>Resolving Float 32</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>What does the CPU want or expect?</li>
+<li>Let's standardize what the web is doing.</li>
+</ul>
+<p>AWB:</p>
+<ul>
+<li>Yes.</li>
+<li>If you know you need big endian, you'll do the conversion</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>Beneficial for File apis that use DataView</li>
+</ul>
+<p>Standardize Little Endian? No opposition.</p>
+<p>Erik Arvidsson, YK:</p>
+<ul>
+<li>A defacto standard.</li>
+</ul>
+<p>LH:</p>
+<ul>
+<li>Are there going to be big endian browser environments?</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>Broadly speaking, little endian has already won</li>
+<li>Regardless of standardization, this is becoming the defacto standard.</li>
+<li>Hardware support likely to get better and better</li>
+<li>Solving a problem that doesn't exist, but leaving unspecified will
+create new issues</li>
+</ul>
+<p>Bill, Brendan Eich:</p>
+<ul>
+<li>XBox, PS3... binary streams are big endian</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li><p>People are upset at disparity</p></li>
+<li><p>Change DataView default to little endian?</p></li>
+</ul>
+<p>Stance: not changing DataView</p>
+<p>BE:</p>
+<ul>
+<li>Historical insight of Big, Little, Bi endian</li>
+<li>Consistency is not the argument</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>Consider extending the API to allow for opt-in to correct endianness</li>
+<li>Rather leave this out until the need is known</li>
+</ul>
+<p>YK:</p>
+<ul>
+<li>More clarification regarding the observable effects in webGL</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>Likely no observable change</li>
+<li>Disregard the casting of types, use the default, ship to GPU</li>
+</ul>
+<p>YK:</p>
+<ul>
+<li>Can we eliminate the observable effects?</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>No...</li>
+<li>If we say the web is big endian...</li>
+</ul>
+<p>CPU             GPU
+[ L, , , H ] -&gt; [ L, , , H ]</p>
+<p>If we say little endian...</p>
+<p>[ H, , , L ] -&gt; transform -&gt; [ L, , , H ]</p>
+<p>YK:</p>
+<p>Summary...</p>
+<p>Doug Crockford:</p>
+<ul>
+<li>What if we just leave it out?</li>
+</ul>
+<p>BE:</p>
+<ul>
+<li>Another spec will emerge, divergence</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>Yes, this is in kronos</li>
+</ul>
+<p>BE:</p>
+<ul>
+<li>Low level byte order less important</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>Getting into new work</li>
+<li>When you have richer type information, good things happen and
+become available.</li>
+</ul>
+<p>DC:</p>
+<ul>
+<li>I love this, tell me more</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li><p>In typeed arrays, thhere are two typed of data structures:</p>
+<p>DataView -</p></li>
+</ul>
+<pre><code>ArrayBufferView - not an &quot;array&quot;
+
+
+ArrayBuffer is a bucket of bytes
+
+can be wrapped with as many ArrayBufferViews of any type and can all point to different sub range of the buffer, can access and modify bytes in the range
+
+
+Add new views:
+
+StructView
+
+atomic types
+  - uint8
+
+array( uint8 )
+
+Can extend typed arrays...
+
+
+S = Struct({
+
+  x: uint8,
+  y: uint8
+
+});
+
+* does not create a struct object, creates a struct type
+
+
+x = new S
+
+creates a new instance of this struct type
+
+A = Array( S )
+
+creates a new type, not instance
+</code></pre>
+<p>BE, DH, YK:</p>
+<ul>
+<li>currently, it's &quot;malloc&quot;</li>
+</ul>
+<p>DH:</p>
+<ul>
+<li>This is not new, but we can make something new...</li>
+</ul>
+<p>(stepped out, lost track...)</p>
+<p>s = struct({
+x: uint8,
+y: uint32
+})</p>
+<p>d = new DV(buf, o)</p>
+<p>v = d.get(s, 17)</p>
+<p>v...</p>
+<p>x
+----&gt; object pointing to offset starting at 17
+y</p>
+
+</body>

@@ -1,0 +1,489 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 19, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-19-2012-meeting-notes"><h1 id="september-19-2012-meeting-notes">September 19, 2012 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Mark S. Miller (MM), Norbert Lindenberg (NL), Nebojša Ćirić (NC), Allen Wirfs-Brock (AWB), István Sebestyén (IS), Luke Hoban (LH), Paul Leathers (PB), Sam Tobin-Hochstadt (STH), Andreas Rossberg (ARB), Brendan Eich (BE), Erik Arvidsson (EA), Dave Herman (DH), Yehuda Katz (YK), Rick Waldron (RW), Eric Ferraiuolo (EF), Matt Sweeney (MS), Doug Crockford (DC), Alex Russell (AR), Rafeal Weinstein (RWN), Waldemar Horwat (WH), Tom Van-Cutsem (TVC)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>Recap of Sept 18th notes.</p>
+<a href="#proxy"><h2 id="proxy">Proxy</h2></a><p>(Tom Van Cutsem, Free University of Brussels)</p>
+<a href="#enumerate-traps-return-types"><h2 id="enumerate-traps-return-types">Enumerate Traps Return Types</h2></a><p>TVC: change return type of enumerate() trap from array-of-string to iterator. Requires waiving the check for duplicate property names</p>
+<a href="#conclusionresolution-enumerate-traps-return-types"><h4 id="conclusionresolution-enumerate-traps-return-types">Conclusion/Resolution</h4></a><ul>
+<li>Drop the duplicate property check. enumerate() trap returns iterator.</li>
+</ul>
+<a href="#revokable-proxies"><h2 id="revokable-proxies">Revokable Proxies</h2></a><p>TVC: The Problem</p>
+<p>In a nutshell: with direct proxies, one can no longer write a caretaker proxy that nulls out a pointer to its target once revoked. This means that the target can no longer be garbage-collected separately from its proxy.</p>
+<p>As pointed out by David Bruant, caretakers are often useful precisely for memory management, where one uses revocation of the caretaker to release the underlying resources, as described here.</p>
+<p>Such caretakers were easy to define in the old Proxy design, since the link between a proxy and its target was fully under the control of the handler (i.e. fully virtual). However, with direct proxies, the proxy has a built-in, immutable reference directly to its target. This reference can’t be modified or nulled out.</p>
+<p>Proposed Solution</p>
+<p>Provide an extension to the Proxy API that allows scripts to null out the proxy-target reference. Of course, the API must be designed with care so that this link can’t be nulled out by any old client of the proxy. Only the creator of the proxy should have the right to revoke it.</p>
+<p>Because revokable proxies appear to be a niche abstraction, we propose to introduce a separate Proxy constructor dedicated to creating revokable proxies. Proxies created with the regular Proxy constructor would remain unrevokable.</p>
+<p>Proposal:</p>
+<ul>
+<li>Introduce a new constructor function RevokableProxy, next to Proxy.</li>
+<li>RevokableProxy(target, handler) returns an object {proxy: proxy, revoke: revoke}.</li>
+<li>revoke is a zero-argument function that, when called, revokes its associated proxy.</li>
+<li>A revoked proxy becomes unusable in the sense that any operation that would trap to the handler instead throws a TypeError.</li>
+<li>Revoking an already revoked proxy has no effect.</li>
+<li>Once a proxy is revoked, it remains forever revoked.</li>
+<li>A revoked proxy drops its target and handler, making both available for garbage collection.</li>
+</ul>
+<p>MM: We missed this in the change to Direct Proxies, thanks to David Bruant for identifying</p>
+<p>...Bikeshedding the spelling of &quot;Revokable&quot;</p>
+<p>MM, WH: Should be &quot;revocable&quot;
+?: &quot;Revokable&quot; would seem like a typo to many folks, as it's an unusual spelling of the word.</p>
+<p>LH: This is bringing another constructor...? Do we want to duplicate all of the functionality?</p>
+<p>RW/DH: Agree this is an issue.</p>
+<p>MM: static on the Proxy object?</p>
+<p>Yes.</p>
+<p>... Discussion about the naming.</p>
+<p>Proposal: Proxy.revocable</p>
+<p>DH: perhaps too academic? Consider alternative names: nullable, ...?
+MM: We can decide later.</p>
+<p>Should Proxy.revokable return the tuple as an array or an object?
+MM: object: non-positional + Javascript has sufficiently lightweight notation for objects.
+STH: then the name &quot;revoke&quot; is part of the API</p>
+<p>Question as to whether we really need two kinds of proxies.
+BE: yes, non-revokable proxies have less trap overhead (no null-check)</p>
+<p>Discussion about whether revokable proxies introduce new ways for interceptable operations to behave.</p>
+<p>WH: Not sure about this as a feature, w/r to future hostility...</p>
+<ul>
+<li>eg. if &quot;===&quot; would trap to the handler how does this work with that?</li>
+</ul>
+<p>MM: trapping &quot;===&quot; would be a significant change on its own, independent of revokable proxies</p>
+<p>TVC: The only type test that is affected is typeof: once the proxy is revoked, it drops references to its target and its handler, so it can no longer forward the typeof test to its target</p>
+<p>BE: It remembers &quot;function&quot; or &quot;object&quot;
+TVC: right</p>
+<p>DH:</p>
+<p>RWN: Does this problem exist...</p>
+<p>STH: revokable proxies don't add any new semantics b/c you can already write a direct proxy that throws the same error on every operation (it just uses more memory)</p>
+<p>WH: Direct proxy, not allowed to muck with</p>
+<p>MM: Are</p>
+<p>TVC: Equivalent to a handler that implements all its traps to unconditionally throw</p>
+<p>STH: RevocableProxy adds no new semantics to the language. except for allowing the proxy to be nullable</p>
+<p>WH: I'm not sure about it</p>
+<p>DH: He jsut gave proof.</p>
+<p>MM: The semantics change to the handlers always throwing on all traps.</p>
+<p>WH: Are there other traps affected by this?</p>
+<p>TVC: New traps added last meeting will not be affected.</p>
+<p>WH: So, a frozen object can &quot;unfreeze&quot; itself?</p>
+<p>MM: No</p>
+<p>WH: An object that is frozen can later refuse that its frozen
+Concern about trapping isFrozen etc.: these tests are no longer stable.
+MM: but are still fail-stop. The integrity guarantee (i.e. that it always returns a correct answer) is more important than the availability guarantee (i.e. that it always returns an answer)</p>
+<p>Alternative to trapping isFrozen etc.: cache stable outcome of certain operations in the proxy, and afterwards no longer trap.</p>
+<p>STH: After the first time isfrozen is true, mark to no longer call.</p>
+<p>AWB: would preclude valid use cases that e.g. want to log all requested isFrozen operations.</p>
+<p>Is there a situation where revoking allows an operation to throw where it previously couldn't with non-revocable proxies?
+TVC: should not be the case</p>
+<p>MM: Specify that...</p>
+<p><strong>The revoke action is observably equivalent to changing the state of the handler to always throw on all traps.</strong></p>
+<p>WH: An uneasy feeling about what else is hiding</p>
+<p>BE: Mark and Tom have significant work on this issue.</p>
+<p>MM: The ability to evict a subgraph is important
+once frozen, stop trapping. once non-configurable, non-writable data, the value continues to be accessible. this loses the garbage collectability of membranes</p>
+<p>...</p>
+<p>DH: Question of clarification re: two constructors, are they necessary because there is no way to return two things from a constructor.</p>
+<p>BE/MM: They create things that are just too different</p>
+<p>BE: There is no mutable state within the proxy that is actually &quot;mutated&quot;?</p>
+<p>TVC: not currently. If we want to pursue the above idea where a trap is disabled once its stable outcome is observed, then the proxy would need to be mutated.</p>
+<p>MM: If you could falsly claim to be not-frozen after being frozen, then there would be issues with reliability, but doesn't exist.
+...</p>
+<p>MM/AR: (discussion about execution points in ES5)</p>
+<p>AR: If you have a file name object, hand it into some API, it might throw, it might not throw... how is this different that what happened before?</p>
+<p>WH: Again, still not sure about effects throughout proxy</p>
+<p>MM/AR: (discussion about frozen object stability)</p>
+<p>AR: Why do we care about the stability of frozen object w/r to revocability?</p>
+<p>WH: (summary) Not clear what the security consequences of revoking a frozen object, either via a revocable proxy or via traps, are; this hasn't been thought about.</p>
+<p>MM: This has been thought about and discussed off-line.</p>
+<a href="#conclusionresolution-revokable-proxies"><h4 id="conclusionresolution-revokable-proxies">Conclusion/Resolution</h4></a><ul>
+<li>we want revocable proxies</li>
+<li>further discussion is needed on revoking frozen objects, either via revocable proxies or via traps</li>
+</ul>
+<a href="#proxy-and-private-names"><h2 id="proxy-and-private-names">Proxy and Private Names</h2></a><p>TVC: We don't want Proxy to inadvertently leak private name properties.</p>
+<p>In Redmond, we discussed that we would seperate string properties and private name properties into separate traps.</p>
+<p>Later determined that this would become cumbersome.</p>
+<p>Proposing to add a third argument to the Proxy constructor: a &quot;whitelist&quot; of private name properties that are allowed to be trapped.</p>
+<p>WH: unique vs private names?
+STH: The primary purpose of Names is to avoid name clash and non-forgeable. Uniques should be reflected, private: not.</p>
+<p>WH: What makes them non-forgeable</p>
+<p>STH: They are objects</p>
+<p>DH: And are as non-forgeable as objects,</p>
+<p>WH: Why do we need both? Unique, Private?</p>
+<p>AWB: They are both useful</p>
+<p>STH: Unique names give you actual unforgeability</p>
+<p>MM: as opposed to the &quot;unguessability&quot; of randomly chosen strings</p>
+<p>DH: About the whitelist, instead of <em>requiring</em> a WeakSet,  can it be anything that can be passed to a WeakSet, like an Array?</p>
+<p>MM: Should probably use a WeakMap...</p>
+<p>EA: An object that has a method that takes the public name string and returns the private name object, if you have access to that, you can extract the private data.</p>
+<p>STH: Erik is right, but it a</p>
+<p>MM: if we don't drop the .public property, don't need the whitelist but instead just the resolvePrivateName trap. If we stick with the whitelist, don't pass the .public property to the resolvePrivateName trap</p>
+<p>TVC: Why is it a WeakSet? Because we dont want someone to provide their own collection that can extract the private data.</p>
+<p>TVC: Why is there a resolvePrivateName trap? Say an operation is performed on a proxy involving a private name, and the proxy doesn't know this private name. Two reasonable options: 1) forward to target, i dont see results, I dont care. OR 2) throw exception. A policy decision to be made by the handler: when working on a private name that we dont know about, forward or throw?</p>
+<p>DH: Should champions take this offline?</p>
+<p>STH: It's pretty important and could mean a significant simplification.</p>
+<p>WH: Would like to get rid of the public/private property flags</p>
+<p>DH: for notational convenience, would be great if one could pass an array literal as 3rd arg
+TVC: could specify that if 3rd arg is an array-like, we copy its elements into a built-in WeakSet
+WH: that would be confusing: names later added to the array-like won't get added to the internal WeakSet</p>
+<p>AWB: Not clear how using a built-in WeakSet will protect, what if it's been redefined? Are WeakSet methods non-writable?
+TVC: we need to specify that the proxy calls the original/intrinsic WeakSet.prototype.get method.</p>
+<p>STH/LH/RW: Will need to spec WeakSet</p>
+<a href="#conclusionresolution-proxy-and-private-names"><h4 id="conclusionresolution-proxy-and-private-names">Conclusion/Resolution</h4></a><p>Yes to third arg for whitelist, pending details to be worked out by Proxy champions.</p>
+<p>Expect to remove the &quot;public&quot; part of private names.</p>
+<a href="#weakset"><h2 id="weakset">WeakSet</h2></a><p>DH: Clear that we need WeakSet to match WeakMap (Set and Map)</p>
+<p>AWB: Need to assure that WeakMap and WeakSet are not redefined?</p>
+<p>RW: Use cases in node programs where I'm using WeakMap made it apparent that it <em>is</em> possible to leak via redefinition.</p>
+<a href="#conclusionresolution-weakset"><h4 id="conclusionresolution-weakset">Conclusion/Resolution</h4></a><p>Needs to be designed, as part of the whitelist feature's needs.</p>
+<p>SpiderMonkey tracking bug: <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792439">https://bugzilla.mozilla.org/show_bug.cgi?id=792439</a></p>
+<a href="#syntactic-support-for-private-names"><h2 id="syntactic-support-for-private-names">Syntactic Support for Private Names</h2></a><p>(Allen Wirfs-Brock, Mozilla)</p>
+<p>Slides: <a href="https://members.ecma-international.org/get.php?group=TC39&amp;file=2012_sub_tc39-2012-066.pdf">https://members.ecma-international.org/get.php?group=TC39&amp;file=2012_sub_tc39-2012-066.pdf</a></p>
+<a href="#private-names--names"><h2 id="private-names--names">Private Names &amp; @Names</h2></a><a href="#uniqueprivate-names"><h3 id="uniqueprivate-names">Unique/Private Names</h3></a><ul>
+<li><p>Unique and private names (aka symbols) are ES6's solution for objects that need to expose props that have limited or controlled acccessibility.</p></li>
+<li><p>Currently no syntactic support for definition of use</p></li>
+<li><p>Imperative code patterns for using names dont mesh well with declaratinve object/class definitional forms.</p></li>
+</ul>
+<p>eg.</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> secret = Name();
+<span class="hljs-keyword">let</span> o = { <span class="hljs-attr">secret</span>: <span class="hljs-number">42</span> }; <span class="hljs-comment">// does not define a "Name" prop</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Yours</span> </span>{
+  secret() {
+    <span class="hljs-keyword">this</span>.mine();
+    <span class="hljs-keyword">super</span>[secret]();
+  }
+}
+
+<span class="hljs-comment">// Not allowed:</span>
+MyClass.prototype[secret] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">super</span>[secret]();
+};
+<span class="hljs-comment">//... Because super is banned outside of class</span>
+</code></pre>
+<a href="#computed-property-names-for-object-literals-were-abandoned"><h3 id="computed-property-names-for-object-literals-were-abandoned">Computed Property Names for Object Literals Were Abandoned...</h3></a><pre><code class="language-js"><span class="hljs-keyword">const</span> secret = <span class="hljs-number">42</span>;
+<span class="hljs-keyword">let</span> o = { [secret]: <span class="hljs-number">42</span> };
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Yours</span> </span>{
+  [secret]() {
+    <span class="hljs-keyword">this</span>.mine();
+    <span class="hljs-keyword">super</span>[secret]();
+  }
+}
+</code></pre>
+<p>Issues:</p>
+<ul>
+<li>Allowed arbitrary expr in prop name def position</li>
+<li>Allowed aliasing of string valued prop keys</li>
+<li>Permitted same key to duplicate</li>
+<li>Future hostile: ties prop def to indexing (See: object model reformation)</li>
+</ul>
+<a href="#proposal-at-names"><h3 id="proposal-at-names">Proposal At-Names</h3></a><p><a href="https://members.ecma-international.org/get.php?group=TC39&amp;file=2012_sub_tc39-2012-066.pdf">Slides</a></p>
+<ul>
+<li>An At-Names is an IdentifierName that is lexically prefixed with @</li>
+<li>At-Names are const bound to Name values by new declaration forms</li>
+</ul>
+<pre><code class="language-js">name @x, @y;
+priv @secret;
+</code></pre>
+<ul>
+<li>Such declarations implicitly create Name Objects</li>
+<li></li>
+</ul>
+<p>... Missed slides</p>
+<a href="#at-name-references"><h3 id="at-name-references">At-Name References</h3></a><ul>
+<li>At-Name can appear in any context where an IdentifierName would be interpreted as a literal property name.
+<ul>
+<li>As a prop name in object literals/class defs</li>
+<li>After . in MemberExpressions</li>
+</ul></li>
+<li>Lexical scoping rules resolve such At-Name references to a Name object value.</li>
+</ul>
+<pre><code class="language-js">private secret;
+<span class="hljs-keyword">let</span> o = { @secret: <span class="hljs-number">42</span> };
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Yours</span> </span>{
+  @secret() {
+    <span class="hljs-keyword">this</span>.mine();
+  }
+}
+</code></pre>
+<a href="#at-names-in-primary-expressions"><h3 id="at-names-in-primary-expressions">At-Names in Primary Expressions</h3></a><ul>
+<li>When used as Primary expression, an At-Name... (see slides)</li>
+</ul>
+<pre><code class="language-js">obj.@secret
+obj[@secret]
+<span class="hljs-comment">// same thing</span>
+</code></pre>
+<a href="#name-declarations-with-initializers"><h3 id="name-declarations-with-initializers">Name Declarations with Initializers</h3></a><ul>
+<li>In a name/private declaration, each At-Name may have an initialization expression.</li>
+</ul>
+<pre><code class="language-js">private @secret = NameBroker.provideName(secretcode);
+</code></pre>
+<ul>
+<li>The initializer must evaluate to a name object</li>
+<li>Primary use case is initializing an At-Name to a name provided via a function call or other computed value (the provided name or computed value is &quot;secretcode&quot;).</li>
+</ul>
+<p>DH: Concern about keyword naming, &quot;private&quot; (worried about contextual keywords)</p>
+<p>AWB: naming can be bikeshedded, but whatever it is, there is no ambiguity because:</p>
+<pre><code class="language-js">foo @IdentifierName
+</code></pre>
+<p>Is always: &quot;keyword [space] '@'&quot;</p>
+<p>DH: You've won me over</p>
+<p>LH: Not sure this goes &quot;far enough&quot; to warrant the addition.</p>
+<p>MM/AWB/YK: (discussion about simplification)</p>
+<p>DH: (whiteboard)</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> o =  {
+  private @foo: <span class="hljs-number">42</span>,
+  m() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.@foo;
+  }
+}
+
+o.m(); <span class="hljs-comment">// 42</span>
+
+<span class="hljs-comment">// As seen via inspection (REPL, console)</span>
+{ m() {} }
+</code></pre>
+<p>...Discussion about varying semantics lacking in previous proposals.</p>
+<p>MM: Cannot avoid runtime collision?</p>
+<p>DH: We can</p>
+<p>MM: Should throw?</p>
+<p>DH: Not strictly, but a possibility.</p>
+<p>AWB: function vs. cost</p>
+<p>ARB: strongly recommend making runtime duplicate check and throwing. (LH seems to agree? Or just acknowledge?)</p>
+<a href="#optional-feature-class-scoped-name-declarations"><h2 id="optional-feature-class-scoped-name-declarations">Optional Feature: Class-scoped name declarations</h2></a><ul>
+<li>Allow name/private declarations to occur as a class body element</li>
+<li>Any such declared At-Name are scoped to the class body.</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+  private @x, @y; <span class="hljs-comment">// &lt;=== scoped to class body</span>
+  <span class="hljs-keyword">constructor</span>(x, y) {
+    <span class="hljs-keyword">this</span>.@x = x;
+    <span class="hljs-keyword">this</span>.@y = y;
+  }
+  get x() { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.@x; }
+  get y() { <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.@y; }
+}
+</code></pre>
+<p>DH/RW: Makes sense for declaration to see it at once.</p>
+<p>LH: Want to be cautious about what we commit to forever.</p>
+<p>RW: Fully support this.</p>
+<p>LH: Let's work towards understanding the entire commitment</p>
+<p>...Discussion about path forward and whether it's too late.</p>
+<p>DH: This does resolve an issue that stands out about max min classes: private name props cannot be added declaratively</p>
+<p>WH: classes are not worth it without this</p>
+<p>BE/LH/RW: Disagree. Classes already support themselves.</p>
+<p>YK: Saying that it's too late is not a valuable argument.</p>
+<p>DH: Just the API won't be <em>worse</em>. Allen's biggest point is that you cannot use Symbol in declarative forms with super().</p>
+<p>DH: (rebuked)</p>
+<p>AWB: There is a big hole in classes where super() is allowed only within class, means that name/symbol <em>cannot</em> be used with super()</p>
+<p>DH: imperative API is safe to start, At-Names are good, but we don't need them now.</p>
+<p>WH: You could say the same about super() in class</p>
+<p>DH: No. We have solid, reasonable semantics for where to allow super() and where to error.</p>
+<p>LH: I don't think we're ready to design this syntax.</p>
+<p>AR: Are we converging on this as an idea that needs solving? Just not now?</p>
+<p>MM: If we decided that we had consensus today, we could improve it over the next year.</p>
+<p>RW: (agrees)</p>
+<p>MM: However, it <em>is</em> late and the agreement of max min was to commit to something light weight that can be built on.</p>
+<p>BE: I agree, but I dont think we should disallow exceptions to that cut off date.</p>
+<p>LH: syntax was not on the table at the cut off</p>
+<p>BE: Firm disagreement.</p>
+<p>RW: This is actually a good example of why max min classes is a good idea. It's already an identified addition that creates a massive improvement.</p>
+<p>WH: This actually adds the missing piece for me to support classes.</p>
+<p>LH: I want something more minimal.</p>
+<p>BE: Can we accept it for work, bet on it until at least the next meaning?</p>
+<p>EA: Nice that it allows class private as well as instance private</p>
+<p>LH: Agrees. If we're going to do this, we have to do all of it. The part that is listed as &quot;optional&quot; actually needs to be included.</p>
+<p>AWB: Essential functionality is base declarations at the block level.</p>
+<p>I have an ES.next (not 6) solution for &quot;protected&quot;.</p>
+<p>LH/DH: The baseline is private declaration in statement, classes, object literals. Build from there. As well as whatever the &quot;public&quot; version. BOTH are part of the baseline. NO PROTECTED.</p>
+<p>AWB/WH/BE: Yes, I agree.</p>
+<p>DH/BE: Move protected to a new strawman.</p>
+<a href="#conclusionresolution-optional-feature-class-scoped-name-declarations"><h4 id="conclusionresolution-optional-feature-class-scoped-name-declarations">Conclusion/Resolution</h4></a><p>Consensus on:</p>
+<ul>
+<li>Need private binding, including: statement form, import and export.</li>
+<li>Need private prefix form on class methods on object literal props and methods</li>
+<li>&quot;public&quot; in addition to private, but need to choose keyword</li>
+<li>dot notation, expression form</li>
+</ul>
+<p>Deferred to separate proposal:</p>
+<ul>
+<li>&quot;Protected&quot;</li>
+</ul>
+<a href="#renaming-name-to-symbol"><h2 id="renaming-name-to-symbol">Renaming Name to Symbol</h2></a><p>(Dave Herman, Mozilla)</p>
+<p>YK: A little nervous that not identical to Lisp</p>
+<p>DH: Gave blessing ;)  the only diff is that you can't go from string -&gt; symbol, whereas in lisp you can</p>
+<p>YK: ok with that.</p>
+<a href="#conclusionresolution-renaming-name-to-symbol"><h4 id="conclusionresolution-renaming-name-to-symbol">Conclusion/Resolution</h4></a><ul>
+<li>we agree that names are now called symbols (Name =&gt; Symbol)</li>
+<li>new alternatives for syntax to bind a &quot;Unique Symbol&quot; will be a keyword, one of: public, unique, or symbol
+ie. <code>public @foo;</code> vs <code>symbol @foo;</code> vs <code>unique @foo;</code></li>
+</ul>
+<a href="#early-errors-that-possibly-should-not-be"><h2 id="early-errors-that-possibly-should-not-be">Early Errors That Possibly Should Not Be</h2></a><p>(Luke Hoban, Microsoft)</p>
+<p>LH: Concerns about detecting assignment to constants. Want to just parse, not build name environments, parse trees, etc.</p>
+<p>WH: What about detecting a continue to a nonexistent label? That requires name environments.</p>
+<p>LH: It's rare enough that it doesn't matter.</p>
+<p>WH: Just what are we talking about? Should the assignment 3 = 1 no longer be an early error?</p>
+<p>[Debate, without resolution]</p>
+<p>[Discussion about whether the ES5.1 early errors should no longer be early errors.]
+Consensus: No.</p>
+<p>[Discussion about when these kinds of errors should be detected. One option mentioned was at function call time at the granularity of a function.]</p>
+<p>WH: That's not useful. With arrow functions we'll have many lightweight functions, so the hybrid of early and late checking at function granularity does not do a good job of either early error detection or fully dynamic binding (late error detection).</p>
+<p>DH: Not detecting typo'd free variables would be a big loss for one of the motivations for modules.</p>
+<p>[Discussions about alternative of having early error detection of things like typo'd variables only in development tools]</p>
+<p>WH: Concerned that these will diverge into a mess of incompatible &quot;even-stricter&quot; modes.</p>
+<p>DH: macros need to expand at compile-time; we'd essentially be making static features like macros impossible</p>
+<p>[Macros require compile time expansion]</p>
+<p>BE: we can do the delayed errors now, and modules that use macros could be eagerly compiled; IOW we can make this decision now without necessarily closing that door</p>
+<p>LH: need for delaying compilation of cold code is huge; large portions of web workloads consist of cold code</p>
+<p>BE: (explains that interns and researchers at Mozilla are working on parsers that can support macros)</p>
+<p>DH: Explains sweet.js (similar to coffeescript transcompilation)</p>
+<p>DH/BE: Continue research of macros, offline.</p>
+<p>MM: List all early errors and discuss the merits</p>
+<p>AWB: Are we ok with a class of errors that are reported on each function entry? Static function analysis will simplify certain runtime semantics.</p>
+<p>...Will allay performance issues discovered through Chakra and v8 prototyping.</p>
+<p>Discussion of label analysis</p>
+<p>Strict mode implementation</p>
+<a href="#conclusionresolution-early-errors-that-possibly-should-not-be"><h4 id="conclusionresolution-early-errors-that-possibly-should-not-be">Conclusion/Resolution</h4></a><ul>
+<li>es-discuss will get a list of all early errors that should not be</li>
+</ul>
+<a href="#performance-costs-of-temporal-dead-zone"><h2 id="performance-costs-of-temporal-dead-zone">Performance Costs of Temporal Dead Zone</h2></a><p>(Luke Hoban, Microsoft)</p>
+<p><a href="https://mail.mozilla.org/pipermail/es-discuss/2012-September/024993.html">https://mail.mozilla.org/pipermail/es-discuss/2012-September/024993.html</a></p>
+<p>LH: (introduces discussion)</p>
+<p>ARB: Have you tested with let and no temporal dead zone</p>
+<p>BE: early-boyer is likely not an accurate test for let. There are closures that capture deep chains of activations. If let is top level, why would it have changed?</p>
+<p>LH: We suspect that a majority of the overhead was caused by the read barrier created by temporal dead zones.</p>
+<p>...Will continue with testing and gather evidence.</p>
+<p>MM/STH/BE: early-boyer is probably innappropriate.</p>
+<p>LH: Believe that the motivation of temporal dead zones is not actually a common enough issue in real world code</p>
+<p>BE: (proxy for Oliver Hunt) says the whole JSC team is against temporal dead zones on let, support it on const</p>
+<p>LH: meta concern is that cases are adding up against let. If the perceived cost is real, measurable performance cost, there will be less buy in from developers.</p>
+<p>WH: [as previously mentioned by Brendan], having a lot more scopes to close over (i.e. creating a new one for each loop iteration, etc.) is likely to be the main performance cost of let. What if let is slower merely due to having many more scopes?</p>
+<p>BE: (history of let in SpiderMonkey...) No outcry that performance is an issue</p>
+<p>MM: (countering the &quot;not common enough&quot; argument) Presented personal experiences where dead zones were essential in detecting problems.</p>
+<a href="#conclusionresolution-performance-costs-of-temporal-dead-zone"><h4 id="conclusionresolution-performance-costs-of-temporal-dead-zone">Conclusion/Resolution</h4></a><ul>
+<li>No change to temporal dead zone (yet)</li>
+<li>Get more data, report back</li>
+</ul>
+<a href="#global-scope-revisit"><h2 id="global-scope-revisit">Global Scope Revisit</h2></a><p>YK: Still not in agreement with discussion yesterday, but not blocking the</p>
+<p>BE: Recap the problem that revealed the issue.</p>
+<p>LH: Can we talk about let/var at the top level?</p>
+<p>Current proposal... let would shadow var</p>
+<p>ARB: Why?</p>
+<p>BE: Global contour in which let binds</p>
+<p>AWB: The rule in functions is that you cannot have a var and function of the same name.</p>
+<p>MM: is the interaction with the global the same as a &quot;with&quot; scope object.</p>
+<p>LH:</p>
+<p>YK: class followed by class with the same name: error
+var followed by let with same identifier name: error</p>
+<p>BE: It happens all the time...</p>
+<pre><code>    for (var i = 0; ...) {}
+
+    for (var i = 0; ...) {}
+</code></pre>
+<p>...Not the issue, but this:</p>
+<pre><code>    var i;
+    for (i = 0; ...) {}
+
+    var i;
+    for (i = 0; ...) {}
+</code></pre>
+<p>...is a problem if <code>let</code> throws when name collision occurs.</p>
+<p>DH: A serious issue exists... the single global object. It's beginning to feel like we're adding to the issue.</p>
+<p>WH: The complexity is not on the number of scopes, but what they do. I'm concerned about the complexity of reflecting let, const, @names, etc. onto a global object.</p>
+<p>WH: Also don't want random HTML attributes elsewhere on the page to knock out global let/const/etc. bindings.</p>
+<p>AWB: No one has discussed... Any script tag, whose order can be determined... bring deferred scripts to the last script</p>
+<p>BE:</p>
+<pre><code>A <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+B <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml"> document.write("D <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">")
+C <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="undefined">
+
+( G )  &lt;
+  ^    ( D )
+( A )
+  ^
+( B ) &lt;-?
+  ^
+( C ) &lt;-?
+</span></span></span></span></span></span></span></code></pre>
+<p>Hell.</p>
+<p>DH: Note that multiple globals is not the problem. The problem is that the one global scope is the &quot;window&quot;</p>
+<p>ARB: Implemented global lexical scope, give the impression of one, but is a scope chain.</p>
+<p>DH: Why is it any different then having a global that isn't the window?</p>
+<p>LH: It has to be.</p>
+<p>BE: Points out in chart above that a function in A that refers to a <code>let x = 1;</code> in C, will create an error.</p>
+<p>DH: Users make recursive dependencies that they don't realize.</p>
+<p>ARB: The way I understood <code>let</code>... we resolve every variable at compile time, (I missed the next part, ARB: Can you fill this in?)</p>
+<p>YK: (whiteboard)</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animate</span><span class="hljs-params">()</span> </span>{
+    requestAnimationFrame();
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> requestAnimationFrame;
+  <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> requestAnimationFrame === <span class="hljs-string">"undefined"</span> ) {
+    requestAnimationFrame = ...polyfill.
+  }
+  animate();
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>BE: Recapping the Window.prototype issue</p>
+<p>RW: There is no reason to put <em>everything</em> on the Window.prototype. Object APIs should be own properties of the Global object (&quot;window&quot; in the browser case). This doesn't mean that the needs of EventTarget specification cannot be met by using the Window.prototype. The WebIDL change to move all APIs to a different semantic &quot;space&quot; without understanding the consequences is the worst negligence.</p>
+<p>...More discussion...</p>
+<p>BE: If we make let, const, class, module, function, var (all binding forms, now and in the future) are global—will this be blocked?</p>
+<p>...Discussion...</p>
+<p>DH: Hard to decide if a dead zone exists for <code>let</code> on the global object.</p>
+<p>ARB:</p>
+<p>LH: What are the mechanics of <code>let</code> accessors on the global?</p>
+<p>...Discussion about the</p>
+<p>Two models to consider:</p>
+<p>Andreas:
+When you have a <code>let</code> binding, it reflected observably as a getter/setter pair with some form of identification as a <code>let</code> binding.</p>
+<p>Luke:
+I can't figure out what the semantics you're describing is</p>
+<p>DH: I think it's simple: every let binding is simply stored in a getter/setter pair</p>
+<p>ARB: better to think of as a separate scope contour, where the getter/setter accesses it</p>
+<p>DH: no difference</p>
+<p>ARB: No, it is the difference between being stored inside the object vs inside the separate scope contour</p>
+<p>DH: I still don't see the difference</p>
+<p>WH: How are the proposed hidden attributes (such as the aforementioned identification of a binding as a 'let' binding) reflected if the global object is a Proxy?</p>
+<p>DH: Tom has spec'ed these to &quot;pass through&quot;</p>
+<p>BE: Object to the idea that there is an observable getter/setter on <code>let</code> bindings.</p>
+<p>ARB: If you don't do it this way, you can't have a temporal dead zone in the global scope.</p>
+<p>DH: (to BE) Can you recap your objection to getter/setter pairs on <code>let</code> bindings? Optimization doesn't seem like a long term motivation if we're moving to <code>module</code></p>
+<p>BE/DH/ARB...</p>
+<p>Like modules, need to have global getter/setter pairs on let/const bindings</p>
+<p>Unless there is a lexical scope or hidden data store...</p>
+<p>LH: Observability?</p>
+<p>ARB: It would be actually observable if the global object was a Proxy. Think of this in terms of a lexical contour</p>
+<p>LH (recapping one of the alternative models)</p>
+<p>There are two scopes:
+Global Object and Global Lexical Scope... when a <code>let</code> binding occurs, there are two things created, one on the Global Object and Global Lexical Scope.</p>
+<p>[people generally felt it was easier to comprehend the data living in the scope contour]</p>
+<a href="#conclusionresolution-global-scope-revisit"><h4 id="conclusionresolution-global-scope-revisit">Conclusion/Resolution</h4></a><p>Agreed on the AWB/MM/WH alternative model
+(new binding forms)</p>
+<ul>
+<li>Allen's 1 extra global scope contourc</li>
+<li>Redeclaration is an error</li>
+<li>Shadows all properties on the Global object</li>
+<li>Does not create a Global property</li>
+</ul>
+<a href="#test-262"><h2 id="test-262">Test 262</h2></a><p>(István Sebestyén, ECMA)</p>
+<p>IS: Someone needs to update the site with the latest version of the test suite in zip file format.</p>
+<p>LH/RW/AWB: Needs to be an automated process, if that's possible within the scope of ECMA's policies.</p>
+<p>IS: Needs archival snapshots. The standards body is still a classic style standards organization that needs to abide its rules and policies.</p>
+<a href="#conclusionresolution-test-262"><h4 id="conclusionresolution-test-262">Conclusion/Resolution</h4></a><ul>
+<li>Bill Ticehurst to produce recommendation for the automated archival of test 262 at arbitrary states, as needed.
+Rick Waldron volunteers to assist as necessary.</li>
+</ul>
+<a href="#create-archival-utility-for-ecma-wiki"><h2 id="create-archival-utility-for-ecma-wiki">Create Archival Utility for ECMA Wiki</h2></a><p>2012-10-31: <code>wget -r -l 0 http://wiki.ecmascript.org/</code></p>
+<a href="#conclusionresolution-create-archival-utility-for-ecma-wiki"><h4 id="conclusionresolution-create-archival-utility-for-ecma-wiki">Conclusion/Resolution</h4></a><p>Rick Waldron will champion this</p>
+
+</body>

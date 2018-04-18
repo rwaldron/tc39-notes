@@ -1,0 +1,265 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>September 18, 2012 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#september-18-2012-meeting-notes"><h1 id="september-18-2012-meeting-notes">September 18, 2012 Meeting Notes</h1></a><hr>
+<p>Rick Hudson (RH), John Neumann (JN), Mark S. Miller (MM), Norbert Lindenberg (NL), Nebojša Ćirić (NC), Allen Wirfs-Brock (AWB), István Sebestyén (IS), Luke Hoban (LH), Paul Leathers (PB), Sam Tobin-Hochstadt (STH), Andreas Rossberg (ARB), Brendan Eich (BE), Erik Arvidsson (EA), Dave Herman (DH), Yehuda Katz (YK), Rick Waldron (RW), Eric Ferraiuolo (EF), Matt Sweeney (MS), Doug Crockford (DC)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>Introductions. Brief Agenda tweaks</p>
+<p>RW: Confirm that Internationalization spec is available, per last meeting</p>
+<p>NL: Internationalization specs are available on the Wiki</p>
+<p>AWB: Start with Internationalization</p>
+<p>IS: We need two products: The spec and a technical report (via test suite)</p>
+<p>JN: Would like Internationalization tests to be included with test262</p>
+<p>AWB: Finalize by June</p>
+<a href="#internationalization"><h2 id="internationalization">Internationalization</h2></a><p>(Norbert Lindenberg, Mozilla)</p>
+<p><a href="https://members.ecma-international.org/get.php?group=TC39&amp;file=2012_sub_tc39-2012-065.pdf">Slides</a></p>
+<a href="#review-and-approve-final-draft-of-internationalization-api-specification"><h2 id="review-and-approve-final-draft-of-internationalization-api-specification">Review and Approve Final Draft of Internationalization API Specification</h2></a><p>(Introduction)</p>
+<p>NL: Final draft following major discussion in May and tweaks from July.</p>
+<p>Primary change is to <strong>Require Normalization By Default</strong></p>
+<p>DH: Is this a performance issue? Should we leave it to the lib authors</p>
+<p>AWB: Why do we assume lib authors will write wrappers.</p>
+<p>YK: Because we have no evidence to the contrary</p>
+<p>LH: That implies a judgement about design...</p>
+<p>RW: Spec APIs are not <em>bad</em>, they often require simplification for wide acceptance and use.</p>
+<p>Discussion returns to whether or not Normalization is <em>required</em> by the specification or if it is implementation independant.</p>
+<p>Agreement that generally there should be no &quot;optional&quot; implementation details. Conformance should be explicitly normative.</p>
+<p>NL: Note about ES5 assumptions that a string has been normalized before parsed.</p>
+<p>NL: Three options to support or ignore:</p>
+<ol>
+<li>Normalization</li>
+<li>Lowercase to Uppercase first</li>
+<li>Numeric sorting</li>
+</ol>
+<a href="#dont-use-year-0-in-datetime-formatting"><h2 id="dont-use-year-0-in-datetime-formatting">Don't Use Year 0 in Date/Time Formatting</h2></a><p>2 AD, 1 AD, 1 BC, 2 BC</p>
+<p>Discussion and explanation</p>
+<p>YK: Ruby has a year 0</p>
+<p>AWB: Fundamentally Date/Time objects are ms mapped to some external designator, would there be any impact?</p>
+<p>Decision: Date calculations will remain as is; but dates before 1AD will be adjusted in localized formatting (Date.prototype.toLocaleString, Intl.DateTimeFormat.prototype.format) to reflect no year 0.</p>
+<a href="#conformance-tests"><h2 id="conformance-tests">Conformance Tests</h2></a><p>NL: 137 tests, reaches almost all algorithms, coverage is still thin, draft test report</p>
+<p>LH: These have been effective in identifying bugs in Chakra prototype implementation</p>
+<a href="#implementors-report"><h2 id="implementors-report">Implementor's Report</h2></a><p>(Google)
+NC: Chrome/v8 has <code>Intl</code> namespace and the implementation is working towards passing the conformance tests with ~20 failures. Some tests not yet implemented. Google internal use</p>
+<p>AWB: What is the feedback?</p>
+<p>NC: Mostly migration based discussion for the time being. There was a previously a [Localization] API.</p>
+<p>AWB: Issues with name conflict? Wouldn't know if it was prefixed.</p>
+<p>NC: Will be removing the prefix</p>
+<p>DH/YK/STH: Discussion about globals, as they apply to the future with modules. import foo from ... will reduce naming conflict overall.</p>
+<p>(Microsoft)
+LH: Currently passing 100/137 of conformance tests. Dont have direct user feedback. No one is actively using the prototype.</p>
+<p>RW: Is there any communication between implementors?</p>
+<p>NC/LH: Only via es-discuss</p>
+<p>(Mozilla)
+NL: Prototyped in SpiderMonkey. Uses ICU for comparison, formatting and feature detection. JS/C++ for implementation, Unicode extensions not yet supported. Passing 128/137.</p>
+<a href="#approvals"><h2 id="approvals">Approvals</h2></a><p>NL: Final change, move to year 0.</p>
+<p>AWB: Need to address the &quot;optional&quot; spec issues.</p>
+<p>DH: Not that leaving things unspec is evil, we should just be conservative.</p>
+<p>RW: For the sake of clarity there should be a specific list,(via notes?) of &quot;optional&quot; implementation details.</p>
+<p>DH: Agree, similar to the history of strict mode list</p>
+<p>LH: This can be produced off-line</p>
+<p>AWB: In the form of an Annex</p>
+<p>DH/LH/AWB: (Discussion about implementation limitations)</p>
+<p><strong>Summary</strong>
+Produce Annex that outlines a list of all optional implementation details. Include a rationale for each item that describes strong reasoning for optional implementations.</p>
+<a href="#annex"><h2 id="annex">Annex</h2></a><p>Optional</p>
+<p>All Functionality</p>
+<ul>
+<li>Supported Locales</li>
+<li>Default Locale</li>
+<li>Supported subset of unicode</li>
+<li>Best fit matcher for locales</li>
+<li>Supported Unicode Extenion values per locale</li>
+<li>Additional values per conformance clause</li>
+</ul>
+<p>Collation</p>
+<ul>
+<li>Adherence to unicode collaiton algorithm</li>
+<li>Support for unicode extenions keys kf, kk, kn and parallel options caseFirst, normalization, numeric</li>
+<li>localized sort orders</li>
+<li>Default search sensitivity per locale</li>
+</ul>
+<p>NumberFormat</p>
+<ul>
+<li>Support for numbering systems</li>
+<li>Implementation of non-decimal numbering systems</li>
+<li>Localized decimal &amp; grouping separators, representation of negative numbers, percent sign</li>
+<li>Localization grouping</li>
+<li>Localized concurrency symbols and names</li>
+</ul>
+<p>DateTimeFormat</p>
+<ul>
+<li>Supported data/time formats per locale beyond core set</li>
+<li>Best fit matcher for formats</li>
+<li>Supported Calendars</li>
+<li>Support for numbering systems</li>
+<li>Localized format patterns, weekday names, month names, era names, am/pm, time zone names</li>
+</ul>
+<p>BE: Similar to the underspecified portions of Date</p>
+<p>LH: Of course, we'll work together to be as consistent as possible.</p>
+<a href="#approval-of-intl"><h2 id="approval-of-intl">Approval of Intl</h2></a><p>JN: If there are no objections, we will forward this document specification, ECMA-402 to the CC &amp; General Assembly for final approval.</p>
+<p>...No objection.</p>
+<p>JN: With the final modifcations, this document will be submitted to the CC &amp; GA for final approval. NL and NC to produce a list for an Annex of optional details.</p>
+<p>JN: Any desire for ISO fast tracking?</p>
+<p>(Discussion re: ISO benefits.)</p>
+<a href="#conclusionresolution-approval-of-intl"><h4 id="conclusionresolution-approval-of-intl">Conclusion/Resolution</h4></a><p>ECMA-402 Approved for submission to ECMA CC &amp; GA</p>
+<p>ISO fasttrack postoned (with the limited time frame of 2 months notice prior to presentation the GA, approx Oct 10, 12?)</p>
+<a href="#intl-2nd-edition"><h2 id="intl-2nd-edition">Intl 2nd Edition</h2></a><p>NL: There is a need to continue work, towards a 2nd edition</p>
+<p>JN: Agenda item for Nov.</p>
+<p>IS: Need to determine scope and scale of needed changes.</p>
+<a href="#conclusionresolution-intl-2nd-edition"><h4 id="conclusionresolution-intl-2nd-edition">Conclusion/Resolution</h4></a><p>Agenda item for November 2012 to entertain a proposal.</p>
+<a href="#parallel-javascript"><h2 id="parallel-javascript">Parallel JavaScript</h2></a><p>(Rick Hudson, Intel)</p>
+<a href="#river-trail-intel"><h3 id="river-trail-intel">River Trail (Intel)</h3></a><ul>
+<li><a href="https://members.ecma-international.org/get.php?group=TC39&amp;file=2012_sub_tc39-2012-064.ppt">slides</a></li>
+</ul>
+<p><strong>Map</strong></p>
+<ul>
+<li>myArray.map(callback)</li>
+<li>myArray.map(depth, callback) // for an n-dimensional array</li>
+<li>elementalFunction (element, index, source)</li>
+<li>(need slides?)</li>
+</ul>
+<p>DH: Not sure that the level of technical detail is yet appropriate (from the perspective of an implementor)</p>
+<p>YK: Gratuitous API changes should be avoid</p>
+<p>RH: Intentionally avoided using the |thisArg|, think it's complete unnecessary and exists for legacy purpose.</p>
+<p>DH: Absolutely not the case and is very important.</p>
+<p>RW: For example, when you have a constructor that has properties [[Put]] via map, |thisArg| allows setting the context within the callback to the constructor itself.</p>
+<p>DH: This needs to be taken offline, away from the committee.</p>
+<p>LH:</p>
+<p><strong>Examples of Map</strong></p>
+<pre><code class="language-js">paArray.map(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">element</span>) </span>{
+  <span class="hljs-keyword">return</span> element+<span class="hljs-number">1</span>;
+});
+
+paArray.map(<span class="hljs-number">2</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">element</span>) </span>{
+  <span class="hljs-keyword">return</span> element+<span class="hljs-number">1</span>;
+});
+
+paArray.map(<span class="hljs-number">2</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">element, [i, j], array</span>) </span>{
+  <span class="hljs-keyword">return</span> element+<span class="hljs-number">1</span>;
+});
+</code></pre>
+<p>LH/DH: (Discussion of explanation of River Trail semantics and the use cases)</p>
+<p>LH: Is it the claim of this proposal to follow the ECMA 262 Semantics.</p>
+<p>DH: Yes, up to the issue of floating point non-determinism</p>
+<p>LH: Which means an engine cannot detect... (lost)</p>
+<p>RH: We do rely on the programmer to know that they need to write an associative and commutative function. Tools can be provided to help.</p>
+<p>LH: Worried about implicitly saying that a function does not match what ECMA 262 says it will mean.</p>
+<p>DH: (Clarifies that it's <em>just</em> JavaScript)</p>
+<p>BE: Parallelization can be painfully slow</p>
+<p>YK: If it's straight forward, then why not specify how Parallelization is accomplished</p>
+<p>DH/BE: Too early to attempt to specify Parallelization detection.</p>
+<p>Lengthy discussion of Parallelization &quot;mode&quot; switching semantics... Devolved. Ended abruptly when no progress was made.</p>
+<p><strong>Shape</strong></p>
+<ul>
+<li>Mixing 1D and 2D operations requires an understanding of shape</li>
+<li>Shape determined at construction</li>
+</ul>
+<p><strong>Identity</strong></p>
+<ul>
+<li>Accessors to non leaf elements of ParallelArrays will return a fresh ParallelArray</li>
+<li>References semantics for === remains consistent</li>
+</ul>
+<p>Between the two:</p>
+<ul>
+<li>pa[2] === pa[2] true for only 1D ParallelArrays</li>
+<li>pa[2] === pa[2] always false when shape is &gt; 1</li>
+</ul>
+<p>LH: Asks for explanation...</p>
+<p>DH: Will fill in blanks offline</p>
+<p>AWB: Are there any other efforts that are developing competing specifications?</p>
+<p>RH: Not exactly, but WebCL(Kronos?) is similar in the application they are trying to address.</p>
+<p>DH: A different name?</p>
+<p>BE: Vector?</p>
+<p>DH: Also, the world will hate us for creating a new Array-like.</p>
+<p>RW: Only a problem when creating constructors that produce objects with numeric indices and a length property and no Array proto API.</p>
+<p>DH: Which it does.</p>
+<p>RW: Then it will be a problem.</p>
+<p>MM: The proliferation of Array-like things is unfortunate</p>
+<p>RW: And ES6 reduces that pain by effectively eliminating arguments via rest and Array.from()</p>
+<p>...</p>
+<p>DH: There was also the idea of having parallel-specific methods.</p>
+<p>Derailed to Array-like API issues on the whole... When to implement array API and when not. Why and why not...</p>
+<a href="#conclusionresolution-parallel-javascript"><h4 id="conclusionresolution-parallel-javascript">Conclusion/Resolution</h4></a><p>Further research and offline discussion.</p>
+<a href="#define-properties-operator-"><h2 id="define-properties-operator-">Define Properties Operator &quot;:=&quot;</h2></a><p>(Allen Wirfs-Brock, Mozilla)</p>
+<p>Introduction, rationale as published:
+<a href="http://wiki.ecmascript.org/doku.php?id=strawman:define_properties_operator">http://wiki.ecmascript.org/doku.php?id=strawman:define_properties_operator</a></p>
+<p>DH/AWB/RW: (discussion) Object.define, Object.put</p>
+<p>RW: Have research and supporting cases from jQuery, Dojo, YUI, Node core, Underscore... Always exists an approximation of &quot;merging&quot; or &quot;extending&quot;</p>
+<p>AWB: We should strive to fix the future and correct developers thinking about &quot;define&quot; and &quot;assign&quot;</p>
+<p>LH: That's a dangerous scenario to put developers in, where they have to think about assignment vs definition.</p>
+<p>RW: The newly created dom node case, for batch property assignment (originally brought forth by Doug) is the second most important use-case, but implicit define will pave innerHTML (or any dom node properties)</p>
+<p>...</p>
+<p>DH: Shouldn't create syntax for the less common operation.</p>
+<p>MM: Agreed.</p>
+<p>AWB: But there is no way to:</p>
+<ul>
+<li>Batch define class-side properties</li>
+<li>Batch define constructor properties</li>
+<li>Batch define instance properties</li>
+</ul>
+<p>YK: Nothing for static properties in classes yet anyway</p>
+<p>MM: But not sure we need any syntax yet. If there was a lot of precedent for batch define, in the same way there is for assign/put, then it would make sense, but there is very little userland history for <em>define</em></p>
+<p>RW: Agreed, assign/put is a cow-highway to pave, but user code has barely begun to include regular use of definePropert(y|ies)</p>
+<p>MM: (comments about private name access concerns)</p>
+<p>AWB:</p>
+<p>LH: Long term, we're going to have to consider features that are allowed to move private state.</p>
+<p>DH: Essentially, you'd need inside access and list private items.</p>
+<p>Discussion about side channel access via newly defined properties that were never expected on the object.</p>
+<p>Discussion about the needs of Private Names, Unique Names and WeakMaps.</p>
+<p>BE: People want Private Names as much as they want Unique Names</p>
+<p>YK: Can we tell people to use Unique Name when they want copyable and Private Name when not.</p>
+<p>BE: I thought of this earlier, but wasn't sure, but it could work</p>
+<p>AWB: ...</p>
+<p>MM: Given ES6, remove the copying of private names, allow copying unique names: Can this be written as library code?</p>
+<p>DH/YK/RW: Devs want Object.define which is Object.defineProperties
+Object.assign() or Object.put() (these are the same, just different names)</p>
+<p>Extensive discussion around whether or not Object.define()</p>
+<p>Extensive discussion around whether or not Object.assign()</p>
+<p>Derailed due to concise method's making non-enumerables, which means they won't copy if the rule disallows copying.</p>
+<p>...Revisit &quot;Concise Method Definition&quot; (add anchor)</p>
+<p>Object.define( target, source )</p>
+<ul>
+<li>All own properties of source</li>
+<li>plain object descriptor map is copied</li>
+<li>private names are not copied</li>
+<li>unique names are copied</li>
+<li>super mechanism (rebind super)</li>
+</ul>
+<p>Object.assign( target, source )</p>
+<ul>
+<li>Only enumerable own properties of source</li>
+<li>Invoke [[Get]] on property list derived from source, for each property in list [[Put]] on target</li>
+<li>private names are not copied</li>
+<li>unique names are copied</li>
+<li>super mechanism (rebind super)... AWB To determine needs</li>
+<li>Returns modified &quot;target&quot;</li>
+</ul>
+<p>DH, MM, AWB: Object.assign a well worn enough cow-path to be worth paving. Object.define isn't, and so should only be standardized after libraries have explored the space.</p>
+<a href="#conclusionresolution-define-properties-operator-"><h4 id="conclusionresolution-define-properties-operator-">Conclusion/Resolution</h4></a><ul>
+<li>Accept Object.assign into ES6, but postpone Object.define (or something like it) to discussion of future versions.</li>
+<li>Reference materials and use cases: <a href="https://gist.github.com/3744794">https://gist.github.com/3744794</a></li>
+</ul>
+<p>(** The inclusion of variable length sources is imperative to match real world patterns found in the most ubiquitous JS libraries)</p>
+<a href="#concise-method-definition-revisited"><h2 id="concise-method-definition-revisited">Concise Method Definition, Revisited</h2></a><p>RW: Defaulting concise methods to non-enumerable is a mistake</p>
+<p>DH: Not sure about the decision to go non-enumerable. Users expect that things they create to be enumerable and things that the platform provides to be non-enumerable.</p>
+<p>LH: enumerability is not a real concept with any sort of meaning.</p>
+<p>EA: (reveals the broken-ness of the DOM)</p>
+<p>No longer arguable.</p>
+<a href="#conclusionresolution-concise-method-definition-revisited"><h4 id="conclusionresolution-concise-method-definition-revisited">Conclusion/Resolution</h4></a><ul>
+<li>Concise method definitions create [[Enumerable]]: true</li>
+</ul>
+<a href="#scoping-of-the-top-level"><h2 id="scoping-of-the-top-level">Scoping of the Top Level</h2></a><a href="#var-and-the-windowprototype-issue"><h2 id="var-and-the-windowprototype-issue">var and the window.prototype issue</h2></a><p>var indexedDB = window.msIndexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.indexedDB;</p>
+<p>Issue with WebIDL change.</p>
+<p>REVISIT.</p>
+<a href="#let-const-module-class"><h2 id="let-const-module-class">let, const, module, class</h2></a><p>Global scope contours</p>
+<p>AWB: propose extra global contour, shared across all scripts, for new binding forms, to avoid colliding with Window object</p>
+<p>others skeptical of complexity of new scoping model for globals</p>
+<a href="#conclusionresolution-let-const-module-class"><h4 id="conclusionresolution-let-const-module-class">Conclusion/Resolution</h4></a><p>continued on second day, resolved then</p>
+
+</body>

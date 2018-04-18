@@ -1,0 +1,83 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 23, 2013 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-23-2013-meeting-notes"><h1 id="may-23-2013-meeting-notes">May 23, 2013 Meeting Notes</h1></a><hr>
+<p>John Neumann (JN), Allen Wirfs-Brock (AWB), Eric Ferraiuolo (EF), Erik Arvidsson (EA), Luke Hoban (LH), Doug Crockford (DC), Yehuda Katz (YK), Sam Tobin-Hochstadt (STH), Alex Russell (AR), Dave Herman (DH), Bernd Mathiske (BM), Andreas Rossberg (ARB), Mark S. Miller (MM), Tom Van-Cutsem (TVC), István Sebestyén (IS)</p>
+<hr>
+<a href="#promises-vs-monads"><h2 id="promises-vs-monads">Promises vs Monads</h2></a><p>MM: ...Continuing from yesterday</p>
+<p>AR: <a href="https://github.com/slightlyoff/Futures/blob/master/Promise.idl">https://github.com/slightlyoff/Futures/blob/master/Promise.idl</a></p>
+<p>STH: Don't like resolve but not willing to die on this hill.</p>
+<p>AR: DOM has a bunch of ad hoc APIs to do promise like things.</p>
+<p>YK: Mozilla is also actively working on APIs using promises.</p>
+<p>AR: A lot of methods today return void so we can change these to return a promise. This is forward compatible.</p>
+<p>AR: then does recursive unwrapping...</p>
+<a href="#es6-es7-es8-marks-strawman-roadmap"><h2 id="es6-es7-es8-marks-strawman-roadmap">ES6, ES7, ES8... Mark's Strawman Roadmap</h2></a><p>LH: The important part is not the features but the process.</p>
+<p>AWB: Can things be decoupled?</p>
+<p>LH: These kind of structural questions are the important part</p>
+<p>MM: Suggests &quot;concurrency&quot; to be the main theme.</p>
+<p>AWB: Thought about the event loop. All we need is a processing queue... put things in the front and the back.</p>
+<p>DH: Only need to add to the back.</p>
+<p>AWB: OK.</p>
+<p>STH: The callback is called at some later point.</p>
+<p>AR: Don't think we need to specify the order.</p>
+<p>STH: If we are going to specify promises etc we need to be able to specify things in detail. We can be loose in ES6 and then come back in ES7 and provide a more tight spec.</p>
+<p>DH: We could specify the pending events as a set or something. Not sure if there is a consensus that we want a fast small ES7. Not opposed to a modularized approach.</p>
+<p>AR: Are there any browsers that are not shipping stable ES6 features today.</p>
+<p>YK: Yes. V8.</p>
+<p>AWB: Where we have problem today is that there is a lot of interdependency.</p>
+<p>MM: These (&quot;concurrency&quot;) are coupled together to the event loop</p>
+<p>AWB: We can do it as a separate non 262 spec</p>
+<p>DH: Opposed to a separate spec. Introduces versioning confusion.</p>
+<p>AWB: Roll up</p>
+<p>DH: Think of all the extra overhead.</p>
+<p>STH: Big difference with 402 since it was run by different people.</p>
+<p>LH: Lack of confidence in new features has been an issue for implementers. Good exceptions were <code>Object.observe</code> and <code>Proxies</code> where the wiki contained a mostly complete spec.</p>
+<p>AWB: We need to have wiki proposals be deltas to the spec.</p>
+<p>TVC: We could have &quot;stable&quot; wiki pages. These would have complete spec deltas.</p>
+<p>DH: Very concerned about over modularizing.</p>
+<p>AWB: We need to find a way to work faster and be less monolithic.</p>
+<p>DH: Agree. ES6 process has blocked implementation work.</p>
+<p>LH: We are not committed to our designs.</p>
+<p>STH: We are not resolving issues until we start to spec. We are not getting feedback until engines starts to implement.</p>
+<p>EA: The problem is that we didn't start to spec things until very late. We had agreements on features long before there was any spec drafts for them.</p>
+<p>YK: More from our champions before we get to concensus.</p>
+<p>ARB: Lots of the proposals were very vague.</p>
+<p>AWB: The more complete spec you bring to tc39 the better chance you have to reach consensus.</p>
+<p>ARB: Lack of early spec leads to lack of early implementations...</p>
+<p>AWB: ...which leads to lack of feedback.</p>
+<p>LH: Not more work, just doing the work earlier before things pile up too much.</p>
+<p>DH: Need to look at the dependency graph. Hold of the work of later feature.</p>
+<p>ARB: We need to higher bar before we accept proposals.</p>
+<p>MM: What we agreed to 2 years ago was that the features are the one we want to spend work on speccing.</p>
+<p>LH: Less features to bite of.</p>
+<p>DH: A lot of us have a hard time not getting too engage in too many features.</p>
+<p>YK: if we focused more effort on managing the overall complexity instead of getting stuck on a lot of technical discussions (and nit picking).</p>
+<p>DH: <code>Object.observe</code> and <code>Proxy</code> moved fast but are fairly isolated features</p>
+<p>TVC: Didn't involve syntax.</p>
+<p>AWB: With ES6 we had a long backlog.</p>
+<p>DH: A language will have smaller and smaller complexity budgets as it grows.</p>
+<p>AR: ES future needs events</p>
+<p>DH: Since this is Mark's wishlist people will throw in their pet features.</p>
+<p>MM: This is the direction I am going to work.</p>
+<p>LH: There is a page on the wiki outlining the goals.</p>
+<p>LH: Looking for 2 things: Something that would allow earlier implementations. Have not brought proposals (over the last 2 years) because we have been blocked by ES6.</p>
+<p>LH: When is the appropriate time to bring new proposals to TC39?</p>
+<p>AWB: We are free to do what we want. We can issue 6.1, 6.2 etc or technical reports which would serve as a recommendation.</p>
+<p>DH: We cannot exclusively work on ES6.</p>
+<p>YK: Time at f2f is the most important. Champions can go off and do what they want.</p>
+<p>DH: Suggests adding non ES6 items to the agenda. We will prioritize the non ES6 stuff we can get to given our limited time.</p>
+<p>YK: We should reinstate the rule that agenda items needs links to wiki pages.</p>
+<p>YK: Spec language is good but examples at the top are a must.</p>
+<p>ARB: Add step after proposal. For example &quot;stable&quot; or &quot;spec&quot; which a proposal gets promoted to once there is a spec draft, good enough to start implementing.</p>
+<p>DH: Strawman: Anything goes.</p>
+<p>YK: Proposals used to mean approved.</p>
+<p>DH: 3 sections: strawman, proposal, spec/candidate. Keep strawman. Work on improving as a proposal, and when mature enough promoted to next level.</p>
+
+</body>

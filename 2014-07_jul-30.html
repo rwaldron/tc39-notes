@@ -1,0 +1,664 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>July 30, 2014 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#july-30-2014-meeting-notes"><h1 id="july-30-2014-meeting-notes">July 30, 2014 Meeting Notes</h1></a><hr>
+<p>Brian Terlson (BT), Dmitry Lomov (DL), Waldemar Horwat (WH), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Eric Ferraiuolo (EF), Jafar Husain (JH), Jeff Morrison (JM), Mark Honenberg (MH), Caridy Patiño (CP), Sebastian Markbåge (SM), István Sebestyén (IS), Erik Arvidsson (EA), Brendan Eich (BE), Mark S. Miller (MM), Sam Tobin-Hochstadt (STH), Domenic Denicola (DD), Peter Jensen (PJ), John McCutchan (JMC), Paul Leathers (PL), Eric Toth (ET), Abhijith Chatra (AC), Jaswanth Sreeram (JS), Yehuda Katz (YK), Dave Herman (DH), Brendan Eich (BE),</p>
+<hr>
+<a href="#rftg-admin-es6-opt-out-period"><h2 id="rftg-admin-es6-opt-out-period">RFTG Admin: ES6 Opt-out period.</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/ecma-262-6-optout1.pdf">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/ecma-262-6-optout1.pdf</a></p>
+<p>AWB: This is the opt-out period: Aug. 11, 2014 - Oct. 11, 2014</p>
+<p>Final opt-out window: March 16, 2015 - May 18, 2015</p>
+<p>Read the policy, speak with István Sebestyén for further information.</p>
+<p>The opt-out version of the spec is: ECMA-262 6th Edition, revision 26, document: tc39/2014/031</p>
+<a href="#44-instantiation-reform-review-create-design-rationale-and-possible-alternatives"><h2 id="44-instantiation-reform-review-create-design-rationale-and-possible-alternatives">4.4 Instantiation Reform (Review @@create design rationale and possible alternatives)</h2></a><p>(Mark Miller, Allen Wirfs-Brock, Dmitry Lomov, Tom Van Cutsem. Based on Claude Pache proposal )</p>
+<p><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/instantiation-reform.pdf">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/instantiation-reform.pdf</a></p>
+<p>AWB: Currently:</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> Foo(arg)
+</code></pre>
+<ol>
+<li><code>Foo[[Construct]](arg)</code> ::=</li>
+<li><code>let obj = Foo[@@create]()</code></li>
+<li><code>foo.call(obj, arg)</code></li>
+</ol>
+<p>The actual constructor method typically does all of the initialization and setup on the instance object.</p>
+<p>Issues:</p>
+<p>(DOM centric)</p>
+<ol>
+<li>If instances aren't sufficiently initialized by @@create, then instance objects could leak (e.g. via a nefarious decoupling between the @@create allocation process and the constructor-function initialization process)</li>
+<li>@@create could be called directly</li>
+</ol>
+<p>DH: Do we have concrete examples of this problem?</p>
+<p>JM: Dealing with legacy code where you want to subclass from legacy constructors, need to set up state, <code>this</code> uninitialized</p>
+<p>AWB: Gives <code>Date</code> example, where <code>[[DateValue]]</code> isn't setup until <code>super()</code></p>
+<p>DH: The initialization of the internal field cannot happen until the super constructor is called to create <em>that</em> field.</p>
+<p>YK: This is caused by the @@create not accepting the constructor arguments.</p>
+<p>AWB: Yes. Propose: Remove @@create, replace it with @@new, which will make the arguments available to</p>
+<p>YK: When you subclass, it's normal to call super and pass the arguments.</p>
+<p>AWB: @@create is a property of the constructor, not the instance.
+Creating a subclass, you may want to do something with the arguments before passing to <code>super</code></p>
+<p>JM: or adjust some state on the subclass instance before calling <code>super</code></p>
+<p>AWB: There is a complication that built-ins have: different behaviour when <code>new</code>'ed or <code>call</code>'ed
+No internal distinguishing mechanism. No way to indicate that a constructor was called or newed.</p>
+<p>YK: Don't think we need to be concerned with handling</p>
+<p>AWB: A subclass will create a &quot;call&quot; up to the <code>super</code></p>
+<p>Explanation of current spec handling.</p>
+<p>JM: Issues: were we called, or newed. One deals with intermediary state initialization.</p>
+<p>AWB: The issue is coupling between state and the instance.
+Do we agree that there's a problem?</p>
+<p>(no one says no)</p>
+<p>JM: There are scenarios where a subclass wants to initialize state before calling super()</p>
+<p>YK: It seems like a feature, not a bug</p>
+<p>WH: What are you calling the intermediary state</p>
+<p>YK: The fact that you can observe the creation
+There has to be brand check</p>
+<p>DH: The simplest way of saying is that all need brand checks.</p>
+<p>YK: Can do: <code>foo.call(any)</code> and there is obviously a check there.</p>
+<p>AWB: Internal slots are initialized in an atomic unit,</p>
+<p>YK:</p>
+<p>DL: TypedArrays missing creation information</p>
+<p>AWB: You can move all the logic [to @@create or @@new or something akin], but you've just created another constructor</p>
+<p>WH: Why not do everything from @@create in the constructor</p>
+<p>DL/AWB: Jason Orendorff's proposal.</p>
+<p>DH: (not-quite-right summary of Jason's proposal)</p>
+<p>AWB: One way: reify [[Construct]] to the user</p>
+<p>DH: When <code>new Foo(args)</code>, calls <code>Foo[@@new](args)</code> ... ?</p>
+<p>DL: Just pass the args to <code>@@create</code> and change <code>@@create</code> to <code>@@new</code></p>
+<p>NM: But then the subtype must have same signature</p>
+<p>AWB: 2 viable options for ES6</p>
+<ul>
+<li>Live with what we have, @@create is grungy, but not unsafe</li>
+<li>Alternative, originating with Claude Pache</li>
+</ul>
+<p>Bring back to constructor with atomic invocation. I'm for this approach and it's reasonable for ES6</p>
+<p>(Mark presenting...)</p>
+<p>MM:</p>
+<p>Goals</p>
+<p>Subclass exotics
+Avoid un (or partially) initialized exotics</p>
+<p>ES5 compat (aside from &quot;rcvr&quot;)
+ES6 class compat (aside from @@create)
+Reliable test for &quot;am i called as a constructor?&quot;
+Support base-creates-proxy scenario</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Derived</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-comment">// TDZ this, on "new Derived..." etc.</span>
+    <span class="hljs-keyword">super</span>(...otherArgs); <span class="hljs-comment">// this = what super returns</span>
+    <span class="hljs-comment">// this is initialized.</span>
+  }    
+}
+
+<span class="hljs-comment">// </span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Base</span>(<span class="hljs-params">...otherArgs</span>) </span>{
+  <span class="hljs-comment">// implicit this = Object.create(mostDerived.prototype, {});</span>
+}
+</code></pre>
+<p>AWB: The <code>super()</code> call is calling the super class constructor as a <em>constructor</em> when <code>new Derived()</code>—that's important.</p>
+<p>WH: When constructor() is called as a function, super is called as a function too?</p>
+<p>MM: Yes</p>
+<p>WH: What causes the TDZ to appear? The statically visible presence of a super call in the body of the constructor?</p>
+<p>AWB: Yes</p>
+<p>WH: What if the super call is inside an arrow function?</p>
+<p>BE: If <code>Derived</code> called without <code>new</code>?</p>
+<p>AWB: <code>super()</code> is called a non-constructor.</p>
+<p>WH: super cannot appear in a nested function?</p>
+<p>AWB: they can appear, but... (trails off)</p>
+<p>JM: A related use case is being able to set up stuff on the instance before calling super()</p>
+<p>AWB: Show me code that does that, to make sure we don't break that.</p>
+<p>BE: code that doesn't actually use super() won't break, and there is no such code yet</p>
+<p>MM: Base is an example of a function that doesn't have a super call (because it can't). On entry, before user code, implicit init this of fresh newly created object. This is a difference from ES5. The &quot;mostDerived&quot; prototype ...?</p>
+<p>AWB: this actually isn't a difference from ES5, because there is no super() in ES5</p>
+<p>MM: you are correct</p>
+<p>MM: how do people feel?</p>
+<p>JM: It's not an issue with ES5 -&gt; ES6 legacy, it's an issue with ES6 class designs that evolve over time</p>
+<p>YK: my concern is the pedagogy of this approach.</p>
+<p>MM: the pedagogy is as shown in this slide.</p>
+<p>DH: No! It cannot be taught this way.</p>
+<p>BE: let's just let Mark present.</p>
+<p>MM:</p>
+<p><strong>From Claude Pache</strong></p>
+<pre><code class="language-js">F.[[Construct]](args, rcvr)
+</code></pre>
+<ul>
+<li>Distinguish functions-which-call-super</li>
+<li>Vanilla function at end of super-call-chain is base (instantiation postponed to base entry)</li>
+</ul>
+<p>**Modifications to Claude's proposal **</p>
+<pre><code class="language-js">F.[[Construct]](args, rcvr)
+</code></pre>
+<ul>
+<li>mod: Only MOP signature change</li>
+<li>Distinguish functions-which-call-super</li>
+<li>mod: call-super-as-a-function</li>
+<li><code>super()</code>, but not <code>super.foo()</code></li>
+<li>Vanilla function at end of super-call-chain is base (instantiation postponed to base entry)</li>
+<li>mod: instantiation postponed to base entry</li>
+</ul>
+<p>YK: What about subclass constructors that don't include a call to <code>super()</code>.</p>
+<p>AWB: Throw when <code>new</code>'ed</p>
+<p>Agreement.</p>
+<p>JM: I still have issues with state initialization</p>
+<p>YK: Issues</p>
+<p>BE: Concern about setting properties on the instance before <code>super()</code></p>
+<p>JM: Code patterns exist, they won't just go away.</p>
+<p>AWB: Can get around it with <code>super.constructor()</code></p>
+<p>BE: Lose the static analysis of <code>super(</code> (right paren intentionall omitted)</p>
+<p>MM:</p>
+<p><strong>[[Call]] Traps</strong></p>
+<pre><code>F(...args) -&gt; F.[<span class="hljs-string">[Call</span>]](undefined, args)
+
+Derive.[<span class="hljs-string">[Call</span>]](const this, args)
+  super(...other) -&gt; super.special_name(...other)
+</code></pre>
+<p>WH: What is the special name?</p>
+<p>MM/AWB/DD: (to Waldemar) This is the ES6 spec</p>
+<p>WH: Explain?</p>
+<p>AWB: methods that ref super are bound to an object where the super ref takes place. that binding is the current inst. two bound values object where look up starts and the method name.</p>
+<p>MM:</p>
+<p><strong>[[Construct]] Traps</strong></p>
+<pre><code>new F(...args) -&gt; F.[<span class="hljs-string">[Construct</span>]](args, F)
+
+Base.[<span class="hljs-string">[Construct</span>]](rcvr, args)
+  entry -&gt; const this = [<span class="hljs-string">[Create</span>]](rcvr.prototype)
+
+Derive.[<span class="hljs-string">[Construct</span>]](args, rcvr)
+  entry -&gt; TDZ this
+  super(...other) -&gt; const this = super.[<span class="hljs-string">[Construct</span>]](other, rcvr)
+</code></pre>
+<p><strong>Remaining Requirements</strong></p>
+<p>Am I called as a constructor?</p>
+<p>What is the original's constructor's prototype?</p>
+<p>How do I provide alternate instance to the subclasses?</p>
+<p><strong>Am I called as a constructor?</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">F</span>(<span class="hljs-params">...other</span>) </span>{         
+  <span class="hljs-keyword">let</span> constructing = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">try</span> { <span class="hljs-keyword">this</span>; } <span class="hljs-keyword">catch</span>(_) { constructing = <span class="hljs-literal">true</span>; }         
+  <span class="hljs-keyword">super</span>(..);
+}
+</code></pre>
+<p><strong>Base instantiates proxy scenario</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Base</span>(<span class="hljs-params">...other</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(... this.prototype ...);
+}  
+</code></pre>
+<p><strong>Kill two birds with &quot;new&quot;</strong></p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Date</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> now = $$GetSystemTime();
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">new</span>*) {
+    <span class="hljs-keyword">let</span> obj = <span class="hljs-built_in">Object</span>.create(<span class="hljs-keyword">new</span>*.prototype);
+    <span class="hljs-comment">// obj@now = now; // private “now” state</span>
+    <span class="hljs-keyword">return</span> obj;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> ToTimeString(now);
+  }
+}
+</code></pre>
+<p>MM: Proposing a new special form (shown as <code>new*</code> above) whose value is the most derived otherwise undefined.</p>
+<p>The test being: reliably check if I am called as a constructor.</p>
+<p>WH: Unless the most derived receiver is falsy. Is there a way to create such a thing?</p>
+<p>AWB: Yes, you can invoke the reflection trap and specify a falsy value for the receiver.</p>
+<p>MM: Modified the above example to:</p>
+<pre><code>if (new* !== void 0) ...
+</code></pre>
+<p>AWB: We could fix this by throwing if reflection is used to invoke a constructor with undefined as the receiver.</p>
+<p><strong>Reflection and Proxies</strong></p>
+<ul>
+<li><code>Reflect.construct(F, args, rcvr)</code> (throw on undefined)</li>
+<li>construct trap: <code>construct: function(target, args, rcvr)</code></li>
+</ul>
+<p>YK: How does this work in ES5 classes?</p>
+<p>AWB:</p>
+<p>YK: Is conditional super a hazard?</p>
+<p>MM: Yeah</p>
+<p>AWB: New power, new complexity</p>
+<p>YK: Exposing something that was implicit into the main path. Calling super in a constructor conditionally?</p>
+<p>EA: Bug, can be fixed</p>
+<p>AWB: (re: Date example) Where it shows Object.create...</p>
+<p>DL/AWB: If you conditionally forgot to call <code>super()</code>,  [[Construct]] will have to check at exit and throw.</p>
+<p>YK: With @@create you had to know what you were doing. With this you could tread on weird cases without knowing it.</p>
+<p>BE: Lets park that discussion for now.</p>
+<p>DL: The sign that TypedArray is giving us is a sign of what user code might do as well so they will have the same issue.</p>
+<p>AWB: Better direction. Don't go another decade where implementations can have private slots, but user code cannot.</p>
+<p>MM: The direction I've presented is what I prefer. What I'm <em>actually</em> proposing is that we allow Allen to be the champion and work out the details remaining. Objection?</p>
+<p>None.</p>
+<p>BE: No objection, but I want to make sure Allen works with YK, JM and Boris Zbarsky</p>
+<a href="#conclusionresolution-44-instantiation-reform-review-create-design-rationale-and-possible-alternatives"><h4 id="conclusionresolution-44-instantiation-reform-review-create-design-rationale-and-possible-alternatives">Conclusion/Resolution</h4></a><ul>
+<li>Agreement to MM proposal: Allen to be the champion and work out the details remaining</li>
+</ul>
+<p>(This did not gain <em>final</em> consensus, as follow up was necessary)</p>
+<p>... On to JM objections</p>
+<p>JM: Start with a class never meant to be subclassed. Later you want to re-use aspects of this class, but need a way to hook in to the subclass <code>this</code> before <code>super()</code> class.</p>
+<p>DH: eg. an <code>initialize</code> method that just sets up properties and state</p>
+<p>AWB: If it's just state that it doesn't need to know about, it doesn't matter?
+If it's state that does need to know about, what the channel? Seems very tenuous at best</p>
+<p>JM: An example, we want to re-write some of the dom before calling the parent constructor.</p>
+<p>DL: How is dom related?</p>
+<p>WH: Are you unable to munge parameters to constructor?</p>
+<p>AWB: Consider a scenario where the DOM mutation is contained in a method of the super class that must be invoked, for side effect, with no dep on object instance state, but is an instance-side method. The way around is to access your prototype or original prototype and invoke the method on the instance</p>
+<p>Discussion of legacy scenarios and validity.</p>
+<p>AWB: More of a refactoring issue</p>
+<p>YK/JM: Agreement that we need more real world cases.</p>
+<p>MM: Need a very concrete example, showing: the code written that wasn't intended for subclassing and the newer code that's attempting to subclass.</p>
+<p>YK: There are issues created by memoization</p>
+<p>Discussion re: subclassing in general.</p>
+<p>MM: Need to do the concrete example exercise, and before the end of this meeting.</p>
+<p>AWB: The fallback is that we just keep what we have.</p>
+<p>DD: Worried about @@create, that it won't be possible to subclass because there is negative feedback</p>
+<p>MM: Break on this discussion until JM has adequate examples.</p>
+<a href="#52-simdjs"><h2 id="52-simdjs">5.2 SIMD.JS</h2></a><p>(Peter Jensen and John McCutchan)</p>
+<p><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/simd-128-tc39.pdf">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/simd-128-tc39.pdf</a></p>
+<p>Other slides: <a href="https://peterjensen.github.io/html5-simd/html5-simd.html#/">https://peterjensen.github.io/html5-simd/html5-simd.html#/</a></p>
+<p>JMC: (introducing SIMD, Single Instruction Multiple Data)</p>
+<p>Slide presentation</p>
+<p>Proposing a Fixed 128-bit vector type as close to the metal while remaining portable</p>
+<ul>
+<li>SSE</li>
+<li>Neon</li>
+<li>Efficient scalar fallback possible</li>
+</ul>
+<p>Scales with other forms of parallelism</p>
+<p>WH: Why fixed 128, given that x86 SIMD is now up to 512-bit vectors?</p>
+<p>DH: Plenty of real world use cases for this, video codecs, crypto, etc.</p>
+<p>STH: Wider widths?</p>
+<p>JMC: Yes.</p>
+<p>AWB: Works with IBM PowerPC?</p>
+<p>JMC: Yes, overlapping instruction sets.</p>
+<p>Proposing, specifically:</p>
+<ul>
+<li>SIMD module
+<ul>
+<li>New &quot;value&quot; types</li>
+<li>Composable operations
+<ul>
+<li>Arithmetic</li>
+<li>Logical</li>
+<li>Comparisons</li>
+<li>Reordering</li>
+<li>Conversions</li>
+</ul></li>
+</ul></li>
+<li>Extension to Typed Data
+<ul>
+<li>A new array type for each</li>
+</ul></li>
+</ul>
+<p>float32x4, 4 IEE-754 32-bit floating point numbers
+int32x4, 4 32-bit signed integers
+float64x2, 2 IEE-754 64-bit floating point numbers</p>
+<p>Float32x4Array, array of float32x4
+Int32x4Array, array of int32x4
+Float64x2Array, array of float64x2</p>
+<p>Object Hierarchy</p>
+<p>SIMD
+-&gt; int32x4
+-&gt; add, sub, ...
+-&gt; float32x4
+-&gt; add, sub, ...
+-&gt; float64x2
+-&gt; add, sub, ...</p>
+<p>DH: Introduce new value types, but does not depend on user created value types</p>
+<p>JMC: Examples...</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> a = SIMD.float32x4(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">3.0</span>, <span class="hljs-number">4.0</span>);
+
+<span class="hljs-keyword">var</span> b = SIMD.float32x4.zero();
+</code></pre>
+<p>MM: Why is zero() a function instead of a constant?</p>
+<p>JMC: It could be a constant.</p>
+<p>... additional examples. See Slides.</p>
+<p>STH: How much of the difference is SIMD and single precision?</p>
+<p>JMC: I don't have numbers, but would say SIMD</p>
+<p>MM: Do SIMD instructions preserve denormals or flush?</p>
+<p>JMC: ARM flush to zero. SSE you can select</p>
+<p><strong>Inner Loop</strong></p>
+<p>JMC: All high level JS can be stripped down in the JIT</p>
+<p><strong>Shuffling</strong></p>
+<p>(copy from slide)</p>
+<p>JMC: Compiles down to a single instruction</p>
+<p>WH: There are 256 of those constants defined?</p>
+<p>JMC: Yes.</p>
+<p><strong>Branching</strong></p>
+<p>(copy from slide)</p>
+<p>WH: What data type used to represent that?</p>
+<p>JMC: int32x4</p>
+<p>WH: Any kind of 4-bit data type for the mask?</p>
+<p>Q about displayed data on slide</p>
+<p>WH: Is <code>select</code> bitwise?</p>
+<p>JMC: Yes</p>
+<p>WH: Cool. It's data type agnostic and lets you slice into smaller bit slices.</p>
+<p>WH: Also, those of us who do NaN-coding will need to beware, because this can both view and manufacture arbitrary NaN's.</p>
+<p><strong>How does VM optimize for SIMD</strong></p>
+<p>(copy from slide)</p>
+<p>**Firefox implementation Status</p>
+<p>(see slide)</p>
+<p><strong>Chrome/v8 implementation status</strong></p>
+<p>(see slide)</p>
+<p>YK: is Chrome interested in these patches?</p>
+<p>JMC/PJ: They want confirmation from TC39</p>
+<p>DL: This is v8, not chrome. v8 team is fairly conservative.</p>
+<p><strong>Emscripten Implementation Status</strong></p>
+<p>(see slide)</p>
+<p>JMC: Much of these operations are used in real world platforms written in C++</p>
+<p><strong>V8 SSE Benchmarks (Early 2014)</strong></p>
+<p>(see slide)</p>
+<p>MM: How can you get faster than 4x faster with 4-way SIMD?</p>
+<p>DH: Float 32</p>
+<p><strong>SpiderMonkey SSE Benchmarks (Early 2014)</strong></p>
+<p>(see slide)</p>
+<p><strong>Dart VM NEON Benchmarks (Early 2014)</strong></p>
+<p>(see slide)</p>
+<p>MM: Why are the relative speed ups across the vms are so different?</p>
+<p>JMC: Different output from different code</p>
+<p><strong>Why Fixed Width and not Variable Width Vectors</strong></p>
+<p>(see slides, 1 &amp; 2)</p>
+<p>STH: A problem bigger than variable width vectors. If we wanted 256 bit widths, on 128 bit vector platforms, observable differences.</p>
+<p>JMC:</p>
+<p>WH: Why is intel building hardware with 128 bit vectors</p>
+<p>-- Dmitry Lomov (DL) will fill in details of discussion here.</p>
+<p>JMC: this will expose differences hardware</p>
+<p>JMC: no implicit conversions, 1 + <float32x4> will do string concatenation
+MM: why?
+JMC: too much magic
+DH &amp; JMC: overloading operators is ok, no lifitng or implict conversions</p>
+<p>WH: It's bad that you can do -<float32x4> but not 2*<float32x4> and instead have to splat the 2 into its own vector first.</p>
+<p>JMC: like asm.js, have to be clear about what types you're operating on.</p>
+<p>YK: Don't have to make the ergonomics good</p>
+<p>JMC: Don't have to, they never will be.</p>
+<p><strong>Planned Features 1</strong></p>
+<ul>
+<li><p>SIMD and value objects/types</p>
+<ul>
+<li>float32x4 and friend will be value objects</li>
+<li>overloaded operators (+, -, ..._ will be mapped to SIMD.<type>.<op> equivalents</li>
+</ul></li>
+<li><p>Additional data types (int8x16 and int16x8)</p>
+<ul>
+<li>Looking at VP9 encode/decde for justification</li>
+</ul></li>
+</ul>
+<p>AWB: The top bullet has a lot deps, but the bottom not, are these near term?</p>
+<p>JMC: Yes</p>
+<p>WH: Why not int64x2?</p>
+<p>JMC: Support is not universal</p>
+<p>MM:</p>
+<ul>
+<li>Universal across processors</li>
+<li>something that has compelling algorithm</li>
+</ul>
+<p>Unsigned integers don't fall in the second?</p>
+<p>WH: Why not unsigned integers?</p>
+<p>JMC: Not widely used</p>
+<p>WH: uint32 perhaps, but uint16 and uint8 are heavily used in graphics to represent pixel values.</p>
+<p>JMC: tried, issues encountered</p>
+<ul>
+<li>Extracting kernels and analysing the algorithms they're using and finding the instruction set overlap</li>
+<li>start with smaller scope, can expand later on. can add x8, x16 later. Surveyed internal teams</li>
+<li>128 SIMD and expand from there.</li>
+</ul>
+<p>MM: What's being saved, given the already exposed information?</p>
+<p>JMC: time, complexity, etc.</p>
+<p>AWB: How would you specify &quot;slow&quot;, &quot;fast&quot;, etc.</p>
+<p>DH: Leave it undefined. &quot;High recommended if supported, etc&quot;</p>
+<p>AWB: worried about gaming.</p>
+<p>DH: same</p>
+<p><strong>Planned Features 2</strong></p>
+<p>(see slide)</p>
+<p>DH: Risk:</p>
+<ul>
+<li>Some content is written such: if optimized, do this, if not, throw an error</li>
+<li>Browser doesn't want to be left out, will fake the optimized flag.</li>
+</ul>
+<p>YK:  The only reason to do the check is if you know you have a faster scalar implementation for systems without the SIMD feature; path of least resistance is to use polyfill and do no check at all. So maybe risk is not so great.</p>
+<p>WH: Flip side also could be an issue: Web site has code for the optimized case which is not present on common platforms, somebody changes it and doesn't test it properly, it later breaks on optimized implementations, so browsers don't want to set the optimized flag.</p>
+<p>JMC: (confirmed awareness of gaming)</p>
+<p>BE: Some won't fake for fear of the performance cliff. See WebGL precedents.</p>
+<p>Discussion re: risk, generally: some risks worth taking.</p>
+<p>WH: instead of boolean, maybe a value that indicates speed level?</p>
+<p>AWB: Application could do a mini benchmark as a test?</p>
+<p><strong>Stage 1 Ready?</strong></p>
+<p>(see slide)</p>
+<p>AWB: Sounds like it is ready for stage 1. Can it be its own independent standard?</p>
+<p>WH: It creates new primitive data types. Don't want specs outside creating new types</p>
+<p>AWB: Do you expect every runtime to implement this?</p>
+<p>JMC: Yes. They will run to implement this!</p>
+<p>BE: Some embedded systems have trouble ith regex and unicode, it's expect that there will be &quot;code commerce&quot; among distinct device classes' embedded runtimes.</p>
+<p>MM: We need a general framework for new value types</p>
+<p>AWB: Without the value types, it's fairly clear cut.</p>
+<p>MM: Preserving reference identity makes it prohibitively expensive</p>
+<p>DD: Per the ES7 model, the feature can progress without being in another spec.</p>
+<p>Discussion of the spec process.</p>
+<p>STH: Back to MM statement, what does typeof have to do with reference identity?</p>
+<ul>
+<li>Could be implemented by memoizing the identity, not that you'd implement that way</li>
+</ul>
+<p>MM: (example of using a weakmap)</p>
+<ul>
+<li>Logically, if they're a reference type, we have to admit them to WeakMaps, if they are a value type we can reject them. I hadn't considered the memozation</li>
+</ul>
+<p>AWB/DH: (clarification of coupling and timing issue)</p>
+<p>DH: Needs to be the same semantics as value types, if we ship this sooner and learn that we made a wrong call, then we have to deal with deciding whether or not we apply the mistake or break with SIMD.</p>
+<a href="#conclusionresolution-52-simdjs"><h4 id="conclusionresolution-52-simdjs">Conclusion/Resolution</h4></a><ul>
+<li>Moves to stage 1</li>
+</ul>
+<a href="#43-function-parameterlet-declaration-name-conflict-rules"><h2 id="43-function-parameterlet-declaration-name-conflict-rules">4.3 Function parameter/let declaration name conflict rules</h2></a><p>(Allen Wirfs-Brock)</p>
+<p><a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/parameter-scoping-7-14.pdf">https://github.com/rwaldron/tc39-notes/blob/master/es6/2014-07/parameter-scoping-7-14.pdf</a></p>
+<p>Current spec, Controversial:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-keyword">var</span> x;
+  <span class="hljs-keyword">let</span> x; <span class="hljs-comment">// early error    </span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-keyword">let</span> x; <span class="hljs-comment">// early error    &lt;--------</span>
+}    
+
+<span class="hljs-keyword">try</span> {
+} <span class="hljs-keyword">catch</span>(x) {
+  <span class="hljs-keyword">let</span> x; <span class="hljs-comment">// early error    &lt;--------</span>
+}
+</code></pre>
+<p>AWB: Andreas wants consistent handling</p>
+<p>DH: The mental model is that let is block-bound,</p>
+<p>DH: <code>var</code> is &quot;I assert there is a binding in this scope, but that can be re-asserted as much as I want&quot;. <code>let</code> is &quot;I have one unique declaration, I don't allow redeclaration&quot;.</p>
+<p>YK: If you say <code>var x = 42</code> half way down the function, you can use the original parameter <code>x</code> until that point. With TDZ, if you had <code>let x = 42</code> half way down, you couldn't mean anything with <code>x</code></p>
+<p>DD: (points about let and const protecting from mistakes)</p>
+<p>BE: (channeling Andreas) Worried that there will errors when you want to shadow.</p>
+<p>DH/YK: The shadowing is meaningless.</p>
+<p>MM: I was indifferent, but side with Dave's points about refactoring</p>
+<p>STH: Generating code via macros, introduces non-local restrictions that could break</p>
+<p>DH: Just have a notion of parameter bindings and block bindings, distinct from the surface syntax, and latter can't shadow former; easy workaround for code generators is to add an extra pair of <code>{ }</code>.</p>
+<p>MM: (example of user blindly changing <code>var</code> to <code>let</code>)</p>
+<p>STH: This isn't a language issue, it's a non-semantics preserving change.</p>
+<p>DL: (on behalf of Andreas)</p>
+<p>For Do-Expressions:</p>
+<pre><code class="language-js">() =&gt; {} = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">do</span> {}
+</code></pre>
+<p>DH: Doesn't hold b/c left is statement body, right is expression body, not equivalent.</p>
+<p>AWB: (revisting decisions about duplicate declarations in same contour)</p>
+<p>AWB: Need to ensure that lexical declarations are disjoint sets, there spec mechanics there.</p>
+<p>STH: Proposing</p>
+<p>RW: The refactoring hazard only exists for the one time the code is run after the change from <code>var</code> to <code>let</code> and the refactorer is shown the early error and immediately knows to fix the bug. Removing these errors is unfortunate</p>
+<p>YK: It's not clear what the program does when there is no early error.</p>
+<p>RW: What is Sam's position?</p>
+<p>STH: Why do we have these errors? What do we gain from them?</p>
+<p>RW: Arguably, JavaScript could use some degree of &quot;nannying&quot; if it has positive results.</p>
+<p>MM: No way to explain that function declaration initializes the parameter?</p>
+<p>BE: It doesn't. Andreas just wants <code>let</code> to behave like <code>var</code> re: redeclaration</p>
+<p>MM: Strict programming should be understandable in terms of lexical scope.</p>
+<ol>
+<li>Parameters and body are two scopes</li>
+</ol>
+<ul>
+<li>If explain as two scopes, can't unify.</li>
+</ul>
+<ol start="2">
+<li>One scope</li>
+</ol>
+<ul>
+<li>Has to be an early error.</li>
+</ul>
+<p>BE: Good argument, but not sure it depends on strict.</p>
+<p>MM: In sloppy mode, functions are crap as well.</p>
+<p>STH: He's just trying explain the semantics of <code>let</code>, w/r to block scope alone.</p>
+<p>MM: A <code>var-less</code> strict program should be understandable in terms of lexical scope.</p>
+<p>BE: <code>var</code> is huge turd that should be recalled into some lesser demon's bowels.</p>
+<ul>
+<li>We want the error.</li>
+</ul>
+<a href="#conclusionresolution-43-function-parameterlet-declaration-name-conflict-rules"><h4 id="conclusionresolution-43-function-parameterlet-declaration-name-conflict-rules">Conclusion/Resolution</h4></a><ul>
+<li>Status Quo</li>
+<li>DDWIDM: &quot;Don't Do What I Didn't Mean&quot;</li>
+</ul>
+<a href="#47-revisit-comprehension-decision-from-last-meeting"><h2 id="47-revisit-comprehension-decision-from-last-meeting">4.7 Revisit Comprehension decision from last meeting.</h2></a><p>(Allen Wirfs-Brock)</p>
+<p>AWB: There are a lot of TC members and non-members concerned that this was not a wise decision and that we should revisit. Included link to Andy Wingo</p>
+<p>RW: if I had been here at the last meeting I would've objected to the removal, but as I told Dave offline, I trust him and his plans for syntax unification. I just wanted to see progress in that regard.</p>
+<p>BE: I want to say: I was the champion for years, but letting go. I want to see the comprehensions laziness addressed.</p>
+<p>DH: I did this exercise, the sudoku solver in:</p>
+<ul>
+<li>pythonic</li>
+<li>linq style</li>
+<li>no comprehensions</li>
+</ul>
+<p><a href="https://github.com/dherman/sudoku">https://github.com/dherman/sudoku</a></p>
+<p>JH: I'd like to know if there are objections still, to deferral</p>
+<p>AWB: Objecting to the late removal of a complete feature.</p>
+<p>RW: Same objection, reached independantly, but again I trust Dave to see through the syntax unification.</p>
+<p>DH: First, laziness is not a problem; you just need a way to construct a lazy sequence either from an eager value (<code>array.lazy()</code>) or from whole cloth (<code>lazyRange(0, 1000)</code>).</p>
+<p>DH: Second, the fact that comprehensions only do a subset of operations you want means you end up mixing code styles (comprehensions + methods), and it gets syntactically awkward.</p>
+<p>DH: When I did the exercise with three styles, I found the generalized comprehensions nicer but no comprehensions at all nicest.</p>
+<p>BE: The affordance of generator expressions and comprehensions is that you don't have to write a call</p>
+<p>DH: (Gives walk through of solver.linq.js, solver.pythonic.js)</p>
+<ul>
+<li>The exercise shows a need for new methods of iterators, flatMap, filter, etc.</li>
+</ul>
+<p>DH: I said last time that we need an Iterator.prototype object and we agreed to defer since it probably wouldn't break code, but we forgot that hurts polyfills that want to patch the prototype with upcoming standard methods. So we should add the empty prototype object in ES6.</p>
+<p>WH: In expressions such as foo.lazy().map(...function1...).every(...function2...), what shuts down (i.e. calls the return method of) the foo.lazy() generator?</p>
+<p>DH: The call to every will shut down the generator if it reaches its decision early.</p>
+<p>DD: The minimal Iterator.prototype is empty, but available. The long term is a constructor Iterator with blessed apis.</p>
+<p>DH: Confirm</p>
+<p>BE: An actual Iterator is means Duck typing isn't the preferred way, just create a real Iterator</p>
+<p>MM: Using an actual functional style, the function names you're using are</p>
+<p>BE: The oop style prevails, desired chaining API, adapter full of goodies.</p>
+<p>Discussion of generators and observables</p>
+<p>WH: How would you represent a 2-d comprehension like (for (x of xs) for (y of ys) if (x % y) x+y)?</p>
+<p>xs.flatMap(x =&gt; ys.filter(y =&gt; x % y).map(y =&gt; x+y))</p>
+<p>WH: OK. A bit less pretty than the comprehension in this case, but acceptable.</p>
+<p>MM: after seeing this code I will never use comprehensions</p>
+<p>YK: <em>raises arms in triumphant vindication</em></p>
+<p>BE: who will own explaining to Andy Wingo and es-discuss?</p>
+<p>DH: I will</p>
+<p>BE: &quot;You keep what you kill&quot; - Richard P. Riddick</p>
+<a href="#conclusionresolution-47-revisit-comprehension-decision-from-last-meeting"><h4 id="conclusionresolution-47-revisit-comprehension-decision-from-last-meeting">Conclusion/Resolution</h4></a><ul>
+<li>Add a prototype for iterators, but do not expose a global Iterator constructor for ES6 (leave that for ES7)
+<ul>
+<li>Between Object prototype and Generator prototype</li>
+<li>Initially empty, but accessible</li>
+</ul></li>
+<li>Comprehensions in general deferred to ES7</li>
+</ul>
+<a href="#412-revisit-spread-and-destructuring-of-string"><h2 id="412-revisit-spread-and-destructuring-of-string">4.12 Revisit spread and destructuring of string</h2></a><p>(Erik Arvidsson , Brendan Eich)</p>
+<p>EA: We're using ToObject in spread and all other iterable forms. Should we do the same for destructuring?</p>
+<ul>
+<li>This would allow destructuring strings and other non-objects.</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-comment">// Should allow: </span>
+<span class="hljs-keyword">let</span> [first, ...rest] = <span class="hljs-string">"foo"</span>;
+first; <span class="hljs-comment">// "f"</span>
+rest;  <span class="hljs-comment">// ["o", "o"]</span>
+</code></pre>
+<p>STH: ToObject breaks pattern matching because you couldn't match on a number.</p>
+<p>YK: But we agreed to a future irrefutible matching, which would be the basis of pattern matching.</p>
+<p>DH: Array vs. Object cannot have the same semantics here in what we want from pattern matching</p>
+<ul>
+<li>if I used an array</li>
+</ul>
+<p>EA: Uses iterator</p>
+<p>DH: Not even self-evident that pattern matching syntax will work in JS</p>
+<p>YK: (to Sam) Do you think it will it should fail for strings to destructure?</p>
+<p>More discussion of pattern matching.</p>
+<p>DH, BE: match must mean a different pattern language, ships have sailed for destructuring and implicit ToObject</p>
+<a href="#conclusionresolution-412-revisit-spread-and-destructuring-of-string"><h4 id="conclusionresolution-412-revisit-spread-and-destructuring-of-string">Conclusion/Resolution</h4></a><ul>
+<li>Destructuring does ToObject</li>
+</ul>
+<a href="#45-import-into-namespace-syntax-dave"><h2 id="45-import-into-namespace-syntax-dave">4.5 Import-into-namespace syntax (Dave)</h2></a><p>(Dave Herman)</p>
+<p>request slides</p>
+<p>DH: (recapping the last meeting and the findings of the breakout group; and the fall out)</p>
+<p>DH:</p>
+<p><strong>Resolution</strong></p>
+<ul>
+<li>Changed syntax for clarity</li>
+</ul>
+<p>(need slides)</p>
+<p><strong>Module Context 1</strong></p>
+<ul>
+<li><p>Existing systems provide contextual metadata:</p>
+<ul>
+<li>module.id</li>
+<li>__filename</li>
+<li>__dirname</li>
+</ul></li>
+<li><p>What is the dynamic analog of relative import?</p></li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> helper <span class="hljs-keyword">from</span> <span class="hljs-string">"./helper"</span>;
+</code></pre>
+<p><strong>Module Context 2</strong></p>
+<ul>
+<li>no implicit namespace pollution, plz</li>
+<li>JS has a dedicated contextual variable: <code>this</code></li>
+<li>Solution: inital <code>this</code> binding is a context object</li>
+</ul>
+<p>DD: How is this different from adding global variables, eg. <code>Reflect</code></p>
+<p>STH: The difference is that the value depends on where it is; unlike <code>Reflect</code>, which is the same thing.</p>
+<p>DH: We should use <code>this</code> in top level of a module</p>
+<p>AWB: what does that mean? <code>this</code> at the top level of a module?</p>
+<p>DH:</p>
+<p><strong>Module Context 2</strong></p>
+<ul>
+<li>Relative import:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">this</span>.import(<span class="hljs-string">"./helper"</span>).then(...);
+</code></pre>
+<ul>
+<li>Space for host-specific contextual metadata:</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">this</span>.filename
+</code></pre>
+<p>(This is where platforms can put its host properties and objects)</p>
+<ul>
+<li>Cross-talk about <code>eval</code></li>
+<li><code>Reflect.global</code></li>
+</ul>
+<p>BT: indirect eval?</p>
+<p>DH: Will give you the global object</p>
+<p>DD: object to relying on <code>this</code> outside of a method</p>
+<p>RW: Workers already to the above</p>
+<p>MM: We can't even poison <code>this</code> for ES6</p>
+<p>YK: if you says it's module context, you have to say how it got that value</p>
+<p>DH: No new scoping rules. This construct just implicitly binds something.</p>
+<p>AWB:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> filename <span class="hljs-keyword">from</span> <span class="hljs-keyword">this</span>;
+<span class="hljs-comment">// which basically: import filename from here;</span>
+</code></pre>
+<p>DD: Like this for relative</p>
+<p>DH: Completely amenable to this</p>
+<p>YK:</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> me <span class="hljs-keyword">from</span> here;
+me.import; <span class="hljs-comment">// `me` is the context object</span>
+</code></pre>
+<a href="#conclusionresolution-45-import-into-namespace-syntax-dave"><h4 id="conclusionresolution-45-import-into-namespace-syntax-dave">Conclusion/Resolution</h4></a><ul>
+<li>the api is right direction</li>
+<li>each module gets its own version of that object</li>
+<li>need some sort of access to the module contextual object</li>
+<li>some sort of declarative form to get at</li>
+<li>static contextual information about the module</li>
+</ul>
+<p>&quot;Then, during the Third Reconciliation of the Last of the Meketrex Supplicants, they chose a new form for him, that of a giant Sloar! Many Shubs and Zulls knew what it was to be roasted in the depths of a Sloar that day, I can tell you!&quot;
+―Vinz Clortho[src]</p>
+
+</body>

@@ -1,0 +1,546 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+
+<title>May 25, 2017 Meeting Notes</title>
+<body class="markdown-body">
+<a href="#may-25-2017-meeting-notes"><h1 id="may-25-2017-meeting-notes">May 25, 2017 Meeting Notes</h1></a><hr>
+<p>Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Jeff Morrison (JM), James Snell (JSL), Keith Miller (KM), Myles Borins (MBS), Rick Waldron (RW), Mariko Kosaka (MKA), Stephen Murphy (SMY), Rob Palmer (RPR), Andrew Paprocki (API), Philippa Gardner (PGR), Sam Goto (SGO), Mark S. Miller (MM), Nathan Hammond (NHD), Masud Rahman (MRN), Henry Zhu (HZU), Sebastian Markbåge (SM), Joe Mordetsky (JMY), Franziska Hinkelmann (FHN), Caridy Patiño (CP), Myles Borins (MBS), Ron Buckton (RBN), Ashley Williams (AWS), Domenic Denicola (DD), Patrick Soquet (PST), Peter Hoddie (PHE), Leo Balter (LBR), Ben Newman (BN), Jafar Husain (JH), Yehuda Katz (YK), Sarah D'Onofrio (SDO), Kirill Cherkoshin (KCN), Andres Suarez (ASZ), Diego Ferreiro Val (DFV), Tzvetan Mikov (TMV), Brendan Eich (BE), István Sebestyén (IS)</p>
+<hr>
+<a href="#7-approval-of-the-minutes-from-last-meeting"><h2 id="7-approval-of-the-minutes-from-last-meeting">7. Approval of the minutes from last meeting</h2></a><p>(unanimous consensus)</p>
+<a href="#8-report-from-the-ecma-secretariat"><h2 id="8-report-from-the-ecma-secretariat">8. Report from the Ecma Secretariat</h2></a><p>IS: The minutes have two parts. One part is the &quot;list of metadata&quot; about the meeting. The second part is the technical notes.</p>
+<p>IS: First time somebody asked for the complete minutes of those meetings. Intended to inform the people who are not involved in TC39 what is happening in TC39.</p>
+<p>IS: There were questions around the process of the opt out for the latest ECMASCript standards.</p>
+<p>IS: This is interesting as I always thought that for programming languages (and not e.g. about their compilers) it is hard to get patents therefore a &quot;royalty-free opt out&quot; that would be something that is new for this committee.</p>
+<p>IS: As expected, we have received no comments during the opt-out period that we have started on February 14 and ended on April 14, and therefore we have approved the specification from the TC39 point of view. You may remember that at the March meeting the TC39 approval of ECMA-262 and ECMA-402 new editions were conditional based on the positive outcome of the &quot;opt-out&quot; for both standards.</p>
+<p>IS: The standards have published internally on the Ecma internal website,  and as ususal the New standard version will be available for public download immediately after Ecma GA approval, latest on June 28th. Congratulations on the excellent work you have done.</p>
+<a href="#administrative-items"><h3 id="administrative-items">Administrative Items</h3></a><p>IS:  Just to remind. Anybody can add them via the reflector, at any time. We agreed to this a few meetings ago, in order not to steal time from the meetings</p>
+<a href="#public-relations"><h3 id="public-relations">Public Relations</h3></a><p>IS: Allens remark about 20 years of ECMAScript approval in Ecma is well-taken.  This is always a good opportunity for PR.  You may wish to organize some conference/press conference given the opportunities presented by the size of the community. (Presented as an idea.)</p>
+<p>IS: Would like to bring attention to the work that this committee is doing, and the community built around the language and specification.</p>
+<a href="#tc39-leadership-status"><h3 id="tc39-leadership-status">TC39 Leadership Status.</h3></a><p>IS: Don't have a chairman for TC39 and are looking for a replacement. AWB has been acting chair.</p>
+<p>IS: Chairman is often involved in other technical committees.</p>
+<p>IS: Roles are distributed across membership.</p>
+<p>IS: Ordinary members have first priority to take leadership roles, if they wanted to. So far they haven't expressed interest in taking a  leadership role in TC39.</p>
+<p>IS: Therefore now other members of Ecma (better TC39) may step forward and volunteer themselves, including non-profit members. Anybody who is an Ecma member in good standing can offer themselves.</p>
+<p>IS: However, to lead such a big and intensive group like TC39 is a challanging job. So experience is required. Direct recruitment of people is the next step - if we can not find a good leadership among ourselves, I recommended Rex Jaeschke as an excellent candidate for that (details about Rex has publishedon Github), but this decision is entirely up to the committee (see <a href="https://github.com/tc39/Reflector/issues/71">https://github.com/tc39/Reflector/issues/71</a> )</p>
+<p>IS: Rex has been working with Ecma for 10+ years and is very experienced with standards committee work. Knows Ecma very well and has been working with several technical committees already. Very familiar with programming languages in general. Participating in TC49 (C#). Main position that he has held is that he has been chairing JTC1 SC22 (including C++). This is the place where we are fast-tracking also the TC39 standards. He was there recently when we discussed with ISO the fast-track of ECMA-414.</p>
+<p>IS: ISO allows you only to be a chairman for 9 years. He has been the chairman of SC22 for 8 years, therefore he has availability forthcoming. He knows a lot of people on this committee very well and has worked with people in this committee previously.</p>
+<p>IS: He also offered to provide some background information on himself, available on the Reflector.</p>
+<p>IS: Could invite him informally to the July meeting for continuing relationship development.</p>
+<p>IS: Re-emphasizes that this proposal is at the discretion of the committee.</p>
+<p>IS: Size of TC39 is growing, therefore we need to do more planning in advance of the meetings.</p>
+<a href="#organization-of-the-tc"><h3 id="organization-of-the-tc">Organization of the TC</h3></a><p>IS: When we get &gt; 50 people we will need to deal with hosting and organizing meetings in an different way</p>
+<p>IS: No consensus around different models of working with subgroups or a combined plenary session.</p>
+<p>DE: Leo expressed interest in being chairman?</p>
+<p>LBR: Searching for somebody who would not be taking sides as a person who would act as a chair. Believe that it is good to have a conversation with Rex and let TC39 consider that as an option. I volunteered myself for something I don't have a lot of experience with. Rex has a lot of experience which we could use to be able to learn from. I would love be part of a vice chair group (although not official by ECMA)</p>
+<p>LBR: There may be additional people who have interest.</p>
+<p>DD: What exactly is the role of a vice-chair, and a &quot;vice-chair group&quot;?</p>
+<p>YK: Single person who has the sole responsibility for setting the direction of the conversation. Better received if there is a working group.</p>
+<p>LBR: The vision that I have is: Support the chair in all of their functions. There are a lot of things during the meeting. Supporting the hosts in the process of setting up the meetings. Supporting the process of followup after the meetings, sending the notes... Having a group of people to support these goals is valuable.</p>
+<p>DD: Confirming: Vice chairs would not be setting direction of conversation in the meeting? But would instead be helping with administrative efforts?</p>
+<p>LBR: Confirm.</p>
+<p>AWB: There is a lot of stuff that a chair does that committee does not know: Primary layer between committee and ECMA. Months and months dealing with patents, documentation... Takes real time to interact with ECMA. Also helping the committee structure and organize technical work.</p>
+<p>AWB: This also works to develop future leadership of the committee. A vice-chair could step forward to run a meeting in the event that the chairman is unable to be present.</p>
+<p>IS: Its is very much how you define it. How we organize it is depends on Chairman, its very free.</p>
+<p>DD: What I found clarifying that . The primary thing that person will own is not just the operating of the meeting, but there is also additional unseen work. The conversation that we need to have in this room is focused on determining the flow of meetings.</p>
+<p>DE: I can help with the administrative stuff, but too involved technically. It would be desirable that the person running the meeting has a  internal understanding and technical expertise to weight on the decision in an unbiased way.</p>
+<p>LBR: I am tempted to not sign up for too much (&quot;overloaded&quot;) and I want to be able to take sides. I am open to try and experience with Rex here.</p>
+<p>LBR: To follow our vision goals, we should the use language Chairperson or just Chair instead of Chairman.</p>
+<p>AWB: We will call it Chair going forward. Rex can be very helpful trying to figure out the structure. The recommendation is to try to get Rex to do this, but waiting until is here to come up to speed so he can help with advice and the administrative stuff. Give him a chance to show his expertise.</p>
+<p>WH: Rex should be involved in this discussion, bidirectionally so those of us who don't know him get to meet him as well.</p>
+<p>AK: We should all have an opportunity to have a conversation with Rex.</p>
+<p>WH: How would the finances work?</p>
+<p>IS: We would have to pay to bring him in as a consultant for the first little bit. Ecma has to champion finding a chair in the event that it is not handled internally.</p>
+<p><em>Discussion about ECMA finances</em></p>
+<p>LBR: Is there any alternative?</p>
+<p>WH: Let's not worry about that for now.</p>
+<p>AK: Would be happy to have Rex come have the conversation.</p>
+<p>SDO: SHould specify what the roles are more concretely so that we know who these people are.</p>
+<p>AWB: None of us are here because we want to be bureaucrats.</p>
+<p>AK: Vice-chair is an important for growing skills. (assent from LB, AWB)</p>
+<p>DE: Who is going to run the next meeting?</p>
+<p>AWB: I could chair one last meeting, but come away with a new chair at that meeting.</p>
+<p>DD: Doesn't like the idea of temporary chair?</p>
+<p>FHN: Having an acting chair of Leo next meeting, with AWB as backup?</p>
+<p>YK: Expressing concerns about Rex is being presented as a top-tier candidate with no familiarity to the members of the group.</p>
+<p>BT: Had concerns, but everything I've had in terms of interactions or questions about working with Rex was very positive. He seems like a very good candidate. Likes non-paged standards, which BT loves. Seems to wish to evolve the standards process itself. Standards resume is something like 30 groups deep. Would be valuable to have somebody with that degree of expertise.</p>
+<p>YK: My only concern is that the details in how we work in this committee requires a lot of history and past knowledge.</p>
+<p>MM: We should make sure that he is enough informed to make sure that it is something that he is interested in.</p>
+<p>BT: Has the necessary qualifications, but we can't make a decision sight-unseen, and he can't make the same about us.</p>
+<p>Invite Rex to the next meeting.</p>
+<p>General assent to Leo running the next meeting.</p>
+<p>LBR: I'm willing to try.</p>
+<p>AWB: I may not show, it would be valuable to have it, but he'll play it by ear.</p>
+<p>LBR: Will need to define and document the role.</p>
+<a href="#conclusionresolution-8-report-from-the-ecma-secretariat"><h4 id="conclusionresolution-8-report-from-the-ecma-secretariat">Conclusion/Resolution</h4></a><ul>
+<li>Leo will be acting chair for next meeting.</li>
+<li>We will invite Rex to the next meeting.</li>
+<li>Ecma will cover the respective expenses for Rex</li>
+</ul>
+<a href="#18i-code-of-conduct-follow-up"><h2 id="18i-code-of-conduct-follow-up">18i. Code of Conduct follow-up.</h2></a><p><a href="https://github.com/tc39/code-of-conduct-proposal/issues/25">https://github.com/tc39/code-of-conduct-proposal/issues/25</a></p>
+<p>(István)</p>
+<p>IS: Executive committee's reaction to the proposal was immediately positive and received broad support.</p>
+<p>IS: Should this be all of Ecma or just TC39? Decision was to test it on TC39 and then possibly consider expansion to all of Ecma based upon the experience that we have here.</p>
+<p>IS: Ecma General Assembly may eventually take it over as an Ecma-wide process (in the long run...).</p>
+<p>IS: Ecma wanted to participate in the discussion about the final text. Have produced a new version and fed that in as comments here: <a href="https://github.com/tc39/code-of-conduct-proposal/issues/25">https://github.com/tc39/code-of-conduct-proposal/issues/25</a>.</p>
+<p>IS: Somehow this policy should be linked into the Ecma policies. Allowed to introduce these things as riders via the Ecma bylaws (possibly paragraph five?)</p>
+<p>IS: Some of the execution points that you have created were too detailed in terms of management function which conflicts with the style of the Ecma bylaws and policies. Intentionally simple so that we don't have to micromanage the groups. Give more flexibility to the implementers.</p>
+<p>IS: The changes the General Assembly has made, is linked in the current proposal. Is up to the committee to review them and start a conversation if there are disagreements. If agreement is meet before the July meeting it can be approved by TC39 in the JUly meeting and publish and implements it.</p>
+<p>IS: By the way, for formal TC39 approval we need to publish the final version 15 days before the TC39 meeting. And this can become after approval the &quot;experimental code of conduct policy for TC39&quot;.</p>
+<p>BT: I really appreciate Isabelle Harper's help getting this through the executive committee.</p>
+<p>WH: We can't do this without blessing of the executive committee. They are the ones responsible for modifying ECMA's rules.</p>
+<p>YK: Physical danger has been removed which is odd, and should be revisited. By definition, CoCs are trying to provide more protections than the protections of law enforcement.</p>
+<p>LBR:  Code of conduct doesn't prevent anybody to seek for legal authority.</p>
+<p>IS: Need to build consensus between us and the executive committee.</p>
+<p>IS: Shouldn't have one-sided discussion</p>
+<p>Need to ensure that we have a consensus on this side prior to the conversation with Isabelle.</p>
+<p>AWS: Need to have consensus to progress the conversation further</p>
+<p>MBS: Would it make sense to have an open group internally with internal stakeholders as a representative of this groups.</p>
+<p>BT: We should do it weekly until we have a document ready. Coordinate it via the reflector.</p>
+<a href="#conclusionresolution-18i-code-of-conduct-follow-up"><h4 id="conclusionresolution-18i-code-of-conduct-follow-up">Conclusion/Resolution</h4></a><ul>
+<li>Start an issue on the reflector for building a working group internally.</li>
+<li>That group will work with Ecma to ensure that we're all on the same page.</li>
+</ul>
+<a href="#11-ecma404-json-iso-fast-track-reviewapprove-disposition-of-comments-responses-and-404-2nd-edition-draft"><h2 id="11-ecma404-json-iso-fast-track-reviewapprove-disposition-of-comments-responses-and-404-2nd-edition-draft">11. ECMA404 (JSON) ISO fast-track. Review/approve disposition of comments responses and 404 2nd edition draft.</h2></a><p>Documents TC39-2017-016, TC39-2017-017 (pdfs of documents available in Reflector repository).</p>
+<p>AWB: Questions on the fast track of Ecma404 (JSON specification).</p>
+<p>AWB: Seeking consent that we don't want to review everything that comes out of Ecma 404.</p>
+<p>AWB: Japan editor has asked for some changes (mostly editorial) that the committee has to revise before final approval.</p>
+<p>MM: Retitling from &quot;format&quot; to &quot;syntax&quot;. Historically we have had a lot of trouble explaining what JSON is not, i.e., that it is just a syntax with no standard meaning. Changing the title to &quot;syntax&quot; should help reduce such misunderstandings.</p>
+<p>AWB: Changes are for clarifications and make things more explicit.</p>
+<p>AWB: Has no objections to approving it sight unseen if we have consensus.</p>
+<p>YK: No particular concern if there aren't user-facing changes. Happy to delegate to people who care.</p>
+<a href="#conclusionresolution-11-ecma404-json-iso-fast-track-reviewapprove-disposition-of-comments-responses-and-404-2nd-edition-draft"><h4 id="conclusionresolution-11-ecma404-json-iso-fast-track-reviewapprove-disposition-of-comments-responses-and-404-2nd-edition-draft">Conclusion/Resolution</h4></a><ul>
+<li>Editor to make changes/updates as necessary</li>
+</ul>
+<a href="#17ii-web-compatibility-issues--needs-consensus-prs"><h2 id="17ii-web-compatibility-issues--needs-consensus-prs">17.ii Web compatibility issues / Needs-consensus PRs</h2></a><p>(Brian Terlson)</p>
+<ul>
+<li><a href="https://github.com/tc39/ecma262/pulls?q=is%3Aopen+is%3Apr+label%3A%22needs+consensus%22">https://github.com/tc39/ecma262/pulls?q=is%3Aopen+is%3Apr+label%3A%22needs+consensus%22</a></li>
+<li><a href="https://github.com/tc39/ecma262/issues?q=is%3Aopen+is%3Aissue+label%3A%22needs+consensus%22">https://github.com/tc39/ecma262/issues?q=is%3Aopen+is%3Aissue+label%3A%22needs+consensus%22</a></li>
+</ul>
+<a href="#prohibit-async-methods-named-function-884"><h2 id="prohibit-async-methods-named-function-884">Prohibit async methods named 'function' #884</h2></a><ul>
+<li><a href="https://github.com/tc39/ecma262/pull/884">https://github.com/tc39/ecma262/pull/884</a></li>
+<li><a href="https://github.com/tc39/ecma262/issues/832">https://github.com/tc39/ecma262/issues/832</a></li>
+</ul>
+<p>Why are restricting on two tokens?</p>
+<p>YK: Would prohibit creating an async method called &quot;function&quot;?</p>
+<p>BT: Correct</p>
+<p>AWB: Unless quoted, this is allowed.</p>
+<p>YK: increasingly its ok to use keywords, and this is an inconsistency.</p>
+<p>MM: is two token lookahead concretely a problem for implementors?</p>
+<p>KG:  Seems ok since its already very complicated.</p>
+<p>KM: non-issue</p>
+<p>WH: Can get us unintentionally stuck in a corner, where we can't extend language in the future</p>
+<p>MM: Acknowledging Waldemar , in the sense of implementation concern, YK points is valid: We should be careful with the inconsistencies for keywords.</p>
+<p>DE: Can I withdraw this patch?</p>
+<p>BT: If we don't get consensus for it, or against it, it will sit forever.</p>
+<p>WH: I have not have time to consider the implications of this.</p>
+<p>MM: Implementors should take a look and raise concerns when needed.</p>
+<a href="#conclusionresolution-prohibit-async-methods-named-function-884"><h4 id="conclusionresolution-prohibit-async-methods-named-function-884">Conclusion/Resolution</h4></a><ul>
+<li>Waldemar to further consider</li>
+<li>Implementors will review</li>
+</ul>
+<p>WH: (a few minutes later) Having looked at the implications of this in more detail, I'm fine with rejecting the issue with no action.</p>
+<a href="#normative-specify-regexp-malformed-character-class-behavior-864"><h2 id="normative-specify-regexp-malformed-character-class-behavior-864">Normative: Specify RegExp malformed character class behavior #864</h2></a><ul>
+<li><a href="https://github.com/tc39/ecma262/pull/864">https://github.com/tc39/ecma262/pull/864</a></li>
+<li><a href="https://github.com/tc39/ecma262/issues/863">https://github.com/tc39/ecma262/issues/863</a></li>
+</ul>
+<p>BT: Chackra teams agree with the conclusions for changing the behaviour for regexp.</p>
+<p>DE: Andre specified several previously missing &quot;\c&quot; cases</p>
+<p>YK: Whats the problem with the characters? Why Annex B?</p>
+<p>DE: All the surrounding parts are Annex B</p>
+<a href="#conclusionresolution-normative-specify-regexp-malformed-character-class-behavior-864"><h4 id="conclusionresolution-normative-specify-regexp-malformed-character-class-behavior-864">Conclusion/Resolution</h4></a><ul>
+<li>Accept PR</li>
+</ul>
+<a href="#relax-defineownproperty-on-module-namespace-exotic-objects-858"><h2 id="relax-defineownproperty-on-module-namespace-exotic-objects-858">Relax [[DefineOwnProperty]] on module namespace exotic objects. #858</h2></a><ul>
+<li><a href="https://github.com/tc39/ecma262/pull/858">https://github.com/tc39/ecma262/pull/858</a></li>
+</ul>
+<p>AWB: No way a define property could be use to exactly define a module export in the namespace object.</p>
+<p>DH: why diverge on cases that match module invariants? no.</p>
+<p>DD: Any objection?</p>
+<p>DH: verify not the case that you can observably change an exported NaN via DefineOwnProperty (from the outside)</p>
+<p>DD: You can see the mutations from outside.</p>
+<p>AK: Spec doesn't let you change</p>
+<p>DH: Just verifying.</p>
+<p>YK: Writeable property that you can't write to? Seems weird.</p>
+<p>MM: if thing you're exporting is const, does the property descriptor &quot;non writable&quot;?</p>
+<p>AK: No, all descriptors marked as writable</p>
+<p>DH: Without knowing the details we should not think that ES5 refection mechanism can describe all aspects we encounter.</p>
+<p>AK: Shouldn't be able to tell how someone declared a binding in their module</p>
+<p>MM: should be able to communicate that a value is stable. this is the descriptor &quot;contract&quot; guarantee</p>
+<p>Is the module namespace object non-extensible?</p>
+<p>Yes.</p>
+<p>YK: There is a a new property that we define as writable that is not writable.</p>
+<p>AWB: Not new.</p>
+<p>AK: Since... Proxys!</p>
+<p>YK: If you define object.define property with writable true, and you can't write on it...??</p>
+<p>MM: Non-writeable provides guarantee. Writable provides no guarantee.</p>
+<p>LBR: We need to provide tests before merging. Okay to mark as consensus.</p>
+<a href="#conclusionresolution-relax-defineownproperty-on-module-namespace-exotic-objects-858"><h4 id="conclusionresolution-relax-defineownproperty-on-module-namespace-exotic-objects-858">Conclusion/Resolution</h4></a><ul>
+<li>Accept PR</li>
+</ul>
+<a href="#normative-define-particular-precision-for-tofixed-and-friends-857"><h2 id="normative-define-particular-precision-for-tofixed-and-friends-857">Normative: Define particular precision for toFixed and friends #857</h2></a><ul>
+<li><a href="https://github.com/tc39/ecma262/pull/857">https://github.com/tc39/ecma262/pull/857</a></li>
+</ul>
+<p>BT/WH/DE:</p>
+<p>Discussion re: precision for toFixed and others</p>
+<p>BT: Why do the higher limit?</p>
+<p>WH: This lets you print exact values of doubles. I implemented this in SpiderMonkey and have found it very useful to educate people on how doubles work.</p>
+<p>?: The negative limit makes no sense</p>
+<p>DD: It's well-defined.</p>
+<p>WH: Yes. It rounds to multiples of positive powers of 10 instead of negative powers of 10. It's only sensible for toFixed, which is why toExponential doesn't support it. But I'm fine with negative numbers going away.</p>
+<p>DE:</p>
+<p>BT: We presently support 0 to 21. This is just changing the requirements to the range 0 - 100.</p>
+<p>DE: Yes</p>
+<p>YK: What do admins do if you put a number outside of the range? (after the patch)</p>
+<p>RW: RangeError</p>
+<p>BT: Can also change it to <em>not</em> throw for negative to</p>
+<a href="#conclusionresolution-normative-define-particular-precision-for-tofixed-and-friends-857"><h4 id="conclusionresolution-normative-define-particular-precision-for-tofixed-and-friends-857">Conclusion/Resolution</h4></a><ul>
+<li>Accept PR</li>
+</ul>
+<a href="#normative-dateprototypetostring-throws-on-non-date-receiver-850"><h2 id="normative-dateprototypetostring-throws-on-non-date-receiver-850">Normative: Date.prototype.toString throws on non-Date receiver #850</h2></a><ul>
+<li><a href="https://github.com/tc39/ecma262/pull/850">https://github.com/tc39/ecma262/pull/850</a></li>
+</ul>
+<p>KM: The error is also thrown by typed arrays.</p>
+<p>MM: We should be consistent across all of the occasions to not throw, or this is fine.</p>
+<a href="#conclusionresolution-normative-dateprototypetostring-throws-on-non-date-receiver-850"><h4 id="conclusionresolution-normative-dateprototypetostring-throws-on-non-date-receiver-850">Conclusion/Resolution</h4></a><ul>
+<li>Accept PR</li>
+</ul>
+<a href="#15ia-regexp-legacy-features-for-stage-3"><h2 id="15ia-regexp-legacy-features-for-stage-3">15.i.a RegExp Legacy Features for Stage 3</h2></a><p>(Mark S. Miller, by Claude Pache)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-legacy-features">https://github.com/tc39/proposal-regexp-legacy-features</a></li>
+</ul>
+<p>MM: WH &amp; DE objected to exempting subclasses from legacy features</p>
+<p>DE, WH: Exempting subclasses doesn't serve positive purpose and is very confusing.</p>
+<p>MM: Withdrawing restriction exemption for subclasses, keeping restriction exemption for realms</p>
+<p>AWS: How is it identified by realm?</p>
+<p>DD: New slot for realm, specifically for regexp</p>
+<p>AWS: Legacy properties are on subclass constructor?</p>
+<p>MM: No, they're only on the RegExp constructor.</p>
+<p>MM: Explains how prohibition across realms works</p>
+<p>WH: Another issue: for polyfilling, want to run regexp without polluting static properties. Possible future flag added to regexp to suppress legacy feature. In jest, I suggested &quot;s&quot; flag.</p>
+<a href="#conclusionresolution-15ia-regexp-legacy-features-for-stage-3"><h4 id="conclusionresolution-15ia-regexp-legacy-features-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3</li>
+</ul>
+<a href="#15iif-importmeta-for-stage-2"><h2 id="15iif-importmeta-for-stage-2">15.ii.f import.meta for stage 2</h2></a><p>(Domenic Denicola)</p>
+<ul>
+<li><a href="https://domenic.github.io/proposal-import-meta/">https://domenic.github.io/proposal-import-meta/</a> , following up from Tuesday's discussion which suggested this direction.</li>
+</ul>
+<p>DD: Ready for stage 2; let me give an overview of the spec:</p>
+<ul>
+<li><code>import.meta</code> is a &quot;meta property&quot;</li>
+<li>architecture:</li>
+<li>at eval, create null proto object</li>
+<li>ask host for list of property keys and values</li>
+<li>define them on the object</li>
+<li>escape hatch:</li>
+<li><a href="https://domenic.github.io/proposal-import-meta/#sec-hostfinalizeimportmeta">https://domenic.github.io/proposal-import-meta/#sec-hostfinalizeimportmeta</a></li>
+</ul>
+<p>AWB: why not a map?</p>
+<p>KG: Always use maps</p>
+<p>DH: using a map will be too unergonomic</p>
+<p>DD: using a map makes calling methods terrible</p>
+<p>DD: Bradley Farias noted that using a null proto object discourages code from modifying the object prototype of module object</p>
+<p>AK: Nice for consistency with namespace objects</p>
+<p>AWB: ns objects are special case</p>
+<p>Discussing polyfill story</p>
+<p>BN: In node there is a Module constructor with a prototype, which is shared by all the <code>module</code> objects. In practice, it's a convenient place to put shared operations. <code>import.meta</code> could have a common prototype? Or not, and the host environment could choose to call <code>Object.setPrototypeOf(...)</code>?</p>
+<p>YK: No longer worried about not sealing the objects because they're not shared.</p>
+<p>MM: this object is the &quot;system object&quot;. When discussions arise about what goes on the system object, this will be the place to put them.</p>
+<p>DD: No, because this object is for hosts only.</p>
+<p>MM: I just don't want Domenic to be blind sided</p>
+<a href="#conclusionresolution-15iif-importmeta-for-stage-2"><h4 id="conclusionresolution-15iif-importmeta-for-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2</li>
+<li>Reviewers</li>
+<li>Adam Klein</li>
+<li>Dave Herman</li>
+<li>Yehuda Katz</li>
+</ul>
+<a href="#15iiib-updates-on-class-field-proposals-both-public-and-private"><h2 id="15iiib-updates-on-class-field-proposals-both-public-and-private">15.iii.b Updates on class-field proposals (both public and private).</h2></a><p>(Jeff Morrison)</p>
+<ul>
+<li><sub>https://littledan.github.io/proposal-class-fields/</sub> <a href="https://tc39.github.io/proposal-class-fields/">https://tc39.github.io/proposal-class-fields/</a></li>
+<li>slides: <a href="https://drive.google.com/file/d/0B-TAClBGyqSxWHpyYmg2UnRHc28/view">https://drive.google.com/file/d/0B-TAClBGyqSxWHpyYmg2UnRHc28/view</a></li>
+</ul>
+<p>JM: integrating public and private into one proposal to avoid proposals racing</p>
+<p>JM: Address orthogonal class proposal</p>
+<ul>
+<li><a href="https://github.com/erights/Orthogonal-Classes">https://github.com/erights/Orthogonal-Classes</a></li>
+</ul>
+<p>(working through Orthogonal Class Conventions slide)</p>
+<p>CP: q about &quot;own&quot; keyword</p>
+<p>JM: without keyword indicates prototype, with keyword indicates non-prototype</p>
+<p>(discussion re [[Set]] vs [[Define]])</p>
+<p>YK: Ok with [[Define]] as long was we work on mitigations</p>
+<p>(Working through rules and solution for future additions)</p>
+<ol>
+<li><p>Create new keyword for &quot;proto&quot; members, require this keyword for any future proto fields proposal and make it optional for methods.</p></li>
+<li><p>Include 2 categories in the framework design: &quot;fields&quot; and &quot;methods&quot;. Within each category, say that the common-case form uses the no-keyword syntax, all ... (slide changed)</p></li>
+</ol>
+<p>JM: want to choose one of the above this meeting to fix the orthogonality issue before we can proceed.</p>
+<p>WH: In favor of 2</p>
+<p>WH: What is the syntax for const fields?</p>
+<p>JM: const fields, depending on what the mean...</p>
+<p>WH: For the sake of discussion, let's say that they are initialized once, can be own or static</p>
+<p>JM: would not be one of these mutually exclusive categories</p>
+<p>RBN: no issue in TS, use &quot;readonly&quot; with accessibility modifier</p>
+<p>KG: No <code>own</code> or <code>proto</code> keyword</p>
+<p>RBN: No</p>
+<p>JM: modifiers in languages that allow varying order are problematic, can be addressed with grammar</p>
+<p>WH: In C++ you can write <code>static const</code> but not <code>const static</code>.</p>
+<p>JM: concern that <code>own</code> keyword, interaction with decorator:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
+   @deprecated own foo = <span class="hljs-number">42</span>;   
+}
+</code></pre>
+<ul>
+<li><code>@deprecated</code> may choose to not to store <code>foo</code> as an own property</li>
+<li>Syntax is now misleading: The user has intended to make an <code>own</code> field, but the decorator will violate that intention.</li>
+</ul>
+<p>JM: The issue is the case where an own property gets turned into a getter/setter</p>
+<p>JM: Possible solution:</p>
+<ul>
+<li>Permit fields with a decorator to omit keyword if and only if the decorator makes a concrete determination of own/static/proto in the descriptor it eventually returns.</li>
+</ul>
+<p>WH: (question about interaction with the two framework solutions shown earlier)</p>
+<p>RW: Need to review those two options in the context of this solution</p>
+<p>JM: applies in either case (still needs to work out specifics with YK, re: decorators)</p>
+<p>YK: normal usage of property doesn't change: <code>x.y</code> is still the same whether own property or getter/setter, changing to static makes a difference</p>
+<p>DH: evidence that we need a keyword for instance properties is weak, considering TS ships without keyword. A growing decision tree, accumulating</p>
+<p>WH: need to address decisions in order</p>
+<p>JM: hoping to find objective ways to find a solution, vs subjective &quot;good&quot; or &quot;bad&quot; discussion</p>
+<p>DH: (some objection to the design process that I didn't fully catch before the next person spoke)</p>
+<p>AK: We've been debating syntax for a very long time, he's offering ways to objectively work through design decision tree</p>
+<p>DH: There was a slide that indicated some additional syntax for an uncommon case</p>
+<p>(I'm way behind)</p>
+<p>DH: problems in the reasoning that lead to the <code>own</code> keyword in the first place</p>
+<p>JM: Two possible conclusions:</p>
+<ol>
+<li>Create a new keyword for proto</li>
+<li>Fields and Methods</li>
+</ol>
+<p>DH: The own keywords is a trcit subset of option1 and option2. THey both map variants of proposal that dont &quot;own&quot; or &quot;proto&quot;</p>
+<p>DD: feedback on having keyword?</p>
+<p>JM: Typescript or Babel don't have keywords, thats all we know from the outside.</p>
+<p>DD: when original unified proposal, community pushed back against required keywords</p>
+<p>AWB: people who are not used to keywords, don't like keywords</p>
+<p>JM: That is a tricky debate point, because people can be upset either way (for using it already or no have used it yet)</p>
+<p>YK: Significant reaction for foo = 1 vs. own foo =1, reaction is often at &quot;public&quot;, not specifically &quot;own&quot;</p>
+<p>DD/RW: agree</p>
+<p>MM: own vs. shared is a very intuitive contract...</p>
+<p>AK: not shared</p>
+<p>JM: say we used <code>proto</code> in front of</p>
+<p>??: If you had an alias for own and shared will be easier to understand</p>
+<p>AWS: I believe if the keyword was <code>shared</code>, it would be more likely understood</p>
+<p>AWS: instead of focusing on how the language works from implementation details, focus on how it can be more easily understood/intuited</p>
+<p>BT: Do you think own has similar problem, that begs the question what is it? what is for?</p>
+<p>AWS: to introduce a not feature that doesn't map to another language, especially in a way that's not clear</p>
+<p>MM: This argues against <code>own</code></p>
+<p>AWS: yes</p>
+<p>MM: Also argue that declaration looking like an assignment is confusing?</p>
+<p>AWS: Yes</p>
+<p>DD: Yes</p>
+<p>MM: Given those points, does it lead you to 1 or 2?</p>
+<p>AWS: not sure of all the implications</p>
+<p>JM: mentioned that assignment confusing and most people don't get difference between assignment and definition</p>
+<p>AWS: (restating)</p>
+<p>MM: Given those intuitions...</p>
+<p>RBN: We also have assignments in function parameters (as another precedents)</p>
+<p>AWS: Don't think people will think <code>own</code> as similar to <code>let</code>, <code>const</code>, <code>var</code></p>
+<p>DD: Looks more like <code>static</code></p>
+<p>MM: They'd learn</p>
+<p>AK: There is evidence that says users have been working with &quot;no keyword&quot; and learned</p>
+<p>D: What is the path for people to go from 0 to learn the language in a comfortable way. A keyword will bring one set of confusions. With assignment, people might not have clear the semantics.
+^-- Who is this?</p>
+<p>AWS: Adding own looks weird to learn, since there is not precedents to it.</p>
+<p>AWS: Looks like assignment no matter what, confusion no matter what.</p>
+<p>MM: So, additionally adding a keyword is more confusing?</p>
+<p>AWS: Yes</p>
+<p>AWB: &quot;own&quot; is already used in the language in getOwnProperty... methods</p>
+<p>AK: Extends has the same context</p>
+<p>AWS: Most people don't realize it exists.</p>
+<p>YK: &quot;own&quot; is not the same thing as let, const. In some sense are declarative, but people experience it as assigment only, introducing own with that semantics can be confusing.</p>
+<p>AWS: An assignment with a semicolon will be treated as in order (like statement list)</p>
+<p>There is confusion that this looks like a statement list, <code>own</code> doesn't mitigate this</p>
+<p>JM: The committee has to make a decision. New syntax might confuse somebody, but we need to walk that fine line.</p>
+<p>MM: The case for <code>own</code> that we made, with the case stated, we are willing to give up &quot;own&quot;.</p>
+<p>JM: We have consensus for solution 2?
+We are agreeing to the syntactic specification that Dan has put together in thel ink proposal in teh agenda. which is a merge of a private fields and public fields proposal</p>
+<p>Moving on to DE's <sub>https://littledan.github.io/proposal-class-fields/</sub> <a href="https://tc39.github.io/proposal-class-fields/">https://tc39.github.io/proposal-class-fields/</a></p>
+<p>WH: The proposed spec does not have an <code>own</code> keyword, but does not preclude supporting <code>own</code> to designate instance methods</p>
+<p>DD: There are two small changes: Supporting private static fields: It feel very natural since the semantics are consistent.
+Also comma separated fields declaration for static and non-static.</p>
+<p>WH: is there a no line break restriction on static?</p>
+<p>KG: Methods already do not have that restriction, so can't really introduce it</p>
+<p>DE: Kevin implemented this and it works</p>
+<p>WH:  <code>own</code> (or most other keywords) does not have any meaning (right now). If you add it later, it will need to have a line break restriction to avoid changing the meaning of</p>
+<pre><code>```own
+foo() {...}```
+</code></pre>
+<p>which currently would declare a variable named <code>own</code>.</p>
+<p>DD: <code>own</code> has to have it</p>
+<p>YK: I only care about one scenario: coma separated private name scenarios. Im willing to restrict the grammar for those cases. We should not add arbitrary restrictions.</p>
+<p>DD: If you have own methods, it will have to have the new line restrictions.</p>
+<p>MM: Evewhere where you have an identifier name that means a new property/fields you can use the computed property fields for same name?</p>
+<p>DD: Yes</p>
+<p>MM: Including the computed property its ok.</p>
+<p>JM: We have consensus en no <code>own</code>. The second things is, do we need the ability to make <code>this</code> keyword optional?</p>
+<p>JM: What do we need for this proposal to be in stage 3?</p>
+<p>(process discussion, lol)</p>
+<a href="#conclusionresolution-15iiib-updates-on-class-field-proposals-both-public-and-private"><h4 id="conclusionresolution-15iiib-updates-on-class-field-proposals-both-public-and-private">Conclusion/Resolution</h4></a><ul>
+<li>No <code>own</code></li>
+<li>Moving forward on DE's <a href="https://tc39.github.io/proposal-class-fields/">Integrated public and private fields proposal</a>
+<ul>
+<li>This is the active proposal for class fields</li>
+<li>This supercedes (by way of integration) all previous proposals</li>
+</ul></li>
+<li>Reviewers:
+<ul>
+<li>Waldemar Horwat</li>
+<li>Kevin Gibbons</li>
+<li>Kent C. Dodds</li>
+<li>Rick Waldron</li>
+<li>Diego Ferreiro Val</li>
+<li>Yehuda Katz</li>
+</ul></li>
+</ul>
+<a href="#15iva-revisiting-async-generator-yield-behavior"><h2 id="15iva-revisiting-async-generator-yield-behavior">15.iv.a. Revisiting async generator yield behavior</h2></a><p>(Domenic Denicola)</p>
+<ul>
+<li>issue: <a href="https://github.com/tc39/proposal-async-iteration/issues/93">https://github.com/tc39/proposal-async-iteration/issues/93</a></li>
+<li>slides: <a href="https://docs.google.com/presentation/d/1U6PivKbFO0YgoFlrYB82MtXf1ofCp1xSVOODOvranBM/edit#slide=id.g223fba4116_0_235">https://docs.google.com/presentation/d/1U6PivKbFO0YgoFlrYB82MtXf1ofCp1xSVOODOvranBM/edit#slide=id.g223fba4116_0_235</a></li>
+</ul>
+<p>DD: Got to stage 3, but then there was implementation feedback that we had some issues.</p>
+<p>DD:  As background:  We don't want &quot;promises for promises&quot;, but you could explicitly yield a rejected promise from an async iterator</p>
+<p>Consider</p>
+<p>async function f * () {
+yield 1;
+yield Promise.reject(2);
+yield 3;
+}</p>
+<p>Because 'yield' does not unwrap, someone consuming the sequence manually will get a rejected promise but the generator will complete normally. This differs from sync generators, which stop if there's an exception.</p>
+<p>If you iterate with for-await-of over an async iterator which returns a rejected promise, rather than throwing, the for-await-of will re-throw the exception from the rejected promise immediately, leaving the async iterator paused, which means it doesn't have the chance to clean up resources e.g. with a finally</p>
+<p>MM: I don't like option 1 (don't unwrap rejection)
+WD: Would it be any different in yield and yield await?</p>
+<p>RBN: When you yields a promise that is rejected, by the time it resolved it will be resolved.</p>
+<p>DD: Proposal: yielding just stores the raw value of what you yielded (i.e. no unwrapping), and if you use 'next' manually you need to deal with it, but for-await-of unwraps. so manually consuming with 'next' gives you promises, but for-await-of gives you the values, and rethrows if it hits a rejected promise</p>
+<p>DD: Problem: this means library authors can't use next without a lot of work. Also means that yield* is not like for-await-of and manually yielding each value</p>
+<p>RBN: If I throw in a generator, it should go over the boundary. Does not hit finally blocks (?)</p>
+<p>DD: The problem is yielding a rejected promise.</p>
+<p>Adam: The special case is that for a iterator if next throws, iterator is not closed. If is a generator, thats fine, and im not totally combinced in the simmetry.</p>
+<p>DD: To avoid the resource leak we can avoid calling return.</p>
+<p>YK: Restated option 3: yield has the same semantics as yield await in an async generator</p>
+<p>RW: Have you asked CaitP?</p>
+<p>DD: Yes, she thinks it would be easier to implement and therefore likes it.</p>
+<p>RW: Good, same.</p>
+<p>MM: My favorite option is option3, despite previously liking one of the other options</p>
+<p>WH: I also favor option 3.</p>
+<p>(room in general): I favor option 3</p>
+<a href="#conclusionresolution-15iva-revisiting-async-generator-yield-behavior"><h4 id="conclusionresolution-15iva-revisiting-async-generator-yield-behavior">Conclusion/Resolution</h4></a><ul>
+<li>Go with option 3: yield has the semantics of yield await in an async generator</li>
+</ul>
+<a href="#15ivb-updates-on-cancellation-proposals"><h2 id="15ivb-updates-on-cancellation-proposals">15.iv.b Updates on Cancellation Proposals</h2></a><p>(Brian Terlson, Ron Buckton)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-cancellation">https://github.com/tc39/proposal-cancellation</a></li>
+<li><a href="https://tc39.github.io/proposal-cancellation/CancellationPrimitives-tc39.pptx">https://tc39.github.io/proposal-cancellation/CancellationPrimitives-tc39.pptx</a> (triggers download)</li>
+</ul>
+<p>RBN: (walking through slides)</p>
+<p>Motivations</p>
+<ul>
+<li>Clear and consistent approach to the cancellation of asynchronous operations</li>
+<li>General purpose coordination primitive</li>
+<li>Host API integration (fetch, module loading, etc.)</li>
+</ul>
+<p>Goals</p>
+<ul>
+<li>Separation of source and sink</li>
+<li>Cancellation request can be observed synchronously, via property</li>
+<li>Cancellation request can be observed asynchronously, via callback</li>
+<li>Able to unregister callbacks</li>
+<li>Composable for non-trivial cancellation graphs</li>
+</ul>
+<p>Source/Sink</p>
+<ul>
+<li><p>Source</p></li>
+<li><p>Owned by caller
+- Can share entangled Sink with multiple callees
+- Initiates cancellation signal</p></li>
+<li><p>Sink</p></li>
+<li><p>Received by callee</p></li>
+<li><p>Can observe cancellation state</p></li>
+<li><p>Cannot initiate cancellation signal on Source</p></li>
+<li><p>Callee A cannot interfere with Callee B using the same Sink</p></li>
+</ul>
+<p>...just look at the slides...</p>
+<p>Promise As A Token</p>
+<p>YK: When Domenic originally proposed, there was a ... (I didn't catch the rest of that)</p>
+<p>RBN: Need to revisit</p>
+<p>DD: Disagreed with explanation of <a href="https://github.com/whatwg/dom/pull/437">https://github.com/whatwg/dom/pull/437</a></p>
+<p>(reached some slide with a callable constructor)</p>
+<p>YK: I thought we were avoiding</p>
+<p>RW: callable constructors can't be subclassed</p>
+<p>CancellationToken API Slide</p>
+<p>MM: (question about the phase that a callback is called, missed which, but RBN confirmed that it did whatever it was Mark asked about)</p>
+<p>No time left, so not pushing Stage 1</p>
+<p>YK: not sure if we should accept wholesale?</p>
+<p>RBN: borrows heavily from the established .net APIs</p>
+<a href="#conclusionresolution-15ivb-updates-on-cancellation-proposals"><h4 id="conclusionresolution-15ivb-updates-on-cancellation-proposals">Conclusion/Resolution</h4></a><ul>
+<li>Look into cancel only when everything is canceled</li>
+</ul>
+<a href="#15ih-bigint-for-stage-3"><h2 id="15ih-bigint-for-stage-3">15.i.h. BigInt for Stage 3</h2></a><p>(Daniel Ehrenberg)</p>
+<p>DE: Made the changes, ready?</p>
+<p>WH: I reviewed it this morning, at which point I found that it did not have the changes reflecting our decisions.</p>
+<p>DE: I made the changes during today's lunch.</p>
+<a href="#conclusionresolution-15ih-bigint-for-stage-3"><h4 id="conclusionresolution-15ih-bigint-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Still needs another round of review</li>
+<li>Reviewers:
+<ul>
+<li>Waldemar</li>
+<li>Leo Balter</li>
+</ul></li>
+</ul>
+<a href="#17iiia-observable-proposal-to-stage-2"><h2 id="17iiia-observable-proposal-to-stage-2">17.iii.a Observable proposal to Stage 2</h2></a><p>(Jafar Husain)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-observable">https://github.com/tc39/proposal-observable</a></li>
+<li>request slides</li>
+</ul>
+<p>JH: (working through slides, returned to original proposal)</p>
+<p>... slides, slides, slides</p>
+<p>AK: Why does this need to be in the standard library? No answer to that yet.</p>
+<p>MM: Promises were popular and could be implemented in library code, but it was a high value to users</p>
+<p>MM: This is going into Angular</p>
+<p>YK: The way Angular is using observable is, in my opinion, wrong.</p>
+<p>MM: Where does this fit in?</p>
+<p>YK: The DOM</p>
+<p>DD: There are also libraries where Observable has gone in and then out.</p>
+<p>SM: Never fully integrated into React.</p>
+<p>YK: Observables fundamentally push, where pull is proven to be more effective</p>
+<p>KM: Are there use cases in Node.js?</p>
+<p>API: Bloomberg data (more here, Andrew please fill in)</p>
+<p>DD: (examples of DOM apis that make sense in DOM and Node, but not in language)</p>
+<p>WH: Will there be risk of <code>Observable</code> identifier clashes, with scripts resolving it and picking up our implementation and thinking it's one of the external library ones which might behave differently?</p>
+<p>AK: There is an interest in an Observable, but no one wants to deal with &quot;which one&quot;</p>
+<p>JH: Believe this is fundamental</p>
+<p>MM: Support that. Prior to Promises, we were designing a sequential iterative language; since Promises we're designing a language for asynchronous programming as well. We are figuring out what the toolkit is of basic asynchronous programming abstractions. Asynchronous iterators give us pull streams. Observables give us push streams. Both seem to be necessary, serving broad needs.</p>
+<p>AK: Then why not Streams?</p>
+<p>DD: async iterators</p>
+<p>Stage 2?</p>
+<p>YK: Concerned that this won't make past Stage 3. Similar issue to cancellation token?</p>
+<p>AK: Not the only person with concerns</p>
+<p>DE: Want to see more interaction with host environments</p>
+<p>YK: Wondering if DOM will use this to replace event emitter in the DOM?</p>
+<p>RW: As in literally replacing EventTarget?</p>
+<p>DD: There is a better, backward-compatible path for that.</p>
+<p>DE: Concerns about where it fits in host environments</p>
+<p>AK: Stronger concerns: will this be the thing actually <em>used</em> in hosts?</p>
+<p>RW: (shared experience with Observable &quot;zealotry&quot; in the case of Generic Sensor)</p>
+<ul>
+<li>Want to see more of how this works with actual host interactions to analyze</li>
+<li>Let's see if we can get hosts excited about the feature</li>
+</ul>
+<a href="#conclusionresolution-17iiia-observable-proposal-to-stage-2"><h4 id="conclusionresolution-17iiia-observable-proposal-to-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>No Stage 2</li>
+</ul>
+
+</body>
