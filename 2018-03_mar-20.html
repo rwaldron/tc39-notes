@@ -157,7 +157,7 @@ Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <p>MM: Clarification question: you mention detach and super.detach. Is there a distinction that ..?</p>
 <p>DE: Not really. This wasn't my idea, this was an idea from Andreas Rossberg. Until we get to the point of exposing a JS API. Does anyone else have any suggestions of how to structure this so that it could be more generalized?</p>
 <p>DE: Any more suggestion about it?</p>
-<p>AK: I think Allen is asking us for more system design but a lot of it it's out of EMCA. ECMAScript had a pretty well thought spec on modules. But I don't think it should be a requirement that every system design discussion has to be exposed to JS to integrate with JS. JS is used in a lot of different env. And in a lot of different ways, it seems there's no use case for exposing this.</p>
+<p>AK: I think Allen is asking us for more system design but a lot of it it's out of ECMA. ECMAScript had a pretty well thought spec on modules. But I don't think it should be a requirement that every system design discussion has to be exposed to JS to integrate with JS. JS is used in a lot of different env. And in a lot of different ways, it seems there's no use case for exposing this.</p>
 <p>BT: That's my preferred response as well, but nobody has came up with what system design would look like. Let's do this thing.</p>
 <p>DE: Another note on layering changes -- layering changes can be done outside of this committee on GitHub. Is that correct? However, we are discussing this here due to the activity on the issue.</p>
 <p>BT: That is correct.</p>
@@ -272,7 +272,7 @@ Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <p>RW: (remotely) I counted 17 delegates from Google &amp; 9 from Apple (these numbers come from the attendee sign-in sheet).</p>
 <p>TST: We need at least a rectangular room where people don't have to shout and have easy visual access to slides.</p>
 <p>DE: One thing is finding a place with a good video conference setup, what we should do about that?</p>
-<p>API: It might be a requirement to specify a system, and have a system brought in. It's becoming increasingly difficult when trying to set up a meeting to get rooms that are large enough to have a group as big. If a host needs to also have microphones etc. Tthis further narrows the number of spaces we can use. Can we bring the mic and speaker setup with us?</p>
+<p>API: It might be a requirement to specify a system, and have a system brought in. It's becoming increasingly difficult when trying to set up a meeting to get rooms that are large enough to have a group as big. If a host needs to also have microphones etc. This further narrows the number of spaces we can use. Can we bring the mic and speaker setup with us?</p>
 <p>KM: On the mic thing, it's good to not shuffling the mic around, it's a bit slow to pass it around.</p>
 <p>DE: We have been talking about audio requirements for a year now, but that hasn't lead to anything yet.</p>
 <p>KM: Have we specified the requirements?</p>
@@ -573,7 +573,7 @@ Those are examples of what we need to work on for ntive module support but ???. 
 <p>MM: What do you mean the dependency is cyclic?</p>
 <p>BFS: I think Allan wanted to add this? I don't think this was added for any other reason than CommonJS.</p>
 <p>We should explore the space of trying to make cycles work.</p>
-<p>DH: I think this is definitly open for discuss</p>
+<p>DH: I think this is definitely open for discuss</p>
 <p>LCK: Domenic and George raised this in PR #916, it's definitely going to need more work. Once we talk face to face at the next WebAssembly meeting, We will have a chance to clarify it and then I can present it for the next TC39 meeting.</p>
 <a href="#conclusionresolution-10ih-update-on-wasm-es-modules"><h4 id="conclusionresolution-10ih-update-on-wasm-es-modules">Conclusion/Resolution</h4></a><ul>
 <li>Nothing Recorded</li>
@@ -599,7 +599,7 @@ Those are examples of what we need to work on for ntive module support but ???. 
 <p>SGO: If you want to help, please reach out, we'll happy to have this conversation.</p>
 <p>(Applause)</p>
 <p>YK: You pointed out that a lot of people are interested, do you have any thoughts on what we can do to help people who want to province feedback?</p>
-<p>YSV: There are few directions we could go.This is a quesion that needs more time, people want to help and I think people come with good intentions, but I think people get into bike-shedding conversations, because they're the easiest ones, which can be difficult to comprehend. Making sure that they know what's the discussion has been ???, making sure that people understand the constraints. Theres a contraint that excludes that possibility. I think having explainer docs - maybe a technical solution explaining things already ruled out. This is the most intuitive way of doing this, but it's also the most difficult way.</p>
+<p>YSV: There are few directions we could go.This is a question that needs more time, people want to help and I think people come with good intentions, but I think people get into bike-shedding conversations, because they're the easiest ones, which can be difficult to comprehend. Making sure that they know what's the discussion has been ???, making sure that people understand the constraints. Theres a contraint that excludes that possibility. I think having explainer docs - maybe a technical solution explaining things already ruled out. This is the most intuitive way of doing this, but it's also the most difficult way.</p>
 <p>DH: A couple quick thoughts on something I know isn't final. You mentioned es-discuss before, but I wouldn't recommend you going on es-discuss, I don't know if we want to get into an argument about es-discuss, because if we're sending people someplace that won't have a good outcome...</p>
 <p>The other thing is regarding the list of design considerations. This could appear like a glossary for weird jargon, I think it's helpful to list them as something more like ... These aren't something that are always in consensus, or something that are commonly used, but we should explain that they are terms that appear (not part of the Zen of JS that you must abide by) and we should help newcomers understand what they mean. (paraphrasing)</p>
 <p>SGO: That would certainly be the intention. These are more like design patterns or considerations.</p>
