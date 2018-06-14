@@ -1,0 +1,91 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="manifest" href="img/site.webmanifest">
+<link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<title>Summary for the 64th meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="javascript:history.back()">Back</a>
+<a href="#summary-for-the-64th-meeting-of-ecma-tc39"><h1 id="summary-for-the-64th-meeting-of-ecma-tc39">Summary for the 64th meeting of Ecma TC39</h1></a><p>Ecma Technical Committee 39 held three day meeting at Bloomberg in NYC on May 22nd - May 24th, 2018. <a href="https://github.com/tc39/agendas/blob/master/2018/05.md">Agenda can be found here</a> (note: committee has adopted new agenda formart based on the stage of proposals)</p>
+<a href="#new-proposals"><h2 id="new-proposals">New Proposals</h2></a><p>TC39 discussed 10 new proposals. 7 entered staging process to discuss towards specification, and 3 remains at Stage 0 for further investigation before consensus.</p>
+<a href="#advanced-to-stage-1"><h3 id="advanced-to-stage-1">Advanced to Stage 1</h3></a><ul>
+<li><a href="2018-05_may-22.html#11ia-sequence-properties-in-unicode-property-escapes">Sequence properties in Unicode property escapes</a></li>
+<li><a href="2018-05_may-23.html#module-keys-strawman-for-stage-1">Module Keys</a></li>
+<li><a href="2018-05_may-23.html#class-static-block">Class Static Block</a></li>
+<li><a href="2018-05_may-23.html#class-access-expressions">Class Access Expressions</a></li>
+<li><a href="2018-05_may-24.html#pattern-matching-for-stage-1">Pattern Matching</a></li>
+<li><a href="2018-05_may-24.html#bl%C3%B6cks-syntax-for-stage-0">RegExp Match array offsets</a></li>
+</ul>
+<a href="#advanced-to-stage-2"><h3 id="advanced-to-stage-2">Advanced to Stage 2</h3></a><ul>
+<li><a href="2018-05_may-22.html#stringprototypecodepoints-for-stage-2">Well-formed JSON.stringify</a></li>
+</ul>
+<a href="#needs-more-discussion-remains-stage-0"><h3 id="needs-more-discussion-remains-stage-0">Needs more discussion (remains Stage 0)</h3></a><ul>
+<li><a href="2018-05_may-24.html#tagged-collection-literals-for-stage-1">Tagged Collection Literals</a></li>
+<li><a href="2018-05_may-24.html#symbolthenable-for-stage-1-or-2">Symbol.thenable</a></li>
+<li><a href="2018-05_may-24.html#bl%C3%B6cks-syntax-for-stage-0">&quot;Blöcks&quot; syntax</a></li>
+</ul>
+<a href="#existing-proposals"><h2 id="existing-proposals">Existing Proposals</h2></a><a href="#advanced-to-stage-2"><h3 id="advanced-to-stage-2">Advanced to Stage 2</h3></a><ul>
+<li><a href="2018-05_may-22.html#objectfromentries-to-stage-2">Object.fromEntries</a></li>
+<li><a href="2018-05_may-22.html#set-methods">Set Methods</a></li>
+<li><a href="2018-05_may-23.html#realms">Realms</a></li>
+<li><a href="2018-05_may-22.html#functionprototypetostring-censorship-for-stage-2">Function.prototype.toString() censorship</a>. Please also refer to <a href="2018-05_may-24.html#functionprototypetostring-censorship-for-stage-2-continued-discussion">continued discussion</a></li>
+<li><a href="2018-05_may-22.html#top-level-await">Top Level Await</a></li>
+</ul>
+<a href="#advanced-to-stage-3"><h3 id="advanced-to-stage-3">Advanced to Stage 3</h3></a><ul>
+<li><a href="2018-05_may-22.html#symbolprototypedescription-for-stage-3">Symbol.prototype.description</a></li>
+<li><a href="2018-05_may-23.html#static-class-features-for-stage-3">Static class features</a></li>
+</ul>
+<a href="#advanced-to-stage-4--will-be-added-to-es2019"><h3 id="advanced-to-stage-4--will-be-added-to-es2019">Advanced to Stage 4  (will be added to ES2019)</h3></a><ul>
+<li><a href="2018-05_may-22.html#11id-optional-catch-binding-for-stage-4">Optional catch binding</a></li>
+<li><a href="2018-05_may-22.html#11ie-ecmascript-as-a-superset-of-json">ECMAScript as a superset of JSON</a></li>
+</ul>
+<a href="#demoted-to-stage-2"><h3 id="demoted-to-stage-2">Demoted to Stage 2</h3></a><p>A conflict with other proposal was found, champion group and committee has decided to move following proposal from Stage 3 to Sage 2. Please see notes for more information.</p>
+<ul>
+<li><a href="2018-05_may-24.html#numeric-separators-update">Numeric separators</a>.</li>
+</ul>
+<a href="#needs-more-discussioninformation"><h3 id="needs-more-discussioninformation">Needs more discussion/information</h3></a><p>These proposals were discussed but did not advance to next stage at the meeting. Please refer to &quot;Conclusion / Resolution&quot; section on the notes to see the outcome of discussion.</p>
+<ul>
+<li><a href="2018-05_may-24.html#binary-ast">Binary AST</a></li>
+<li><a href="2018-05_may-22.html#functionprototypetostring-revision-updates-slides-and-stage-4">Function.prototype.toString revision</a></li>
+<li><a href="2018-05_may-22.html#stringprototypecodepoints-for-stage-2">String.prototype.codePoints</a></li>
+<li><a href="2018-05_may-23.html#class-fields-status-update">Class fields</a></li>
+</ul>
+<a href="#updates"><h3 id="updates">Updates</h3></a><p>Status updates from proposals working twards stage advancement.</p>
+<ul>
+<li><a href="2018-05_may-22.html#intl-updates">Intl Updates</a></li>
+<li><a href="2018-05_may-23.html#decorators-towards-stage-3-additional-notes">Decorators</a></li>
+<li><a href="2018-05_may-22.html#arrayprototypeflatten-rename">Array.prototype.flatten rename to flat</a></li>
+<li><a href="2018-05_may-22.html#bigint-status-update">Big Int</a></li>
+<li><a href="2018-05_may-22.html#revisiting-stringprototypematchall">String.prototype.matchAll</a></li>
+</ul>
+<a href="#changes-to-existing-specification"><h2 id="changes-to-existing-specification">Changes to existing specification</h2></a><a href="#consensus-reached-pull-requests"><h3 id="consensus-reached-pull-requests">Consensus Reached Pull Requests</h3></a><ul>
+<li><a href="https://github.com/tc39/ecma262/pull/1144">Normative: Cleanup Time Values and Time Range</a></li>
+<li><a href="2018-05_may-22.html#9ib-normative-add-export--as-ns-from-mod-to-export-production-and-module-semantics">Normative: Add export * as ns from &quot;mod” to Export production and Module Semantics</a></li>
+<li><a href="2018-05_may-24.html#superproperty-evaluation-order">SuperProperty evaluation order</a></li>
+</ul>
+<a href="#needs-more-discussion"><h3 id="needs-more-discussion">Needs more discussion</h3></a><ul>
+<li><a href="2018-05_may-22.html#rename-atomicswake">Rename Atomics.wake</a></li>
+<li><a href="2018-05_may-22.html#updates-and-a-question-to-resolve-on-stringprototypematchall">Updates and a question to resolve on String.prototype.matchAll</a></li>
+</ul>
+<a href="#general-discussions"><h2 id="general-discussions">General Discussions</h2></a><p>Topics related to ECMAScript specification activities.</p>
+<ul>
+<li><a href="2018-05_may-23.html#supporting-other-languages-in-es-module-graphs-updates">Supporting other languages in ES module graphs</a></li>
+<li><a href="2018-05_may-23.html#stopping-exfiltration-massive-privacy-violations-vs-boundaries">Stopping exfiltration: Massive privacy violations vs boundaries</a></li>
+</ul>
+<a href="#organizational-update"><h2 id="organizational-update">Organizational update</h2></a><ul>
+<li><a href="2018-05_may-22.html#test262">~400 new tests added to Test262</a> from various contributors.</li>
+<li><a href="2018-05_may-22.html#8-updates-from-the-coc-committee">CoC commmittee updates</a></li>
+<li><a href="2018-05_may-22.html#11if-update-to-the-how-we-work-documentation-project-and-website">Update to the How We Work Documentation project and Website</a></li>
+<li><a href="2018-05_may-22.html#11ic-20192020-meeting-scheduling-update">2019 / 2020 meeting scheduling</a></li>
+<li><a href="2018-05_may-24.html#further-secretariat-updates">TC53 - variables which are based on ECMAScript</a></li>
+<li><a href="2018-05_may-23.html#expanding-group-of-editors">Editor group update</a></li>
+<li><a href="2018-05_may-23.html#ecma-secretariat-update">ECMAScript PDF is most downloaded spec in ECMA</a></li>
+</ul>
+
+</body>
