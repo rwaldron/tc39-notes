@@ -412,7 +412,8 @@ No reason to rush, this is an ES7 thing.</p>
 <p>RW: You get back a descriptor. There is already a getOwnPropertyDescriptor.</p>
 <p>ACHIEVEMENT UNLOCKED: Longer API name than getOwnPropertyDescriptor!</p>
 <a href="#conclusionresolution-44-objectgetownpropertydescriptors"><h4 id="conclusionresolution-44-objectgetownpropertydescriptors">Conclusion/Resolution</h4></a><ul>
-<li>Pursue for ES7. RW has spec text. Approved for Stage 0.</li>
+<li>Stage 0 acceptance</li>
+<li>Pursue for ES7. RW has spec text.</li>
 <li>RW to send a PR to add to github.com/tc39/ecma262 tracker</li>
 </ul>
 <a href="#45-arrayprototypecontains"><h2 id="45-arrayprototypecontains">4.5 Array.prototype.contains</h2></a><p>(Rick Waldron)</p>
@@ -428,7 +429,7 @@ No reason to rush, this is an ES7 thing.</p>
 <p>BT: Is this different than <code>indexOf</code>?</p>
 <p>RW: Open question.</p>
 <a href="#conclusionresolution-45-arrayprototypecontains"><h4 id="conclusionresolution-45-arrayprototypecontains">Conclusion/Resolution</h4></a><ul>
-<li>Sounds good, need strawman to approve stage 0.</li>
+<li>Stage 0 acceptance</li>
 </ul>
 <a href="#46-updates-to-parseint"><h2 id="46-updates-to-parseint">4.6 Updates to parseInt</h2></a><p>(Rick Waldron)</p>
 <p>RW: Should <code>parseInt</code> handle new octal and binary integer literal syntax? <a href="https://bugs.ecmascript.org/show_bug.cgi?id=1585">bug #1585</a></p>
@@ -445,7 +446,9 @@ No reason to rush, this is an ES7 thing.</p>
 <p>MB: You can use <code>Number(&quot;0b11&quot;)</code> or <code>Number(&quot;0o42&quot;)</code> instead, at least in V8. (<code>ToNumber</code> in the spec should be updated to make this official: <a href="https://bugs.ecmascript.org/show_bug.cgi?id=1584">https://bugs.ecmascript.org/show_bug.cgi?id=1584</a>)</p>
 <p>LH: Was that a breaking change? Looks like, but we went from <code>NaN</code> to actually returning a number.</p>
 <p>WH: It's a breaking change. parseInt looks for a valid prefix and ignores the rest. parseInt('0o123') currently returns 0 because it sees the starting 0.</p>
-<a href="#conclusionresolution-46-updates-to-parseint"><h4 id="conclusionresolution-46-updates-to-parseint">Conclusion/Resolution</h4></a><p>It's dead. RW to close the bug wontfix.</p>
+<a href="#conclusionresolution-46-updates-to-parseint"><h4 id="conclusionresolution-46-updates-to-parseint">Conclusion/Resolution</h4></a><ul>
+<li>It's dead. RW to close the bug wontfix.</li>
+</ul>
 <a href="#43-update-objectassign-to-accept-multiple-sources"><h2 id="43-update-objectassign-to-accept-multiple-sources">4.3, Update Object.assign to accept multiple sources</h2></a><p>(Rick Waldron)</p>
 <p>RW: <code>Object.assign</code> is useful. Multiple real-world APIs do this, but most allow multiple sources.</p>
 <p>AWB: Some have additional options (enumerable vs. non-enumerable, shallow vs. deep copy).</p>

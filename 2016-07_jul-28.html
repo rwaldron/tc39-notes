@@ -101,10 +101,13 @@
 <p>STH: Write the memory model, rep. all the legal executions. Run X times, ensure that all</p>
 <p>SYG: How to test the actual implementation</p>
 <a href="#conclusionresolution-10iia-shared-memory-and-atomics"><h4 id="conclusionresolution-10iia-shared-memory-and-atomics">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 acceptance
+<ul>
+<li>After Waldemar is satisfied with rewrite of memory model</li>
+</ul></li>
 <li>API freeze granted?</li>
-<li>Stage 3 after Waldemar is satisfied with rewrite of memory model</li>
 </ul>
-<a href="#10ib-disregard-lastindex-for-non-global-non-sticky-regexps"><h2 id="10ib-disregard-lastindex-for-non-global-non-sticky-regexps">10.i.b Disregard lastIndex for non-global non-sticky regexps</h2></a><p>Leo Balter</p>
+<a href="#10ib-disregard-lastindex-for-non-global-non-sticky-regexps"><h2 id="10ib-disregard-lastindex-for-non-global-non-sticky-regexps">10.i.b Disregard lastIndex for non-global non-sticky regexps</h2></a><p>(Leo Balter)</p>
 <p>PR from Claude Pache <a href="https://github.com/tc39/ecma262/pull/627">https://github.com/tc39/ecma262/pull/627</a></p>
 <p>LBR: The change is: &quot;don't do the lastIndex step unless isn't actually necessary&quot;
 <a href="https://github.com/tc39/ecma262/issues/625">https://github.com/tc39/ecma262/issues/625</a></p>
@@ -141,8 +144,10 @@
 <li>Merge it</li>
 <li>Implement in canary and report what happens</li>
 </ul>
-<a href="#10iiid-objectshallowequal"><h2 id="10iiid-objectshallowequal">10.iii.d Object.shallowEqual</h2></a><p>Sebastian Markbage</p>
-<p><a href="https://github.com/sebmarkbage/ecmascript-shallow-equal">https://github.com/sebmarkbage/ecmascript-shallow-equal</a></p>
+<a href="#10iiid-objectshallowequal"><h2 id="10iiid-objectshallowequal">10.iii.d Object.shallowEqual</h2></a><p>(Sebastian Markbage)</p>
+<ul>
+<li><a href="https://github.com/sebmarkbage/ecmascript-shallow-equal">proposal</a></li>
+</ul>
 <p>SBI: Problem...</p>
 <a href="#memoization"><h3 id="memoization">Memoization</h3></a><p>... see slide</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eq</span>(<span class="hljs-params">a, b</span>) </span>{
@@ -284,8 +289,8 @@
 <p>AWB: Won't block if the rest of the room wants to advance</p>
 <p>WH: Have no objection to this, but in the future I'd love a prior notice on the agenda for any item that wants to jump more than one stage so I can look at it much more carefully before the meeting.</p>
 <a href="#conclusionresolution-10iiib-promiseprototypefinally"><h4 id="conclusionresolution-10iiib-promiseprototypefinally">Conclusion/Resolution</h4></a><ul>
-<li>Stage 1 approved</li>
-<li>Stage 2 approved</li>
+<li>Stage 1 acceptance</li>
+<li>Stage 2 acceptance</li>
 </ul>
 <a href="#10ivb-cancelable-promises-update"><h2 id="10ivb-cancelable-promises-update">10.iv.b Cancelable promises update</h2></a><p>Domenic Denicola</p>
 <p>Slides: <a href="https://docs.google.com/presentation/d/1kSY7X1ymw5f2oatDrZaMJh4Z_wpd0ynZIimhUyqhbrY/edit#slide=id.g15f86355f5_0_55">https://docs.google.com/presentation/d/1kSY7X1ymw5f2oatDrZaMJh4Z_wpd0ynZIimhUyqhbrY/edit#slide=id.g15f86355f5_0_55</a></p>
@@ -646,7 +651,7 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
 <p>WH: I am not opposed to Stage 4, just noting the potential danger.</p>
 <p>BE: is there a way to look at the grammar of &quot;yield&quot; to have it work?</p>
 <a href="#conclusionresolution-10iv-async-functions"><h4 id="conclusionresolution-10iv-async-functions">Conclusion/Resolution</h4></a><ul>
-<li>Stage 4</li>
+<li>Stage 4 acceptance</li>
 </ul>
 <a href="#9iiic-decorators"><h2 id="9iiic-decorators">9.iii.c Decorators</h2></a><p>Yehuda Katz and Brian Terlson</p>
 <p><a href="http://tc39.github.io/proposal-decorators/">http://tc39.github.io/proposal-decorators/</a></p>
@@ -683,9 +688,11 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
 <p>YK: Willing to champion additions to this proposal to satisfy outstanding needs.</p>
 <ul>
 <li>The interop issue (with &quot;annotations&quot;) has existed for some time, we can keep coming back with new features</li>
-<li>The work can be done in Stage 2</li>
+<li>The work can be done in Stage 2
+<ul>
 <li>Babel is skeptical now</li>
 <li>Stage 2 signals to community</li>
+</ul></li>
 </ul>
 <p>AWB: My understanding is that Stage 2 is &quot;not locked down&quot;, the language wants to solve this problem and will eventually include the feature.</p>
 <p>Massive agreement.</p>
@@ -710,7 +717,7 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
 <p>BT: Fair to make that separate?</p>
 <p>NO.</p>
 <a href="#conclusionresolution-9iiic-decorators"><h4 id="conclusionresolution-9iiic-decorators">Conclusion/Resolution</h4></a><ul>
-<li>Stage 2 Approval</li>
+<li>Stage 2 acceptance</li>
 </ul>
 <a href="#9iiib-private-state"><h2 id="9iiib-private-state">9.iii.b Private State</h2></a><p>Daniel Ehrenberg</p>
 <p><a href="https://github.com/tc39/proposal-private-fields">https://github.com/tc39/proposal-private-fields</a></p>

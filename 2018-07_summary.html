@@ -1,0 +1,83 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="manifest" href="img/site.webmanifest">
+<link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<title>Summary for the 65th meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="javascript:history.back()">Back</a>
+<a href="#summary-for-the-65th-meeting-of-ecma-tc39"><h1 id="summary-for-the-65th-meeting-of-ecma-tc39">Summary for the 65th meeting of Ecma TC39</h1></a><p>Ecma Technical Committee 39 held three day meeting at Microsoft in Bellevue on July 24th - July 26th, 2018. <a href="https://github.com/tc39/agendas/blob/master/2018/07.md">Agenda can be found here</a>.</p>
+<a href="#new-proposals"><h2 id="new-proposals">New Proposals</h2></a><p>TC39 discussed 6 new proposals. 3 entered staging process to discuss towards specification, and 1 remains at Stage 0 for further investigation before consensus.</p>
+<a href="#advanced-to-stage-1"><h3 id="advanced-to-stage-1">Advanced to Stage 1</h3></a><ul>
+<li><a href="2018-07_july-24.html#explicit-resource-management">Explicit Resource Management</a></li>
+<li><a href="2018-07_july-25.html#dynamic-modules">Dynamic Modules</a></li>
+<li><a href="2018-07_july-26.html#javascript-standard-library">JavaScript Standard Library</a></li>
+</ul>
+<a href="#advanced-to-stage-2"><h3 id="advanced-to-stage-2">Advanced to Stage 2</h3></a><ul>
+<li><a href="https://github.com/rwaldron/tc39-notes/blob/master/es9/2018-07/july-24.md#arraybufferprototypetransfer"><code>ArrayBuffer.prototype.transfer()</code></a></li>
+<li><a href="2018-07_july-24.html#intldatetimeformatprototypeformatrange"><code>Intl.DateTimeFormat.prototype.formatRange</code></a></li>
+</ul>
+<a href="#needs-more-discussion-remains-stage-0"><h3 id="needs-more-discussion-remains-stage-0">Needs more discussion (remains Stage 0)</h3></a><ul>
+<li><a href="2018-07_july-24.html#secondary-proposal-for-arraybufferprototypetransfer">Secondary Proposal for <code>ArrayBuffer.prototype.transfer()</code></a>
+<ul>
+<li>committee suggestion is to split into separate proposals.</li>
+</ul></li>
+</ul>
+<a href="#existing-proposals"><h2 id="existing-proposals">Existing Proposals</h2></a><a href="#advanced-to-stage-2-from-stage-1"><h3 id="advanced-to-stage-2-from-stage-1">Advanced to Stage 2 from Stage 1</h3></a><ul>
+<li><a href="2018-07_july-25.html#regexp-match-offsets">RegExp Match Offsets</a></li>
+<li><a href="2018-07_july-26.html#intlnumberformat-unified-feature-proposal-for-stage-2"><code>Intl.NumberFormat</code> Unified Feature</a></li>
+</ul>
+<a href="#advanced-to-stage-3-from-stage-2"><h3 id="advanced-to-stage-3-from-stage-2">Advanced to Stage 3 from Stage 2</h3></a><ul>
+<li><a href="2018-07_july-24.html#objectfromentries-to-stage-3"><code>Object.fromEntries</code></a></li>
+</ul>
+<a href="#needs-more-discussioninformation"><h3 id="needs-more-discussioninformation">Needs more discussion/information</h3></a><p>These proposals were discussed but did not advance to next stage at the meeting. Please refer to &quot;Conclusion / Resolution&quot; section on the notes to see the outcome of discussion.</p>
+<ul>
+<li><a href="2018-07_july-25.html#reduce-the-number-of-ticks-in-asyncawait">Reduce the number of ticks in async/await</a></li>
+</ul>
+<a href="#updates"><h3 id="updates">Updates</h3></a><p>Status updates from proposals working towards stage advancement.</p>
+<ul>
+<li><a href="2018-07_july-24.html#update-on-do-expressions">Update on <code>do</code>-expressions</a></li>
+<li><a href="2018-07_july-24.html#new-name-for-global">New name for global</a>(<a href="2018-07_july-25.html#revisit-global-name">revisited discussion</a>)</li>
+<li><a href="2018-07_july-25.html#decorators-towards-stage-3">Decorators</a></li>
+<li><a href="2018-07_july-25.html#cancellation-update">Cancellation</a></li>
+<li><a href="2018-07_july-25.html#partial-application">Partial Application</a></li>
+<li><a href="2018-07_july-25.html#updates-on-first-class-protocols">First-class Protocols</a></li>
+<li><a href="2018-07_july-26.html#temporal-proposal-update">Temporal</a></li>
+</ul>
+<a href="#changes-to-existing-specification"><h2 id="changes-to-existing-specification">Changes to existing specification</h2></a><a href="#consensus-reached-pull-requests"><h3 id="consensus-reached-pull-requests">Consensus Reached Pull Requests</h3></a><ul>
+<li><a href="2018-07_july-24.html#atomicsnotify">Rename <code>Atomics.wake</code> to <code>Atomics.notify</code></a> (<a href="https://github.com/tc39/ecma262/pull/1220">Pull Request</a>)</li>
+</ul>
+<a href="#general-discussions"><h2 id="general-discussions">General Discussions</h2></a><p>Topics related to ECMAScript specification activities.</p>
+<ul>
+<li><a href="2018-07_july-24.html#report-on-realms-shim-security-review">Report on Realms shim Security Review</a></li>
+<li><a href="2018-07_july-24.html#tc53-introduction-for-tc39">TC53 introduction for TC39</a></li>
+<li><a href="2018-07_july-24.html#user-testing-eg-usability-or-learnability-call-for-resources">User testing (e.g. usability or learnability): call for resources</a></li>
+<li><a href="2018-07_july-25.html#website-and-documentation-project-update">Website and Documentation project update</a></li>
+<li><a href="2018-07_july-25.html#groups">Groups</a></li>
+<li><a href="2018-07/july-26.md#abstractions-for-membranes">Abstractions for membranes</a></li>
+<li><a href="2018-07_july-26.html#reviewing-the-future-js-syntax-throughout-the-current-proposals-overflow">Reviewing the future JS syntax throughout the current proposals</a></li>
+<li><a href="2018-07_july-26.html#package-name-maps">Package name maps</a></li>
+<li><a href="2018-07/july-26.md#layered-apis">Layered APIs</a></li>
+<li><a href="2018-07_july-26.html#get-originals">Get Originals</a></li>
+</ul>
+<a href="#updates-from-ecma-262-editors-group"><h2 id="updates-from-ecma-262-editors-group">Updates from ECMA 262 Editors Group</h2></a><p>ES2019 now includes:</p>
+<ol>
+<li>ECMAScript is now a superset of JSON.</li>
+<li>The catch binding is now optional.</li>
+<li>bugfixes and few needs-consensus PRs.</li>
+</ol>
+<a href="#organizational-update"><h2 id="organizational-update">Organizational update</h2></a><ul>
+<li>TC39 welcomed 4 new voting members, Agoric Systems (SPC), npm (SME), Stripe (OM), and Igalia (SME).</li>
+<li>TC39 Chairperson or Chair Group for 2019 will be nominated for September meeting and planned to have vote at November meeting.</li>
+<li>ECMA has approved “Ecma Fellow&quot; to accomodate individuals with extraordinary, contribution to participate in TCs. TC39 can nominate such members to be approved at December 2018 General Assembly</li>
+<li><a href="2018-07_july-24.html#managementinfrastructure-tasks-invited-expert-policy-meeting-planning">Management/infrastructure tasks; invited expert policy; meeting planning</a> (<a href="https://docs.google.com/presentation/d/1eTBTMZzylhZR4v7Hgfd3UJYwLBgQZgX8q8fGvsvcNDE/edit#slide=id.p">slides</a>)</li>
+<li><a href="2018-07_july-26.html#september-2019-meeting-location">September 2019 Meeting Locations</a></li>
+</ul>
+
+</body>

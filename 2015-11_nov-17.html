@@ -62,7 +62,12 @@
 <a href="#conclusionresolution-async-functions-stage-4-process-discussion-bt"><h4 id="conclusionresolution-async-functions-stage-4-process-discussion-bt">Conclusion/Resolution</h4></a><p>None yet.</p>
 <a href="#objectvaluesentries"><h2 id="objectvaluesentries">Object.values/entries</h2></a><p>JHD: OK for stage 3? It got signoff
 … [general consensus]</p>
-<a href="#conclusionresolution-objectvaluesentries"><h4 id="conclusionresolution-objectvaluesentries">Conclusion/Resolution</h4></a><p>Object.values/entries approved for stage 3</p>
+<a href="#conclusionresolution-objectvaluesentries"><h4 id="conclusionresolution-objectvaluesentries">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 acceptance
+<ul>
+<li>Object.values/entries</li>
+</ul></li>
+</ul>
 <a href="#stringpadleftright"><h2 id="stringpadleftright">String.pad{Left,Right}</h2></a><p>JHD: Concerns raised on es-discuss: 1) No grapheme handling (response: then other existing things should be changed, and nothing cares about it. Every language follows native string support in its padding.)</p>
 <p>… [General consensus that that’s OK]</p>
 <p>WH: I see the choices as either doing this simple thing (measuring code units) or doing something really, really complicated that works correctly on graphemes. The simple thing is useful in practice, while implementing grapheme measurement would be too complicated and take us a long time. So I support this.</p>
@@ -79,7 +84,12 @@ YK: saying padLeft, and meaning visual right is clearly bad.</p>
 <p>YK: any objections start/End ?</p>
 <p>CM: Remaining parallel with trimLeft/trimRight, established names?</p>
 <p>DD: Add trimStart, trimEnd and rename to padStart, padEnd as part of annex B.</p>
-<a href="#conclusionresolution-stringpadleftright"><h4 id="conclusionresolution-stringpadleftright">Conclusion/Resolution</h4></a><p>Rename to <code>padStart</code>/<code>padEnd</code>, update trimLeft/trimRight proposal to also include trimStart/trimEnd. padStart/padEnd approved for Stage 3.</p>
+<a href="#conclusionresolution-stringpadleftright"><h4 id="conclusionresolution-stringpadleftright">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 acceptance
+<ul>
+<li>Rename to <code>padStart</code>/<code>padEnd</code>, update trimLeft/trimRight proposal to also include trimStart/trimEnd. padStart/padEnd approved</li>
+</ul></li>
+</ul>
 <a href="#arrayprototypeincludes"><h2 id="arrayprototypeincludes">Array.prototype.includes</h2></a><p>DD: CC + FF in betas</p>
 <p>DD: test262 works</p>
 <p>DD: Safari doesn’t have TypeArray.prototype.includes</p>

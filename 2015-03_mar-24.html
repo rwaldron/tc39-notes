@@ -251,7 +251,7 @@ Counter.propTypes = {<span class="hljs-attr">initialCount</span>: React.PropType
 <p>AWB: What if someone modifies these descriptors.</p>
 <p>EA: It is important that the descriptor of these own instance properties is immutable, or at that you cannot change these afterwards because then the constructor function has to change its behavior after the fact.</p>
 <a href="#conclusionresolution-61-es6-class-properties"><h4 id="conclusionresolution-61-es6-class-properties">Conclusion/Resolution</h4></a><ul>
-<li>Stage 0</li>
+<li>Stage 0 acceptance</li>
 <li>Do not use descriptors for initializer state.</li>
 </ul>
 <a href="#62-decorators"><h2 id="62-decorators">6.2 Decorators</h2></a><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> </span>{
@@ -336,7 +336,10 @@ we'll fall off a complexity cliff.  Agree that we should look at the bigger pict
 <p>YK:  If readonly were built-in and you imported it, then the engine could do smarter things.</p>
 <p>DH: Suggests stage 1, but audit the space which may lead to changes.</p>
 <a href="#conclusion-62-decorators"><h4 id="conclusion-62-decorators">Conclusion</h4></a><ul>
-<li>Stage 1, YK will audit the space.</li>
+<li>Stage 1 acceptance
+<ul>
+<li>YK will audit the space.</li>
+</ul></li>
 </ul>
 <a href="#63-reverseiterable-interface"><h2 id="63-reverseiterable-interface">6.3 ReverseIterable interface</h2></a><p>(Lee Byron)</p>
 <p>Proposal: <a href="https://github.com/leebyron/ecmascript-reverse-iterator">https://github.com/leebyron/ecmascript-reverse-iterator</a></p>

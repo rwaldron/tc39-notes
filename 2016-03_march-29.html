@@ -40,8 +40,8 @@
 <p>JHD: Only negative feedback was performance related. Otherwise, just sadness it didn't make it in.</p>
 <p>JHD: the only negative feedback was disappointment that it didn't make it in and...</p>
 <p>BT/JHD/etc consensus agreed that it proceeds to stage 4.</p>
-<a href="#conclusionresolution-objectvalues--objectentries"><h4 id="conclusionresolution-objectvalues--objectentries">Conclusion/resolution</h4></a><ul>
-<li>Stage 4!</li>
+<a href="#conclusionresolution-objectvalues--objectentries"><h4 id="conclusionresolution-objectvalues--objectentries">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4 acceptance</li>
 </ul>
 <a href="#systemglobal"><h2 id="systemglobal">System.global</h2></a><p>(JHD)</p>
 <p>JHD: I did a whole bunch of research, and found that there's a whole bunch of code that uses self, window and global which would break, as it assumes that 'global' implies Node, 'self' or 'window' imply web.</p>
@@ -58,7 +58,15 @@
 <p>JHD: self might be OK, but there were a few examples; didn't find a particular compelling one</p>
 <p>MM: is opposed to having bare &quot;global&quot;. They should be gathered; having that be System is fine, but it shoudl be someplace.</p>
 <a href="#conclusionresolution-systemglobal"><h4 id="conclusionresolution-systemglobal">Conclusion/resolution</h4></a><ul>
-<li>Stage 2, reviewers for Stage 3 are Caridy Patiño, Mark Miller, Michael Ficarra</li>
+<li>Stage 2 acceptance
+<ul>
+<li>Reviewers:
+<ul>
+<li>Caridy Patiño</li>
+<li>Mark Miller</li>
+<li>Michael Ficarra</li>
+</ul></li>
+</ul></li>
 </ul>
 <a href="#stringprototypepadstartpadend"><h2 id="stringprototypepadstartpadend">String.prototype.padStart/padEnd</h2></a><p>(JHD)</p>
 <p>JHD: will ship in stable behind a flag.  Not currently trying to get to stage 4 today (currently at Stage 3). Just wanted to update because of recent discussion.  there is not enough implementations to move it forward in stage.</p>
@@ -262,7 +270,7 @@
 <p>WH: Another option already mentioned was to have for await only look for Symbol.asynciterator and not default to Symbol.iterator. This would require explicit user conversions to convert sequences to async sequences, but those aren't necessarily a bad thing.</p>
 <p>DH: &quot;meh&quot;.</p>
 <p>BT: Matt the author of ReactiveX wants to work with Matt Podwysocki</p>
-<a href="#conclusion-async-iteration"><h5 id="conclusion-async-iteration">Conclusion</h5></a><p>Approved for Stage 2</p>
+<a href="#conclusion-async-iteration"><h5 id="conclusion-async-iteration">Conclusion</h5></a><p>Stage 2 acceptance</p>
 <p>DD: and DH volunteered as reviewers.</p>
 <a href="#shared-memory-and-atomics"><h2 id="shared-memory-and-atomics">Shared Memory and atomics</h2></a><p>LHN: presenting</p>
 <p>DH: did we convince ourselves that using strings instead of integers for futex codes is not too onerous for asm.js?</p>

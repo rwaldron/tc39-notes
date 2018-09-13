@@ -37,7 +37,7 @@ Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-pr
 <p>YK: toString is a defacto reflection mechanism. Web depends on it.</p>
 <p>AWB: Not all code runs on the web.</p>
 <p>AWB: Seems like a value add.</p>
-<p>MM: It would be a value add for an implementation not to support sloppy mode.... but it can't claim to be conformant.</p>
+<p>MM: It would be a value add for an implementation not to support sloppy mode... but it can't claim to be conformant.</p>
 <p>(Discussion of how imortant toString returning source is...)</p>
 <p>BT: Bound functions should show [Native Code]</p>
 <p>MF: Currently an option.</p>
@@ -140,7 +140,7 @@ Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-pr
 <p>BT: comes at as cost, but i doubt its actually used.</p>
 <p>ARB: one reason for enumerate trap may be that the set of all properties is larger then the set of properties that are enumerable, so a performance difference is pssible.</p>
 <p>YK: getOwnPropertyDescriptors + filter out enumerable, covers this</p>
-<p>BT: what is the trap name for all property names .... getOwnPropertyNames</p>
+<p>BT: what is the trap name for all property names ... getOwnPropertyNames</p>
 <p>BT: should for-in just be implemented as that.</p>
 <p>BT: we would get rid of enumerate trap</p>
 <p>ARB: doesn't one return an iterator</p>
@@ -152,34 +152,36 @@ Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-pr
 <li>provisional consensus to kill enumerate trap, contingent on running it by tom</li>
 <li>for-in does [[HasProperty]]</li>
 </ul>
-<p>************** Response from Tom: **************</p>
+<hr>
+<p>Response from Tom:</p>
 <p>A few things come to mind:</p>
 <ol>
-<li><p>Faithful virtualization of the prototype chain. We decided that the Proxy should always be in control of operations involving prototype inheritance. This includes has, get, set and enumerate. For all of these operations, when executed on a normal object, they will walk the prototype chain until they hit a Proxy. After that point, full control is delegated to the Proxy. If a Proxy would only be able to override get() and set() but not enumerate(), this may lead to inconsistencies (without an enumerate() trap, the VM will have to externally walk the prototype chain of the Proxy via getPrototypeOf()).</p></li>
-<li><p>When we designed Proxies originally, we made the design decision to map many built-in operations directly to specific traps, even if these operations could be expressed in terms of more fundamental operations (get, set, has, enumerate are all examples here). The design argument here was always improved performance by reducing the number of temporary allocations.</p></li>
-</ol>
-<p>Much later in the design, others started pushing back on the number of traps, leading us to reconsider some traps, e.g. I recall the &quot;hasOwn&quot; trap was dropped in favor of checking whether (getOwnProperty() !== undefined), even though it is strictly less efficient. I don't have a view on the actual cost of expressing enumerate() in terms of lower-level MOP operations, but it seems obvious that there will be more allocation costs involved. The question is then: if enumerate() gets dropped on these grounds, why not get(), set() and has()?</p>
-<ol start="3">
-<li><p>As far as I recall, enumerate() is the only trap that actually returns an <em>iterator</em> over the property names, allowing efficient virtualization of objects with a large (or potentially, infinite) number of properties. The only other trap that returns a list of property keys, &quot;ownKeys&quot;, returns a manifest array of property names.</p></li>
-<li><p>enumerate() had weaker invariants than ownKeys() [just like all the traps that deal with prototype inheritance, since a frozen object can still inherit from a non-frozen object, leading to weaker observable invariants in general]. If one would express for-in in terms of repeated calls to ownKeys(), the invariant check overhead may be substantial compared to just calling enumerate().</p></li>
+<li>Faithful virtualization of the prototype chain. We decided that the Proxy should always be in control of operations involving prototype inheritance. This includes has, get, set and enumerate. For all of these operations, when executed on a normal object, they will walk the prototype chain until they hit a Proxy. After that point, full control is delegated to the Proxy. If a Proxy would only be able to override get() and set() but not enumerate(), this may lead to inconsistencies (without an enumerate() trap, the VM will have to externally walk the prototype chain of the Proxy via getPrototypeOf()).</li>
+<li>When we designed Proxies originally, we made the design decision to map many built-in operations directly to specific traps, even if these operations could be expressed in terms of more fundamental operations (get, set, has, enumerate are all examples here). The design argument here was always improved performance by reducing the number of temporary allocations.
+Much later in the design, others started pushing back on the number of traps, leading us to reconsider some traps, e.g. I recall the &quot;hasOwn&quot; trap was dropped in favor of checking whether (getOwnProperty() !== undefined), even though it is strictly less efficient. I don't have a view on the actual cost of expressing enumerate() in terms of lower-level MOP operations, but it seems obvious that there will be more allocation costs involved. The question is then: if enumerate() gets dropped on these grounds, why not get(), set() and has()?</li>
+<li>As far as I recall, enumerate() is the only trap that actually returns an <em>iterator</em> over the property names, allowing efficient virtualization of objects with a large (or potentially, infinite) number of properties. The only other trap that returns a list of property keys, &quot;ownKeys&quot;, returns a manifest array of property names.</li>
+<li>enumerate() had weaker invariants than ownKeys() [just like all the traps that deal with prototype inheritance, since a frozen object can still inherit from a non-frozen object, leading to weaker observable invariants in general]. If one would express for-in in terms of repeated calls to ownKeys(), the invariant check overhead may be substantial compared to just calling enumerate().</li>
 </ol>
 <p>Unless there are really good reasons to get rid of enumerate(), I think it should remain in. For me, (1) and (3) are the killer arguments: consistency with has(),get(),set() and efficient enumeration via iteration.</p>
 <p>Feel free to forward this mail to TC39. I'm happy to engage in follow-up discussions, just ping me when needed.</p>
 <hr>
-<a href="#5xviii-exponentiation-operator-rw"><h2 id="5xviii-exponentiation-operator-rw">5.xviii Exponentiation Operator (RW)</h2></a><p>RW: i implemented the changes, tried to get brendan to review it (no luck). BT reviewed, and chakra implements</p>
+<a href="#5xviii-exponentiation-operator-rw"><h2 id="5xviii-exponentiation-operator-rw">5.xviii Exponentiation Operator (RW)</h2></a><p>RW: I implemented the changes, tried to get brendan to review it (no luck). BT reviewed, and chakra implements</p>
 <p>RW: BT and I went over it line/line, followed up with new tests, and in the last 20 minutes per domenics suggestion I duplicated the applying ** operater tests, so both map.pow and ** tests. the SM folks will be happy that they all passed (except for one, but that's expected).</p>
 <p>RW: chakra implements, applause for OSS chakra</p>
 <p>RW: motion to include to stage 4, inclusion for 2016</p>
 <p>BT: thanks rick</p>
 <p>RW: any objections</p>
 <a href="#conclusionresolution-5xviii-exponentiation-operator-rw"><h4 id="conclusionresolution-5xviii-exponentiation-operator-rw">Conclusion/Resolution</h4></a><ul>
-<li>stage 4!</li>
+<li>Stage 4 acceptance</li>
 </ul>
 <p>(Lunch)</p>
 <a href="#afternoon-agenda"><h2 id="afternoon-agenda">Afternoon Agenda</h2></a><ol>
 <li>Date and place for the next meetings</li>
 </ol>
-<a href="#conclusionresolution-afternoon-agenda"><h4 id="conclusionresolution-afternoon-agenda">Conclusion/Resolution</h4></a><p>Meet in Munich Monday May 23-Wednesday May 25</p>
+<a href="#conclusionresolution-afternoon-agenda"><h4 id="conclusionresolution-afternoon-agenda">Conclusion/Resolution</h4></a><ul>
+<li>Meet in Munich Monday May 23-Wednesday May 25</li>
+<li></li>
+</ul>
 <a href="#2-402-needs-reviewers-20min"><h2 id="2-402-needs-reviewers-20min">2. 402 needs reviewers (20min)</h2></a><p>CP: HTML version of the second edition is now public (<a href="http://www.ecma-international.org/ecma-402/2.0/">www.ecma-international.org/ecma-402/2.0/</a>),  just like 262. We have done some re-orgs on the spec to make the new features easier to include. Many new features have been proposed, lots of new contributors, good momentum. At this point we need reviewers</p>
 <p>DE: first we need to propose to stage 2.</p>
 <p>CP: we want to move 3 things up, and get reviewers, and one small detail</p>
@@ -243,20 +245,6 @@ Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-pr
 <a href="#conclusionresolution-5xix-revisit-proxy-enumerate---revisit-decision-to-exhaust-iterator"><h4 id="conclusionresolution-5xix-revisit-proxy-enumerate---revisit-decision-to-exhaust-iterator">Conclusion/Resolution</h4></a><ul>
 <li>Remove Reflect.enumerate, contingent on further information from Tom</li>
 </ul>
-<p>************** Response from Tom: **************</p>
-<p>A few things come to mind:</p>
-<ol>
-<li><p>Faithful virtualization of the prototype chain. We decided that the Proxy should always be in control of operations involving prototype inheritance. This includes has, get, set and enumerate. For all of these operations, when executed on a normal object, they will walk the prototype chain until they hit a Proxy. After that point, full control is delegated to the Proxy. If a Proxy would only be able to override get() and set() but not enumerate(), this may lead to inconsistencies (without an enumerate() trap, the VM will have to externally walk the prototype chain of the Proxy via getPrototypeOf()).</p></li>
-<li><p>When we designed Proxies originally, we made the design decision to map many built-in operations directly to specific traps, even if these operations could be expressed in terms of more fundamental operations (get, set, has, enumerate are all examples here). The design argument here was always improved performance by reducing the number of temporary allocations.</p></li>
-</ol>
-<p>Much later in the design, others started pushing back on the number of traps, leading us to reconsider some traps, e.g. I recall the &quot;hasOwn&quot; trap was dropped in favor of checking whether (getOwnProperty() !== undefined), even though it is strictly less efficient. I don't have a view on the actual cost of expressing enumerate() in terms of lower-level MOP operations, but it seems obvious that there will be more allocation costs involved. The question is then: if enumerate() gets dropped on these grounds, why not get(), set() and has()?</p>
-<ol start="3">
-<li><p>As far as I recall, enumerate() is the only trap that actually returns an <em>iterator</em> over the property names, allowing efficient virtualization of objects with a large (or potentially, infinite) number of properties. The only other trap that returns a list of property keys, &quot;ownKeys&quot;, returns a manifest array of property names.</p></li>
-<li><p>enumerate() had weaker invariants than ownKeys() [just like all the traps that deal with prototype inheritance, since a frozen object can still inherit from a non-frozen object, leading to weaker observable invariants in general]. If one would express for-in in terms of repeated calls to ownKeys(), the invariant check overhead may be substantial compared to just calling enumerate().</p></li>
-</ol>
-<p>Unless there are really good reasons to get rid of enumerate(), I think it should remain in. For me, (1) and (3) are the killer arguments: consistency with has(),get(),set() and efficient enumeration via iteration.</p>
-<p>Feel free to forward this mail to TC39. I'm happy to engage in follow-up discussions, just ping me when needed.</p>
-<hr>
 <a href="#8-ecma-402-edition-3-advance-stage-2"><h2 id="8-ecma-402-edition-3-advance-stage-2">8 Ecma 402, Edition 3, Advance stage 2</h2></a><p>(Zibi Braniecki)</p>
 <p>402-related slides: <a href="https://drive.google.com/drive/u/1/folders/0B1rFz38aICo2YUpVd0VfTUdwRW8">https://drive.google.com/drive/u/1/folders/0B1rFz38aICo2YUpVd0VfTUdwRW8</a></p>
 <a href="#formattoparts"><h2 id="formattoparts">formatToParts</h2></a><p><a href="https://docs.google.com/presentation/d/1GuPC_pD84VFf4Yc8NKNDFBBmX6uY9DMA5CtKZoAdrzM/">https://docs.google.com/presentation/d/1GuPC_pD84VFf4Yc8NKNDFBBmX6uY9DMA5CtKZoAdrzM/</a></p>
@@ -270,7 +258,7 @@ Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-pr
 <p>DE: I will review</p>
 <p>RW: I will review</p>
 <a href="#conclusionresolution-formattoparts"><h4 id="conclusionresolution-formattoparts">Conclusion/Resolution</h4></a><ul>
-<li>stage 2</li>
+<li>Stage 2 acceptance</li>
 <li>Reviewers:
 <ul>
 <li>Rick Waldron</li>
@@ -301,7 +289,7 @@ Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-pr
 <p>SP: me</p>
 <p>DE: me</p>
 <a href="#conclusionresolution-intlpluralrules"><h4 id="conclusionresolution-intlpluralrules">Conclusion/Resolution</h4></a><ul>
-<li>stage 2</li>
+<li>Stage 2 acceptance</li>
 <li>Reviewers:
 <ul>
 <li>Daniel Ehrenberg</li>
@@ -332,15 +320,15 @@ Spec text: <a href="https://raw.githubusercontent.com/michaelficarra/Function-pr
 <p>DE: yes</p>
 <p>CP: whats in the content of the object returned, is it spec'd</p>
 <p>SP: needs further exploration</p>
-<a href="#conclusion-abstract-locale-operations"><h3 id="conclusion-abstract-locale-operations">Conclusion</h3></a><ul>
-<li>stage 2
-reviewers
+<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2 acceptance</li>
+<li>reviewers
 <ul>
 <li>Stefan Penner</li>
 <li>Daniel Ehrenberg</li>
 </ul></li>
 </ul>
-<a href="#intl-formatter-preview"><h3 id="intl-formatter-preview">Intl Formatter preview</h3></a><p>ZB: this is still exploration</p>
+<a href="#intl-formatter-preview"><h2 id="intl-formatter-preview">Intl Formatter preview</h2></a><p>ZB: this is still exploration</p>
 <p>ZB: slide (Intl.UnitFormat)</p>
 <p>ZB: lots of un-answered questions</p>
 <p>ZB: slide (Intl.DurationFormat): Video player or timer in a watch. Distinct from UnitFormat</p>
@@ -353,10 +341,10 @@ reviewers
 <p>ZB: these 4 handle the most common problems we have seen.</p>
 <p>CP: considerable existing bikeshedding, but more are invited to join.</p>
 <p>ZB: stage 0?</p>
-<a href="#conclusion-abstract-locale-operations"><h3 id="conclusion-abstract-locale-operations">Conclusion</h3></a><ul>
-<li>advanced to stage 0</li>
+<a href="#conclusionresolution-intl-formatter-preview"><h4 id="conclusionresolution-intl-formatter-preview">Conclusion/Resolution</h4></a><ul>
+<li>Stage 0 acceptance</li>
 </ul>
-<a href="#async-generator-functions"><h3 id="async-generator-functions">Async generator functions</h3></a><p>presenter: Kevin Smith
+<a href="#async-generator-functions"><h2 id="async-generator-functions">Async generator functions</h2></a><p>presenter: Kevin Smith
 link to presentation:  <a href="https://docs.google.com/presentation/d/1OwDb4WH9pkdEFVhsY5kjaJ6MF1KrxBNQWpWc9SymweQ/edit#slide=id.p">https://docs.google.com/presentation/d/1OwDb4WH9pkdEFVhsY5kjaJ6MF1KrxBNQWpWc9SymweQ/edit#slide=id.p</a></p>
 <p>KS: slide (overview)</p>
 <p>KS: Async generator functions return AsyncGenerator objects, with a for-await loop</p>
@@ -489,7 +477,7 @@ link to presentation:  <a href="https://docs.google.com/presentation/d/1OwDb4WH9
 <p>AWB: this feels like stage 1</p>
 <p>DD: does anyone have fundamental disagreement?</p>
 <p>YK: someone needs to respond to my exploration request. I am pretty uncomfortable combining the two types.</p>
-<p>.... discussion ....</p>
+<p>... discussion ...</p>
 <p>DH: let me add structure</p>
 <p>DH: their are several work areas, that have been structured as independent. JH has been a champ in 1 direction, and KS in another. Several areas of unstability:</p>
 <ul>
@@ -526,12 +514,11 @@ link to presentation:  <a href="https://docs.google.com/presentation/d/1OwDb4WH9
 <li>yielding a rejected promise does not cause a generation-side exception. Rather it simply transmits the rejected promise. A simple for-await consumer is stopped by the rejection throwing the reason.</li>
 <li>(Pointed out by Dean): An implicit &quot;await&quot; at the &quot;yield&quot; violates the rule that we can find all interleaving points by looking for &quot;await&quot;.</li>
 </ul>
-<a href="#conclusionresolution-abstract-locale-operations"><h3 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h3></a><ul>
-<li>Stage 1</li>
+<a href="#conclusionresolution-async-generator-functions"><h4 id="conclusionresolution-async-generator-functions">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 acceptance</li>
 <li>needs more exploration as per above discussion.</li>
 </ul>
-<a href="#strong-mode-discussion"><h3 id="strong-mode-discussion">Strong Mode Discussion</h3></a><p>Presenter: Andreas Rossberg
-link:</p>
+<a href="#strong-mode-discussion"><h2 id="strong-mode-discussion">Strong Mode Discussion</h2></a><p>(Andreas Rossberg)</p>
 <p>ARB: slide (recap)</p>
 <p>ARB: slide (progress)</p>
 <p>ARB: slide (strong mode)</p>
@@ -549,14 +536,10 @@ link:</p>
 <p>... discussion above strong vs non-string inheritance mixtures ...</p>
 <p>ARB: slide (takeaway)</p>
 <p>ARB: slide (soundscript)</p>
-<a href="#teset262"><h3 id="teset262">Teset262</h3></a><p>presenter: Dan</p>
-<p>DE: reptitive tests, lots of tests that repeat each other. Their exists a proposal to generate tests precedurally, we require implementors feedback. Ask me and I will provide more information</p>
-<a href="#conclusion--resolution-abstract-locale-operations"><h3 id="conclusion--resolution-abstract-locale-operations">Conclusion / resolution</h3></a><ul>
-<li>implementors need to provide feedback</li>
-</ul>
-<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h4></a><a href="#test262-updates"><h1 id="test262-updates">Test262 Updates</h1></a><p>Presenter: DE</p>
+<a href="#test262-updates"><h2 id="test262-updates">Test262 Updates</h2></a><p>(Dan Ehrenberg)</p>
+<p>DE: reptitive tests, lots of tests that repeat each other. There exists a proposal to generate tests precedurally, we require implementors feedback. Ask me and I will provide more information</p>
 <p>DE: We have some changes coming into test262, e.g., <a href="https://github.com/tc39/test262/issues/470">https://github.com/tc39/test262/issues/470</a> <a href="https://github.com/tc39/test262/issues/467">https://github.com/tc39/test262/issues/467</a>. Users, please give feedback as to whether these are appropriate for you! Please reach out to me if you have any concerns.</p>
-<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h4></a><a href="#progress-review-callable-class-constructors-allen"><h1 id="progress-review-callable-class-constructors-allen">Progress review: Callable class constructors (Allen)</h1></a><p>presenters: AWB / YK</p>
+<a href="#progress-review-callable-class-constructors-allen"><h2 id="progress-review-callable-class-constructors-allen">Progress review: Callable class constructors (Allen)</h2></a><p>presenters: AWB / YK</p>
 <p>AWB: slide (callable Class Constructors)</p>
 <p>AWB: slide (refresher)</p>
 <p>AWB: slide (refresher pt.2)</p>
@@ -606,7 +589,7 @@ link:</p>
  }
 </code></pre>
 <p>MM the only thing that gives me pause here, if long term we will only address this with a specified mechanism. Date case goign back to es5, then we are not gaining any value from having the default constructor throwing.</p>
-<p>YK: incorrect.... i would make a looser term.</p>
+<p>YK: incorrect... i would make a looser term.</p>
 <p>YK: lets go back to es5, a massive hazard to forget use. This made many people not want the newless behavior.</p>
 <p>MM: I'm not buying this</p>
 <p>YK: the world you want to live in, they can choose new or old style, If you happen to not like new, you call without. That world only works if all the classes are es6 classes, if you encounter an es5 class you will likely encounter a hazard.</p>
@@ -636,14 +619,16 @@ link:</p>
 <p>DD: we should likely not provide constructs that will allow those to shoot themselves in the foot, they can just use =&gt;...</p>
 <p>YK: decorators could enable this ergonomically</p>
 <p>MM: we should drop this completely, and solve it with decorators.</p>
-<a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h4></a><p>Proposal dropped.</p>
+<a href="#conclusionresolution-progress-review-callable-class-constructors-allen"><h4 id="conclusionresolution-progress-review-callable-class-constructors-allen">Conclusion/Resolution</h4></a><ul>
+<li>Proposal dropped.</li>
+</ul>
 <a href="#objectgetownpropertydescriptors-to-stage-3-jordan-harband-low-priority-but-super-quick"><h1 id="objectgetownpropertydescriptors-to-stage-3-jordan-harband-low-priority-but-super-quick">Object.getOwnPropertyDescriptors to stage 3? (Jordan Harband, low priority, but super quick!)</h1></a><p>presenter JDH:</p>
 <p>JDH: reviewers and editors +1'd, can we move to stage 3</p>
 <p>all: yes</p>
-<a href="#conclusionresolution-abstract-locale-operations"><h2 id="conclusionresolution-abstract-locale-operations">Conclusion/resolution</h2></a><ul>
-<li>advance stage 3</li>
+<a href="#conclusionresolution-progress-review-callable-class-constructors-allen"><h4 id="conclusionresolution-progress-review-callable-class-constructors-allen">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 acceptance</li>
 </ul>
-<ol start="6">
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><ol start="6">
 <li>private state</li>
 <li>Progress review: Callable class constructors (Allen)</li>
 <li>Module loading update (Dave Herman, Caridy Patiño)</li>

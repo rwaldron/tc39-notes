@@ -427,7 +427,13 @@ We have experience at libs, and all the new web stuff at Yahoo is using this und
 <p>(Discussion of IE not using CLDR vs. everyone else using it.)</p>
 <p>EF: we would like to advance to stage 1, we dont have spec test. But we have draft impl + gecko imp.</p>
 <p>BT: I have to get the windows guys to sign-off to on the new API, so something concrete (spec text) would be best.</p>
-<a href="#resolution-for-exposing-abstract-operations-intl"><h3 id="resolution-for-exposing-abstract-operations-intl">Resolution: (for exposing abstract operations)</h3></a><a href="#stage-1"><h2 id="stage-1">Stage 1</h2></a><a href="#pluralrules"><h3 id="pluralrules">PluralRules</h3></a><p>EF: apps must solves this, if they want to use I18n in the UI. This is heavily requested, we have implemented it.</p>
+<a href="#conclusionresolution-intl"><h4 id="conclusionresolution-intl">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 acceptance
+<ul>
+<li>for exposing abstract operations</li>
+</ul></li>
+</ul>
+<a href="#pluralrules"><h3 id="pluralrules">PluralRules</h3></a><p>EF: apps must solves this, if they want to use I18n in the UI. This is heavily requested, we have implemented it.</p>
 <p>ZB: it is hard to implement correctly, CLDR gives the required information</p>
 <p>(some visual examples)</p>
 <p>ZB: Without this, the shear amount of complexity required blocks good localized sites.</p>
@@ -468,7 +474,7 @@ We have experience at libs, and all the new web stuff at Yahoo is using this und
 <p>EF: CP has written up spec text</p>
 <p>EF: we need to deal with decimals, the spec test needs to be updated</p>
 <p>CP: we need to figure it out yet</p>
-<a href="#resolutions-stage-1-stage-1"><h3 id="resolutions-stage-1-stage-1">resolutions stage 1</h3></a><a href="#abstract-locale-operations"><h2 id="abstract-locale-operations">Abstract Locale Operations</h2></a><p>EF: aspects of each of the components currently go through some abstract operations, we would like to expose them</p>
+<a href="#resolutions-stage-1-intl"><h3 id="resolutions-stage-1-intl">resolutions stage 1</h3></a><a href="#abstract-locale-operations"><h2 id="abstract-locale-operations">Abstract Locale Operations</h2></a><p>EF: aspects of each of the components currently go through some abstract operations, we would like to expose them</p>
 <p>ZB: Intl.getCanonicalLocales(locales)</p>
 <p>ZB: naming suggestions are open.</p>
 <p>ZB: This is useful any time we do language negotiation, this allows us to verify. Implementing this in userland is like 4000 loc, exposing it instead has a clear advantage.</p>
@@ -545,7 +551,7 @@ We have experience at libs, and all the new web stuff at Yahoo is using this und
 <p>JHD: in all reasonable platforms, the global is accessible. This merely provides a consistent solution.</p>
 <p>YK: SES is ok with this, even though they provide no global access.</p>
 <a href="#conclusionresolution-abstract-locale-operations"><h4 id="conclusionresolution-abstract-locale-operations">Conclusion/Resolution</h4></a><ul>
-<li>stage 1</li>
+<li>Stage 1</li>
 </ul>
 <a href="#wrap-up"><h1 id="wrap-up">Wrap-up</h1></a><p>JN: thanks to paypal, for hosting the meeting lunches and breakfasts. Excellent thank you</p>
 <p>JN: Thank you to paypal and ecma for dinner</p>

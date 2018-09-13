@@ -148,7 +148,7 @@
 <p>[various discussion]</p>
 <p>DH: We have an implementer who has implemented [proper tail calls] as an optimization, and would like to continue shipping that optimization. We should make sure that any Error.stack proposal does not interfere with their ability to do so.</p>
 <p>DH: BT wants to put forward a new proposal, and I want to make sure that he's going to be heard. From what I've understood today, it seems totally reasonable.</p>
-<a href="#conclusionresolution-tail-calls"><h4 id="conclusionresolution-tail-calls">Conclusion/resolution</h4></a><p>Brian Terlson (with EF as co-champion) to champion a stage 0 proposal to amend existing tail call spec language to require extra syntax to implement a tail call</p>
+<a href="#conclusionresolution-tail-calls"><h4 id="conclusionresolution-tail-calls">Conclusion/Resolution</h4></a><p>Brian Terlson (with EF as co-champion) to champion a stage 0 proposal to amend existing tail call spec language to require extra syntax to implement a tail call</p>
 <a href="#reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression"><h2 id="reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression">Reference type and implementation reality (double-evaluation of computed property expression)</h2></a><p>MF: IE6-8 and some versions of Opera has the correct (specified) semantics.</p>
 <p>BT: Less worried about the web compatibility aspects. Fixing issue is costly for us.</p>
 <p>AWB: We had a spec. We had divergent implementations. We looked it. We asked if the spec should change. We said no. We said that the spec was correct. An implementor becoming divergent doesn't invalidate that.</p>
@@ -158,7 +158,7 @@
 <p>BT: Spec should implement reality.</p>
 <p>AWB: Not if ...</p>
 <p>BT: This doesn't matter all that much.</p>
-<a href="#conclusionresolution-reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression"><h4 id="conclusionresolution-reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression">Conclusion/resolution</h4></a><p>Let the current spec stand.</p>
+<a href="#conclusionresolution-reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression"><h4 id="conclusionresolution-reference-type-and-implementation-reality-double-evaluation-of-computed-property-expression">Conclusion/Resolution</h4></a><p>Let the current spec stand.</p>
 <a href="#intl"><h2 id="intl">Intl</h2></a><p>ZB: presenting gi</p>
 <p>Wants to advance to stage 3</p>
 <p>Fundamentally, it's that all future formatters will have *.formatToParts</p>
@@ -166,7 +166,9 @@
 <p>ZB: the longer name is mostly used by libraries. Most people will just use format and so it's a good compromise</p>
 <p>DH: Naming is bikeshedding.</p>
 <p>WH, AWB: But we're setting precedent here.</p>
-<a href="#conclusionresolution-intl"><h4 id="conclusionresolution-intl">Conclusion/resolution</h4></a><p>formatToParts advances to stage 3</p>
+<a href="#conclusionresolution-intl"><h4 id="conclusionresolution-intl">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 acceptance</li>
+</ul>
 <p>Additional Intl List/Unit/RelativeTime/Duration entries advance to stage 1</p>
 <p>BT: Reserve the right to come back later and object more strongly. Not sure if ICU has the APIs that we can use to support this.</p>
 <p>The ECMA 402 group encourages Microsoft to use ICU</p>
@@ -228,7 +230,7 @@
 <p>DH: some options: abandoned phased execution, [... I missed the rest]</p>
 <p>MM: scoping of this, super, and arguments, and ...</p>
 <p>MM: for all these, file issues on teh proposal</p>
-<a href="#conclusionresolution-public-class-fields"><h4 id="conclusionresolution-public-class-fields">Conclusion/resolution</h4></a><ul>
+<a href="#conclusionresolution-public-class-fields"><h4 id="conclusionresolution-public-class-fields">Conclusion/Resolution</h4></a><ul>
 <li>JM will bring a proposal in May</li>
 <li>DE will try to organize a call in advance</li>
 <li>please file issues on the proposal repo for all specific concerns</li>
@@ -340,7 +342,7 @@
 <p>SYG: I would volunteer to help one of the champions prototype this in our engine</p>
 <p>AWB: This needs debate, and it needs implementation experience.</p>
 <p>EF: The core of the problem is that the worries about the proposal are exactly those things that the proposal explicitly does not address.</p>
-<a href="#conclusionresolution-weak-references"><h4 id="conclusionresolution-weak-references">Conclusion/resolution</h4></a><p>Stage 1</p>
+<a href="#conclusionresolution-weak-references"><h4 id="conclusionresolution-weak-references">Conclusion/Resolution</h4></a><p>Stage 1</p>
 <p>Open issue: deal with cross-realm stuff in more detail</p>
 <p>Open issue: .get() -&gt; strong as a side channel</p>
 <p>Open issue:  address this turn-based behavior in a non-turn-based execution environment.</p>
@@ -372,18 +374,18 @@
 <p>DH: clearly stage 1 appropriate, will need lots of stage 2 spec analysis rigor</p>
 <p>WH: similar to regexes, which have a cover grammar</p>
 <p>… discussion about compat issue …</p>
-<a href="#conclusionresolution-template-literals-are-broken"><h4 id="conclusionresolution-template-literals-are-broken">Conclusion/resolution</h4></a><ul>
-<li>Stage 1</li>
+<a href="#conclusionresolution-template-literals-are-broken"><h4 id="conclusionresolution-template-literals-are-broken">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 acceptance</li>
 </ul>
 <a href="#mapprototypetojsonsetprototypetojson"><h2 id="mapprototypetojsonsetprototypetojson">Map.prototype.toJSON/Set.prototype.toJSON</h2></a><p>(JHD)</p>
 <p>Continued discussion from yesterday.</p>
-<a href="#conclusionresolution-mapprototypetojsonsetprototypetojson"><h4 id="conclusionresolution-mapprototypetojsonsetprototypetojson">Conclusion/resolution</h4></a><ul>
+<a href="#conclusionresolution-mapprototypetojsonsetprototypetojson"><h4 id="conclusionresolution-mapprototypetojsonsetprototypetojson">Conclusion/Resolution</h4></a><ul>
 <li>Rejected.</li>
 </ul>
 <p><code>toJSON</code> is a legacy artifact, and a better approach is to use a custom <code>replacer</code> that, for example, checks <code>[Symbol.toStringTag]</code> and dispatches to appropriate serializations.</p>
 <p>The committee did not want to bless the <code>toJSON</code> approach by adding what would be an incomplete representation - one that would not obviate the need for developers to define their own serialization format and revivification logic.</p>
 <a href="#aggregated-foss-parser-pass-fail-and-equivalence-tests"><h2 id="aggregated-foss-parser-pass-fail-and-equivalence-tests">Aggregated FOSS parser pass-fail and equivalence tests</h2></a><p>(KG)</p>
-<a href="#conclusionresolution-aggregated-foss-parser-pass-fail-and-equivalence-tests"><h4 id="conclusionresolution-aggregated-foss-parser-pass-fail-and-equivalence-tests">Conclusion/resolution</h4></a><ul>
+<a href="#conclusionresolution-aggregated-foss-parser-pass-fail-and-equivalence-tests"><h4 id="conclusionresolution-aggregated-foss-parser-pass-fail-and-equivalence-tests">Conclusion/Resolution</h4></a><ul>
 <li>needs lots of review, nobody volunteered</li>
 <li>decision left to test262 maintainers</li>
 <li>test262 are not conformance tests</li>

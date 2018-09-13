@@ -762,7 +762,7 @@ source ::= STRING | frame;
 <p>WH: How does an implementation censor the result of GetStackString? It can call GetStack and possibly remove or alter some frames, but how does it render those back into something that GetStackString would have produced?</p>
 <p>MM: Good point. We need a way of rendering for virtualization. This suggests including another part of the SES shim api we omitted from this proposal: stackString, which is an unprivileged operation that takes the object structure returned by getStack and produces the rendered string returned by getStackString. Then, when virtualizing getStack you'd just reimplement getStackString as stackString(getStack(error)).</p>
 <a href="#conclusionresolution-15iiia-error-stacks-seeking-stage-1"><h4 id="conclusionresolution-15iiia-error-stacks-seeking-stage-1">Conclusion/Resolution</h4></a><ul>
-<li>Stage 1</li>
+<li>Stage 1 acceptance</li>
 <li>Open Questions:
 <ul>
 <li>Determine if this belongs in annex b or if other normative-optional text is allowed</li>

@@ -194,7 +194,7 @@ See <a href="http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html">http://www
 <p>DD: Yes, and we encourage collaboration with the champions.  Just want to move to stage zero if we can.</p>
 <p>YK: Stage zero seems fine.</p>
 <a href="#conclusionresolution-5i-zones"><h4 id="conclusionresolution-5i-zones">Conclusion/Resolution</h4></a><ul>
-<li>stage 0 approved</li>
+<li>Stage 0 approved</li>
 </ul>
 <a href="#announcement"><h3 id="announcement">Announcement</h3></a><p>MM: Does ECMA have rules for NDA's signed at these meetings? Participants should not be required to sign an NDA, the company should protect its own secrets it should not be the burden of the participants.</p>
 <p>We need to do some diligence, some work for the next meeting.</p>
@@ -519,11 +519,17 @@ could <span class="hljs-builtin-name">print</span> 0.
 <p>AR: we should  land it in M50</p>
 <p>YK: People maybe confused with async/await, entries/values introduces potential web compatibility issues, which we haven't vetted yet. Async await, had technical implementation details.</p>
 <a href="#conclusionresolution-5xiv-objectvalues-objectentries"><h4 id="conclusionresolution-5xiv-objectvalues-objectentries">Conclusion/Resolution</h4></a><ul>
-<li>Stay stage 3, wait for 2 shipping browsers to confirm web compat.</li>
+<li>Stage 3 holds
+<ul>
+<li>wait for 2 shipping browsers to confirm web compat.</li>
+</ul></li>
 </ul>
 <a href="#stringpadstartpadend-jhd"><h2 id="stringpadstartpadend-jhd"><code>String#padStart</code>/<code>padEnd</code> (JHD)</h2></a><a href="#conclusionresolution-stringpadstartpadend-jhd"><h4 id="conclusionresolution-stringpadstartpadend-jhd">Conclusion/Resolution</h4></a><ul>
-<li>stay stage 3, no further concerns about unicode/graphemes/RTL, Intl will handle that.</li>
-<li>will pursue stage 4 when enough browsers have shipped it to allay web compat concerns</li>
+<li>Stage 3 holds
+<ul>
+<li>no further concerns about unicode/graphemes/RTL, Intl will handle that.</li>
+</ul></li>
+<li>will pursue Stage 4 when enough browsers have shipped it to allay web compat concerns</li>
 </ul>
 <a href="#unicode-fix-httpsgithubcomtc39ecma262pull300-de"><h2 id="unicode-fix-httpsgithubcomtc39ecma262pull300-de">Unicode fix: <a href="https://github.com/tc39/ecma262/pull/300">https://github.com/tc39/ecma262/pull/300</a> (DE)</h2></a><p>Discussion about support for old operating systems</p>
 <p>WH: In practice the unicode version doesn't affect ES programs much. New unicode versions mainly add new characters, and those just flow through ES programs regardless of the unicode version. The places where unicode version matters are relatively obscure such as case conversions for non-BMP characters or whether you can use brand new characters in identifiers. The situation will change when we add character classes to RegExps, so we should update the required minimum unicode version of the spec then.</p>
