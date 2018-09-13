@@ -70,7 +70,7 @@ Rick Waldron (RW), Daniel Ehrenberg (DE), Caridy Patiño (CP), Justin Ridgewell 
 <p>MPT: There’s a library that is basically does this—strips out the heavy aspects. But unfortunately just the computations themselves come out to be about 56kb gzipped, and we’ve even checked that all the code-paths are used, so it may not be possible to get more lightweight than that.</p>
 <p>TST: Moment.js and Moment Locale is 66kb, so they’ve made it quite small. I think it’s worth doing this in a very light-weight way.</p>
 <p>MPT: So, what's the concern here?  Sure, we could expose CLDR data in Intl.  What's the concern in going in this way?  The proposal is large?</p>
-<p>TST: This is already a complex proposal, so would do ECMA 402 follow-up in a separate proposal.  That sounds like too much complexity if you can't do it in an atomic proposal.</p>
+<p>TST: This is already a complex proposal, so would do ECMA-402 follow-up in a separate proposal.  That sounds like too much complexity if you can't do it in an atomic proposal.</p>
 <p>MPT: OK. I think that’s a valid concern.</p>
 <p>MM: So, I want to confirm, there is nothing in this proposal that gives you direct access to the current time or current date, right?</p>
 <p>MPT: We did add some current time support. It’s definitely something I’m willing to discuss, though.</p>

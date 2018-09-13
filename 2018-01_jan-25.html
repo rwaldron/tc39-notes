@@ -22,7 +22,7 @@ Bradley Farias (BFS), Thomas Wood (TW), Ben Newman (BN), Rick Waldron (RW), Vale
 <ul>
 <li><a href="https://github.com/tc39/ecma262/pull/1066">proposal</a></li>
 </ul>
-<p>BT: technical content is all good, there are test262 tests, I don't know how complete they are, there are still gaps in coverage, but I think those are normal test bugs, not blocking</p>
+<p>BT: technical content is all good, there are Test262 tests, I don't know how complete they are, there are still gaps in coverage, but I think those are normal test bugs, not blocking</p>
 <p>AK: I think our stage 4 requirements are covered</p>
 <p>RW: we're doing a survey of the async iteration tests to get a sense of what's covered and what's left to cover</p>
 <p>BT: has been implemented a number of times, in chrome, safari, firefox, babel, typescript. I think it's ready for stage 4, big feature, lots of people have reviewed it. Any objections to advancing to stage 4?</p>
@@ -314,7 +314,7 @@ Bradley Farias (BFS), Thomas Wood (TW), Ben Newman (BN), Rick Waldron (RW), Vale
 <p>DE: proposal to add arbitrary sized integers to JS</p>
 <p>DE: one update since last meeting, TypedArrays have ops to convert from one element type to another, initially with BigInt arrays this would throw an exception. One primary use case was to manipulate binary data with 64-bit integers. Asked several people whether BigInt64Array or BigInt64 in typed arrays was a useful feature, everybody said yes. In this PR we're addressing some edge cases around casting. Previous logic was to throw TypeError to avoid implicit conversion without explicitly calling the constructor. With patch, this writes .. ?? lossy conversion?</p>
 <p>DE: other change, BigInt.parseInt was removed, Mathias Bynens' fromString subsumes this, more clean/uniform, this is a pattern we want for further numeric types</p>
-<p>DE: test262 testing continues to improve, almost all the surface, still adding tests for type coersion, test by josh wolfe and robin templeton. Spidermonkey has a bug open with a feature-complete implementation, V8 is in progress, plain bigints are done, new typedarrays are not done, good performance. JSC impl is in progress</p>
+<p>DE: Test262 testing continues to improve, almost all the surface, still adding tests for type coersion, test by josh wolfe and robin templeton. Spidermonkey has a bug open with a feature-complete implementation, V8 is in progress, plain bigints are done, new typedarrays are not done, good performance. JSC impl is in progress</p>
 <p>DE: that's it, any thoughts?</p>
 <p>DT: with the recent Meltdown/etc, for aynthing that's a security/psasword/key, you want to be able to erase it so your GC doesn't spread the secret all over the place, are any of the driving cases for bigints here (I love bigints) set up to be able to encoruage / use this for crypto, expressed in JS, which suggests we need to look at things like controlling allocation</p>
 <p>DE: people say they're interested in this for crypto, even though we removed all rerefences to crypto fro mthe explainers because of all the different potential attacks, we aren't exposing constant-type operations, etc. I'm not sure what we can do to mitigate even with out this feature, it's possibelt ouse existing features for cryypto</p>

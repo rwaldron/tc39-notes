@@ -157,13 +157,13 @@ foo();
 <p>WH: I would like to see better qualification of whether this is a performance win. This increases the attack surface, etc., so decoding it is nontrivial. How fast is it to validate the AST vs. validate the source ECMAScript?</p>
 <p>SYG: We'll build it, use normal security practices, fuzzers, etc. It sounds like you want to see a prototype decoder, some evidence that we've done significant fuzzing, etc.</p>
 <p>WH: Yes</p>
-<p>AWB: I don't have a problem with this at Stage 1, but not obvious that it's ECMA 262 standards-track stuff.</p>
+<p>AWB: I don't have a problem with this at Stage 1, but not obvious that it's ECMA-262 standards-track stuff.</p>
 <p>BE: A wire format has to be standardized</p>
-<p>AWB: Maybe not part of ECMA 262. It really needs to be built and proven, not prematurely standardized.</p>
+<p>AWB: Maybe not part of ECMA-262. It really needs to be built and proven, not prematurely standardized.</p>
 <p>DH: There's actually a remarkable amount of homework done, which is reasonable with this big scope. I think this is the right amount of work for Stage 1, but it's not Stage 2</p>
 <p>SYG: I think it would be very bad if this was not standards track, and somebody just did it.</p>
 <p>MP: You could put it in a different standard; Sourcemaps and HTML are different</p>
-<p>SYG: This calls for some semantic changes to handling of early errors in ECMA 262 (for example).</p>
+<p>SYG: This calls for some semantic changes to handling of early errors in ECMA-262 (for example).</p>
 <p>DD: The fact that new proposals need to provice integration into the binary grammar is a big reason for pursuing in this committee.</p>
 <p>MS: The speed comparison was in Firefox, right? I'd like to see performance on other browsers. In terms of, where we are at today in parsing performance--we can see in one browser that there's a 3-8x improvement on one browser. This is a short-term solution--it'll give us 3 years in Moore's law, but what do you do next? This is just a short-term solution. I imagine it will take significant implementation effort</p>
 <p>YK: Developers are sincerely trying to save time, not waste resources opened up by new optimizations.</p>

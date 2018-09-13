@@ -269,14 +269,14 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <a href="#13if-seeking-stage-4-for-sharedarraybuffer"><h2 id="13if-seeking-stage-4-for-sharedarraybuffer">13.i.f Seeking Stage 4 for SharedArrayBuffer</h2></a><p>(Shu-Yu Guo)</p>
 <ul>
 <li><a href="https://github.com/tc39/ecma262/pull/769">spec PR</a></li>
-<li><a href="https://github.com/tc39/test262/pull/839">test262 PR</a></li>
+<li><a href="https://github.com/tc39/Test262/pull/839">Test262 PR</a></li>
 </ul>
-<p>SYG: Last time, we were missing a mergeable PR and test262 tests. Now we have both of those. The memory model is now a top-level clause.</p>
+<p>SYG: Last time, we were missing a mergeable PR and Test262 tests. Now we have both of those. The memory model is now a top-level clause.</p>
 <p>BT: I suggest that even people who are not familiar with memory models could read the notes which are specifically targeted to the developer intuition for the memory model.</p>
 <p>SYG: Notes: 1. For programmers using JavaScript 2. For implementers trying to decide which transformations are valid 3. For code generation. These are informative, and describe things that are implied by the memory model, but the memory model is arcane.</p>
 <p>BT: This is a new thing, including extensive non-normative explanatory text. It would be great to have feedback on whether you like it, don't like it, etc.</p>
 <p>SYG: There haven't been any big normative changes since the last time; @@toStringTag, etc. The initial PR tests the coverage of the ECMAScript parts, like that the properties are hooked up correctly, the methods have the right property descriptors, etc. The difficulty is that it requires that test harnesses can spawn agents, which is provided by the embedding. The PR includes a description of what harnesses should provide, but the harness isn't part of the PR.</p>
-<p>BT: If test262 tests exist but can only be run on one engine, due to lacking the time to implement the harness for every engine. Does that meet the stage 4 requirement?</p>
+<p>BT: If Test262 tests exist but can only be run on one engine, due to lacking the time to implement the harness for every engine. Does that meet the stage 4 requirement?</p>
 <p>SYG: It's also not all functionality; wait and wake need agents, but other atomics can be tested on one thread.</p>
 <p>AWB: We don't have any strict requirements for what the Stage 4 tests consist of</p>
 <p>DE: In this case, you're working with V8 to make sure the tests are compatible with the harness, so it should be especially not a problem.</p>
@@ -672,7 +672,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>DE: Our implementation in V8 has a patch, are there others?</p>
 <p>MF:I know Mozilla was working on this when they realized the performance implications</p>
 <p>BT: I implemented this in chakra but i didn't do the line termination. I only did it to fix another bug, it's not close to the spec.</p>
-<p>MF: I've updated all the test262 tests to not enforce this. I can test this in the wild to confirm the current state of things. The new tests actually enforce the opposite. I'll do some research tonight.</p>
+<p>MF: I've updated all the Test262 tests to not enforce this. I can test this in the wild to confirm the current state of things. The new tests actually enforce the opposite. I'll do some research tonight.</p>
 <p>DE/AK: We aren't shipping, our patch is not checked in.</p>
 <p>MF: Just wanted to let implementors know.</p>
 <p>WH: I raised the issue with the lack of normalization being user hostile, but if implementations are against normalization I'm not going to block the proposal.</p>

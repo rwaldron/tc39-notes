@@ -297,7 +297,7 @@ Summary</p>
 <p>AWB: Need to update the ES6 web reality</p>
 <p>DC: Did this make it into the bug suites?</p>
 <p>LH: Must not have, because no major browser is failing.</p>
-<p>WH: How much does test262 test detection of syntax errors?</p>
+<p>WH: How much does Test262 test detection of syntax errors?</p>
 <p>BT: A lot but probably not enough</p>
 <a href="#conclusionresolution-bug-1571-regexp-syntax"><h4 id="conclusionresolution-bug-1571-regexp-syntax">Conclusion/Resolution</h4></a><ul>
 <li>Roll back the ES5 change</li>
@@ -334,7 +334,7 @@ Summary</p>
 <p>?: Not all browsers correctly implement the rule that RegExp toString results must be evalable into the same regular expression.</p>
 <p>WH: That would be a browser bug.</p>
 <p>AWB: Some browsers haven't been paying close attention to this.</p>
-<p>WH: Best fixable by putting a few test cases in test262.</p>
+<p>WH: Best fixable by putting a few test cases in Test262.</p>
 <a href="#conclusionresolution-regexp-tostring-escaping-not-fully-specified"><h4 id="conclusionresolution-regexp-tostring-escaping-not-fully-specified">Conclusion/Resolution</h4></a><ul>
 <li>Leave <code>RegExp.prototype.toString</code> definition as-is, but consider adding requirement <a href="https://bugs.ecmascript.org/show_bug.cgi?id=2609">https://bugs.ecmascript.org/show_bug.cgi?id=2609</a></li>
 </ul>
@@ -496,14 +496,14 @@ No reason to rush, this is an ES7 thing.</p>
 <a href="#conclusionresolution-51-objectentries-objectvalues"><h4 id="conclusionresolution-51-objectentries-objectvalues">Conclusion/Resolution</h4></a><ul>
 <li>Need strawman for stage 0</li>
 </ul>
-<a href="#test-262-update"><h2 id="test-262-update">Test 262 Update</h2></a><p>BT: A lot of pull requests piling up
+<a href="#test262-update"><h2 id="test262-update">Test262 Update</h2></a><p>BT: A lot of pull requests piling up
 ... Domenic will port promise tests
 ... Awaiting the contributor agreement form</p>
 <p>BN: Will contribute Generator tests</p>
 <p>BT: Also need syntax tests</p>
 <p>DL: V8 is beginning to implement ES6 and will want to contribute back the tests</p>
 <p>RW: We'll need to update the current PRs with any guidelines</p>
-<p>MM: For tests that are not specifically specified as strict-only or sloppy-only, currently the test262 harness only tests these in sloppy mode. Must test these in both strict and sloppy by default.</p>
+<p>MM: For tests that are not specifically specified as strict-only or sloppy-only, currently the Test262 harness only tests these in sloppy mode. Must test these in both strict and sloppy by default.</p>
 <p>BT: Issues with the error message string varying across platforms</p>
 <p>BT: Also need cross realm association testing
 ...Naively, we could write in-browser tests, but ideally we want host-agnostic testing.</p>
@@ -514,7 +514,7 @@ No reason to rush, this is an ES7 thing.</p>
 <p>MB: What about Annex B tests? They’d have to run in a browser; test runner needs to support that somehow.</p>
 <p>MM: Detect Annex B features, then if they’re present, test if they behave as per the spec, if not, fail silently.</p>
 <p>BT: Continue to report test coverage gaps.</p>
-<a href="#conclusionresolution-test-262-update"><h4 id="conclusionresolution-test-262-update">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-test262-update"><h4 id="conclusionresolution-test262-update">Conclusion/Resolution</h4></a><ul>
 <li>BT to publish test criteria/guidelines</li>
 <li>Inform current contributors of guidelines to prepare</li>
 <li>Establish rules for testing Annex B</li>

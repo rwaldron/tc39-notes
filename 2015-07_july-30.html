@@ -16,37 +16,37 @@
 <p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Waldemar Horwat (WH), István Sebestyén (IS), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Jonathan Turner (JT), Paul Leathers (PL), Chip Morningstar (CM), Vladimir Matveev (VM), Ron Buckton (RBN), Brian Terlson (BT), Alan Schmitt (AS), Ben Newman (BN), Mohamed Hegazy (MH), Abhijith Chatra (AC), Tom Care (TC), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Daniel Ehrenberg (DE), Dan Gohman (DGN), Andreas Rossberg (ARB), Rick Waldron (RW), Mike Pennisi (MP), Akrosh Gandhi (AGI), Jonathan Sampson (JSN)</p>
 <hr>
 <a href="#7-test262-updates"><h2 id="7-test262-updates">7 Test262 Updates</h2></a><p>(Brian Terlson, Mike Pennisi)</p>
-<p><a href="https://jugglinmike.github.io/presentations/2015/tc39-test262-update">Slides</a></p>
+<p><a href="https://jugglinmike.github.io/presentations/2015/tc39-Test262-update">Slides</a></p>
 <p>MP: Introduction</p>
 <p>See slides</p>
-<p>WH: (re: <a href="http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#7">http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#7</a> ) question, re: es6draft, ecmascript spec, before/after publication?</p>
+<p>WH: (re: <a href="http://jugglinmike.github.io/presentations/2015/tc39-Test262-update/#7">http://jugglinmike.github.io/presentations/2015/tc39-Test262-update/#7</a> ) question, re: es6draft, ecmascript spec, before/after publication?</p>
 <p>?: es6draft ? ECMAScript 6 draft</p>
 <p>BT: Ongoing. Could also add Chakra bugs</p>
 <p>MF: raw flag? Does this prevent issues other than directive prologue issues?</p>
 <p>MP/BT: &quot;raw&quot; means: don't touch the file, just run it. No access to assert features, useful for syntax only tests</p>
-<p>[discussing distinction between early errors and parse errors that test262 does]</p>
-<p><a href="http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#12">http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#12</a></p>
+<p>[discussing distinction between early errors and parse errors that Test262 does]</p>
+<p><a href="http://jugglinmike.github.io/presentations/2015/tc39-Test262-update/#12">http://jugglinmike.github.io/presentations/2015/tc39-Test262-update/#12</a></p>
 <p>AWB: These are a specification artifact. An implementation doesn't have to do parsing and early errors in separate passes.</p>
 <p>WH: This becomes visible when there are multiple errors, some in parsing and some early errors. Does the spec designate which error should be reported when there are multiple of these?</p>
 <p>AWB: No. An implementation is free to report any of these errors.</p>
 <p>AWB: Distinguishing early and parsing errors in tests is overspecifying.</p>
 <p>(re: website improvements)</p>
-<p>BT: current test262 site does not have ES6 collatoral.</p>
+<p>BT: current Test262 site does not have ES6 collatoral.</p>
 <ul>
 <li>Implementing ToLength appears to lock up the website</li>
-<li>Alot of work needed to get the test262 site into a functional state</li>
+<li>Alot of work needed to get the Test262 site into a functional state</li>
 <li>Is the work something that Bocoup is going to do?</li>
 </ul>
 <p>MP: Nearing end of time, but ideally would like to take on this work</p>
 <p>BT: Then we need to find a &quot;resource&quot; for this project</p>
 <ul>
-<li>Enumerating outstanding issues with test262 website</li>
+<li>Enumerating outstanding issues with Test262 website</li>
 </ul>
 <p>YK: Considered running tests in iframe or worker and timing out?</p>
 <p>BT: Harness uses iframes</p>
 <p>Discussion of implementation details of test harness</p>
 <p>BT: Requirement of new site: use web workers</p>
-<p>Moving on to <a href="http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#15">http://jugglinmike.github.io/presentations/2015/tc39-test262-update/#15</a></p>
+<p>Moving on to <a href="http://jugglinmike.github.io/presentations/2015/tc39-Test262-update/#15">http://jugglinmike.github.io/presentations/2015/tc39-Test262-update/#15</a></p>
 <p>MP: (first example) TypedArray, 9 sets of the same tests. The tests might start in sync, but it's hard to maintain over time.</p>
 <ul>
 <li>Typed Arrays (9)</li>

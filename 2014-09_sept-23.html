@@ -185,19 +185,19 @@ G();
 <p>MM: Applied to anything other than a non-strict function?</p>
 <p>(10 minute back and forth about the definitions of &quot;strict function&quot; and &quot;ECMAScript function&quot;)</p>
 <p>MM's overall concern is to make sure the behavior is nailed down for built-ins as well as for strict functions.</p>
-<a href="#somehow-we-started-talking-about-test262"><h2 id="somehow-we-started-talking-about-test262">Somehow we started talking about test262</h2></a><p>Discussion of test262's (lack of) coverage.</p>
-<p>BT: We didn't have coverage in test262 of a non-enumerable property shadowing an enumerable property.</p>
+<a href="#somehow-we-started-talking-about-test262"><h2 id="somehow-we-started-talking-about-test262">Somehow we started talking about Test262</h2></a><p>Discussion of Test262's (lack of) coverage.</p>
+<p>BT: We didn't have coverage in Test262 of a non-enumerable property shadowing an enumerable property.</p>
 <p>JM: it would be good to have a place to list the open coverage holes.</p>
 <p>SK/DD: while reviewing sections of the spec, people should write down a list of test cases that should be written (e.g. <a href="https://github.com/domenic/Array.prototype.contains/issues/1">https://github.com/domenic/Array.prototype.contains/issues/1</a> )</p>
 <p>AWB: Perhaps we should try to get a rough statement of what our coverage areas are. Some areas are covered because they were in ES3 tests; Microsoft contributed a lot of standard library tests; there are probably lots of gaps.</p>
-<p>(Discussion of running test262 tests against implementations, especially given their optimizations.)</p>
+<p>(Discussion of running Test262 tests against implementations, especially given their optimizations.)</p>
 <p>YK: ideally we should not run the tests in interpreted mode.</p>
-<p>AR: there is no hot code in test262, so right now we only run in interpreted mode.</p>
+<p>AR: there is no hot code in Test262, so right now we only run in interpreted mode.</p>
 <p>YK: could we use switches to turn up optimizations?</p>
 <p>AR: there are complications that in V8 at least make that unlikely to be useful.</p>
 <p>(Back to topic of a statement of coverage)</p>
 <p>AWB: I'm mostly interested in whether there is a useful set of tests for most areas of the spec</p>
-<p>BT: was this the test262 agenda item?</p>
+<p>BT: was this the Test262 agenda item?</p>
 <p>BE: this was the &quot;depress the room&quot; agenda item</p>
 <p>DD/BT: (discussion of poisoning built-ins before running tests)</p>
 <p>YK: Value of poisioning?</p>
@@ -209,11 +209,11 @@ G();
 <li>It's impossible to test ECMAScript</li>
 <li>Testing is hard</li>
 </ul>
-<a href="#test-262-update"><h2 id="test-262-update">Test 262 Update</h2></a><p>(Brian Terlson)</p>
+<a href="#test262-update"><h2 id="test262-update">Test262 Update</h2></a><p>(Brian Terlson)</p>
 <p>BT: A number of PRs remain open from the Test The Web Forward event: people haven't signed CLA despite request, haven't updated patch according to review feedback. These will be closed.</p>
 <ul>
 <li>Browser will currently hang on 2**32 ToLength tests; these are initializing and iterating</li>
-<li>Previous consensus was to not update test262 on ecmascript.org. Any objections to creating a preview of ES6 test262?</li>
+<li>Previous consensus was to not update Test262 on ecmascript.org. Any objections to creating a preview of ES6 Test262?</li>
 <li>extracted test runner harness, wip.</li>
 <li>Suggest transferring test harness to ecma</li>
 </ul>
@@ -242,7 +242,7 @@ G();
 <p>AWB: when running &quot;the ES6 test suite,&quot; it should only be things that are officially in ES6. But the JS community cares about what they can use in a browser. We should not create impressions that things are done or stable until they have worked through the process.</p>
 <p>AR: so we should put experimental things into a separate directory</p>
 <p>YK: no. You don't do that in Chrome; you use feature flags.</p>
-<p>(Discussion of folder vs. feature flags for new test262 tests for post-ES6 experimental features.)</p>
+<p>(Discussion of folder vs. feature flags for new Test262 tests for post-ES6 experimental features.)</p>
 <p>AWB: ok with stage 3 being in the repo</p>
 <p>DD: needs to be stage 1 and onward</p>
 <p>AWB: At stage 1, it's just the champion</p>
@@ -252,10 +252,10 @@ G();
 <p>DD/YK: nooooo</p>
 <p>ARB: Fine to have early stage features, as long as they're not intermingled.</p>
 <p>BT: The file system isn't ideal.</p>
-<p>(Discussion of whether to accept stage 1 onward into test262.)</p>
-<p>DD: Want to make test262 writing easy, so will be adding helpers.</p>
-<a href="#conclusionresolution-test-262-update"><h4 id="conclusionresolution-test-262-update">Conclusion/Resolution</h4></a><ul>
-<li>Create a subdomain to host test262's ES6 tests</li>
+<p>(Discussion of whether to accept stage 1 onward into Test262.)</p>
+<p>DD: Want to make Test262 writing easy, so will be adding helpers.</p>
+<a href="#conclusionresolution-test262-update"><h4 id="conclusionresolution-test262-update">Conclusion/Resolution</h4></a><ul>
+<li>Create a subdomain to host Test262's ES6 tests</li>
 <li>Deprecation plan for Python harness: contact</li>
 <li>Domenic or Andreas for V8</li>
 <li>Dave for SpiderMonkey</li>

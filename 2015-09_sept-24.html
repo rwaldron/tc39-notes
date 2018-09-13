@@ -94,7 +94,7 @@ Mark S. Miller (MM), István Sebestyén (IS)</p>
 <li><a href="http://jsbin.com/baquqokujo/1/edit?output">http://jsbin.com/baquqokujo/1/edit?output</a></li>
 </ul>
 <a href="#8-test262-update"><h2 id="8-test262-update">8. Test262 Update</h2></a><p>(Gorkem Yakin)</p>
-<p>GY: (General update on status of ES6/ES2015 support in test262)</p>
+<p>GY: (General update on status of ES6/ES2015 support in Test262)</p>
 <p>BT: previously we decided it was important to have clear delineation between test artifacts at specific spec versions, but that's hard.</p>
 <p>YK: It stops making so much sense now. Can I suggest a feature flag thing?
 (discussion about how to handle old tests that break with a new version)</p>
@@ -102,15 +102,15 @@ Mark S. Miller (MM), István Sebestyén (IS)</p>
 <p>AWB: strictly speaking, only yearly releases approved by GA that are final</p>
 <p>AWB: nothing becomes stage 4 until version of the spec they're in is approved
 (more discussion about stage 4 vs. stage 5)</p>
-<p>BT: I see it this way. for implementors, there is value in having tests checked in to test262 when they're working on the features, ~ stage 2/3. Only consideration here is what implemetors find useful</p>
+<p>BT: I see it this way. for implementors, there is value in having tests checked in to Test262 when they're working on the features, ~ stage 2/3. Only consideration here is what implemetors find useful</p>
 <p>YK: ok stage 3 seems fine</p>
-<p>BT: if things break, git has tools for this. going forward let's not have branches, just say test262 is living</p>
+<p>BT: if things break, git has tools for this. going forward let's not have branches, just say Test262 is living</p>
 <p>AK: I say stage 3</p>
 <p>(RW agree, this aligns with implementation step)</p>
-<p>YK: I think stage 2 criteria is test262 tests. For me, as spec author this is valuable</p>
+<p>YK: I think stage 2 criteria is Test262 tests. For me, as spec author this is valuable</p>
 <p>AWB: during stage 2, I expect these to change a lot. These are part of the artifacts</p>
-<p>DE: for the SIMD tests, we went through a lot of churn. it makes sense to have them outside of test262, now we're stage 3, we're ok with test262</p>
-<p>YK: I think that implementors should have commit access to test262 while they're working on it</p>
+<p>DE: for the SIMD tests, we went through a lot of churn. it makes sense to have them outside of Test262, now we're stage 3, we're ok with Test262</p>
+<p>YK: I think that implementors should have commit access to Test262 while they're working on it</p>
 <p>BT: difficulty mentioned by DE is real</p>
 <p>YK: not intractable to make this frictionless</p>
 <p>BT: I don't think this is too bad, having written thousands myself. Not frictionless, but surmountable</p>
@@ -120,11 +120,11 @@ Mark S. Miller (MM), István Sebestyén (IS)</p>
 <p>(discussing whether we need to use pull requests vs. direct commit access)</p>
 <p>DE: problem with stage 2 is that the API is not stable, so it doesn't provide value</p>
 <p>DH: having tests are similar to having spec, helpful to make it clear to people how the feature works</p>
-<p>AK: we have automated process pulling test262, we don't want to have to triage unstable changes</p>
+<p>AK: we have automated process pulling Test262, we don't want to have to triage unstable changes</p>
 <p>YK: feature flags should solve this problem</p>
-<p>BT: difficulty is that numerous different test262 harnesses, I understand Google has their own</p>
-<p>_ general agreement that test262 tests should be stage 3 _</p>
-<p>DE: YK and others are going to look into adding feature flags to implementors test262 harnesses</p>
+<p>BT: difficulty is that numerous different Test262 harnesses, I understand Google has their own</p>
+<p>_ general agreement that Test262 tests should be stage 3 _</p>
+<p>DE: YK and others are going to look into adding feature flags to implementors Test262 harnesses</p>
 <p>BT: difficult to test features in isolation, they are often cross-cutting</p>
 <p>_ discussion about difficulty of implementing feature flags _</p>
 <p>AWB: what is the plan of record for user-facing test page?</p>

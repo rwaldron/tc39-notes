@@ -22,13 +22,13 @@ Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <p>KM: Meet the TC39 on Thursday at Facebook. Please get in touch with me so that we can add your name to the list of guests.</p>
 <p>DE: Conrad is here to discuss the memory model, but it was not added to the agenda, he is only here today, so we can discuss it today. It doesn't need consensus. Schedule constraint is that it needs to be done today before 3 pm.</p>
 <p>BT: Let's just discuss it as part of the normative PR section.</p>
-<a href="#3-adoption-of-agenda"><h2 id="3-adoption-of-agenda">3. Adoption of Agenda</h2></a><p>RJE: (agenda planning)</p>
-<a href="#conclusionresolution-3-adoption-of-agenda"><h4 id="conclusionresolution-3-adoption-of-agenda">Conclusion/Resolution</h4></a><ul>
+<a href="#adoption-of-agenda"><h2 id="adoption-of-agenda">Adoption of Agenda</h2></a><p>RJE: (agenda planning)</p>
+<a href="#conclusionresolution-adoption-of-agenda"><h4 id="conclusionresolution-adoption-of-agenda">Conclusion/Resolution</h4></a><ul>
 <li>Agenda Adopted</li>
 </ul>
-<a href="#4-approval-of-the-minutes-from-last-meeting"><h2 id="4-approval-of-the-minutes-from-last-meeting">4. Approval of the minutes from last meeting</h2></a><p>RJE: Any issues from the minutes last meeting?</p>
+<a href="#approval-of-the-minutes-from-last-meeting"><h2 id="approval-of-the-minutes-from-last-meeting">Approval of the minutes from last meeting</h2></a><p>RJE: Any issues from the minutes last meeting?</p>
 <p>(none)</p>
-<a href="#conclusionresolution-4-approval-of-the-minutes-from-last-meeting"><h4 id="conclusionresolution-4-approval-of-the-minutes-from-last-meeting">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-approval-of-the-minutes-from-last-meeting"><h4 id="conclusionresolution-approval-of-the-minutes-from-last-meeting">Conclusion/Resolution</h4></a><ul>
 <li>Minutes from the last meeting approved.</li>
 </ul>
 <a href="#5-next-meeting-host-and-logistics"><h2 id="5-next-meeting-host-and-logistics">5. Next meeting host and logistics</h2></a><p>RJE: Next meeting?</p>
@@ -84,16 +84,16 @@ Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <ul>
 <li><a href="https://github.com/tc39/ecma262/pull/1131">Restore original definition of DataView.length #1131</a></li>
 </ul>
-<p>DE: DataView constructor view was noted as 3 even though ... ( ? ).. to give it a more comprehensive memory model. There are two different proposals. A minimal one and another more complex unification. It seems like given implementation and test262 converged on 3 as ? .... any other thoughts on this proposal?</p>
+<p>DE: DataView constructor view was noted as 3 even though ... ( ? ).. to give it a more comprehensive memory model. There are two different proposals. A minimal one and another more complex unification. It seems like given implementation and Test262 converged on 3 as ? .... any other thoughts on this proposal?</p>
 <p>MS: Can you show Leo Balter's table?</p>
 <p>??: So you want to change DataView?</p>
 <p>JHD: The original post from andre here is that the implementation is 3, but the spec says 1. Because conceptually one of the arguments is required, and two are optional. So my preference is, even if all four browsers agree, that the length is 3, then ..?</p>
 <p>JHD: Function lengths are one of the things that we found to be web compatible to change. Is there any reason why we shouldn't consider changing the length to 1?</p>
 <p>AK: I think its a waste of time to change length. Let's take the simplest path.</p>
 <p>BT: I'm fine with changing the spec. It's a bug that will get fixed when it gets fixed, when it's time.</p>
-<p>JHD: Can we make it so that the test262 is changed to 1 to match the spec? Should we shoot for that?</p>
+<p>JHD: Can we make it so that the Test262 is changed to 1 to match the spec? Should we shoot for that?</p>
 <p>??: The browsers will fail the tests. The browsers do their thing but the spec should be ..?</p>
-<p>DE: Three options: leave the spec as is and update the test262 to have the length of 1 instead of 3. Option 1: Total alignment with Chakra core and the spec draft being one. The other option is to create a new consensus concept that Leo had. Proposal two is to make a rough consensus between implementer.</p>
+<p>DE: Three options: leave the spec as is and update the Test262 to have the length of 1 instead of 3. Option 1: Total alignment with Chakra core and the spec draft being one. The other option is to create a new consensus concept that Leo had. Proposal two is to make a rough consensus between implementer.</p>
 <p>YK: I want to hear if vendors agree that 1 is the correct solution.</p>
 <p>BT: That doesn't change the answer. If you wanted to be pedantic, 1 would be the correct choice, I think.</p>
 <p>BT: Would anyone object to any of the options here? Raise your hands if you have any objections for any options here.</p>
@@ -614,7 +614,7 @@ Those are examples of what we need to work on for ntive module support but ???. 
 <li><a href="https://github.com/tc39/ecma262/issues/917">issue</a></li>
 <li><a href="https://github.com/tc39/ecma262/pull/1136">PR</a></li>
 </ul>
-<p>DE: My colleagues noticed that <code>await</code> is not permitted in a default param, you might've expected that you can do this (see slides). If you're using this for some sort of dependencies injection. The restriction here historically is from generators where you can't do yields. An example of the dependency injection case, is taking a module as a parameter, and using <code>import()</code> as the default. I'm not entirely sure prohibiting await expressions in parameter defaults was intentional. Unfortunately, in this PR, we couldn't implement <code>await</code> in all cases. Grammar-wise, in async arrow functions, you'd have to look too far ahead to be able to parse it. The proposal here is just to enable <code>await</code> in all async function declaration parameters—function declarations as well as methods. Thanks to Pedram for rewriting test262 tests as well as spec text. The current PR doesn't include async generators because the PR started before async generators landed. The specification changes is sort of a small refactoring of where function declarations vs instantiation happens, but its a very small change in the specification. Are we ok to allowing await in async function declaration but not allowing in async arrow functions?</p>
+<p>DE: My colleagues noticed that <code>await</code> is not permitted in a default param, you might've expected that you can do this (see slides). If you're using this for some sort of dependencies injection. The restriction here historically is from generators where you can't do yields. An example of the dependency injection case, is taking a module as a parameter, and using <code>import()</code> as the default. I'm not entirely sure prohibiting await expressions in parameter defaults was intentional. Unfortunately, in this PR, we couldn't implement <code>await</code> in all cases. Grammar-wise, in async arrow functions, you'd have to look too far ahead to be able to parse it. The proposal here is just to enable <code>await</code> in all async function declaration parameters—function declarations as well as methods. Thanks to Pedram for rewriting Test262 tests as well as spec text. The current PR doesn't include async generators because the PR started before async generators landed. The specification changes is sort of a small refactoring of where function declarations vs instantiation happens, but its a very small change in the specification. Are we ok to allowing await in async function declaration but not allowing in async arrow functions?</p>
 <p>MM: What's the reason for not allowing them in async arrow functions?</p>
 <p>DE: Async arrow functions don't have. You don't know whether to parse the <code>async(await / 3)</code> as a function or an regular expression when going left to right).</p>
 <p>BT: You could have it figure it out, but it would require more speculative parsing, I guess.</p>

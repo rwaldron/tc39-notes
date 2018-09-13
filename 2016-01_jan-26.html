@@ -33,7 +33,7 @@
 <p>MH: by annotating different context, prioritizing is possible. One example would be animation context vs ..</p>
 <p>WH: thanks</p>
 <p>MH: another example is testing, existing solutions result in test &quot;flickering&quot;, but using zones would enable some determism.</p>
-<p>BT: test262 would benefit from this, existing solutions require manual book keeping and tracking. No way to tell in the browser when a set of async operations have completed.</p>
+<p>BT: Test262 would benefit from this, existing solutions require manual book keeping and tracking. No way to tell in the browser when a set of async operations have completed.</p>
 <p>SP: it adds determism</p>
 <p>MH: another use-case, is for measuring and instrumentation.</p>
 <p>SP: you may also have interleaving plans, this helps group them and mitigate some common related issues</p>
@@ -535,7 +535,7 @@ could <span class="hljs-builtin-name">print</span> 0.
 <p>WH: In practice the unicode version doesn't affect ES programs much. New unicode versions mainly add new characters, and those just flow through ES programs regardless of the unicode version. The places where unicode version matters are relatively obscure such as case conversions for non-BMP characters or whether you can use brand new characters in identifiers. The situation will change when we add character classes to RegExps, so we should update the required minimum unicode version of the spec then.</p>
 <p>DE: should we stay at unicode 5.1?</p>
 <p>DD: now, it seems like we should move to 8</p>
-<p>WH: I am worried this will cause too much noise in the test262 tests. I think it is legitmate for implementations to lag if they rely on the OS's support for unicode and don't want to penalize them with test262 failures for being lightweight.</p>
+<p>WH: I am worried this will cause too much noise in the Test262 tests. I think it is legitmate for implementations to lag if they rely on the OS's support for unicode and don't want to penalize them with Test262 failures for being lightweight.</p>
 <p>DD: I think its no less legitimate to implement all of ES2016</p>
 <p>DE: i don't understand your concern WH, it seems like you want to save the implementers some time, but the implementers seem on board.</p>
 <p>WH: [repeats above]</p>
@@ -565,7 +565,7 @@ could <span class="hljs-builtin-name">print</span> 0.
 <p>DE: (walks through slides)</p>
 <p>DD: how do you feel about the test coverage</p>
 <p>DE: test coverage feels pretty good, the tests for the value semantics will need some more work, but largely the test suite is good.</p>
-<p>DE: we will need to do some work on the test harness, test262 would like to generate the tests precedurally</p>
+<p>DE: we will need to do some work on the test harness, Test262 would like to generate the tests precedurally</p>
 <p>DE: test harness may want sameValue sameValue0</p>
 <p>DE: do we want SIMD to be optional</p>
 <p>M: I would prefer for it to be optional, i don't see value</p>

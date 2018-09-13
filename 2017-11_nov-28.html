@@ -17,7 +17,7 @@
 <p>Remote:
 István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
-<a href="#1-opening-welcome-and-roll-call"><h2 id="1-opening-welcome-and-roll-call">1. Opening, welcome and roll call</h2></a><ul>
+<a href="#opening-welcome-and-roll-call"><h2 id="opening-welcome-and-roll-call">Opening, welcome and roll call</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2017/11.md">Agenda</a></li>
 </ul>
 <a href="#7i-ecma262-status-updates-15m"><h2 id="7i-ecma262-status-updates-15m">7.i ECMA262 Status Updates (15m)</h2></a><p>BT: I've updated the queue tool</p>
@@ -91,7 +91,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>RW: Yeah don't read that! Read the spec. Apologies that the readme is out of date.</p>
 <p>AK: Champions, please keep your explainers up to date.</p>
 <p>JHD: You can use multiple separators, just not sequentially right?</p>
-<p>RW: Yes! For example a binary literal might be separated every 4 digits. This has test262 coverage. Sorry for not having an example on the slides.</p>
+<p>RW: Yes! For example a binary literal might be separated every 4 digits. This has Test262 coverage. Sorry for not having an example on the slides.</p>
 <p>RW: So, stage 3?</p>
 <p>AK: Prohibiting underscores in ToString - can you explain what the spec does. Does it disallow underscores when things are being implicitly converted to number?</p>
 <p>RW: It had an STR decimal literal. Decimal digits, space, decimal digits. The solution is to mirror the spec of today and prefix those with STR.</p>
@@ -184,7 +184,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>DE: It'd be great to get more of all of you involved in ECMA-402 and watching the repo - there's lots of smaller activities there.</p>
 <p>CP: Most of these changes are simply adding wording and options for conformance, it does not require changes in algorithms or steps.</p>
 <p>YK: Yes, maybe follow the staging process yourself but move it along quicker - external to TC39. I would hope you would still follow a staging process for the same reasons we do.</p>
-<p>DE: We have the ECMA 402 update at the beginning of each meeting so we could use that time to discuss these changes rather than these additional 15 minute timeboxes.</p>
+<p>DE: We have the ECMA-402 update at the beginning of each meeting so we could use that time to discuss these changes rather than these additional 15 minute timeboxes.</p>
 <p>DE: Any other questions? No? Thank you!</p>
 <a href="#10ik-bigint-status-update"><h2 id="10ik-bigint-status-update">10.i.k BigInt status update</h2></a><p>(Daniel Ehrenberg)</p>
 <ul>
@@ -451,7 +451,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>DE: It'd be great to publish this list.</p>
 <p>DH: Species was intentionally extensibility design. Subclassing an OO were key goals and continues to be a valid usecase. So if the sentiment in the room is &quot;what did we do?!&quot; then I want to defend the design decisions. We should have just called it out sooner that low level language hooks are rife for vulnerabilities. Let's not have the takeaway that extensibility is a non-goal for JS due to security concerns.</p>
 <p>NSH: Yes this is all easy to say in hindsight, I don't want to attack the original decisions just highlight the vulnerabilities.</p>
-<p>JRL: Surely test262 coverage could add this.</p>
+<p>JRL: Surely Test262 coverage could add this.</p>
 <p>AK: Well in my experience conformance testing is not right for this. Fuzz testing or security analysis is how we get these.</p>
 <p>NSH: I think we should add shared tests for known vulnerabilities.</p>
 <a href="#conclusionresolution-arrayspecies-array-index-accessors-and-security"><h4 id="conclusionresolution-arrayspecies-array-index-accessors-and-security">Conclusion/Resolution</h4></a><ul>

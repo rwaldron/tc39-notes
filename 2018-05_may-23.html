@@ -190,7 +190,7 @@ WASM might be able to get around this by adding an “any” type. You may have 
 <li><a href="https://github.com/tc39/proposal-class-fields">proposal</a></li>
 <li><a href="https://docs.google.com/presentation/d/1oDQOS9b8wnuP5-o8zInsEO9lpRbhduawAmvfRzbxkOs/">slides</a></li>
 </ul>
-<p>DE: We changed a funny TDZ thing with class field initializers, making <code>this</code> binding initialization a little bit earlier. We have test262 tests for the change.</p>
+<p>DE: We changed a funny TDZ thing with class field initializers, making <code>this</code> binding initialization a little bit earlier. We have Test262 tests for the change.</p>
 <p>WH: Can you explain the “Tweak in <code>this</code> TDZ” slide again?</p>
 <p>DE:  We're explicitly enabling access to <code>this</code> in the initializer, and for other functions that close over <code>this</code> that are called from the initializer.</p>
 <p>KG: The initializer expression for the prop has two expression, a <code>this</code>, and a <code>f</code> that closes over the same <code>this</code>. The two were not equivalent before, because the first worked and the second throw, and they are now.</p>
