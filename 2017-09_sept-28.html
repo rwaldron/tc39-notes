@@ -1,0 +1,318 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="manifest" href="img/site.webmanifest">
+<link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<title>September 28, 2017 Meeting Notes</title>
+<body class="markdown-body">
+<a href="javascript:history.back()">Back</a>
+<a href="#september-28-2017-meeting-notes"><h1 id="september-28-2017-meeting-notes">September 28, 2017 Meeting Notes</h1></a><hr>
+<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (ARE), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD), Caio Gondim (CGM), Brittany Storoz (BSZ), Sathya Gunasekaran (SGN), Domenic Denicola (DD), Richard Gibson (RGN), Michael Z Goddard (MZG)</p>
+<p>Remote:
+István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM), Gabriel Isenberg (GI), Zibi Braniecki (ZB), James M Snell (JSL)</p>
+<hr>
+<a href="#opening-welcome-and-roll-call"><h2 id="opening-welcome-and-roll-call">Opening, welcome and roll call</h2></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2017/09.md">Agenda</a></li>
+</ul>
+<a href="#other-test262-updates"><h2 id="other-test262-updates">Other Test262 updates</h2></a><p>LBR: During this meeting we hold some break off sections to talk about Test262 and we had some productive conversations to move it forward. We should have another meeting today, probably on lunch time and everyone is welcome to join. We should release a report after this meeting.</p>
+<a href="#updates-on-the-code-of-conduct-enforcement-committee"><h2 id="updates-on-the-code-of-conduct-enforcement-committee">Updates on the Code of Conduct Enforcement Committee</h2></a><p>LBR: Since Tuesday we found more volunteers and I'm now vouching for Maggie Pint to steward this group and I'm also deferring to her to give more updates about it.</p>
+<p>MPT: Volunteers for the code of conduct enforcement committee include myself, Jordan Harband, Jory Burson, and Aki Rose. I would like to approach Myles Borins to work on this as well. Our first action will be to create some scenario playbooks to help the committee understand what course of action will be taken when code of conduct violations occur. These are something that we can publicly share and accept feedback on.</p>
+<p>LBR: To confirm this is approved by consensus, I'd like to ask if anyone has any objections.</p>
+<p>(no objections)</p>
+<a href="#conclusionresolution-updates-on-the-code-of-conduct-enforcement-committee"><h4 id="conclusionresolution-updates-on-the-code-of-conduct-enforcement-committee">Conclusion/Resolution</h4></a><ul>
+<li>consensus</li>
+</ul>
+<a href="#15i-flatmap-for-stage-3"><h2 id="15i-flatmap-for-stage-3">15.i flatMap for stage 3</h2></a><p>(Michael Ficarra)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-flatMap">Explainer</a></li>
+</ul>
+<p>MF: Updates:</p>
+<ul>
+<li>no longer looking for stage 3</li>
+<li>IsConcatSpreadable has changed to isArray check. Reason: 2 was opt-in to very limited exception in Array methods. X.prototype.flatMap should flatten Xs only.</li>
+</ul>
+<a href="#conclusionresolution-15i-flatmap-for-stage-3"><h4 id="conclusionresolution-15i-flatmap-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stays in Stage 2</li>
+</ul>
+<a href="#15iii-stringprototypematchall-for-stage-2"><h2 id="15iii-stringprototypematchall-for-stage-2">15.iii String.prototype.matchAll for Stage 2</h2></a><p>(Jordan Harband)</p>
+<p>JHD: (reporting follow up items from discussion: questions and change requests are resolved). Waldemar withdrew his concerns over dinner — addressing the problem wasn't worth the extra complexity here. Can explore a flag that finds all matches (including overlapping ones) in an independent proposal if we like.</p>
+<a href="#conclusionresolution-15iii-stringprototypematchall-for-stage-2"><h4 id="conclusionresolution-15iii-stringprototypematchall-for-stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Stage 2 acceptance</li>
+<li>Reviewers for Stage 3:
+<ul>
+<li>Daniel Ehrenberg</li>
+<li>Mathias Bynens</li>
+</ul></li>
+</ul>
+<a href="#12ivb-decorators-detailed-discussion-of-proposed-semantics-cont"><h2 id="12ivb-decorators-detailed-discussion-of-proposed-semantics-cont">12.iv.b Decorators: detailed discussion of proposed semantics (cont)</h2></a><p>(Daniel Ehrenberg)</p>
+<p>RBN: Private name API. Decorators on two different class members that add an &quot;extra&quot; with the same name. Collisions? Talk offline.</p>
+<p>JRL: Why not WeakMap?</p>
+<p>DE: WeakMaps have stronger GC guarantees than what we want for private names. If all references to a WeakMap go away, all contents of the WeakMap should be collected, whereas that's not true for private names. It's harder for implementations to provide those stronger WeakMap semantics, whereas private name semantics can be easily implemented using hidden slots on instance objects.</p>
+<p>YK: WeakMaps ok for babel.</p>
+<p>DE: (identifying implementation tradeoffs)</p>
+<p>JRL: What dos the getter and setter do to public name</p>
+<p>DE: Throw an exception</p>
+<p>JHD: (echoing Bradley's concerns)</p>
+<p>DE: What does the committee want for decorators to be brought to stage 3?</p>
+<p>YK: Ron's concern</p>
+<p>DE: Need detailed reviews</p>
+<p>YK: Concerned about decorators falling behind private state, because private state is influenced heavily by decorators.</p>
+<a href="#conclusionresolution-12ivb-decorators-detailed-discussion-of-proposed-semantics-cont"><h4 id="conclusionresolution-12ivb-decorators-detailed-discussion-of-proposed-semantics-cont">Conclusion/Resolution</h4></a><ul>
+<li>Reviewers</li>
+<li>Waldemar Horwat (for January meeting)</li>
+<li>Dave Herman</li>
+<li>Sathya Gunasekaran</li>
+<li>Bradley Farias</li>
+</ul>
+<a href="#13i-object-shorthand-improvements"><h2 id="13i-object-shorthand-improvements">13.i Object Shorthand Improvements</h2></a><p>(Ron Buckton)</p>
+<ul>
+<li><a href="https://github.com/rbuckton/proposal-shorthand-improvements">Explainer</a></li>
+<li><a href="https://docs.google.com/presentation/d/1tsE8sbLBvi-1xHPaeeI9u50ktqDub2EfhyrrvTEkfRA/edit?usp=sharing">Slides</a></li>
+</ul>
+<p>RBN: (presenting slides)</p>
+<p>DH: In your examples your computed keys are all literals, but it works for any expression right?</p>
+<p>RBN: Right</p>
+<p>CM: What problem is this trying to solve? This looks like more stuff to put in my linter to stop using.</p>
+<p>RBN: This is a feature available in the C# language.</p>
+<p>CM: Do the code savings pay for the cognitive overhead?</p>
+<p>RBN: I'd say the cognitive overhead is the same as existing shorthand</p>
+<p>CM: Which are already problematic. I think they were a mistake to begin with.</p>
+<p>RBN: I'm on the side of them</p>
+<p>CM: People like them, that's how they got there.</p>
+<p>JHD: The renaming thing, while powerful ends up confusing people. I feel this would have a lot of cognitive overhead. I also agree with Chip.</p>
+<p>AR: Object destructing is good but it is so powerful it can be difficult to understand. This feels like it compounds this.</p>
+<p>YK: All the forms here can already be done by existing syntax. I agree with others about the cognitive overhead. The thing with existing destructuring is that it mirrors the style of object creation but this goes further. This feels confusing.</p>
+<p>SGO: I am worried this becomes an anti pattern as soon as it is shipped. If you don't own the object you are consuming, and the o.x is changed to o.y, your code breaks. How does C# view this problem?</p>
+<p>RBN: Well C# is statically typed so we have compile time checks for things. In JS we have TypeScript or Flow to cater for this. This proposal is designed to progress the shorthand notation; you can destructure deeply currently, and use spreads. This is designed to bring the deep destructing properties and spread to a top level.</p>
+<p>DH: Can we make it a point of presenting to show people not just contrived examples and instead present actual use cases. What DHH says from rails; &quot;show me the code&quot;. In addition some A/B slides of &quot;this is what the code looks like with this feature, this is what the code looks like without&quot;</p>
+<p>RBN: If the concerns are we need more examples, I don't want to abandon the proposal.</p>
+<p>MPT: I understand the hazards of not having a type system - but this is always the case. The problem Sam describes should be lintable; but the hazard is no greater with or without a type system.</p>
+<p>YK: I agree.</p>
+<p>DE: So for private fields this would just be an early error.</p>
+<p>WH: This proposal overlays property definition and expression grammars, which poses grammar problems. Suppose you start parsing an object literal:  <code>{ get[foo]</code> looks like the beginning of the definition of a getter, but then it can be turned into an expression that looks up an property of the object named <code>get</code>:  <code>{ get[foo].x }</code>. I can come up with many of these examples. This would preclude a range of ways we might want to extend the property definition grammar.</p>
+<p>DE: I understand the objections, but personally when I learned destructing I expected this to be a part of it, I was surprised it was not. I find it intuitive.</p>
+<p>RBN: I dont believe the grammar issues are unsolvable.</p>
+<p>DE: We've solved grammar issues in the past.</p>
+<p>RBN: You're saying that adding this feature increases complexity of adding new features later on?</p>
+<p>WH: Yes, and that complexity is not worth the benefits of this feature.</p>
+<p>(roll call)</p>
+<p>WH: I object to this for stage 1</p>
+<p>YK: I also object.</p>
+<p>DE: I somewhat support this.</p>
+<a href="#conclusionresolution-13i-object-shorthand-improvements"><h4 id="conclusionresolution-13i-object-shorthand-improvements">Conclusion/Resolution</h4></a><ul>
+<li>RBN to address concerns and re-present.</li>
+<li>Not promoted to stage 1</li>
+</ul>
+<a href="#13iii-nullary-coalescing-operator"><h2 id="13iii-nullary-coalescing-operator">13.iii Nullary coalescing operator</h2></a><p>(Gabriel Isenberg)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1m5nxTH8ifcmOlyaTmTuMAa1bawiGUyKJzQGlw-EVSKM/edit?usp=sharing">Slides</a></li>
+<li><a href="https://github.com/gisenberg/proposal-nullary-coalescing">Explainer</a></li>
+</ul>
+<p>(Gabriel Isenberg)</p>
+<p>GI: (Presenting)</p>
+<p>DE: Why not stage 2? The definition of what triggers going to the alternative -- we are talking about &quot;null or undefined&quot; only. Is &quot;null or undefined&quot; the right choice?</p>
+<p>Everyone: yes</p>
+<p>CM: Use of <code>?.</code> in the examples are confusing. Can I see an example without optional chaining?</p>
+<p>MF: Read the spec text.</p>
+<p>YK: &quot;null or undefined&quot; well motivated. Especially to check whether or not could be used to dot index.</p>
+<p>DE: Stage 2 was the concern about syntax, which is about relationship with the optional chaining &quot;?.&quot; syntax</p>
+<p>JHD: Operators in optional chaining proposal should be considered at the same time as this. Both should be considered in stage 2.</p>
+<p>MS: &quot;?|&quot; makes sense to me</p>
+<p>WH: We keep bikeshedding the optional chaining proposal. But none of that affects the use of <code>??</code> here.</p>
+<p>DE: &quot;??.&quot; or &quot;??[&quot; in optional chaining would mean we can't consider &quot;??&quot; here. Stage 2 things should have a moderate level of stability.</p>
+<p>WH: <code>??.</code>, <code>??[</code>, and <code>??(</code> in optional chaining does <em>not</em> mean that we can't use <code>??</code> here if we ship the proposals at the same time.</p>
+<p>DE: It would break behavior</p>
+<p>WH: No, it wouldn't, as long as we ship them simultaneously so there is no existing behavior to break. Just introduce four lexer tokens <code>??</code>, <code>??.</code>, <code>??[</code>, and <code>??(</code>. The lexer automatically picks the longest token. It's the same situation that we've had since the beginning. For example, <code>-</code> and <code>--</code> are both tokens even though one is a prefix of the other.</p>
+<p>JHD: Stable semantics are important in stage 2, not syntax.</p>
+<p>GI: Waldemar suggested <code>??</code> to align with all proposals.</p>
+<p>WH: We cannot, for example, introduce <code>-</code> and later <code>--</code> because it would break existing code that subtracted a negative number from something. However in this case we can introduce <code>??.</code>, <code>??(</code>, <code>??[</code> all at the same time and the lexer can differentiate between them.</p>
+<p>DH: We should be considering these together - that is important. We don't need to heavily block everything though; for the record I think we could bikeshed forever, but <code>??</code> is an excellent syntax for this. I am unlikely to like a third character for the other proposal.</p>
+<p>WH: To clarify, I was presenting this as an option because some people wanted <code>??.</code> for the other proposal; I personally do not want <code>??.</code>; I prefer <code>?.</code> for the other proposal.</p>
+<p>DH: Yes its important for us to air this. I don't want us to feel we have to solve everything here though.</p>
+<p>GI: I'm happy with the feedback but I feel It's useful to look at them in isolation.</p>
+<p>MF: We don't need to consider the syntax before stage 2. We dont need to block it.</p>
+<p>YK: Even for a syntax propsoal?</p>
+<p>MF: This is <em>not</em> a syntax proposal. Yes it has syntax but the importance is the problem solving nature. The point is stage 2 should be blocking</p>
+<p>DE: If we were to go with <code>??.</code> and <code>??(</code>, there would be a conflict between whether you're referring to the nullary coalescing operator or optional chaining. It sounds like Waldemar wants to differentiate based on whitespace, but I think that would be too confusing. This case is a little different from <code>--</code>; it's a qualitiative thing. I think that using <code>??</code> with an array literal is more common than negating a negative number. You may really want to write <code>x.y?? [1]</code> to default to <code>[1]</code>, or you may want to read the &quot;1&quot; property of <code>x.y</code> if <code>x.y</code> is not null as <code>x.y??[1]</code>--if we differentiated these only based on whitespace, it would come up in real cases in a confusing way.</p>
+<p>WH: I agree with that reasoning, which is why I personally prefer the <code>?.</code> variant for the syntax of the other proposal.</p>
+<p>DH: <code>?</code> as a sigil conveys the sense that there may or may not be a &quot;thing&quot; here. It's intuitive; even if you are unfamilar with the syntax you can intuit it from the use of <code>?</code>. In addition <code>??</code> fits in well with our double character infix operators. <code>?.</code> though feels right because you're modifying the <code>.</code> operator, but <code>??.</code> feels like applying an infix operator to this; so it does not fit as well. <code>?.</code> for properties and <code>??</code> as an infix style operator feel right, other styles do not.</p>
+<p>GI: Using <code>??</code> for this proposal feels right - its uncontroversial. Shall we look at stage 2? Any objections to Stage 2?</p>
+<p>YK: Dave did you have a comment on the nully thing?</p>
+<p>DH: No strong feelings on if this is a stage 2 or 3 question - but what are we doing about nully vs undefined? Both are plausible. We have a convention of <code>undefined</code> meaning &quot;not there&quot; at current; so refactoring paths between old code and the new operator it would suggest <code>undefined</code> is a use case; however nully is also a common use case. My point is we should have a useful, well reasoned, one sentence explainer on if we are going with nully or <code>undefined</code>.</p>
+<p>JHD: There are many conventions of null and undefined being &quot;not there&quot;. I'm not trying to advocate for any position but there is a group that feel null and undefined. In React for example when you want to render a JSX element on a condition - it's a common footgun that falsy values that are not actually false or null will get rendered, this operator could complement this use case. If this only worked with <code>undefined</code> it would not address all usecases such as this.</p>
+<p>DD: There are two camps. If you come back and say its null or undefined without good reason then it might not progress.</p>
+<p>YK: Yes, but don't just go away and write an explanation of why null or undefined is right, instead also figure out <em>if</em> that is right.</p>
+<a href="#conclusionresolution-13iii-nullary-coalescing-operator"><h4 id="conclusionresolution-13iii-nullary-coalescing-operator">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 acceptance</li>
+<li>Need to work out syntax with respect to optional chaining operator</li>
+</ul>
+<a href="#13i-partial-application"><h2 id="13i-partial-application">13.i Partial application</h2></a><p>(Ron Buckton)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1GSnqtT1jHbilIAwCuaK2yjKNj0y6cLfJNisZDig3Nm8/edit#slide=id.p3">Slides</a></li>
+<li><a href="https://github.com/rbuckton/proposal-partial-application">Explainer</a></li>
+</ul>
+<p>RBN: (Presenting)</p>
+<p>YK: I don't understand the &quot;...&quot; rest argument. In the backchannel everyone agrees it's confusing/shouldn't be allowed. The fact that the question about &quot;call by value&quot; or &quot;call by name&quot; might block this proposal - the fact that it is a question means there are detailed semantics that need in-depth explanation.</p>
+<p>RBN: Once we have it defined we can have a set semantic to describe. It is not unheard of to have semantics that need in-depth explainers - for example the lexical this inside of arrow functions.</p>
+<p>DH: A syntax suggests it will continue with eager evaluation. Need some syntactic design to indicate where the evaluation is paused. To me the syntax is asking for eager evaluation - the syntactic traditions of JS also suggest this. I would be shocked to see a delay of the evaluation of this. Outside of that, I want to make sure this syntax is actually cost saving - I'm worried about the barrier to new learners, not hard blocking.</p>
+<p>RBN: I look at this as an alternative to expressing this through arrow functions - to make it easier to codify partial application rather than using arrow functions. To your earlier point; arrow functions allow us to pick and choose these semantics though - but I would agree that eager evaluation feels like the right choice.</p>
+<p>TST: I agree with Dave that this question shouldn't exist. Anything other than eager evaluation would bely all intuition. I do like this syntax though.</p>
+<p>RBN: Call-by-value and eager evaluation is what everyone preferred during the break. If you need deferred, use arrow function.</p>
+<p>DE: When does C# evaluate default arguments? Is it per-function-call, as in JS, or once like Python?</p>
+<p>RBN: Default arguments can only be value types or null in C#.</p>
+<p>RBN: (explains new last slide)</p>
+<p>KV: I feel like this example doesn't truly show the benefit of partial application... I'd be curious to see an example that uses the pipeline operator but without the partial application proposal - I'm curious if it'd be significantly less readable.</p>
+<p>RBN: Okay so can we move this to Stage 1? Any objections?</p>
+<p>KV: I feel as though this could be implemented in userland - what's the value of adding this to JS?</p>
+<p>RBN: There are userland libraries to do this; but its more code than just an arrow function to do it properly. In addition the syntax becomes much more complicated as you have to pass the function, the arguments and some placeholder sentinel all into a library function. So it's more work in userland. In addition hosts have the capability to optimise this by having syntax; while the userland library will always have an upfront cost to performing these operations.</p>
+<p>WH: The main issue with this is the syntax. This is garden-path syntax. Consider the function <code>foo(x++, Y(g, h, k, l), m*n, &quot;hello&quot;, bar, ...a)</code> - what does this do? It's a function call, right?</p>
+<p>Everyone: Yes a function call</p>
+<p>WH: Now let’s remove that last <code>a</code> and change this to <code>foo(x++, Y(g, h, k, l), m*n, &quot;hello&quot;, bar, ...)</code> - this is no longer a function call, it is a closure capture. My issue is that it looks like a function call but it is not. I think the syntax is a non starter because of this. If we had a syntax at the beginning that suggested to the user that it is not a function call then this would be fine. Syntax before or after the identifier that starts the closure: <code>{HERE}foo{OR_HERE}(x++)</code></p>
+<p>WH: The other problem with the syntax is that this allows no way to create a closure that takes no parameters. When the semantics were to defer everything, that was kind of ok because you could just wrap the whole thing in an arrow function. With eager evaluation, the lack of a way to define a closure that takes no parameters hurts because wrapping in an arrow function switches from eager to lazy evaluation of the arguments.</p>
+<p>BT: Are you objecting to the feature for stage 1? Stage 1 is not about syntax - it is about promoting this to a feature we want to consider.</p>
+<p>WH: This whole proposal is about syntax, and I object to the syntax.</p>
+<p>MB: The proposal is about adding partial application to the language in one way or another. Advancing to Stage 1 does not prevent us from changing the syntax.</p>
+<p>DD: I don't think we should block stage 1 - but I do think this is a worrying trend of presenting full code and semantics and asking for stage 1 where the syntax and semantics aren't sensible. Present an idea to push an idea to stage 1, not syntax and semantics to get the idea to stage 1.</p>
+<p>RBN: The syntax and semantics are flexible but without syntax and semantics there is nothing to present.</p>
+<p>MS: This proposal meets stage 1, given the policy document.</p>
+<p>WH: I'm happy to advance to stage 1 — I think the general closure capture this does is useful but have strong concerns about the garden path syntax.</p>
+<a href="#conclusionresolution-13i-partial-application"><h4 id="conclusionresolution-13i-partial-application">Conclusion/Resolution</h4></a><ul>
+<li>Stage 1 acceptance</li>
+</ul>
+<p>MF: I don't object to stage 1, but don't believe that we'll be able to come up with a syntax that makes this proposal viable.</p>
+<p>LBR: I agree with Michael.</p>
+<a href="#12iiic-importmeta-for-stage-3"><h2 id="12iiic-importmeta-for-stage-3">12.iii.c import.meta for stage 3</h2></a><p>(Domenic Denicola)</p>
+<p>DD: Are we happy to progress this to stage 3?</p>
+<p>(Discussion about whether the name is appropriate, whether it should be included outside modules, revisiting other semantic decisions, settling on this design being a reasonable starting point despite limitations.)</p>
+<p>Everyone: Agreement</p>
+<a href="#conclusionresolution-12iiic-importmeta-for-stage-3"><h4 id="conclusionresolution-12iiic-importmeta-for-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>Stage 3 acceptance</li>
+</ul>
+<a href="#14ia-builtinstypeof-and-builtinsis"><h2 id="14ia-builtinstypeof-and-builtinsis">14.i.a Builtins.typeOf() and Builtins.is()</h2></a><ul>
+<li><a href="https://github.com/jasnell/proposal-istypes">Explainer</a></li>
+</ul>
+<p>(James M Snell)</p>
+<p>JSL: (Presenting)</p>
+<p>JSL: Any questions?</p>
+<p>DD: What does this improve over <code>constructor.name</code> or <code>[Symbol.toStringTag]</code></p>
+<p>JSL: We need something that gives reasonable assurance.</p>
+<p>DD: We have existing mechanisms in the language.</p>
+<p>JSL: If we have something existing then thats fine.</p>
+<p>DD: Yes if you want something with stronger guarantees, we can do that but thats different. If we're solving the general problem we already have this.</p>
+<p>KCL: How is this different from toStringTag? How is it meant to offer stronger guarantees?</p>
+<p>JHD: If code modifies <code>Array.prototype[Symbol.toStringTag]</code> then later queries to check that will return something different to what I expect. If I cache <code>Array.prototype[Symbol.builtin]</code> I can subsequently <code>.call</code> my cached function with any type and it should return <code>'Array'</code> for arrays - I can't do the same with <code>toStringTag</code> because if it is changed, introspecting it gives the changed value.</p>
+<p>KCL: You've buried the lede here - that's the motivating feature of this.</p>
+<p>JSL: I will take this away and work on it some more.</p>
+<a href="#conclusionresolution-14ia-builtinstypeof-and-builtinsis"><h4 id="conclusionresolution-14ia-builtinstypeof-and-builtinsis">Conclusion/Resolution</h4></a><ul>
+<li>Remains stage 0</li>
+</ul>
+<a href="#numeric-literal-separator-to-stage-3"><h2 id="numeric-literal-separator-to-stage-3">Numeric Literal Separator to Stage 3</h2></a><ul>
+<li><a href="https://github.com/tc39/proposal-numeric-separator">Explainer</a></li>
+</ul>
+<p>(Rick Waldron)</p>
+<p>RW: Would like to move to stage 3. Reviews -- all concerns in reviews resolved. Implementation in babel. We have Test262 tests ready to merge.</p>
+<p>RW: (lists all concerns/issues from reviewers in explainer)</p>
+<p>RW: Waldemar pointed out in his review that the spec didn't allow an underscore after the first digit in a number (i.e. 10_00 was allowed but 1_000 was illegal). Fixed the grammar to allow this.</p>
+<p>DE: Does ToNumber change?</p>
+<p>WH: No; ToNumber will not allow underscores. The intent was to leave the syntax of the strings allowed by ToNumber unchanged. We had to revise the grammar to achieve that because ToNumber had been sharing some of the lexical grammar.</p>
+<p>RW: Waldemar also found that the ToNumber grammar had allowed underscores in some places but not others. Fixed that problem in the latest proposed spec.</p>
+<p>RW: As we're out of time I'll re-present this at the next meeting.</p>
+<a href="#conclusionresolution-numeric-literal-separator-to-stage-3"><h4 id="conclusionresolution-numeric-literal-separator-to-stage-3">Conclusion/Resolution</h4></a><ul>
+<li>No progression to Stage 3</li>
+<li>Present and next meeting</li>
+</ul>
+<a href="#regexp-proposals-to-stage-4"><h2 id="regexp-proposals-to-stage-4">RegExp proposals to Stage 4</h2></a><p>(Daniel Ehrenberg)</p>
+<p>DE: RegExp dot-all flag is shipped in Chrome Canary and Safari Tech Preview. Stage 4?</p>
+<p>DD: No stable implementations, so this doesn't meet Stage 4 requirements</p>
+<p>DE: Earlier in this meeting, we moved other features to Stage 4 which are even less far along in shipping. We should arrange for a discussion on what is good enough for Stage 4 so we can apply a consistent policy.</p>
+<a href="#conclusionresolution-regexp-proposals-to-stage-4"><h4 id="conclusionresolution-regexp-proposals-to-stage-4">Conclusion/Resolution</h4></a><ul>
+<li>Will be discussed next meeting</li>
+</ul>
+<a href="#promiseprototypefinally-status-update"><h2 id="promiseprototypefinally-status-update">Promise.prototype.finally status update</h2></a><p>(Jordan Harband)</p>
+<p>JHD: Promise.prototype.finally went back to having a fast-path for when a built-in Promise is given as an argument, based on implementation feedback. Hoping to come back in November with more rigorous experience from implementations.</p>
+<a href="#another-regexp-annex-b-33-sloppy-mode-function-hoisting-edge-case-httpsgithubcomtc39ecma262issues480"><h2 id="another-regexp-annex-b-33-sloppy-mode-function-hoisting-edge-case-httpsgithubcomtc39ecma262issues480">Another RegExp Annex B 3.3 sloppy mode function hoisting edge case <a href="https://github.com/tc39/ecma262/issues/480">https://github.com/tc39/ecma262/issues/480</a></h2></a><p>(Shu-yu Guo)</p>
+<p>SYG: Implementors should take a look at <a href="https://github.com/tc39/ecma262/issues/480">https://github.com/tc39/ecma262/issues/480</a> . Seems the spec disagrees with implementations. Need more data.</p>
+<p>SYG: Implementations seem to all accept the form.</p>
+<p>WH: But do they have the same semantics for it?</p>
+<p>SYG: I don't know.</p>
+<p>TST: Some implementations reject this.</p>
+<a href="#conclusion--resolution-another-regexp-annex-b-33-sloppy-mode-function-hoisting-edge-case-httpsgithubcomtc39ecma262issues480"><h4 id="conclusion--resolution-another-regexp-annex-b-33-sloppy-mode-function-hoisting-edge-case-httpsgithubcomtc39ecma262issues480">Conclusion / Resolution</h4></a><ul>
+<li>False alarm, implementations all follow the spec here these days</li>
+</ul>
+<a href="#bigint-topropertykey"><h2 id="bigint-topropertykey">BigInt ToPropertyKey</h2></a><p>(Daniel Ehrenberg)</p>
+<p>WH: Need a very strong reason not to do what toString does.</p>
+<p>DE: What about performance?</p>
+<p>WH: That's way down the list of concerns here. This won't come up often.</p>
+<p>YK: My intuition is we should ban bigint property keys. Are people not interested in banning this because they feel we went overboard with banning uses of bigint?</p>
+<p>BT: I do not think that.</p>
+<p>YK: We already ban things like ===. It seems plausible to teach people to not think of this as a number, it is just a special type and will throw typeerrors for many operations</p>
+<p>JHD: I do not expect toString to be eval-able, but it I do expect String(3n) to be '3n'. If I only care about the value it should be interchangeable everywhere.</p>
+<p>DE: toString is not meant to be evalable. toString of the string <code>&quot;3&quot;</code> and the number <code>3</code> both produce &quot;3&quot;, but strings and numbers behave differently.</p>
+<p>WH: By that argument, the string <code>&quot;false&quot;</code> and the boolean <code>false</code> should behave the same everywhere too, which makes no sense.</p>
+<p>JHD: No that's not quite the argument. I'm just expressing intuition that if it is toStringable then it should be able to be a property key.</p>
+<p>MF: I don't see why it is problematic to allow property keys.</p>
+<p>WH: The reason for banning it for <code>+</code> was because there are no reasonable definitions of adding a BigInt and a Number.  Which ever way we come up with to define it would be wrong a significant fraction of the time. That problem doesn't arise here. I don't see any good arguments to diverge from what <code>toString</code> does.</p>
+<p>DD: My intuition - not my understanding - is that <code>x[1] = 5</code> is desugared to <code>x['1'] = 5</code> - so I would also apply the same intuition that <code>x[1n] = 5</code> would desugar to <code>x['1n'] = 5</code>. But to counterpoint my own point this is not true of <code>x[0x1] = 5</code>.</p>
+<p>MB: It’s also not true for exponents, e.g. <code>x[1e3] = 5</code>. The same thing applies for the example in the slide: <code>x = { 3n: 'a' }</code> should work the way <code>x = { 1e3: 'a' }</code> does.</p>
+<p>DE: But your intuition won't follow for variables, e.g. <code>x[foo] = 5</code> isn't <code>x['foo'] = 5</code>.</p>
+<p>DD: I suppose the issue could be that developers may see an array index as an integer and using bitint as it is an integer type</p>
+<p>MS: We just spoke about adding underscores as numeric separators - we're not tostringing those, so this point doesn't follow.</p>
+<p>YK: I share Domenic's intuition that it is a foot gun. On the other hand, we're happy with toString, we're happy with string keys - we're just maybe banning the combination of those two, which seems more in the province of linting. Unlike binary <code>+</code>, there are well-defined semantics for what this operation does.</p>
+<a href="#conclusion--resolution-bigint-topropertykey"><h4 id="conclusion--resolution-bigint-topropertykey">Conclusion / Resolution</h4></a><ul>
+<li>Allow BigInt as a property key</li>
+</ul>
+<a href="#process-for-adding-agenda-items"><h2 id="process-for-adding-agenda-items">Process for adding agenda items</h2></a><p>LBR: I want to codify the deadline for adding agenda items - the deadline should be Friday, UTC-12, 7 days before the date of a meeting. This gives everyone a week to read the specifications and prepare for the meeting.</p>
+<p>DD: It is important for the Chrome team to keep track of any advancement - we would ask if it is put on the agenda with little time for the Chrome team to review - don't expect advancement.</p>
+<p>MPT: Its a concern for us at JSF too - we need to publicize information about these and it can be awkward if things get added too close to the meeting.</p>
+<p>YK: I think the level of prep is stage dependant.</p>
+<p>LBR: I don't want to stress it too much. I really just want to raise the intention to add a deadline - please feel free to send feedback to me.</p>
+<p>JHD: I thought we had agreed on previous meetings to have this deadline. We just need to agree on something to avoid meeting disputes or disputes on GitHub. We just need to pick a moment in time.</p>
+<p>DH: Whatever we pick - let's just consistently apply to everybody to prevent any abuse of the system.</p>
+<p>YK: So for stage 0 and 1 it seems as though these have some lenience but Stage 2 or 3 should prepare these materials before the deadline.</p>
+<p>LBR: I'm not asking for consensus - let's defer to next meeting.</p>
+<p>JHD: No, let's make a decision now, and we can change it in November if need be.</p>
+<p>YK: Concretely could we say Stage 0 and 1 put the topic on the agenda before the deadline, Stage 2 and 3 add presentation and other materials before the deadline.</p>
+<p>JHD: Okay so Stage 0 and 1 have to simply be on the agenda by 10 days before the meeting, Stage 1 and 2 need all materials on the agenda by 10 days before the meeting.</p>
+<p>CM: Can we please add a specific date and time and time zone for the exact deadline for each meeting?</p>
+<p>JHD: Yes I will do that.</p>
+<a href="#conclusionresolution-process-for-adding-agenda-items"><h4 id="conclusionresolution-process-for-adding-agenda-items">Conclusion/Resolution</h4></a><ul>
+<li>Add a 10 day deadline in the agenda template</li>
+<li>Specify an exact time for each meeting</li>
+<li>Specify minimum guidelines for what needs to be on the agenda for Stage 0 and 1, and Stage 2+</li>
+</ul>
+<a href="#arraybuffertransfer"><h2 id="arraybuffertransfer">ArrayBuffer.transfer</h2></a><p>DD: There used to be an ArrayBuffer.transfer proposal - it was rejected before but I think it should be Stage 0. If you are interested in this please talk to me.</p>
+<p>DE: The whole point of ArrayBuffer.transfer is to grow an asm.js heap. Isn't this subsumed now by WebAssembly.Memory.prototype.grow?</p>
+<p>DD: I have other use cases, e.g., testing.</p>
+<a href="#conclusionresolution-arraybuffertransfer"><h4 id="conclusionresolution-arraybuffertransfer">Conclusion/Resolution</h4></a><ul>
+<li>&quot;you can't stop me from making it stage 0&quot;</li>
+</ul>
+<a href="#float16-typed-arrays"><h2 id="float16-typed-arrays">Float16 Typed Arrays</h2></a><p>(Michael Z Goddard)</p>
+<p>MZG: Float16s are useful for graphics and physics calculations, numpy, texture information. You don't need 32 bit precision.</p>
+<p>LBR: We're not sure if want to advance to stage 2 yet, this is just an update.</p>
+<p>DE: Do you actually need element by element access as a scalar? Or just memory buffers? The latter is already possible with array buffers.</p>
+<p>MZG: There isnt a float16 typed array so WebGL gives you half precision. WebGL could down convert from 32 it but I dont think its workable because then you just spend a lot of time converting 32 to 16 bit.</p>
+<p>DE: Have you discussed this with WebGL folks? Do they have interest?</p>
+<p>MZG: I haven't discussed this with them no.</p>
+<p>DE: It could be worthwhile to do this, I can introduce you to some people for this.</p>
+<p>MS: X86 and ARMv8 don't have native 16 bit float - so there'd have to be manual conversion.</p>
+<p>RW: I suspect that might be why they weren't in the original Chronos TypedArray spec.</p>
+<p>MS: To me without instruction support it'd be slower or just as slow to do this as it is currently.</p>
+<p>DH: If its just Arrays and not value typed theres not much you're doing much with instructions. If you're just passing to GPU thats fine right?</p>
+<p>MS: Correct, GPUs bread and butter is 8 and 16 bit floats.</p>
+<p>DH: So float 16 arrays allow you to store which you can ship through GLSL. We're essentially talking about loads and stores in the JS side, and instructions done on GLSL.</p>
+<p>MS: Loads and stores would be groups of integer 16 bit values in CPUs for passing throughs, just buckets of bits for passing through. If one of the use cases of this is loading an Array with data - what does that look like?</p>
+<p>DH: Yes, is this even useful for JS if you cant compute without GLSL? The question is can you write the programs you want to write? Float16 array would satisfy use cases without going all the way to value types?</p>
+<p>MZG: Yeah</p>
+<p>LBR: I'll bring a draft spec next meeting.</p>
+<a href="#conclusionresolution-float16-typed-arrays"><h4 id="conclusionresolution-float16-typed-arrays">Conclusion/Resolution</h4></a><ul>
+<li>No advancement, a draft for Stage 2 should be prepared as a follow up.</li>
+<li>Work more closely with WebGL community, as this is the motivating application</li>
+</ul>
+<a href="#meeting-concluded"><h2 id="meeting-concluded">Meeting concluded</h2></a>
+</body>
