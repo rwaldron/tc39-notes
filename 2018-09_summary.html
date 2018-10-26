@@ -1,0 +1,97 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="manifest" href="img/site.webmanifest">
+<link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<title>Summary for the 66th meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="javascript:history.back()">Back</a>
+<a href="#summary-for-the-66th-meeting-of-ecma-tc39"><h1 id="summary-for-the-66th-meeting-of-ecma-tc39">Summary for the 66th meeting of Ecma TC39</h1></a><p>Ecma Technical Committee 39 held three day meeting hosted by Paypal in NYC on September 25th - September 27th, 2018. <a href="https://github.com/tc39/agendas/blob/master/2018/09.md">Agenda can be found here</a>.</p>
+<a href="#new-proposals"><h2 id="new-proposals">New Proposals</h2></a><p>TC39 discussed 6 new proposals. 5 entered staging process to discuss towards specification, and 1 remains at Stage 0 for further investigation before consensus.</p>
+<a href="#advanced-to-stage-1"><h3 id="advanced-to-stage-1">Advanced to Stage 1</h3></a><ul>
+<li><a href="2018-09_sept-25.html#for-in-mechanics">for-in mechanics</a></li>
+<li><a href="2018-09_sept-26.html#uniform-parsing-of-quasi-standard-dateparse-input">Uniform parsing of quasi-standard Date.parse input</a></li>
+<li><a href="2018-09_sept-27.html#promiseallsettled-for-stage-1">Promise.allSettled</a></li>
+<li><a href="2018-09_sept-27.html#idl-for-javascript">IDL for JavaScript</a></li>
+<li><a href="2018-09_sept-27.html#jsonparse-source-text-access">JSON.parse source text access</a></li>
+</ul>
+<a href="#needs-more-discussion-remains-stage-0"><h3 id="needs-more-discussion-remains-stage-0">Needs more discussion (remains Stage 0)</h3></a><ul>
+<li><a href="2018-09_sept-25.html#consistent-behavior-delegation-for-configurable-properties--extensible-values">Consistent Behavior Delegation for Configurable Properties &amp; Extensible Values</a></li>
+</ul>
+<a href="#existing-proposals"><h2 id="existing-proposals">Existing Proposals</h2></a><a href="#advanced-to-stage-2-from-stage-1"><h3 id="advanced-to-stage-2-from-stage-1">Advanced to Stage 2 from Stage 1</h3></a><ul>
+<li><a href="2018-09_sept-26.html#sequence-properties-in-unicode-property-escapes-for-stage-2">Sequence properties in Unicode property escapes</a></li>
+<li><a href="2018-09_sept-26.html#hashbang-for-stage-2">Hashbang</a></li>
+<li><a href="2018-09_sept-27.html#temporal-for-stage-2">Temporal</a></li>
+</ul>
+<a href="#advanced-to-stage-3-from-stage-2"><h3 id="advanced-to-stage-3-from-stage-2">Advanced to Stage 3 from Stage 2</h3></a><ul>
+<li><a href="2018-09_sept-26.html#well-formed-jsonstringify-for-stage-3">Well-formed JSON.stringify</a></li>
+</ul>
+<a href="#needs-more-discussioninformation"><h3 id="needs-more-discussioninformation">Needs more discussion/information</h3></a><p>These proposals were discussed but did not advance to next stage at the meeting. Please refer to &quot;Conclusion / Resolution&quot; section on the notes to see the outcome of discussion.</p>
+<ul>
+<li><a href="2018-09_sept-26.html#arrayprototypeflatmap-for-stage-4-">Array.prototype.flat{,Map}</a></li>
+<li><a href="2018-09_sept-26.html#include-static-in-static-method-tostring">Include static in static method toString</a></li>
+<li><a href="2018-09_sept-26.html#revisiting-private-symbols">Revisiting Private Symbols</a></li>
+</ul>
+<a href="#updates"><h3 id="updates">Updates</h3></a><p>Status updates from proposals working towards stage advancement.</p>
+<ul>
+<li><a href="2018-09_sept-25.html#update-on-stringprototypematchall">String.prototype.matchAll</a></li>
+<li><a href="2018-09_sept-26.html#decorators-stage-2-update">Decorators</a></li>
+<li><a href="2018-09_sept-26.html#class-fields-and-private-methods-stage-3-update">Class fields and private methods</a></li>
+</ul>
+<a href="#changes-to-existing-specification"><h2 id="changes-to-existing-specification">Changes to existing specification</h2></a><a href="#consensus-reached-pull-requests"><h3 id="consensus-reached-pull-requests">Consensus Reached Pull Requests</h3></a><ul>
+<li><a href="2018-09_sept-25.html#normative-reduce-the-number-of-ticks-in-asyncawait">Normative: Reduce the number of ticks in async/await</a></li>
+<li><a href="2018-09_sept-25.html#normative-use-array-indices-instead-of-integer-indices-in-ordinaryownpropertykeys">Normative: Use array indices instead of integer indices in OrdinaryOwnPropertyKeys</a></li>
+<li><a href="2018-09_sept-27.html#normative-add-export--as-ns-from-mod-contd">Normative: Add export * as ns from &quot;mod&quot;</a></li>
+</ul>
+<a href="#rejected-pull-requests"><h3 id="rejected-pull-requests">Rejected Pull Requests</h3></a><ul>
+<li><a href="2018-09_sept-25.html#normative-allow-arrayspeciescreate-to-create-non-arrays">Normative: allow ArraySpeciesCreate to create non-arrays</a></li>
+</ul>
+<a href="#needs-more-discussioninformation"><h3 id="needs-more-discussioninformation">Needs more discussion/information</h3></a><ul>
+<li><a href="2018-09_sept-25.html#normative-use-getmethod-instead-of-getv-to-get-iterator-next">Normative: Use GetMethod instead of GetV to get iterator next</a></li>
+<li><a href="2018-09_sept-27.html#normative-getexportednames-adjustments-for-dynamic-modules">Normative: GetExportedNames adjustments for Dynamic Modules</a></li>
+</ul>
+<a href="#breakout-sessions"><h2 id="breakout-sessions">Breakout Sessions</h2></a><p>At this meeting, TC39 had break out sessions on following topics. Please see notes for each topic.</p>
+<ul>
+<li><a href="2018-09_sept-27.html#future-syntax-space-for-other-languages">Future syntax space for other languages</a></li>
+<li><a href="2018-09_sept-27.html#export-decorator-ordering">Export Decorator Ordering</a></li>
+<li><a href="2018-09_sept-27.html#same-realm-internal-slots-for-specs">Same-realm internal slots for specs</a></li>
+<li><a href="2018-09_sept-27.html#matchall-issue">Matchall issue</a></li>
+<li><a href="2018-09_sept-27.html#modules">Modules</a></li>
+<li><a href="2018-09_sept-27.html#temporal">Temporal</a></li>
+</ul>
+<a href="#general-discussions"><h2 id="general-discussions">General Discussions</h2></a><p>Topics related to ECMAScript specification activities that were presented at the meeting</p>
+<ul>
+<li><a href="2018-09_sept-25.html#arrayprototypesort-stability">Array.prototype.sort stability</a></li>
+</ul>
+<a href="#updates-from-ecma-262-editors-group"><h2 id="updates-from-ecma-262-editors-group">Updates from ECMA-262 Editors Group</h2></a><ul>
+<li>Starting to finalize ES2019. Proposals that make it to stage-4 by November meeting will be part of ES2019.</li>
+<li>Brian Terlson will be stepping down from the Editor Group after ES2019 is finalized (around May 2019)</li>
+</ul>
+<a href="#organizational-update"><h2 id="organizational-update">Organizational update</h2></a><ul>
+<li>2019 Chair Group was nominated
+<ul>
+<li>Will likely hold an uncontested election in November. Please see <a href="https://docs.google.com/presentation/d/1P5DdJBQrr5hj_x-SqQxk8HOTaipJUaxbH0icp1g9iMk/edit">slides</a> for details.</li>
+</ul></li>
+<li>TC39 has nominated Brendan Eich and Allen Wirfs-Brock as ECMA Fellows (To be approved at ECMA General Assembly in December)</li>
+<li>Test 262 work group has been developing <a href="2018-09_sept-25.html#announcing-a-tests-reports-project">Tests Reports Project</a></li>
+<li>Archival effort to document history of TC39 has started by ad-hoc TC39 History Group</li>
+<li>Few topics on Ecma policy were discussed
+<ul>
+<li>This is the change in Ecma policy to add “invited expert” status</li>
+<li>BFS, DE, and YSV will be talking to the Ecma ExeCom to discuss further.</li>
+<li>No opposition to making TC39 itself royalty free in preparation to accepting invited experts</li>
+</ul></li>
+<li><a href="2018-09_sept-26.html#groups-update">Groups Update</a></li>
+<li><a href="2018-09_sept-25.html#8-updates-from-the-coc-committee-15m">Code of Conduct Committee Report</a></li>
+<li><a href="2018-09_sept-25.html#9-report-from-the-ecma-secretariat">Report from the Ecma Secretariat</a></li>
+<li><a href="2018-09_sept-25.html#7ii-ecma402-status-updates">ECMA 402 Updates</a></li>
+<li><a href="2018-09_sept-25.html#7iv-test262-status-updates">Test262 Status Updates</a></li>
+</ul>
+
+</body>

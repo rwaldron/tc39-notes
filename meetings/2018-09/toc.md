@@ -1,5 +1,6 @@
 # September 2018 - Table of Contents
 
+- [Summary](2018-09_summary.html)
 - [September 25, 2018 Meeting Notes](sept-25.md#september-25-2018-meeting-notes)
   * [Agenda](sept-25.md#agenda)
   * [1. Welcome](sept-25.md#1-welcome)
