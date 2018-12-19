@@ -21,7 +21,7 @@ Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), 
 <li><a href="https://github.com/tc39/agendas/blob/master/2018/11.md">Agenda</a></li>
 </ul>
 <a href="#1-welcome"><h2 id="1-welcome">1. Welcome</h2></a><p>RJE: (housekeeping)</p>
-<a href="#3-agenda-scheduling"><h2 id="3-agenda-scheduling">3. Agenda Scheduling</h2></a><p>SYG: Conrad Watts tuning in from UK tomorrow morning would like to speak about memory model issue (<a href="https://github.com/tc39/ecma-262/issues/1354">https://github.com/tc39/ecma-262/issues/1354</a>) so will move in the agenda earlier (10 AM time? Please confirm)</p>
+<a href="#3-agenda-scheduling"><h2 id="3-agenda-scheduling">3. Agenda Scheduling</h2></a><p>SYG: Conrad Watts tuning in from UK tomorrow morning would like to speak about memory model issue (<a href="https://github.com/tc39/ecma262/issues/1354">https://github.com/tc39/ecma262/issues/1354</a>) so will move in the agenda earlier (10 AM time? Please confirm)</p>
 <p>DE: Would like to have breakout sessions or longer discussions with extra time in meeting agenda. I have a pull request open to the agenda. Think about what topics you'd like to discuss in breakout session.</p>
 <a href="#4-approval-of-the-minutes-from-last-meeting"><h2 id="4-approval-of-the-minutes-from-last-meeting">4. Approval of the minutes from last meeting</h2></a><p>RJE: anybody have objection for September meeting notes? Not hearing any objection.</p>
 <a href="#conclusionresolution-4-approval-of-the-minutes-from-last-meeting"><h4 id="conclusionresolution-4-approval-of-the-minutes-from-last-meeting">Conclusion/Resolution</h4></a><ul>
@@ -76,7 +76,7 @@ Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), 
 <li>dateStyle/timeStyle stage 1 proposed for stage 2 later</li>
 <li>Display names (stage 0) gives you strings that are locale sensitive</li>
 </ul>
-<p>DE: Please get involved at the <a href="https://github.com/tc39/ecma-402/">repo</a></p>
+<p>DE: Please get involved at the <a href="https://github.com/tc39/ecma402/">repo</a></p>
 <p>DE: I won't be able to organize these meetings in 2019. If you are interested in helping out, please let me know.</p>
 <p>BT: We have IRC channels: #tc39 (public channel). Ping me to give you voice in that channel. #tc39-delegates is our private channel. It is invite-only. I need to send you an invite. You need to register your nick on freenode. You can message BT at <code>/msg bterlson</code></p>
 <a href="#7ii-ecma-404-status-updates"><h3 id="7ii-ecma-404-status-updates">7.ii ECMA-404 Status Updates</h3></a><p>CM: No news is good news.</p>
@@ -136,7 +136,7 @@ Execom Chairman: Elected out of the ExeCom members</p>
 </ul>
 <a href="#modules-layeringnaming-for-webassembly"><h2 id="modules-layeringnaming-for-webassembly">Modules layering/naming for WebAssembly</h2></a><p>(Daniel Ehrenberg)</p>
 <a href="#new-intermediate-class-circular-module-records"><h2 id="new-intermediate-class-circular-module-records">New intermediate class &quot;circular module records&quot;</h2></a><ul>
-<li><a href="https://github.com/tc39/ecma-262/pull/1311">Proposal</a></li>
+<li><a href="https://github.com/tc39/ecma262/pull/1311">Proposal</a></li>
 </ul>
 <p>DE: This is a continuation of the work from Lin Clark about making non-JS modules able to participate in the module dependency graph. Currently there is an abstract class for modules. The only subclass that exists right now is source-text module records, which have certain semantics, and recursing to dependencies is something that source-text module records own. In this PR there is an intermediate class, circular module records, that takes over the searching dependency records part. source-text module records can be a subclass of this new class, and other classes can also be a child of it. HTML modules, CSS modules, etc., might also take advantage of this. WebAssembly modules are the first user.</p>
 <p>Moving function hoisting sooner is another idea Lin had. The current thinking within WebAssembly is that those changes won't be necessary. We thinking of a more restrictive form of WebAssembly semantics. I'm happy to go into more details if you're interested. Today I'm just looking for consensus</p>
@@ -151,7 +151,7 @@ Execom Chairman: Elected out of the ExeCom members</p>
 <a href="#conclusionresolution-new-intermediate-class-circular-module-records"><h4 id="conclusionresolution-new-intermediate-class-circular-module-records">Conclusion/Resolution</h4></a><ul>
 <li>PR Approved</li>
 </ul>
-<a href="#a-name-change-from-moduleinstantiate-to-modulelink"><h2 id="a-name-change-from-moduleinstantiate-to-modulelink">A name change from &quot;Module.Instantiate&quot; to &quot;Module.Link&quot;.</h2></a><p><a href="https://github.com/tc39/ecma-262/pull/1312">https://github.com/tc39/ecma-262/pull/1312</a></p>
+<a href="#a-name-change-from-moduleinstantiate-to-modulelink"><h2 id="a-name-change-from-moduleinstantiate-to-modulelink">A name change from &quot;Module.Instantiate&quot; to &quot;Module.Link&quot;.</h2></a><p><a href="https://github.com/tc39/ecma262/pull/1312">https://github.com/tc39/ecma262/pull/1312</a></p>
 <p>DE: The motivation is that, from WebAssembly perspective, we have a separate phase called instantiate, which happens in the instantiation phase of the JS module pipeline. Link is a better, more clear name. Some identifiers within programs might want to be renamed.</p>
 <p>DH: I think the linking terminology is good. My question is, is this the phase where the function that actually gets instantiated?  Because where functions get turned into dynamic values is early in the process—is that where this is?  Because that's why it was called instantiation, but if conceptually this is the phase where dependencies get wired up, then link is a good name.</p>
 <a href="#conclusionresolution-a-name-change-from-moduleinstantiate-to-modulelink"><h4 id="conclusionresolution-a-name-change-from-moduleinstantiate-to-modulelink">Conclusion/Resolution</h4></a><ul>
@@ -160,7 +160,7 @@ Execom Chairman: Elected out of the ExeCom members</p>
 <a href="#dynamic-modules-layering-change"><h2 id="dynamic-modules-layering-change">Dynamic modules layering change</h2></a><p>(Guy Bedford)</p>
 <ul>
 <li><a href="https://github.com/nodejs/dynamic-modules">proposal</a></li>
-<li><a href="https://github.com/tc39/ecma-262/pull/1306">pull request</a></li>
+<li><a href="https://github.com/tc39/ecma262/pull/1306">pull request</a></li>
 </ul>
 <p>GB: This is something we need in Node.js. It's been discussed quite a bit. I'll do a quick recap. In node, the idea is to support commonjs modules is to import directly. Eg, <code>import { name } from &quot;cjs&quot;</code>. The problem is that named exports of a commonjs module, you have to execute it. It's not static. We can execute the cjs modules during the instantiate phase, but this causes problems. If you have execution errors in commonjs, you can't guarantee statements execute in order. This is not intuitive behavior.</p>
 <p>Our solution is the Dynamic Modules proposal. If you've got an es modules importing a name from a cjs module, we're going to create a placeholder binding. When the cjs executes, we'll populate the placeholder binding. There's one major problem. If you have a circular reference between two EcmaScript modules, it's possible to access the namespace before the module is finished loading.</p>
@@ -286,7 +286,7 @@ We have an email reflector and happy to add people</p>
 <a href="#stable-sort-for-arrayprototypesort"><h2 id="stable-sort-for-arrayprototypesort">Stable sort for Array.prototype.sort</h2></a><p>(Mathias Bynens)</p>
 <ul>
 <li><a href="https://docs.google.com/presentation/d/1Io53b2Bi3_N0_wguWoA9OKuPRpHch34EVbS1H8zISes/edit">slides</a></li>
-<li><a href="https://github.com/tc39/ecma-262/pull/1340">proposal</a></li>
+<li><a href="https://github.com/tc39/ecma262/pull/1340">proposal</a></li>
 </ul>
 <p>MB: ChakraCore merged a stable merge sort. Moddable added a stable sort as well. Chrome 69 stable sorting is all green on the sort stability page.</p>
 <p>MB: Array.prototype.sort is stable in all major browsers and in Moddable/XS!</p>
@@ -297,7 +297,7 @@ We have an email reflector and happy to add people</p>
 </ul>
 <a href="#override-mistake-fix-status-update"><h2 id="override-mistake-fix-status-update">Override mistake fix status update</h2></a><p>(Daniel Ehrenberg)</p>
 <ul>
-<li><a href="https://github.com/tc39/ecma-262/pull/1320">proposal</a></li>
+<li><a href="https://github.com/tc39/ecma262/pull/1320">proposal</a></li>
 </ul>
 <p>DE: (describes the PR above)</p>
 <p>NSH: In the past, that has happened for me because a library included that feature.</p>
