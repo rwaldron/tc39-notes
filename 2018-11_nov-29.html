@@ -1,0 +1,633 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="manifest" href="img/site.webmanifest">
+<link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<title>November 29, 2018 Meeting Notes</title>
+<body class="markdown-body">
+<a href="javascript:history.back()">Back</a>
+<a href="#november-29-2018-meeting-notes"><h1 id="november-29-2018-meeting-notes">November 29, 2018 Meeting Notes</h1></a><hr>
+<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Dave Herman (DH), Pieter Ouwerkerk (PO), Aki Rose (ARE), Kevin Smith (KS), Peter Hoddie (PHE), Godfrey Chan (GCN), Adam Klein (AK), Mathias Bynens (MB), Keith Miller (KM), Mattijs Hoitink (MHK), Justin Ridgewell (JRL), Randy Luecke (RLE), Daniel Ehrenberg (DE), Sathya Gunasekaran (SGN), Kevin Gibbons (KG), Alan Schmitt (AS), Ross Kirsling (RKG), Shane Carr (SCR), Nathan Hammond (NHD), Ilias Tsangaris (IT), Brian Terlson (BT), Augustus Yuan (AYN), Frank Yung-Fong Tang (FTG), Felipe Balbontin (FAB), Thomas Levy (TL), Yulia Startsev (YSV), Natalie Silvanovich (NSH), J.F. Paradis (JFP), Sebastian Markbage (SM), Taaeu Zagallo (TZO), Eric Faust (EFT), Dustin Savery (DSY), Patrick Soquet (PST), Sebastian McKenzie (SMK), Tab Atkins (TAB), Lin Clark (LCK), Reefath Rajali (RRI), Devin Rousso (DRO), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE)</p>
+<p>Remote:
+Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), Istvan Sebestyen (IS), Richard Gibson (RG), Guy Bedford (GB), Conrad Watts (CWS)</p>
+<hr>
+<a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2018/11.md">Agenda</a></li>
+</ul>
+<a href="#jsexplain-10am-breakout-session-summary-of-discussion-as"><h2 id="jsexplain-10am-breakout-session-summary-of-discussion-as">JSExplain (10am Breakout Session), summary of discussion (AS)</h2></a><p>JSExplain (<a href="https://github.com/jscert/jsexplain">https://github.com/jscert/jsexplain</a>) is step-by-step JavaScript interpreter that displays the source code evaluated, the interpreter, and the state of both. JSExplain now supports proxies, and the goal of the session was to request feedback for features to implement. The following were suggested:</p>
+<ul>
+<li>Annex B 3.3, in particular functions and blocks;</li>
+<li>arrow functions and their scope;</li>
+<li>promises, promise description, including the display of the stack;</li>
+<li>for education, improve the UI to show a frame with the current spec text and the values of bound variables;</li>
+<li>in the future, find a way to link feature descriptions in MDN to a JSExplain example that can be run step by step.</li>
+</ul>
+<a href="#private-symbols-10am-breakout"><h2 id="private-symbols-10am-breakout">Private Symbols (10am Breakout)</h2></a><p>JRL: I'm proposing a few changes to the Private Symbols proposal presented in July 2018 to address a few of the concerns. The two issues were syntax (people like the private fields <code>.#</code> syntax), and transparency in membranes. So, to illustrate the change I want, see:</p>
+<pre><code><span class="hljs-keyword">class</span> <span class="hljs-title">Example</span> {
+  <span class="hljs-meta">#foo = 1;</span>
+  bar() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.<span class="hljs-meta">#foo;</span>
+  }
+}
+
+<span class="hljs-keyword">const</span> obj = Object.create(<span class="hljs-keyword">new</span> Example);
+obj.bar()
+<span class="hljs-comment">// =&gt; 1</span>
+</code></pre>
+<p>JRL: This reuses the same syntax, but does away with weakmap semantics to better mirror public properties. I think the consistency here is more valuable than the branding.</p>
+<p>KG: I disagree with this. I shouldn't be able to just create a prototype chain and suddenly get access to the private state.</p>
+<p>JRL: This doesn't expose the private state, it just allows it to live on the prototype. I don't see this as much different than extending some base class that has private state. It's pretty much the same. The private state is still encapsulated to the functions that are on the class (or in scope in some way).</p>
+<p>KG+JRL and others: discussing extending.</p>
+<p>JRL: The other compliant is that private symbols should not pass through the proxy. In order to maintain membrane semantics, they must throw. So we define private symbols to throw errors without consulting the target and without trapping:</p>
+<pre><code>const p = <span class="hljs-keyword">new</span> <span class="hljs-type">Proxy</span>(<span class="hljs-keyword">new</span> <span class="hljs-type">Example</span>, {
+  <span class="hljs-keyword">get</span>() {
+    <span class="hljs-comment">// never called</span>
+  }
+});
+p.bar();
+<span class="hljs-comment">// =&gt; Error is thrown</span>
+</code></pre>
+<p>JRL: Since we're using private symbols now, this also logically extends to allowing installing the symbol onto foreign objects:</p>
+<pre><code><span class="hljs-comment">// Using a class, because there's no way to reify a private symbol yet.</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title">Ex</span> {
+  <span class="hljs-meta">#foo;</span>
+  <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-title">get</span>(<span class="hljs-params">obj</span>) </span>{
+    <span class="hljs-keyword">return</span> obj.<span class="hljs-meta">#foo;</span>
+  }
+  <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-title">set</span>(<span class="hljs-params">obj</span>) </span>{
+    obj.<span class="hljs-meta">#foo = 1;</span>
+  }
+}
+
+<span class="hljs-keyword">const</span> obj = {};
+Ex.<span class="hljs-keyword">get</span>(obj);
+<span class="hljs-comment">// =&gt; undefined</span>
+
+Ex.<span class="hljs-keyword">set</span>(obj);
+<span class="hljs-comment">// =&gt; #foo set to 1 on obj</span>
+
+Ex.<span class="hljs-keyword">get</span>(obj);
+<span class="hljs-comment">// =&gt; 1</span>
+</code></pre>
+<p>JRL: This exactly mirrors public properties, but the private property is still encapsulated to the methods defined on the class. While I can install the symbol onto foreign objects, those objects cannot mutate or access the symbol without using my code.</p>
+<p>JRL: Further, we can achieve the exact same semantics as the current proposal by using a weakset to guard our code:</p>
+<pre><code>const brand = <span class="hljs-keyword">new</span> <span class="hljs-type">Weakset</span>;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Branded</span> </span>{
+  <span class="hljs-meta">#foo;</span>
+  constructor() {
+    brand.add(<span class="hljs-built_in">this</span>);
+  }
+  bar() {
+    <span class="hljs-keyword">if</span> (!brand.has(<span class="hljs-built_in">this</span>)) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">Error</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.<span class="hljs-meta">#foo;</span>
+  }
+}
+
+<span class="hljs-comment">// Or, extract the checker.</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check</span></span>(obj) {
+  <span class="hljs-keyword">if</span> (!brand.has(<span class="hljs-built_in">this</span>)) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">Error</span>;
+  }
+}
+</code></pre>
+<p>JRL: This allows more usecases, is more consistent with public properties, and still allows branding without much trouble. I think this is the better option.</p>
+<p>KG+MM: This leads to the confused deputy problem, where you cannot reason about the instances you're operating on. If we adding syntax for a security feature, we need to make it secure by default. Making it operate on foreign objects is a no go.</p>
+<p>JRL: I'm using syntax here because it was a sticking point in the last meeting. We were going to object without syntax, and now we're objecting with syntax. This doesn't prevent people from securing their code easily by using a weakset.</p>
+<p>KG: This also makes it difficult to reason about multiple privates on an instance:</p>
+<pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> </span>{
+  #base = <span class="hljs-number">7</span>;
+  #<span class="hljs-keyword">val</span>;
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">this</span>.#<span class="hljs-keyword">val</span> = <span class="hljs-number">1</span>;
+  }
+  bar() {
+    <span class="hljs-keyword">this</span>.#<span class="hljs-keyword">val</span> = <span class="hljs-number">2</span>;
+  }
+  method() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.#<span class="hljs-keyword">val</span> + <span class="hljs-keyword">this</span>.#base;
+  }
+}
+</code></pre>
+<p>KG: Here, I want to say that if the node has a <code>#val</code>, then it has a <code>#base</code>. Allowing me to have one without the other on a foreign object is terrible.</p>
+<p>JRL: Again, this can be guarded against by doing a weakset check before installing onto foreign objects.</p>
+<p>Misc: If you're going to have a syntax and also require a check for usage you can reason about, just put the check in the syntax.</p>
+<p>SGN: There an issue with the current class private fields. You can actually install a private field onto a foreign object:</p>
+<pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Base</span> </span>{}
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Ex</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span> </span>{
+  #foo = <span class="hljs-number">1</span>;
+  isExample() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.#foo === <span class="hljs-number">1</span>;
+  }
+}
+const o = {};
+<span class="hljs-type">Ex</span>.__proto__ = function() { <span class="hljs-keyword">return</span> o; }
+<span class="hljs-keyword">new</span> <span class="hljs-type">Ex</span>;
+<span class="hljs-type">Ex</span>.prototype.isExample.call(o);
+<span class="hljs-comment">// =&gt; true</span>
+</code></pre>
+<p>SGN: This means that we already have the confused deputy problem with the current semantics.</p>
+<p>MM: I think just because we have one issue, doesn't mean we should allow all of the confused deputies in.</p>
+<p>All: more discussion about whether confused deputy is really a goal of encapsulation. Or, whether language consistency is more valuable than security.</p>
+<a href="#dynamic-modules-11am-breakout-session"><h2 id="dynamic-modules-11am-breakout-session">Dynamic Modules (11am Breakout Session)</h2></a><p>DE: The idea is to follow-up with Guy Bedford's presentation on Tuesday. He is not able to come right now. I've been in contact with him about this proposal and he said OK to meet without me. I'll start by summarizing the proposal again.</p>
+<p>DE: The goal is to allow native ES6 modules to be usable in Node.js and to have ES6 modules in Node.js work the same in Node and on the web. So there are lots of details. One proposal is that when ES6 imports a cjs module, then it is ust be one big object. Guy's proposal breaks them out into named exports.</p>
+<p>YK: Some people think we should turn cjs module into the default, but ... (fast speaker)</p>
+<p>DE: &quot;People&quot; is ambiguous. People want different things. Guy's proposal is based on let's make this a gradual upgrade. I don't want this discussion to be which one to go with. I want this discussion to decide if any of the infrastructure that this proposal needs is acceptable from a TC39 perspective. From there, the embedders can work out the details they want. The main thing is what happens with cycles. My understanding is that cjs will hit the cache with cycles; if you do the require backwards, you get an uninitialized module, and later access to that object will get the properties. Do if you have code that runs at the top level, you might see this artefact.</p>
+<p>YK: This comes up when extending classes.</p>
+<p>DE: The issue with extending classes happens with both cjs modules and ES6 modules. (says that the error types are different.)  So, the proposal here is, there was a big effort on how he could get a reference error in these cases. And you can in the named import case. But if you import star, you get a namespace object. So Guy looked into what if we made even more conservative checks. Those ended up being too conservative.</p>
+<p>YK: So the check is, is the property on this object?</p>
+<p>DE: That check turned out to be unimplementable. And if you do a for..in over the namespace, you should get a reference error. And having that expose a reference error was too difficult to implement. There was a different idea for a check. If you have an ES module somewhere, there should be an error, but that was too conservative and too difficult to debug.</p>
+<p>YK: And that's the status quo that we agreed to at the time.</p>
+<p>DE: Yeah, so that's the status quo. The interesting part is circular references. Guy's current proposal is that you'll see an empty object. My feeling is, this all makes perfect sense. It seems like YK and Dave were interested in edge cases.</p>
+<p>YK: I think the reason I don't like it is philosophical. I've become more convinced they're not so bad. The first is import * is guaranteed to have a fixed shape  The list of keys should be the same no matter when you look at it.</p>
+<p>DE: That changes with this proposal.</p>
+<p>YK: Yeah, so philosophically that could be a problem. The second is there's a correspondence between import* and bare references such that import* and import{} are semantically different.</p>
+<p>DE: Bare imports already give more aggressive errors.</p>
+<p>DH: Yeah, someone made that point. But someone made the point that namespace objects are first-class objects.</p>
+<p>DE: And there also seemed to be this idea that no one is going to want to use import*.</p>
+<p>DH: So the concern was roughly of the shape, are there cases where people find that to make code that should work work, they need to move it to the import* syntax to avoid checks?</p>
+<p>AK: The answer is no.</p>
+<p>YK: The mechanism is that if you write import{}, the linker needs to know right away that the name is there.</p>
+<p>DH: If you write import{} with this proposal, it defers the check until it's done executing the module.</p>
+<p>AK: You'll know it before you start executing any code in the module. In a corner case, you can have a hoisted function that runs before the module is finished loading. But you get lots of edge cases when you do that.</p>
+<p>YK: So the worry is that if people use more curlies, if the check can sometimes run during the cyclic resolution, people see different behavior when using import* and import{}.</p>
+<p>AK: That sounds like bad software engineering. Cycles are problematic already.</p>
+<p>YK: There's a bag of tricks that you have to learn.</p>
+<p>AK: I think I answered that, but what I'm saying is that you're not avoiding any error that you won't get later. It'll just fail in a different way.</p>
+<p>YK: In import{}, we defer the check.</p>
+<p>AK: Right</p>
+<p>YK: So then there's no problem. So when you say inport{}, and you see that module the first time and you're ready to link it,</p>
+<p>AK: The whole point of the dynamic modules patch is to let the curlies behave in a way that's relatively nice.</p>
+<p>YK: You still won't evaluate the top-level module until you know. You're deferring the linker error.</p>
+<p>AK: The actual problem with dynamic modules is not import{}, it's import*.</p>
+<p>DE: Is there an example?  This is very abstract.</p>
+<p>YK: This was not my concern in the first place. My concern was the first thing.</p>
+<p>DH: Remind me the two issues.</p>
+<p>YK: One of them is my issue and the other is the correspondence issue. The first issue is, a philosophical issue.</p>
+<p>DH: That's different than this question about there being more errors in practice?</p>
+<p>YK: Yes.</p>
+<p>YK: On the first issue, we are changing an invariant. ((( The invariant is that before, import module namespace, no matter when you look at it, always has the keys, but now you might look at it when it's not complete. )))</p>
+<p>DE: So let's talk about the philosophical issue?</p>
+<p>YK: Let's finish discussing issue 2. But my opinion is that I think that issue</p>
+<p>DH: My opinion is that I think this issue is fine. i think conceptually we're deferring the checks until we have complete information about the graph.</p>
+<p>AK: You're dereffing the checks related to that module.</p>
+<p>DH: We have a set of linkage that is known statically. And we have a set that is known after cjs modules. And we are deferring static importing rom those deferred executions until after those executions are finished.</p>
+<p>AK: I'm not sure about exactly what happens in cycles.</p>
+<p>DH: I don't feel fully educated on that. We're deferring the check to some point.</p>
+<p>AK: The concern is that in the presence of cycles, what effect does hit shave?</p>
+<p>YK: If you have curlies, and you decide to run the check right now, but sometimes you cannot.</p>
+<p>DH: I bet you can construct a cycle where there's enough modules where you can go in both directions, where you import{} from one and import{}| in the other.</p>
+<p>AK: I suspect that, there's two options. Either you run the check too early, or you run the stuff in tz. So I think that's the way this mostly errors.</p>
+<p>YK: But if you do that, then you can have a tdz error that...</p>
+<p>AK: No, I think the runs-later part is not a problem. Because I think you have errored due to the linking error.</p>
+<p>YK: I think you wanted to make the hoisting function thing an edge case, but it might not be an edge case.</p>
+<p>YK: I think if the linkage error happens late, and you start running the program, you can get weird errors.</p>
+<p>AK: The problem we've found is, in the presence of cycles, what happens to the top level... is it possible to run the top level of the es module where the cjs module has not yet loaded?</p>
+<p>YK: And what is the difference there between import{} and import*?</p>
+<p>AK: And there is a whole other question and there are fewer problems there, the other thing being that you have these namespace objects where ...</p>
+<p>DE: I'm having trouble following. I'm looking up what the semantics are of the cyclic case.</p>
+<p>AK: The thing to do is to design a case that has problematic behavior and then actually run it through the machinery to see what happens.</p>
+<p>YK: I'm trying to figure out which abstract layer is the right one.</p>
+<p>AK: The thing that's confusing both bme and dan is that there are lots of semantics, but it's not clear what Guy's proposal actually does. The point is not that you shouldn't have more ideas, but that does not move this conversation forward.</p>
+<p>DH writes some code on the board.</p>
+<pre><code><span class="hljs-comment">// e0</span>
+import { foo } from <span class="hljs-string">"c1.js"</span>
+import { bar } from <span class="hljs-string">"c3.js"</span>
+
+<span class="hljs-comment">// c1</span>
+<span class="hljs-function"><span class="hljs-title">require</span><span class="hljs-params">(<span class="hljs-string">"e2.mjs"</span>)</span></span>
+exports<span class="hljs-selector-class">.foo</span> = ... 
+
+<span class="hljs-comment">// e2</span>
+import { bar } from <span class="hljs-string">"c3.js"</span>
+
+<span class="hljs-comment">// c3</span>
+<span class="hljs-function"><span class="hljs-title">require</span><span class="hljs-params">(<span class="hljs-string">"e0.mjs"</span>)</span></span>
+exports<span class="hljs-selector-class">.bar</span> = ... 
+</code></pre>
+<p>DH: I'm trying to demonstrate a cyclic graph in which there are deferred checks imposed across multiple crossings. So we have a type crossing between all four files. I'm trying to demonstrate that you can't partition the graph and run all the cjs first. Because if you could partition the graph, that would be nice, but that's impossible. So therefore, the only options I can see is that either you do some of those deferred checks before you finish execution of cjs, in which case you could get errors for things that could have been there if you waited longer, or you do the checks after everyone has executed.</p>
+<p>AK: What happens if you need to start evaluating a module that depends on a cjs module that hasn't executed yet?</p>
+<p>DH: What I'm saying is that there's a deferred check that runs later. Because once you run cjs stuff there's no possible way to do the check. So, you either do the checks before you've done some of the executions, or you do it after you've done executions not only of the cjs stuff but also yourself.</p>
+<p>AK: There's checks all the time.</p>
+<p>YK: Do you do the check after you get the reference?</p>
+<p>DH: You want to guarantee that you always do the checks after you evaluate cjs but before you do yourself, but that's not possible. So there are tradeoffs.</p>
+<p>AK: We're not going to run the check before we run cjs. So my understanding is that you're able to run...</p>
+<p>KS: It's a strange situation where ...</p>
+<p>YK: Dan had a question where if you import a bare name from something that's not exported, will you ever get an error?  And Dan said, there's an error later on.</p>
+<p>AK: It's now or later for the errors. Now I don't know if that's what Guy's proposal actually does, but that's the intention. So you can't end up in a situation where you have some pulled-out function.</p>
+<p>YK: The question is what happens when you get to the bare ref and ...</p>
+<p>YK: There are only two things that can happen. Either the cjs module loading hasn't finished yet, or it did finish.</p>
+<p>DH: I think this module sounds brilliant. I'm thinking of edge cases. With dynamic modules, you don't even know what the module graph is up front. If what we're saying is that we do the check as soon after we execute the module body, afte more execution happens, more modules come into the graph and add more requirement to the graph.</p>
+<p>DE: Dynamic modules can only use require() and they have no dependencies in the graph.</p>
+<p>DH: When they run the require, that module may have not been seen before.</p>
+<p>NHD: (fill in later)</p>
+<p>AK: In DH's cde, (explains something involving c1 exporting foo)</p>
+<p>DH: I think, we have basically build a set of interests that we haven't yet been able to check. There is some number of things that we want to get from this module before we know if it's there yet. but in the future if more checks get added, those can be eagerly answered.</p>
+<p>NHD: It's not necessarily eager though. They can still get delayed. You can make a function that adds a new export.</p>
+<p>All: No, we won't allow that.</p>
+<p>DH: I think what Guy's semantics is, if they refer interest, what is that later point?</p>
+<p>DE: After the cjs module evaluates. When it says, here's my actual names. That's the point. That's stored in exportNames in spec text. It actually creates new mudable bindings that are uninitialized. It checks those, and if there's something at that point that is uninitialized, it throws reference errors.</p>
+<p>YK: If you look at an uninitialized value that will never come, you could get a tdz because it never comes. But I an giving a thumbs-up.</p>
+<p>DH: That completely corresponds to current cjs practice today.</p>
+<p>YK: It's very close to the csm semantics.</p>
+<p>DH: Cycle construction is an inherently problematic thing.</p>
+<p>DE: Exporting getters...</p>
+<p>DH: The things you verified at some point in time should remain true.</p>
+<p>KS: The semantics you currently talk about are possible with the current spec. It's just weird that it doesn't have everything available until later. but what happens with the namespace object in import*?  We can frame the whole thing as what happens with namespace objects.</p>
+<p>AK: Are we okay with these cycle semantics?</p>
+<p>DE: All those things we discuss, as Kevin is saying, lives on top on the current spec. it's implementable on top of the current spec.</p>
+<p>AK: Does it matter if it is possible in the current spec?</p>
+<p>DH: In the semantics I want, ...</p>
+<p>DE: About star exports, the PR that we were discussing in committee adds a layering change that allows star re-exports. But the problem is that you could get an esm module that is dynamic. The PR allows that to become more dynamic. The es6 module becomes more dynamic in that it supports a call that adds more stuff to it, and you can keep adding stuff until you think you're done.</p>
+<p>KS: Currently during the linking phase, ambiguities are resolved.</p>
+<p>DE: The ambiguities are...</p>
+<p>YK: They could go from non-ambiguous to ambiguous based on cjs modules.</p>
+<p>KS: The dynamic module wants to, its namespace object could add entries after it executes, but if we allow export* from that dynamic module, the downstream esm module has to dynamically add things to its namespace object. So that's the part that the poisoning/infection</p>
+<p>YK: From a star perspective, that's bad.</p>
+<p>DE: Let's stick to the current proposal.</p>
+<p>YK: No matter what the semantics are, if I write a program with bunches of cycles, it's going to be bad.</p>
+<p>NHD: What is the proposed solution exactly?</p>
+<p>KS: The PR to ema262 changes the get namespace operation such that if I'm trying to construct a namespace object for myself, I'm going to pass a list throughout the graph so I can grab all the exports that I need. The PR says that I'm also, in addition to flowing the exports list throughout the graph, i'm going to throw my namespace object, so that people can add things to my namespace object later.</p>
+<p>YK: That's a mechanism, but it means that...</p>
+<p>KS: The dynamic module has this collection of namespace object that is waiting to add things to it.</p>
+<p>DH: (asks question about current 262 semantics)</p>
+<p>KS: So, the PR is not exposed to user code, but V8 in its representation of a dynamic module would have a phase...</p>
+<p>DH: A deferment mechanism?</p>
+<p>KS: Yes.</p>
+<p>YS Writes another example on the board:</p>
+<pre><code><span class="hljs-keyword">export</span> {foo} <span class="hljs-keyword">from</span> <span class="hljs-string">"bar.esm"</span>
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">"dyn.cjs"</span>
+
+<span class="hljs-keyword">import</span> &amp; <span class="hljs-keyword">as</span> ns <span class="hljs-keyword">from</span> <span class="hljs-string">"collection"</span>
+</code></pre>
+<p>YSV: Part of the problem is that you're propagating something through the graph</p>
+<p>DH: An alternative is that we can disable export* from dynamic modules.</p>
+<p>YK: That's a good idea.</p>
+<p>KS: If you do that, you do ___</p>
+<p>DH: It's a loss of ergonomics, but export* is a convenience anyway.</p>
+<p>KS: My hunch is that ___</p>
+<p>AK: It seems like the whole idea is to do in cjs modules what you can in es modules.</p>
+<p>YK: This is messy in es6 modules already. As a user it's always weird of when I use * anyway.</p>
+<p>DH: This seems like a good way to make these changes incrementally.</p>
+<p>AK: Has Guy responded to that request?</p>
+<p>KS: I'm not sure.</p>
+<p>DE: Looking at the bigger picture, for the Node.js group, we should take their concerns into consideration. if we come down from TC39 that we insist that this is an error, ...</p>
+<p>DH: It's a diplomatic question. We should treat this as an engagement, but not a declaration.</p>
+<p>YK: This original issue is very related to the original error.</p>
+<p>DH: There's a problem of cognitive load where cjs and es6 modules are different modules, and by doing export* you can change the type of modules, and that's really confusing.</p>
+<p>YK: Basically if I import from somebody and that causes problems, I want to avoid that.</p>
+<p>AK: I think most people here are okay with the suggestion</p>
+<p>DH: The design of es6 modules is that they can only be mutated from inside the module. Does that retain true with the cjs wrapper thing?</p>
+<p>DE: Yes, that remains true.</p>
+<p>YK: I want to state my concern. We said originally is that people want modules to work the same in node and in the browser. I'm concerned that a reasonable bundler would be able to implement the same behavior, and dynamic makes that a lot harder to do.</p>
+<p>DE: So it sounds like node must use bundler semantics.</p>
+<p>YK: No, the worst bound is that bundlers just have different semantics. That's the status quo. i'm not trying to say anything is fatal, but there's really 3 things in the wild.</p>
+<p>AK: Is this the same concern?</p>
+<p>YK: It's the same concern as Dave's. We've never talked about my original problem, dynamic shaping problem.</p>
+<p>YK: Export* would have made my concern even worse. I was very heartened that Guy was thinking about this stuff. however, i've not heard people discuss the concerns of the third environment a lot, and dynamic options make it hard to do a good job in the bundler environment. But tl;dr is that static shapes are easier to compile than dynamic shapes. Guy put constraints on cjs modules that make them work better in ecmascript graphs, and those improvements help the bundler case.</p>
+<p>DH: Why is ___ not sufficient?</p>
+<p>(out of time)</p>
+<a href="#js-explain--as"><h2 id="js-explain--as">JS Explain — AS</h2></a><p>Attendees: AS, SYG, YS, MHK, PST, IT (note taker)</p>
+<p>AS: Naive JS interpreter written in OCaml, as close to the spec instrumented to generate a trace of everything that happened. JS Explain provides a way to navigate that trace. You can inspect the state of the interpreter. [DEMO]</p>
+<p>AS: Right now we put links to the spec in the the interpreter. The idea is that it would have a frame on the side that would show you the link—still a WIP. It's on the most current version of the standard.</p>
+<p>AS: We just finished adding proxies. We had to redo everything when the memory model changed.</p>
+<p>SYG: Currently there's not a widely used implementation of Annex B 3.3—very few people understand it. In particular functions in blocks, which isn't lexical scoped, rather it is weirdly dynamically scoped. If you implemented this, the small audience would be very grateful because it's a hard spec to implement.</p>
+<p>AS: Nobody has written to part of the spec better?</p>
+<p>SYG: No. It's a dark part of the spec.</p>
+<p>MHK: Could be useful to understand current scope in arrow functions.</p>
+<p>YSV: How difficult is it to do an implementation of a feature in the spec?</p>
+<p>SYG: Because the groundwork is done it's pretty simple. As long as it's precisely defined it's easy.</p>
+<p>YSV: Would be good for our process to write in a way that is easy to translate. Making formalization of JS easier makes the spec better in the long run. It will make us have fewer inconsistencies in the spec.</p>
+<p>SYG: I have skepticism, because barrier to entry to spec is high—wouldn't want to make it higher.</p>
+<p>YSV: Wouldn't be required.</p>
+<p>AS: We could do it so that the spec would be easy to translate into code and we could play with it.</p>
+<p>SYG: Easy for proposal writer to spin up a playground.</p>
+<p>YSV: Would be nice to make their job easier because it makes our job easier. We should consider it as a option. It would be ideal to run the strict language version.</p>
+<p>AS: A nice side effect is everything is typed. We need to address completion values. What I would like is to have type annotation in the spec.</p>
+<p>PST: What happens if there is an error in the program?</p>
+<p>AS: What kind of error? [DEMO]</p>
+<p>AS: How about async/await?</p>
+<p>SYG: The Promise spec is more complicated than it really is.</p>
+<p>PST: If you could do a step by step description of how promises work.</p>
+<p>YSV: Promise description would be great, as it's fairly complex.</p>
+<p>AS: We need to consider host specific behavior. We didn't implement <code>for.. in</code> because it's not spec'ed clearly enough. We are thinking about implementing the &quot;good&quot; enumeration order.</p>
+<p>SYG: For the web dev audience we could have a tool on MDN so people can understand step by step what is going on.</p>
+<p>RK: They may not need to understand what's going on a source text level.</p>
+<p>YSV: Browser version?</p>
+<p>AS: Yes, runs in the browser.</p>
+<p>MHK: You might have different levels about what it shows you—web devs may only be interested in JS/Pseudo JS version while spec implementers would be interested in other parts—for different audiences.</p>
+<p>AS: We would like to be able to modify the state and rerun the code. I'm lucky I have one engineer working on that.</p>
+<p>SYG: This is cool, but it's a lot of work to keep in sync with the spec.</p>
+<p>AS: Yeah but the spec is moving slower now.</p>
+<p>SYG: If it's of so much use to the org, how can we get people to donate time? The education group?</p>
+<p>YSV: I think this is a fantastic tool for the education group. We could help people what's going on in the spec with this tool.</p>
+<p>AS: We did this with JS, it's also easy to do with another language. JS is unique given that it puts everything in the spec.</p>
+<p>SYG: When was your last talk about this?</p>
+<p>AS: Munich.</p>
+<p>SYG: Now that it's more mature, I would love to see this presented now that we have education efforts spun up.</p>
+<p>AS: The frame on the side that has the current step would be nice. Would like to show then, maybe in May.</p>
+<p>YSV: Hope you submit this to JS Conf EU, it would be awesome given it's interactive.</p>
+<p>PST: Devs often have incorrect mental models about how JS actually works.</p>
+<p>YSV: I believe Cambridge is working on visualizing every step of execution as a graph—their goal is to formally verify functional languages. It's also an educational tool to show how performance is impacted by decisions. They presented the second keynote at Lambda World Cádiz. It's very visual.</p>
+<a href="#typed-objects-1000-am"><h2 id="typed-objects-1000-am">Typed Objects 10:00 am</h2></a><p>(This section is presented as-is because the note takers didn't bother to keep with the format of the committee's notes)</p>
+<pre><code>js objects are notoriously dynamic, less than ideal. makes it hard <span class="hljs-keyword">to</span> integrate with wasm
+gc<span class="hljs-built_in"> proposal </span>on wasm side associated with typed objects. js <span class="hljs-keyword">and</span> wasm can both have references <span class="hljs-keyword">to</span> <span class="hljs-keyword">and</span> efficiently operate on a typed object
+<span class="hljs-keyword">for</span> thus we need <span class="hljs-keyword">to</span> have deterministic memory layout, <span class="hljs-keyword">in</span> all envs except edge, wasm is ahead of time compiled so access cannot be dynamic
+typed objects provide more predictable performance <span class="hljs-keyword">AND</span> behavior
+
+typed objects are indexed collections with types on the entries<span class="hljs-built_in">
+type </span>primitives, any type, <span class="hljs-keyword">or</span> object <span class="hljs-keyword">or</span> string. like typed arrays but <span class="hljs-keyword">for</span> structured data
+<span class="hljs-keyword">if</span> you install a named prop as an alias, guaranteed <span class="hljs-keyword">to</span> have all lookups <span class="hljs-keyword">to</span> that name <span class="hljs-keyword">to</span> be the same because it cannot be overridden
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">in</span> your compiler you have a<span class="hljs-built_in"> simple </span>typecheck, you can inline accessors
+typed objects are extensible/subclassable. basically appends slots at the end of the memory layout.
+
+q: what about nested struct?
+a: this<span class="hljs-built_in"> proposal </span>only has references <span class="hljs-keyword">to</span> other structs <span class="hljs-keyword">in</span> structs, cannot embed
+   nested structs would need <span class="hljs-keyword">to</span> have fat pointers <span class="hljs-keyword">or</span> copy <span class="hljs-keyword">in</span> copy out semantics, so this version doesnt include it, too complex mvp
+   we will probably want <span class="hljs-keyword">to</span> revisit it
+
+   old<span class="hljs-built_in"> proposal </span>also had transparent types where you could access the underlying buffer but <span class="hljs-keyword">not</span> this one
+   we could maybe say give me an<span class="hljs-built_in"> instance </span>of this typed object based on this buffer.
+   <span class="hljs-keyword">if</span> typed references were restricted <span class="hljs-keyword">to</span> be <span class="hljs-keyword">in</span> the same buffer you could use this feature <span class="hljs-keyword">to</span> embed structs <span class="hljs-keyword">in</span> structs
+   <span class="hljs-keyword">if</span> you have this option, youd probably be able <span class="hljs-keyword">to</span> encode these locations more efficiently <span class="hljs-keyword">if</span> its consistent
+   &lt; confusion&gt; ok lets skip this because it is <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> scope
+q: how <span class="hljs-keyword">do</span> you <span class="hljs-keyword">do</span> arrays?
+a: they are <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> explainer yet but will probably be <span class="hljs-keyword">in</span> mvp
+   would probably be fixed length arrays, fixed at construction time
+   kinda implies nested structs
+
+   we could however have value<span class="hljs-built_in"> type </span>arrays
+
+q: how <span class="hljs-keyword">do</span> these interact with proxies?
+a: these are just exotic objects
+   <span class="hljs-keyword">and</span> they can be implemented with proxies, so they are <span class="hljs-keyword">not</span> a problem <span class="hljs-keyword">for</span> membranes
+
+q: whats the overall goal? just fixing layout <span class="hljs-keyword">for</span> interaction with other languages?
+a: <span class="hljs-literal">yes</span>, <span class="hljs-keyword">and</span> introducing a way <span class="hljs-keyword">to</span> have more predictable performance <span class="hljs-keyword">for</span> interacting with collections of data
+   think like typed arrays, but <span class="hljs-keyword">for</span> structured data
+   cannot unify it with the typedarray prototype though
+
+q: sounds like arrays are core <span class="hljs-keyword">to</span> this<span class="hljs-built_in"> proposal </span>due <span class="hljs-keyword">to</span> the above goal, but theyre <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> the explainer yet
+a: structs are also collections of structured data, because of references
+
+comment: typed objects you can know there is <span class="hljs-literal">no</span> alias between different types
+q: but theres <span class="hljs-literal">no</span> plan <span class="hljs-keyword">for</span> making them aliasable?
+a: <span class="hljs-keyword">if</span> we had transparent types you would be able <span class="hljs-keyword">to</span> alias
+
+q: why <span class="hljs-keyword">do</span> we want backing buffers <span class="hljs-keyword">if</span> the buffer is <span class="hljs-keyword">not</span> transparent?
+a: so we can send large amounts of data between threads efficiently
+
+q: can you put methods on the prototypes of these things?
+a: <span class="hljs-literal">yes</span>, we thought maybe wed freeze the protos entirelt, but we only freeze the<span class="hljs-built_in"> identity </span>of the proto
+
+you can compose behavior with means other than subtyping (traits)
+
+how does eqality work on these objects?
+still reference equality
+
+[END]
+</code></pre>
+<a href="#kevins-1pm-talk"><h2 id="kevins-1pm-talk">Kevin's 1pm Talk</h2></a><p>KG: The globals proposal is in stage 3. The bare name &quot;global&quot; doesn't work on the web. globalThis works. But the &quot;this&quot; keyword confuses people known to JavaScript, and globalThis might make more people confused. This is relevant right now because it's 4 days from landing in Chrome stable. But there will become a point where we can't revisit this. Is the room concerned about this given the new feedback?  If so, what other names should we use?</p>
+<p>JRL: globalGlobal?</p>
+<p>MB: This is already decided I thought.</p>
+<p>KG: We shouldn't pick a name, users see it, and we don't change it.</p>
+<p>MB: We already picked a name; we already went through this process. We all wanted <code>global</code>, but it didn't work out. We had to come up with a shortlist of names, Microsoft did a study on real-world usage of these identifiers, and based on that data we decided on <code>globalThis</code>.</p>
+<p>KG: There were other names that Microsoft provided that we might want to consider instead.</p>
+<p>YK: I'm a little confused. At the time I had this concern exactly. My recollection is that the committee is that this isn't an important name; should only be used by power users; it's hard to pick a good name; there's no web compatibility issue; and I'm one of the person who had that opinion, and the committee dismissed it at that time. What is the reason for revisiting this?</p>
+<p>KG: Now having seen strong feedback from educators, that is what is different now.</p>
+<p>AK: We did spend a lot of time talking about adding &quot;this&quot; to the name. I don't see that globalThis should be in the first thing you learn when you come into the language. Seems like we're re-litigating this issue, thought a lot of people on the thread feel this way.</p>
+<p>DE: I regret the process we used in TC39 to arrive at globalThis. i think it would have been better to advertise and get feedback on the name, rather than using the deliberate secrecy. In the future I'd rather not do that. I'd rather get outreach. We have a group for that now.</p>
+<p>JHD: The name globalThis has been public for months now.</p>
+<p>AK: I don't think this is a useful conversation.</p>
+<p>JHD: It seems like shipping it in Chrome could be an issue. And Kevin is asking if that's worth re-evaluating anything.</p>
+<p>KG: ___</p>
+<p>DE: We have feedback from the community about aesthetics. We can take these case-by-case. It makes sense that this should be open to community feedback.</p>
+<p>YSV: Dan made an excellent point about our process for getting feedback. Also, in this thread, Axel concedes that this is the best name from his perspective. So reading the thread in full would be worth our time.</p>
+<p>JHD: Axel is considering closing this thread later today.</p>
+<p>MM: Is there a short summary of how Axel arrived at the conclusion that globalThis was the best name?</p>
+<p>YSV: There were arguments for all the alternatives and globalThis seemed like the best.</p>
+<p>JHD: He accepts the constraints.</p>
+<p>KG: There were some names that seemed not totally terrible that we objected to on aesthetic or pedantic grounds. but we're not necessarily the best for judging aesthetics. I wanted to point out Global with capital G. We reject that because it's not a constructor, namespace, etc. But maybe we should consider taking that aesthetic pain since globalThis has aesthetic.</p>
+<p>SCR:300 seems like a lot of votes. how big is it ?</p>
+<p>JHD: Axel (and another educator that retweeted) has a lot of twitter followers and got a lot of people to upvote; 300 people is for sure a lot, very quickly, but maybe take it with a grain of salt.</p>
+<p>YK: One thing I was worried about that the time is, when people teach JS now, most tutorials use window. And if they keep using window, then globalThis is a power user tool. But if people start thinking globalThis is better than window, then a lot of beginner documentation for JS has globalThis in it.</p>
+<p>KG: ___ said this is something beginners will encounter. But if I were an educator, I would want to use this name for my code to work in Node.</p>
+<p>YK: So the argument that we can dismiss concerns that this is a power user tool is maybe not a good argument, which makes me feel less comfortable about globalThis.</p>
+<p>EF: It seems like Axel came around. So isn't this resolved?  Is there more progress to be made here?</p>
+<p>KG: That's not something I noticed when I read the thread at that time.</p>
+<p>YSV: We are over our timebox; consider discussing this in a breakout session.</p>
+<p>KG: I really do feel we need an answer to this question because it's urgent.</p>
+<p>AK: My next topic on the queue further justifies that <code>globalThis</code> is better. Most of the comments on the thread just talk about all the other names that we already dismissed.</p>
+<p>JHD: So out of all the suggestions, the only name that was suggested we hadn't seen before was <code>globalContext</code>. But the only name that really survives the complaints is <code>Global</code>, which we had previously discussed.</p>
+<p>YK: I'm not going to object. However, this seems like a referendum on <code>globalThis</code>. I strongly disagree (with what?). If we were really trying to look for other names, but we've already done that. there's a tension here between people wanting an aesthetic name and people who think people won't use it a lot. In the list, none of the non-aesthetic names are ever consider.</p>
+<p>JHD: 15-20 other names were suggested, like <code>__global</code>.</p>
+<p>AK: I think this is why it takes TC39 to take forever to do something.</p>
+<p>JHD: The issue that <code>global</code> breaks Flickr was filed publicly in December of 2016. So it's been public knowledge for a long time.</p>
+<p>KG: I really want to try to assess if this is worth spending more time on.</p>
+<p>YSV: Let's do a raising hands of who thinks we should do a breakout session.</p>
+<p>(a few people raise hands)</p>
+<p>KG: I don't think a breakout session would actually be useful. It sounds like the room wants to continue with globalThis with a few exceptions.</p>
+<p>AK: My concern is that the same issues will come up again and again.</p>
+<p>KG: Maybe our aesthetics disagree with the communities. But we can say that maybe the community hasn't thought through this issue as much, and maybe that's true.</p>
+<p>YSV: Let's make a writeup about this decision and give that to the community. And if nothing comes out of that, then we consider this a closed issue.</p>
+<p>MM: That sounds good.</p>
+<p>KG: Yeah. I don't want to write it though.</p>
+<a href="#standard-libraries-1pm-breakout"><h2 id="standard-libraries-1pm-breakout">Standard Libraries (1pm breakout)</h2></a><p>Attendees:</p>
+<ul>
+<li>MHK</li>
+<li>NHD</li>
+<li>DE</li>
+<li>SCR</li>
+<li>MF</li>
+<li>CM</li>
+<li>MM</li>
+<li>IT</li>
+<li>RKG</li>
+<li>TL</li>
+<li>PS</li>
+<li>SG</li>
+</ul>
+<p>DE: What do people want to talk about?</p>
+<p>NHD: Resolver chain.</p>
+<p>DE: Or in general, the infrastructure for standard modules?</p>
+<p>NHD: Yeah, but in general, if you have an import mapped item,</p>
+<p>MHK: That might be package name maps.</p>
+<p>DE: How about if we change this to infrastructure. Another infrastructure is IDL. And another thing I want to talk about is Contents.</p>
+<p>MM: Pure modules from resource modules distinction. We've been very careful with the primordials that if you freeze them all, there's essentially no state left, so they can be shared by subgraphs. A pure module is one whose top-level state is transitively frozen and so does not provide a communication channel.</p>
+<p>MHK: I want to get a sense for the namespace we should use for importing standard module things.</p>
+<p>DE: I'm excited for that.</p>
+<p>DE: Should we walk at a high level for the motivation?</p>
+<p>MM: Yeah, let's make that the first one.</p>
+<p>MHK: Starting with motivation.</p>
+<a href="#motivation"><h3 id="motivation">Motivation</h3></a><p>MHK: My main motivation is that other languages have these features build in, and JS doesn't. There's a lot of cool things we could ship with an engine/browser so you don't need lodash and all these other common things that people put in over and over again.</p>
+<p>MHK: Another motivator is to drive contributions through that. So if people are able to continue on a higher level, people can start contributing library pieces. (something about native code)</p>
+<p>MF: So you said something about shipping les code. So I think there's 2 sub-categories there. There's things that aren't available and aren't right, and then things that are hard to get right. So if I want multimap all the time, that's easy, but I have to write it all the time. But there are plenty of things that are hard to get right.</p>
+<p>MHK: The desire of having these things available is having them be correct. i think that's a value that comes with that.</p>
+<p>MHK: Another big reason is, if we use the module system to do this, we can save space for the committee to develop features that don't pollute the global namespace. This helps problems like</p>
+<p>TL: Doesn't using prototypes make it hard to add features in the future?</p>
+<p>DE: There are mechanisms or that. For me, build-in modules have scopable virtualization. With the ___ maps proposal, you can take a built-in module, and ...</p>
+<p>MF: Can we not get into those details?</p>
+<p>DE: Okay. So I think shimmability is a goal.</p>
+<p>MHK: Yeah. The ability to patch a bug or missing feature is something we should consider.</p>
+<p>MM: We should acknowledge going into this that we want to make things tamper-proof but also shimmable, and that's a tension. but they're both well-motivated.</p>
+<p>NHD: I want to create an area where it's easier to play and work without the tension of TC39. So here, we have to concern ourselves with a tremendous level of details about web compatibility, Annex B, etc., whereas in a Standard Library specialized container box, some of those concerns can melt away. So that gives us an area where barriers for entry are lower.</p>
+<p>CM: Backwards compatibility is lower.</p>
+<p>DE: In the Intl subgroup, we've been able to make large progress on APIs, so I think we can make progress in this area of standard libraries by splitting this up.</p>
+<p>CM: Another motivation is by breaking up chaos. As this bucket gets bigger and bigger.</p>
+<p>MF: Another motivation: allowing for a point of coordination. There are 2 different aspects. (1) we provide a bunch of well-known symbols or interfaces.</p>
+<p>SG: Like protocols?</p>
+<p>MF: Yes. And (2) well-known data structures that you don't want to have to convert between these isomorphic data structures.</p>
+<p>SG: How does this work with the existing global namespace?</p>
+<p>MHK: That will just keep existing.</p>
+<p>DE: There've been perennial proposals to fix global things.</p>
+<p>SG: So in the future, if we have new modules, they don't go into global?</p>
+<p>MM: But that's certainly a motivation?  So we can stop polluting global namespace.</p>
+<p>MHK: So we have to evaluate that separately.</p>
+<p>NHD: But import from a module ___ array</p>
+<p>SG: Why is that a problem?</p>
+<p>NHD: ___</p>
+<p>MM: Whenever I hear &quot;centralized&quot;, I think, let's do something else.</p>
+<p>DE: I'd be interested in hearing your thoughts. Shimming right now is very decentralized.</p>
+<p>MM: There's a hierarchy of control points that could be described as decentralized. Shimmability is directly is in conflict with getOriginals.</p>
+<p>SG: I want to play devil's advocate and go through the motivations. For having a playground, we already have polyfills. So maybe that's not a strong enough motivator. I'm not saying I'm right.</p>
+<p>MM: We have something that already does what?</p>
+<p>NHD: That provides a lower barrier of entry.</p>
+<p>SG: Built-in modules are not helping with that.</p>
+<p>MHK: What you get by going it through a standard library is that the library is standardized.</p>
+<p>DE: I agree that whether it's in a standard module doesn't affect whether it is possible to polyfill.</p>
+<p>CM: With a library, there's a level of opting-in that the user has. So they could be fixing their world while breaking mine.</p>
+<p>SG: That's a good point. My main motivation is to make people use the esm syntax to import modules. But users use esm, but there's no way to import the standard collections. So this provides a unified surface for people to write code.</p>
+<p>MHK: I agree with that. IN the long run, I'd want global objects to be in the standard library. But going forward, I want everything to be using this system to do it.</p>
+<p>NHD: Would that speed up the generation of the global object for each context?  Like, you don't have to throw Array on it?</p>
+<p>DE: In what context do you not throw those things on it?</p>
+<p>MM: There is a way that this would speed up initialization. As the committee standardizes new stuff, if you put it in a global realm, all those things need to be instantiated. But if we put them in a module, they don't have to be initialized.</p>
+<p>SG: We already can lazy-init. That doesn't change much.</p>
+<p>NHD: But now we can do it in the startup process.</p>
+<p>MM: There's an interaction with shimmability. If you can postpone running the code to shim a module until the module is loaded, whereas in a global, you have to do all the shimming upfront.</p>
+<p>DE: Any more pieces of motivation?</p>
+<p>PS: In the real world, the user of JS, the old cheap has the C compiler and the C library. Often, not the same people write the C compiler and the C library. Which means that if we envision a JS with a core and a standard library, you could also imagine that some of the library are not provided by us, but by somebody else. Since JS language is usually ties to a browser, you always imagine that the browser vendor does everything. But it could be very useful that especially if it is completely standardized, you can have different people doing different paths of the thing. (continues with some examples.)  So that's the &quot;Second man&quot; motivation. And, what Max (?) is always talking about, that we should have no internal state, that's essential to us. Since we're instantiating ___, that is very costly.</p>
+<p>MM: Another motivation: something Yulia brought up: so far, everything that we have available as part of the JS standard, none of them have special dangerous powers that need to be specially arranged to virtualize or censor. There are some proposals that would introduce special powers that would need to be quarantined, so that old code that precedes the introduction of special powers can distinguish special powers from just new pure modules. So if builtin modules are introduced in a way to distinguish between pure modules and other things, things that are dangerous, such that you can make a loader just for pure modules and a loader for dangerous things, then the category of dangerous modules becomes a place to put things like getStack, makeWeakReference.</p>
+<p>SG: Would this be part of the spec?</p>
+<p>MM: Yes.</p>
+<p>DE: Another benefit of standard modules is that they're standard. They could be common tools that JS programmers use in lots of different environments.</p>
+<p>MHK: And there's certain guarantees behind quality and behavior.</p>
+<p>NHD: It can help drive down JS hype. Like, the new library framework hype, by saying look, here's the thing, it's the standard, use it. Instead of like, should I use lodash or underscore or something else?</p>
+<p>CM: Depending on how the committee's work gets subdivided, committees don't have to be on the same schedule as being on the 262 spec.</p>
+<p>DE: I don't see the schedule as a blocker. We seem asynchronous already.</p>
+<p>CM: I'm talking about rolling out.</p>
+<p>DE: I think that's already the thing. Nobody pays attention to the step function.</p>
+<p>CM: But also, the different libraries don't have to be in sync with each other.</p>
+<p>MHK: Alright.</p>
+<a href="#bikeshedding-names"><h4 id="bikeshedding-names">Bikeshedding names</h4></a><p>Namespace suggestions: std, js, es, lib, standard, e
+Prefix suggestions: <code>@</code>
+Separator suggestions: <code>/</code>, <code>:</code>, <code>.</code>, <code>|</code>, <code>://</code></p>
+<p>MHK: We have the distinction between string vs not. I would want to stick with string. Most obvious option is <code>std:</code>.</p>
+<p>TL: Would we want to register a scheme</p>
+<p>DE: Yes</p>
+<p>MF: I think that's problematic—I don't think we should sit on a scheme space. Any builtin modules where the module specifies is a valid URL is bad. In the future it could be useful specifier.</p>
+<p>DE: Aside from the URL space, we want to consider npm namespace i.e. @key.</p>
+<p>MHK: If we use <code>:</code> it looks like a URN and might break current usage, such as in WebPack.</p>
+<p>DE: Or we use that &amp; register a scheme.</p>
+<p>NHD: Agree. If we do a scheme, we must register.</p>
+<p>MF: Yes, but I don't think we should do that. Best bet is to consider 2 major ecosystems: web &amp; node. Harder to avoid user defined modules in node space, so we would want to go the route of @<namespace> because node modules are specified as whatever.</p>
+<p>DE: Use of term node is ambiguous. Sounds like we're talking about the npm namespace.</p>
+<p>NHD: We can parallel the npm namespace pattern... But who says npm is forever.</p>
+<p>MF: npm will avoid that space because it's builtin modules.</p>
+<p>MHK: Should there be one or multiple namespaces? If we tie it to npm it will hard to look for namespaces as you have to go to npm.</p>
+<p>DE: Why is that hard?</p>
+<p>MF: You don't need to go to npm...</p>
+<p>TL: Eminent domain it.</p>
+<p>DE: Sounds like we want <code>::</code> because don't want it to be a URN.</p>
+<p>PST: No dot, too many dots in our codebase.</p>
+<p>TL: Slash looks like a path.</p>
+<p>PST: Yes, I cannot look like a URI or a path—must look like a language namespace. <code>::</code> works well for me as someone from C-world.</p>
+<p>NHD: Throw <code>key|</code> up there.</p>
+<p>NHD: Want to avoid URI, want to make it clear that it doesn't look like a path.</p>
+<p>DE: <code>@key/</code> may or may not satisfy that.</p>
+<p>TL: Looks like an annotation to me.</p>
+<p>MHK: Or decorators.</p>
+<p>NHD: Other goal is to avoid conflict with npm.
+MHK: At Apple we have an internal one, so also we want to avoid conflicts with that too. It's basically a shorthand for the closest node_modules directory. We use artifactory.</p>
+<p>NHD: Artifactory is whatever you throw in package.json</p>
+<p>MHK: Want to sense if we want one or multiple prefixes. We is going to own the namespace &amp; what is going to be in it? I think one namespace is problematic—same problems as global scope, where everyone gets to write to it. I want <code>js</code> as our ECMAscript prefix and vendors can have other prefixes. I want developers to understand that <code>js</code> is constant across environments.</p>
+<p>DE: I made a repro recently that is trying to doc the non tc39 APIs that is incompatible between web &amp; node...</p>
+<p>NHD: Who serves as the register for namespace?</p>
+<p>MHK: Nobody.</p>
+<p>DE: I think it would be great to have someone who documents this is the js standard base library even for things that are spec'ed outside of TC39.</p>
+<p>MHK: I would have concerns—I wouldn't want everything in the std library to be specified by TC39... It would have to live in the engine.</p>
+<p>TL: I would be intended that all these things would be implementable as JavaScript.</p>
+<p>DE: Not a requirement.</p>
+<p>NHD: Want to specify behavior &amp; API rather than implementation.</p>
+<p>DE: There will be isomorphic code that will be using namespace not specified by TC39—how do they decide what namespace they use?</p>
+<p>MHK: They should separately seek standardization of that library.</p>
+<p>DE: We should let ourselves be available a registar. Biggest risk is inaction.</p>
+<p>MHK: We also try to avoid making mistakes as we can't backout anything.</p>
+<p>NHD: Import maps spec gives us the ability to deal with isomorphism. We specify <code>js::&lt;url&gt;</code>, now node doesn't know which version for doing URL. Answer is import map for the correct behavior.</p>
+<p>DE: URL is a standard. We should give a clean path for things that start off as web APIs and make there way into node.</p>
+<p>NHD: Or leave it to user to decide what namespace they want to pick from... How do we guarantee the same level as rigour—who is responsible for bugs, etc?</p>
+<p>PST: Under <code>std::</code> there only should be modules that have been specified as we do currently. There is already something in place for have 3rd party modules, so we don't need to substitute for that i.e. npm.</p>
+<p>DE: What about built in web features? How should those be exposed?</p>
+<p>PST: I'm not sure.</p>
+<p>NHD: Web platforms don't care about that world.</p>
+<p>DE: How does that give us an answer on one vs multiple name spaces.</p>
+<p>PST: Ok to have multiple, but what I would like is to see a commonality in loading mechanism between different JS environments.</p>
+<p>DE: You feel strongly that other communities not invade this namespace?</p>
+<p>PST: Yes.</p>
+<p>NHD: DE is saying that we should be able to adopt other namespaces.</p>
+<p>DE: Ok with multiple namespaces as long as we do it well. We can specifically endorse specific things being in our shared namespace for isomorphic. I have concerns about inclusion in WHATWG—they don't have a formal governance structure...</p>
+<p>TL: Is there a middle ground where we reference their spec. Let the other spec specify the behavior, but we specify the API surface.</p>
+<p>MHK: That may get us in trouble if they break the web.</p>
+<p>MF: Let's move on... Most interested in contents &amp; shimmability.</p>
+<p>DE: Let's talk about import-maps story.</p>
+<p>MHK: We could have a chaining mechanism for loaders. When a module is imported, first resolver in chain gets called to see if they could resolve, this goes on recursively. If by the end no one resolves it throws. We could create a loader at end of chain to see if they can resolve the std library. That's how you could layer host specific resolving on engine.</p>
+<p>DE: Import maps module specifier to URL. If you use this to map <code>js::</code> to <myURL> it let's you polyfil &amp; gives you something that shimmable in a control way cause it's centralized in the import map. Would benefit by bringing node into the conversation. Needs to work across platforms or at least that there is one on each platform. Want to make sure that things are in sync between web &amp; node.</p>
+<p>MHK: That's part of the other proposal.</p>
+<p>DE: Is it OK for TC39 to tell import map proposal to say we want shimability across platforms? We could either make sure that the ecosystem is aligned or just say this is out of scope... Proposal has said this is out of scope.</p>
+<p>MHK: Champion should talk to node people to see if loading mechanism is reasonable for them to implement.</p>
+<p>DE: Not one person's responsibility, we can be part of this too.</p>
+<p>NHD: Happy to serve as liaison to node for import maps.</p>
+<p>MHK: I think std lib fits with import maps.</p>
+<p>NHD: I'll follow up with my contacts—Miles &amp; Adam.</p>
+<p>DE: J Chung is leading open standards effort—will introduce.</p>
+<p>NHD: Does this answer shimability MF?</p>
+<p>MF: There are many ideas what people want, shadowing is sufficient for some, others may be interested as mutating builtins.</p>
+<p>DE: As the controller of the import map tells that to have the import map of the polyfil...</p>
+<p>NHD: Importing standard Array is an issue given they are different identities ie. instanceof.</p>
+<p>DE: Luke Wagner wanted WebASM to import web APIs directly without going through JS. V8 concluded get originals proposal causes memory overhead. Mozilla says good technique doesn't. There's are different analyses.</p>
+<p>NHD: Webkit says it OK.</p>
+<p>MF: Apparently idea behind get originals has changed. Can't explain it very well though... Kevin knows the answer to this, he spoke to Dominic.</p>
+<a href="#conclusionresolution-standard-libraries-1pm-breakout"><h4 id="conclusionresolution-standard-libraries-1pm-breakout">Conclusion/Resolution</h4></a><p>– NHD to get in touch with J Chung
+– Resync with get originals and Luke Wagner</p>
+<a href="#summary-session-330pm"><h2 id="summary-session-330pm">Summary Session 3:30pm</h2></a><a href="#least-authority-libraries"><h3 id="least-authority-libraries">Least-Authority Libraries</h3></a><p>MM: Modules have top level state, to import shared modules into a frozen realm, we need modules that are known to have frozen top level state. This can bootstrap importing other modules that have least authority. This would have prevented the recent NPM exploit.</p>
+<a href="#implementation-security-and-correctness"><h3 id="implementation-security-and-correctness">Implementation Security and Correctness</h3></a><p>MF: We had 2 major takeaways. They are recorded in the tc39 security repo. (1) Have guidelines for Stage 3 reviewers, and include security as a guideline. Natalie offered to put together a PR to the process document and present it at a future meeting. (2) It might be valuable to create a list of exotic JS values. If would be useful for proposal champions could provide how exotic JavaScript values could interact with their library. We should start with values that have caused errors in the past.</p>
+<a href="#source-text-ness-of-template-literals"><h3 id="source-text-ness-of-template-literals">Source Text-ness of Template Literals</h3></a><p>JRL: We discussed what the implicit call site that could call to a decorator function, pipeline, etc., that would allow us to determine if a call could have been forged: a call expression and not source text in your JS file. There's a few issues that come up with tail call invocation. You could look at the stack, which is zero cost, but with tail call invocations, it's difficult, because the stack gets pushed off and replaced with the tail. So we'd need to figure out that problem. We could still move forward with Dan's proposal to add an internal slot to tag template strings, and allow hosts to build on top of that to give them the easiest path forward to tell if a tagged template literal was source text.</p>
+<a href="#private-symbols"><h3 id="private-symbols">Private Symbols</h3></a><p>JRL: 2 camps to the private symbols debate. First camp, allow private symbols to be allowed on foreign object and propagate out the prototype chain, and the other saying that branding is the only way to have proper privacy. The other topics discussed were proxies with private symbols, continuing to use the same syntax. That would be the smallest possible change from the current proposal to a new proposal backed by private symbols.</p>
+<p>DE: What do you recommend?</p>
+<p>JRL: Nothing, because I'm not going for stage advancement.</p>
+<p>DE: There is no consensus on making any changes. Correct?</p>
+<p>JRL: Yes.</p>
+<a href="#js-explain"><h3 id="js-explain">JS Explain</h3></a><p>AS: We were most interested in having Annex B 3.3. There was a request to have arrow functions. Promises, way to display the stack, and regarding the UI itself, show the spec text instead of the interpreter being run. I'm hoping to have that by Berlin. Maybe have a way to put feature descriptions on MDN to explain an example.</p>
+<a href="#the-issues-queue"><h3 id="the-issues-queue">The Issues Queue</h3></a><p>KG: We handled a couple of the issues. There are a lot of them. We have a better sense of what general kinds of issues there are. I'd appreciate having a place to move them that's not the general spec so we can address open-ended and questions separate. If you feel like taking care of issues, there are a lot open.</p>
+<a href="#typed-objects"><h3 id="typed-objects">Typed Objects</h3></a><p>TST: Typed objects has been in the works for a while, been resurrected with Wasm. They are in lockstep now. It's not yet in a state that we can present here, but talking about it was helpful. It'll be on the agenda in the future.</p>
+<a href="#optional-chaining-discussions"><h3 id="optional-chaining-discussions">Optional Chaining Discussions</h3></a><p>DSY: We started with simple property access, and actually reverted all the changes. So optional deletion is back, optional function call, and we're using <code>?.</code>, <code>?.[</code>, and <code>?.(</code>. I think based on the group, we have universal consensus, a few questions, but overall we're looking good for Stage 2 advancement in March.</p>
+<a href="#weakref"><h3 id="weakref">WeakRef</h3></a><p>TST: Weakrefs, we had a proposal in the spring, and V8 is working on the current proposal. SpiderMonkey also has an implementation in progress. We also found out that it is polyfillable in the web platform because of spec bugs. We got to a state where I think we have a better factoring of the API that doesn't have factoring (?). That should be ready for Stage 3.</p>
+<a href="#dynamic-modules"><h3 id="dynamic-modules">Dynamic Modules</h3></a><p>DE: Discussed Guy's proposal. All seem to agree that named imports from cjs into esm seems reasonable. Sticking point are * re-exports from cjs into esm. You can see the module object change over time. That's something we will have to think more about, whether it's okay and well-motivated. But that would prohibit certain cases, but allow for a lot of integration. I think we have agreed about some of the big points.</p>
+<a href="#--function-calls"><h3 id="--function-calls"><code>|&gt; ::</code> function calls</h3></a><p>TAB: We had a cool review of all the function syntaxes, and realized that they weren't as collapsable as we thought: early vs. lazy evaluation of the major bits. Conclusion is that we need to be careful about reviewing them together with each other in the future.</p>
+<a href="#js-standard-library"><h3 id="js-standard-library">JS Standard Library</h3></a><p>Nice group about JS Standard library. Started by collecting motivations. We did preliminary ideas on namespace prefixes and what they should be, and finished on brainstorming on what we put in the standard library, which ranges from deep to shallow libraries, something we can take to the next phase of this proposal.</p>
+<a href="#whats-involved-in-hosting"><h3 id="whats-involved-in-hosting">What's involved in hosting</h3></a><p>ARE: We talked about hosting and did some recruiting. Talk to me about what's involved with hosting.</p>
+<a href="#locale-data"><h3 id="locale-data">Locale Data</h3></a><p>SCR:Talked about how Intl has hard coded database. Can vary between browsers. Users might want fresher data. How can provide a service to users so they can provide their own data. How can browsers implement new features without adding to what browsers already have to do.</p>
+<a href="#jessie-semantics"><h3 id="jessie-semantics">Jessie Semantics</h3></a><p>MM: Small subset of javascript that is pleasant to code in. This provides strong understanding of what your code is and how it will run. Talked about how we could formalize it.</p>
+<a href="#talking-about-our-reputation"><h3 id="talking-about-our-reputation">Talking about our reputation</h3></a><p>ARE: Spent some time about reputation. It's not super awesome. I'll come to the January meeting with ideas on what we can do to improve it. We also talked about what we want our reputation to be, and figure out what small things we need to go in that direction: finding kinder ways to say thanks-but-no-thanks; preparing the rationale document (volunteers please). You'll hear more in January.</p>
+<a href="#how-we-make-decisions"><h3 id="how-we-make-decisions">How we make decisions</h3></a><p>YSV: We talked about how we make decisions, and what do we make decisions about, how we bring in tools. I suggested we have a way to have tools to bring back what people think about the language so we have higher-quality data. Maybe have self-selected samples.</p>
+<a href="#end-of-meeting"><h2 id="end-of-meeting">End of Meeting</h2></a><p>RJE: Thanks to Michael and others from Apple for the facilities and hosting the dinner!  (applause). Thanks to the note takers, mainly SCR and AY  :-).</p>
+<p>YSV: Thanks to RJE for doing the last 15 months of organizing!</p>
+<p>RJE: Thanks everyone!  Safe travels.</p>
+
+</body>
