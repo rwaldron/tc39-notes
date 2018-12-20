@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-29-2018-meeting-notes"><h1 id="november-29-2018-meeting-notes">November 29, 2018 Meeting Notes</h1></a><hr>
-<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Dave Herman (DH), Pieter Ouwerkerk (PO), Aki Rose (ARE), Kevin Smith (KS), Peter Hoddie (PHE), Godfrey Chan (GCN), Adam Klein (AK), Mathias Bynens (MB), Keith Miller (KM), Mattijs Hoitink (MHK), Justin Ridgewell (JRL), Randy Luecke (RLE), Daniel Ehrenberg (DE), Sathya Gunasekaran (SGN), Kevin Gibbons (KG), Alan Schmitt (AS), Ross Kirsling (RKG), Shane Carr (SCR), Nathan Hammond (NHD), Ilias Tsangaris (IT), Brian Terlson (BT), Augustus Yuan (AYN), Frank Yung-Fong Tang (FTG), Felipe Balbontin (FAB), Thomas Levy (TL), Yulia Startsev (YSV), Natalie Silvanovich (NSH), J.F. Paradis (JFP), Sebastian Markbage (SM), Taaeu Zagallo (TZO), Eric Faust (EFT), Dustin Savery (DSY), Patrick Soquet (PST), Sebastian McKenzie (SMK), Tab Atkins (TAB), Lin Clark (LCK), Reefath Rajali (RRI), Devin Rousso (DRO), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE)</p>
+<p>Mattijs Hoitink (MHK), Michael Saboff (MS), Keith Miller (KM), Tadeu Zagallo (TZO), Natalie Silvanovich (NSH), Waldemar Horwat (WH), Daniel Ehrenberg (DE), Jean Francois Paradis (JFP), Chip Morningstar (CM), Alan Schmitt (AS), Ross Kirsling (RKG), Jordan Harband (JHD), Brian Terlson (BT), Kevin Smith (KS), Eric Faust (EFT), Sathya Gunasekaran (SGN), Till Schneidereit (TST), Lin Clark (LCK), Godfrey Chan (GCN), Kevin Gibbons (KG), Pieter Ouwerkerk (POK), Randy Luecke (RLE), Devin Rousso (DRO), Reefath Rajali (RRI), Adam Klein (AK), Rex Jaeschke (RJE), Mark Miller (MM), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE), Emily Huynh (EHH), Michael Ficarra (MF), Ilias Tsangaris (IT), Thomas Levy (TLY), Augustus Yuan (AYN), Nathan Hammond (NHD), Sebastian Markbage (SM), Justin Ridgewell (JRL), Shane Carr (SCR), Dustin Savery (DSY), Frank Yung-Fong Tang (FTG), Mariko Kosaka (MKA), Peter Hoddie (PHE), Patrick Soquet (PST), Felipe Balbontin (FAB), Dave Herman (DH), Shu-yu Guo (SYG), Yehuda Katz (YK), Yulia Startsev (YSV), Sebastian McKenzie (SMK), Aki Rose (ARE), Tab Atkins (TAB), Mathias Bynens (MB), Scott Myers (SMS)</p>
 <p>Remote:
 Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), Istvan Sebestyen (IS), Richard Gibson (RG), Guy Bedford (GB), Conrad Watts (CWS)</p>
 <hr>
@@ -471,7 +471,7 @@ still reference equality
 <p>MF: So you said something about shipping les code. So I think there's 2 sub-categories there. There's things that aren't available and aren't right, and then things that are hard to get right. So if I want multimap all the time, that's easy, but I have to write it all the time. But there are plenty of things that are hard to get right.</p>
 <p>MHK: The desire of having these things available is having them be correct. i think that's a value that comes with that.</p>
 <p>MHK: Another big reason is, if we use the module system to do this, we can save space for the committee to develop features that don't pollute the global namespace. This helps problems like</p>
-<p>TL: Doesn't using prototypes make it hard to add features in the future?</p>
+<p>TLY: Doesn't using prototypes make it hard to add features in the future?</p>
 <p>DE: There are mechanisms or that. For me, build-in modules have scopable virtualization. With the ___ maps proposal, you can take a built-in module, and ...</p>
 <p>MF: Can we not get into those details?</p>
 <p>DE: Okay. So I think shimmability is a goal.</p>
@@ -525,11 +525,11 @@ still reference equality
 <p>DE: I think that's already the thing. Nobody pays attention to the step function.</p>
 <p>CM: But also, the different libraries don't have to be in sync with each other.</p>
 <p>MHK: Alright.</p>
-<a href="#bikeshedding-names"><h4 id="bikeshedding-names">Bikeshedding names</h4></a><p>Namespace suggestions: std, js, es, lib, standard, e
+<a href="#bikeshedding-names"><h3 id="bikeshedding-names">Bikeshedding names</h3></a><p>Namespace suggestions: std, js, es, lib, standard, e
 Prefix suggestions: <code>@</code>
 Separator suggestions: <code>/</code>, <code>:</code>, <code>.</code>, <code>|</code>, <code>://</code></p>
 <p>MHK: We have the distinction between string vs not. I would want to stick with string. Most obvious option is <code>std:</code>.</p>
-<p>TL: Would we want to register a scheme</p>
+<p>TLY: Would we want to register a scheme</p>
 <p>DE: Yes</p>
 <p>MF: I think that's problematic—I don't think we should sit on a scheme space. Any builtin modules where the module specifies is a valid URL is bad. In the future it could be useful specifier.</p>
 <p>DE: Aside from the URL space, we want to consider npm namespace i.e. @key.</p>
@@ -543,15 +543,15 @@ Separator suggestions: <code>/</code>, <code>:</code>, <code>.</code>, <code>|</
 <p>MHK: Should there be one or multiple namespaces? If we tie it to npm it will hard to look for namespaces as you have to go to npm.</p>
 <p>DE: Why is that hard?</p>
 <p>MF: You don't need to go to npm...</p>
-<p>TL: Eminent domain it.</p>
+<p>TLY: Eminent domain it.</p>
 <p>DE: Sounds like we want <code>::</code> because don't want it to be a URN.</p>
 <p>PST: No dot, too many dots in our codebase.</p>
-<p>TL: Slash looks like a path.</p>
+<p>TLY: Slash looks like a path.</p>
 <p>PST: Yes, I cannot look like a URI or a path—must look like a language namespace. <code>::</code> works well for me as someone from C-world.</p>
 <p>NHD: Throw <code>key|</code> up there.</p>
 <p>NHD: Want to avoid URI, want to make it clear that it doesn't look like a path.</p>
 <p>DE: <code>@key/</code> may or may not satisfy that.</p>
-<p>TL: Looks like an annotation to me.</p>
+<p>TLY: Looks like an annotation to me.</p>
 <p>MHK: Or decorators.</p>
 <p>NHD: Other goal is to avoid conflict with npm.
 MHK: At Apple we have an internal one, so also we want to avoid conflicts with that too. It's basically a shorthand for the closest node_modules directory. We use artifactory.</p>
@@ -562,7 +562,7 @@ MHK: At Apple we have an internal one, so also we want to avoid conflicts with t
 <p>MHK: Nobody.</p>
 <p>DE: I think it would be great to have someone who documents this is the js standard base library even for things that are spec'ed outside of TC39.</p>
 <p>MHK: I would have concerns—I wouldn't want everything in the std library to be specified by TC39... It would have to live in the engine.</p>
-<p>TL: I would be intended that all these things would be implementable as JavaScript.</p>
+<p>TLY: I would be intended that all these things would be implementable as JavaScript.</p>
 <p>DE: Not a requirement.</p>
 <p>NHD: Want to specify behavior &amp; API rather than implementation.</p>
 <p>DE: There will be isomorphic code that will be using namespace not specified by TC39—how do they decide what namespace they use?</p>
@@ -582,7 +582,7 @@ MHK: At Apple we have an internal one, so also we want to avoid conflicts with t
 <p>PST: Yes.</p>
 <p>NHD: DE is saying that we should be able to adopt other namespaces.</p>
 <p>DE: Ok with multiple namespaces as long as we do it well. We can specifically endorse specific things being in our shared namespace for isomorphic. I have concerns about inclusion in WHATWG—they don't have a formal governance structure...</p>
-<p>TL: Is there a middle ground where we reference their spec. Let the other spec specify the behavior, but we specify the API surface.</p>
+<p>TLY: Is there a middle ground where we reference their spec. Let the other spec specify the behavior, but we specify the API surface.</p>
 <p>MHK: That may get us in trouble if they break the web.</p>
 <p>MF: Let's move on... Most interested in contents &amp; shimmability.</p>
 <p>DE: Let's talk about import-maps story.</p>
