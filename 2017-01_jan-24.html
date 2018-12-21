@@ -37,7 +37,7 @@
 <a href="#side-discussion"><h4 id="side-discussion">Side Discussion</h4></a><p>WH: What's happening with es-discuss? I'm getting bounces.</p>
 <p>AWB: The list administrators of this are Brendan Eich and myself. If someone else wants to be an administrator on that list, I am sure Brendan and I would be happy about that. There isn't a lot of work but occasionally something does come in.</p>
 <p>IS: I think this is an example for another TC39 tool, that was popular for a few years, and maybe now is slowly disappearing. It is a real challange for us, how to archive all this for long-term.</p>
-<a href="#ecma262-status-updates--countdown-to-es2017"><h2 id="ecma262-status-updates--countdown-to-es2017">ECMA262 Status Updates--countdown to ES2017</h2></a><p>(Brian Terlson)</p>
+<a href="#ecma-262-status-updates--countdown-to-es2017"><h2 id="ecma-262-status-updates--countdown-to-es2017">ECMA-262 Status Updates--countdown to ES2017</h2></a><p>(Brian Terlson)</p>
 <p>BT: The key dates for our schedule are, at the end of this month, on the 31st, we will stop taking any normative updates besides bugfixes. we can fix bugs but we can't add features. Correct me if I'm wrong but the only proposal I'm aware of that is pushing for stage 4 is shared array buffers. Are there other proposals if I need to be tracking?</p>
 <p>DE: There may be some for 402</p>
 <p>AK: Do you mean big proposals, or do bugs count?</p>
@@ -85,7 +85,7 @@ From a practical standpoint this comes up at least once a month, I'm fighting ar
 <p>WHB: If you thought about how you would do a find all implementations of an abstract algorithm?</p>
 <p>BT: I can handle that in some way. If you click a reference to delete, for the ability for the editor to say, I know you mean this one.</p>
 <p>WHB: It would be nice to get a list of those so you could see them all.</p>
-<p>BT: You can do it with search but I don't know the right way to do it yet. I had a proposal pulling out... I won't get into that. So anyway, for spec editors, note there is a new type of note, the editors note. You should use this when you are making notes to the committee when you don't expect the editor to include that in the final spec. Easy way to add some stuff that will be removed by the time the proposal is accepted. You don't need CSS in JS files. Please stop hotlinking the ECMA262 css file. I made changes and external stuff changed.</p>
+<p>BT: You can do it with search but I don't know the right way to do it yet. I had a proposal pulling out... I won't get into that. So anyway, for spec editors, note there is a new type of note, the editors note. You should use this when you are making notes to the committee when you don't expect the editor to include that in the final spec. Easy way to add some stuff that will be removed by the time the proposal is accepted. You don't need CSS in JS files. Please stop hotlinking the ECMA-262 css file. I made changes and external stuff changed.</p>
 <p>WH: Can you clarify your last point?</p>
 <p>BT: Previously ecmarkup would dump a css and js file next to your built spec and you would have to include that. Because that's a PITA, what people did was not generate that CSS or JS and just link to the github version. Problem occurs when I update the ecmarkup verison for 262, that makes a new CSS file that breaks the old markup. The new version of ecmarkup creates an inline script and style tag. If you do that, everything will just work.</p>
 <p>BT: That's everything for 262 tooling this year.</p>
@@ -206,7 +206,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>AK: I would actually be OK with it was easy to see. I feel like it might be easy for us to detect. I'm not as worried about someone moving that super call into an error function I don't think that's a thing people do unless they are intentionally messing with the interpreter.</p>
 <p>SYG: Independently, we already have some checks scheduled around super calls</p>
 <p>AK: We check in the parser for methods whether they contain super property access and need the home object, but we don't do the similar parser analysis for super construct calls</p>
-<p>WH: There are worse surprises you can get. For example, if the super call counts how many instances you've made, you'll bump the count by two while creating only one instance.  I'm strongly in favor of doing the check before.</p>
+<p>WH: There are worse surprises you can get. For example, if the super call counts how many instances you've made, you'll bump the count by two while creating only one instance. I'm strongly in favor of doing the check before.</p>
 <p>DH: Just to be clear if we do the check before we do it after also.</p>
 <p>WH: Yes. The check after can be optimized out in most practical cases.</p>
 <p>BT: I think we should do due diligence though. If you can check in advance of the next meeting or next couple of days.</p>
@@ -269,7 +269,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <a href="#13if-seeking-stage-4-for-sharedarraybuffer"><h2 id="13if-seeking-stage-4-for-sharedarraybuffer">13.i.f Seeking Stage 4 for SharedArrayBuffer</h2></a><p>(Shu-Yu Guo)</p>
 <ul>
 <li><a href="https://github.com/tc39/ecma262/pull/769">spec PR</a></li>
-<li><a href="https://github.com/tc39/Test262/pull/839">Test262 PR</a></li>
+<li><a href="https://github.com/tc39/test262/pull/839">Test262 PR</a></li>
 </ul>
 <p>SYG: Last time, we were missing a mergeable PR and Test262 tests. Now we have both of those. The memory model is now a top-level clause.</p>
 <p>BT: I suggest that even people who are not familiar with memory models could read the notes which are specifically targeted to the developer intuition for the memory model.</p>
@@ -474,7 +474,10 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <li>Interaction with private state--included or not? See <a href="https://github.com/tc39/proposal-private-fields/issues/78">https://github.com/tc39/proposal-private-fields/issues/78</a></li>
 </ul></li>
 </ul>
-<a href="#8-ecma402-status-updates"><h2 id="8-ecma402-status-updates">8. ECMA402 Status Updates</h2></a><p>(Caridy Patiño)</p>
+<a href="#8-ecma-402-status-updates"><h2 id="8-ecma-402-status-updates">8. ECMA-402 Status Updates</h2></a><p>(Caridy Patiño)</p>
+<ul>
+<li></li>
+</ul>
 <p>CP, ZB:
 - Editorial changes
 - Legacy constructor compromise (ready to land in SpiderMonkey)
@@ -486,7 +489,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>ZB: It is somewhere in between. Over the last year it was mostly Google and Mozilla (as browser vendors) interested in expanding intl support in JS. I think Mozilla got a little more active because of our internal strategy / higher pressure. Google is supportive and helpful but has a little less resources to implement it. Often we are pushing the spec and the tests, but Google is taking a bit longer. Is that representative Dan?</p>
 <p>DE: Yes, that's accurate.</p>
 <p>CP: Yes, this spec is only been around for a few months.</p>
-<p>ZB: This is what we consider internally on the ecma402 group is done. Userland can follow an implmenet if they want to. It's been reviewed, we think it is a sound and safe API. Once a second implementor steps up we should put it into the spec.</p>
+<p>ZB: This is what we consider internally on the ECMA-402 group is done. Userland can follow an implmenet if they want to. It's been reviewed, we think it is a sound and safe API. Once a second implementor steps up we should put it into the spec.</p>
 <p>CP: Three more formatters that we introduced about a year ago that have been through discussions and writing.</p>
 <ul>
 <li>intl.ListFormat</li>
@@ -495,7 +498,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 </ul>
 <p>I'd like to move these to stage 2. My understanding is that stage two means we'll be looking for more feedback from implenetors, but not putting pressure on them.</p>
 <p>AWB: The move between stage 1 to 2 is saying, here is an area we think will be useful, let's explore it. Stage 2 is saying we should start getting something like this into a future version of the spec. I would expect at that stage some sort of review presentation. To move to the next stage would be appropriate to have a review of the stage. Here's the API we arrived at, here's why it's good, we should advance this, etc. My sense is that waiting two months is not going to really hold you up any.</p>
-<p>ZB: Happy to delay to the next meeting. Two new proposals to put forward. Deprecate <code>hour12</code> option and introduce <code>hourCycle</code>.  Proposal: <a href="https://github.com/zbraniecki/proposal-ecma402-hourcycle">https://github.com/zbraniecki/proposal-ecma402-hourcycle</a>. I don't think we need to seek any stage now, I'd just like to introduce to the community that we are using it.</p>
+<p>ZB: Happy to delay to the next meeting. Two new proposals to put forward. Deprecate <code>hour12</code> option and introduce <code>hourCycle</code>. Proposal: <a href="https://github.com/zbraniecki/proposal-ECMA-402-hourcycle">https://github.com/zbraniecki/proposal-ECMA-402-hourcycle</a>. I don't think we need to seek any stage now, I'd just like to introduce to the community that we are using it.</p>
 <p>DE: About this proposal, I'm wondering what the appropriate vehicle for it is. The spec text is written very well, thanks for responding already. It's small and we may add more thinks to this. I'm wondering if each one should go through a 4 stage proposal. We might move through the stages quickly, but getting implementation feedback on these things would be good.</p>
 <p>AWB: I think it could be streamlined as one. As a starting point, I'd like to understand what you mean by deprecate.</p>
 <p>ZB: The proposal means that we will still fully support the current implementation (interface). If someone creates a dateTime format with hour12, we'll internally convert it to an hourCycle. If both are present, we'll use hour12, because we'll assume it's an old implementation. In the spec we recommend users use hourCycle.</p>
@@ -577,7 +580,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>ZB: One other thing, we have an internal debate we haven't resolved yet. We have two option formats for datetimesformat. Does the community have an opinions on what looks more like JS?</p>
 <p>??: The single format style matches CSS, so that makes sense.</p>
 <p>ZB: Thanks for your time!</p>
-<a href="#conclusionresolution-8-ecma402-status-updates"><h4 id="conclusionresolution-8-ecma402-status-updates">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-8-ecma-402-status-updates"><h4 id="conclusionresolution-8-ecma-402-status-updates">Conclusion/Resolution</h4></a><ul>
 <li>Stage 2 was proposed for these topics, but we didn't get an explcit &quot;yay&quot; or &quot;nay&quot; from the committee, and didn't appoint reviewers:
 <ul>
 <li>intl.ListFormat</li>
@@ -659,7 +662,9 @@ After a second super call, an error will always be thrown, it'll be called, but 
 </ul></li>
 </ul>
 <a href="#13iib-functionprototypetostring-updates"><h2 id="13iib-functionprototypetostring-updates">13.ii.b Function.prototype.toString updates</h2></a><p>(Michael Ficarra)</p>
-<p><a href="https://github.com/tc39/Function-prototype-toString-revision">proposal</a></p>
+<ul>
+<li><a href="https://github.com/tc39/Function-prototype-toString-revision">proposal</a></li>
+</ul>
 <p>MF: I don't have materials or anything. I recently made changes to the stage 3 proposal. We discussed last time the line terminator normalization. This is a process that happens at the toString algo to replace all line terminators with a standard one. That was added as a part of this spec. No implementation actually does this. I remind you that the proposal's original intent was just to specify existing behavior. Sort of like an Annex B requirement. I've removed that normalization. I just want to make implementations aware of that. The reason I've done this is because I don't think it's valuable to try to specify something that all implementations have said they would not implement. We're just really trying to spec reality as closely as possible.</p>
 <p>AWB: Just to clarify. Not everything in this proposal toString is done by every implementation;</p>
 <p>MF: Where the implementations differ I try to use the simplest possible mental model of how the method should work. We've agreed on this being from the first and last token for the given grammar production. For functions created dynamically we have a very simple string building operation that tries to get as close to the overlap as possible.</p>
@@ -690,8 +695,10 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>AWB: I have done so!</p>
 <p>AWB: Capture groups?</p>
 <a href="#13iic-seeking-stage-2-for-named-capture-groups"><h2 id="13iic-seeking-stage-2-for-named-capture-groups">13.ii.c Seeking Stage 2 for named capture groups</h2></a><p>(Daniel Ehrenberg)</p>
-<p><a href="https://docs.google.com/presentation/d/1fx5S4DpuD7z4K6ItFW7BjbvYPiuQNxU2769F5YhGP3o/edit#slide=id.p3">slides</a>
-<a href="https://github.com/tc39/proposal-regexp-named-groups">proposal</a></p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1fx5S4DpuD7z4K6ItFW7BjbvYPiuQNxU2769F5YhGP3o/edit#slide=id.p3">slides</a></li>
+<li><a href="https://github.com/tc39/proposal-regexp-named-groups">proposal</a></li>
+</ul>
 <p>DE: A quick overview of the feature: it allows you to access matched groups by a name in the match object.</p>
 <p>AWB: Can the same name occur more than once?</p>
 <p>DE: No, that's an early error. I'll double check that.</p>
@@ -724,7 +731,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>DH: If we're always returning a unique object when you call the getter when you normally access the groups property.</p>
 <p>AWB: It could be the same value, an internal slot that we keep returning.</p>
 <p>DH: We have lots of situations like this! Does it have to not exist? Could we just set it to the value of undefined to allow destructuring?</p>
-<p>DE: I don't understand what code would require these. If you use destructuring, you know what groups you're looking for. If you write a regex, you know what groups you're looking for.  Why would you introspect keys for groups of a regex that you don't know?</p>
+<p>DE: I don't understand what code would require these. If you use destructuring, you know what groups you're looking for. If you write a regex, you know what groups you're looking for. Why would you introspect keys for groups of a regex that you don't know?</p>
 <p>KG: There are two completely separate concerns, making destructuring work, and making object.keys work. It doesn't sound to me like anything in this change, having groups or not, would affect destructuring. Having the match object return undefined vs null would have mattered but that ship has long sailed. Having groups there or not doesn't affect destructuring as far as I can tell.</p>
 <p>JHB: If the property isn't there, the destructuring will throw</p>
 <p>DE: We know, the groups protocol would be very straightforward. Why would you not know what the groups are called.</p>

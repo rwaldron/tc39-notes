@@ -28,7 +28,7 @@ Summary of changes: <a href="http://wiki.ecmascript.org/doku.php?id=harmony:spec
 <p>YK: Concerns about let bindings in function parameters
 ...Let's make sure that anything in ES5 that does not have a let binding doesn't produce such, to avoid interop hazards.</p>
 <p>BT: In IE11, you can't create a let binding whose identifier is the same as a function parameter</p>
-<p>AWB/YK: Then this is a spec bug.  (AWB: not clear what this is referring to, the behavior described above for IE11 sounds correct)</p>
+<p>AWB/YK: Then this is a spec bug. (AWB: not clear what this is referring to, the behavior described above for IE11 sounds correct)</p>
 <p>BT: Even <code>var x; let x;</code> is an error</p>
 <p>AWB: There are lexical bindings that the closure captures and then there are static semantic rules that say you cannot have a <code>let</code> in the body that are same name as a <code>parameter</code>
 ... We need</p>
@@ -40,7 +40,7 @@ Summary of changes: <a href="http://wiki.ecmascript.org/doku.php?id=harmony:spec
 AWB: Yes, that's invisible. Went back and forth about whether to express such optimizations in the spec.</p>
 <p>AWB: (moving on)</p>
 <ul>
-<li>Lookahead grammar restriction created, to disambiguate <code>new super()</code>  (AWB: but they aren't right yet.  Stills needs some more work)</li>
+<li>Lookahead grammar restriction created, to disambiguate <code>new super()</code>  (AWB: but they aren't right yet. Stills needs some more work)</li>
 <li>Lookahead <code>let</code> restrictions added: IterationStatement (see notes)</li>
 <li>Temporary change return default for missing class constructor: Reverted.</li>
 </ul>
@@ -65,7 +65,7 @@ AWB: Yes, that's invisible. Went back and forth about whether to express such op
 <p>(no opposition)</p>
 <p>AWB: (continuing) Corrected RegExpExec so it correcly translates the match state of full unicode RegExps back to UTF-16 cature values and endIndex</p>
 <p>WH: If you have a composed character, is it still considered two characters?</p>
-<p>AWB: Yes, it operates at the level of code points or  code units.  Not a higher livel such as composed characters</p>
+<p>AWB: Yes, it operates at the level of code points or  code units. Not a higher livel such as composed characters</p>
 <p>YK: (requesting more information about the the ES5 compatibility change item added to Annex D)</p>
 <p>RW: (note: it appears to be missing, Allen, please fill in/follow up?)</p>
 <p>AWB: Call for Spec reviewers</p>
@@ -236,7 +236,7 @@ AWB: Yes, that's invisible. Went back and forth about whether to express such op
 <p>FP: (Question about requirements)</p>
 <p>MM: Any defensible options other than dropping the invariant?</p>
 <p>AWB: No</p>
-<p>WH: Yes. To prevent proxy cycles, something in the proxy (perhaps the target's prototype, perhaps something else) would record what the proxy thinks the prototype is.  GetPrototypeOf does not run user code and only returns the current stored value.  SetPrototypeOf runs user code and can change the stored value.  The circularity check occurs at the time of the store.</p>
+<p>WH: Yes. To prevent proxy cycles, something in the proxy (perhaps the target's prototype, perhaps something else) would record what the proxy thinks the prototype is. GetPrototypeOf does not run user code and only returns the current stored value. SetPrototypeOf runs user code and can change the stored value. The circularity check occurs at the time of the store.</p>
 <p>AWB: Possible for ordinary objects, if the prototype chain only consists of ordinary objects, there must not be circularities.</p>
 <p>Discussion about Proxy trap handlers for <code>getPrototypeOf</code> and <code>setPrototypeOf</code></p>
 <p>MM: Storing state related to the target</p>
@@ -511,7 +511,7 @@ MM: I guess this is ok. These names are not high-integrity -- mostly intended fo
 <p>MM: Too late to
 (AWB: I don't recall what this was about)</p>
 <a href="#new-%typedarray%iterable"><h2 id="new-%typedarray%iterable">new %TypedArray%(iterable)</h2></a><ul>
-<li>Currently constructor doesn't recognize iterables, but requires an array like.  This is the behavior inherited from the Khronos spec.</li>
+<li>Currently constructor doesn't recognize iterables, but requires an array like. This is the behavior inherited from the Khronos spec.</li>
 <li>Need to use:</li>
 <li>%TypedArray%.from(iterable)</li>
 <li>Should constructor work like %TypedArray%.from?</li>

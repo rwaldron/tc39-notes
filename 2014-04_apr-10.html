@@ -104,8 +104,8 @@ System.get(<span class="hljs-string">"foo"</span>);
 <li>Revisit <code>module foo from &quot;...&quot;</code> (YK)</li>
 </ul>
 <a href="#reviewer-sign-up"><h2 id="reviewer-sign-up">Reviewer sign up</h2></a><a href="#revisiting-initializer-in-for-in"><h2 id="revisiting-initializer-in-for-in">Revisiting: Initializer in for-in</h2></a><p>AWB: New information:</p>
-<p>OH: To clarify JSC encountered breakage in the syntax. Only case we’ve seen is (presumably) author changing their mind about type of loop, so we <em>no-op</em> the expression.  No execution at all.
-...Unclear about what we’re saying about the let case. I would be opposed to leaking the redundant initialiser into for (let blah of/in …)
+<p>OH: To clarify JSC encountered breakage in the syntax. Only case we've seen is (presumably) author changing their mind about type of loop, so we <em>no-op</em> the expression. No execution at all.
+...Unclear about what we're saying about the let case. I would be opposed to leaking the redundant initialiser into for (let blah of/in ...)
 ... Would be great to eventually nuke it.</p>
 <p>AWB: Likely won't have any new information in May?</p>
 <p>OH: All internal builds have this change, so we'll have users reporting.</p>
@@ -300,7 +300,9 @@ Iterable.prototype.takeWhile = <span class="hljs-function"><span class="hljs-key
 <li>Reference material: <a href="https://mail.mozilla.org/pipermail/es-discuss/2013-May/030683.html">https://mail.mozilla.org/pipermail/es-discuss/2013-May/030683.html</a></li>
 </ul>
 <a href="#decorators-for-es7"><h2 id="decorators-for-es7">Decorators for ES7</h2></a><p>(Yehuda Katz)</p>
-<p><a href="https://github.com/rwaldron/tc39-notes/raw/master/es6/2014-04/Decorators.pdf">Slides</a></p>
+<ul>
+<li><a href="https://github.com/rwaldron/tc39-notes/raw/master/es6/2014-04/Decorators.pdf">slides</a></li>
+</ul>
 <p>YK: Presenting aspects of common use cases not yet covered by ES6 <code>class</code>.</p>
 <p>Knockout.js example (compute the value of a property)</p>
 <p>WH: Do you want to use functors to produce functions that are per-class (i.e. on the prototype) or per-instance?</p>
@@ -510,17 +512,17 @@ MM: Overriding MemberOfLiteral definition?</p>
 <p>Discussion of async arrows from <a href="https://github.com/lukehoban/ecmascript-asyncawait/issues/13">https://github.com/lukehoban/ecmascript-asyncawait/issues/13</a></p>
 <p>LH: If we cared about being forward compatible with eliding () in arrows, we could be conservative with [no line terminator] : <a href="https://github.com/lukehoban/ecmascript-asyncawait/issues/13#issuecomment-40124678">https://github.com/lukehoban/ecmascript-asyncawait/issues/13#issuecomment-40124678</a></p>
 <p>Several: async(foo, bar) =&gt; ... looks too much like a function call.</p>
-<p>LH:  If 'async' were 'function', you likely wouldn't say that.  Once editors colorize, this will be less of a concern.</p>
+<p>LH:  If 'async' were 'function', you likely wouldn't say that. Once editors colorize, this will be less of a concern.</p>
 <p>WH: you're not proposing to make &quot;async&quot; a keyword?</p>
 <p>LH: Contextual keyword</p>
 <p>[Discussion of syntax and no-line-terminator-here]</p>
-<p>LH: Questions about whether 'await' should be allowed at top level.  We could add to the module top level grammar, not the script grammar</p>
+<p>LH: Questions about whether 'await' should be allowed at top level. We could add to the module top level grammar, not the script grammar</p>
 <p>WH: If it's usable in modules outside async functions, would await be a contextual keyword inside modules? It isn't right now.</p>
 <p>MM: That would be a breaking change from ES6.</p>
 <p>?: We could disambiguate in grammar.</p>
 <p>WH: No. Is x = await(foo) a legacy ES6 function call or an await call?</p>
 <p>LH: Good point, we'd need to reserve &quot;await&quot; in modules in ES6.</p>
-<p>LH: Original proposal included an optional &quot;await<em>&quot; syntax that was sugar over &quot;await Promise.all(...)&quot;.  It was unrelated to &quot;yield</em>&quot; which has no meaning in async context.</p>
+<p>LH: Original proposal included an optional &quot;await<em>&quot; syntax that was sugar over &quot;await Promise.all(...)&quot;. It was unrelated to &quot;yield</em>&quot; which has no meaning in async context.</p>
 <p>MM: Using await * that is not analogous to yield * is bad, let's take it off the table.</p>
 <p>LH: Agreed - we'll remove that from the proposal.</p>
 <p>LH: Current proposal requires &quot;static async&quot; to be ordered that way for async methods.</p>

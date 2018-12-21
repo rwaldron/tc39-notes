@@ -64,7 +64,7 @@
 <li>What IS forgot to tell, that actually with the publication of ECMAScript 2016 and ECMA-402 new Edition etc. it would be a good idea to make more PR, e.g. Press Release.</li>
 </ul></li>
 </ul>
-<a href="#8-test262-status-update"><h2 id="8-test262-status-update">8. Test262 Status Update</h2></a><p>IS: Technical Report 104 needs to be updated. He added that all specs related to TC39 work are being downloaded very heavily (actually at  least 2/3 of all Ecma downloads are TC39 related).  The HTML version of ECMA-262 and ECMA-402 is in addition to it, and compared to full downloads that is even significantly higher.This is actually more than e.g. what is being downloaded from the ISO Shop (of course that is not free of charge...).  So automatically also TR-104 gets downloaded rather heavily. But e.g. in TR/104 the URL to the tests does not work. Also the text needs to be updated. It reflects a situation when only ES5 was covered, but  e.g. not ECMA-402.</p>
+<a href="#8-test262-status-update"><h2 id="8-test262-status-update">8. Test262 Status Update</h2></a><p>IS: Technical Report 104 needs to be updated. He added that all specs related to TC39 work are being downloaded very heavily (actually at  least 2/3 of all Ecma downloads are TC39 related). The HTML version of ECMA-262 and ECMA-402 is in addition to it, and compared to full downloads that is even significantly higher.This is actually more than e.g. what is being downloaded from the ISO Shop (of course that is not free of charge...). So automatically also TR-104 gets downloaded rather heavily. But e.g. in TR/104 the URL to the tests does not work. Also the text needs to be updated. It reflects a situation when only ES5 was covered, but  e.g. not ECMA-402.</p>
 <p>AWB: Propose updating TR 104 to be descriptive only?</p>
 <p>BT: Is this just a readme? Possible get rid of it?</p>
 <p>AWB: Just reduce to an abstract description of the content and motivation of Test262</p>
@@ -164,7 +164,7 @@
 <p>Generally, no.</p>
 <a href="#conclusionresolution-9ia-reintroduce-for-in-initializer"><h4 id="conclusionresolution-9ia-reintroduce-for-in-initializer">Conclusion/Resolution</h4></a><ul>
 <li>Add for-var-in initializers with the old semantics to Annex B, for non-strict mode only.</li>
-<li><a href="https://github.com/tc39/ecma262/pull/614">ecma262/pull/614</a></li>
+<li><a href="https://github.com/tc39/ecma262/pull/614">ECMA-262/pull/614</a></li>
 <li>Kevin will write tests for the change, based on the new policy</li>
 </ul>
 <a href="#9ib-update-on-async-iteration"><h2 id="9ib-update-on-async-iteration">9.i.b Update on Async Iteration</h2></a><p>(Domenic Denicola)</p>
@@ -189,7 +189,7 @@
 </ul></li>
 </ul>
 <a href="#9if-unify-string-and-array-maximum-lengths"><h2 id="9if-unify-string-and-array-maximum-lengths">9.i.f Unify String and Array maximum lengths</h2></a><p>(Michael Saboff)</p>
-<p>MS: Unify the length of strings and arrays. Strings are 2^53-1, Arrays are 2^32-1 indexed elements. A few APIs cross over. Really, browsers are all 2^31 or less. I don't care which way we go, but I'd like Strings and Arrays to be unified.  Maybe we should delay this a little until we figure out how to make Arrays bigger; I originally proposed reducing everything to 2^32-1</p>
+<p>MS: Unify the length of strings and arrays. Strings are 2^53-1, Arrays are 2^32-1 indexed elements. A few APIs cross over. Really, browsers are all 2^31 or less. I don't care which way we go, but I'd like Strings and Arrays to be unified. Maybe we should delay this a little until we figure out how to make Arrays bigger; I originally proposed reducing everything to 2^32-1</p>
 <p>MF: What's the motivation?</p>
 <p>MS: Consistency, so they all use the same type of index.</p>
 <p>AWB: There was a lot of thought that went into it. We increased the size of everything that we could — strings, typed arrays — and held off on Arrays for compatibility reasons.</p>
@@ -385,7 +385,7 @@ Problem: many places possible to predict the bit pattern. Can convey information
 <p><a href="https://i.gyazo.com/0dcfc195d891a36c4b0c04d460cb5d72.png">https://i.gyazo.com/0dcfc195d891a36c4b0c04d460cb5d72.png</a>
 In text form: <a href="https://github.com/mathiasbynens/es-regexp-unicode-property-escapes#illustrative-examples">https://github.com/mathiasbynens/es-regexp-unicode-property-escapes#illustrative-examples</a></p>
 <p>DE: Have full spec text, implementation in V8, tests for V8 (need to be updated for Test262)</p>
-<p>BT: If ok with deviating from what’s allowed inside <code>\u</code>, then we can overload <code>\u</code> instead of <code>\p</code></p>
+<p>BT: If ok with deviating from what's allowed inside <code>\u</code>, then we can overload <code>\u</code> instead of <code>\p</code></p>
 <p>DD: Are there conflicts with other languages and use of <code>\u</code>?</p>
 <p>WH: <code>\u</code> could be trouble if anyone comes up with classname consisting entirely of characters A-F</p>
 <p>DE: I can find out if this is an invariant that will be maintained. If it is, then we should use <code>\u</code>, otherwise <code>\p</code>. If Unicode advises us <em>not</em> to depend on existing <code>\u</code> invariants, then we won't</p>
@@ -468,7 +468,7 @@ In text form: <a href="https://github.com/mathiasbynens/es-regexp-unicode-proper
 <p>(Questions about &quot;Third State&quot;)</p>
 <a href="#conclusionresolution-9iid-async-functions-for-stage-4"><h4 id="conclusionresolution-9iid-async-functions-for-stage-4">Conclusion/Resolution</h4></a><p>Will revisit after discussing cancels more; hopefully reshuffle non-timeboxed agenda items to enable that to happen in this meeting.</p>
 <a href="#9iie-math-extensions"><h2 id="9iie-math-extensions">9.ii.e Math extensions</h2></a><p>(Rick Waldron)</p>
-<p>RW: There are some nasty npm modules for these sorts of math functions. This comes up in IoT, cool animations, etc.  We could add some more functions to the standard library. This stuff happens over and over and over again; typing things into consoles.</p>
+<p>RW: There are some nasty npm modules for these sorts of math functions. This comes up in IoT, cool animations, etc. We could add some more functions to the standard library. This stuff happens over and over and over again; typing things into consoles.</p>
 <p>YK: leftPad went well</p>
 <p>RW: This falls into the leftPad box. This is putting down pavement where a cowpath once was.</p>
 <p>RW: Math.constrain: Could be called Math.clamp. Like Uint8ClampedArray. Very straightforward.</p>

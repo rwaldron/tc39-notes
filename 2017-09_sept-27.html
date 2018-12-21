@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-27-2017-meeting-notes"><h1 id="september-27-2017-meeting-notes">September 27, 2017 Meeting Notes</h1></a><hr>
-<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (ARE), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD), Caio Gondim (CGM), Brittany Storoz (BSZ), Sathya Gunasekaran (SGN), Domenic Denicola (DD), Richard Gibson (RGN)</p>
+<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (AKI), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD), Caio Gondim (CGM), Brittany Storoz (BSZ), Sathya Gunasekaran (SGN), Domenic Denicola (DD), Richard Gibson (RGN)</p>
 <p>Remote:
 István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM), Gabriel Isenberg (GI), Zibi Braniecki (ZB)</p>
 <hr>
@@ -115,8 +115,8 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>DH: Is this precedent to change JSON?</p>
 <p>MB: No, very much not. We need to be very clear JSON cannot change. This does not set the precedent.</p>
 <p>CM: We had the same thing with the BigInt proposal - we could change how JSON gets interpreted by JS without changing JSON. There is wiggle room there.</p>
-<p>DE: I don’t think there is wiggle room.</p>
-<p>DH: That’s fine, this was a quick temperature check to see how flexible we are with JSON.</p>
+<p>DE: I don't think there is wiggle room.</p>
+<p>DH: That's fine, this was a quick temperature check to see how flexible we are with JSON.</p>
 <p>YK: We could standardise something like JSONC, but keep JSON the same.</p>
 <p>DH: Maybe I think about that. Sorry for the hijack!</p>
 <a href="#conclusionresolution-12ie-make-ecmascript-a-syntactic-superset-of-json-for-stage-1"><h4 id="conclusionresolution-12ie-make-ecmascript-a-syntactic-superset-of-json-for-stage-1">Conclusion/Resolution</h4></a><ul>
@@ -244,7 +244,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>WH: Yes.</p>
 <p>JHD: If I came up with a different name would you be okay with it?</p>
 <p>WH: Yes.</p>
-<p>YK: There’s another option which is to provide an option to choose between them.</p>
+<p>YK: There's another option which is to provide an option to choose between them.</p>
 <p>JHD: Does anyone have a suggestion to how to make this an option?</p>
 <p>DD: Boolean options are bad.</p>
 <p>JHD: I agree, let's come up with something then.</p>
@@ -253,9 +253,9 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>DE: Do we really want to set up a convention where methods that return iterators end in &quot;iterator&quot; ?</p>
 <p>MS: you could call it scan instead</p>
 <p>JHD: Is everyone happy with scan?</p>
-<p>MF: Why don’t we set up a github issue?</p>
+<p>MF: Why don't we set up a github issue?</p>
 <p>JHD: Right. I will set up a github issue. Can everyone who is interested please comment on that issue.</p>
-<p>MS: It seems you really want a sticky that doesn’t start at lastindex. I'm not sure what sticky means with what your proposing.</p>
+<p>MS: It seems you really want a sticky that doesn't start at lastindex. I'm not sure what sticky means with what your proposing.</p>
 <p>JHD: Sticky provides an iterator for one match.</p>
 <p>MS: You want an iterator that gives you all the captures - a &quot;sticky plus&quot; could do that.</p>
 <p>JHD: Like an alternative flag?</p>
@@ -266,7 +266,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>MS: With matchAll do I have to change my regular expression to remove <code>g</code>?</p>
 <p>JHD: No, you get all match groups with <code>g</code>. It works the same.</p>
 <p>MS: So you're changing how exec works?</p>
-<p>JHD: No, exec doesn’t change. match and exec work differently. I'll file a few github issues to chat about. I may or may not come back in November for Stage 2. Any other concerns?</p>
+<p>JHD: No, exec doesn't change. match and exec work differently. I'll file a few github issues to chat about. I may or may not come back in November for Stage 2. Any other concerns?</p>
 <a href="#conclusionresolution-12iiia-stringprototypematchall"><h4 id="conclusionresolution-12iiia-stringprototypematchall">Conclusion/Resolution</h4></a><ul>
 <li>Does not progress to Stage 2 today</li>
 <li>Name change to scan</li>
@@ -304,7 +304,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>MF: These operators are here to check what you're doing is a safe thing to do; so the check for not-null doesnt matter.</p>
 <p>WH: I see your point but disagree. The mental model is it checks for null/undefined only.</p>
 <p>MF: That reduces the usefulness for this operator then.</p>
-<p>WH: It is more useful though because if it is a number and I expect it to be a function, I wouldn't know about it. It’s hard for me to come up for a scenario where:</p>
+<p>WH: It is more useful though because if it is a number and I expect it to be a function, I wouldn't know about it. It's hard for me to come up for a scenario where:</p>
 <ul>
 <li>if the value f is missing, I don't want to call it;</li>
 <li>if the value f is a number, I silently don't want to call it;</li>
@@ -362,7 +362,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>WH: It would not do the call.</p>
 <p>DH: And when not null?</p>
 <p>WH: It would behave as if the <code>?</code> were not there:  <code>a.b.c()</code>. The current semantics specify exactly this and they are good.</p>
-<p>DE: We're over time, let’s summarise.</p>
+<p>DE: We're over time, let's summarise.</p>
 <p>DE: Waldemar says that the proposal doesn't work without  <code>?.(</code> and <code>?.[</code>...</p>
 <p>WH: Not quite. My point is a bit subtler: One could remove <code>?.(</code> and <code>?.[</code> thinking that you'd avoid having to deal with short-circuited function calls and indexing expressions, but that would be incorrect. Even if you forbade <code>a?.()</code>, you need to deal with what <code>a?.b()</code> does, which is a very similar use case. Thus, you haven't achieved anything useful by banning <code>?.(</code> and <code>?.[</code>.</p>
 <p>DE: Let's record where we're in agreement.</p>
@@ -410,7 +410,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>DH: You could express this dynamically - like making a function to get import.meta and evaling that - but you're using direct eval. Is this kicking the can down the road?</p>
 <p>DD: We could go to stage 3 with &quot;it doesnt work now&quot; but is feature detection important?</p>
 <p>DH: Try/catch?</p>
-<p>DD: That’s an early error.</p>
+<p>DD: That's an early error.</p>
 <p>DH: Eval is not?</p>
 <p>DD: No</p>
 <p>DH: Is this a sink or swim stage 3 question? It should be resolved by now.</p>
@@ -420,14 +420,14 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>BT: Does everyone else not care if <code>import.meta</code> works in scripts over modules?</p>
 <p>YK: What does it mean in a script?</p>
 <p>BT: Same as module.</p>
-<p>YK: Why don’t we wait to see if the host environments want this? Domenic says browser does - why don't we wait for node?</p>
+<p>YK: Why don't we wait to see if the host environments want this? Domenic says browser does - why don't we wait for node?</p>
 <p>BT: Fair.</p>
-<p>JHD: To answer your earlier question it would be nice to expose metadata for scripts. Even though I’m a strong advocate for supporting syntaxes and requiring eval, it doesn’t matter in this case because the overlap of support will leave at worst a tiny window of lack of support.</p>
+<p>JHD: To answer your earlier question it would be nice to expose metadata for scripts. Even though I'm a strong advocate for supporting syntaxes and requiring eval, it doesn't matter in this case because the overlap of support will leave at worst a tiny window of lack of support.</p>
 <p>TST: It seems like we wouldnt have this conversation if import wasnt only meant for modules.</p>
 <p>DD: The use cases for import.meta are to replace <code>document.currentScript</code> and <code>import.meta.url</code> to resolve relative to your current module. In the browser we don't want to add more features to scripts - we're trying to move away from them; we try to not add just metadata for scripts.</p>
-<p>KVR:  A web application that’s using a bundler; I would imagine that it should work as per the example but is it the bundlers responsibility to resolve that directly or...</p>
+<p>KVR:  A web application that's using a bundler; I would imagine that it should work as per the example but is it the bundlers responsibility to resolve that directly or...</p>
 <p>DD: Yes tricky for a bundler. It could work depending on the file you're concatenating. Scripts vs modules - if you are bundling we want you to bundle to a single module not script - modules are more secure.</p>
-<p>KVR: Sure that’s the long term vision, but for today's developers it might not be practical. I understand your argument for not having eval.</p>
+<p>KVR: Sure that's the long term vision, but for today's developers it might not be practical. I understand your argument for not having eval.</p>
 <p>DD: Let's push for not working in scripts or eval. Maybe going to stage 3 tomorrow?</p>
 <a href="#conclusionresolution-12iiic-importmeta-for-stage-3"><h4 id="conclusionresolution-12iiic-importmeta-for-stage-3">Conclusion/Resolution</h4></a><ul>
 <li>Revisit Tomorrow</li>

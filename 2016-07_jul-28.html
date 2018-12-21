@@ -313,7 +313,7 @@
 <li>Does not get reported to the host
 <ul>
 <li>window.onerror</li>
-<li>process.on(&quot;uncaughtException&quot;, …)</li>
+<li>process.on(&quot;uncaughtException&quot;, ...)</li>
 </ul></li>
 <li>Does not get tracked as an unhandled rejection either</li>
 <li>throw Cancel(&quot;message&quot;)</li>
@@ -347,7 +347,7 @@
 <p>DD: No</p>
 <p>JHD: Any catch cancel?</p>
 <p>DD: No, this is everything <em>but</em></p>
-<p>Cancel token’s cancel() always creates a Cancel</p>
+<p>Cancel token's cancel() always creates a Cancel</p>
 <pre><code class="language-js"><span class="hljs-keyword">const</span> { token, cancel } = CancelToken.source();
 
 cancel(<span class="hljs-string">"message"</span>);
@@ -367,7 +367,7 @@ token.promise.then(<span class="hljs-function"><span class="hljs-params">value</
 </ul>
 <p>MM: I disagree with your opinion on the usefulness of <code>.then</code>'s second argument</p>
 <p>DD: it's more of a power user feature.</p>
-<p>DE: This works better with the two argument <code>then</code>.  previously there was a back compat concern (with third state), and with this proposal, it's more compatible with 2-arg then.</p>
+<p>DE: This works better with the two argument <code>then</code>. previously there was a back compat concern (with third state), and with this proposal, it's more compatible with 2-arg then.</p>
 <p>MM: Having <code>else</code> in relation to <code>then</code>..,</p>
 <p>Cut off by other members who are time constrained</p>
 <p>BE: Is dependent on state of the stack?</p>
@@ -535,16 +535,16 @@ token.promise.then(<span class="hljs-function"><span class="hljs-params">value</
 <p>DD: Come back to it.</p>
 <p>Cancel Token Composition?</p>
 <p>Precedent from .NET:</p>
-<p><code>const { token, cancel } = CancelToken.linked([ct1, ct2, …]);</code>
+<p><code>const { token, cancel } = CancelToken.linked([ct1, ct2, ...]);</code>
 Here token is canceled if any of the following is true:
 cancel() is called
 ct1 becomes canceled
 ct2 becomes canceled
-…
-I haven’t really investigated what this is used for in the .NET ecosystem…</p>
+...
+I haven't really investigated what this is used for in the .NET ecosystem...</p>
 <p>The extra cancel() seems useless and an artifact of the .NET setup, so instead:</p>
-<p>.NET’s version but a little better</p>
-<p><code>const token = CancelToken.some([ct1, ct2, …]);</code>
+<p>.NET's version but a little better</p>
+<p><code>const token = CancelToken.some([ct1, ct2, ...]);</code>
 Here token is canceled if any of the following is true:
 ct1 becomes canceled
 ct2 becomes canceled
@@ -585,7 +585,7 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
   <span class="hljs-keyword">await</span> anotherOne(<span class="hljs-keyword">await</span>.cancelToken);
 }
 </code></pre>
-<p>YK: This would continue with our tradition of implicit parameters, e.g. implicitly passing 'this'.  You don't want to have to add it explicitly</p>
+<p>YK: This would continue with our tradition of implicit parameters, e.g. implicitly passing 'this'. You don't want to have to add it explicitly</p>
 <p>YK:</p>
 <pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cancelMe</span>(<span class="hljs-params"></span>) </span>{
   doSyncThing();
@@ -615,7 +615,7 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
 <p>DD: What I'm hearing is that people are not heavily concerned. Sounds like this might be worth pursuing. Cancelation already has a lot of stuff in it, and it's hard to get a read on how many people are going to have objections. Dean already raised several objections and we didn't have time in the timebox to raise all of them.</p>
 <p>DT: good effort and really want something along the lines</p>
 <p>YK: If the implicit argument fails, I'm not sure whether I'll be OK with this whole proposal.</p>
-<p>DD: There is some enthusiasm for this proposal, it seems, including some of the additions.  More is available in the repo. I'll add more spec'd things, including await.cancelToken, Promise.cancelable, and CancelToken.any</p>
+<p>DD: There is some enthusiasm for this proposal, it seems, including some of the additions. More is available in the repo. I'll add more spec'd things, including await.cancelToken, Promise.cancelable, and CancelToken.any</p>
 <p>BT: What do cancelable promises change about async functions? Seems purely additive.</p>
 <p>DD: Yes, seems purely additive. We don't have third state.</p>
 <p>YK: It'd be possible for await to send cancelation tokens, but only if you do extra things to thread things through.</p>
@@ -643,7 +643,7 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
 <p>MM: I don't think we should implicitly pass a parameter to existing sync function calls and change the semantics retroactively. Anyway, given the overall situation, I'm not arguing that we should hold async functions back.</p>
 <p>WH: The grammar is both impressive and really scary, trying to see how much it can dance on the edge of a cliff without falling over — cover grammars inside of cover grammars — but I haven't found any flaws yet.</p>
 <p>When is &quot;await&quot; usable as an identifier?</p>
-<p>DE: anytime you are not in an async function.  <then more details> We implemented it all in V8</p>
+<p>DE: anytime you are not in an async function. <then more details> We implemented it all in V8</p>
 <p>BT: It's just like yield</p>
 <p>WH: await is different from yield in that it appears at a much higher precedence than yield.</p>
 <p>YK: What are you worried about?</p>
@@ -657,7 +657,7 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
 <p><a href="http://tc39.github.io/proposal-decorators/">http://tc39.github.io/proposal-decorators/</a></p>
 <p>YK: Has been working closely with Dan since the last meeting to come up with how to move forward. I want to address the technical issues. The spec is now in a Stage 2 complete state. Many have asked, why can't this be a transpiler feature. I think it's possible in principle for that to be true, but it's not as cut and dry. One problem is that it absorbs a bunch of syntax from the class body; it's important to coordinate that somewhere. You'd imagine that private state could use the @ sign, and you would want to understand that this is reserved for decorators. Also, it would be difficult to have a conversation in this committee about the class evaluation order (as last time) and interaction with features like private state. We have a lot of cross-cutting concerns to think through. The concerns from implementors is that adding more syntax features slows down the parser, which affects startup time.</p>
 <p>MM: I was surprised by the idea of just doing this in the transpiler world.</p>
-<p>YK: This will be standardized somehow; there are already two implementations. We should have a document that defines it, with some sort of spec.  So it would have to be a delta on top of the JavaScript spec, if we keep it in transpiler land.</p>
+<p>YK: This will be standardized somehow; there are already two implementations. We should have a document that defines it, with some sort of spec. So it would have to be a delta on top of the JavaScript spec, if we keep it in transpiler land.</p>
 <p>AWB: if it's done as a preprocessor, you'd have to do it to standard JavaScript semantics. So everything would have to be expressible in terms of the core syntax/semantics. So if the core isn't sufficient, it won't be possible to do it correctly.</p>
 <p>YK: In order to get the semantics for high fidelity, the preprocessor will have to target ES5.</p>
 <p>AWB: But then you can't get classes completely correct. If you were going to go the route of a preprocessor, what changes would you have to make to the current spec?</p>

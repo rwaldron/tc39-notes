@@ -53,7 +53,7 @@
 <p>MP: Will most developers need to know about binary ASTs?</p>
 <p>SYG: No, it will be an optimization for tools like minifiers.</p>
 <p>SYG: Not looking to implement any new concepts to the language itself.</p>
-<p>SYG: …continuing presentation… (&quot;What Tree Grammar?&quot; slide)</p>
+<p>SYG: ...continuing presentation... (&quot;What Tree Grammar?&quot; slide)</p>
 <p>BN: These ASTs seem like a better starting point than the formal grammar</p>
 <p>MF: There is an implicit structure in the grammar</p>
 <p>AWB: But the grammar was not defined with that in mind</p>
@@ -109,7 +109,7 @@ foo();
 <p>AK: Transpilers and faulty compilers have similar consequences for debuggability.</p>
 <p>MP: And that's a bad experience for programmers too.</p>
 <p>BFS: ASTs can have a reduced number of early errors compared to source code.</p>
-<p>SYG: …continuing presentation… (&quot;How to Encode Set of Binding Names?&quot; slide)</p>
+<p>SYG: ...continuing presentation... (&quot;How to Encode Set of Binding Names?&quot; slide)</p>
 <p>WH: What if you're inside a <code>with</code> statement? Then you may not know which <code>x</code> you're referring to.</p>
 <p>SYG: I'm hoping to make easier-to-statically-analyze usages fast, and tolerate <code>with</code> with fewer performance benefits. Also, you always know as you're parsing whether you're inside a <code>with</code>, so <code>with</code> can never be in the future of your token stream (unlike a <code>var</code> declaration).</p>
 <p>MF: given we have the information about presence of direct call to eval and with statement, why would we preserve identifier names?</p>
@@ -133,7 +133,7 @@ foo();
 <p>YK: There may be benefits to thinking about the source map format at the same time as the AST format. Traditional source maps are text-to-text mappings (and the binary AST isn't text with lines and columns).</p>
 <p>MS: Concerned about effort to validate the AST, to protect the engine against malformed AST data. How much work is needed to validate the AST?</p>
 <p>SYG: I'm going to work with all the engines to design the binary AST format. Details have not been designed yet.</p>
-<p>SYG: …continuing presentation… (&quot;Versioning&quot; slide)</p>
+<p>SYG: ...continuing presentation... (&quot;Versioning&quot; slide)</p>
 <p>JHD: Would there be any possibility of providing an AST fallback? Different ASTs for browsers that understand different formats?</p>
 <p>SYG: Seems like that would require browser/HTML integration.</p>
 <p>DTL: You could possibly use the Accept HTTP header, though that's outside ECMAScript.</p>
@@ -179,7 +179,7 @@ foo();
 <p>DT: Whenever something like this becomes available, we gain time that would otherwise have had to wait for Moore's Law.</p>
 <p>MS: This proposal is not &quot;compartmentalized&quot; in the sense of CM's vision talk. Web servers will need to support both source and AST versions of everything, so it increases complexity. In the slide about compatibility: we don't do features in lockstep. There will be a difficult time for web applications because they will not have a common platform, and will have to use a lowest common denominator, taking into account older browsers for a while. You can ship polyfills, but shipping an AST presupposes features on certain browsers. So, we're creating a world which will be difficult for web applications and browsers to support on the web.</p>
 <p>DTL: Lots of websites have things like Facebook like buttons; even if just large applications like that upgraded, that would benefit all users. The part of this proposal that's about standardizing the AST will definitely benefit developers. About browsers working in lockstep, this is a problem we already have: if a browser doesn't support generators, it doesn't support generators. AST vs text file doesn't change anything to this problem.</p>
-<p>MS: You can provide a polyfill for source; you can't do that in AST.  By contrast, you could send transpiled source code normally.</p>
+<p>MS: You can provide a polyfill for source; you can't do that in AST. By contrast, you could send transpiled source code normally.</p>
 <p>DTL: It's not clear what you mean; are you talking about shipping Babel output? Why would this not be possible for ASTs?</p>
 <p>JHD: If I want my code to detect if generators are natively supported, I have to load additional code later. Maybe browsers could use headers to specify which AST nodes / binary AST capabilities they support. I think this concern is very important, but I think it's both a later stage concern and also largely outside of ECMAScript.</p>
 <p>DTL: Yes, I think this can be solved outside of ECMAScript.</p>

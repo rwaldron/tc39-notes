@@ -407,7 +407,9 @@ WH: We said that array subclasses are new and safe because unmodified code won't
 <li></li>
 </ul>
 <a href="#510-function-parameter-scoping-and-instantiation"><h2 id="510-function-parameter-scoping-and-instantiation">5.10 Function parameter scoping and instantiation</h2></a><p>Andreas Rossberg</p>
-<p><a href="default-arguments.pdf">Slides</a></p>
+<ul>
+<li><a href="default-arguments.pdf">slides</a></li>
+</ul>
 <p>Default Parameters/Arguments</p>
 <p>Goals: Convenience Feature</p>
 <ul>
@@ -473,7 +475,7 @@ WH: We said that array subclasses are new and safe because unmodified code won't
 </ul>
 <p>YK: (recalling names declared in parameter scopes being rebound in the function body)</p>
 <p>AWB: I can express this with one Environment Record</p>
-<p>ARB: Cannot, because of eval.  A delayed eval in the parameter list must not see bindings from the body</p>
+<p>ARB: Cannot, because of eval. A delayed eval in the parameter list must not see bindings from the body</p>
 <pre><code class="language-js">
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">g</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-number">3</span> * <span class="hljs-number">3</span>;
@@ -567,7 +569,9 @@ f(<span class="hljs-literal">undefined</span>, <span class="hljs-number">2</span
 <li>Details unresolved?</li>
 </ul>
 <a href="#45-modules-update"><h2 id="45-modules-update">4.5 Modules Update</h2></a><p>Dave Herman</p>
-<p>[Slides](need to commit for a link)</p>
+<ul>
+<li>[slides](need to commit for a link)</li>
+</ul>
 <a href="#generic-bundling-slide"><h3 id="generic-bundling-slide">Generic Bundling Slide</h3></a><p>(Debate about hash as the delimiter. Agreement that this discussion can take place elsewhere.)</p>
 <p>DH: the browser loader is not something that belongs in Ecma-262. It's a separate spec. We can do it concurrently. We definitely want to start now and get feedback early, but it doesn't need to block ES6.</p>
 <p>(Discussion of confusion on parsing vs. evaluation timing. Custom loaders can implement the desired esoteric use case; see caching slides.)</p>

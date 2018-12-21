@@ -13,14 +13,14 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-27-2018-meeting-notes"><h1 id="september-27-2018-meeting-notes">September 27, 2018 Meeting Notes</h1></a><hr>
-<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Dave Herman (DH), Pieter Ouwerkerk (POK), Leo Balter (LBR), Aki Rose (ARE), Kevin Smith (KS), Peter Hoddie (PHE), Godfrey Chan (GCN), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Richard Gibson (RGN), Maggie Pint (MPT), Mike Murry (MMY), Mathias Bynens (MB), Keith Miller (KM), Mattijs Hoitink (MHK), Kyle Verrier (KV), Justin Ridgewell (JRL), Katie Broida (KBA), Randy Luecke (RLE), Daniel Ehrenberg (DE), Sathya Gunasekaran (SGN), Rob Palmer (RPR), Kevin Gibbons (KG), Myles Borins (MBN), Tom Dale (TOD), Daniel Rosenwasser (DW), Henry Zhu (HZ), Lin Clark (LCK), Matt Johnson (MJN)</p>
+<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Dave Herman (DH), Pieter Ouwerkerk (POK), Leo Balter (LBR), Aki Rose (AKI), Kevin Smith (KS), Peter Hoddie (PHE), Godfrey Chan (GCN), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Richard Gibson (RGN), Maggie Pint (MPT), Mike Murry (MMY), Mathias Bynens (MB), Keith Miller (KM), Mattijs Hoitink (MHK), Kyle Verrier (KV), Justin Ridgewell (JRL), Katie Broida (KBA), Randy Luecke (RLE), Daniel Ehrenberg (DE), Sathya Gunasekaran (SGN), Rob Palmer (RPR), Kevin Gibbons (KG), Myles Borins (MBN), Tom Dale (TOD), Daniel Rosenwasser (DW), Henry Zhu (HZ), Lin Clark (LCK), Matt Johnson (MJN)</p>
 <p>Remote:
 Brian Terlson (BT), Rick Waldron (RW), Caridy Patiño (CP), Brian Warner (BWR), Yulia Startsev (YSV), Jason Williams (JWS), Ron Buckton (RBN), Ross Kirsling (RKG)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2018/09.md">Agenda</a></li>
 </ul>
-<a href="#normative-add-export--as-ns-from-mod-contd"><h2 id="normative-add-export--as-ns-from-mod-contd">Normative: Add export * as ns from &quot;mod&quot; (cont'd)</h2></a><p>BFS: We have this open PR about adding a syntax for exporting from another module its namespace as a local name. Some people wanted to discuss this a bit but we haven't really heard objections. We had a “needs consensus” and DD seemed OK with this on IRC, so I'm asking now to see if we can move forward and merge this PR.</p>
+<a href="#normative-add-export--as-ns-from-mod-contd"><h2 id="normative-add-export--as-ns-from-mod-contd">Normative: Add export * as ns from &quot;mod&quot; (cont'd)</h2></a><p>BFS: We have this open PR about adding a syntax for exporting from another module its namespace as a local name. Some people wanted to discuss this a bit but we haven't really heard objections. We had a &quot;needs consensus&quot; and DD seemed OK with this on IRC, so I'm asking now to see if we can move forward and merge this PR.</p>
 <p>KS: Looks like the PR needs to be rebased. Didn't we report consensus a couple of meetings ago on this?</p>
 <p>DE: Could you summarize the status of implementations and tests?</p>
 <p>BFS: I cannot summarize the status of implementations and tests; no one has implemented this as far as I know.</p>
@@ -56,7 +56,9 @@ Brian Terlson (BT), Rick Waldron (RW), Caridy Patiño (CP), Brian Warner (BWR), 
 <li>Stage 1 acceptance</li>
 </ul>
 <a href="#normative-getexportednames-adjustments-for-dynamic-modules"><h2 id="normative-getexportednames-adjustments-for-dynamic-modules">Normative: GetExportedNames adjustments for Dynamic Modules</h2></a><p>(Bradley Farias)</p>
-<p><a href="https://github.com/tc39/ecma262/pull/1306">proposal</a></p>
+<ul>
+<li><a href="https://github.com/tc39/ecma262/pull/1306">proposal</a></li>
+</ul>
 <p>BFS: We came to a conclusion earlier that maybe we should change the module record such that we could implement it outside the JS spec. This PR is the result of that. We've created a guide, which is this PR, that states that in order for abstract module records to get some data for the host. Why we're doing this change—and what it allows us to do—is it track what the exports are, is so that we can evaluate the module in an abstract module, which is what the dynamic module proposal was seeking to do originally. There's the whole idea that we're going to change when the list of exported names can occur—like A depends upon B depends upon A—where we add extra cycles. We're adding to the spec in this PR that this could be a case to throw. We're planning on going forward with this approach to see if we can go through all the dynamic modules with this approach. Lin has another PR which also has an approach where they are introducing the things WASM is doing for modules, and we're looking on working together with them.</p>
 <p>DD: I'm generally very happy with the way this has gone. I also support minimal features like this to support advanced subtypes. When you export a module you may not have considered all the things you want to export, so going back seems like a normal use case.</p>
 <p>BFS: Yes, and we will need a fair bit of feedback to make sure that we are going about this the right way.</p>
@@ -75,7 +77,7 @@ Brian Terlson (BT), Rick Waldron (RW), Caridy Patiño (CP), Brian Warner (BWR), 
 <li><a href="https://github.com/tc39/proposal-temporal">proposal</a></li>
 </ul>
 <p>MPT: This API is quite large, but we won't need to spend all 60 minutes on it. There are a few concerns—and a lot of places where we can go way deep on these APIs—but I am arguing for getting this proposal to Stage 2 and going into a lot more depth when this is up for Stage 3. (Reads slides). One of the major things we discussed at the last meeting was variability and valueOf. We discussed that we want to cut valueOf, so effectively they are not comparable without APIs. Calls to Now were cut from this proposal. Leap Seconds were also discussed in July, after talking to the Windows team—the only thing I can say is to do what they did is not web compatible. The table of leap second data may or may not be available at the OS level; it would require round-tripping. It is our intent to allow parsing, so if you get the 60th second in a string is to allow it to be parseable, and go to 59. There's many non-stage 2 topics which are outlined on the slides, but to keep this small we will discuss those later. I think we make Stage 2 requirements, and I'm happy to take questions.</p>
-<p>RGN: How do you feel about leap seconds in instant vs. “civil” processing?</p>
+<p>RGN: How do you feel about leap seconds in instant vs. &quot;civil&quot; processing?</p>
 <p>MPT: You're talking about leap seconds in the civil types? (Yes). I don't understand what meaningful data you would have . If you have a leap second you almost certainly have a instant type, so I don't think there would be meaningful data there, but let's put it in the issue tracker.</p>
 <p>MF: I'm not an expert in date-time stuff, and I expect most users of this API also will not be experts. How do we think these concepts will be teachable? Are there canonical examples of each construct that can be used for comparison?</p>
 <p>MPT: CivilDate are canonically used for birthdates. CivilTimes are for TC39 meetings are at 10am. CivilDateTime are more for historical times—like the moment when the Declaration of Independence was signed.</p>
@@ -116,7 +118,7 @@ Do accurate duration calculations on past UTC times.</p>
 <p>MJN: I also support this, and I have an issue on the Temporal proposal to do this work when the OS supports it, but it's not in scope for Temporal now.</p>
 <p>API: If you know your point in the GPS timeline, then you can add in leap seconds after the fact to compute your exact UTC time. I have a question for WH about what you were looking for.</p>
 <p>WH: There's no way to use Date.now to get the current UTC time to millisecond accuracy. It would have to be a new API.</p>
-<p>YK: Some people are forced to care about leap seconds, so we should make sure people trying to comply with regulations should be able to use our APIs. Separately, a long time ago MH asked about the way to talk about this in an education, but I think the term “global timeline” was used, and I think that's a very useful term to talk about Temporal.</p>
+<p>YK: Some people are forced to care about leap seconds, so we should make sure people trying to comply with regulations should be able to use our APIs. Separately, a long time ago MH asked about the way to talk about this in an education, but I think the term &quot;global timeline&quot; was used, and I think that's a very useful term to talk about Temporal.</p>
 <p>MF: I recall a very early version of this that talked about Durations. I don't see it here. I am concerned that there's high demand for this, and without this in the spec people will create libraries that do use it, and do it incorrectly.</p>
 <p>MPT: The API is there for arithmetic, so it shouldn't be difficult to do.</p>
 <p>MF: That's OK, I think people want to do this, and I just want to make sure they do it in a very easy way without making mistakes.</p>
@@ -156,15 +158,17 @@ Do accurate duration calculations on past UTC times.</p>
 <p>DD: Don't forget clause 15. JavaScript implementers will also do what they want.</p>
 <p>WH: Exactly, much of Temporal is nondeterministic because of time zone changing. I don't want that to be a reason to have to stick it onto System.</p>
 <p>JHD: Lack of System object has come up in a lot of proposals. What if we had some sort of object that gave you a whitelist of nondeterministic APIs.</p>
-<p>MM: A list of global names would be useful, a list of property names would not.  You want to be able to have different compartments in realms.</p>
+<p>MM: A list of global names would be useful, a list of property names would not. You want to be able to have different compartments in realms.</p>
 <p>JHD: We can talk about this offline.</p>
 <a href="#conclusionresolution-temporal-for-stage-2"><h4 id="conclusionresolution-temporal-for-stage-2">Conclusion/Resolution</h4></a><ul>
 <li>Stage 2 acceptance</li>
 <li>BFS, RGN, DE have volunteered to be reviewers for Stage 3</li>
 </ul>
 <a href="#idl-for-javascript"><h2 id="idl-for-javascript">IDL for JavaScript</h2></a><p>(Daniel Ehrenberg)</p>
-<p>-<a href="https://github.com/littledan/proposal-idl/blob/master/README.md">proposal</a>
--<a href="https://docs.google.com/presentation/d/17JnVfV8claiW1u8rFgvzg7itzNBVC9ahgK0RcyXOc70/edit">slides</a></p>
+<ul>
+<li><a href="https://github.com/littledan/proposal-idl/blob/master/README.md">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/17JnVfV8claiW1u8rFgvzg7itzNBVC9ahgK0RcyXOc70/edit">slides</a></li>
+</ul>
 <p>DE: We've been gradually adding to our Standard Library to JS. This would be helped by an IDL. This is basically a header file, which is used to describe coercions of arguments, overloading, class structure, etc. There's a lot of commonality in our ecosystem to languages that use IDLs that JS could benefit from. The current algorithms are currently pretty free form. There are several edge cases that have to be considered not in the problem domain, but with how we're writing this freeform algorithm. It's not currently trivial to follow conventions in new specifications. IDLs also enable auto-generations. In Chrome and V8 these files are effectively copy+pasted into Chrome's source code, where C++ code automatically generates from this IDL. It's my understanding that all major browsers have a concept like this. I think if we could use for JS an IDL, this would help with the native bindings. From manual code-writing to manual code-generation</p>
 <p>DD: Beyond generation of bindings, there's an added benefit of auto-generated code from Spec text. There's a lot of places that an IDL concretizes that in an algorithmic way.</p>
 <p>DE: There's a third thing, also auto-generation of tests. That's a very helpful point, DD. So JS is still dynamically typed, and this doesn't aim to change that obviously. In the WASM project, they had two ways of binding WebIDL things to Rust. The JS one was the long tail, however, because it was so difficult to implement.</p>

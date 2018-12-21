@@ -235,10 +235,10 @@ Runtime error when instantiating a script if a lexical declaration shadows a non
 <p>AWB: Spec text that breaks Zepto:</p>
 <pre><code><span class="hljs-number">4.</span> <span class="hljs-keyword">If</span> O <span class="hljs-keyword">is</span> an exotic Array <span class="hljs-built_in">object</span>, <span class="hljs-keyword">then</span>
    a. <span class="hljs-keyword">Let</span> C be <span class="hljs-keyword">Get</span>(O, <span class="hljs-string">"constructor"</span>).
-   b. ReturnIfAbrupt(C).   
+   b. ReturnIfAbrupt(C). 
    c. <span class="hljs-keyword">If</span> IsConstructor(C) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>     
-i.  <span class="hljs-keyword">Let</span> thisRealm be the running execution context’s Realm.     
-ii.  <span class="hljs-keyword">If</span> SameValue(thisRealm, GetFunctionRealm(C)) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>     
+i. <span class="hljs-keyword">Let</span> thisRealm be the running execution context<span class="hljs-comment">'s Realm. </span>
+ii. <span class="hljs-keyword">If</span> SameValue(thisRealm, GetFunctionRealm(C)) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>     
 iii. <span class="hljs-keyword">Let</span> A be the result <span class="hljs-keyword">of</span> calling the [[Construct]] internal method <span class="hljs-keyword">of</span> C <span class="hljs-keyword">with</span> argument (<span class="hljs-number">0</span>). 
 <span class="hljs-number">5.</span> <span class="hljs-keyword">If</span> A <span class="hljs-keyword">is</span> undefined, <span class="hljs-keyword">then</span>   
 a. <span class="hljs-keyword">Let</span> A be ArrayCreate(<span class="hljs-number">0</span>).
@@ -252,8 +252,8 @@ a. <span class="hljs-keyword">Let</span> A be ArrayCreate(<span class="hljs-numb
 <span class="hljs-number">6.</span> <span class="hljs-keyword">If</span> IsConstructor(C) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>
 a. <span class="hljs-keyword">Let</span> thisRealm be the running execution context<span class="hljs-comment">'s Realm. </span>
 b. <span class="hljs-keyword">If</span> SameValue(thisRealm, GetFunctionRealm(C)) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span> 
-i.   <span class="hljs-keyword">Let</span> species be <span class="hljs-keyword">Get</span>(C, @@species);
-ii.  ReturnIfAbrupt(species)
+i. <span class="hljs-keyword">Let</span> species be <span class="hljs-keyword">Get</span>(C, @@species);
+ii. ReturnIfAbrupt(species)
 iii. <span class="hljs-keyword">If</span> IsConstructor(species) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span> 
 <span class="hljs-number">1.</span> <span class="hljs-keyword">Let</span> A be the resu;t <span class="hljs-keyword">of</span> calling the [[Construct]] internal method <span class="hljs-keyword">of</span> species <span class="hljs-keyword">with</span> argument O. 
 <span class="hljs-number">7.</span> <span class="hljs-keyword">If</span> A <span class="hljs-keyword">is</span> undefined, <span class="hljs-keyword">then</span>   

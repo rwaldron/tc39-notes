@@ -27,7 +27,7 @@ We are now operating as a Royalty Free Task Group</p>
 Update spec for C-style for-let.
 Loaders and Realms are integrated into the spec draft. Lots of review needed.</p>
 <p>EA: Standard modules were deferred at last F2F</p>
-<p>LH:  We agreed on globally reachable names for all pre-modules APIs last September.  New names for module loaders APIs need similar design.</p>
+<p>LH:  We agreed on globally reachable names for all pre-modules APIs last September. New names for module loaders APIs need similar design.</p>
 <p>AWB: Loader and Realm are speced as %Loader% and %Realm% since we haven't talked about their public names.</p>
 <p>DH: Where does Reflect go?</p>
 <p>AWB: Use a global.</p>
@@ -54,7 +54,7 @@ Loaders and Realms are integrated into the spec draft. Lots of review needed.</p
 <li>DH to do the work?</li>
 </ul>
 <a href="#task-and-tasks-queues"><h2 id="task-and-tasks-queues">Task and Tasks Queues</h2></a><p>Postponed until tomorrow when Raf is here.</p>
-<a href="#process-for-ratifying-es6"><h2 id="process-for-ratifying-es6">Process for ratifying ES6?</h2></a><p>LH:  We have now effectively met the &quot;feature complete draft&quot; requirement we were targetting.  Are there any process requirements this group is placing on progressing the spec to ratifica</p>
+<a href="#process-for-ratifying-es6"><h2 id="process-for-ratifying-es6">Process for ratifying ES6?</h2></a><p>LH:  We have now effectively met the &quot;feature complete draft&quot; requirement we were targetting. Are there any process requirements this group is placing on progressing the spec to ratifica</p>
 <p>BE: Have nothing, same as ES5.
 (Discussion about whether we can be strict)</p>
 <p>LH: For example, do we have &quot;multiple compatibile implementations&quot; requirements?  Or &quot;Test262 coverage&quot; requirements?  Our ES7 process proposal has these, but do we want/need some limitied version of this for ES6?</p>
@@ -136,7 +136,7 @@ BE: Math.clz32 wins.</p>
 <li><code>Array.from</code> will return <code>[]</code> for <code>3</code></li>
 <li><code>Array.from([0, , 2])</code> =&gt; <code>[0, undefined, 2]</code></li>
 </ul>
-<a href="#test262"><h2 id="test262">Test262</h2></a><p>BT: Up on GitHub. <a href="https://github.com/tc39/Test262">https://github.com/tc39/Test262</a>. Conversion from Mercurial done by Brandon Benvie.</p>
+<a href="#test262"><h2 id="test262">Test262</h2></a><p>BT: Up on GitHub. <a href="https://github.com/tc39/test262">https://github.com/tc39/test262</a>. Conversion from Mercurial done by Brandon Benvie.</p>
 <p>BT: AttendedTest the web forward. Got a lot of PR (22).</p>
 <p>BT: Pending contributor guidelines.</p>
 <p>BT: Going to work on style guidelines since the PRs are inconsistent.</p>
@@ -151,7 +151,7 @@ BE: Math.clz32 wins.</p>
 <p>LH: concede</p>
 <p>:: conversation about whether implementing iterators is more common or taskjs-like scenarios are more common ::</p>
 <p>BN: Status quo causes more errors but errors encourage parenthesization, and enables <code>yield 1 + 2</code> to yield the value 3</p>
-<p>LH: For the async use case, important to have high precendence, but willing to concede that <code>yield</code> should remain low precenedence due to iterators use cases.  Async use cases could have new &quot;await&quot; syntax with high precendence.</p>
+<p>LH: For the async use case, important to have high precendence, but willing to concede that <code>yield</code> should remain low precenedence due to iterators use cases. Async use cases could have new &quot;await&quot; syntax with high precendence.</p>
 <p>YK: task.js requires (yield a) + (yield b) paren style</p>
 <p>BE: revenge of Lisp, you get used to it</p>
 <a href="#conclusionresolution-yield-and-its-precendence"><h4 id="conclusionresolution-yield-and-its-precendence">Conclusion/Resolution</h4></a><ul>

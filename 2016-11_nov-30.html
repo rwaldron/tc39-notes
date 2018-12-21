@@ -322,7 +322,7 @@ SYG: Weak enough for hardware and compiler reality.</li>
 </ul>
 <a href="#13v-progress-report-and-request-for-comments-on-64-bit-int-support"><h2 id="13v-progress-report-and-request-for-comments-on-64-bit-int-support">13.v Progress report and request for comments on 64-bit int support</h2></a><p>(Brendan Eich)</p>
 <ul>
-<li><a href="https://github.com/BrendanEich/ecma262/tree/int64">Proposal</a></li>
+<li><a href="https://github.com/BrendanEich/ECMA-262/tree/int64">Proposal</a></li>
 <li><a href="https://www.slideshare.net/BrendanEich/int64">Slides</a></li>
 </ul>
 <p>BE: We need a new plan not based on waiting for SIMD and/or value types, but let's do a way that doesn't depend on those and just hard-code this one to start.</p>
@@ -474,11 +474,11 @@ A: Might need it, but very complicated and not analogous. Likely a different API
 <li>scramble: replace a nan with another arbitrary nan</li>
 <li>canonicalize: replace a nan with a <em>particular</em> nan value.</li>
 </ul>
-<p>DE: V8 may violate the ES standard for NaN observable behavior, but I want to argue that it’s OK</p>
+<p>DE: V8 may violate the ES standard for NaN observable behavior, but I want to argue that it's OK</p>
 <p>From ES2015:</p>
 <blockquote>
 <p>SetValueInBuffer ( arrayBuffer, byteIndex, type, value [ , isLittleEndian ] )
-“An implementation must always choose the same encoding for each implementation distinguishable NaN value.”</p>
+&quot;An implementation must always choose the same encoding for each implementation distinguishable NaN value.&quot;</p>
 </blockquote>
 <p>Every time you get a new number, it can be scrambled at <em>that</em> point. Wen you put it into an ArrayBuffer, it doesn't scramble</p>
 <p>MM: satisfies: &quot;All operations that just move a value opaquely, without interacting with that value, none of them will enable another scramble.&quot;</p>

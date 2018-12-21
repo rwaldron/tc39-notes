@@ -29,7 +29,7 @@
 <p>AWB: doesn't mind saying it's implementation dependent</p>
 <p>...</p>
 <p>BT: it would be preferable if the spec test calls out that if it's possible ot have the membrane crossing be a tail call, it should be.</p>
-<p>AWB: given that there's an issue inke dhere to realms, are there other non-=specified things that might be tied to calls for which the same argument shoudl be made.  &quot;The spec says this should be a tail call, but if we do then e.g., debugging information will be lost so....&quot;</p>
+<p>AWB: given that there's an issue inke dhere to realms, are there other non-=specified things that might be tied to calls for which the same argument shoudl be made. &quot;The spec says this should be a tail call, but if we do then e.g., debugging information will be lost so....&quot;</p>
 <p>AK: How did we arrive at consensus that this is normatively required?</p>
 <p>AWB: It wouldn't bother me if Firefox didn't meet all of the normative requirements.</p>
 <p>BT: I think that would bother Firefox once they started failing Test262 tests</p>
@@ -184,30 +184,30 @@
 <p>JM: The properties get added to whatever object super returns.</p>
 <p>WH: OK; just checking that the private and public field proposals are harmonious here, and it looks like they are.</p>
 <p>AWB: you can think about it as an anonymous function that is invoked at the time of...</p>
-<p>JM: you can think of it that way.  there are edge cases that don't quite match that intuition</p>
+<p>JM: you can think of it that way. there are edge cases that don't quite match that intuition</p>
 <p>JM: there are conflicting opinions about what it means to put a this or a super in the expression</p>
 <p>AWB: shouldn't be. there's only one plausible meaning of this.</p>
 <p>DD: the other plausible meaning is the this of the lexicalness (lexical outer this?)  compare it with what is the meaning of arguments</p>
 <p>AWB: what about constructor parameters</p>
 <p>AWB: whatever the answer here, it needs to apply to both this and privates</p>
-<p>JS: we could go with lexical this and instance this. we don't know yet which one is right.  there's more utility in &quot;this&quot; representing instance and &quot;super&quot; making sense.</p>
-<p>DH: argues that we should start from the intuition at the programming model not the implementation of the feature.  so the &quot;this means instance&quot; is that intuition. they may lead to different conclusions for this vs. fields/properties.  this praticular feature is lexically scoped to the class body.</p>
+<p>JS: we could go with lexical this and instance this. we don't know yet which one is right. there's more utility in &quot;this&quot; representing instance and &quot;super&quot; making sense.</p>
+<p>DH: argues that we should start from the intuition at the programming model not the implementation of the feature. so the &quot;this means instance&quot; is that intuition. they may lead to different conclusions for this vs. fields/properties. this praticular feature is lexically scoped to the class body.</p>
 <p>AK: describing it in terms of a function call led to the confusion, but thinking in terms of instantiation avoided the confusion.</p>
 <ul>
 <li>discussion of <code>arguments</code>*</li>
 </ul>
 <p>MM: classes are strict, so you cannot bind &quot;arguments&quot; as a variable.</p>
 <p>AWB: showed a way that you could shadow it</p>
-<p>MM: ok don't make it a dynamic poison, make it a static error.  It's a weird edge case, so just make it illegal so we don't have to figure it out.</p>
+<p>MM: ok don't make it a dynamic poison, make it a static error. It's a weird edge case, so just make it illegal so we don't have to figure it out.</p>
 <p>AK: that seems weirder than just making it lexical</p>
 <p>WH: What about <code>this</code>?</p>
 <p>MM: &quot;this&quot; inside an initializer evals ot the instance being initialized.</p>
-<p>DD: shows and example such that there's two different definitions of this at different places in the class definition.  that's super confusing.</p>
-<p>DH: this issue comes up repeatedly because an intuition about class bodies is wrong. People assume tha thtey are executed once. But in JS they are not.  You will always see things described in orde that will execute in a different order</p>
+<p>DD: shows and example such that there's two different definitions of this at different places in the class definition. that's super confusing.</p>
+<p>DH: this issue comes up repeatedly because an intuition about class bodies is wrong. People assume tha thtey are executed once. But in JS they are not. You will always see things described in orde that will execute in a different order</p>
 <p>DD: but this would be the first time that we have introduced such a drastic difference in timing.</p>
-<p>MM: DD is bringing up two points. 1) wrt scoping 2) wrt execution time.  Jeff and I had previously talked abotu execution time.  If you accept the declaration being in teh class body, but you don't allow an initializer, then we avoid the multilayer issue. This is how it has been in Babel and people have not reported an issue.</p>
+<p>MM: DD is bringing up two points. 1) wrt scoping 2) wrt execution time. Jeff and I had previously talked abotu execution time. If you accept the declaration being in teh class body, but you don't allow an initializer, then we avoid the multilayer issue. This is how it has been in Babel and people have not reported an issue.</p>
 <p>DH: the intuition of top to bottom does not survive contact with reality.</p>
-<p>BT: TypeScript also does not impose top to bottom ordering.  And noone has been confused about it.  Including with decorators.</p>
+<p>BT: TypeScript also does not impose top to bottom ordering. And noone has been confused about it. Including with decorators.</p>
 <p>DH: puts up another code sample to show that class elements are not really ordered.</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
 
@@ -226,7 +226,7 @@
 <p>JS: I need to know what concerns need to be addressed to make progress.</p>
 <p>AWB:</p>
 <p>WH: We already have staged execution that doesn't follow textual order. Functions get lifted to the top of their scopes.</p>
-<p>MM: JS made the point about a bunch of data from existing users not being confuse. BT also reports users are not confused.  So that corroborates JS position that execution order is not a problem. (that's separate from scoping).  also combined with decorators that affect execution order, I retract my objection to changing execution order.</p>
+<p>MM: JS made the point about a bunch of data from existing users not being confuse. BT also reports users are not confused. So that corroborates JS position that execution order is not a problem. (that's separate from scoping). also combined with decorators that affect execution order, I retract my objection to changing execution order.</p>
 <p>DH: some options: abandoned phased execution, [... I missed the rest]</p>
 <p>MM: scoping of this, super, and arguments, and ...</p>
 <p>MM: for all these, file issues on teh proposal</p>
@@ -367,13 +367,13 @@
 <p>MM: withdraw option 3, prefers option 2.</p>
 <p>DH: when you're designing that tag, you're making a library</p>
 <p>AWB: only on tagged literals?</p>
-<p>… discussion about it being a static error on untagged literals …</p>
+<p>... discussion about it being a static error on untagged literals ...</p>
 <p>DH: untagged could be thought of as sugar for builtin tag that throws on undefined cooked value</p>
 <p>AWB: agree, could be handled</p>
 <p>WH: a bit concerned about details; whether grammar can get out of sync with counting backslashes etc</p>
 <p>DH: clearly stage 1 appropriate, will need lots of stage 2 spec analysis rigor</p>
 <p>WH: similar to regexes, which have a cover grammar</p>
-<p>… discussion about compat issue …</p>
+<p>... discussion about compat issue ...</p>
 <a href="#conclusionresolution-template-literals-are-broken"><h4 id="conclusionresolution-template-literals-are-broken">Conclusion/Resolution</h4></a><ul>
 <li>Stage 1 acceptance</li>
 </ul>

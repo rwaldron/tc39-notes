@@ -84,9 +84,9 @@
 <p>BE: It could be added in the future.</p>
 <p>MM:  What does xmmintrin.h mean?</p>
 <p>WH: XMM (a register type in the x86 architecture) intrinsics</p>
-<p>R?: It's a header file that defines an interface that's widely used for 128 operations.  In emscripten we have an emulation of it in terms of SIMD.js.</p>
-<p>DE: Intention is to represent with value types with wrappers.  Typeof returns a string representing the type for the value object.</p>
-<p>MM: This is a proposed system defined value types.  How does this work with user-defined value types?</p>
+<p>R?: It's a header file that defines an interface that's widely used for 128 operations. In emscripten we have an emulation of it in terms of SIMD.js.</p>
+<p>DE: Intention is to represent with value types with wrappers. Typeof returns a string representing the type for the value object.</p>
+<p>MM: This is a proposed system defined value types. How does this work with user-defined value types?</p>
 <p>BE:  If we're going to integrate with main spec, we might want to roll into user-defined value types.</p>
 <p>DE:  What if we move to stage 2 and we can still integrate it into user-define value types.</p>
 <p>AWB:  It would be good to not introduce 6 new system value types.</p>
@@ -99,11 +99,11 @@
 <p>WH: Defined multiplication by element-wise ECMAscript multiplication with its rounding of intermediate results &gt; 53 bits. This is not what SIMD implementation do — they all do strict modular integer arithmetic.</p>
 <p>DE:  I've added a note asking if this is the direction we want to go. The polyfill uses Math.imul which is the right solution. (DE will change the spec.)</p>
 <p>JHD: Are properties of SIMD supposed to be nonwritable, nonconfigurable?</p>
-<p>MM: The general style we've agreed upon is that primordial properties are either configurable or writable.  This is important for initialization of realms, to make it seem like a different kind of realm.</p>
+<p>MM: The general style we've agreed upon is that primordial properties are either configurable or writable. This is important for initialization of realms, to make it seem like a different kind of realm.</p>
 <p>DGN: I believe that Firefox JIT can handle that.</p>
 <p>JM:  Should we think about standard modules?</p>
-<p>DH:  While the module imports are not writable, the module table is.  Realm initialization is just as possible with modules as with configurable/writable properties.  You just have to update the table.</p>
-<p>DH:  It's fine to not have a blocking dependency on modules.  We don't have convensions for standard modules yet.  I think it's fine to put SIMD on the global object.</p>
+<p>DH:  While the module imports are not writable, the module table is. Realm initialization is just as possible with modules as with configurable/writable properties. You just have to update the table.</p>
+<p>DH:  It's fine to not have a blocking dependency on modules. We don't have convensions for standard modules yet. I think it's fine to put SIMD on the global object.</p>
 <p>JM:  It seems like someone needs to be the first to add a standard module.</p>
 <p>DH:  It's OK if we wait for userland module convensions to emerge.</p>
 <p>MM: We can let this proceed to stage 2 without having to specify in terms of value types or standard modules, with the idea that we will eventually get there.</p>
@@ -113,7 +113,7 @@
 <p>STH: We want to ship SIMD on a timeline which is not constrained by the loader spec.</p>
 <p>MM: I'm convinced, I was just taken by surprise by the implication (that we couldn't add system modules).</p>
 <p>AWB:  With globals, each realm now has to have all of these duplications, depending on optimizations.</p>
-<p>MM: SES has to make sure that none of the primordials expose mutable state.  They have to freeze them, and the only way to do that is to walk eagerly.</p>
+<p>MM: SES has to make sure that none of the primordials expose mutable state. They have to freeze them, and the only way to do that is to walk eagerly.</p>
 <p>DGN: What about the large number of SVG bindings?</p>
 <p>MM: The SVG bindings are provided through a membrane.</p>
 <p>DE: Can we provide SIMD through a membrane?</p>
@@ -121,14 +121,14 @@
 <p>DH:  Can't SES just delete SIMD?  (room laughs)</p>
 <p>MM: Clarifies the cost in question:  traversing the objects and freezing everything.</p>
 <p>STH:  So generally, adding &quot;n&quot; functions will present this problem for you.</p>
-<p>MM:  Yes, when &quot;n&quot; is large enough.  The way to avoid this overhead is to have a platform-provided way of creating a new realm that looks like this realm but is frozen.</p>
+<p>MM:  Yes, when &quot;n&quot; is large enough. The way to avoid this overhead is to have a platform-provided way of creating a new realm that looks like this realm but is frozen.</p>
 <p>DH:  (Notes that such a capability would have benefits beyond just security.)</p>
 <p>CM: (To MM) Are you interested in creating a realm with specific constraints, or general realm initialization?</p>
-<p>MM:  The realm API is for creating a new realm according to the wishes of the creator of the realm.  What I'm interested in is not the Realm API itself, but have a way to ask the platform for an SES realm.</p>
+<p>MM:  The realm API is for creating a new realm according to the wishes of the creator of the realm. What I'm interested in is not the Realm API itself, but have a way to ask the platform for an SES realm.</p>
 <p>MM: &quot;SESsiness&quot;</p>
 <p>BE: &quot;Sessility&quot; (real word)</p>
-<a href="#resolution--move-to-stage-2-simdjs-stage-2-pj-jm-presenting"><h3 id="resolution--move-to-stage-2-simdjs-stage-2-pj-jm-presenting">Resolution:  move to stage 2</h3></a><p>R?: If you put a NaN into a TypedArray, the spec requries it to be a non-signaling NaN.  Why?</p>
-<p>AWB:  It was copied out of the WebIDL spec.  There are only two references, we could remove those.</p>
+<a href="#resolution--move-to-stage-2-simdjs-stage-2-pj-jm-presenting"><h3 id="resolution--move-to-stage-2-simdjs-stage-2-pj-jm-presenting">Resolution:  move to stage 2</h3></a><p>R?: If you put a NaN into a TypedArray, the spec requries it to be a non-signaling NaN. Why?</p>
+<p>AWB:  It was copied out of the WebIDL spec. There are only two references, we could remove those.</p>
 <p>BE: spec link: <a href="http://people.mozilla.org/~jorendorff/es6-draft.html#sec-setvalueinbuffer">http://people.mozilla.org/~jorendorff/es6-draft.html#sec-setvalueinbuffer</a></p>
 <p>BE: proposal is to remove the &quot;if value is NaN...&quot; language and let different (bit-patterns observable via typed array views as well as SIMD) NaNs be stored</p>
 <p>WH:  Any thought to UInt SIMD types? uint8 and uint16 are much more useful for pixel values than int8 and int16.</p>
@@ -145,8 +145,8 @@
 <p>AWB: (References example in repo)</p>
 <p>DH:  But you could do the subsequent capturings with a local variable.</p>
 <p>AWB: It allows you to not special-case the first one.</p>
-<p>DH: This feels like has a little of the &quot;.current&quot; api from C# iterators.  Not sure if it matters.  Does this create any GC pressure?</p>
-<p>AWB:  Don't think so.  It's specced so that it's cleared out when the next value comes in.</p>
+<p>DH: This feels like has a little of the &quot;.current&quot; api from C# iterators. Not sure if it matters. Does this create any GC pressure?</p>
+<p>AWB:  Don't think so. It's specced so that it's cleared out when the next value comes in.</p>
 <p>DH: Think you might just need &quot;function.first&quot; or something, but your (AWB) argument for not special casing is good.</p>
 <p>DH:  Think it's odd to call it next when you mean previous.</p>
 <p>BE: writes &quot;function* gen() [ first ] {}&quot; as an option</p>
@@ -168,8 +168,8 @@
 <p>MM: Is it the value coming in to &quot;return&quot; and &quot;throw&quot; or just &quot;next&quot;?</p>
 <p>AWB:  Just &quot;next&quot;.</p>
 <p>DH:  That's why you like &quot;next&quot;, because it's only the value passed in with &quot;next&quot;.</p>
-<p>MM: We're agreed that this returns 17.  If you resume with &quot;return&quot; then &quot;function.next&quot; retains the value of the previous resumuption.</p>
-<p>AWB:  Yes.  I entertained this.</p>
+<p>MM: We're agreed that this returns 17. If you resume with &quot;return&quot; then &quot;function.next&quot; retains the value of the previous resumuption.</p>
+<p>AWB:  Yes. I entertained this.</p>
 <p>WH: Any weird interactions with yield*?</p>
 <p>KS: yield* primes its generator with the value undefined. If you write using function.next, you get problems because it will be primed with an unwanted &quot;undefined&quot;</p>
 <p>DH: Could &quot;yield *&quot; prime the generator with &quot;function.next&quot;?
@@ -198,7 +198,7 @@
 <p>WH: If I were seeing function.current for the first time, I'd think that it was arguments.callee.</p>
 <p>BE: What about &quot;yield.something&quot;</p>
 <p>AWB, MM: (agree that it would work)</p>
-<p>DH:  There's human ambiguity.  Adding parens around &quot;yield&quot; should not change the meaning.</p>
+<p>DH:  There's human ambiguity. Adding parens around &quot;yield&quot; should not change the meaning.</p>
 <p>JHD: what do we call the value passed into Generator#next? we should name that and call this the same thing</p>
 <p>LB: Propose &quot;sent&quot;</p>
 <p>MM: Does anyone object to &quot;sent&quot;</p>

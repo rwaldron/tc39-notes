@@ -70,7 +70,7 @@ re.compile(<span class="hljs-string">"again"</span>);
 <p>BE/AWB: (mixed discussion about historic compatibility issues)</p>
 <p>BE: We can try it and the first sign of trouble, back off.</p>
 <p>MM/AWB/BE: (agreement)</p>
-<p>WH: The main use I see of ToUint32 is to call it on the existing length.  Indices passed in as arguments are generally processed via ToInteger.  As such, getting rid of the ToUint32 in generic Array methods applied to non-Array objects shouldn't present much difficulty (when they're applied to Array objects the change would be invisible because Array length can't reach 2^32).</p>
+<p>WH: The main use I see of ToUint32 is to call it on the existing length. Indices passed in as arguments are generally processed via ToInteger. As such, getting rid of the ToUint32 in generic Array methods applied to non-Array objects shouldn't present much difficulty (when they're applied to Array objects the change would be invisible because Array length can't reach 2^32).</p>
 <p>AWB: But it doesn't have to be an array
 ...We should move on.</p>
 <a href="#45-private-symbols-weakmaps-and-relationships"><h2 id="45-private-symbols-weakmaps-and-relationships">4.5 Private Symbols, WeakMaps, and Relationships</h2></a><p>(Mark Miller)</p>

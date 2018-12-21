@@ -44,7 +44,7 @@ syntax, per spec.</p>
 <a href="#consensusresolution-41-awb-presents-changes-resulting-in-latest-drafts"><h4 id="consensusresolution-41-awb-presents-changes-resulting-in-latest-drafts">Consensus/Resolution</h4></a><p>Anything that could invoke user written code in a tail position to
 act as a tail call.</p>
 <p>call, apply, accessors, quasi (interpolation), proxy calls</p>
-<p>We still need to specify the tail positions in the syntax.  There's
+<p>We still need to specify the tail positions in the syntax. There's
 a start by DH on
 <a href="http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls">http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls</a> which uses
 an attribute grammar, but the current spec draft leaves this blank.</p>
@@ -270,7 +270,7 @@ foo(<span class="hljs-literal">undefined</span>) <span class="hljs-comment">//  
 foo()    <span class="hljs-comment">// returns 5 by current draft</span>
 </code></pre>
 <p>Issue:  is this desirable?  dherman and others think an explicit undefined
-should trigger use of default value.   use case in support</p>
+should trigger use of default value. use case in support</p>
 <pre><code class="language-js">   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setLevel</span>(<span class="hljs-params">newLevel=<span class="hljs-number">0</span></span>) </span>{light.intensity = newLevel}
    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setOptions</span>(<span class="hljs-params">options</span>) </span>{
        setLevel(options.dimmerLevel);  <span class="hljs-comment">//missing prop returns undefined,</span>

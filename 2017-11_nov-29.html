@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-29-2017-meeting-notes"><h1 id="november-29-2017-meeting-notes">November 29, 2017 Meeting Notes</h1></a><hr>
-<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CPO), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (ARE), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
+<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CPO), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
 <p>Remote:
 István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
@@ -137,7 +137,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 </ul>
 <p>MB: (Presenting)</p>
 <p>BFS: Are you talking about doing this all upfront as an Array - or making an iterator? Is there a significant need either way?</p>
-<p>MB: I’d be against doing the work up-front. An iterator is useful for stopping early, and doesn’t require keeping <em>everything</em> in memory.</p>
+<p>MB: I'd be against doing the work up-front. An iterator is useful for stopping early, and doesn't require keeping <em>everything</em> in memory.</p>
 <p>JHD: For matchAll I was asked to use iterators. They seem to be the new way forward.</p>
 <p>JHD: So we already have APIs for code points as string values but this is for numerical code point values right?</p>
 <p>MB: Yes</p>
@@ -150,8 +150,8 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>DE: There's a lot here, so we can talk more offline about this.</p>
 <p>DH: I imagine getting the number of code points in a string is O(n), so not a calculation that JS engines are going to do upfront?</p>
 <p>MB: (confirms)</p>
-<p>DH: It’s useful to have an iterator because you can do this count right?</p>
-<p>JHD: I don’t care about performance here, I care about code clarity</p>
+<p>DH: It's useful to have an iterator because you can do this count right?</p>
+<p>JHD: I don't care about performance here, I care about code clarity</p>
 <p>DH: Yes, I think if getting codepoint count is used enough it might be a useful API but its possible here to just use the iterator.</p>
 <p>JHD: Yes, the same could be said about .length though.</p>
 <p>MB: We did discuss code point length prior to es6, but it was shut down quite quickly.</p>
@@ -159,9 +159,9 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>MB: Well, we can't really change the way how strings work.</p>
 <p>CM: It's more about what Dan was saying, if we have a sequence of codepoints that are 1 2 3 4 5 rather than this non sequential ordering.</p>
 <p>MF: Having multiple views over a string is just like data views on TypedArrays, we can look at it as code points, graphemes, words. This is not problematic to introduce because of that.</p>
-<p>KG: JS strings are not sequences of code points - you can have lone surrogates. I'd be surprised if a code points iterator gave you something that’s not a codepoint.</p>
+<p>KG: JS strings are not sequences of code points - you can have lone surrogates. I'd be surprised if a code points iterator gave you something that's not a codepoint.</p>
 <p>MB: Ahh, are you saying you want to blacklist lone surrogates?</p>
-<p>KG: If it gives you U+D800 on its own it’s not a codepoint.</p>
+<p>KG: If it gives you U+D800 on its own it's not a codepoint.</p>
 <p>MB: It is a codepoint but not a scalar value.</p>
 <p>KG: I'd be happy to see something like the iterator throw an error for these cases but I just want it to the be thought about.</p>
 <p>KM: I like the idea of using object destructing — array destructing is problematic for data structures because it's another iterator call to destructure arrays — so generally I approve of the object destructuring</p>

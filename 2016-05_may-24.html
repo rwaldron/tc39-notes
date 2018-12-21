@@ -24,7 +24,7 @@
 <p>From Google local experts as observers: Hannes Payer, Jakob Kummerow, Ross McIlroy, Michael Hablich, Yang Guo, Taon Ver Naest, Daniel Clifford, Nikolaos Papaspyrou, Jaroslav Sevcik, Deepti Sharma (all part-time)</p>
 <a href="#always-update-object-properties-if-property-descriptor-is-applicable-nan-issue"><h2 id="always-update-object-properties-if-property-descriptor-is-applicable-nan-issue"><a href="https://github.com/tc39/ecma262/pull/353">Always update object properties if property descriptor is applicable (NaN issue)</a> (DE)</h2></a><p>DH: Summarizing issue:</p>
 <p>In order to be able to talk about a bit pattern of NaN in a reliable way we need to know where canonicalization. Canonicalization is a chaotic operation. In order to reliably predict the bit pattern of a NaN, we need to know all the places we can go from a known bit pattern to an unknown bit pattern.</p>
-<p>YK: If you would like to assert that if you write a NaN and want to read the same NaN back…?</p>
+<p>YK: If you would like to assert that if you write a NaN and want to read the same NaN back...?</p>
 <p>DH: Every place where data is transferred through the semantics you have a source and a sink, anywhere where data is flowing, if you have an input that is a bit pattern and there are one or more outputs or ways to read the outputs the output operations need to know you have the same bit pattern as input.</p>
 <p>WH: Storing into a variable is not of those things. Storing into a variable does change the bit pattern.</p>
 <p>DH: We need to enumerate this. IS the only place we allow canonicalization is reading/writing from a float64array</p>
@@ -72,7 +72,7 @@ DH: The job we have here is to define the spec. Spec is incoherent. We can draw 
 <p>MM: I am perfectl yhappy to say that unserializing a bit pattern into a NaN may give us a different NaN. Not willing to have conveyance steps produce a new NaN.</p>
 <p>WH: If you read it into a typed array and write it into a typed array, you might get a different bit pattern.</p>
 <p>MM: That's fine. When you usserialize a NaN you can get whatever bit pattern.</p>
-<p>DH: PR is good.  As long as we all agree we want to specify that NaNs carry a bit pattern with them and is by default stable and we want to enumerate places we can do canonicalization.</p>
+<p>DH: PR is good. As long as we all agree we want to specify that NaNs carry a bit pattern with them and is by default stable and we want to enumerate places we can do canonicalization.</p>
 <p>MM: It's not an issue of canonicalization. We want to let them use a different bit pattern.</p>
 <p>DH: Agree. Canonicalization is the wrong word.</p>
 <p>DE: Volunteers to write spec text about how NaN's flow. Also known as &quot;scrambling semantics&quot;.</p>
@@ -122,7 +122,7 @@ But now if someone copies `v → w → f64`, the implementation might want to fa
 <p>YK: Pragmatically is is true that implementers can just not implement the features.</p>
 <p>CM: Is anyone advocating none of the above?</p>
 <p>YK: I have more concerns about STC than PTC.</p>
-<p>YK: Stack traces are a problem, it affects analytics, you can try hard to use PTC but not get feedback from it.  Concerned that can make mistakes with it but not know.</p>
+<p>YK: Stack traces are a problem, it affects analytics, you can try hard to use PTC but not get feedback from it. Concerned that can make mistakes with it but not know.</p>
 <p>DE: Is Error.stack used by glimmer?</p>
 <p>DE: What would be the impact of missing stack frames?</p>
 <p>YK: I think the problem with Error.stack is about analytics tools that are expecting to inspect the entire stack, and they get confused by missing stack frames.</p>
@@ -134,7 +134,7 @@ But now if someone copies `v → w → f64`, the implementation might want to fa
 <p>BT: it doesnt, but scopes problem to specifically one case.</p>
 <p>YK: In the sense you're not able to implement PTC then you're not able to implement STC.</p>
 <p>DE: One strategy is to implement a large stack frame to allow for it to grow. An intervening return will give more stack space anyway.</p>
-<p>MS: It's the same thing as “is in tail call position”.</p>
+<p>MS: It's the same thing as &quot;is in tail call position&quot;.</p>
 <p>DE: Explicit tail calls don't exist in existing code that don't intend to recieve a tail call. So you can do more risky things.</p>
 <p>BT: I'm not sure your implementation strategy would work in the progressively growing stack trace.</p>
 <p>DE:: How do yoy know what's big enough. JIT? You can always construct programs to progressively abuse larger stack frames.</p>
@@ -164,7 +164,7 @@ If you can state the way you're not expecting to implement the feature faithfull
 <p>SYG: for the spec, there is no such thing as half compliance.</p>
 <p>DH: has a programmer, are you going to use these features that sometimes work, or will you fall back to a loop?</p>
 <p>SYG: It is useless to talk about anything with space, the spec assumes infinite stack space, is this a well defined spec question?</p>
-<p>DH: Perfect is the enemy of the good. Literature on this requires a complete cost model with a lots of complex formal semantics detail. We don't want this in ecma262, too complex. We can specify this morally. We don't have to be mathematical here.</p>
+<p>DH: Perfect is the enemy of the good. Literature on this requires a complete cost model with a lots of complex formal semantics detail. We don't want this in ECMA-262, too complex. We can specify this morally. We don't have to be mathematical here.</p>
 <p>MS: if the spec is written in such a way that recursion can continue indefinitely and Chakra cannot do it, then it is not compliant.</p>
 <p>DH: I agree, there has to be human judgement to do this.</p>
 <p>YK: The alternatives are manual versions of the same thing, stack data structure or tramoline, these things have guaranteed space. I would be happy if these data structures are specced then I would be happy with STC over the engine's choice.</p>
@@ -248,7 +248,7 @@ DE: Yes</p>
 <p>BT: you're trading off the same thing, either you get an out of stack space error, or the program slows down substantially.</p>
 <p>DE: Wouldn't this be a different ABI?</p>
 <p>BT: it would also have implementation constraints. Many tools would have no idea about the stack spillage sitting around in the heap.</p>
-<p>MM: if the total number of arguments and local variables is over 1000 …</p>
+<p>MM: if the total number of arguments and local variables is over 1000 ...</p>
 <p>DE: Math.max.apply (<em>large number of things</em>), in v8 that works up to 16k. We don't do something different for apply from normal.</p>
 <p>MM: Choice of large number of arguments + locals, such it is rarely hit to exempt from TC vs completely giving up on normative TC vs accepting some kind of TC unfaithfully implemented.</p>
 <p>DE: at this point we are adding more concerns for programmer: are they using a cross realms, are they using the good number of arguments? Should we throw an exception or silently drop out of TC for STC.</p>
@@ -329,7 +329,7 @@ DE: This was only my misunderstanding.</p>
 <p>JHD: JSC used to have different optimisation levels with debugger open or closed. Very awkward to debug in this circumstance.</p>
 <p><em>Etherpad went down for a ~minute</em></p>
 <p><em>Discussion about an API to get better debugging</em></p>
-<p>YK: imagine you have a library that wants to use STC … you will want to see all the frames to debug your code.</p>
+<p>YK: imagine you have a library that wants to use STC ... you will want to see all the frames to debug your code.</p>
 <p>DE: A more reasonable usecase is not to see your loops but to see nested stack frames, A callback into user code could be problematic.</p>
 <p>YK: It is not always the case that you need to know that you need to turn ShadowChicken 'mode' on in order to collect STC frames.</p>
 <p>DE: I would encourage library authors not to do a tail call into a callback provided by the user.</p>
@@ -401,7 +401,7 @@ DE: This was only my misunderstanding.</p>
 <p>BT: STC would allow real tail calls in sloppy mode.</p>
 <p>DE: It defines proper tail calls in sloppy mode. The user has expressed intent that tail calls should be used so we do not have to update caller and argument.</p>
 <p>JHD: Why is a benefit to enable new features in sloppy mode code?</p>
-<p>MM: It's an old debate. We should have left sloppy mode alone …</p>
+<p>MM: It's an old debate. We should have left sloppy mode alone ...</p>
 <p>YK: let's not open this discussion, but everyone would agree that make tail calls available in sloppy mode would not be good.</p>
 <p>BT: There is no additional spec, function.arguments and caller will be null when you try and access a frame that tail-called to you. This is the same as currently with strict mode calling into sloppy mode.</p>
 <p>YK: I am skeptical that you can do this and it is an easy change.</p>
@@ -432,7 +432,7 @@ DE: This was only my misunderstanding.</p>
 <p>MS: I would be opposed to that. (inferred)</p>
 <p>DH: We know we would need some changes to fix the cross-realm issue and arguments issue. Either eliminate it, or make fixes to make it implementable in the real implementations.</p>
 <p>DE: What are the fatal flaws? Cross-realms or others? Make the cross-realm a silent failure or exception?</p>
-<p>DH: hearing from Microsoft that they won't be able to implement it … you're eliding the difference between syntactic opt in and syntactic guarantees.</p>
+<p>DH: hearing from Microsoft that they won't be able to implement it ... you're eliding the difference between syntactic opt in and syntactic guarantees.</p>
 <p>DH: the thought burden for tail call is large in both case. They're more binary for STC as they are closer to guarantees.</p>
 <p>(discussion &amp; disagreement about whether one would use tail call)</p>
 <p>EFT: there are many reasons why calls are not in tail position</p>

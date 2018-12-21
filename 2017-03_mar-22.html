@@ -31,7 +31,7 @@
 <p>...lots of discussion..</p>
 <p>BT: You would like us to approve this document at which point we can at least get Ecma management to take a look at it and make sure there are no problems.</p>
 <p>LBR: We can only move to Ecma if we have consensus.</p>
-<p>DH: I would certainly move to accept the document with the consensus that TC39 thinks it’s the right document ... we'd prefer feedback than having them reject it outright.</p>
+<p>DH: I would certainly move to accept the document with the consensus that TC39 thinks it's the right document ... we'd prefer feedback than having them reject it outright.</p>
 <p>MS: Do we want to include just the Code of Conduct or all related documents?</p>
 <p>BT: Are you sure we want to remove the 4th paragraph about how to report problems?</p>
 <p>LBR: The question marks denote a place where we don't have an email.</p>
@@ -62,7 +62,7 @@
 <p>MM: Doesn't the same issue come up with the committee? The &quot;sub-committee&quot; may have strong feelings on these issues.</p>
 <p>AK: This is one of the reasons to have multiple members of this body.</p>
 <p>MM: Yes, but it may be an issue. All vs. 1 type of situation.</p>
-<p>AK: There's no magic bullet here. There's 9 members on the Supreme Court, e.g. This goes to Myles' point about having a robust setup to start with so you don't have to have the process discussion at the same time you have a severe issue. Ran into this at Chromium. How do you deal with something that's happening right now? …a bad situation to get yourself into.</p>
+<p>AK: There's no magic bullet here. There's 9 members on the Supreme Court, e.g. This goes to Myles' point about having a robust setup to start with so you don't have to have the process discussion at the same time you have a severe issue. Ran into this at Chromium. How do you deal with something that's happening right now? ...a bad situation to get yourself into.</p>
 <p>MPT: There's almost no way to pre-select the Code of Conduct committee. I have many personal friends with people like Brian or ??? and because of that I couldn't participate on a committee in that situation.</p>
 <p>MS: But recusal, if you had a committee of four, that's easier than trying to form a committee when the violation is reported.</p>
 <p>AWB: I don't know what the Ecma executive committee and the GA is likely to say, but I suspect that at the point where you talk about enforcement, they may step up and say &quot;that's not our job&quot;.</p>
@@ -97,7 +97,7 @@
 <a href="#conclusionresolution-review-of-code-of-conduct"><h4 id="conclusionresolution-review-of-code-of-conduct">Conclusion/Resolution</h4></a><ul>
 <li>TC39 will present the current Code of Conduct proposal to Ecma's executive committee.</li>
 </ul>
-<a href="#general"><h2 id="general">General</h2></a><p>AWB: When I said that someone should step up to being the chair, that was really addressed to the member companies.  Many member companies have people that are ideally suited to running and mediating the meetings. Please check whether your company might be willing to send such a person to these meetings.</p>
+<a href="#general"><h2 id="general">General</h2></a><p>AWB: When I said that someone should step up to being the chair, that was really addressed to the member companies. Many member companies have people that are ideally suited to running and mediating the meetings. Please check whether your company might be willing to send such a person to these meetings.</p>
 <a href="#10iiia-orthogonal-classes"><h2 id="10iiia-orthogonal-classes">10.iii.a Orthogonal Classes</h2></a><ul>
 <li><a href="https://github.com/erights/Orthogonal-Classes">https://github.com/erights/Orthogonal-Classes</a></li>
 </ul>
@@ -142,13 +142,13 @@
 <p>MM: No. It's too late for that in JS.</p>
 <p>MM: So, if you just declare a method with no keyword it's already a method on the prototype.</p>
 <p>AWB: Well we don't have a meta class......</p>
-<p>MM: That's the sense in which I mean it's too late. For those who remember enough history, JavaScript in this regard [is more?] like Smalltalk 76 than Smalltalk 80. Smalltalk 80 had a very carefully constructed meta-braid, which JavaScript does not have.  Hence &quot;static own&quot; doesn't make sense without that.</p>
+<p>MM: That's the sense in which I mean it's too late. For those who remember enough history, JavaScript in this regard [is more?] like Smalltalk 76 than Smalltalk 80. Smalltalk 80 had a very carefully constructed meta-braid, which JavaScript does not have. Hence &quot;static own&quot; doesn't make sense without that.</p>
 <p>MM: A &quot;protected&quot; attribute would go on the visibility dimension, if we ever decided to do that (which I don't recommend). There's a kind of thing that's data property like..........# sign. This is also compatible with the spirit of the proposed private and public states. The difference between the proposals would primarily be the ....</p>
 <p>MM: The beautiful thing about an initial keyword followed by name followed by initial value it looks like a declaration rater than an assignment. This gets us away from the expectation that it should have an assignment behavior.</p>
 <p>YK: I think it still hasn't fixed the factoring issue but it has fixed the pedagogical issue.</p>
-<p>MM: It also addresses another point of controversy:  should class properties be initialized as configurable or non-configurable? I thought they should be non-configurable.  But with this orthogonal pattern, it makes more sense for them to start out configurable.  &quot;own&quot; means placement on the instance, and similar items start out configurable.</p>
+<p>MM: It also addresses another point of controversy:  should class properties be initialized as configurable or non-configurable? I thought they should be non-configurable. But with this orthogonal pattern, it makes more sense for them to start out configurable. &quot;own&quot; means placement on the instance, and similar items start out configurable.</p>
 <p>AWB: In the current class design, when we place properties, when we say &quot;own&quot; we are defining a property.</p>
-<p>MM: Yes.  It's private though, it's not a property so configurability is not an issue.</p>
+<p>MM: Yes. It's private though, it's not a property so configurability is not an issue.</p>
 <p>YK: I'm happy to accept this concession, but don't understand how you arrived at it.</p>
 <p>YK: So &quot;own&quot; means &quot;configurable?&quot;</p>
 <p>MM: No, own means placement on the instance. It's already placed using defined property semantics and configurable, that should apply to other places.</p>
@@ -158,7 +158,7 @@
 <p>MM: It's consistent because...let's take &quot;own&quot; followed by method syntax or &quot;static&quot; followed by method syntax or simply method syntax with no &quot;own&quot;. The only difference between the three is the keyword or its absence. The only semantic difference should be the placement.</p>
 <p>YK: So the consisteny issue is between properties and methods. If you leave off the keyword, the property or method is configurable, it would be surprising if adding the &quot;own&quot; keyword made the item non-configurable.</p>
 <p>MM: Trying to stay within spirit of orthogonality. Main value is combinatorial space of things that might get proposed. Most points don't have strong use cases. Enough would get proposed that it would create burden. We get most of the combinatorial space without burden because each element can be understood separately. We get two further benefits for the data-property-like syntax. Comma-separated list of member names with optional initializers in one declaration. And there's also thinking ahead to how this interacts with decorators and what Alan and I are proposing: if you decorate a declaration that is declaring several members, the decorator applies to each of them.</p>
-<p>MM: There's some points in the cross-product space that are nonsensical.  We can statically reject them without causing surprise, because all accepted programs follow the consistent semantics.</p>
+<p>MM: There's some points in the cross-product space that are nonsensical. We can statically reject them without causing surprise, because all accepted programs follow the consistent semantics.</p>
 <p>Oh, I'm sorry. One more detail: The constructor!</p>
 <p>The constructor has to be specified as method-like.</p>
 <p>YK: &quot;Method-like syntax&quot;, can you clarify? I've read the document and I understand...I was thinking concise methods might eventually happen. We had a proposal before where you did not have to put curlies (??).</p>
@@ -185,7 +185,7 @@
 <p>MM: Any objection?</p>
 <p>BT: I have a number of points, but let's let Dan go first.</p>
 <p>DE: My intuition is that this is one more dimension than what might be the common understanding of objects. This dimension of &quot;own&quot; vs. being on the prototype is definitely there, but the way that we look at classes, we don't have to think about adding the method to the prototype. With the public and private fields proposal, and the private methods straw-man, it sort of retains this property. You don't have to be explicit about the prototype vs. the instance. This is intuitive and fuzzy but seems important. Talking about &quot;owned&quot; vs. &quot;notowned&quot; gets into the weeds and will confuse people. I'm espcially concerned about non/owned methods. People might think they are supposed to put &quot;owned&quot; on everything, which would be hard to optimize.</p>
-<p>MM: I understand the point.  The philosophy I bring to language design is represented by goals 8 and 9: be understandable in a shallow and wide sense and invite understanding to become deeper and narrower.  JS is good at that now. New people learn patterns initially but then over time they can learn the deeper semantics. The dominant use cases would be the reasonable common ones. The regularities suggest to people where they can explore deeper and find additional ways to use the system. [MM/MARKM: review and edit this]</p>
+<p>MM: I understand the point. The philosophy I bring to language design is represented by goals 8 and 9: be understandable in a shallow and wide sense and invite understanding to become deeper and narrower. JS is good at that now. New people learn patterns initially but then over time they can learn the deeper semantics. The dominant use cases would be the reasonable common ones. The regularities suggest to people where they can explore deeper and find additional ways to use the system. [MM/MARKM: review and edit this]</p>
 <p>YK: I agree completely with that philosophy.</p>
 <p>AWB: ... Irregularities that for example are in the present proposals.</p>
 <p>MM: The proposal uses syntax like x = 3 to declare a property on the instance.</p>
@@ -204,9 +204,9 @@
 <p>WH: How would you put a data property on a prototype in this proposal? I understand that this is a rare case and you don't want to allow it by accident if someone omits the keyword, but if you do fall into that rare case, how would you do it?</p>
 <p>MM: You would create those imperatively, like you do now, instead of using declarative syntax.</p>
 <p>AWB: An idea kicked around is possibility of static initializer in a class body, at class definition time. The logic of putting a real data property on the prototype is so rare...that it doesn't deserve having syntax.</p>
-<p>DE: At a high level I like the goals about orthogonality. Aside from that big developer intuition thing, I'm not sure about adding &quot;own methods&quot;.  It seems a potential source of confusion and is redundant with property initializers.  They could end up being confusing.  The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.</p>
-<p>DE: There's also an example of having an &quot;own private&quot; method.  Maybe this would be in conjunction with lexically scoped methods in class bodies.  I'm concerned if the first private method thing that we add is &quot;own&quot;, it would catch on and be hard to optimize.  Might we consider excluding that case?</p>
-<p>MM: If we decided to prohibit those cases, that would still be consistent with this approach, it would just knock more members out of the cross-product.  I would consider that to be negotiable.  I also want to say that at every moment there is something concrete being proposed.  Thus, the concrete proposal is that methods stay in the cross product but constructors are not included in the cross product.</p>
+<p>DE: At a high level I like the goals about orthogonality. Aside from that big developer intuition thing, I'm not sure about adding &quot;own methods&quot;. It seems a potential source of confusion and is redundant with property initializers. They could end up being confusing. The big use case I've heard about is people wanting bound methods, which this proposal doesn't provide.</p>
+<p>DE: There's also an example of having an &quot;own private&quot; method. Maybe this would be in conjunction with lexically scoped methods in class bodies. I'm concerned if the first private method thing that we add is &quot;own&quot;, it would catch on and be hard to optimize. Might we consider excluding that case?</p>
+<p>MM: If we decided to prohibit those cases, that would still be consistent with this approach, it would just knock more members out of the cross-product. I would consider that to be negotiable. I also want to say that at every moment there is something concrete being proposed. Thus, the concrete proposal is that methods stay in the cross product but constructors are not included in the cross product.</p>
 <p>AWB: An important thing about the matrix here is understanding the orthogonality. The more holes knocked into it, the harder it is to get the concept. Private methods...the utility is low but we left it in proposal to fill in matrix as much as possible. Was hoping we'd have something like lexically-scoped ...?</p>
 <p>WH: Lexical scoped function.... could you clarify what you mean?</p>
 <p>AWB: Since classes now have lexical scopes. There's no reason you couldn't have function declarations inside of their lexical scope.</p>
@@ -214,7 +214,7 @@
 <p>MM: The reason I'm resisting knocking out methods is exactly what Allen says. Once you have an orthogonal framework. Once you knock it out, everything has a ....</p>
 <p>DT: It's useful like Dan where he's mentioning these things, let's not chase down resolving particular ones. With respect to going to stage 1, these don't have to be decided now. Want to be sure we don't deep dive.</p>
 <p>DE: I'm not sure what to do as the champion as the private state proposal if we decide go ahead with this.</p>
-<p>DE: There was a subproblem:  it could be confusing if you have a property declaration goes onto the instance and a method declaration goes on the prototype.  We could solve just that subproblem without introducing this entire matrix by adding the &quot;own&quot; keyword.  We could do that along the way to adding private methods.  The thing that's good about having public/private support explicitly rather than using lexical methods is that you don't have to change call sites (e.g., by passing &quot;this&quot;) in order to change visibility.</p>
+<p>DE: There was a subproblem:  it could be confusing if you have a property declaration goes onto the instance and a method declaration goes on the prototype. We could solve just that subproblem without introducing this entire matrix by adding the &quot;own&quot; keyword. We could do that along the way to adding private methods. The thing that's good about having public/private support explicitly rather than using lexical methods is that you don't have to change call sites (e.g., by passing &quot;this&quot;) in order to change visibility.</p>
 <p>YK: There's a general point I want to make about if this is even an ok proposal is this an OK time for that?</p>
 <p>Multiple: No.</p>
 <p>MM: This proposal cross-cuts a lot of existing proposals and the whole process architecture does not accomodate that. I think that's a bug. We all know as language designers that we need to be raising cross-cutting concerns and have a way of dealing with issues that cross-cut. I'm going to leave those procedural issues to AWB.</p>
@@ -225,15 +225,15 @@
 <p>DE: I can write up a doc for the next meeting about the state that we are at for the cross-cutting considerations.</p>
 <p>AWB: What we are asking for as this being stage 1 is really figuring out how this integrates with the other proposals. We actually considered just filing this as issues, but it would get lost at the issue level for those proposals for something that is an overriding thing. That's why we did it in this form.</p>
 <p>BT: I think on the recent topic of process, it seems strange to me that stage 1 means we are giving consensus to change stage 3 proposals.</p>
-<p>MM: I agree that's what stage 1 means.  We could propose this as an amendment to the private state proposal, but it seemed to deserve due process.</p>
+<p>MM: I agree that's what stage 1 means. We could propose this as an amendment to the private state proposal, but it seemed to deserve due process.</p>
 <p>BT: Right, I brought this up to suggest that stage 1 is not a high bar.</p>
 <p>MS: This would subsume private state?</p>
 <p>AWB: This would probably combine with private state and public field proposals.</p>
 <p>DE: I'm not sure how to proceed as the champion of the private state proposal. I think it would be reasonable to file issues within the proposals to have all of the discussion. Making it a separate proposal. How can we have multiple state proposals is a bit of a weird state to be in.</p>
 <p>DT: It seems like it's approximately both. The idea of doing this consistent thing seems good, we should discuss. There are champions of current proposals, championing their use case. We should make things consistent across the use cases. As the consolidated thing catches up, then we can decide whether or not to merge it. We don't have to couple them so strongly.</p>
-<p>AWB: To some degree both the public state and private state proposals were stalled at stage 2, but there were enough issues with the edge cases that they were having trouble advancing to stage 3.  Take this as an offer and approach to being able to advance them all.</p>
+<p>AWB: To some degree both the public state and private state proposals were stalled at stage 2, but there were enough issues with the edge cases that they were having trouble advancing to stage 3. Take this as an offer and approach to being able to advance them all.</p>
 <p>DE: I don't think there are that many issues. At the last meeting I laid out the issues that were open, we disagree about them, but there's a small number of issues. I would like to be able to have a discussion about which syntax we like better: the one that ?? and I are championing or this one so that we can decide and we can advance one of the syntaxes.</p>
-<p>AK: This reminds me of the discussion of decorators and annotations.  We could have had them advancing together, racing to get the &quot;@&quot; symbol usage.  But that would have been bad.  Having multiple competing proposals seems like a bad thing.</p>
+<p>AK: This reminds me of the discussion of decorators and annotations. We could have had them advancing together, racing to get the &quot;@&quot; symbol usage. But that would have been bad. Having multiple competing proposals seems like a bad thing.</p>
 <p>MM: When it's procedurally possible, I will propose merging the proposals.</p>
 <p>DE: We've discussed this multiple times in the past, and had reasons to not merge the proposals.</p>
 <p>WH: Have we resolved the cross-cutting issues with syntax?</p>
@@ -245,11 +245,11 @@
 <p>DE: But we identified all the issues...</p>
 <p>MM: Independent of .... with a proposal for an orthogonal syntactic framework which points out all of these different cases. As long as this is viable ... this should absorb the syntactic issues from the other proposals. Then the other proposals, such as &quot;what specifically does a private property mean...independent of placement&quot; are semantics that can be individually worked out in the separate proposals.</p>
 <p>DE: I'd like to hear from people who have actual feedback.</p>
-<p>BT: If I can get to my actual points. When you sent the mail about this proposal, I became extremely excited about it. I could see how the syntax aligned with my mental model of the object model.  And then I went and talked to some JS developers and universally the reaction was viscerally negative.  They partly reacted to the &quot;own&quot; keyword. A lot of developers don't have a...</p>
+<p>BT: If I can get to my actual points. When you sent the mail about this proposal, I became extremely excited about it. I could see how the syntax aligned with my mental model of the object model. And then I went and talked to some JS developers and universally the reaction was viscerally negative. They partly reacted to the &quot;own&quot; keyword. A lot of developers don't have a...</p>
 <p>MM: Was it the &quot;own&quot; keyword or something else?</p>
-<p>BT: The presence of  keyword was the biggest problem. Coming from current programs where you can do data properties without a keyword, saying &quot;add this keyword for your 99% use case&quot; was not an easy sell.  there's an arguent to be made that members today and new members tomorrow have default placement that makes sense.  So allowing the implementation to place members based on the kind of member is worth more than the orthogonality.  There's other issues, e.g., per instance and per class allocation semantics.</p>
-<p>WH: You said you liked the &quot;own&quot; keyword but found users don't like it.  But at the last meeting we had users who don't like NOT having a keyword on a definition (because it makes it look too much like assignment) so we have users on both sides of this issue. How do we reconcile them?</p>
-<p>MF: Well there are other options like &quot;:=&quot;.   They weren't complaining about the lack of a keyword, they were complaining about the similarity to assignment.</p>
+<p>BT: The presence of  keyword was the biggest problem. Coming from current programs where you can do data properties without a keyword, saying &quot;add this keyword for your 99% use case&quot; was not an easy sell. there's an arguent to be made that members today and new members tomorrow have default placement that makes sense. So allowing the implementation to place members based on the kind of member is worth more than the orthogonality. There's other issues, e.g., per instance and per class allocation semantics.</p>
+<p>WH: You said you liked the &quot;own&quot; keyword but found users don't like it. But at the last meeting we had users who don't like NOT having a keyword on a definition (because it makes it look too much like assignment) so we have users on both sides of this issue. How do we reconcile them?</p>
+<p>MF: Well there are other options like &quot;:=&quot;. They weren't complaining about the lack of a keyword, they were complaining about the similarity to assignment.</p>
 <p>DH: Can we forget that := was ever brought up?</p>
 <p>DH: I have a hard time believing that the similarity to assignment is actually a source of confusion.</p>
 <p>DH: There's an expectation about different constructs. When I think about a private data property, I expect that to be on the instance. To have to say that every time seems like it's too verbose for the common case.</p>
@@ -343,7 +343,7 @@
 <li>consensus to accept this PR</li>
 </ul>
 <a href="#854-remove-implementation-defined-behavior-for-number-methods"><h3 id="854-remove-implementation-defined-behavior-for-number-methods"><a href="https://github.com/tc39/ecma262/pull/854">#854 Remove Implementation-defined behavior for Number methods</a></h3></a><p><code>Number.toFixed()</code>/<code>toPrecision</code>/<code>toExponential</code></p>
-<p>AWB: When I looked at it, it looked like it was a superfluous paragraph with those three methods.  When I looked at the spec these all just looked superfluous.</p>
+<p>AWB: When I looked at it, it looked like it was a superfluous paragraph with those three methods. When I looked at the spec these all just looked superfluous.</p>
 <p>BT: But this...I agree with that notion, this PR amounts to deleting those extra paragraphs that you mentioned.</p>
 <p>AWB: It felt more like old boilerplate code, like maybe it was just some common practice to add this language.</p>
 <p>WH: Where is this language?</p>
@@ -391,7 +391,7 @@
 <p>BT: Any objections to taking this PR?</p>
 <p>LBR: If we accept this we will have breaking tests.</p>
 <p>BT: We have a needs-tests label. Feel free to apply it.</p>
-<p>BT: I updated permissions to ecma262 so that delegates have ability to add labels to ecma262 issues and to close issues and pull requests and to push branches, which I think will be helpful in the next year.</p>
+<p>BT: I updated permissions to ECMA-262 so that delegates have ability to add labels to ECMA-262 issues and to close issues and pull requests and to push branches, which I think will be helpful in the next year.</p>
 <p>AK: Need to be clear about what kind of comparison is used when things are added.</p>
 <p>WH: This is a one-line change?</p>
 <p>BT: Roughly I think so yeah, you could expand that one line into a loop with explicit? checks.</p>

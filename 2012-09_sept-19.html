@@ -24,9 +24,9 @@
 <a href="#revokable-proxies"><h2 id="revokable-proxies">Revokable Proxies</h2></a><p>TVC: The Problem</p>
 <p>In a nutshell: with direct proxies, one can no longer write a caretaker proxy that nulls out a pointer to its target once revoked. This means that the target can no longer be garbage-collected separately from its proxy.</p>
 <p>As pointed out by David Bruant, caretakers are often useful precisely for memory management, where one uses revocation of the caretaker to release the underlying resources, as described here.</p>
-<p>Such caretakers were easy to define in the old Proxy design, since the link between a proxy and its target was fully under the control of the handler (i.e. fully virtual). However, with direct proxies, the proxy has a built-in, immutable reference directly to its target. This reference can’t be modified or nulled out.</p>
+<p>Such caretakers were easy to define in the old Proxy design, since the link between a proxy and its target was fully under the control of the handler (i.e. fully virtual). However, with direct proxies, the proxy has a built-in, immutable reference directly to its target. This reference can't be modified or nulled out.</p>
 <p>Proposed Solution</p>
-<p>Provide an extension to the Proxy API that allows scripts to null out the proxy-target reference. Of course, the API must be designed with care so that this link can’t be nulled out by any old client of the proxy. Only the creator of the proxy should have the right to revoke it.</p>
+<p>Provide an extension to the Proxy API that allows scripts to null out the proxy-target reference. Of course, the API must be designed with care so that this link can't be nulled out by any old client of the proxy. Only the creator of the proxy should have the right to revoke it.</p>
 <p>Because revokable proxies appear to be a niche abstraction, we propose to introduce a separate Proxy constructor dedicated to creating revokable proxies. Proxies created with the regular Proxy constructor would remain unrevokable.</p>
 <p>Proposal:</p>
 <ul>
@@ -187,10 +187,10 @@ MyClass.prototype[secret] = <span class="hljs-function"><span class="hljs-keywor
 <li>Permitted same key to duplicate</li>
 <li>Future hostile: ties prop def to indexing (See: object model reformation)</li>
 </ul>
-<a href="#proposal-at-names"><h3 id="proposal-at-names">Proposal At-Names</h3></a><p><a href="https://members.ecma-international.org/get.php?group=TC39&amp;file=2012_sub_tc39-2012-066.pdf">Slides</a></p>
-<ul>
-<li>An At-Names is an IdentifierName that is lexically prefixed with @</li>
-<li>At-Names are const bound to Name values by new declaration forms</li>
+<a href="#proposal-at-names"><h3 id="proposal-at-names">Proposal At-Names</h3></a><ul>
+<li><p><a href="https://members.ecma-international.org/get.php?group=TC39&amp;file=2012_sub_tc39-2012-066.pdf">slides</a></p></li>
+<li><p>An At-Names is an IdentifierName that is lexically prefixed with @</p></li>
+<li><p>At-Names are const bound to Name values by new declaration forms</p></li>
 </ul>
 <pre><code class="language-js">name @x, @y;
 priv @secret;

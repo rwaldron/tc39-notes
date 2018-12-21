@@ -58,7 +58,7 @@ Yes, seconded</p>
 <p>YK: There was feedback, but no action</p>
 <p>RWN: There have been many updates and if there were issues, that was on you to follow up... If there is criticism, it needs to be on record.</p>
 <p>AWB: In addition to meeting notes record, file bugs to track progress</p>
-<p>YK: In general, if there are concerns, there’s two sides: person A thinks “I should push harder” vs. person B saying “that’s fine” without giving it much thought</p>
+<p>YK: In general, if there are concerns, there's two sides: person A thinks &quot;I should push harder&quot; vs. person B saying &quot;that's fine&quot; without giving it much thought</p>
 <p>AWB: Still need to be more active reviewing in the committee.</p>
 <p>Relevant: <a href="https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-09/sept-19.md#7-objectobserve-status-report">https://github.com/rwaldron/tc39-notes/blob/master/es6/2013-09/sept-19.md#7-objectobserve-status-report</a> (incomplete notes about the
 discussion about filtering in general)</p>
@@ -66,7 +66,7 @@ discussion about filtering in general)</p>
 <li>RWS withdrawing request for stage 3</li>
 <li>YK commits to prioritize working through remaining issues prior to next meeting.</li>
 <li>RW commits to reviewing for spec mechanics</li>
-<li>AWB: “Don’t approve stuff without reading the spec text, dammit” :)</li>
+<li>AWB: &quot;Don't approve stuff without reading the spec text, dammit&quot; :)</li>
 </ul>
 <a href="#royalty-free-status"><h2 id="royalty-free-status">Royalty Free Status</h2></a><p>(István Sebestyén)</p>
 <p>JN: (recaps decisions)</p>
@@ -145,7 +145,7 @@ Summary</p>
 <p>WH: Examples of whitelisting?</p>
 <p>RH: Math.sin</p>
 <p>WH: Calculating the sine might be parallelizable, but are the lookup of the name and object used to invoke it parallelizable? My biggest concerns are with the glue stuff such as variable and object accesses, which might hit a proxy, observer, or whatnot.</p>
-<p>RH: It’s a QoS issue. Start with everything blacklisted, then let implementations figure out what to optimize/whitelist.</p>
+<p>RH: It's a QoS issue. Start with everything blacklisted, then let implementations figure out what to optimize/whitelist.</p>
 <p>WH: If I dont know what the impl does, what am i allowed to do to stay in this efficient realm</p>
 <p>NM: Building tools that will help developers see what operations are causing de-opts, general jit feedback</p>
 <p>MM: With the JIT optimization, you're comfortable knowing the jit will do its job</p>
@@ -204,10 +204,10 @@ Summary</p>
 <p>MM, WH: Why do the arrows on the slide cross? Why require reduce combinators to be commutative?</p>
 <p>NM: For parallelism.</p>
 <p>MM, WH: Why? Only associative is needed for parallelism.</p>
-<p>TS: eg. if you try to do addition, 100 threads on GPU and doing addition as atomic operation, can’t guarantee commutativity</p>
+<p>TS: eg. if you try to do addition, 100 threads on GPU and doing addition as atomic operation, can't guarantee commutativity</p>
 <p>WH: If you're able to compile the reduce operation into an atomic add, just do it. If you know enough to compile it into an atomic add, you also know that atomic add is commutative.</p>
 <p>WH: If you have something more complex, assume it's associative but don't assume it's commutative. It significantly limits the applicability of the algorithms.</p>
-<p>NM: I’ll do some more measurements and come back with data.</p>
+<p>NM: I'll do some more measurements and come back with data.</p>
 <p>MM: When the elemental function is commutative, in that case, use whatever technique you want to preserve associativity</p>
 <p>YK: You may want to allow people to say that</p>
 <p>WH: I want to see, in practice, if that makes a difference</p>
@@ -302,7 +302,7 @@ Summary</p>
 <a href="#conclusionresolution-bug-1571-regexp-syntax"><h4 id="conclusionresolution-bug-1571-regexp-syntax">Conclusion/Resolution</h4></a><ul>
 <li>Roll back the ES5 change</li>
 </ul>
-<a href="#change-escapesequence-0-lookahead-∉-decimaldigit-to-match-reality"><h2 id="change-escapesequence-0-lookahead-∉-decimaldigit-to-match-reality">Change “EscapeSequence 0 [lookahead ∉ DecimalDigit]” to match reality</h2></a><p><a href="https://bugs.ecmascript.org/show_bug.cgi?id=1553">https://bugs.ecmascript.org/show_bug.cgi?id=1553</a></p>
+<a href="#change-escapesequence-0-lookahead-∉-decimaldigit-to-match-reality"><h2 id="change-escapesequence-0-lookahead-∉-decimaldigit-to-match-reality">Change &quot;EscapeSequence 0 [lookahead ∉ DecimalDigit]&quot; to match reality</h2></a><p><a href="https://bugs.ecmascript.org/show_bug.cgi?id=1553">https://bugs.ecmascript.org/show_bug.cgi?id=1553</a></p>
 <p>AWB: Strict mode explicitly disallows octal escapes.</p>
 <p>MB: Technically <code>\08</code> isn't an octal escape sequence though since <code>8</code> is not an octal digit; not sure if the strict mode rule applies</p>
 <p>LH: We should take this offline</p>
@@ -313,7 +313,7 @@ Summary</p>
 <li>Follow up on the bug report
 (AWB: who/how?  Action items without names don't get done...)</li>
 </ul>
-<a href="#implementation-dependencies-in-stringprototypereplace"><h2 id="implementation-dependencies-in-stringprototypereplace">Implementation Dependencies in String.prototype.replace</h2></a><p>AWB: 21.1.3.14 &quot;Table 40 — Replacement Text Symbol Substitutions&quot;: someone should research what implementations do here (any differences or “web reality” to match?)</p>
+<a href="#implementation-dependencies-in-stringprototypereplace"><h2 id="implementation-dependencies-in-stringprototypereplace">Implementation Dependencies in String.prototype.replace</h2></a><p>AWB: 21.1.3.14 &quot;Table 40 — Replacement Text Symbol Substitutions&quot;: someone should research what implementations do here (any differences or &quot;web reality&quot; to match?)</p>
 <p>This issue dates back to ES3</p>
 <a href="#conclusionresolution-implementation-dependencies-in-stringprototypereplace"><h4 id="conclusionresolution-implementation-dependencies-in-stringprototypereplace">Conclusion/Resolution</h4></a><ul>
 <li>LH to follow up</li>
@@ -511,8 +511,8 @@ No reason to rush, this is an ES7 thing.</p>
 <p>BT: Rick and I have been doing this</p>
 <p>DL: V8 team can assist as well</p>
 <p>BT: Will need to support a variety of disparate test systems</p>
-<p>MB: What about Annex B tests? They’d have to run in a browser; test runner needs to support that somehow.</p>
-<p>MM: Detect Annex B features, then if they’re present, test if they behave as per the spec, if not, fail silently.</p>
+<p>MB: What about Annex B tests? They'd have to run in a browser; test runner needs to support that somehow.</p>
+<p>MM: Detect Annex B features, then if they're present, test if they behave as per the spec, if not, fail silently.</p>
 <p>BT: Continue to report test coverage gaps.</p>
 <a href="#conclusionresolution-test262-update"><h4 id="conclusionresolution-test262-update">Conclusion/Resolution</h4></a><ul>
 <li>BT to publish test criteria/guidelines</li>

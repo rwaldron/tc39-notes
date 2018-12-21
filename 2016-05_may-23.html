@@ -68,7 +68,7 @@ which have this sort of semantics.</p>
 <p>WH; So they cannot see any of the class properties?</p>
 <p>BT: Correct.</p>
 <p>EF: What happens when decorators are not in the picture? Seems like it just means that statics happen at the end. Let's tweeze these two things apart.</p>
-<p>YK: It will be clarifying to think through the complete picture with decorators, but you are right.  A lot of this is spec factoring, but this is very important to expose to decorators.</p>
+<p>YK: It will be clarifying to think through the complete picture with decorators, but you are right. A lot of this is spec factoring, but this is very important to expose to decorators.</p>
 <p>BT: Slide edit to insert step 11 where decorator transformations are run after static elements are installed onto the class in order by evaluating initializers</p>
 <p>WH: Isn't it problematic that you have static element initializers run, with access to the class, when the constructor is not in TDZ? What if an exception is thrown in step 10? To be more concrete, ...</p>
 <p>MM just now gave an example of a decorator that freezes the class. If one of the static initializers in step 10 throws and someone catches it, the class will be defined but never be frozen.</p>

@@ -114,13 +114,13 @@ See <a href="http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html">http://www
 <p>MH: The first thing I do in a click handler is to ask for a zone and do all the work in it.</p>
 <p>MM: Okay.</p>
 <p>YK: I agree that you could make these be trees, but I think it's bad that you can't handle multiple sources.</p>
-<p>DD: Disagree as apps aren't trying to track this.  We can take this offline to discuss more though.</p>
+<p>DD: Disagree as apps aren't trying to track this. We can take this offline to discuss more though.</p>
 <p>YK: the concern that i have, is that causality and execution branching are intermixed. Frameworks will be the same place we are today, enumerating all the potential entry points.</p>
 <p>MH: I'm having a hard time understanding</p>
 <p>YK: do you enumerate all eventHandlers?</p>
 <p>MH: no</p>
 <p>MH: I want to make sure angular knows about everything, a second problem is to track user behavior flow. I would argue this requires hand tuning.</p>
-<p>MH: Usually, zones trigger on router changes.  App changes route and a new zone handles tracking from there.</p>
+<p>MH: Usually, zones trigger on router changes. App changes route and a new zone handles tracking from there.</p>
 <p>WH: How do zones interact with iterators and generators? What happens if you start one from zone A and then call next from zone B?</p>
 <p>DD: you suspect the execution context from the generator</p>
 <p>MH: is this not the same as async</p>
@@ -129,7 +129,7 @@ See <a href="http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html">http://www
 <p>MH: presents a strawman &quot;slide: MVP API&quot;</p>
 <p>MH this is missing error handling, but that is handled by zone spec. Zone spec describes the details.</p>
 <p>DD: having the fully customized wrap may not make it, as it makes some of us nervous.</p>
-<p>MH: You get to wrap the callback into the wrap, but at the end of the day you don't get to override the Zone.  Fundamentally, the result will be on the zone that was wrapped.</p>
+<p>MH: You get to wrap the callback into the wrap, but at the end of the day you don't get to override the Zone. Fundamentally, the result will be on the zone that was wrapped.</p>
 <p>DD: Browser engineers are very unhappy about having to call code whenever setTimeout is called</p>
 <p>YK: await having to do this is quite scary.</p>
 <p>YK: if you don't monkey patch the world, the platform can be performant. This makes it somewhat scary.</p>
@@ -151,15 +151,15 @@ See <a href="http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html">http://www
 <p>DD: i think this is solvable, but the cross realm point is a good catch. We will need to explore this.</p>
 <p>...: Examples have a then block presented statically, if the function</p>
 <p>MM: it is the registration of the callback not the instantiation of the promise nor the function.</p>
-<p>DH: I have questions about intra-thread uses of the API.  Two questions:</p>
-<pre><code>1. You have .get but not .set you can put immutable things in the .get so I'm not sure what it buys you to make it immutable.  
+<p>DH: I have questions about intra-thread uses of the API. Two questions:</p>
+<pre><code>1. You have .get but not .set you can put immutable things in the .get so I'm not sure what it buys you to make it immutable. 
 </code></pre>
 <p>MH: One property I'd like to have is that for apps that expect zone behavior, when you fork a child zone, application should behave the same way as without the fork.</p>
-<p>DH: Only true if users don't mutate things.  Is it vital for the language to enforce this guarantee?</p>
-<p>MH: You can certainly override a property and that COULD break behavior.  If code running in a child zone could mutate the parent then you couldn't see it in the parent.</p>
+<p>DH: Only true if users don't mutate things. Is it vital for the language to enforce this guarantee?</p>
+<p>MH: You can certainly override a property and that COULD break behavior. If code running in a child zone could mutate the parent then you couldn't see it in the parent.</p>
 <p>DH: I didn't understand</p>
-<p>DD: I'll rephrase -- if you allow children to set new properties, then they don't share the idea across the boundary.  This is more of a path we want to guide you down rather than a path that must be enforced.</p>
-<p>DH: I have a question that may clarify around lack of .set.  There's history for other languages with TLS with use cases for what has historically been achieved through dynamic scope.  A concrete example program would be a recursive descent JS parser.  You have certain context being passed around like the labeles currently in scope.  Only used a few places in the parser.  It's a total pain to keep track.  Other option is to use an OO pattern to carry context in a class/object so it's still explicit, but it's shrunk to one place.  Another mechanism is to use a TLS (thread local storage) like mechansim or dynamic scoping so this becomes implicit.  Only operations that need to access the state go through this.  One answer could be we disavow this and say the OO way is the right way to do this.  Another answer is to say this (zone) is right for doing this.  Creating new zones is a heavy-weight api.  Is there a lightweight user-land abstraction?  Is there no place for .set there?</p>
+<p>DD: I'll rephrase -- if you allow children to set new properties, then they don't share the idea across the boundary. This is more of a path we want to guide you down rather than a path that must be enforced.</p>
+<p>DH: I have a question that may clarify around lack of .set. There's history for other languages with TLS with use cases for what has historically been achieved through dynamic scope. A concrete example program would be a recursive descent JS parser. You have certain context being passed around like the labeles currently in scope. Only used a few places in the parser. It's a total pain to keep track. Other option is to use an OO pattern to carry context in a class/object so it's still explicit, but it's shrunk to one place. Another mechanism is to use a TLS (thread local storage) like mechansim or dynamic scoping so this becomes implicit. Only operations that need to access the state go through this. One answer could be we disavow this and say the OO way is the right way to do this. Another answer is to say this (zone) is right for doing this. Creating new zones is a heavy-weight api. Is there a lightweight user-land abstraction?  Is there no place for .set there?</p>
 <p>YK: why not just provide set</p>
 <p>MH: get will walk up the hirachy but set will not hence get/set are not symmetric.</p>
 <p>YK: sounds like prototypes</p>
@@ -176,12 +176,12 @@ See <a href="http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html">http://www
 <p>DT: If A passes a zone to B and then to C, A could arrange so that B could change the state the C sees. A may want to arrange so that they are isolated very specifically. A needs to be sure, B cannot interfere with C etc. If we add set, A would need to add many defensive layers in-case of a malicious actor.</p>
 <p>YK: a symmetrical problem is users may not realize the deep mutability.</p>
 <p>SP: think prototype.value = {}  vs prototype.value = 1;, the former shares state the later cannot.</p>
-<p>MH: I feel zones are more like an observer like a logging service.  They get to watch over how an app runs and notify you to do something about it.  Whether it's there or not, the app should function the same way.</p>
+<p>MH: I feel zones are more like an observer like a logging service. They get to watch over how an app runs and notify you to do something about it. Whether it's there or not, the app should function the same way.</p>
 <p>DH: maybe the answer if you are using thread local dynamic scoping, it should not be built on top of zones.</p>
 <p>YK: Arriving at &quot;you should not put mutable objects there&quot; is good. (referring to values passed into the zone)</p>
-<p>MM: The proposal as it stand, there are some good goals that we should seek a way to address.  Kudos on the good goals.  The mechanisms as proposed combine several nightmares -- mutable global state, dynamic scoping, and before/after hooks. Before/after hooks reminds me of the nightmare of aspect oriented programming. They introduce an attack vector of invoking someone else's code during a turn while invariants are supended. Classically a thread is a sequential program, TLS (thread local storage) is a global variable for that sequential program.  In TC39, we have successfully avoided global state -- if you lock down all the primordials, everything still works so far. We must keep that property.  LISP has dynamic scoping.  Scheme has fluid scoping. In Fluid scoping, thing that changes depending on the context you're in is the value of a lexical variable.  You cannot see the values or rebind that var if you're not in the lexical scope.  The strings are worse than classical dynamic scoping because the program can calculate the strings.  Making them something first class or record based -- we should look how to restrict how you name those things.  Otherwise you have a truly global variable.</p>
+<p>MM: The proposal as it stand, there are some good goals that we should seek a way to address. Kudos on the good goals. The mechanisms as proposed combine several nightmares -- mutable global state, dynamic scoping, and before/after hooks. Before/after hooks reminds me of the nightmare of aspect oriented programming. They introduce an attack vector of invoking someone else's code during a turn while invariants are supended. Classically a thread is a sequential program, TLS (thread local storage) is a global variable for that sequential program. In TC39, we have successfully avoided global state -- if you lock down all the primordials, everything still works so far. We must keep that property. LISP has dynamic scoping. Scheme has fluid scoping. In Fluid scoping, thing that changes depending on the context you're in is the value of a lexical variable. You cannot see the values or rebind that var if you're not in the lexical scope. The strings are worse than classical dynamic scoping because the program can calculate the strings. Making them something first class or record based -- we should look how to restrict how you name those things. Otherwise you have a truly global variable.</p>
 <p>YK: if you are too restrictive, people will end up virtualizing again.</p>
-<p>MM: If you have fluid variables, you don't need to reinvent dynamic variables.  They're still bad, but less bad.  I'm firmly on the lexical scoping side of the debate.</p>
+<p>MM: If you have fluid variables, you don't need to reinvent dynamic variables. They're still bad, but less bad. I'm firmly on the lexical scoping side of the debate.</p>
 <p>YK: i think everyone agrees with that. Lexical scoping is the 99.9% case, some things don't quite fit in that. You can use globals or OO, all of them have issues. If you end up restricting, users will end up approximating the same thing.</p>
 <p>MM: for most of the motivating problems for dynamic scoping, if rethought, lexical scoping patterns typically address the issues nicely.</p>
 <p>YK: Who is the one rethinking it?  If it's an app developer, they won't end up doing it.</p>
@@ -191,7 +191,7 @@ See <a href="http://www.hpl.hp.com/techreports/2009/HPL-2009-78.html">http://www
 <p>DH: I think it's well motivated problem.</p>
 <p>YK: well motivated problem</p>
 <p>MM: if I endorse some of the goals but not the mechanisms, can I approve stage 0?</p>
-<p>DD: Yes, and we encourage collaboration with the champions.  Just want to move to stage zero if we can.</p>
+<p>DD: Yes, and we encourage collaboration with the champions. Just want to move to stage zero if we can.</p>
 <p>YK: Stage zero seems fine.</p>
 <a href="#conclusionresolution-5i-zones"><h4 id="conclusionresolution-5i-zones">Conclusion/Resolution</h4></a><ul>
 <li>Stage 0 approved</li>
@@ -593,7 +593,7 @@ could <span class="hljs-builtin-name">print</span> 0.
 <p>BE: why would we look for devices to cripple the spec</p>
 <p>MM: has someone reached out to the samsung folks</p>
 <p>DH: I believe they implemented something that may support it all: <a href="https://github.com/Samsung/jerryscript">https://github.com/Samsung/jerryscript</a></p>
-<a href="#conclusion-5xi-daniel-presenting-simd-changes-since-december"><h4 id="conclusion-5xi-daniel-presenting-simd-changes-since-december">Conclusion</h4></a><ul>
+<a href="#conclusionresolution-5xi-daniel-presenting-simd-changes-since-december"><h4 id="conclusionresolution-5xi-daniel-presenting-simd-changes-since-december">Conclusion/Resolution</h4></a><ul>
 <li>successfully delivered the update to the committee</li>
 </ul>
 

@@ -230,7 +230,7 @@ Included for symmetry.</p>
 <li><a href="https://docs.google.com/presentation/d/1JlVOkn21jyF4YlsxBeisfvyYKzf5AZYNUzrUeZD12CQ/edit#slide=id.g2e1d914bb7_0_62">slides</a></li>
 </ul>
 <p>ZB: two intl will be presented tomorrow, when we have more time, two willl be presented now, less controversial</p>
-<p>ZB: Intl.Segmenter: already stage 3, got approval from ecma402? during last call.</p>
+<p>ZB: Intl.Segmenter: already stage 3, got approval from ECMA-402? during last call.</p>
 <p>DE: in the call we discusesd adding another option</p>
 <p>ZB: We talked about more options including specifying the break algorithm, decided against that because (?). Any questions?</p>
 <p>ZB: just wanted to give you an update, not asking for advancement</p>
@@ -303,7 +303,7 @@ TODO(yehuda): please fill in</p>
 <p>MBS: use cases: dynamic dependency pathing: <code>const strings = await import(`/i18n/${navigator.language}`);</code></p>
 <p>MBS: resource initialization: <code>const connection = await dbConnector();</code> Lets modules represent resources and produce errors, instead of putting all of your code inside the on()</p>
 <p>MBS: dependency fallbacks: <code>try { jquery = await import (cdnB); ... import(cdnB) }</code></p>
-<p>MBS: constraint: halting progress: A would halt in the graph until resolved, B doesn't block sibling execution, as long as there are no cycles, everything else gets executed.  I like the idea of being able to statically analyze the graph and identify which nodes are dirty.</p>
+<p>MBS: constraint: halting progress: A would halt in the graph until resolved, B doesn't block sibling execution, as long as there are no cycles, everything else gets executed. I like the idea of being able to statically analyze the graph and identify which nodes are dirty.</p>
 <p>DD: this is way better than SyncXHR</p>
 <p>MBS: C limits progress halting to the root node. Most problems with halting are resolved in C</p>
 <p>MBS: existing ways to halt progress: infinite loops, Atomics.wait, infinite recursion, all lock the thread in various ways. We can teach best practices to get people to not do these, and also how to use top-level await properly</p>
@@ -467,7 +467,7 @@ TODO(yehuda): please fill in</p>
 <p>BE: no, if we're only recommending a specific style, we're doing it wrong (relying on manual best effort when that breaks down at scale). The question is not how minimal of a style recommendation to make, but whether any style recommendation is useful.</p>
 <p>YK: it literally says &quot;semicolons are recommended&quot;, it's a style recommendation</p>
 <p>BE: let's do the thing that would help programmers catch errors, which is based on something that actually parses a dialect of the language</p>
-<p>MB: The consensus at the last meeting was that while we’ll try to continue supporting ASI where feasible, we won’t let it prevent us from extending the language in the future. The goal of this PR was to communicate that resolution.</p>
+<p>MB: The consensus at the last meeting was that while we'll try to continue supporting ASI where feasible, we won't let it prevent us from extending the language in the future. The goal of this PR was to communicate that resolution.</p>
 <p>?: e.g. make sure e.g. class syntax doesn't require or prevent ASI</p>
 <p>JHD: there are a few pieces that came out of the discussion. not-controversial: document the current ASI hazards, list the places where a no-semicolon style would cause problems, the spec should document them so the tools can get them right. Second : there was a general sentiment, shared by both sides, that no guidance is still guidance, and some guidance is important. ..</p>
 <p>BE: three concerns. I understand the class issue, we could go either way (november proposal, or carveout from ASI within class bodies), but there's no third way where our guidance will help us avoid ASI in the future. Guidance is relatively new, we don't have a lot of experience, we aren't dev-rels. If you're merely teaching people or nagging them, you can't rely on any definite outcome. So I'm skeptical of guidance, and reaction on twitter seems to support this. For class fields, I think that's it's own agenda item. eslint/tools are important</p>

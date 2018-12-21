@@ -170,20 +170,20 @@
 <p>IS: Some people may have used it with edition 3.</p>
 <p>AWB: We had this conversation 5 years ago. Things have evolved. Maybe adobe still cares, or maybe they don't.</p>
 <p>BE: It can be withdrawn without breaking other standards.</p>
-<p>IS: We approved ECMA404 before we had the RF agreement. Should we start an opt-out period for ECMA404?</p>
+<p>IS: We approved ECMA-404 before we had the RF agreement. Should we start an opt-out period for ECMA-404?</p>
 <a href="#conclusionresolution-what-to-do-with-compact-profile-ecma-327-and-e4x-ecma-357"><h4 id="conclusionresolution-what-to-do-with-compact-profile-ecma-327-and-e4x-ecma-357">Conclusion/Resolution</h4></a><ul>
 <li>István to follow up with Adobe and the CC to see if they would object to withdrawing E4X</li>
 </ul>
-<a href="#ecma404-rf"><h2 id="ecma404-rf">ECMA404 RF?</h2></a><p>IS: We approved ECMA404 before we had the RF agreement. Should we start an opt-out period for ECMA404?</p>
+<a href="#ecma-404-rf"><h2 id="ecma-404-rf">ECMA-404 RF?</h2></a><p>IS: We approved ECMA-404 before we had the RF agreement. Should we start an opt-out period for ECMA-404?</p>
 <p>AWB: Can we retroactively make ECMA-404 Royalty Free?</p>
 <p>IS: Yes</p>
 <p>AWB: We should have an opt-out period then.</p>
-<a href="#conclusionresolution-ecma404-rf"><h4 id="conclusionresolution-ecma404-rf">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-ecma-404-rf"><h4 id="conclusionresolution-ecma-404-rf">Conclusion/Resolution</h4></a><ul>
 <li>Start an opt-out period.</li>
 </ul>
 <a href="#compact-profile"><h3 id="compact-profile">Compact profile</h3></a><p>DH: People who are interested in this can start doing work. Once there is actual demand work will happen. We shouldn't just make standards because someone might use it.</p>
 <p>AWB: I think there is consensus to kill 327.</p>
-<a href="#conclusionresolution-ecma404-rf"><h4 id="conclusionresolution-ecma404-rf">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-ecma-404-rf"><h4 id="conclusionresolution-ecma-404-rf">Conclusion/Resolution</h4></a><ul>
 <li>István to follow up with Adobe and the CC to see if they would object to withdrawing the compact profile.</li>
 </ul>
 <a href="#fast-track-ecma-404"><h2 id="fast-track-ecma-404">Fast track ECMA-404</h2></a><p>IS: The actual standard document is not ready, maybe ready for this afternooon. Then we can publish it for fast track.</p>
@@ -271,53 +271,53 @@ Counter.propTypes = {<span class="hljs-attr">initialCount</span>: React.PropType
 })); 
 </span></code></pre>
 <p>MM: When defineProperty runs, does Person.prototype have an undecorated name property?</p>
-<p>YK: No.  The thing that you pass to the decorator looks like a descriptor, but is just an object.</p>
+<p>YK: No. The thing that you pass to the decorator looks like a descriptor, but is just an object.</p>
 <p>AWB: We need to think about what the built in ones should be.</p>
 <p>YK: Things that update descriptors seem like good candidates.</p>
 <p><a href="http://bit.ly/ember-js-classes">http://bit.ly/ember-js-classes</a></p>
 <p>Examples of things that Ember might do with decorators.</p>
 <p>YK:  Shows example of more complex decorator usage:</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{   
-    firstName = “…”;   
-    lastName = “…”;   
+    firstName = <span class="hljs-string">"..."</span>;   
+    lastName = <span class="hljs-string">"..."</span>;   
     @concat(<span class="hljs-string">'firstName'</span>, <span class="hljs-string">'lastName'</span>, <span class="hljs-string">' '</span>) fullName;   
     @concat(<span class="hljs-string">'lastName'</span>, <span class="hljs-string">'firstName'</span>, <span class="hljs-string">', '</span>) formalName; } 
 </code></pre>
 <p>MM:  Can create a read-only getter from a declared property</p>
 <p>AWB:  Do you have a more plausible use case for more complex decorators</p>
-<p>YK:  (Shows ember gist.  Shows @service which does dependency injection.)</p>
+<p>YK:  (Shows ember gist. Shows @service which does dependency injection.)</p>
 <p>AWB:  Why would I use a decorator instead of a property initializer?</p>
 <p>YK:  More complex</p>
 <p>JM:  Decorators run once per class</p>
 <p>AWB:  This is an own property?</p>
-<p>YK:  The decorator would attach a more complex getter.  @service does a lazy lookup.</p>
+<p>YK:  The decorator would attach a more complex getter. @service does a lazy lookup.</p>
 <p>DD:  When you return a descriptor does it return an own property?</p>
 <p>YK:  ?</p>
 <p>MM:  Since this is integrated into TypeScript, how does TypeScript type the decorator method?</p>
-<p>YK:  Another way to ask question is I would prefer a more immutable API so that I know what the type is.  Decorators themselves are typed,
+<p>YK:  Another way to ask question is I would prefer a more immutable API so that I know what the type is. Decorators themselves are typed,
 but they can mutate.</p>
-<p>MM:  It's a functional transformation of a descriptor.  There's nothing being mutated on.</p>
-<p>ARB:  This is reified as a first class value.  How can you track that without a full blown dependent type system?</p>
+<p>MM:  It's a functional transformation of a descriptor. There's nothing being mutated on.</p>
+<p>ARB:  This is reified as a first class value. How can you track that without a full blown dependent type system?</p>
 <p>YK:  (Shows examples of decorators with no mutating effect).</p>
-<p>DH:  ARB is saying that the set of properties that end of being in the class ends up depending on what happens with these decorators.<br>
-Mutation is a red herring. The issue is computably determining the class type.  You're saying that there is an expressive subset of this
+<p>DH:  ARB is saying that the set of properties that end of being in the class ends up depending on what happens with these decorators.
+Mutation is a red herring. The issue is computably determining the class type. You're saying that there is an expressive subset of this
 system for which this is not a problem.</p>
 <p>ARB:  To know what to reject you'd have to know the returned value at type-check time.</p>
-<p>JM:  ARB is saying that the value is dependent on runtime.  Enumerable true and enumerable false produce very different things.</p>
+<p>JM:  ARB is saying that the value is dependent on runtime. Enumerable true and enumerable false produce very different things.</p>
 <p>ARB:  Hard to forsee the implications, because annotations will want to spread.</p>
-<p>YK:  We should consider them on a case-by-case basis, but I am conservative.  I'm not proposing targeting general declarations.<br>
+<p>YK:  We should consider them on a case-by-case basis, but I am conservative. I'm not proposing targeting general declarations.
 Use case is that with class syntax we aren't able to do things we could with object literals.</p>
 <p>MM:  Are you proposing that you can decorate fields in an object literal?</p>
 <p>YK:  I don't consider it fundamental but there is a symmetry concern.</p>
-<p>ARB:  Still missing the big picture.  Don't you ever want to decorate parameters and other things?</p>
+<p>ARB:  Still missing the big picture. Don't you ever want to decorate parameters and other things?</p>
 <p>YK:  These are things we might want to consider.</p>
 <p>ARB:  Take modules, it seems like people will want to do some metaprogramming by annotating imports.</p>
-<p>YK:  Proposal is addressing an expressive hole introduced by ES6.  There is not a way  to do higher order things with methods.</p>
-<p>DH:  We're targeting the class syntax but we need to focus on the whole and not the part. The broad category is metaprogramming.  What is our model?<br>
-In Scheme, it's static.  In Ruby, it's dynamic.  We should do a zoom out and look at what metaprogramming might mean for the language.</p>
+<p>YK:  Proposal is addressing an expressive hole introduced by ES6. There is not a way  to do higher order things with methods.</p>
+<p>DH:  We're targeting the class syntax but we need to focus on the whole and not the part. The broad category is metaprogramming. What is our model?<br>
+In Scheme, it's static. In Ruby, it's dynamic. We should do a zoom out and look at what metaprogramming might mean for the language.</p>
 <p>ARB:  (Objects to saying that JS implies dynamic metaprogramming.)</p>
-<p>DH:  (Mentions objection to staging.)  With a first class class system, a lot of meta- programming stuff you just do at runtime.  If
-you've gone down the path of dynamic  metaprogramming, then it's probably best to keep going that way.  ARB:  I think class expressions are a
+<p>DH:  (Mentions objection to staging.)  With a first class class system, a lot of meta- programming stuff you just do at runtime. If
+you've gone down the path of dynamic  metaprogramming, then it's probably best to keep going that way. ARB:  I think class expressions are a
 red herring.</p>
 <p>DH:  I just don't believe that we should do staging.</p>
 <p>BE: staging not seriously proposed but noted as possible accidental outcome of generalizing decorators across first- and second-class parts of ES6.
@@ -331,11 +331,11 @@ We want a principled approach that's not just for classes.</p>
 <p>DH: Need a more general system for &quot;twiddling&quot; knobs.</p>
 <p>ARB:  My question is how does this generalize?</p>
 <p>DH: Current instinct is that first class things (classes, object literals) are easy to apply this to, but for second class things
-we'll fall off a complexity cliff.  Agree that we should look at the bigger picture.</p>
+we'll fall off a complexity cliff. Agree that we should look at the bigger picture.</p>
 <p>ARB:  readonly is an example that we might want to have a more direct way.</p>
 <p>YK:  If readonly were built-in and you imported it, then the engine could do smarter things.</p>
 <p>DH: Suggests stage 1, but audit the space which may lead to changes.</p>
-<a href="#conclusion-62-decorators"><h4 id="conclusion-62-decorators">Conclusion</h4></a><ul>
+<a href="#conclusionresolution-62-decorators"><h4 id="conclusionresolution-62-decorators">Conclusion/Resolution</h4></a><ul>
 <li>Stage 1 acceptance
 <ul>
 <li>YK will audit the space.</li>
@@ -345,7 +345,7 @@ we'll fall off a complexity cliff.  Agree that we should look at the bigger pict
 <p>Proposal: <a href="https://github.com/leebyron/ecmascript-reverse-iterator">https://github.com/leebyron/ecmascript-reverse-iterator</a></p>
 <p>LB: <a href="https://github.com/leebyron/ecmascript-reverse-iterable/blob/master/TC39-March2015.pdf">presents slides</a></p>
 <p>[lots of discussion about how to extend iterators/iterables]</p>
-<a href="#conclusion-63-reverseiterable-interface"><h4 id="conclusion-63-reverseiterable-interface">Conclusion</h4></a><ul>
+<a href="#conclusionresolution-63-reverseiterable-interface"><h4 id="conclusionresolution-63-reverseiterable-interface">Conclusion/Resolution</h4></a><ul>
 <li>More work to be done in breakouts to figure out path forward for iteration.</li>
 </ul>
 

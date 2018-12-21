@@ -419,13 +419,13 @@ q.foo();
 </ul>
 <p>LH: Require a string value and throw on invalid</p>
 <p>MM: happy with this proposal, any dissent?</p>
-<p>WH: The comparators must be equivalence relations.  Neither == nor === is an equivalence relation, with == breaking particularly badly. It's neither transitive, symmetric, nor reflexive.
+<p>WH: The comparators must be equivalence relations. Neither == nor === is an equivalence relation, with == breaking particularly badly. It's neither transitive, symmetric, nor reflexive.
 AWB: You'd simply have unfindable elements.
 WH: That might work for a multiset but not for something that claims to be a set. You could iterate through the keys and not be able to look up the corresponding elements. If you stick a NaN into such a map, you then couldn't delete it.
 AWB: Reduce the set of comparators to &quot;is&quot; and &quot;default&quot;.
 WH: Rename &quot;default&quot; to &quot;===&quot; but keep its semantics (NaN's are equal, ±0 are not).
 AWB, most: Yes.
-YK: No.  Maps should throw on NaN's.
+YK: No. Maps should throw on NaN's.
 WH: Why? Why not throw on undefineds?</p>
 <blockquote>
 <p>Conclusion/Resolution

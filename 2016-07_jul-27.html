@@ -114,7 +114,7 @@
 <p>DD: I'd prefer 'self'</p>
 <p>CM: no self</p>
 <p>DD: Would prefer <code>self</code></p>
-<p>AK: 'global' seems fine.  Most people don't seem to want 'self', Domenic.</p>
+<p>AK: 'global' seems fine. Most people don't seem to want 'self', Domenic.</p>
 <p>YK, AK: This doesn't give any new capability</p>
 <p>JHD: Sounds like the next steps are for Mark to think through Yehuda's objection and see if he can support bare 'global', and for me to follow up with Mark, Dean and &lt;who?&gt;</p>
 <a href="#conclusionresolution-9iiia-systemglobal"><h4 id="conclusionresolution-9iiia-systemglobal">Conclusion/Resolution</h4></a><ul>
@@ -167,7 +167,7 @@
 <p>AK/DE: Some cases need 2 or more browsers, but this is not one.</p>
 <a href="#conclusionresolution-9ii-ecma-402-formattoparts"><h4 id="conclusionresolution-9ii-ecma-402-formattoparts">Conclusion/Resolution</h4></a><ul>
 <li>Stage 4 acceptance</li>
-<li><a href="https://github.com/tc39/Test262/pull/734/files">https://github.com/tc39/Test262/pull/734/files</a></li>
+<li><a href="https://github.com/tc39/test262/pull/734/files">https://github.com/tc39/test262/pull/734/files</a></li>
 </ul>
 <a href="#9ij-ecma-402-intlpluralrules"><h2 id="9ij-ecma-402-intlpluralrules">9.i.j ECMA-402 Intl.PluralRules</h2></a><p>Zibi Braniecki</p>
 <p>ZB: Can we advanced to stage 3?</p>
@@ -232,7 +232,7 @@
 <p>BE: ES4 tried to do namespaces. Modules should give us a way to do this. I'm agreeing, we can't really extend things too much.</p>
 <p>RW: what software?</p>
 <p>AK: CRM Dynamics 2013</p>
-<p>BT: It is fixed, but people don't update their on-premises software. They hire a contractor to install it, and then the contractor walks away. We tell them just use IE11 rather than Edge.  You can configure a group policy to open certain pages in IE11</p>
+<p>BT: It is fixed, but people don't update their on-premises software. They hire a contractor to install it, and then the contractor walks away. We tell them just use IE11 rather than Edge. You can configure a group policy to open certain pages in IE11</p>
 <a href="#conclusionresolution-arrayprototypevalues"><h4 id="conclusionresolution-arrayprototypevalues">Conclusion/Resolution</h4></a><ul>
 <li>No change; Firefox will proceed with caution in shipping values.</li>
 </ul>
@@ -373,7 +373,7 @@
 <p>AK: This isn't thought of as a statement, but rather as a declaration, so the evaluation of the computed property names goes with the other declarations</p>
 <p>(discussion re: transpilers)</p>
 <p>DH: &quot;identifier : identifier&quot; currently means type annotation</p>
-<p>with respect to this ^^ <a href="https://tc39.github.io/ecma262/#sec-forbidden-extensions">https://tc39.github.io/ecma262/#sec-forbidden-extensions</a>:</p>
+<p>with respect to this ^^ <a href="https://tc39.github.io/ECMA-262/#sec-forbidden-extensions">https://tc39.github.io/ECMA-262/#sec-forbidden-extensions</a>:</p>
 <blockquote>
 <p>The Syntactic Grammar must not be extended in any manner that allows the token : to immediate follow source text that matches the BindingIdentifier nonterminal symbol.</p>
 </blockquote>
@@ -411,7 +411,7 @@
 <p>BN: We have been shipping this to the Meteor community in a transpiler context. The semantics are more subtle than you would expect to allow, due to the subtleties of modules. They are synchronous (hoisted to the top of the scope) and backwards compatible.</p>
 <p>MM: [clarifying that bindings are immutable on the import side]</p>
 <p>YK: [clarifying that currently proposal is transpiled to commonJS require]</p>
-<p>… discussion about the spec; request to skip the spec discussion at this stage …</p>
+<p>... discussion about the spec; request to skip the spec discussion at this stage ...</p>
 <p>AWB: How about we consider these to be ordinary lexically scoped variables?</p>
 <p>WH: If I sit inside a loop, importing a module mutiple times, will I get the same module namespace object?</p>
 <p>BN: Yes. In subsequent iterations, it doesn't get imported again</p>
@@ -425,14 +425,14 @@
 <p>BN: Modules get all loaded before the program starts. Their instantiations are done as their blocks are encountered in the program.</p>
 <p>WH: So then what happens if a module is missing when being loaded? How do Optimistic Imports work?</p>
 <p>BN: necessarily an error if it fails to load.</p>
-<p>BN: … talking about a use case for cross-env code with conditional imports … if it turns out that the fetching of the module source fails, it is entirely conceivable that the dev knows this was a possibility and that that import is inside a conditional block that prevents it from evaluating - so I think it's less fatal for the fetch to fail.</p>
+<p>BN: ... talking about a use case for cross-env code with conditional imports ... if it turns out that the fetching of the module source fails, it is entirely conceivable that the dev knows this was a possibility and that that import is inside a conditional block that prevents it from evaluating - so I think it's less fatal for the fetch to fail.</p>
 <p>YK: an important use case for this is &quot;if I'm in env X, import stuff for env X&quot;</p>
 <p>DH: proposal: we unconditionally do all the fetches, but if any fail, we don't actually fail - just hang onto the error for later. and only if control flow reaches the point where it's needed, does it end up being an error. iow, if you only have conditional imports, failures will not create a compile-time error, and only create a runtime error when the module is needed and missing.</p>
 <p>AWB: consistent with the current spec.</p>
 <p>AK: changing what used to be early errors into not-early errors.</p>
 <p>AWB: I mean consistent in that it treats each block as if it's its own module.</p>
 <p>YK: ?? conditional importing means the dev knows it's benign if it's missing, and can work around that.</p>
-<p>BN: … explaining &quot;isolated scopes&quot; example … ability to reuse identifiers in the same file, but in separate scopes. With top-level, you need slight identifier variations.</p>
+<p>BN: ... explaining &quot;isolated scopes&quot; example ... ability to reuse identifiers in the same file, but in separate scopes. With top-level, you need slight identifier variations.</p>
 <p>SP: also refactoring hazard - if the imports are in the describe, it's easier to split up large files without breaking things.</p>
 <p>BN: in top-level model you still have to do all the same fetching</p>
 <p>CP: at what point in this program is the error triggered? we intentionally chose declarative import evaluation as well as initialization/loading.</p>
@@ -440,11 +440,11 @@
 <p>BN: it should fail every time its import is attempted</p>
 <p>DH: it should be possible via the registry to clear things out and make it possible to retry, but only in a staged way - ie, you have to kick off an evaluation, not in the middle of a module.</p>
 <p>BF: in node, if it evaluates, it's put into the cache; if it fails to evaluate, it's not put into the cache.</p>
-<p>… discussion about entire dep graph being resolved before any evaluation …</p>
-<p>DT: … general argument that nested imports would have to be VERY compelling to make it worth it …</p>
+<p>... discussion about entire dep graph being resolved before any evaluation ...</p>
+<p>DT: ... general argument that nested imports would have to be VERY compelling to make it worth it ...</p>
 <p>AWB: what about imperatively using a dynamic import API?</p>
 <p>DH: loader API does not let you statically express dependencies, so we talked about a syntax that allows dynamic async importing</p>
-<p>… more discussion ?? …</p>
+<p>... more discussion ?? ...</p>
 <p>DH: inherent conflict with top-level await</p>
 <p>BN: I think the dynamic syntax you're proposing is essential for top-level await. what would happens with current <code>import</code> if you pull in a module using top-level <code>await</code>?</p>
 <p>CP: top-level <code>import</code> would handle it</p>
@@ -459,11 +459,11 @@
 <p>BN: i think it will not interfere with lazy loading.</p>
 <p>BN: if you treat all module identifiers the same, then you don't have to parse the whole file, you just have to tokenize it and look for &quot;import&quot; tokens.</p>
 <p>EF: i think you grossly underestimate the costs involved.</p>
-<p>… discussion about tokenizing vs parsing; costs thereof; etc …</p>
+<p>... discussion about tokenizing vs parsing; costs thereof; etc ...</p>
 <p>BN: in my naive understanding of tokenizing and parsing, you could tokenize, iterate, locate <code>import</code>, locate the possible path - then optimistically parse that path whether it's a module or not.</p>
 <p>AK: unless you're talking about throwing away all module early errors, you need to know the exports, so you still have to parse. your approach only would allow easier fetching.</p>
 <p>BN: if i'm wrong about the tokenizing trick, it still doesn't matter where the import declarations are</p>
-<p>YK: i think the point is that if it turns out that conditional import …</p>
+<p>YK: i think the point is that if it turns out that conditional import ...</p>
 <p>SM: what matters is &quot;do you do the fetch if there's a syntax error&quot;</p>
 <p>CP: Do we need to have a user make a change to allow for this tokenizing optimization?</p>
 <p>BN: The optimization is orthogonal</p>
@@ -484,7 +484,7 @@
 <p>YK: We did a lot to support the web's asynchronous fetching.</p>
 <p>BN: Yes, we needed to support browsers. Nested import declarations seem problematic mostly because of the browser and asynchronous fetch.</p>
 <p>BN: I have a grammar in the proposal. Import is not allowed in non-modules. There is a PR, I invite people to participate there. Nested imports from scripts are prohibited with static semantics.</p>
-<p>BN: We have settled on declarative imports, hoisting them.  But nested imports give you a tool for doing imperative imports, though no deferred fetching and specifiers are literal</p>
+<p>BN: We have settled on declarative imports, hoisting them. But nested imports give you a tool for doing imperative imports, though no deferred fetching and specifiers are literal</p>
 <p>BN: Stage 1?</p>
 <p>DH: Suggested area of exploration: await import</p>
 <pre><code><span class="hljs-function"><span class="hljs-keyword">async</span> <span class="hljs-title">fn</span>(<span class="hljs-params"></span>) </span>{

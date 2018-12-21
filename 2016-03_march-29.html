@@ -69,7 +69,7 @@
 </ul></li>
 </ul>
 <a href="#stringprototypepadstartpadend"><h2 id="stringprototypepadstartpadend">String.prototype.padStart/padEnd</h2></a><p>(JHD)</p>
-<p>JHD: will ship in stable behind a flag.  Not currently trying to get to stage 4 today (currently at Stage 3). Just wanted to update because of recent discussion.  there is not enough implementations to move it forward in stage.</p>
+<p>JHD: will ship in stable behind a flag. Not currently trying to get to stage 4 today (currently at Stage 3). Just wanted to update because of recent discussion. there is not enough implementations to move it forward in stage.</p>
 <p>MS: It's now in WebKit Nightly</p>
 <p>JHD: Small number of people have asked about the fill string (the second argument). If you pass anything that is not a non-empty string it defaults to a space character. Ascii space is maybe English-centric.</p>
 <p>MM: does anyone here know the I18l to comment?</p>
@@ -125,8 +125,8 @@
 <p>Dh: I don't understand the harm?</p>
 <p>JHD: This is not a people's websites will break thing. If more cross-realm things happen, there will be a lot of code that relies on this. Concern about things that make symbol toStringTag make objects look like an error.</p>
 <p>MM: to minimize the window, JHD should collaborate with MM on the getStack API. Hopes to have a proposal in Munich.</p>
-<a href="#conclusion-erroriserror"><h5 id="conclusion-erroriserror">Conclusion</h5></a><p>•JHD will work with MM on the stack proposal, and move this proposal into the &quot;withdrawn proposals&quot; section</p>
-<a href="#ecma402"><h3 id="ecma402">ECMA402</h3></a><p>DE: Compatibility fix for v1 -&gt; v2 (call with a receiver that is created via Object.create, it would initialize the object). For V2, spec was changed to be normal JS semantics. Tried to fix V2 semantics, but couldn't ship in V8 due to breaking websites. Now have implemented a compromise semantics: if you call the NumberFormat and DateTimeFormat constructor with a receiver that is an instance of the respective constructor and it's not initialized.... (continues to describe) details here: <a href="https://github.com/tc39/ecma402/pull/84">https://github.com/tc39/ecma402/pull/84</a>. There is a symbol that it indirects to and the fix seems to work.</p>
+<a href="#conclusionresolution-erroriserror"><h5 id="conclusionresolution-erroriserror">Conclusion/Resolution</h5></a><p>•JHD will work with MM on the stack proposal, and move this proposal into the &quot;withdrawn proposals&quot; section</p>
+<a href="#ecma-402"><h3 id="ecma-402">ECMA-402</h3></a><p>DE: Compatibility fix for v1 -&gt; v2 (call with a receiver that is created via Object.create, it would initialize the object). For V2, spec was changed to be normal JS semantics. Tried to fix V2 semantics, but couldn't ship in V8 due to breaking websites. Now have implemented a compromise semantics: if you call the NumberFormat and DateTimeFormat constructor with a receiver that is an instance of the respective constructor and it's not initialized.... (continues to describe) details here: <a href="https://github.com/tc39/ecma402/pull/84">https://github.com/tc39/ecma402/pull/84</a>. There is a symbol that it indirects to and the fix seems to work.</p>
 <p>MM: there is a self-hosted piece of code that illustrates the algorithm.</p>
 <p>DE: has a pull request for the change.</p>
 <p>MM: As he understood it, we are expecting the kludge to be temporary. If it will be temporary, then it shoudln't make it into a standards document.</p>
@@ -140,7 +140,7 @@
 <p>AK: and people want to use hte same code in Node and Web</p>
 <p>BT: let's not open that.</p>
 <p>MM: proposes: put the tecxt and mark it non-normative</p>
-<p>DE: if it's relevant to performance tests, etc. then it's normative.  Normative optional is plausible</p>
+<p>DE: if it's relevant to performance tests, etc. then it's normative. Normative optional is plausible</p>
 <p>MM: Annex B is irritataingly stronger than normative optional.</p>
 <p>DE: but we need the stronger requirement here. It's been an obstacle to being spec compliant.</p>
 <p>MM: Inlcude a non-normative note stating we hope to retrire the kludge eventually</p>
@@ -162,7 +162,7 @@
 <p>BT: my bar is &quot;can I imagine it being contentious, then it needs consensus&quot; Ye sit can be used fo htis spec as well.</p>
 <p>DE: Ok let's confirm that when Mark gets back.</p>
 <p>CP: Targeting edition 4.</p>
-<a href="#conclusion-erroriserror"><h5 id="conclusion-erroriserror">Conclusion</h5></a><p>PR: is ok once the editorial issues are worked out (including a non-normative note describing the back-compat requirement and other relevant information). Said note should not link to GitHub issues.</p>
+<a href="#conclusionresolution-erroriserror"><h5 id="conclusionresolution-erroriserror">Conclusion/Resolution</h5></a><p>PR: is ok once the editorial issues are worked out (including a non-normative note describing the back-compat requirement and other relevant information). Said note should not link to GitHub issues.</p>
 <a href="#zones-update"><h2 id="zones-update">Zones update</h2></a><p>(DD: Presenting slides)</p>
 <p>DD: Not going for stage 1 yet, but proposal has gotten more concrete</p>
 <p>MM: where is the polyfill?</p>
@@ -210,7 +210,7 @@
 <p>DD: you can replace the name column with &quot;initial name&quot; value</p>
 <p>AK: how does the &quot;get&quot; name spec text work with computed properties?</p>
 <p>MF: the expression is included in the name.</p>
-<a href="#conclusion-functionprototypetostring"><h5 id="conclusion-functionprototypetostring">Conclusion</h5></a><p>MF: will make changes to use the initial value of the &quot;name&quot; property as the global name of intrinsics</p>
+<a href="#conclusionresolution-functionprototypetostring"><h5 id="conclusionresolution-functionprototypetostring">Conclusion/Resolution</h5></a><p>MF: will make changes to use the initial value of the &quot;name&quot; property as the global name of intrinsics</p>
 <p>MF: will make fix to clearly exclude surrounding whitespace: &quot;the source text matched by&quot; to mean &quot;the text form the beginning of hte first token and the end of the last token&quot;. He will attempt to get it in section 5.2</p>
 <p>MF: will bring those tomorrow to get final approval for stage 3</p>
 <a href="#reference-type-and-the-implementation-reality"><h2 id="reference-type-and-the-implementation-reality">Reference type and the implementation reality</h2></a><p><a href="https://github.com/tc39/ecma262/issues/467">https://github.com/tc39/ecma262/issues/467</a></p>
@@ -242,7 +242,7 @@
 <p>KS: correct. there is no longer a special case for promises</p>
 <p>JH: where before we were relying on then to do the flattening, here we are relying on the for await?</p>
 <p>*discussion</p>
-<p>MM: the typical consumer should see the flattened value.  The principle here is that for the producer yields a value, they must not get blocked because they didn't block.</p>
+<p>MM: the typical consumer should see the flattened value. The principle here is that for the producer yields a value, they must not get blocked because they didn't block.</p>
 <p>MM: the only alternative approach is if the async iterator did the collapsing.</p>
 <p>KS: It would be in the behavior of next()</p>
 <p>MM: next returns a promise for the iteration result. Don't resolve that value until the value is actually resolved.</p>
@@ -262,7 +262,7 @@
 <p>KS: How should for await work on sync iterables? Initially, for/await fell back to sync iterables. However, concerns were raised, and now that's gone. But, at least, you should be able to yield* a regular iterable within an async iterable, right?</p>
 <p>JFB: I can wait a non-boxed value. is that the reasoning for falling back to Symbol.iterator in the async iteration support.</p>
 <p>?? if you have an async iterator of async iterators does it flatten those?</p>
-<p>DD: what if Object.prototype.iterator that returns async.iterator [check the proposal].  This was proposed to change the refactoring considerations around the proposal to failover to synchronous iteration for async iteration.</p>
+<p>DD: what if Object.prototype.iterator that returns async.iterator [check the proposal]. This was proposed to change the refactoring considerations around the proposal to failover to synchronous iteration for async iteration.</p>
 <p>MM: is there anything in the spec where we case-switch on whetehr something is iterable.</p>
 <p>JHD: <code>Array.from</code> is an example.</p>
 <p>MM: what about getting rid of Symbol.asynciterator completely, and just use Symbol.iterator. Then the iteration operations distinguish based on the type of the returned object.</p>
@@ -270,7 +270,7 @@
 <p>WH: Another option already mentioned was to have for await only look for Symbol.asynciterator and not default to Symbol.iterator. This would require explicit user conversions to convert sequences to async sequences, but those aren't necessarily a bad thing.</p>
 <p>DH: &quot;meh&quot;.</p>
 <p>BT: Matt the author of ReactiveX wants to work with Matt Podwysocki</p>
-<a href="#conclusion-async-iteration"><h5 id="conclusion-async-iteration">Conclusion</h5></a><p>Stage 2 acceptance</p>
+<a href="#conclusionresolution-async-iteration"><h5 id="conclusionresolution-async-iteration">Conclusion/Resolution</h5></a><p>Stage 2 acceptance</p>
 <p>DD: and DH volunteered as reviewers.</p>
 <a href="#shared-memory-and-atomics"><h2 id="shared-memory-and-atomics">Shared Memory and atomics</h2></a><p>LHN: presenting</p>
 <p>DH: did we convince ourselves that using strings instead of integers for futex codes is not too onerous for asm.js?</p>

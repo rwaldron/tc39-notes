@@ -30,7 +30,7 @@
 <p>RJE: Officers positions: we'll take a formal vote, unusual in TCs. Need to ascertain the voting members, will discuss tomorrow. Unless I got objection, it's my intent to have one motion for all three positions as a slate; if not we'll take them one-by-one. Should be straightforward to do tomorrow.</p>
 <p>YK: Can I request we attempt to approve through unanimous consent and avoid a formal vote?</p>
 <p>RJE: Sounds good.</p>
-<a href="#7-ecma262-status-updates"><h2 id="7-ecma262-status-updates">7. ECMA262 status updates</h2></a><p>(Brian Terlson)</p>
+<a href="#7-ecma-262-status-updates"><h2 id="7-ecma-262-status-updates">7. ECMA-262 status updates</h2></a><p>(Brian Terlson)</p>
 <p>BT: Most critical is royalty-free opt-out period. I'll talk about what proposals make the cut. Shooting to start this period the first week of Feb if possible. What that means for you is you need to get your lawyers to examine the doc, and tell TC39 if you want to exercise your patents over part of the spec. Hopefully not - we're not sure what would happen, hasn't happened yet - but I'm sure your lawyers will love reading the spec.</p>
 <p>YK: Nothing to do if we have no patents?</p>
 <p>BT: Yes.</p>
@@ -48,11 +48,11 @@
 <p>DD: We have a script we use for HTML, I can show it to you.</p>
 <p>BT: Would love to try it.</p>
 <p>BT: The royalty-free opt-out period I'm shooting for the beginning of Feb. I believe that's a 60-day period within which you can opt-out. I won't make any non-editorial changes from then. I'll also make a branch for this; that's what you'll want your lawyers to look at.</p>
-<a href="#conclusionresolution-7-ecma262-status-updates"><h4 id="conclusionresolution-7-ecma262-status-updates">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-7-ecma-262-status-updates"><h4 id="conclusionresolution-7-ecma-262-status-updates">Conclusion/Resolution</h4></a><ul>
 <li>RF opt-out begins in Feb. (Brian Terlson to fill exact date)</li>
 </ul>
-<a href="#ecma402-status-updates"><h2 id="ecma402-status-updates">ECMA402 status updates</h2></a><p>(Caridy Patiño)</p>
-<p>CP: We finally merged Intl.PluralRules, this is first time a new type of Intl object is added since 2013 (first edition).  Aside from that, a bunch of editorial changes. Two things to notice - for two years we've been trying to remove usage of dynamic fields from objects in the editorial text, we finally removed it. Second, we're trying to specify things that were unspecified, we've covered a lot of ground here. Not much pending for the Feb cut. Getting some traction for another meeting in another month.</p>
+<a href="#ecma-402-status-updates"><h2 id="ecma-402-status-updates">ECMA-402 status updates</h2></a><p>(Caridy Patiño)</p>
+<p>CP: We finally merged Intl.PluralRules, this is first time a new type of Intl object is added since 2013 (first edition). Aside from that, a bunch of editorial changes. Two things to notice - for two years we've been trying to remove usage of dynamic fields from objects in the editorial text, we finally removed it. Second, we're trying to specify things that were unspecified, we've covered a lot of ground here. Not much pending for the Feb cut. Getting some traction for another meeting in another month.</p>
 <p>DE: We've been having ecma 402 meetings</p>
 <p>ZB: Summary is we have good traction on a call, people not in this meeting. We didn't expect that much attendance, almost 20 people on the last 402 call a week ago. It's pretty useful for us, we were able to review the proposals for Stage 3/4, and we'll present in our timebox.</p>
 <p>DE: This is the timebox for that.</p>
@@ -64,13 +64,13 @@
 <p>ZB: Reviewing Stage 4 features, we had reps from all major browser engines, was useful to verify that we have no reason to worry about non-impl. There has been convos with Edge about timing, they're locked on stable features in ICU than we are, but that's all a 3-4 month period we think.</p>
 <p>ZB: So pluralRules, hourCycle, and formatToParts are all good to go.</p>
 <p>ZB: Stage 3, Segmenter, Locale, RelativeTimeFormat, Listformat, we got support from all attendees on the call to promote them to next stage.</p>
-<a href="#conclusionresolution-ecma402-status-updates"><h4 id="conclusionresolution-ecma402-status-updates">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-ecma-402-status-updates"><h4 id="conclusionresolution-ecma-402-status-updates">Conclusion/Resolution</h4></a><ul>
 <li>WG will propose Intl.Locale, Intl.RelativeTimeFormat and Intl.ListFormat for Stage 3 later at this meeting</li>
 </ul>
-<a href="#9-ecma404-status-updates"><h2 id="9-ecma404-status-updates">9. ECMA404 status updates</h2></a><p>(Chip Morningstar)</p>
+<a href="#9-ecma-404-status-updates"><h2 id="9-ecma-404-status-updates">9. ECMA-404 status updates</h2></a><p>(Chip Morningstar)</p>
 <p>CM: Summary - no news is good news. What they call &quot;fast track&quot; thru ISO has happened, 404 is now ISO-21778, that's it.</p>
-<a href="#conclusionresolution-9-ecma404-status-updates"><h4 id="conclusionresolution-9-ecma404-status-updates">Conclusion/Resolution</h4></a><ul>
-<li>ECMA404 is an ISO standard (ISO-21778)</li>
+<a href="#conclusionresolution-9-ecma-404-status-updates"><h4 id="conclusionresolution-9-ecma-404-status-updates">Conclusion/Resolution</h4></a><ul>
+<li>ECMA-404 is an ISO standard (ISO-21778)</li>
 </ul>
 <a href="#10-ecma414-status-updates"><h2 id="10-ecma414-status-updates">10. ECMA414 status updates</h2></a><p>(Brian Terlson)</p>
 <p>BT: No updates. The suite is ready.</p>
@@ -238,19 +238,19 @@ engine implementor's feature tests
 <li><a href="https://github.com/GoogleChromeLabs/jsvu">jsvu</a></li>
 </ul>
 <p>MB: (Presenting)</p>
-<p>MB: Wanted to start with something small and talk about ESHost... talking about command-line utilities. Useful for people on the community. Makes it really easy to run a piece of JS code in various engines from the command line. On a system with Node and npm, you just install ESHost-CLI (demonstrates).  It runs a given code snippet in all the engines it knows about. For it to know about these engines you have to tell it &quot;I have a V8 binary here, Chakra there...&quot;.  You do have to set up build systems, compile from source, repeat every few weeks to get up-to-date engine builds. This was painful unless you're already working on these. So now I want to talk about a new tool to set these up locally rather than doing the whole compile dance. It's called JSVU (version updater) and it's also a command-line utility. On a system with Node and npm, you just install jsvu globally, and then run it (demonstrates). The first time it asks for confirmation on which engines + arch, then it does its thing, figures out the latest version of each engine, downloads and installs the binaries, and that's it. So you only have to remember a single command, jsvu, and run it whenever you want to auto-update all those engines to the latest version. Then you can directly use the JS engines from the command line.</p>
+<p>MB: Wanted to start with something small and talk about ESHost... talking about command-line utilities. Useful for people on the community. Makes it really easy to run a piece of JS code in various engines from the command line. On a system with Node and npm, you just install ESHost-CLI (demonstrates). It runs a given code snippet in all the engines it knows about. For it to know about these engines you have to tell it &quot;I have a V8 binary here, Chakra there...&quot;. You do have to set up build systems, compile from source, repeat every few weeks to get up-to-date engine builds. This was painful unless you're already working on these. So now I want to talk about a new tool to set these up locally rather than doing the whole compile dance. It's called JSVU (version updater) and it's also a command-line utility. On a system with Node and npm, you just install jsvu globally, and then run it (demonstrates). The first time it asks for confirmation on which engines + arch, then it does its thing, figures out the latest version of each engine, downloads and installs the binaries, and that's it. So you only have to remember a single command, jsvu, and run it whenever you want to auto-update all those engines to the latest version. Then you can directly use the JS engines from the command line.</p>
 <p>MB: Specifically for eshost-cli, you just need to install eshost and tell it where the engines are, which for jsvu is all in the same directory, and that's it. Immensely useful for compat testing. Any time you find yourself in need of a JS engine binary you can use jsvu to easily automate the install and get a recent version. I'm interested in other use-cases, too, like web assembly waterfall — in that project, a lot of engineering time is spent maintaining the build infrastructure for all JS engines. This can be avoided by just using jsvu instead of building it all from source. If you use this, let me know what you use it for. And shoutout to eshost, it's a very nice tool.</p>
 <p>YK: At minimum, a use-case in my space is having JS code that you expect to not need browser code (I write a library like this), this is a quick way to ensure it runs on all the engines.</p>
 <p>MB: Note that there's still some difference in what REPLs offer, e.g. most of them include a non-standard print() function. But yes, you're closer to the metal — Node is a wrapper around V8, while this lets you test directly in V8.</p>
 <p>MM: This is awesome. With regard to what it takes to extend jsvu to know about a new engine, for example how would the Moddable team add their engine (XS)?</p>
 <p>MB: There's a support statement in the README — JSC on Linux isn't maintained. I'd love to add Moddable support. We first need precompiled binaries at a predictable URL, then some way to programmatically determine which is the latest version. After that it's an easy PR to add it, look at the existing scripts in the <code>engines</code> folder: they codify how to detect the version number, what the checksum is, what the URL format is, and how to test whether the binary works.</p>
-<p>MB: The thing about browser JS engines is that they were already compiling these binaries for their testing infra anyway — they just weren’t uploading them anywhere afterwards. The biggest part of working on this project was convincing browser vendors to host the binaries publicly, rather than discarding them after every test run.</p>
-<p>BT: I’d love to add Moddable's XS support to eshost as well — eshost needs to know how to print to the console, how to create a new realm, etc. Happy to do that work if you can give me pointers to your docs.</p>
+<p>MB: The thing about browser JS engines is that they were already compiling these binaries for their testing infra anyway — they just weren't uploading them anywhere afterwards. The biggest part of working on this project was convincing browser vendors to host the binaries publicly, rather than discarding them after every test run.</p>
+<p>BT: I'd love to add Moddable's XS support to eshost as well — eshost needs to know how to print to the console, how to create a new realm, etc. Happy to do that work if you can give me pointers to your docs.</p>
 <p>PST: Shouldn't be too complicated. We support all the architectures jsvu mentions in its README.</p>
 <p>MB: You don't even have to, to have it added to jsvu!</p>
 <p>BT: Let's get it figured out.</p>
 <p>TST: Another thing for easier use-cases within the shell itself.</p>
-<p>MB: To make it easier to publish in jsvu, you can host a <code>LATEST</code> file somewhere with the URL/checksums/etc. Right now I have to do terrible things like parsing HTML with regex just to get the version number.  For one of the engines I have to look at the GitHub Releases page for the official mirror of the project; at some point GH changed their HTML and my regex broke. :(</p>
+<p>MB: To make it easier to publish in jsvu, you can host a <code>LATEST</code> file somewhere with the URL/checksums/etc. Right now I have to do terrible things like parsing HTML with regex just to get the version number. For one of the engines I have to look at the GitHub Releases page for the official mirror of the project; at some point GH changed their HTML and my regex broke. :(</p>
 <p>BT: (To TST) I've got a couple bugs open on your bug tracker, requests for SpiderMonkey. One I know of is SM is the only engine that doesn't let you eval some text as a module without passing a root module on the command line. If you don't have a module file to start with... There's another I can't remember.</p>
 <p>TST: I'll look into those, ping me.</p>
 <p>DE: Igalia is maintaining JSC on Linux and working on exposing the binaries in a URL that's more friendly to jsvu.</p>
@@ -269,7 +269,7 @@ engine implementor's feature tests
 <li><a href="https://docs.google.com/presentation/d/1eDW_u6dI8iFUx77m8rjRbF6C0grLZuVFJmJq620qD-I/edit">slides</a></li>
 </ul>
 <p>MB: Back onto ECMAScript being a syntactic superset of JSON, a proposal by Richard Gibson.</p>
-<p>MB: Simple idea, make ES a superset of JSON. It’s not right now, because JS strings can't contain two unescaped characters (U+2028, U+2029), while JSON can. This proposal aims to fix that. We can't fix JSON, it's set in stone, but we can change ES. So this proposal changes ES to extend double and single-quoted strings to accept these two chars. Can't imagine anyone depending on this not working. (demonstrates the spec edit) This is a rare proposal that actually simplifies the current spec — ECMAScript benefits from the similarity in its definition of JSON.parse, so we can drop some of the extra code specializing this. Jordan and Michael Ficarra were Stage 3 reviewers and gave their blessing, so I'm asking for Stage 3. Any objections?</p>
+<p>MB: Simple idea, make ES a superset of JSON. It's not right now, because JS strings can't contain two unescaped characters (U+2028, U+2029), while JSON can. This proposal aims to fix that. We can't fix JSON, it's set in stone, but we can change ES. So this proposal changes ES to extend double and single-quoted strings to accept these two chars. Can't imagine anyone depending on this not working. (demonstrates the spec edit) This is a rare proposal that actually simplifies the current spec — ECMAScript benefits from the similarity in its definition of JSON.parse, so we can drop some of the extra code specializing this. Jordan and Michael Ficarra were Stage 3 reviewers and gave their blessing, so I'm asking for Stage 3. Any objections?</p>
 <p>(No Objections)</p>
 <p>WH: I also have reviewed this and I approve it</p>
 <a href="#conclusionresolution-13iib-make-ecmascript-a-syntactic-superset-of-json-for-stage-3"><h4 id="conclusionresolution-13iib-make-ecmascript-a-syntactic-superset-of-json-for-stage-3">Conclusion/Resolution</h4></a><ul>
@@ -282,13 +282,13 @@ engine implementor's feature tests
 </ul>
 <p>MB: BigInt used to have .parseInt(), but it was removed because parseInt behavior is weird. So conclusion was to remove it and come up with something more sensible. This is that proposal.</p>
 <p>... discussion about the pronunciation of &quot;radix&quot;; loosely settled on &quot;radd-ix&quot; ...</p>
-<p>MB: Suggestion is {BigInt, Number}.fromString(). Symmetric with toString. We want something to BigInt that fulfills this functionality and we can add the same thing to Number.  Main problem that motivates this is there's no way to do the inverse — go from string back to number — but Number can through parseInt, although in a surprising way.</p>
-<p>MB: Reasons parseInt is weird: gives NaN when string is bad, gives NaN when radix is bad, accepts radix 0 and pretends it's 10, accepts hex literal prefixes but not the octal and binary prefixes. Can't go back and add support, might be backwards-incompatible. It also ignores leading whitespace and trailing non-digits.  And having some support for integer literal prefixes means it's not the inverse of toString - it accepts some things that toString can't produce.</p>
+<p>MB: Suggestion is {BigInt, Number}.fromString(). Symmetric with toString. We want something to BigInt that fulfills this functionality and we can add the same thing to Number. Main problem that motivates this is there's no way to do the inverse — go from string back to number — but Number can through parseInt, although in a surprising way.</p>
+<p>MB: Reasons parseInt is weird: gives NaN when string is bad, gives NaN when radix is bad, accepts radix 0 and pretends it's 10, accepts hex literal prefixes but not the octal and binary prefixes. Can't go back and add support, might be backwards-incompatible. It also ignores leading whitespace and trailing non-digits. And having some support for integer literal prefixes means it's not the inverse of toString - it accepts some things that toString can't produce.</p>
 <p>MM: one more way - case sensitive.</p>
-<p>MB: Ah yes, we’ll talk about this as we move along.</p>
+<p>MB: Ah yes, we'll talk about this as we move along.</p>
 <p>WH: I have some concerns on this proposal</p>
-<p>MB: Note this is stage 0, trying to hit 1 today. Let’s not get too hung up on the exact shape of the current proposal.</p>
-<p>DD: It'd be good to get the committee’s opinion on case sensitivity.</p>
+<p>MB: Note this is stage 0, trying to hit 1 today. Let's not get too hung up on the exact shape of the current proposal.</p>
+<p>DD: It'd be good to get the committee's opinion on case sensitivity.</p>
 <p>WH: There are some real fundamental problems.</p>
 <p>DD: We'll get there.</p>
 <p>MB: The idea is that anything that can be produced by toString with some radix is accepted by fromString with that radix. Easy to say, hard to spec, but here are some examples.</p>
@@ -300,7 +300,7 @@ engine implementor's feature tests
 <p>TAB: that would imply that anything which can't be expressed as a dyadic fraction would have to throw.</p>
 <p>WH: Another problem: Number toString will never produce the output &quot;9999999999999999999999&quot; because there is no such exact IEEE double, but rejecting it would be weird.</p>
 <p>MB: Depends on what we want to limit ourselves to.</p>
-<p>MM: I think we absolutely want to accept this. Narrowly perceived as &quot;what toString accepts, exactly&quot; is too narrow. The useful use-case is that we have a string we want to produce a number from.  If you don't accept everything that's valid as floating point and produce a number close to that, you've thrown away too much.</p>
+<p>MM: I think we absolutely want to accept this. Narrowly perceived as &quot;what toString accepts, exactly&quot; is too narrow. The useful use-case is that we have a string we want to produce a number from. If you don't accept everything that's valid as floating point and produce a number close to that, you've thrown away too much.</p>
 <p>DD: I was first firmly on the side of this should be symmetric, I'm looking for some guiding principle to spec this that excludes the prefixes, but the 1.0 example is very compelling. I'd urge us to find some principle accepting 1.0 but not 0x0, maybe we won't find it in 6 minutes.</p>
 <p>JRL: To reiterate. Imagine coming from a backend with a different language that doesn't follow toString's api.</p>
 <p>MB: How does parseInt not solve that?</p>
@@ -309,16 +309,16 @@ engine implementor's feature tests
 <p>DE: Mathias wrote a bunch of slides, can we move through them?</p>
 <p>MB: Doesn't the backend always have to know the rules either way?</p>
 <p>YK: you have to know what the rules are, but the more complicated they are, the more likely you are to mess up, this was hard for Rails</p>
-<p>MM: I’d like to propose a guiding principle — the number syntax that this accepts should be a superset of &quot;standard number interchange&quot; defined by JSON. (Amusing similarity to previous item on being a superset of JSON.)</p>
+<p>MM: I'd like to propose a guiding principle — the number syntax that this accepts should be a superset of &quot;standard number interchange&quot; defined by JSON. (Amusing similarity to previous item on being a superset of JSON.)</p>
 <p>WH: Another issue is &quot;1e20&quot;, in base 10 that's <code>10 ** 20</code>. If you set radix to 16 what do you get?</p>
 <p>WH: If you do toString with radix 36, you can get &quot;infinity&quot; in a couple different ways: either supplying an actual ∞ or an integer that's spelled &quot;infinity&quot; in base 36.</p>
-<p>MB: The infinity example - we can fix by not allowing case-insensitivity.  This slide shows some hex digits - <code>C0FFEE</code> is uppercase, should that throw, and work only with <code>c0ffee</code>? Latter is what toString produces.</p>
-<p>MB: We use parseInt, if something isn't a number it produces NaN. With fromString we can throw for anything that toString can’t produce. For nonsensical radix values, the new proposal can also be strict and throw RangeErrors. Legacy octal integers, we can choose to be strict and not support these. No need to support numeric separators either. The n suffix for BigInt, we wouldn't support; symmetry principle says no, and also &quot;1n&quot; is a valid digit with a radix of e.g. 32, so it would be ambiguous.</p>
+<p>MB: The infinity example - we can fix by not allowing case-insensitivity. This slide shows some hex digits - <code>C0FFEE</code> is uppercase, should that throw, and work only with <code>c0ffee</code>? Latter is what toString produces.</p>
+<p>MB: We use parseInt, if something isn't a number it produces NaN. With fromString we can throw for anything that toString can't produce. For nonsensical radix values, the new proposal can also be strict and throw RangeErrors. Legacy octal integers, we can choose to be strict and not support these. No need to support numeric separators either. The n suffix for BigInt, we wouldn't support; symmetry principle says no, and also &quot;1n&quot; is a valid digit with a radix of e.g. 32, so it would be ambiguous.</p>
 <p>MB: So does the committee want to advance to stage 1 and investigate this further, or should we not pursue this further and just say that using parseInt is fine?</p>
 <p>MM: I'm in favor of advancing to stage 1; I want to see what solutions emerge from this discussion</p>
-<p>WH: Agree. I support stage 1 as well. I'm also curious about the solutions to some of these problems.  I was concerned I was getting dismissed bringing them up on GH.</p>
+<p>WH: Agree. I support stage 1 as well. I'm also curious about the solutions to some of these problems. I was concerned I was getting dismissed bringing them up on GH.</p>
 <p>MB: Sorry for making you feel that way - didn't want us to focus too much on the current spec text. It's intentionally vague right now - I wasn't intending to go straight to Stage 4 in this form.</p>
-<p>DD: I'm also very happy that this will presumably clarify parseInt spec text. I'm hopeful in the course of defining this spec algo it'll be natural to define one for parseInt.  It currently says &quot;the mathematical number value corresponding to this string&quot;.</p>
+<p>DD: I'm also very happy that this will presumably clarify parseInt spec text. I'm hopeful in the course of defining this spec algo it'll be natural to define one for parseInt. It currently says &quot;the mathematical number value corresponding to this string&quot;.</p>
 <p>MM: Is parseInt not clarified?</p>
 <p>WH: Presumably BigInt.fromString works on integers, but Number.fromString would work on decimals, including &quot;decimals&quot; representing non-integral numbers in bases other than 10.</p>
 <p>MB: Any suggestions on what the guiding principle should be, let us know. <a href="https://github.com/mathiasbynens/proposal-number-fromstring">The link to the proposal repo is in the agenda.</a></p>
@@ -496,13 +496,13 @@ engine implementor's feature tests
 <ul>
 <li><a href="https://github.com/tc39/proposal-regexp-lookbehind">proposal</a></li>
 </ul>
-<p>MB: I want to give a status update on the RegExp proposals. I’ll present the first half today, but I’d like to defer the rest until tomorrow. You’ll see why in a minute.</p>
+<p>MB: I want to give a status update on the RegExp proposals. I'll present the first half today, but I'd like to defer the rest until tomorrow. You'll see why in a minute.</p>
 <p>MB: dotAll mode (s flag): advanced to stage 4 at the November meeting, then merged PR (#1028). This feature will be part of ES2018!</p>
 <p>MB: named capture groups: advanced to stage 4 at the November meeting; the PR got merged just recently (#1027). Moddable/XS engine now has an implementation too, by the way (brand new RegExp engine)</p>
-<p>MB: lookbehind assertions: I didn't nominate it for stage 4 at the last meeting because there was only one implementation (Chrome/V8), but now it’s in XS too. And we’ve had Test262 tests for a while. Any objections to moving to stage 4?</p>
+<p>MB: lookbehind assertions: I didn't nominate it for stage 4 at the last meeting because there was only one implementation (Chrome/V8), but now it's in XS too. And we've had Test262 tests for a while. Any objections to moving to stage 4?</p>
 <p>WH: I was told in private communication prior to this meeting that this wouldn't be proposed for stage 4, so I haven't reviewed it thoroughly yet. I shall do so within the next day and report back to Mathias.</p>
 <p>MB: the XS impl is really recent, so I hadn't been planning to go for stage 4 at this meeting. Let's give you a chance to review it more thoroughly and revisit this on Wed/Thu.</p>
-<p>MB: Unicode property escapes: Waldemar has some new feedback that I want to address first, so I’m deferring this item.</p>
+<p>MB: Unicode property escapes: Waldemar has some new feedback that I want to address first, so I'm deferring this item.</p>
 <p>WH: there are enough bugs in the proposed Unicode property escape spec that I don't understand what parts of the proposed spec are supposed to do. I've been filing GitHub comments.</p>
 <p>MB: Let's revisit Wed/Thu for maybe moving to stage 4.</p>
 <p>AK: It'd be nice if these managed to move to stage 4; there are lots of RegExp things going into ES2018.</p>
@@ -580,7 +580,7 @@ engine implementor's feature tests
 <p>MF: currently stage 1, looking for stage 2 and reviewers. Has full spec text, general idea is that you can give a symbol ..</p>
 <p>MF: getter on Symbol.prototype, currently too hard to get the name out of the object</p>
 <p>JHD: I'll be a reviewer</p>
-<p>DE: should we add this to ..  private name to use in a decorator??</p>
+<p>DE: should we add this to .. private name to use in a decorator??</p>
 <p>MF: sounds related, but not something I know enough to champion</p>
 <p>KG: currently a corner case where you don't provide any string to the Symbol function, then use toString, can't tell the difference between an empty string and this other undefined thing</p>
 <p>MM: this is serialization for humans? or for deserialization?</p>
@@ -683,7 +683,7 @@ KCL: me too</p>
 <p>MM: Protocols-vs-Mixins have a lot of overlap, but the problem statement looks very different depending upon which one you start from. We say that stage 1 is about a problem statement. But there are good reasons why the artifact we examine in stage 1 is a rough proposal for how to solve the problem. Often, such a sketch of an approach to a solution is the clearest initial expression of what the problem is that is being solved. The proposal expresses a philosophical approach for solving a problem which it understands from the perspective of that philosophical approach. Different approaches will have different ways of categorizing the world. To make progress, we need to come to better understanding of these problems, arriving at common terms so we can see how they overlap. But this takes discussion and discovery --- precisely the kind of effort that often only starts once a proposal is at stage 1.</p>
 <p>(Note: AWB apparently was not here for this topic, but it worth noting the following text from his paper on standards participation:</p>
 <blockquote>
-<p>A majority of the delegates may approach a problem in a manner that you believe won’t work but you cannot convince them that they are going down the wrong path. Instead of wasting additional time trying to convince them, work on developing an alternative solution. If you are right, the majority will eventually recognize their mistake and your solution will be available to take its place.
+<p>A majority of the delegates may approach a problem in a manner that you believe won't work but you cannot convince them that they are going down the wrong path. Instead of wasting additional time trying to convince them, work on developing an alternative solution. If you are right, the majority will eventually recognize their mistake and your solution will be available to take its place.
 )</p>
 </blockquote>
 <p>RJE: let's talk about this offline and revisit it later</p>
@@ -703,7 +703,7 @@ KCL: me too</p>
 <p>MB: option 4: make null/undefined iterable, but producing no values. Would fix this behavior in general (not just for array spread), but hides bugs like accidental undefined</p>
 <p>YK: um, how do you do that?</p>
 <p>MB: The current PR checks for null/undefined and exits early within array spread. We can just move that check to GetIterator to return an empty iterator.</p>
-<p>YK: But it won’t have [Symbol.iterator]</p>
+<p>YK: But it won't have [Symbol.iterator]</p>
 <p>MB: No</p>
 <p>MB: <a href="https://twitter.com/mathias/status/954455439101562881">Did a Twitter poll</a> with ~1300 responses, got 52% wanting exception, 42% wanting silent spread-to-nothing. Not scientific.</p>
 <p>SM: rational for object spread was consistency with for..in and Object.assign, but let's not force a decision for legacy reasons. Very common to have types that are null | undefined for a lack of value, e.g. <code>null | undefined| Point3D</code>, but less common to have empty objects in that place, e.g. <code>{} | Point3D</code>. We generally don't recommend using <code>{ ...obj || {} }</code></p>

@@ -197,7 +197,7 @@ Derive.[<span class="hljs-string">[Construct</span>]](args, rcvr)
   <span class="hljs-keyword">let</span> now = $$GetSystemTime();
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">new</span>*) {
     <span class="hljs-keyword">let</span> obj = <span class="hljs-built_in">Object</span>.create(<span class="hljs-keyword">new</span>*.prototype);
-    <span class="hljs-comment">// obj@now = now; // private “now” state</span>
+    <span class="hljs-comment">// obj@now = now; // private "now" state</span>
     <span class="hljs-keyword">return</span> obj;
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-keyword">return</span> ToTimeString(now);

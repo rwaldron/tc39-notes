@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-30-2017-meeting-notes"><h1 id="november-30-2017-meeting-notes">November 30, 2017 Meeting Notes</h1></a><hr>
-<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CP), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (ARE), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
+<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CP), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
 <p>Remote:
 István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
@@ -44,7 +44,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>AK: This uses a lot of syntactic space, in a limited area. I would've allowed things like the decoration of objects for that, given that we already have a way to do this.</p>
 <p>KCL: This finds utility in a variety of places, including arguments; this makes it significantly useful to make sense to use this space.</p>
 <p>AK: I disagree with the intuition that these are similar. I think sealing arguments are better done by type systems, and maybe if statements at runtime. I'm sort of opposed to using up this syntactic space when we could be using it for something new.</p>
-<p>DH: The comparison to rest/spread is interesting. Unlike rest/spread, this creates a sort of combinatorial explosion. This increases the decision space--will we have the hash wars next, among people who are debating whether you should use hash everywhere? This comes at a big cost for the jobs of programmers and the ecosystem to figure out what the preferred style. We end up not resolving them, just getting factions.  I agree on the motivations, but I'm stuck on the cost.</p>
+<p>DH: The comparison to rest/spread is interesting. Unlike rest/spread, this creates a sort of combinatorial explosion. This increases the decision space--will we have the hash wars next, among people who are debating whether you should use hash everywhere? This comes at a big cost for the jobs of programmers and the ecosystem to figure out what the preferred style. We end up not resolving them, just getting factions. I agree on the motivations, but I'm stuck on the cost.</p>
 <p>KCL: Do you see a lower-cost path?</p>
 <p>DH: I don't know of one. You have to go with the grain of the language; I've become more conservative about additions over time. Doubling the number of ways that you can express the same concept is not an approach I feel good about. I know this is at an early stage; I am not saying I object.</p>
 <p>KCL: Maybe we can discuss offline more. My motivations come more from invariants than convenience. It's difficult to write correct, efficient code that picks these things up.</p>
@@ -171,14 +171,14 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <li><a href="https://docs.google.com/presentation/d/1bPzE6i_Bpm6FXgzfx9XFJNHGkVcM42lux-6bUNhxpl4/edit#slide=id.p">slides</a></li>
 </ul>
 <p>MB: would enabling ASI here make the spec more complex?</p>
-<p>DE: There’s no algorithmic complexity, adding ASI here doesn’t complicate the spec nor implementations. Actually, there is no spec text needed at all--the existing description of ASI is sufficient.</p>
-<p>BFS: I’m not a fan of ASI in general, but I don't want to disallow ASI <em>only</em> inside class bodies.</p>
+<p>DE: There's no algorithmic complexity, adding ASI here doesn't complicate the spec nor implementations. Actually, there is no spec text needed at all--the existing description of ASI is sufficient.</p>
+<p>BFS: I'm not a fan of ASI in general, but I don't want to disallow ASI <em>only</em> inside class bodies.</p>
 <p>YK: I do want to disallow ASI in class bodies.</p>
 <p>JHD: As far as I'm aware, there were no ASI linters available until the last few years; many developers who rely on ASI use a blog post that hasn't been updated since 2011, or the documentation from a specific linting tool (standardjs). Even when a new ASI hazard came into existence, i.e. tagged templates, the 2011 article was not updated, and as of the last time I checked, standardjs was still incorrect about the finite list of ASI hazards. ASI hazards that cause errors are fine, but I want the committee to consider that ASI hazards that cause silent incorrect runtime behavior <em>will not be caught</em> by the majority of ASI users, because they are not approaching it with sufficient rigor to understand the hazards. I am weakly (but not strongly) in favor of disallowing ASI in class bodies.</p>
 <p>YK: (something about reframing the discussion)</p>
 <p>KCL: A quick run through GitHub's codebase, which uses standardjs and omits semicolons, found only four places that required semicolons, related to Array destructuring assignment.</p>
 <p>YK: Are you sure the rest of the code is correct?</p>
-<p>MKA: Want to add a user perspective: I recently worked at a small company that used the &quot;standard&quot; (no semicolons) linter, and we used it because we never had to argue about the code style. I've seen similar issues in small companies, and have seen people choose the &quot;standard&quot; linter to avoid having to think about semicolons. Point is: many people use “Standard” but it doesn’t mean they all feel strongly about avoiding semicolons.</p>
+<p>MKA: Want to add a user perspective: I recently worked at a small company that used the &quot;standard&quot; (no semicolons) linter, and we used it because we never had to argue about the code style. I've seen similar issues in small companies, and have seen people choose the &quot;standard&quot; linter to avoid having to think about semicolons. Point is: many people use &quot;Standard&quot; but it doesn't mean they all feel strongly about avoiding semicolons.</p>
 <p>DE: So does that mean that many programmers who omit semicolons don't care particularly about semicolons, just about following the linter rules?</p>
 <p>MKA: I think for a big group of programmers, yes.</p>
 <p>AK: Named infix operators worry me. But it seems this problem isn't specific to class bodies; new infix operators are problematic due to ASI in general, correct?</p>
@@ -197,14 +197,14 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>KCL: Actually, for loops actually need semicolons, so my original statement is strictly not correct, though that's a different kind of usage of semicolons.</p>
 <p>RW: So I concede you can write parseable code without semicolons but I'm saying its part of a spec.</p>
 <p>YK: When Brendan tried to coerce people away from this is that ASI is a form of error correction - so writing semi-colon free code is making a lot of errors.</p>
-<p>DE: That’s a good case for taking a stance as a committee and saying, we’ll require semicolons here.</p>
+<p>DE: That's a good case for taking a stance as a committee and saying, we'll require semicolons here.</p>
 <p>YK: I think we could set a point of saying that we should avoid introducing new ASI hazards as a reasonable compromise</p>
 <p>AK: Avoiding ASI hazards does not seem reasonable</p>
 <p>JRL: A hair brained idea: could we add NLTs to infix operators in class bodies.</p>
 <p>DE: I think it'd be pretty strange if the grammar of expressions differed based on where they were used.</p>
 <p>DE: Does anyone have any strong concerns about having ASI hazards in class bodies</p>
 <p>KZM: My opinion is that ASI is there for beginners who make mistakes. We just catch them when they fall and accidentally omit a semicolon. The aggressive ASI proponents are experienced programmers who intentionally do this. By the community requiring semicolons here we are sending a signal saying we're no longer bothering with ASI. There may be a community backlash for this. Its not that we cant do it its just extra work</p>
-<p>DE: Well, I mean it’s not extra work now as we have Babel and V8 implementing these with the ASI hazards in place. What we're concerned about though is providing a set of footguns for users. What do you think about this?</p>
+<p>DE: Well, I mean it's not extra work now as we have Babel and V8 implementing these with the ASI hazards in place. What we're concerned about though is providing a set of footguns for users. What do you think about this?</p>
 <p>KZM: Well people will still hit errors.</p>
 <p>DH: The two things fighting in my head is: on the one hand to a person whos used to not using semicolons it will be a hostile move to require them. Putting a semiclon at the end of a &quot;line&quot; (vs a semicolon in a for loop) is telling developers who are used to not using semicolons that their style is wrong. The problem on the other side is the list of new gotchas that will trip these people up - throwing a bunch of new hazards at them. Either approach has a downside for the no-semicolon camp.</p>
 <p>AK: Yes thats imporant, we are hurting programmers either way</p>
@@ -215,9 +215,9 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>ZB: If we can make a statement saying that ASI wont be consistent with the evolution of the language we should make that statement</p>
 <p>MM: A good suggestion</p>
 <p>DE: I'm not sure we can make a statement like that.</p>
-<p>MB: Yehuda pointed out that Brendan always said ASI was error correction. Kat repeated that point. That fact won’t change, we're just saying there are new rules that apply to new things. It sounds like we already have a statement.</p>
+<p>MB: Yehuda pointed out that Brendan always said ASI was error correction. Kat repeated that point. That fact won't change, we're just saying there are new rules that apply to new things. It sounds like we already have a statement.</p>
 <p>DE: It seems like the conclusion is we don't have strong arguments to either.</p>
-<p>JHD: I think there is one objective point on how it prevents the future additions to the language. Adding things like <code>const</code> keywords or <code>+</code> or <code>*</code> - any new prefix sigil for methods or functions is now restricted. We always say we don’t want to take up syntactic space - partly because of user cognitive load but also because we dont want to limit future evolution of the language.</p>
+<p>JHD: I think there is one objective point on how it prevents the future additions to the language. Adding things like <code>const</code> keywords or <code>+</code> or <code>*</code> - any new prefix sigil for methods or functions is now restricted. We always say we don't want to take up syntactic space - partly because of user cognitive load but also because we dont want to limit future evolution of the language.</p>
 <p>AK: Well we add NLTs to every keyword which goes inside class bodies. For extra tokens which work like <code>*</code>, probably better to just not do that since it's difficult to understand.</p>
 <p>DE: There are some ugly failure modes for ASI though. <code>protected function</code> as a potential new feature is a new ASI hazard.</p>
 <p>JHD: Well I guess my argument stops being strong if we have a requirement for NLTs for all prefix keywords.</p>
@@ -232,7 +232,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>DE: On the bug thread many JS devs wrote in to tell us they'd be disappointed with not having ASI.</p>
 <p>ZB: We seem to operating on extremes - either banning or encouraging it. We can still keep ASI for the original error correction for newbies but send signals to strong ASI proponents that relying on ASI as a stylistic choice is not sustainable.</p>
 <p>DE: It seems a clear way forward to say we can support ASI here but we're not sure how many more features will continue to work out like this.</p>
-<p>ARE: I was going to say the same thing - we should think about a long term path in general, around making decisions of including ASI in future features.</p>
+<p>AKI: I was going to say the same thing - we should think about a long term path in general, around making decisions of including ASI in future features.</p>
 <p>CM: It sounds like what we're coming to is &quot;we'll continue supporting ASI while it's not too much trouble&quot;. If it gets in our way we'll stop using it but otherwise keep using it.</p>
 <p>DH: Its hard for us to predict to what we can do down the line. Its also hard to make a declaration about semicolons. Voicing an opinion seems something we don't want to do. Telling someone to rewrite their codebase is not something they'll be happy with.</p>
 <p>KCL: I would counterpoint that, part of the problem we have is that TC39 doesn't communicate enough to the community - and so no guidance is still guidance. My interpretation of ES6 - where in class bodies methods being very not required - this to me is a signal that the committee was moving away from strong semicolon usage - contrary to what the committee seems to be saying here.</p>
@@ -278,19 +278,19 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <a href="#tc39-community-engagement-discussion"><h2 id="tc39-community-engagement-discussion">TC39 Community Engagement Discussion</h2></a><ul>
 <li><a href="https://docs.google.com/presentation/d/1vmnxDDZnbUjkfM0J9LDOtzOW1VL0efYA8uBCbGb1UZ8/edit#slide=id.p">presentation</a></li>
 </ul>
-<a href="#positive-culture"><h3 id="positive-culture">Positive culture</h3></a><p>ARE: I've noticed examples of people coming to disagreements in issues in bad faith. Shutting debates down often by making it person because they don't agree with the premise or don't want to give time or air to the pepole they disagree with. It makes the targets of  those bad-faith arguments feel bad and sends a message to new people that it's not worth contributing when that's how we treat each other. One thing keeping women and marginalised folks out of open source is brashness around the responses to issues on the repos. It can make a massive difference.</p>
+<a href="#positive-culture"><h3 id="positive-culture">Positive culture</h3></a><p>AKI: I've noticed examples of people coming to disagreements in issues in bad faith. Shutting debates down often by making it person because they don't agree with the premise or don't want to give time or air to the pepole they disagree with. It makes the targets of  those bad-faith arguments feel bad and sends a message to new people that it's not worth contributing when that's how we treat each other. One thing keeping women and marginalised folks out of open source is brashness around the responses to issues on the repos. It can make a massive difference.</p>
 <p>ZB: We had a very similar issue on our bug tracking. We had developers who were very brash and shut down issues without - perhaps empathy is the word? One thing that fixed that is we started adding tags indicating new users. For the first time users this is important.</p>
 <p>KCL: GitHub does this for you!</p>
-<p>ARE: I've fallen down this trap before. Especially for ESLs, it makes a massive difference. Additionally I think the GitHub canned replies feature can be useful here - for starting an issue</p>
+<p>AKI: I've fallen down this trap before. Especially for ESLs, it makes a massive difference. Additionally I think the GitHub canned replies feature can be useful here - for starting an issue</p>
 <p>KCL: (Presenting canned replies and GitHub contributor labels)</p>
-<a href="#encouraging-more-presenters"><h3 id="encouraging-more-presenters">Encouraging more presenters</h3></a><p>ARE: I think it would be great to have some documentation around these processes, but also to be able to provide short TL;DRs to see if people are actually interested. The existing documentation has <em>so many words</em> and its very difficult just to read this.</p>
+<a href="#encouraging-more-presenters"><h3 id="encouraging-more-presenters">Encouraging more presenters</h3></a><p>AKI: I think it would be great to have some documentation around these processes, but also to be able to provide short TL;DRs to see if people are actually interested. The existing documentation has <em>so many words</em> and its very difficult just to read this.</p>
 <p>JHD: Having rationale - explaining some things we care about that aren't in process documents or specs - would be useful. I understand we've had concerns about bringing discussions from es-discuss into here - but only because the proposals aren't of a quality <em>because</em> we have no documents explaining how to make quality contributions.</p>
 <p>YK: When I joined the committee it took me a while to get past the &quot;read the entire es-discuss before you say anything&quot; which thankfully we don't do anymore. I think we can help people who want to peek in - right now they're bouncing hard out. We need to do more to support those people.</p>
 <p>MM: Many people on do have relevant expertise and know the language well, we do ourselves a service bringing those people in. Some of the outside experts I've invited in the past are now in this comittee today. There's lots we can do to bring outside people in and include them in our deliberations.</p>
 <a href="#conversation-participation"><h3 id="conversation-participation">Conversation participation</h3></a><p>DE: I also want to talk about conversation participation. Everyone here has great knowledge and different perspectives - but they don't always participate in the conversation. I dont want to say people who are just here to observe is bad, but I want to help people feel welcome to participate freely. We have a lot of jargon that people need to get to. If any of you have ideas about these</p>
 <p>CM: Its also shared culture that forms a point of reference for conversations. If you come to 3 or 4 meeting you're no longer a neophyte - but we could do more to capture the misunderstandings and confusions for the first time people comes to meetings.</p>
 <p>DT: Jargon is essential to any technical community - but actually theres some value in capturing it. We should have a page which enumerates the jargon, like what does TCP mean to this group.</p>
-<p>ARE: This is a great opportunity to have an FAQ repo, higher level less dense documentation, a dictionary, a glossary. Footgun could go in there.</p>
+<p>AKI: This is a great opportunity to have an FAQ repo, higher level less dense documentation, a dictionary, a glossary. Footgun could go in there.</p>
 <p>DH: A simple practice of a jargon definition is fun, its shared culture. This is one of the easy things we can do.</p>
 <p>DE: I wonder if just more than documentation - explaining words as we speak them in the meetings would be good.</p>
 <p>CM: Jargon like TCP, but also jargon like catch-phrases that you don't even realise is jargon like &quot;im not going to die on that hill&quot; which is just as important to communicate on that thing. Having a jargon file is a great way to capture this too.</p>
@@ -300,7 +300,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>DH: Having the public backchannel conversation in IRC is helpful and high speed and you don't need to tell every newcommer to read the old docs. However not everyone uses IRC. I wonder if some people have a problem with that.</p>
 <p>DE: If you look at TC39's internal IRC channel, maybe not even half the people in the room are in it despite almost everyone having their laptop open. Maybe switching to Slack or Gitter is worth investigating?</p>
 <p>KM: Maybe it'd be useful to have people on their own - having a buddy system where people can quietly ask questions can be useful.</p>
-<p>ARE: How do we feel about a tc39/how-we-work repo?</p>
+<p>AKI: How do we feel about a tc39/how-we-work repo?</p>
 <p>Everyone: thumbs up</p>
 <p>DT: Why a separate repo?</p>
 <p>JHD: Permissions granularity, and not polluting the spec.</p>
@@ -310,7 +310,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>MB: For context on this logo - its based on the open source JS community logo. I think the nice thing about this logo is it is a nod to the community.</p>
 <p>SYG: I made a logo for the committee hats; what do you think? It uses the font of the JS community logo and is black on orange.</p>
 <p>DE: One final point - Brian announced he will no longer be editor after 2018. We're currently looking for a new editor for ES2019. He says it takes around 20 hours a week every week.</p>
-<p>ARE: I had a question on Tuesday night: how much unpaid time do you put into this and how much do you expect to? Fingers crossed this was 0.</p>
+<p>AKI: I had a question on Tuesday night: how much unpaid time do you put into this and how much do you expect to? Fingers crossed this was 0.</p>
 <p>YK: For me that is definitely not true.</p>
 <a href="#conclusionresolution-tc39-community-engagement-discussion"><h4 id="conclusionresolution-tc39-community-engagement-discussion">Conclusion/Resolution</h4></a><ul>
 <li>Starting tc39/how-we-work

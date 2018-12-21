@@ -109,7 +109,7 @@
 <p>WH: This also comes up in for loops, e.g., <code>for (do {break;};; ) {}</code></p>
 <p>JHD: Your correspondence principal half answers my question... do statements, i like, they make a new form of implicit return, where the completion value is used in a way that isn't other wise like... so like in an arrow function with an implicit return, it's implicitly selection the completion of the thing, so it's an expression. It's a bit confusing since this is the first time in normal code to observe the completion value; people using eval don't usually think about it that way.</p>
 <p>DH: This is the first place in the syntax that makes completion observerable</p>
-<p>DH: There is an API, eval, that makes the completion visible. Most people don't realize that is what happening.  There is a question if people now have to undersatnd what completion is.</p>
+<p>DH: There is an API, eval, that makes the completion visible. Most people don't realize that is what happening. There is a question if people now have to undersatnd what completion is.</p>
 <p>JHD: Would it make sense to have some sort of keyword in the do statement return/yield/etc.</p>
 <p>DH: I would argue against it. It feels a bit like Stroustrup's rule, when something is new people want it to be noisy so they can feel comfortable with it until they get use to it. In the short term it feels good, in the long term it doesn't. There is a usability concern. How do we teach this? I would argue that it is intuitive enough that it doesn't have to be explained by teaching people rigorous notions of what a completion is. Maybe it's more like, the value of this statement. Oh, what's that mean? It's worth testing that, the early user testing we have in the babel community at least indicates that some people find it appealing. That could be selection bias, though.</p>
 <p>JHD: I'm not pushing one way or the other. If you type something into the console it's as if it's doing this already. Whatever you type into a console and pops out that's what happens. My concern is THAT it is teachable, i don't mind which way</p>
@@ -174,8 +174,10 @@
 </ul></li>
 </ul>
 <a href="#13iid-seeking-stage-1-for-realms"><h2 id="13iid-seeking-stage-1-for-realms">13.ii.d Seeking Stage 1 for Realms</h2></a><p>(Dave Herman, co-championing with Mark Miller and Caridy Patiño)</p>
-<p><a href="https://github.com/tc39/proposal-realms">proposal</a>
-<a href="https://gist.github.com/dherman/66627aac764a9795dc3875e270f55918">presentation</a></p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-realms">proposal</a>
+<a href="https://gist.github.com/dherman/66627aac764a9795dc3875e270f55918">presentation</a></li>
+</ul>
 <p>DH: Realms was sitting at Stage 0; I've been looking at it with Dean, and Chip, and others. Previously worked on it through ES2015, just the core JavaScript builtins, nothing else fancy. If you create a new Realm and instantiate an Array, it's a different one. Alternatively considered, this is a reflective reification of the ECMAScript realm concept. (going over presentation linked above)</p>
 <p>DH: It forms a sort of sandbox, or you could think of it as a worker with synchronous communication.</p>
 <p>MM: That seems odd; Workers are tied to concurrency/processes</p>
@@ -184,7 +186,7 @@
 <p>BFS: Another thing is using ServiceWorker to avoid redundant evaluation of module loading, and transpilation</p>
 <p>DH: When you have a realm object, you have super privileges over the realm: you can get its global, evalScript</p>
 <p>WH: What's on the realm's global object of a realm you created in your example via new Realm()?</p>
-<p>DH: By default, what's on it is the standard library of ECMA262--Array, parseInt, Function, not window, document--none of the web-specific stuff.</p>
+<p>DH: By default, what's on it is the standard library of ECMA-262--Array, parseInt, Function, not window, document--none of the web-specific stuff.</p>
 <p>WH: What about Annex B libraries? In particular, things like the error stack introspection that we discussed earlier in this meeting?</p>
 <p>DH: We can discuss; either could work.</p>
 <p>AWB: You could also have Annex B realm</p>
@@ -250,10 +252,10 @@
 <p>AWB: Yes, we'll fix those.</p>
 <a href="#conclusionresolution-meeting-minutes"><h4 id="conclusionresolution-meeting-minutes">Conclusion/Resolution</h4></a><p>Minutes are approved.</p>
 <a href="#global"><h2 id="global">global</h2></a><p>(Jordan Harband)</p>
-<p>JHD: We faced a number of web-compatibility issues for <code>global</code>, including flikr and several enterprise JIRA intallations.  So it seems like the name <code>global</code> is dead. What should we do? Abandon this? I'd like to find another name, with global in the name</p>
+<p>JHD: We faced a number of web-compatibility issues for <code>global</code>, including flikr and several enterprise JIRA intallations. So it seems like the name <code>global</code> is dead. What should we do? Abandon this? I'd like to find another name, with global in the name</p>
 <p>MF: How about gl0bal?</p>
 <p>MPT: globalThisPascal</p>
-<p>JHD: <code>Global</code>, <code>$global</code>, <code>__global__</code>, anyway, I'll open a bug and we can come together and make a list of possibilities.  This will take a while, since each time we try a name, we'll have to find a browser willing to try it, if it breaks, we'll have to roll it back, hope that trust hasn't been broken enough to try again. Both Safari and FF are willing to try again but I don't want to just try again every two months.</p>
+<p>JHD: <code>Global</code>, <code>$global</code>, <code>__global__</code>, anyway, I'll open a bug and we can come together and make a list of possibilities. This will take a while, since each time we try a name, we'll have to find a browser willing to try it, if it breaks, we'll have to roll it back, hope that trust hasn't been broken enough to try again. Both Safari and FF are willing to try again but I don't want to just try again every two months.</p>
 <p>WH: What was the cause of the flickr breakage?</p>
 <p>JHD: If a global variable named global was present moment would attach to the wrong thing.</p>
 <p>AWB: Where I saw it was detecting what platform I am on.</p>
@@ -385,7 +387,7 @@ AK: That is three that exist</p>
 <p>AK: If that was true it would be in stage 2 now.</p>
 <p>AWB: So we have been talking about System for more than 5 years, you can't just assume it won't happen.</p>
 <p>JHD: Speaking as a champion for the stack proposal, I didn't ask for stage two, major semantics are not specified, it's not ready. I want it to be ready. I want Mark to take this up. My goal is to get that done quickly. In some number of years it will be finished and something we agreed upon will ship. it's already compat.</p>
-<p>AK: It may not include the stack or getstack trace. We may expose the stack trace in other ways that don't include System.  I'm partially making these arguments for Domenic.</p>
+<p>AK: It may not include the stack or getstack trace. We may expose the stack trace in other ways that don't include System. I'm partially making these arguments for Domenic.</p>
 <p>JHD: I hear what you are saying. There is a slim change that getStack and getStack string will not need a priv granting object. The real question is, if we likely will have a privilege-granting object, let's assume its going to happen and some stuff will be on it. At that point will we regret not putting lgobal on it?</p>
 <p>AWB: No, global doesn't need to be there, it would be perfectly fine</p>
 <p>DH: A global is already always accessilble to you. The idea that we woudl take this thing that is already available and is the one major thing you need to blacklist to get attenuated power and pretend you were hiding it under a power tools namespace is silly</p>
@@ -420,7 +422,9 @@ AK: That is three that exist</p>
 <li>We will look for a web compat simple global name</li>
 <li>We will make a reflector issue to bikeshed</li>
 </ul>
-<a href="#public-and-private-class-fields-daniel-ehrenberg-jeff-morrison-and-kevin-gibbons"><h2 id="public-and-private-class-fields-daniel-ehrenberg-jeff-morrison-and-kevin-gibbons">Public and Private Class Fields (Daniel Ehrenberg, Jeff Morrison and Kevin Gibbons)</h2></a><p><a href="https://docs.google.com/presentation/d/1yXsRdAJO7OdxF0NmZs2N8ySSrQwKp3D77vZXbQOWbMs/edit">slides</a></p>
+<a href="#public-and-private-class-fields-daniel-ehrenberg-jeff-morrison-and-kevin-gibbons"><h2 id="public-and-private-class-fields-daniel-ehrenberg-jeff-morrison-and-kevin-gibbons">Public and Private Class Fields (Daniel Ehrenberg, Jeff Morrison and Kevin Gibbons)</h2></a><ul>
+<li><a href="https://docs.google.com/presentation/d/1yXsRdAJO7OdxF0NmZs2N8ySSrQwKp3D77vZXbQOWbMs/edit">slides</a></li>
+</ul>
 <p>DE: Kevin is joining the champion group for private state. There are a number of things we are approaching consenus on. I don't want to say we're at consensus but the public and private keyword, Allen you've expressed interest in this. At the last meeting we discussed if we should have this in addition to the sigil we have to have. A few arguments for this were that we don't have it for methods and you really want it when you're learning but after you learn you don't want it. The second one is the stronger argument. For the token we talked about different possibilities, it could be = or :=. It seemed like equals was pretty agreeable.</p>
 <p>WH: By &quot;token&quot; here and on the slide I assume you don't mean the token that starts a private name.</p>
 <p>DE: Correct. That would remain <code>#</code>.</p>

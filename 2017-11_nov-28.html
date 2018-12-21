@@ -13,14 +13,14 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-28-2017-meeting-notes"><h1 id="november-28-2017-meeting-notes">November 28, 2017 Meeting Notes</h1></a><hr>
-<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CPO), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (ARE), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM)</p>
+<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CPO), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM)</p>
 <p>Remote:
 István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
 <a href="#opening-welcome-and-roll-call"><h2 id="opening-welcome-and-roll-call">Opening, welcome and roll call</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2017/11.md">Agenda</a></li>
 </ul>
-<a href="#7i-ecma262-status-updates-15m"><h2 id="7i-ecma262-status-updates-15m">7.i ECMA262 Status Updates (15m)</h2></a><p>BT: I've updated the queue tool</p>
+<a href="#7i-ecma-262-status-updates-15m"><h2 id="7i-ecma-262-status-updates-15m">7.i ECMA-262 Status Updates (15m)</h2></a><p>BT: I've updated the queue tool</p>
 <p>BT: The only topics which I'm aware of for Stage 4 in ES2018 seem to be the RegExp proposals. If there are any more things for ES2018, then please get the pull request ready by January. If it's not in by January, it's probably not getting into the final spec.</p>
 <p>BT: Post-2018, I'd like to pass the torch to someone else. If you're interested in editing, please get in touch with me. Hopefully we can get someone else to ramp up on this role.</p>
 <p>KCL: Is Object spread possible to make it into es2018?</p>
@@ -98,7 +98,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>AK: I'm more interested in behavior than spec text. 1_0 as a string, does that fail to convert to string?</p>
 <p>RW: That's the number 10 in parseFloat</p>
 <p>AK: So a string being implicitly converted to a number</p>
-<p>RW: The underscores have no mathematical value so they get ignored. Implicit conversion of <code>'1_0'</code> is <code>10</code>.  T</p>
+<p>RW: The underscores have no mathematical value so they get ignored. Implicit conversion of <code>'1_0'</code> is <code>10</code>. T</p>
 <p>(RW: Important to note that I was presenting remotely and misheard Adam's question, which is why my answer &quot;broke the web&quot;—sorry for any confusion there. The correct answer is that there is NO CHANGE to the existing behavior of implicitly coerced strings that contain an underscore, eg: <code>1 + &quot;1_0&quot; === &quot;11_0&quot;</code> and <code>&quot;1_0&quot; + 1 === &quot;1_01&quot;</code>)</p>
 <p>RJE: We've used up the time slot. How much more do you need?</p>
 <p>DE: From the spec text, it doesn't draw a distinction from Number constructor and ToNumber.</p>
@@ -159,7 +159,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>YK: It's just a case of confusion. I agree with Mark's original case.</p>
 <p>MB: So can we say stage 1 still though?</p>
 <p>MM: It certainly qualifies, and I won't object. But my preference is we drop it. One of the functions of the committee is to be the guardian of the overall language complexity. We lose sight when we look at each proposal in isolation. We should ask ourselves if the benefit this brings is worth the extra surface. My opinion is no.</p>
-<p>MB: My opinion is different. Whether it’s worth it depends on the exact shape of the solution.</p>
+<p>MB: My opinion is different. Whether it's worth it depends on the exact shape of the solution.</p>
 <p>MS: To counter Mark, there is no good way to do a global string search of another string without regular expressions.</p>
 <p>MM: Hmm, this is a significant point I hadn't considered.</p>
 <p>YK: This case and others from earlier is making the case that a better API for &quot;just use /g&quot; is important.</p>

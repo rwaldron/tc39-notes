@@ -72,7 +72,7 @@ István Sebestyén (IS)</p>
 <li><code>new super()</code> is always a [[Construct]] invocation</li>
 <li><code>super()</code>     is always a [[Call]] invocation</li>
 </ul></li>
-<li><p>Didn’t want to further confuse &quot;called as a constructor&quot; and &quot;called as a function&quot;.
+<li><p>Didn't want to further confuse &quot;called as a constructor&quot; and &quot;called as a function&quot;.
 – <id>() -- always means &quot;called as function&quot;
 – new <id>() – always means &quot;called as constructor&quot;
 – Even when <id> is <code>super</code></p></li>
@@ -488,7 +488,7 @@ AWB: Are you proposing that all initialization and allocation happen in @@create
 <p>YK: I think you misunderstood the argument. I'm not saying you always have to write <code>if (new^)</code>. I'm saying that it is SOMETIMES true that you have to do it.</p>
 <p>MM: I want to split the argument. In world 1, we are saying we don't want to burden normal code with worrying about subclassing builtins. For code that does not subclass builtins, it shouldn't need to worry about possibility that it might get reused as a subclass of a builtin. We should not need to pay the price.</p>
 <p>MM: In that world, let's compare new^ to the proposal on the board. In new^, in world 1, if this is normal code, super() becomes <code>this = new super()</code></p>
-<p>YK: Yes but what this was saying is that IF YOU ARE subclasing something exotic, you need to do idiomatic things to get plausible results.</p>
+<p>YK: Yes but what this was saying is that IF YOU AKI subclasing something exotic, you need to do idiomatic things to get plausible results.</p>
 <p>MM: But only on the hypothesized small amount of code that needs to subclass builtins.</p>
 <p>YK: In the revived @@create, the burden falls on people are subclassing objects, and want to do a transform on the constructor.</p>
 <p>BZ: And people who don't know if they want to subclass an exotic.</p>

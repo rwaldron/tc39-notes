@@ -32,10 +32,10 @@
 <p>DH: That's what Node.js modules have.</p>
 <p>EF: Sure, but if you look at the compiled Node.js module, it's wrapped in a function with <code>module</code> as one of its arguments. So it's not magic, it can be explained with JavaScript.</p>
 <p>DH: But conceptually when writing a Node.js module you assume these bindings will be there, effectively by magic.</p>
-<p><em>…Discussion continued into the next question…</em></p>
+<p><em>...Discussion continued into the next question...</em></p>
 <a href="#how-do-you-dynamically-load-another-module-relative-to-the-current-module-using-the-same-loader-as-the-current-module"><h3 id="how-do-you-dynamically-load-another-module-relative-to-the-current-module-using-the-same-loader-as-the-current-module">How do you dynamically load another module relative to the current module using the same loader as the current module?</h3></a><p>CP, GB, and EF want to be able to dynamically load modules from within a module, using the same loader (which is unknown at development time).</p>
 <p>EF: A concrete example is a SPA with an <code>app.js</code> module that does client-side routing and dynamically imports the <code>settings.js</code> module when the user navigates to <code>/settings/</code>. We want to make sure the <code>app</code> module can load the <code>settings</code> module via the same loader — which might not be the <code>System</code> loader.</p>
-<p><em>…Discussion continued into the next question…</em></p>
+<p><em>...Discussion continued into the next question...</em></p>
 <a href="#how-do-you-gain-access-to-a-modules-metadata-from-within-the-module-itself-eg-normalized-name-address-etc"><h3 id="how-do-you-gain-access-to-a-modules-metadata-from-within-the-module-itself-eg-normalized-name-address-etc">How do you gain access to a module's metadata from within the module itself? e.g.; normalized <code>name</code>, <code>address</code>, etc.</h3></a><p>These questions were leading towards a main issue: a module needs access to its own metadata, including the ability to dynamically load other modules relative to itself using the loader in which it was loaded.</p>
 <p>EA: In Node.js you have access to this module metadata between the <code>module</code>, <code>exports</code>, and <code>require</code> bindings that Node passes into the module.</p>
 <p>GB &amp; CP: We can't assume the <code>System</code> loader was used to load a particular module, and we want to dynamically load more modules using that same loader. Currently we have no way of doing this.</p>

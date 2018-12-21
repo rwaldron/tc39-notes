@@ -71,7 +71,7 @@
 [Discussion on the behavior of the new var bindings, along with whether assignment to foo updates one or both.]</p>
 <p>WH: When are the crazy introduced var bindings initialized? At entry to outer function bar (just like ES5 inner functions in the top-level of an outer function), or at the time the inner function function foo definition is executed?
 Various: Set to undefined on entry to outer function. Set when inner function definition foo is executed.
-Various: Executing function definition updates both the let and the var bindings.  Assignment updates only the let binding.</p>
+Various: Executing function definition updates both the let and the var bindings. Assignment updates only the let binding.</p>
 <p>WH: [points out (and likes) warning on cases &quot;for which the above steps are performed&quot; in Annex B of the current draft]
 [Long discussion about warnings, SHOULD, and their audience]</p>
 <p>LH:  A SHOULD warning seems a reasonable addition to the proposal here.</p>

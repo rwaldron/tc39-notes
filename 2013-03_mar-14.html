@@ -78,7 +78,7 @@ observe.observePath(foo, <span class="hljs-string">"bar.baz"</span>);
 </code></pre>
 <p>?: Observing paths leaks objects if we only have weak maps, not weak references</p>
 <p>WH: Please explain</p>
-<p>?: Path observers observe mutations anywhere on an object path a.b.c.d.  Without weak refs these will leak a if d is still alive but a wouldn't otherwise be.</p>
+<p>?: Path observers observe mutations anywhere on an object path a.b.c.d. Without weak refs these will leak a if d is still alive but a wouldn't otherwise be.</p>
 <p>(Slide 5)</p>
 <hr>
 <p><strong>Per Analysis (dirty checking vs Object.observe)</strong></p>
@@ -209,7 +209,7 @@ But symbols don't fully behave like objects yet, as would be required by current
 <a href="#417-legacy-compatibility-for-block-level-function-declarations"><h2 id="417-legacy-compatibility-for-block-level-function-declarations">4.17 Legacy Compatibility for Block Level Function Declarations</h2></a><p>(Allen Wirfs-Brock)</p>
 <p>See: <a href="http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:legacyblockfunctiondcl2.pdf">http://wiki.ecmascript.org/lib/exe/fetch.php?id=meetings%3Ameeting_mar_12_2013&amp;cache=cache&amp;media=meetings:legacyblockfunctiondcl2.pdf</a> (This is a PDF that will initiate a download!)</p>
 <p>(Copied from PDF)</p>
-<p>Prior to the Sixth Edition, the ECMAScript specification did not define the occurrence of a <em>FunctionDeclaration</em> as an element of a Block statement’s <em>StatementList</em>. However, support for that form of <em>FunctionDeclaration</em> was an allowable extension and most browser-hosted ECMAScript implementations permitted them. Unfortunately, the semantics of such declarations differ among those implementations. Because of these semantic differences, existing web ECMAScript code that uses Block level function declarations is only portable among browser implementation if the usage only depends upon the semantic intersection of all of the browser implementations for such declarations. The following are the use cases that fall within that intersection semantics:</p>
+<p>Prior to the Sixth Edition, the ECMAScript specification did not define the occurrence of a <em>FunctionDeclaration</em> as an element of a Block statement's <em>StatementList</em>. However, support for that form of <em>FunctionDeclaration</em> was an allowable extension and most browser-hosted ECMAScript implementations permitted them. Unfortunately, the semantics of such declarations differ among those implementations. Because of these semantic differences, existing web ECMAScript code that uses Block level function declarations is only portable among browser implementation if the usage only depends upon the semantic intersection of all of the browser implementations for such declarations. The following are the use cases that fall within that intersection semantics:</p>
 <ol>
 <li>A function is declared and only reference within a single block:</li>
 </ol>

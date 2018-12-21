@@ -52,7 +52,7 @@
 <p>LBR: Would appreciate legal feedback, e.g. from Brian Terlson.</p>
 <p>IS: Please write down your proposal and Ecma will review it.</p>
 <p>LBR: Please reach out to me by this weekend if you're interested in being involved.</p>
-<a href="#8ii-using-frontmatter-tags-that-matter"><h3 id="8ii-using-frontmatter-tags-that-matter">8.ii Using Frontmatter tags that matter</h3></a><p>LBR: <a href="https://github.com/tc39/Test262/blob/master/features.txt">https://github.com/tc39/Test262/blob/master/features.txt</a> defines features that can be used to filter or group tests.</p>
+<a href="#8ii-using-frontmatter-tags-that-matter"><h3 id="8ii-using-frontmatter-tags-that-matter">8.ii Using Frontmatter tags that matter</h3></a><p>LBR: <a href="https://github.com/tc39/test262/blob/master/features.txt">https://github.com/tc39/test262/blob/master/features.txt</a> defines features that can be used to filter or group tests.</p>
 <p>MM: Is this for semantic purposes, or just organization?</p>
 <p>LBR: Organization, and also to avoid running tests you expect to fail, and to skip unrelated tests.</p>
 <p>LBR: Bocoup is looking for more contributors to Test262!</p>
@@ -85,7 +85,7 @@
 <p>DE: Even for a 0-&gt;1 transition, if you're in a larger organization, you'll be able to give more useful feedback if you have the agenda item further in advance.</p>
 <a href="#10ii-vision-thing"><h2 id="10ii-vision-thing">10.ii Vision Thing</h2></a><p>(Chip Morningstar)</p>
 <p>TODO: link to slides</p>
-<p>CM: We (TC39) have a love / hate relationship with JS..  Our Prime Directive is &quot;Don't break the web&quot;.  Fixes can break crappy software, which breaks the web.  Opinion is that this crappy software is an obstacle to innovation.  Our current tool is Compartmentalization.  Limit the scope of changes to avoid interference.  Examples from past / current work.  Lexical scoping, modules, realms and frozen realms.  These are &quot;Islands of Sanity&quot;.  Many are asking for JavaScript to morph into language XXX.  &quot;JavaScript should be more like JavaScript&quot;   Quote from Tony Hoare - &quot;Inside every large program is a small program struggling to get out.&quot;</p>
+<p>CM: We (TC39) have a love / hate relationship with JS.. Our Prime Directive is &quot;Don't break the web&quot;. Fixes can break crappy software, which breaks the web. Opinion is that this crappy software is an obstacle to innovation. Our current tool is Compartmentalization. Limit the scope of changes to avoid interference. Examples from past / current work. Lexical scoping, modules, realms and frozen realms. These are &quot;Islands of Sanity&quot;. Many are asking for JavaScript to morph into language XXX. &quot;JavaScript should be more like JavaScript&quot;   Quote from Tony Hoare - &quot;Inside every large program is a small program struggling to get out.&quot;</p>
 <p>WH: It's easier to compartmentalize syntax features, like &quot;use strict&quot; or modules do. What about semantic quirks, e.g. if you want to forbid <code>__proto__</code>?</p>
 <p>CM: Frozen realms allow bringing in two separate pieces of SW and limiting there linking to a small surface area</p>
 <p>BFS: Are you proposing more compartments like &quot;use strict&quot;?</p>
@@ -95,16 +95,16 @@ CM: Experimenting with new compartments needs to be independent from the languag
 <p>CM: My target is it ought to be possible to take any random crappy software, load it, run it and nothing bad happens.</p>
 <p>DH: Maybe people would like to treat certain features as if they didn't exist.</p>
 <p>CM: Individual companies do self-censor themselves with linters and compan, etc.</p>
-<p>CM: Programmers think about taking out certain features and that makes things better.  While taking out other things make things worse.</p>
+<p>CM: Programmers think about taking out certain features and that makes things better. While taking out other things make things worse.</p>
 <p>DH: (BN: Not sure I caught this accurately) Want to avoid mandating fragmentation at the engine level.</p>
 <p>CM: It may be the case that users can try out things that are actually &quot;dangerous&quot;, but with realms and the like, they can try this in a safe way.</p>
 <p>AWB: I take it by compartmentalization you mean true isolation, a la browser tabs/workers. Totally isolated except for some communications channel? Isn't that essentially what an operating system gives you? Do we still have to think of the isolated things as using the same language, then?</p>
-<p>CM: I think there is something there to what your are saying.  There are some things that JS does that is different to the way other software works,  e.g. loaded immediately before use, or different set of services.</p>
+<p>CM: I think there is something there to what your are saying. There are some things that JS does that is different to the way other software works,  e.g. loaded immediately before use, or different set of services.</p>
 <p>BN: Need to get the communications channel right between the compartments. WASM already has an import mechanism of its own, not exactly the same as ES modules. Should we standardize this?</p>
 <p>BFS: That may not be within our scope as TC39.</p>
 <p>MS: Browsers are already basically OSes in that there is JS, WASM, Workers, memory protection, scheduling, thread, ...</p>
 <p>MS: Multiple standards bodies and engine implementors are all standardizing JS and the browser environment. Experiments become de facto standards. But everyone's hoping for eventual convergence/standardization.</p>
-<p>MM: It goes back to the notion of the good parts vs the bad parts and being conscious about each.  They takes judgement.</p>
+<p>MM: It goes back to the notion of the good parts vs the bad parts and being conscious about each. They takes judgement.</p>
 <p>CM: There are lots of little sharp edges and corners inadvertently added that would be good to take out.</p>
 <p>DH: This question of other languages compiling to the platform...</p>
 <p>CM: I'm not talking about that.</p>
@@ -134,7 +134,7 @@ CM: Experimenting with new compartments needs to be independent from the languag
 <p>DD: The ICU folks aren't exactly writing a spec, but they are trying to create a reference implementation through their code, so it has some of the value of a spec, so we could consider treating it that way?</p>
 <p>BT: That's what the discussion of a &quot;normative reference&quot; to ICU was about in the last meeting.</p>
 <p>DE: That's unfriendly to alternate implementations.</p>
-<p>DD: If the ICU folks wrote an ECMA262-style specification, would we be more willing to reference it normatively?</p>
+<p>DD: If the ICU folks wrote an ECMA-262-style specification, would we be more willing to reference it normatively?</p>
 <p>BT: How much leeway do we want to give these implementations? Alternate implementations are good, but the web reality will probably select one implementation.</p>
 <p>DE: So should we keep this at stage 2?</p>
 <p>BT: I don't want to hold this proposal back, since the Intl API is important to me.</p>
@@ -223,7 +223,7 @@ In some fashion, TC39 must support a cancellation primitive, since our async API
 <p>LBR: (closes the vision talk with suggestions)</p>
 <ul>
 <li>Establish a public meta repo on GitHub for open and general discussions.</li>
-<li>Recognize ECMAScript as a living standard, refer to the <a href="https://tc39.github.io/ecma262">latest draft</a> and skip the year or edition numbers.</li>
+<li>Recognize ECMAScript as a living standard, refer to the <a href="https://tc39.github.io/ECMA-262">latest draft</a> and skip the year or edition numbers.</li>
 </ul>
 <p>(the suggestions are not necessarily being applied to TC39, this is an async work that still requires further discussion)</p>
 <a href="#11iia-functionprototypetostring-looking-for-stage-4"><h2 id="11iia-functionprototypetostring-looking-for-stage-4">11.ii.a. Function.prototype.toString looking for stage 4</h2></a><p>(Michael Ficarra)</p>

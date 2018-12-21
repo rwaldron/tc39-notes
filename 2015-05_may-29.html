@@ -18,19 +18,19 @@
 <a href="#relaxed-semantics-for-promiseresolve-nominal-check-mm"><h2 id="relaxed-semantics-for-promiseresolve-nominal-check-mm">Relaxed semantics for Promise.resolve nominal check (MM)</h2></a><p>MM: presenting</p>
 <pre><code class="language-js"><span class="hljs-built_in">Promise</span>.resolve(arb1).then(arb2, arb3);
 </code></pre>
-<p>MM: The invariant that we are trying to maintain is that in a realm where the primodials are frozen and arb1, arb2, and arb3 are from an untrusted party, then any code associated with those objects will be executed in a later turn.  Since promises are not frozen, the invariant can be broken if &quot;then&quot; is overridden on the instance.  The invariants can be maintained by a subclass of Promise.</p>
+<p>MM: The invariant that we are trying to maintain is that in a realm where the primodials are frozen and arb1, arb2, and arb3 are from an untrusted party, then any code associated with those objects will be executed in a later turn. Since promises are not frozen, the invariant can be broken if &quot;then&quot; is overridden on the instance. The invariants can be maintained by a subclass of Promise.</p>
 <pre><code class="language-js">DefensiblePromise.resolve(arb1).then(arb2, arb3);
 </code></pre>
-<p>The other way that the invariant was broken was with Promise.resolve.  Once we added the newTarget parameter to the Reflect.construct method, that meant that someone could invoke the Promise constructor with an arbitrary newTarget.</p>
-<p>AWB:  That could be checked in the Promise constructor code.  The constructor could traverse the prototype chain of the constructor.</p>
-<p>MM: Because we have the mutability issue we have to protect the invariants in userland anyway, so I like the proposal from C. Scott Ananian.  Just perform a Get on the &quot;constructor&quot; property of the argument supplied to &quot;resolve&quot;.</p>
+<p>The other way that the invariant was broken was with Promise.resolve. Once we added the newTarget parameter to the Reflect.construct method, that meant that someone could invoke the Promise constructor with an arbitrary newTarget.</p>
+<p>AWB:  That could be checked in the Promise constructor code. The constructor could traverse the prototype chain of the constructor.</p>
+<p>MM: Because we have the mutability issue we have to protect the invariants in userland anyway, so I like the proposal from C. Scott Ananian. Just perform a Get on the &quot;constructor&quot; property of the argument supplied to &quot;resolve&quot;.</p>
 <p>MM: Do we have species on Promise</p>
 <p>AWB:  Yes</p>
 <p>MM: Don't think @@species buys you anything here</p>
 <p>AWB: But there's a consistency</p>
 <p>AK: This is a breaking change for shipping browsers.</p>
 <p>YK: I would be suprised if there are programs which rely on this edge case.</p>
-<p>MM: We should take this into account.  Even if there's code subclassing promises, they would probably not be affected by this change.  I would like AWB's opinion on whether we use @@species or constructor.</p>
+<p>MM: We should take this into account. Even if there's code subclassing promises, they would probably not be affected by this change. I would like AWB's opinion on whether we use @@species or constructor.</p>
 <p>AWB: NewPromiseCapability might use @@species anyway.</p>
 <p>KS: Can we confirm?</p>
 <p>AWB:  No, it doesn't use @@species.</p>
@@ -39,8 +39,8 @@
 <p>MM:</p>
 <pre><code class="language-js">FooCancellable.resolve(arb1).then(arb2).then(arb3);
 </code></pre>
-<p>@@species of FooCancellable is Cancellable.  Using &quot;constructor&quot;, the first then is called on a FooCancellable and the second is called on a Cancellable.  That looks correct.</p>
-<p>AK: We'll have to look and see if this change breaks anything.  (Not asking to postpone.)</p>
+<p>@@species of FooCancellable is Cancellable. Using &quot;constructor&quot;, the first then is called on a FooCancellable and the second is called on a Cancellable. That looks correct.</p>
+<p>AK: We'll have to look and see if this change breaks anything. (Not asking to postpone.)</p>
 <p>SP: Chrome canary is already broken here:</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Promise</span> </span>{}
 Foo.resolve(<span class="hljs-built_in">Promise</span>.resolve()).constructor !== Foo;

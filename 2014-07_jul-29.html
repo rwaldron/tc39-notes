@@ -71,7 +71,7 @@ WH: I wrote this wording in ES3 and I'm fine with this change. It will fix the b
 <p>MM: Worried that implementation-defined behavior could do bad things such as violate memory safety. Should state that it doesn't.</p>
 <p>MM: (filing bug to make language more specific to avoid memory safety violations)</p>
 <p>AWB: There was never a concern about violating memory safety because we don't define memory safety</p>
-<p>WH: I tried to formalize it in ES3 but it was too much trouble.  I wanted  to state that the sort always produces a permutation, but that doesn't  apply to sorting oddball input objects containing things such as holes with prototype properties showing through, read-only properties,  getters/setters, proxies, ....  Can't write &quot;sort doesn't violate memory  safety&quot; without formalizing what memory safety is.</p>
+<p>WH: I tried to formalize it in ES3 but it was too much trouble. I wanted  to state that the sort always produces a permutation, but that doesn't  apply to sorting oddball input objects containing things such as holes with prototype properties showing through, read-only properties,  getters/setters, proxies, .... Can't write &quot;sort doesn't violate memory  safety&quot; without formalizing what memory safety is.</p>
 <p>MM: Will write concrete suggestion for handling and submit as part of bug</p>
 <p><a href="https://bugs.ecmascript.org/show_bug.cgi?id=3089">https://bugs.ecmascript.org/show_bug.cgi?id=3089</a></p>
 <p>Slide 3</p>
@@ -125,7 +125,7 @@ WH: I wrote this wording in ES3 and I'm fine with this change. It will fix the b
 <p>(<a href="https://bugs.ecmascript.org/show_bug.cgi?id=1908#c14">https://bugs.ecmascript.org/show_bug.cgi?id=1908#c14</a>)</p>
 <p><strong>Object instead of Array</strong></p>
 <pre><code class="language-js"><span class="hljs-built_in">Array</span>.prototype[<span class="hljs-built_in">Symbol</span>.unscopables] = {
-  ...  
+  ... 
 };
 </code></pre>
 <p>(with null prototype)</p>

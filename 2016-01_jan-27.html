@@ -412,7 +412,7 @@ link to slides:</p>
 <p>YK: can you force SW to cache the opaque thing.</p>
 <p>JW: the browser cache is sufficient, each new script element gets invoked.</p>
 <p>YK: throttling that seems like one way to mitigate</p>
-<p>… some discussion to clarify the attack vectors of CSRF …</p>
+<p>... some discussion to clarify the attack vectors of CSRF ...</p>
 <p>JW: slide (The attack: Some-origin policy workdaround)</p>
 <p>JW: Object.prototype/ Window.prototype. EventTarget.prototype</p>
 <p>WH: Could the system say, this is not a a script?</p>
@@ -458,17 +458,17 @@ B. add a MOP operation</p>
 </ul>
 <a href="#quick-interjection-method-param-decorators-function-expression-decorators-yk-mh"><h2 id="quick-interjection-method-param-decorators-function-expression-decorators-yk-mh">quick interjection: method param decorators, function expression decorators (YK, MH)</h2></a><p>YK: stage 0 for function decorators?</p>
 <p>AWB/MM: stage 0 is exploratory, make it part of the same proposal?</p>
-<p>… discussion about splitting/decoupling proposals …</p>
-<p>… MH putting up slides …</p>
-<p>MH: first slide, method param decorators example: <code>refresh(@lastRefreshTime timeStamp) { … }</code> as example</p>
+<p>... discussion about splitting/decoupling proposals ...</p>
+<p>... MH putting up slides ...</p>
+<p>MH: first slide, method param decorators example: <code>refresh(@lastRefreshTime timeStamp) { ... }</code> as example</p>
 <p>YK: additional metadata about the param they're attached to</p>
 <p>MM: can not change meaning?</p>
 <p>YK/MH: can change meaning. decorator gets extra info to identify that it is a function param.</p>
 <p>MM: happy with stage 0.</p>
 <p>MH: function param decorators: <code>schedule(@memoize (value) =&gt; ...)</code></p>
 <p>WH: Syntax conflict with the method param decorator example <code>@leg('right') rightLeg</code>. When used with arrow functions above, the <code>@memoize</code> decorator would swallow the arrow parameter list <code>(value)</code>, just like the <code>@leg</code> decorator swallows <code>('right')</code>.</p>
-<p>MH: corrected function param decorators example: <code>schedule(@memoize function (value) { … })</code></p>
-<p>… discussion that clarifies that they could replace the value, like all decorators …</p>
+<p>MH: corrected function param decorators example: <code>schedule(@memoize function (value) { ... })</code></p>
+<p>... discussion that clarifies that they could replace the value, like all decorators ...</p>
 <p>MM: keep as separate stage 0 proposals</p>
 <p>MF: tl;dr about problem trying to be solved?</p>
 <p>MH: 1) dependency injection, example shows on constructor parameters</p>
@@ -522,7 +522,7 @@ B. add a MOP operation</p>
 <p>WH: What exactly is a parse tree? What about whitespace?</p>
 <p>DH: White space and comments should be preserved.</p>
 <p>YK: No, they shouldn't.</p>
-<p>… discussion about parseability, errors, <code>new Function</code> to detect, toSource, etc …</p>
+<p>... discussion about parseability, errors, <code>new Function</code> to detect, toSource, etc ...</p>
 <p>MF: &quot;possible solutions&quot; slide</p>
 <a href="#conclusionresolution-functiontostring--functionisportable-mf"><h4 id="conclusionresolution-functiontostring--functionisportable-mf">Conclusion/Resolution</h4></a><ul>
 <li>none yet, will continue tomorrow morning, first thing</li>

@@ -58,11 +58,11 @@ István SEBESTYEN: Waldemar, it is more than a bibliography. It is a compilation
 <li>Rest/Spread property review not ready Tuesday</li>
 <li>Target 12:30 for lunch</li>
 </ul>
-<a href="#7-ecma262-status"><h2 id="7-ecma262-status">7 ECMA262 Status</h2></a><p>(Brian Terlson)</p>
+<a href="#7-ecma-262-status"><h2 id="7-ecma-262-status">7 ECMA-262 Status</h2></a><p>(Brian Terlson)</p>
 <p>BT: Tooling: Ecmarkup is now much faster, and written in TypeScript</p>
 <p>YK: We are writing the Handlebars spec in Ecmarkup, and it is definitely helpful.</p>
 <p>RW: We are using it to specify the IO Plugin standard for Nodebots</p>
-<p>BT: TypeScript is using it and C# is considering using it as well. The question for me is, what kind of changes does it make sense to add, when there are feature requests that aren't used in ECMA262? E.g., * and + for grammars. My feeling is to add things when they don't compromise 262. I would break out a separate notational conventions document, including * and +, which had all of the features of the tool. This potentially impacts the editorial conventions in 262, though I will work to not require those changes.</p>
+<p>BT: TypeScript is using it and C# is considering using it as well. The question for me is, what kind of changes does it make sense to add, when there are feature requests that aren't used in ECMA-262? E.g., * and + for grammars. My feeling is to add things when they don't compromise 262. I would break out a separate notational conventions document, including * and +, which had all of the features of the tool. This potentially impacts the editorial conventions in 262, though I will work to not require those changes.</p>
 <p>WH: I wouldn't want to use * and + in the ECMAScript grammar.</p>
 <p>BT: Agree; these are meant only for other languages.</p>
 <p>BT: With Domenic, I am working on integrating better with the spec authoring tools in HTML-land. This includes standardizing on a bibliography format so we can share symbols and cross-reference well.</p>
@@ -101,7 +101,7 @@ István SEBESTYEN: Waldemar, it is more than a bibliography. It is a compilation
 <p>YK: implementors hesitant when issues are left open, concerns that these maybe long term issues.</p>
 <p>SYG: [For SharedArrayBuffer] Implementations will do what will work out for real chips; we have to capture a memory model that other people can reason about, but the implementation won't change since the hardware does something. I don't want to speak for everyone, but I think SpiderMonkey and V8 agree on this.</p>
 <p>WH: The bug we ran into was that the memory model formalism was allowing synchronization without atomics; that's not something we want to allow but is hard to fix.</p>
-<a href="#conclusionresolution-7-ecma262-status"><h4 id="conclusionresolution-7-ecma262-status">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-7-ecma-262-status"><h4 id="conclusionresolution-7-ecma-262-status">Conclusion/Resolution</h4></a><ul>
 <li>Please review async functions PR</li>
 </ul>
 <a href="#stage-4-process-update"><h2 id="stage-4-process-update">Stage 4 Process Update</h2></a><p>BT: Include PR for Stage 4 approval?</p>
@@ -110,12 +110,12 @@ István SEBESTYEN: Waldemar, it is more than a bibliography. It is a compilation
 <li>Editor Sign Off on PR</li>
 <li>Done: <a href="https://github.com/tc39/process-document/commit/e0009705959360f35cf44468c5568e9d5bdbae0d">https://github.com/tc39/process-document/commit/e0009705959360f35cf44468c5568e9d5bdbae0d</a></li>
 </ul>
-<a href="#8-ecma402-status"><h2 id="8-ecma402-status">8 ECMA402 Status</h2></a><p>DE: formatToParts has been removed from draft due to missing implementation. The only implementation was Intl.js</p>
+<a href="#8-ecma-402-status"><h2 id="8-ecma-402-status">8 ECMA-402 Status</h2></a><p>DE: formatToParts has been removed from draft due to missing implementation. The only implementation was Intl.js</p>
 <ul>
 <li>Would like to roll back to Stage 3</li>
 <li>Spec can easily accommodate reintroduction</li>
 </ul>
-<a href="#conclusionresolution-8-ecma402-status"><h4 id="conclusionresolution-8-ecma402-status">Conclusion/Resolution</h4></a><ul>
+<a href="#conclusionresolution-8-ecma-402-status"><h4 id="conclusionresolution-8-ecma-402-status">Conclusion/Resolution</h4></a><ul>
 <li>Stage 3 downgrade</li>
 </ul>
 <a href="#9-test262-status"><h2 id="9-test262-status">9 Test262 Status</h2></a><p>(Leo Balter)</p>
@@ -166,7 +166,7 @@ István Sebestyén (sitting in CH...): No, that was a mistake on my side... Sorr
 <p>MM: w/o proxy no cycle checks agree. But we have proxy, so disagree</p>
 <p>SBI: This spec proposal is just to keep Proxies with the same behavior, and bail out in that case as we do now, but allow embedder exotic objects to have the cycle check.</p>
 <p>Proposal:</p>
-<p>As was mentioned in the original bug (comments 9 &amp; 11), a loop check could be performed through ordinary lookup of each object’s [[Prototype]] without trapping to any handler.  Specifically:
+<p>As was mentioned in the original bug (comments 9 &amp; 11), a loop check could be performed through ordinary lookup of each object's [[Prototype]] without trapping to any handler. Specifically:
 Eliminate step 8.c.1 from 9.1.2.1
 Change 26.2.2 Properties of the Proxy Constructor to state that proxy exotic objects have an immutable [[Prototype]] property of null.
 Remove the comment in section 6 of the possibility of prototype loops.</p>
@@ -363,7 +363,7 @@ Remove the comment in section 6 of the possibility of prototype loops.</p>
 <p>Repeated discussion about ownership of this behavior</p>
 <p>KG: (attempting to bring it back together)</p>
 <p>BT: Nice to normatively &quot;uplink&quot; to HTML spec</p>
-<p>BE: So ECMA262 is going to depend on HTML?</p>
+<p>BE: So ECMA-262 is going to depend on HTML?</p>
 <p>BT: Just trying to explain the requirements.</p>
 <p>BE: (describes concerns about falsey objects b/c value objects) (eg throwing the baby out with the bathwater)</p>
 <p>DE: This is OK, they are both editing some of the same abstract operations, but one is horrible and scoped, and the other is general and clean; no contradiction.</p>
@@ -553,7 +553,7 @@ Remove the comment in section 6 of the possibility of prototype loops.</p>
 <ul>
 <li>\k not available in non-Unicode RegExps (backwards compatibility)</li>
 <li>Option: Python-style backreference syntax (?P=name)</li>
-<li>Option: Revisit (with data) whether it’s possible to add this new escape</li>
+<li>Option: Revisit (with data) whether it's possible to add this new escape</li>
 </ul>
 <p>DE: group names overlap with of match object</p>
 <ul>
@@ -577,7 +577,7 @@ Remove the comment in section 6 of the possibility of prototype loops.</p>
 <p><a href="https://docs.google.com/presentation/d/1o31S9RqDdkoWW2zfPMNIZdPDIp25Rr0-XW0gro_cskk/edit#slide=id.p">https://docs.google.com/presentation/d/1o31S9RqDdkoWW2zfPMNIZdPDIp25Rr0-XW0gro_cskk/edit#slide=id.p</a></p>
 <p>DE: Why <code>\P</code></p>
 <ul>
-<li>The Unicode Consortium’s UTS 18 recommends it</li>
+<li>The Unicode Consortium's UTS 18 recommends it</li>
 <li>All other programming languages surveyed follow UTS 18 here</li>
 <li>According to Mark Davis, there are many overlaps between property values and keys, so clever abbreviations are not recommended</li>
 </ul>

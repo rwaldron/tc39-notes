@@ -34,20 +34,20 @@ Before the TC39 meeting, there will be a meetup with the NodeJS CTC.</p>
 <p>CP: What I meant to say is you can do it in ESModules today and transpile that in CommonJS, you should be able to do that same thing. I can rephrase that. There's more detail in the README to describe what I was trying to say. The second piece of feedback was from Allen. The fact that there might be side effects for these bindings... ?? Accessing an importing binding cannot have side effects.</p>
 <p>DH: It's not just from an implementor's standpoint. It's from a programmer's standpoint that being about to be sure that accessing a variable doesn't cause random things is good.</p>
 <p>CP: So the actual solution that we're proposing (this is the second iteration), Dave came up with the idea that whenever you're trying to run the instantiation processes of modules, you could inspect what modules you're trying to ?? If any of these are dynamic modules that haven't been evaluated yet, you should be able to store information and enforce this connection between the modules. So in slide 12 you'll see that we're doing the regular instantiation order... {references slides}. We'll continue doing the same for ESModules, but if any module is just a dynamic reference, we don't want to evaluate it up front. What we're doing is just adding these bits to a new slot called [[PendingImportEntries]] where we can store information about this binding and where it comes from. Eventually during module evaluation, right before <code>main.js</code> we're going to walk the list of [[PendingImportEntries]] and create the bindings for them. At that point <code>x</code> and <code>y</code> are already evaluated and we're all ready to evaluate <code>main</code>.</p>
-<p>AWB: In this example you are only using default exports.  Can it have named exports?</p>
+<p>AWB: In this example you are only using default exports. Can it have named exports?</p>
 <p>CP: Yes, it's the same thing.</p>
 <p>BFS: The current plan is to only support default exports. We're working on other things... Much like this, you ??</p>
 <p>AWB: It's clear that it wouldn't be very hard to make default work, but it wasn't clear that you could make an open-ended set of names work.</p>
 <p>BFS: Correct.</p>
 <p>CP: It's the same, we do have the details of the binding. We have the local name for the binding, the import name for the one we're importing from. One more point is that this solution is not just for CommonJS modules, but for any other dynamic modules (like wasm)</p>
 <p>MM: What are the other possible values for the internal slot named ImportName?</p>
-<p>CP: Let's switch to the spec text. It will clarify. Step 12.d.3  If you go through the module instantiation and creation, we get these ImportEntrys.  We walk all the table entries from parsing the source text. If the entry is pending, we put it there.  This is the same entry when you parse.</p>
+<p>CP: Let's switch to the spec text. It will clarify. Step 12.d.3  If you go through the module instantiation and creation, we get these ImportEntrys. We walk all the table entries from parsing the source text. If the entry is pending, we put it there. This is the same entry when you parse.</p>
 <p>AK: To answer your question, the name default comes from the syntax. If you say <code>import a from './wherever'</code> that's where the <code>default</code> comes from.</p>
 <p>MM: What are the other possible values for that slot?</p>
 <p>DH: If you use named exports it would be whatever you asked for.</p>
 <p>MM: And the reason why <code>default</code> is not mistaken as a variable name is because it's a keyword?</p>
 <p>YK: I just want to say, in general, I don't think we need to worry that much about what Node does here. We need to worry that the semantics are flexible enough to give Node options, and I believe these are flexible enough for other options as well. But we shouldn't be concerned about that.</p>
-<p>AK: Given the motivation stated at the beginning is based on node, it's interesting that you say that.  Until this morning, I had not heard this was meant to support dynamic modules cases other than node.</p>
+<p>AK: Given the motivation stated at the beginning is based on node, it's interesting that you say that. Until this morning, I had not heard this was meant to support dynamic modules cases other than node.</p>
 <p>YK: I think AMD modules have always been a plausible story. I've been talking with Dave about whether this is actually true that there are other use cases and that's when we realized that the future transpiliation use case exists.</p>
 <p>CP: To add to that. If you go to the rationale paragraph, one example is CommonJS, but this is about general dynamic modules, not specifically CommonJS.</p>
 <p>AWB: I have a question. You're describing this in terms of module declaration instantiations. I'm interested in how this generalizes to what the actual JS programmer sees. So if you have something you've imported with either a default binding or even a named binding, but the module is in its pending state...??</p>
@@ -55,7 +55,7 @@ Before the TC39 meeting, there will be a meetup with the NodeJS CTC.</p>
 <p>AWB: I'm wondering when they're resolved and if it's possible to try to access in the JS code while it's still pending.</p>
 <p>DH: I believe that the programming model is that the validation will occur before execution starts.</p>
 <p>AWB: That means that the evaluation of the dynamic module (its body or whatever it needs)... In CJS, you need to evaluate the entire module... That will happen before evaluating any code of the importing module.</p>
-<p>CP: We can go to module evaluation in the spec and you will see in step 7 right after we evaluate all the dependencies. then we are ready to evaluate the ES module that is importing the dynamic module.  We eval the pending bindings, otherwise we throw an error.  So before the source test but after the dependencies.</p>
+<p>CP: We can go to module evaluation in the spec and you will see in step 7 right after we evaluate all the dependencies. then we are ready to evaluate the ES module that is importing the dynamic module. We eval the pending bindings, otherwise we throw an error. So before the source test but after the dependencies.</p>
 <p>AWB: Ok, you described this as Create Pending Binding, you resolve all these bindings and their values are available.</p>
 <p>CP: Yes.</p>
 <p>AWB: Ok, any evaluation of import modules still takes place prior to any evaluation of the importing module?</p>
@@ -78,22 +78,22 @@ Before the TC39 meeting, there will be a meetup with the NodeJS CTC.</p>
 <p>AK: Okay I need to read this new spec then, more closely I guess.</p>
 <p>YK: I think it would help people to do that, maybe we can pause this.</p>
 <p>AK: It's possible it's a waste of most people's time because it is very detailed.</p>
-<p>AWB: I have what I think is a higher level question.  A lot of this is about initialization order, so I want to verify my understanding. If I have a module and it has 3 imports: a, b, c using default imports. And let's assume their bodies is just a console.log and that a, b, c each don't depend on anything else. The expectation would be that when you load the root module, you would see on your console: a, b, then c and anything the importing module did. Now if b is changed to be dynamic, am I correct that we'd see: a, c, b?</p>
+<p>AWB: I have what I think is a higher level question. A lot of this is about initialization order, so I want to verify my understanding. If I have a module and it has 3 imports: a, b, c using default imports. And let's assume their bodies is just a console.log and that a, b, c each don't depend on anything else. The expectation would be that when you load the root module, you would see on your console: a, b, then c and anything the importing module did. Now if b is changed to be dynamic, am I correct that we'd see: a, c, b?</p>
 <p>DH: No, the whole point of this is to preserve the original behavior.</p>
 <p>AWB: Ok, then my understanding of what the pending modules works..</p>
 <p>DH: Caridy is the one deep in the spec. Pending is about these are the names that have been requested by some of the importing modules but we can't yet validate them because we haven't executed them yet.</p>
 <p>CP: It's not evaluation, it's creation of the import binding. But yes, you are correct.</p>
 <p>DH: And won't have created those until after we have finished evaluation of all the dependencies before evaluating the importing module.</p>
-<p>CP: After evaluation of all the dependencies but before the execution of the module.  The whole proposal is saying that during the instantiation we need to create the import bindings, but we cannot create some of them yet....</p>
+<p>CP: After evaluation of all the dependencies but before the execution of the module. The whole proposal is saying that during the instantiation we need to create the import bindings, but we cannot create some of them yet....</p>
 <p>WH: What does the default indicate?</p>
 <p>DH: That's about the whole default import syntax: <code>import a from 'a'</code>, that <code>a</code> is effectively sugar for: <code>import { default as a } from 'a'</code>.</p>
 <p>WH: So, is it possible not to export a default?</p>
-<p>DH: Yes it's possible not to export a default.  That's in ECMAScript syntax. In a dynamic module, you can choose to name one of the imports &quot;default&quot;.</p>
+<p>DH: Yes it's possible not to export a default. That's in ECMAScript syntax. In a dynamic module, you can choose to name one of the imports &quot;default&quot;.</p>
 <p>AWB: I think I'm comfortable with what's happening here, whether the details of the spec are (perfect?) or not.</p>
 <p>DH: I think Caridy did a good job talking about the goals. We can make sure the spec is flexible enough to preserve the order of the modules loaded whether they're ESModules or Dynamic modules. You don't want validation to happen at arbitrary times. We want to get, early in the programming model that we can evaluate modules in a consistent order regardless of what kind of module they are...</p>
 <p>AWB: So if .. I think the only observable difference here is that if a dynamic module is involved, there are some situations where an unresolved import binding error, where in the current spec that would always be produced bfore any evaluations, there are now situations where some of those errors may occur after some eval has started, but only in the presence of dynamic modules.</p>
 <p>CP: Correct.</p>
-<p>DH: A way to make that more concrete.  A dyn module, since it could have executed before a static module, could dynamically ask for the module and so observe whether it's been initialized, but there are no invariants violated in that scenario.</p>
+<p>DH: A way to make that more concrete. A dyn module, since it could have executed before a static module, could dynamically ask for the module and so observe whether it's been initialized, but there are no invariants violated in that scenario.</p>
 <p>AK: When you say executing the modules in the body of the source function ??? This adds a strangeness to the lexical environment of modules. Meaning they have their lexical environment changed after it's created.</p>
 <p>DH: In other words, is there a soundness hole here?  Where a cycle between a source text module and a dynamic module... where the dyn module can see the source text module before it has validated.</p>
 <p>AK: Yeah, at the moment that just creates a reference error, but the way the spec is written is strange. The static module doesn't create a lexical binding. From an implementation perspective, it doesn't ??? This is interesting...</p>
@@ -106,7 +106,7 @@ Before the TC39 meeting, there will be a meetup with the NodeJS CTC.</p>
     <span class="hljs-built_in">console</span>.log(a)
 }
 </code></pre>
-<p>DH: Oh, the fact that the way the spec is written means it doesn't add it to the environment.  That's just a bug in the spec.</p>
+<p>DH: Oh, the fact that the way the spec is written means it doesn't add it to the environment. That's just a bug in the spec.</p>
 <p>MM: Ok, good.</p>
 <p>AWB: Yeah.</p>
 <p>DH: It should be changed to add the lexical binding. Our goal was to not have it be possible for import binding to ever trigger side effects, including dynamic reference errors whenever they are evaluated. Adam has found a case where before you have started eval of top level code, it's still possible to enter into a function, resolve a binding and get a dynamic error.
@@ -136,15 +136,15 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>MM: So when you access...</p>
 <p>DH: We may be able to fix that, we just found out about it, but we can investigate it. This only happens when you early call a bunch of functions several times. You have no hope of that doing reasonable things anyway.</p>
 <p>WH: What would be subjected to the TDZ? Would the call of the function fail because you would get a TDZ error on invoking it, or would the function run and get TDZ errors inside it when it accesses variables?</p>
-<p>CP: I created an example on slide #15.  It shows the problem that Adam referenced.</p>
-<p>AK: I want to explain why the previous version of the proposal tried to do the other way of doing this.  Some new machinery must be invented. The other module doesn't have an environment record, so you can't set it up correctly because there is no exporting module thing yet.  Where does that get created?  The node loader default only solution solves all this.  If that's the only dynamic loader you must deal with, then it could never fail because you know what exports you have to deal with.</p>
+<p>CP: I created an example on slide #15. It shows the problem that Adam referenced.</p>
+<p>AK: I want to explain why the previous version of the proposal tried to do the other way of doing this. Some new machinery must be invented. The other module doesn't have an environment record, so you can't set it up correctly because there is no exporting module thing yet. Where does that get created?  The node loader default only solution solves all this. If that's the only dynamic loader you must deal with, then it could never fail because you know what exports you have to deal with.</p>
 <p>YK: That's only what they currently think they <em>might</em> want to do.</p>
 <p>DH: We heard Bradley say they're investigating ways to see how you could state what you're export set is. So let's say, from a user model perspective, there's something that node recognizes that allows you to specify upfront what your fixed shape is, what that could be built on top of is a reflective layer (nothing exists for this now), but you're opting into that where you state I'm playing by new rules that say I have a fixed state that I cannot change dynamically. If you do this, then we don't need to execute to discover what that shape is. In other words, either you have that thing and you don't need to execute, in which case you have to be a default export and again we know the shape of that as well...</p>
 <p>YK: I would be happy to explore that.</p>
 <p>BFS: We have prototyped out exactly that. You can model it with two ES modules right now.</p>
 <p>DH: Sure, perfect. And we could make that API nicely. The going assumption we had is that the only way to discover the shape was to execute it. I'm suggesting that instead of that, we could say you have to declare before you execute what the static shape is.</p>
 <p>WH: By static shape you mean &quot;names and exports&quot;?</p>
-<p>DH: Yes, that's the thing you declare once and for all and never changes.  You can state names before your execution.</p>
+<p>DH: Yes, that's the thing you declare once and for all and never changes. You can state names before your execution.</p>
 <p>WH: And that would be constant, it's not computed?</p>
 <p>DH: It would be computed dynamically, but it is staged, in the sense that once you have told the system what it is, that's frozen and immutable and will never change.</p>
 <p>WH: What does that computation have access to?  Does it have access to other modules or is it purely local?</p>
@@ -153,7 +153,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>BFS: We have a couple of different shapes of modules but we know all their shapes prior to evaluating them currently.</p>
 <p>AK: When you say node, this is in some thing outside the language, you aren't evaluating expression to figure it out right?</p>
 <p>BFS: No, there are a few different approaches (Dave mentioned one: an out of band file), or some pragma at the top.</p>
-<p>DH: I want to continue answering WH's question.  If you are making it dynamic, that is exactly the right question to poke at when looking for soundness or initialization order problems. I believe that a staged system makes it possible to avoid that problem, but we need to investigate this further.</p>
+<p>DH: I want to continue answering WH's question. If you are making it dynamic, that is exactly the right question to poke at when looking for soundness or initialization order problems. I believe that a staged system makes it possible to avoid that problem, but we need to investigate this further.</p>
 <p>WH: I'm fine with poking at that problem later.</p>
 <p>DH: It's the right kind of question, but now's not the time to answer it. But we should allow you to declare upfront what the shape is in a way where it doesn't have access to the modules before they've been evaluated. This means it now becomes easy to have a straightforward binding setup and evaluation setup...</p>
 <p>WH: What does the shape consist of?  Just names?  Or does it matter what kind of thing?  e.g., getter/setter, proxy, etc.</p>
@@ -168,7 +168,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>AWB: I'm going to pile on. I think that the fundamental thing here is that if you say <code>import foo.js</code> is there a way to determine the exported names from that module without having to evaluate code?</p>
 <p>DH: The quickest way to explain is that Node discovered a key thing. We can make the default mode for the whole ecosystem to be <code>default</code> export and we can opt-into named export. That gives us strong backward compatibility. Once you have that it's easier to see your way to semantics that makes sense. Is that right Bradley?</p>
 <p>BFS: Yes.</p>
-<p>YK: One other closing the loop.  There's also AMD modules. They don't trivially have a solution. I think that having them default to default export works fine.  Because they are eval'd with an outer wrapper and an inner function, you can add to the outer wrapper pretty easily.</p>
+<p>YK: One other closing the loop. There's also AMD modules. They don't trivially have a solution. I think that having them default to default export works fine. Because they are eval'd with an outer wrapper and an inner function, you can add to the outer wrapper pretty easily.</p>
 <p>DH: Thanks for bringing that up because it's easy to forget about other dynamic modules systems.</p>
 <p>YK: Yeah, we use AMD so... :)</p>
 <p>AWB: At a pure reflection level, you can imagine that the reflection API that when you instantiate a dynamic module, you are required to specify what the export names are.</p>
@@ -186,7 +186,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <a href="#conclusionresolution-10iia-dynamic-module-reform-for-stage-2"><h4 id="conclusionresolution-10iia-dynamic-module-reform-for-stage-2">Conclusion/Resolution</h4></a><ul>
 <li>Remains on stage 1</li>
 </ul>
-<p><em>Awesome work, now simplified as a result of awesome feedback.  A new version will be presented at next meeting.</em></p>
+<p><em>Awesome work, now simplified as a result of awesome feedback. A new version will be presented at next meeting.</em></p>
 <a href="#10iic-realms-update"><h2 id="10iic-realms-update">10.ii.c Realms update</h2></a><p>(Dave Herman)</p>
 <ul>
 <li><a href="https://github.com/tc39/agendas/raw/master/2017/tc39-2017-003-realms-update.pdf">slides</a></li>
@@ -199,19 +199,19 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>DE: Example: a tiny, fixed registry.</p>
 <p>DE: They have one big switch at the top of the code that said. If the module is jquery, give them a simple version of jquery, if it was underscore, etc. And that was their entire registry. So maybe you can build a tiny fixed registry this way (using realms).</p>
 <p>CP: Another point around this is today people use Rollup which is effectively a ???? for client-side.</p>
-<p>DH: By calling super I'm subclassing the builtin realm API.  It is just a demo here.</p>
+<p>DH: By calling super I'm subclassing the builtin realm API. It is just a demo here.</p>
 <p>WH: You are missing a declaration of #registry.</p>
-<p>DH: OK I just got the details of the private field wrong.  Imagine there is a declaration.  At any given time a &quot;registry&quot; might want you to load new modules. So I'm taking jquery as an example of that. So you have a jquery loaded in one realm, and you want to explicitly share it to another realm.  You may want to allow modules to be realm-specific.</p>
+<p>DH: OK I just got the details of the private field wrong. Imagine there is a declaration. At any given time a &quot;registry&quot; might want you to load new modules. So I'm taking jquery as an example of that. So you have a jquery loaded in one realm, and you want to explicitly share it to another realm. You may want to allow modules to be realm-specific.</p>
 <p>KCD: When I worked at Domo people could build little graphs on their own. And a big problem we had was that every single one of these were loading their own angular. This would be a perfect solution for that.</p>
 <p>DH: Perfect, yes, I use jquery as an example, but there may be other big things. In order to have total reflective control over the whole realm, you need total reflective control over the import. I'm not confident I have everything nailed down, but the basic idea is that you can specify a hook and by doing that you can tell the system how to resolve a name and how to provide it with a module. So here, I have a fixed set of modules in my registry, if it's not one of those, then throw a reference error, otherwise....</p>
 <p>WH: What does <code>this.#registry.graph().then(graph =&gt; graph[name])</code> do? What's in <code>this.#registry</code> hasn't been explained yet.</p>
 <p>DH: {explains slide}. This is asynchronous, allowing you to use <code>import()</code> as well as top level import.</p>
 <p>WH: Who gets to call the [Realm.import] method? Only the system, or can adversarial user code call it and cause trouble?</p>
-<p>DH: One way to think about the entire realm API is that it is a privileged API.  There's never direct access to that API.  There are documented ways in which e.g., the import semantics triggers these hooks, but there's no direct access given to the realm object to code within the realm.  The creator of the realm has access to it, but they control whether it's made available to anyone else.</p>
+<p>DH: One way to think about the entire realm API is that it is a privileged API. There's never direct access to that API. There are documented ways in which e.g., the import semantics triggers these hooks, but there's no direct access given to the realm object to code within the realm. The creator of the realm has access to it, but they control whether it's made available to anyone else.</p>
 <p>DH: So top level usage of this, we create a realm, we use eval, use <code>import()</code> and that produces a promise and that gives us the module.</p>
 <p>KCD: So what you normally get, is that going to be whatever is exported from that module?</p>
 <p>BFS: The completion value?</p>
-<p>DH: The result of <code>eval()</code> is going to be the completion value of eval.  I'm forgetting the details of the import-parens syntax.</p>
+<p>DH: The result of <code>eval()</code> is going to be the completion value of eval. I'm forgetting the details of the import-parens syntax.</p>
 <p>BFS: It needs to be in an expression position.</p>
 <p>DH: So I'd have to put parens around the eval here (in the example)?</p>
 <p>KCD: I basically want to know what's returned from a call to <code>eval</code>, is it a completion value or is there some mechanism to export something specific?</p>
@@ -223,7 +223,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>MM: Of the Script start symbol, those strings that satisfy that grammar can be evaluated as scripts or as eval-code.</p>
 <p>DH: Oh we talked about that before, yes.</p>
 <p>CP: We have github issues for those.</p>
-<p>DH: [continuing demo] This is the registry class.  Imagine I have a @memoize decorator...  This is not the module namespace, it's a reflective API that we need to have to do all the things you could reflect on for modules.  So I'm positing a parseModule operation.  It difffers from eval.  I want to take some source code and get a module record that has been parsed by an engine so that, e.g., I can ask what names it depends on.  I need the ability to go meta on code to setup the environment for running it.  So this helper method is just basically to fetch all things in my graph, for this tiny demo I can just fetch them all upfront.</p>
+<p>DH: [continuing demo] This is the registry class. Imagine I have a @memoize decorator... This is not the module namespace, it's a reflective API that we need to have to do all the things you could reflect on for modules. So I'm positing a parseModule operation. It difffers from eval. I want to take some source code and get a module record that has been parsed by an engine so that, e.g., I can ask what names it depends on. I need the ability to go meta on code to setup the environment for running it. So this helper method is just basically to fetch all things in my graph, for this tiny demo I can just fetch them all upfront.</p>
 <p>DH: Continuing on.....by the way Caridy did you find the PDF for this?</p>
 <p>CP: Yes.</p>
 <p>DH: The <code>graph</code> method is the one we actually saw the first class using. How do we do the linking? We have to go and fetch them asynchronously. The result of this is going to be a promise. For the module record A it basically has this not-yet-satisfied set of dependencies. Where it asked for the name <code>./b.js</code> I'm telling <code>b</code> is the thing that satisfies the dependency. For <code>b</code> I'm doing it imperatively. This is also at the level that's teetering toward bike shedding, so I don't want to spend that much...</p>
@@ -259,12 +259,12 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>BFS: I do have a question on <code>ensureEvaluated</code> here, in the previous slide I thought <code>realm.import</code> returned an unevaluated dependency and this one looks like it ensures it's evaluated. If it's coming from something that's not evaluated, you're hoisting evaluation.</p>
 <p>DH: It's a bug in the first demo. You should just call <code>ensureEvaluated</code>.</p>
 <p>MM: Can module be a regular object?</p>
-<p>DH: No I would expect that to be some kind of brand check.  I don't want to add a bunch of conversation and other conveniences that confuse the underlying model. {explains slides}. The register helper method will do the work of fetching this thing. Effectively we have a userland implementation of the core semantics of default module loading in ECMAScript. We'll fetch the specify, parse the module, then get all the requested names (specifiers), then do a recursive load on all of those specifiers, once that's completed, then we'll add them to the dependency graph and then call link on the module and set the three promise steps as the entry in the registry so you can track the progress of the whole thing.</p>
+<p>DH: No I would expect that to be some kind of brand check. I don't want to add a bunch of conversation and other conveniences that confuse the underlying model. {explains slides}. The register helper method will do the work of fetching this thing. Effectively we have a userland implementation of the core semantics of default module loading in ECMAScript. We'll fetch the specify, parse the module, then get all the requested names (specifiers), then do a recursive load on all of those specifiers, once that's completed, then we'll add them to the dependency graph and then call link on the module and set the three promise steps as the entry in the registry so you can track the progress of the whole thing.</p>
 <p>WH: Interesting that you didn't write these using <code>async</code> functions.</p>
 <p>DH: Went back and forth on that.</p>
 <p>MM: Is this a case where...</p>
 <p>DH: Part of the value of being able to implement loaders in user-land is there's so much value in doing this. There's sort of no end to the different ways you want to do it. There are tons of different things that you might want to do. What's exciting to me about what we're doing is how simple it is. Effectively hooking into <code>import</code> is the whole story.</p>
-<p>DT: If that was a for loop with async/await instead of <code>Promise.all</code>, it would serialize it.  So this is a good example of where the lower level tools are very useful. This example may also be a good foil for working out fancier support for async/await without full serialization.</p>
+<p>DT: If that was a for loop with async/await instead of <code>Promise.all</code>, it would serialize it. So this is a good example of where the lower level tools are very useful. This example may also be a good foil for working out fancier support for async/await without full serialization.</p>
 <p>MM: Can you point out explicitly where you're gaining information from the API that you would be otherwise required to parse yourself without it?</p>
 <p>DH: <code>requestedNames</code> tell me all the import strings that appeared in the source code.</p>
 <p>WH: So the registry defined on the last line of the example combines <code>name</code> with three promises.</p>
@@ -284,9 +284,9 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>CP: I don't think that will be a problem. I think you are abstracting the normal jquery object. I don't think it will really matter much, you can evaluate jquery in the new realm, extract the global jquery object and use it as in the example. This jquery will somehow have to become a dynamic module.</p>
 <p>DH: I want to call that by design. (Scott Isaac told me JS causing general protection faults was by design.) Here's what realms are. By default everything is separated, for security, etc. B) so you know every time you're incurring sharing. If you choose to share a library that you know was designed to only be used in 1 realm, you face the consequences. OR maybe you design a library that works across realms. It gives you the control as a module writer to do whatever you want.</p>
 <p>MM: The frozen realm work is specifically targetting to deal with the issue Allen's raising (it's called an identity discontinuity). Most existing JS code and legacy libraries are not built to work smoothly between realms. And that will remain the case because it's conceptually difficult. Frozen realm is a way to use a single realm where you have multiple protection domains and global scopes all sharing the single realm. Frozen realms is an extension of the realms work which solves this problem.</p>
-<p>AWB: So that sounds like one way to do it.  Part of what I'm wondering is that you are almost there and people are going to trip over that, and maybe some minor tweaks might address that.  e.g., If jquery is shared at the parsed module level, then you get most of the sharing efficiency without the complexity.</p>
+<p>AWB: So that sounds like one way to do it. Part of what I'm wondering is that you are almost there and people are going to trip over that, and maybe some minor tweaks might address that. e.g., If jquery is shared at the parsed module level, then you get most of the sharing efficiency without the complexity.</p>
 <p>DH: I definitely believe there's a lot we can do at parseModule to share the work you do.</p>
-<p>YK: I want to reiterate what Dave says about this being a low level API. But the discontinuity problem has an inverse problem is some modules....such as Ember's server-side rendering library works, which is there is a realm which emulates some portion of the browser.  Let's call it the Ember Realm. We want it to render some stuff then take the results and serve it over http. In order to make that work, the host realm needs to give Ember a way to get it back. That thing would have a discontinity if you copied it, because that thing's internals expected to be in the other realm.</p>
+<p>YK: I want to reiterate what Dave says about this being a low level API. But the discontinuity problem has an inverse problem is some modules....such as Ember's server-side rendering library works, which is there is a realm which emulates some portion of the browser. Let's call it the Ember Realm. We want it to render some stuff then take the results and serve it over http. In order to make that work, the host realm needs to give Ember a way to get it back. That thing would have a discontinity if you copied it, because that thing's internals expected to be in the other realm.</p>
 <p>MM: If both of those were operating under a single frozen realm...</p>
 <p>YK: If you think the solution to that problem could be solved at the parseModule by making copies.</p>
 <p>MM: So you're not arguing that you cannot solve that problem with a single frozen realm?</p>
@@ -304,10 +304,12 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>MM: They're largely orthogonal. If you wanted job queues and enqueue things on specific job queues. None of that is written down on the agent API, but if we wanted to address them reflexively they'd go in ??</p>
 <p>AWB: Mark, the wayback machine has a pretty good archive of wiki.ecmascript.org.</p>
 <p>DH: Ok, thanks everyone.</p>
-<a href="#conclusion-10iic-realms-update"><h4 id="conclusion-10iic-realms-update">Conclusion</h4></a><ul>
+<a href="#conclusionresolution-10iic-realms-update"><h4 id="conclusionresolution-10iic-realms-update">Conclusion/Resolution</h4></a><ul>
 <li>Stage remains at stage 1. This was just an update.</li>
 </ul>
-<a href="#10iva-arbitrary-precision-integer-type-for-stage-2"><h2 id="10iva-arbitrary-precision-integer-type-for-stage-2">10.iv.a Arbitrary precision integer type for stage 2</h2></a><p><a href="https://docs.google.com/presentation/d/1lKscD8d_i1mz1w_puWJKW4LCyQLgrb0CySHVukohkLE/edit#slide=id.g1c4f05590f_0_115">slides</a></p>
+<a href="#10iva-arbitrary-precision-integer-type-for-stage-2"><h2 id="10iva-arbitrary-precision-integer-type-for-stage-2">10.iv.a Arbitrary precision integer type for stage 2</h2></a><ul>
+<li><a href="https://docs.google.com/presentation/d/1lKscD8d_i1mz1w_puWJKW4LCyQLgrb0CySHVukohkLE/edit#slide=id.g1c4f05590f_0_115">slides</a></li>
+</ul>
 <a href="#slide-_why-integer-rather-than-int64_"><h3 id="slide-_why-integer-rather-than-int64_">Slide: <em>Why Integer rather than Int64?</em></h3></a><p>DE: Basically the strange wrap-around semantics in C is almost always a bug. Anyone who actually wants that can apply it straightforwardly.</p>
 <a href="#slide-_how_"><h3 id="slide-_how_">Slide: <em>How?</em></h3></a><p>DE: New primitive type <code>Integer</code>.</p>
 <p>MF: I wanted to point out because I didn't originally realise it myself: the <code>n</code> suffix is chosen because it's orthogonal to the base representation. You could represent binary, octal, decimal, and hex notation integers.</p>
@@ -345,7 +347,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>BE: It's hard to remove asm.js as it's just a subset. It's not like WebAssembly is the only way people will...</p>
 <p>DE: If we did want Integer to work with asm validation. It can work, but it's unclear if we want to make it work.</p>
 <p>BE: Let's talk about that later.</p>
-<a href="#slide-_library-features_"><h3 id="slide-_library-features_">Slide: <em>Library Features</em></h3></a><p>DE: For library features there's Int64Array and Uint64Array.  And functions to get these from array bufers.</p>
+<a href="#slide-_library-features_"><h3 id="slide-_library-features_">Slide: <em>Library Features</em></h3></a><p>DE: For library features there's Int64Array and Uint64Array. And functions to get these from array bufers.</p>
 <ul>
 <li>Uint64Array, Int64Array</li>
 <li>Integer static methods
@@ -361,7 +363,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>BE: If you look at the ASM.js example, you can see that it's cast <code>asUintN</code> and then ...</p>
 <p>DE: Maybe we should have asInt64 as a spcific thing.</p>
 <p>MM: Now that I see that the number was a parameter, I have no objection.</p>
-<p>DE: This is identical to the Integer64 proposal but there's no implicit conversion.  This is because there is no type that subsumes the other. Also, if you have a bare 1, it has to stay a Number for web-compatibility. Therefore we require an explicit cast such as calling the Number constructor.</p>
+<p>DE: This is identical to the Integer64 proposal but there's no implicit conversion. This is because there is no type that subsumes the other. Also, if you have a bare 1, it has to stay a Number for web-compatibility. Therefore we require an explicit cast such as calling the Number constructor.</p>
 <p>DE: If you do <code>+ Integer</code> the current proposal would throw (?)</p>
 <p>AK: I don't think it's only asm.js that uses this. People have used addition elsewhere to cast things to numbers.</p>
 <p>YK: Yeah, I've done it.</p>
@@ -379,22 +381,22 @@ We got close and &quot;I'll take close&quot;.</p>
 <li><code>1 &lt; 1n</code> is TypeError</li>
 </ul>
 <p>MM: I like this. With <code>==</code> I'm concerned:  what does <code>1n == null</code> do?</p>
-<p>DE: It coerces null into a Number, do the compare, and then get a TypeError.   We could discard future-proofing so we could make the comparison operators work for this case.</p>
+<p>DE: It coerces null into a Number, do the compare, and then get a TypeError. We could discard future-proofing so we could make the comparison operators work for this case.</p>
 <a href="#slide-15-comparison-semantics-allow-semantic-comparison"><h3 id="slide-15-comparison-semantics-allow-semantic-comparison">Slide 15: Comparison semantics: Allow semantic comparison</h3></a><ul>
 <li><code>1 === 1n</code> is <code>false</code></li>
 <li><code>1 == 1n</code> is <code>true</code></li>
 <li><code>1 &lt; 1n</code> is <code>true</code></li>
 </ul>
-<p>MM: I like the prior slide better. It's not worth the special case.  The one defensible use of <code>==</code> that people have defended is to say <code>== null</code> as shorthand for <code>=== null || === undefined</code>.</p>
+<p>MM: I like the prior slide better. It's not worth the special case. The one defensible use of <code>==</code> that people have defended is to say <code>== null</code> as shorthand for <code>=== null || === undefined</code>.</p>
 <p>WH: What does that mean with regard to that slide?</p>
 <p>MM: The answer should be <code>false</code> instead of throwing. Users expect that for any value x, x == null will not throw and is equivalent to x === null || x === undefined.</p>
 <p>YK: Does <code>==</code> ever <code>throw</code> right now?</p>
 <p>WH: Yes, that's an argument for defining the values of mixed comparisons such as <code>anInteger &lt; anNumber</code> and <code>anInteger == aNumber</code> to their exact mathematical results instead of throwing.</p>
 <p>YK: There's a specific invariant that <code>== null</code> never throws, but <code>==</code> in other cases does  not neccessarily follow that same rule.</p>
-<p>AWB: Both <code>==</code> and <code>===</code> are defined by type enumeration of the two arguments.  Two of those types are the type null and undefined. Those could be special.</p>
+<p>AWB: Both <code>==</code> and <code>===</code> are defined by type enumeration of the two arguments. Two of those types are the type null and undefined. Those could be special.</p>
 <p>MM: What I'm saying is that they should be special with regard to <code>null</code> and <code>undefined</code> not with regard to other Integers.</p>
 <p>DE: I think that for comparing with <code>undefined</code> and <code>null</code> the expectation is that it would return <code>false</code> and not <code>throw</code>.</p>
-<p>DE: Continuing the semantics explanation.  + would not lose precision.</p>
+<p>DE: Continuing the semantics explanation. + would not lose precision.</p>
 <p>BE: Can you explain the plus issue again?</p>
 <p>DE: The plus issue is that IEEE754 arithmetic is well defined. When you try to combine them you will get outside of the domain of both. There are two reasons why mixed operations are bad. The first is you will confuse users. The second is that you will run into bugs.</p>
 <a href="#slide-10-optimization-potential"><h3 id="slide-10-optimization-potential">Slide 10: Optimization potential</h3></a><ul>
@@ -402,13 +404,13 @@ We got close and &quot;I'll take close&quot;.</p>
 <li>Could work with asm.js</li>
 <li>Multiple browsers expressed optimism about implementing with good performance</li>
 </ul>
-<p>DE: For optimization potential currently across JavaScript engines there are  .... Could also be used to optimize Integer as Int64 (?).  We could make it work with asm.js.</p>
+<p>DE: For optimization potential currently across JavaScript engines there are  .... Could also be used to optimize Integer as Int64 (?). We could make it work with asm.js.</p>
 <p>MM: What's Smi?</p>
 <p>BE: Small integer.</p>
 <p>YK: Fixnum.</p>
 <p>YK: I believe the optimizers are optimistic about optimizations. Do we expect that implementors will implement these optimizations?</p>
 <p>AK: They will be as good as if we implemented 64-bit integers. The main implementation feedback is that it won't be any worse than 64-bit integers.</p>
-<p>BT: I don't think that's what I heard exactly. Conversations from 2 months ago.  In order to optimize Integer, we need profile data to show that this value is always in the 64bit range, then we can do the optimal thing there. That's what lets us do the optimization. We would not need to teach our engines to get that data, so I don't think it's difficult.</p>
+<p>BT: I don't think that's what I heard exactly. Conversations from 2 months ago. In order to optimize Integer, we need profile data to show that this value is always in the 64bit range, then we can do the optimal thing there. That's what lets us do the optimization. We would not need to teach our engines to get that data, so I don't think it's difficult.</p>
 <p>YK: Is the assumption that once things warm up it's the same? Or are you saying (Adam) that u64? would have the equivalent performance problems to making it fast in cold state.</p>
 <p>AK: For v8, to be really fast, you want to fit inside a Smi.</p>
 <p>MM: As long as you have any tagging at all, as long as you use nanboxing? or not to do it ...</p>
@@ -421,7 +423,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>YK: Do bignums require that you heap-alloc pretty liberally?</p>
 <p>AK: No, for 64 bits you have to heap allocate.</p>
 <p>DE: Until you know the types that are flowing through the program. I think a lot of implementations will be heap allocating, even 64-bit integers. Because if you have a pointer? on the stack that's a 64-bit pointer, you have to keep that separate in some way from the 64-bit integer.</p>
-<p>SYG: We are confusing two optimizations.  Int64 and BigInts are going to be the same because we need to allocate stuff. For V8 that's about the same amount of work. For SpiderMonkey, I think it will be more work, but only a little bit more.</p>
+<p>SYG: We are confusing two optimizations. Int64 and BigInts are going to be the same because we need to allocate stuff. For V8 that's about the same amount of work. For SpiderMonkey, I think it will be more work, but only a little bit more.</p>
 <p>BT: That's the general message I heard as well. Slightly harder, but it's not worse enough that our first implementation will be pretty much on par with what Int64 would have been.</p>
 <p>BE: E.g., 1.x for some fraction. Where the various cast operations are used in asm.js etc, you could imagine have it compile to unboxed, etc. implementation. Is any implementor looking at that?</p>
 <p>SYG: Since our asm.js is kind of ahead-of-time. Any engine that optimizes for asm.js has to kind of have that stuff anyway. The cast operator and the with operator...you realize it may not always be a constant, but it's not going to be a ?? big deal.</p>
@@ -440,7 +442,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>DE: I did talk to some people in the node community about this. Some people expressed a preference for Int64 over Integer, however the maining worry was about possibly falling into a bad performance path if they left out the cast operator. On the other hand there were positive arguments in favor of interger over Int64 in some of these use cases. ... something about hashes... With Integers we can definitely build integer math faster than we could directly in javascript. We could use SIMD or similar things.</p>
 <p>YK: One of my sad Rust experiences is opening the great int debate in Rust. You want 3 things: wrapping (Crypto), an exception if you overthrow, or you might want a bigNum. This proposal targets where you might want a bignum case (and there are a lot of cases where that's true). If you're writing crypto.</p>
 <p>BE: I talked to Fedor Induttny and others about this and they want ...</p>
-<p>YK: My point is a bit broader than the specifics. This proposal also says we don't want u32. We don't want many types. BigNum is the right thing. But if you look at those types there are use cases outside of BigNum.  TL;DR there are cases where u64 is the thing you are actually talking about.</p>
+<p>YK: My point is a bit broader than the specifics. This proposal also says we don't want u32. We don't want many types. BigNum is the right thing. But if you look at those types there are use cases outside of BigNum. TL;DR there are cases where u64 is the thing you are actually talking about.</p>
 <p>BE: I agree, sometimes the type is different. Sometimes when you want the wrap-around or other things, the type is the most ergonomic solution. That is the trade-off that we are giving up now in favor of other benefits.</p>
 <p>YK: I don't think we need to give up those other benefits (or options for alternative types).</p>
 <p>WH: Yes, we decided this at the last meeting.</p>
@@ -457,13 +459,13 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>BE: We achieved consensus on moving forward with Integer first and making sure it had the cast functions and other things to make sure it had efficient math using Integers.</p>
 <p>AK: And that is the spirit why Dan is presenting the proposal in this way.</p>
 <p>DH: If there is confusion about what people are saying it's very good if we get that down. There are many discussions where we have multiple alternatives and we pick one of them and sometimes people take away (incorrectly) that we can't do any of the other ones as well. <strong>It's important to get down in the minutes that we are still open to pursuing other paths (with numeric types)</strong>. I want to make sure that's in the minutes.</p>
-<p>BE: The only time the committee salted the earth and said &quot;never will something be added&quot; was named spaces from ES4.  oh and:  RING HOMORPHISM!!!</p>
+<p>BE: The only time the committee salted the earth and said &quot;never will something be added&quot; was named spaces from ES4. oh and:  RING HOMORPHISM!!!</p>
 <p>DE: In the discussion with people that had libraries, I got a sense that Integer would indeed be a significant help.</p>
 <p>DT: Does this help any users that were interested in decimal and things like financial users?</p>
 <p>BE: I did talk with FinTech people. Crypto people not use Uint because it's the best they have access to. FinTech people want BigInts. (?)</p>
 <p>DE: I've heard interest from FinTech client of Egalia, but don't know details.</p>
 <a href="#slide-11-specification-status"><h3 id="slide-11-specification-status">Slide 11: Specification status</h3></a><ul>
-<li>Detailed <a href="https://littledan.github.io/proposal-integer/">spec text</a> based on Brendan’s Int64 spec</li>
+<li>Detailed <a href="https://littledan.github.io/proposal-integer/">spec text</a> based on Brendan's Int64 spec</li>
 <li><a href="https://github.com/littledan/proposal-integer/issues">Open issues</a>
 <ul>
 <li><a href="https://github.com/littledan/proposal-integer/issues/10">Editorial: How to deal with the various spec numeric values</a></li>
@@ -472,18 +474,18 @@ We got close and &quot;I'll take close&quot;.</p>
 <li><a href="https://github.com/littledan/proposal-integer/issues/1">Bikeshedding</a></li>
 <li><a href="https://github.com/littledan/proposal-integer/issues/20">Bigger</a> <a href="https://github.com/littledan/proposal-integer/issues/18">standard</a> library, or save more for v2?</li>
 </ul></li>
-<li>And many more! Please come on GitHub and tell me what’s wrong with the proposal​</li>
+<li>And many more! Please come on GitHub and tell me what's wrong with the proposal​</li>
 </ul>
 <p>DE: There is detailed spectext. It has some color issues that I will address. It has open issues.</p>
 <p>DE: Currently in the spec there appears to be some implicit coercion between Numbers and mathematical values. Once we have multiple numeric types, we have to be more explicit about how this is accomplished.</p>
 <p>DE: <em>Should mixed-type comparision be allowed?</em> - We could allow it. It wouldn't extend to user-defined types as well.</p>
 <p>WH: I believe I and Mark would be in favor that in order to get <code>null</code> to work.</p>
-<p>MM: I'm in the opposite position. I want comparison to <code>undefined</code> and <code>null</code> to work for all types, but do not think that mixed type comparison between different numeric types to work.  That's weird but with the spec'd behavior, then there's no inconsistency with how comparison would work for user-defined types.  That consistency is good.</p>
+<p>MM: I'm in the opposite position. I want comparison to <code>undefined</code> and <code>null</code> to work for all types, but do not think that mixed type comparison between different numeric types to work. That's weird but with the spec'd behavior, then there's no inconsistency with how comparison would work for user-defined types. That consistency is good.</p>
 <p>BE: You handled that in the <code>null</code> and <code>undefined</code> special cases. I agree with Mark and I got the committee to first say they liked Uint64 and then this proposal, I think we'll do better if we keep firm on that requirement. It may be a bit tricky, but I'd rather avoid that.</p>
 <p>MF: Do you consider mixed type comparison, implicit conversion?</p>
 <p>BE: In general yes.</p>
 <p>WH: Allowing <code>5n == null</code> and not allowing <code>5n == 0</code> is untenable.</p>
-<p>DE: I have gotten feedback form potential users about the comparison.  A lot of users are unhappy about throwing exceptions on mixed operations.  This one seems solvable, but some similar ones are not solvable.</p>
+<p>DE: I have gotten feedback form potential users about the comparison. A lot of users are unhappy about throwing exceptions on mixed operations. This one seems solvable, but some similar ones are not solvable.</p>
 <p>WH: The reason I support mixed comparisons is precisely because they do NOT consider implicit conversions, they consider exact values.</p>
 <p>DE: I want to leave it as an open issue for now, It would be resolved for stage 3.</p>
 <p>BE: I think this issue has to stay open, because in the terms you just raised there may be some conversions unless we hard-code some cases for Integer.</p>
@@ -492,7 +494,7 @@ We got close and &quot;I'll take close&quot;.</p>
 <p>MPT: I would think the community would rather see no impicit conversions vs. implicit conversions that don't make any sense.</p>
 <p>MF: What is an example?</p>
 <p>MPT: Dates conversions can end up really weird. <code>00</code> vs <code>000</code> dates.</p>
-<p>DE: Next issue.  Should toString include the literal suffix &quot;N&quot;.  The current spec doesn't put the N.</p>
+<p>DE: Next issue. Should toString include the literal suffix &quot;N&quot;. The current spec doesn't put the N.</p>
 <p>WH: It's analogous to asking whether string.toString() should put the quotes around it or not.</p>
 <p>MM: <code>toString()</code> should not be thought of as something to recover the source string for a programming language. What it should be doing is represent using characters something that indicates what the value is.</p>
 <p>WH: So <code>toString()</code> of Integer 5 should return what?</p>

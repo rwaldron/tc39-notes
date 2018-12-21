@@ -102,7 +102,7 @@ Option #4: let/const anywhere in scope changes FIB semantics.</p>
 <p>(Note: &quot;block scoping&quot; means: let, const, class, FIB)</p>
 <p>WH:  Are the options listed about what we want to spec or what the implementations ought to <em>do</em> (leaving aside the question of whether or how the standard specs it)?
 LH: Here we're explicitly discussing what implementations should <em>do</em>.
-[general agreement that this is what we're discussing at this point.]</p>
+(general agreement that this is what we're discussing at this point.)</p>
 <p>LH: We cannot do FIB with meaningful semantics in the face of let/const</p>
 <p>AWB: If you didn't have FIB, are there still issues?</p>
 <p>LH: No.
@@ -170,7 +170,7 @@ function a() {
 <p>LH: So, not really an argument <em>against</em> #3, but for #0</p>
 <p>ARB: And not creating a more complicated language</p>
 <p>AWB/EA: No.</p>
-<p>AWB: [#3] Arguably no more complicated then [#0]</p>
+<p>AWB: (#3) Arguably no more complicated then (#0)</p>
 <p>MM: (Uses &quot;duplicate parameters in parameter lists with defaults&quot; as example of adding complexity)</p>
 <p>AWB/MM/WH: (Discussion around complexity implications)</p>
 <p>AWB: Complexity that occurs in edge cases is not</p>
@@ -381,7 +381,7 @@ var { p, r }? = q;
 <li>if q is {r: 7}: p is undefined, r is 7.
 WH: That means that ? is deep.</li>
 </ul>
-<p>WH: Given the discussion above [not recorded in these notes?] about doing primitive pattern matching assertions in the future, just curious what the semantics of ? ought to be so that it would interact well with such assertions. Example:
+<p>WH: Given the discussion above (not recorded in these notes?) about doing primitive pattern matching assertions in the future, just curious what the semantics of ? ought to be so that it would interact well with such assertions. Example:
 What should ? do in these cases?
 let {p, q}? = {p:17}
 Here p gets 17 and q gets undefined because ? distributes down.
@@ -399,12 +399,12 @@ let {p: {x: true}}? = {p: {}}</p>
 <p>ARB will work out new pattern matching strawman based on proposed ideas.</p>
 <p>BE: (to YK) have we assuaged your concerns about irrefutable destructuring?</p>
 <p>YK: yes, as long as &quot;?&quot;</p>
-<a href="#conclusionresolution-47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in"><h4 id="conclusionresolution-47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in">Conclusion/Resolution</h4></a><ol>
+<a href="#conclusionresolution-47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in"><h4 id="conclusionresolution-47--fail-fast-destructuring-with--syntax-for-irrefutable-opt-in">Conclusion/Resolution</h4></a><ul>
 <li>No implicit ToObject(RHS). <strong>consensus</strong></li>
 <li>Exception on missing property selected without a ?-suffix. <strong>consensus</strong></li>
 <li>?-suffix allowed on any pattern, imputing undefined deeply instead of refuting. <strong>consensus</strong></li>
 <li>The ? is a separate lexeme from the : in long-hand patterns. <strong>consensus</strong></li>
-</ol>
+</ul>
 <p>&quot;?&quot; in combination with default values, syntax error.</p>
 <pre><code class="language-js">{ a? = <span class="hljs-number">42</span> } <span class="hljs-comment">// throws.</span>
 </code></pre>
@@ -512,23 +512,25 @@ name is used instead.</p>
 (Diagram)</p>
 <p>AWB: 10 Prototype objects, 6 distinct method/get accessor functions per Realm.</p>
 <a href="#10-typedarrayprototype"><h1 id="10-typedarrayprototype">10, TypedArray.prototype</h1></a><ul>
-<li>[ BYTES_PER_ELEMENT: int abstract ]</li>
-<li>set() void</li>
-<li>subarray() void</li>
-<li>byteLength() int get</li>
-<li>byteOffset() int get</li>
-<li>buffer() Object get</li>
-<li>length() long get</li>
+<li><code>[ BYTES_PER_ELEMENT: int abstract ]</code></li>
+<li><code>set() void</code></li>
+<li><code>subarray() void</code></li>
+<li><code>byteLength() int get</code></li>
+<li><code>byteOffset() int get</code></li>
+<li><code>buffer() Object get</code></li>
+<li><code>length() long get</code></li>
 </ul>
-<p>Int8Array (BYTES_PER_ELEMENT int=1),
-Int32Array (BYTES_PER_ELEMENT int=4),
-Uint8Array (BYTES_PER_ELEMENT int=8),
-Uint32Array (BYTES_PER_ELEMENT int=4),
-Float32Array (BYTES_PER_ELEMENT int=4),
-Float64Array (BYTES_PER_ELEMENT int=8),
-Int16Array (BYTES_PER_ELEMENT int=1),
-Uint16Array (BYTES_PER_ELEMENT int=1),
-Uint8ClampedArray</p>
+<ul>
+<li><code>Int8Array (BYTES_PER_ELEMENT int=1)</code></li>
+<li><code>Int32Array (BYTES_PER_ELEMENT int=4)</code></li>
+<li><code>Uint8Array (BYTES_PER_ELEMENT int=8)</code></li>
+<li><code>Uint32Array (BYTES_PER_ELEMENT int=4)</code></li>
+<li><code>Float32Array (BYTES_PER_ELEMENT int=4)</code></li>
+<li><code>Float64Array (BYTES_PER_ELEMENT int=8)</code></li>
+<li><code>Int16Array (BYTES_PER_ELEMENT int=1)</code></li>
+<li><code>Uint16Array (BYTES_PER_ELEMENT int=1)</code></li>
+<li><code>Uint8ClampedArray</code></li>
+</ul>
 <p>MM: A Uint1Array or BooleanArray, where each element is one bit.</p>
 <p><strong>TypedArrays act like fixed length, numeric element JS Arrays</strong></p>
 <ul>
@@ -565,7 +567,7 @@ Uint8ClampedArray</p>
 <p>WH: [Repeats question]</p>
 <p>?: TypedArrays are not exotic arrays so don't get spread by Array.prototype.concat and ... . On the other hand, TypedArray.prototype.concat will spread TypedArrays only.</p>
 <p>WH: OK.</p>
-<p>[Debate about whether TypedArrays need the suite of Array methods]</p>
+<p>(Debate about whether TypedArrays need the suite of Array methods)</p>
 <p>YK: Using TypedArrays would be a pain if they didn't already offer these array operations.</p>
 <p>WH: It would be too confusing to have gratuitously different APIs for two array-like things in the language.</p>
 <p>RW: Agree.</p>
@@ -576,8 +578,8 @@ Uint8ClampedArray</p>
 <p>RW: Agrees.</p>
 <p>LH: Implementation and performance issue concerns?</p>
 <p>WH: This is not a lot of work for implementations, and implementations (as opposed to users) are clearly in the better place to implement these efficiently.</p>
-<p>[STH: After the end of the official meeting, there was some discussion as to why Typed Arrays wouldn't just become genuine Arrays.  This would mean
-that they'd have all the Array methods, some of which would throw on use (those that change length). This needs discussion at a future meeting.]</p>
+<p>(STH: After the end of the official meeting, there was some discussion as to why Typed Arrays wouldn't just become genuine Arrays. This would mean
+that they'd have all the Array methods, some of which would throw on use (those that change length). This needs discussion at a future meeting.)</p>
 <a href="#conclusionresolution-412-typed-arrays-update"><h4 id="conclusionresolution-412-typed-arrays-update">Conclusion/Resolution</h4></a><ul>
 <li>Move forward with the plan presented.</li>
 </ul>

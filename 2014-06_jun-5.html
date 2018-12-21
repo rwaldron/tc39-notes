@@ -165,7 +165,7 @@ YK: When you have packaging solution (SPDY, etc), you no longer need named modul
 <p>MM: <code>&lt;script type=&quot;module&quot;&gt;</code> would inherit the special termination rules of </script>, whereas old browsers might not handle <module> the same way, since that tag name doesn't mean anything special in old browsers</p>
 <p>AR: <code>&lt;script type=&quot;module&quot;&gt;</code> means the browser won't even try to parse it as JS, which is what we want [so that we can execute the script contents as a module, via some sort of polyfill]</p>
 <p>DH: <code>&lt;script type=&quot;worker&quot;&gt;</code> might also need to have the <code>&lt;script type=&quot;module&quot;&gt;</code> semantics, and type= attribute syntax makes it hard to mix and match those attributes; maybe <code>&lt;script worker module&gt;</code> would be better? (i.e. the type attribute values become optional value-less attribute names)</p>
-<p>DH: The difference between <code>&lt;script type=&quot;module&quot;&gt;</code> and <module> is that as long as there's … you always have the option of writing <code>&lt;script&gt;System.import(&quot;main.js&quot;)&lt;/script&gt;</code>
+<p>DH: The difference between <code>&lt;script type=&quot;module&quot;&gt;</code> and <module> is that as long as there's ... you always have the option of writing <code>&lt;script&gt;System.import(&quot;main.js&quot;)&lt;/script&gt;</code>
 TODO: Get DH to clarify this point when we edit the notes.</p>
 <p>MM: The <code>&lt;module&gt;</code> tag still has HTML misparsing consequences that <code>&lt;script&gt;</code> wouldn't have.</p>
 <p>YK: The success of <code>&lt;template&gt;</code> proves that we can introduce a new <code>&lt;script&gt;</code>-like <code>&lt;module&gt;</code> tag.</p>

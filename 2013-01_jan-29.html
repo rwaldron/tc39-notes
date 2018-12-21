@@ -214,7 +214,7 @@ v.length; <span class="hljs-comment">// 0</span>
 <ul>
 <li><p>Array uses a special exotic object representation that changes the semancs of [[DefineOwnProperty]].</p></li>
 <li><p>The object that new Vector creates and passes to the Vector constructor is an ordinary object, not an exotic Array object.</p></li>
-<li><p>Even with the super call, the Array constructor doesn’t transform its this object into an exotic Array</p></li>
+<li><p>Even with the super call, the Array constructor doesn't transform its this object into an exotic Array</p></li>
 </ul>
 <p><strong>First Solution</strong></p>
 <ul>
@@ -242,8 +242,8 @@ v.length; <span class="hljs-comment">// 0</span>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> d = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
 <span class="hljs-built_in">Map</span>.call(d);
 <span class="hljs-built_in">console</span>.log(d.getYear()); <span class="hljs-comment">// 2013</span>
-<span class="hljs-built_in">Map</span>.prototype.set.call(d,”month”, “January”);
-<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Map</span>.prototype.get.call(d,”Month”)) <span class="hljs-comment">// January</span>
+<span class="hljs-built_in">Map</span>.prototype.set.call(d,<span class="hljs-string">"month"</span>, <span class="hljs-string">"January"</span>);
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">Map</span>.prototype.get.call(d,<span class="hljs-string">"Month"</span>)) <span class="hljs-comment">// January</span>
 </code></pre>
 <p><strong>What do other dynamic OO languages do?</strong></p>
 <ul>
@@ -253,7 +253,7 @@ v.length; <span class="hljs-comment">// 0</span>
 <li>The allocation phase is defined as a separate  class method
 –  Can be inherited, or over-ridden, or super-invoked by  subclasses.</li>
 </ul>
-<p><strong>Sounds Good, Let’s see if it works for JavaScript</strong></p>
+<p><strong>Sounds Good, Let's see if it works for JavaScript</strong></p>
 <ul>
 <li>@@create is a well known symbol that when used as a property of  a constructor provides the alloca1on method for that constructor.</li>
 <li>New definition of the ordinary [[Construct]] :
@@ -262,14 +262,14 @@ v.length; <span class="hljs-comment">// 0</span>
 <li>If creator is not undefined, then
 a. Let obj be the result of calling creator with this constructor as its this value.</li>
 <li>Else, fallback implementation
-a. Let obj be a new ordinary object with its [[Prototype]] initialized from this constructor's “prototype” property.</li>
+a. Let obj be a new ordinary object with its [[Prototype]] initialized from this constructor's &quot;prototype&quot; property.</li>
 <li>Call this constructor with obj as the this value and the original argument list.</li>
 <li>Return obj.</li>
 </ol></li>
 </ul>
 <p>BE, EA, YK, WH, others: Get rid of the fallback implementation and just throw if there is no @@create. It's unnecessary complexity.</p>
 <ul>
-<li>Most constructors just inherit Function.prototype[@@create]  which allocates a new ordinary object with its [[Prototype]]  initialized from this.prototype (the constructor’s “prototype”  property).</li>
+<li>Most constructors just inherit Function.prototype[@@create]  which allocates a new ordinary object with its [[Prototype]]  initialized from this.prototype (the constructor's &quot;prototype&quot;  property).</li>
 <li><code>new Foo() &lt;=&gt; Foo.call(Foo[@@create]())</code></li>
 </ul>
 <p>TODO: Copy slide text to notes?</p>
