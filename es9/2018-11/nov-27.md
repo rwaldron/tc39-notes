@@ -2,7 +2,7 @@
 -----
 Mattijs Hoitink (MHK), Michael Saboff (MS), Keith Miller (KM), Tadeu Zagallo (TZO), Natalie Silvanovich (NSH), Waldemar Horwat (WH), Daniel Ehrenberg (DE), Jean Francois Paradis (JFP), Chip Morningstar (CM), Alan Schmitt (AS), Ross Kirsling (RKG), Jordan Harband (JHD), Brian Terlson (BT), Kevin Smith (KS), Eric Faust (EFT), Sathya Gunasekaran (SGN), Till Schneidereit (TST), Lin Clark (LCK), Godfrey Chan (GCN), Kevin Gibbons (KG), Pieter Ouwerkerk (POK), Randy Luecke (RLE), Devin Rousso (DRO), Reefath Rajali (RRI), Adam Klein (AK), Rex Jaeschke (RJE), Mark Miller (MM), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE), Emily Huynh (EHH), Michael Ficarra (MF), Ilias Tsangaris (IT), Thomas Levy (TLY), Augustus Yuan (AYN), Nathan Hammond (NHD), Sebastian Markbage (SM), Justin Ridgewell (JRL), Shane Carr (SCR), Dustin Savery (DSY), Frank Yung-Fong Tang (FTG), Mariko Kosaka (MKA), Peter Hoddie (PHE), Patrick Soquet (PST), Felipe Balbontin (FAB), Dave Herman (DH), Shu-yu Guo (SYG), Yehuda Katz (YK), Yulia Startsev (YSV), Sebastian McKenzie (SMK), Aki Rose (AKI), Tab Atkins (TAB), Mathias Bynens (MB), Scott Myers (SMS)
 
-Remote: 
+Remote:
 Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), Istvan Sebestyen (IS), Richard Gibson (RG), Guy Bedford (GB), Conrad Watts (CWS)
 -----
 
@@ -158,7 +158,7 @@ Onto page 8, TC39 Web Matters. So far no change yet. Working on better integrati
 
 Page 9, Ecma Fellow Recognition Award and Emeritus Membership. TC39 nominated Brendan Eich and Allen Wirfs-Brock as Ecma Fellows 2018. Congratulations and thanks!
 
-Page 10, ECMAScript Trademark issues. Deadline for filing declaration in US is Jan 22, 2019. First registered 10 years ago in US and we need to renew it. The Ecma IPR Lawyer drew our attention to use the ECMAScript trademark. (You need to put an "R" in brackets after "ECMAScript") because we might lose it. So far Ecma does it on all in the ECMAScript Standards, but it would be good if it could also be used by others, e.g. on company's product descriptions, manuals, if hardware then on the box etc. So whenever one uses "JavaScript" in a text one may think to put also "ECMAScript" behind it in a brackets to keep the Trademark office happy and not to endanger that they withdraw the trademark because of lack of "commercial use". 
+Page 10, ECMAScript Trademark issues. Deadline for filing declaration in US is Jan 22, 2019. First registered 10 years ago in US and we need to renew it. The Ecma IPR Lawyer drew our attention to use the ECMAScript trademark. (You need to put an "R" in brackets after "ECMAScript") because we might lose it. So far Ecma does it on all in the ECMAScript Standards, but it would be good if it could also be used by others, e.g. on company's product descriptions, manuals, if hardware then on the box etc. So whenever one uses "JavaScript" in a text one may think to put also "ECMAScript" behind it in a brackets to keep the Trademark office happy and not to endanger that they withdraw the trademark because of lack of "commercial use".
 
 Page 11: TC39 representation in GA, Ecma Management in ExeCom. Important that the true voice of TC39 is present and represented in the GA, Management and in the ExeCom. Fortunately for 2019 we have good TC39 ExeCom candidates.
 
@@ -221,6 +221,7 @@ YSV: Because meetings run quite long, in order to avoid conflicts, we'll rotate 
 
 - [Proposal](https://github.com/tc39/ecma262/pull/1311)
 
+[Value:Interop Tension:MinMax Resolution:Modification]
 DE: This is a continuation of the work from Lin Clark about making non-JS modules able to participate in the module dependency graph. Currently there is an abstract class for modules. The only subclass that exists right now is source-text module records, which have certain semantics, and recursing to dependencies is something that source-text module records own. In this PR there is an intermediate class, circular module records, that takes over the searching dependency records part. source-text module records can be a subclass of this new class, and other classes can also be a child of it. HTML modules, CSS modules, etc., might also take advantage of this. WebAssembly modules are the first user.
 
 Moving function hoisting sooner is another idea Lin had. The current thinking within WebAssembly is that those changes won't be necessary. We thinking of a more restrictive form of WebAssembly semantics. I'm happy to go into more details if you're interested. Today I'm just looking for consensus
@@ -233,6 +234,7 @@ BT: It's sort-of normative-ish. It's hard to pull the pieces apart. So it was be
 
 JHD: This is a layering change that makes it easier for implementers.
 
+[Tension:Interop Value:Interop Resolution:Discussion]
 BT: Not on the language, but it could have impact on embedders.
 
 DE: Where were concerns raised?
@@ -245,11 +247,11 @@ Rex: Any objections?  Looks like we're okay.
 
 - PR Approved
 
-
 ## A name change from "Module.Instantiate" to "Module.Link".
 
 https://github.com/tc39/ecma262/pull/1312
 
+[Value:Interop Tension:Coherence Resolution:Renaming]
 DE: The motivation is that, from WebAssembly perspective, we have a separate phase called instantiate, which happens in the instantiation phase of the JS module pipeline. Link is a better, more clear name. Some identifiers within programs might want to be renamed.
 
 DH: I think the linking terminology is good. My question is, is this the phase where the function that actually gets instantiated?  Because where functions get turned into dynamic values is early in the process—is that where this is?  Because that's why it was called instantiation, but if conceptually this is the phase where dependencies get wired up, then link is a good name.
@@ -267,10 +269,12 @@ DH: I think the linking terminology is good. My question is, is this the phase w
 
 GB: This is something we need in Node.js. It's been discussed quite a bit. I'll do a quick recap. In node, the idea is to support commonjs modules is to import directly. Eg, `import { name } from "cjs"`. The problem is that named exports of a commonjs module, you have to execute it. It's not static. We can execute the cjs modules during the instantiate phase, but this causes problems. If you have execution errors in commonjs, you can't guarantee statements execute in order. This is not intuitive behavior.
 
+[Value:Interop]
 Our solution is the Dynamic Modules proposal. If you've got an es modules importing a name from a cjs module, we're going to create a placeholder binding. When the cjs executes, we'll populate the placeholder binding. There's one major problem. If you have a circular reference between two EcmaScript modules, it's possible to access the namespace before the module is finished loading.
 
 The first approach to fix the above problem was to ban cycles with namespaces referencing dynamic modules. The new approach is to mark it as a "pending dynamic namespace".
 
+[Value:Interop Tension:Coherence Resolution:NewCapability]
 Dynamic namespaces current approach
 Mark it as pending dynamic name space
 ...
@@ -339,6 +343,8 @@ JHD: That is the case in ES6 already.
 
 YK: Basically what I'm worried about is, if you import something... I'd rather talk about this in a breakout session.
 
+[Value:Interop Tension:LeastSurprise]
+[Value:Interop Tension:Coherence]
 DH: I get more errors unless I use star form, but that's a bad outcome. We shouldn't be encouraging the star form over the binding form.
 
 GB: This won't be happening in browsers. It's purely node.
@@ -347,6 +353,7 @@ DH: That doesn't matter because what browsers do for transpilers, people will fo
 
 GB: The behavior, in terms of error behavior, remains exactly the same. If you import a name tht doesn't exist, that error will be caught during the initialization phase, but in a function (?) it gets caught during execution phase. I will stress that Node.js needs to be able to move forward with ES6 modules soon. It is important that we are able to move forward not being blocked by TC39. We don't want to implement this if TC39 doesn't see this as being 262-compatible.
 
+[Value:NewCapability Tension:FutureCompat]
 WH: Just so that we're on the same page, I'm interested in DH's example, and implications of it. If I understand correctly, if you import a name directly and the name doesn't exist, you get an error right away. If you import star, you don't get an error until you reference it later. Then you can write code that is compatible with different versions of the library. Would the ecosystem evolve with these different types of behavior?
 
 YK: I think it's the same question: Does this mean that you can observe the namespace having nothing to having something. Is that new?
@@ -380,7 +387,7 @@ LBR: Officially released https://Test262.report and the "Features" view shipping
 
 DE: Thanks to LB and ... from Bloomberg for writing tests on private methods and bugs were found from the test runs.
 
-LBR: One last thing to report is we got some of the specs we wanted -- bugzilla and bugs have been reported with the Test262.report link which shows accurately the test. Really happy with this. 
+LBR: One last thing to report is we got some of the specs we wanted -- bugzilla and bugs have been reported with the Test262.report link which shows accurately the test. Really happy with this.
 
 RKG: It's exciting for me too to fix something and see it show up in the interface.
 
@@ -407,7 +414,7 @@ PHE: The hardware we are targeting is much less powerful than the web platform. 
 
 PHE: The other side of this, important to talk about, is that hardware can get faster. Why not wait?  The consensus was that a lot of those hardware performance gains will go to smaller devices in a more energy-efficient devices. So we think these low-power and resource-constrained systems are here to stay.
 
-PHE: Two developer audiences: Applications (creating apps in JS and using standard APIs) and Systems (implementing "host" functionality in JavaScript rather than native). 
+PHE: Two developer audiences: Applications (creating apps in JS and using standard APIs) and Systems (implementing "host" functionality in JavaScript rather than native).
 
 PHE: In the title of TC53 is sensors. We get into displays and many other things. I'll talk about sensors; straightforward compared to the others.
 
@@ -415,7 +422,7 @@ PHE: Sensor Example traditional browser style i.e. Chrome host object is provide
 
 PHE: Other points of consensus that I think are relevant (no dispute): (1) There's no intention in TC53 to do language work. We may come back with proposals, but we will go through the normal process. (2) People are used to programming on the web, and we want to hold onto that, but since this is a distinct platform, it has different priorities, so we can't always promise interoperability with web. (3) There was broad consensus that we shouldn't add any new communication protocols. (4) We are a royalty-free technical committee.
 
-PHE: We are a fun committee. Please join us, we have 3 meetings per year. Tentative 
+PHE: We are a fun committee. Please join us, we have 3 meetings per year. Tentative
 Feb 25, 26 in Austin
 June 17, 18 in Silicon Valley
 We have an email reflector and happy to add people
@@ -484,7 +491,7 @@ YK: I don't personally have anything to say without them in the room, but if I d
 
 RJE: The historical model is that you have an editor in charge. We don't really have that model. Administratively, I don't see a need to mark someone as having that role.
 
-MS: An editor in chief I would see it as a chief among equals with equal responsibility but they are the point person for emails, etc. 
+MS: An editor in chief I would see it as a chief among equals with equal responsibility but they are the point person for emails, etc.
 
 BT: Practically, that's how it works.
 
@@ -503,7 +510,8 @@ BT: TODO: Editor hats for the editors.
 - [proposal](https://github.com/tc39/ecma262/pull/1340)
 
 
-MB: ChakraCore merged a stable merge sort. Moddable added a stable sort as well. Chrome 69 stable sorting is all green on the sort stability page. 
+[Value:Coherence Resolution:MakeCoherent]
+MB: ChakraCore merged a stable merge sort. Moddable added a stable sort as well. Chrome 69 stable sorting is all green on the sort stability page.
 
 MB: Array.prototype.sort is stable in all major browsers and in Moddable/XS!
 
@@ -526,6 +534,7 @@ DE: (describes the PR above)
 
 NSH: In the past, that has happened for me because a library included that feature.
 
+[Value:BackwardsCompat Resolution:MakeCompat]
 MM: A little bit of history. An example each way. In ES5, with a global JSON object, it broke Facebook. Because the stuff that was broken was served by Facebook, they could simply fix it and the problem went away. ES5 also broke an old version of jQuery, not the current version. But that was a problem because jquery code is distributed by being copied, not served. So we (tc39) had to fix it, but only in the least painful way that enabled that old version of jquery to not break. So the particulars of what is causing the breakage matters.
 
 #### Conclusion/Resolution
@@ -560,7 +569,7 @@ DE: Last meeting, we discussed updates to address ambiguity about who can attend
 
 (Yulia Startsev and Daniel Ehrenberg)
 
-DE: Yulia and I have been working together on this. 
+DE: Yulia and I have been working together on this.
 
 YSV: Trying an experiment to have groups and role is to get more input and direction from specific parties of the community that we might not have.
 Feedback on stage 2 or earlier proposals
@@ -570,7 +579,7 @@ Not consensus seeking group, just for data
 
 DE: The first couple meetings, sort-of left it open to the attendees to set things on the agenda. We ended up with a lot of things that were already under discussion. So we wanted to make this have very explicit scoping, and especially focus on early-stage proposals. To be clear, this is not a consensus-seeking group, but trying to gain perspectives from more people.
 
-YSV: Meeting monthly 2nd Thursday (contact Dan). Two of the things we are talking about 1) Experimental role (writer for a proposal). External to the committee and talking to the champions -> translate that into easily understand documentation. If README is too specific, we can have someone clarify that. We are asking people to also help champions and make proposals clearer to the public. MDN documentation is being worked on. 
+YSV: Meeting monthly 2nd Thursday (contact Dan). Two of the things we are talking about 1) Experimental role (writer for a proposal). External to the committee and talking to the champions -> translate that into easily understand documentation. If README is too specific, we can have someone clarify that. We are asking people to also help champions and make proposals clearer to the public. MDN documentation is being worked on.
 
 YSV: The other topic I'm excited about are better error messages. The goal is to provide a list of recommendations that are unclear to users, and making it possible to make more clear error messages. This is a repo on GitHub where we're collecting bad error messages from various browsers. There are backwards compatibility issues of course, but we hope to address that.
 
@@ -588,7 +597,7 @@ DE: The W3C TAG is a body with 9 (or 90?) people that meets several times a year
 
 DE: Comments?
 
-YSV: Planning on having another group which is a community group -- planned for January which is open to people who want to ask questions and understand how the process works. 
+YSV: Planning on having another group which is a community group -- planned for January which is open to people who want to ask questions and understand how the process works.
 
 WH: es-discuss is one of the places where people come in making first contact with our group. Is the outreach group doing anything about the reception people get there?
 
@@ -596,7 +605,7 @@ YSV: I think we need to address how we treat people on es-discuss. The outreach 
 
 WH: I'm not sure immediacy is the issue. I think the problem is our lack of response, and that would apply to any such forum. People from TC39 just aren't interested in engaging with the mailing list group.
 
-DE: Prior to proposing the outreach groups, we discussed text-based communication mechanisms and lots of hesitation. I really think there are different groups of people who are receptive in different forms of communications. Changing the environment in github, having an open call... I agree we need to improve this situation in es-discuss but I don't think this will improve the feedback we're getting from frameworks. We wouldn't be engaging the same people. 
+DE: Prior to proposing the outreach groups, we discussed text-based communication mechanisms and lots of hesitation. I really think there are different groups of people who are receptive in different forms of communications. Changing the environment in github, having an open call... I agree we need to improve this situation in es-discuss but I don't think this will improve the feedback we're getting from frameworks. We wouldn't be engaging the same people.
 
 AKI: I just wanted to mention, later in this meeting or in January, there will be a breakout session about how you can express your ideas better, and one of the topics will be es-discuss.
 
@@ -616,6 +625,7 @@ DE: Shout out to Justin for taking notes at outreach meetings :)
 
 - [proposal](https://github.com/tc39/proposal-Symbol-description)
 
+[Value:NewCapability]
 MF: Symbol description stage 3 right now. Internal description slot is filled in via the constructor of Symbol. That's it. We have implementation support on 3 major browsers: V8, Spider monkey, ChakraCore. Any objections?
 
 #### Conclusion/Resolution
@@ -665,13 +675,13 @@ MF: More practically, it is being used as the assumed spec text for other propos
 
 AK: On the idea that we should merge this into the spec, there are plenty of areas where the implementation and spec are not exactly the same.
 
-SM: What does moddable do? 
+SM: What does moddable do?
 
 MF: We work together with modules on other versions of this proposal. There is a HostHasSourceTextAvailable function, for example.
 
 SM: And is that how it works right now?
 
-??, row 5, seat 2: It works as it did before. 
+??, row 5, seat 2: It works as it did before.
 
 SM: We haven't explored if that part of the code has seen any problems? It sounds like that could be a breaking change.
 
@@ -703,6 +713,9 @@ MF: I think DD might have something to say about that. I think he's saying that 
 
 DE: So the compatibility issue.. I find it hard to see how that issue would arise in practice.
 
+[Value:ResourceUsage Tension:FutureCompat]
+[Value:Interop Tension:FutureCompat]
+[ValueDesc: toString is an expensive operation that could be optimized out]
 SM: I'm not concerned about web compatibility issues. I'm concerned about future things like moddables being compatible with existing code.
 
 DE: I think there are a lot of decisions that could make it more or less compatible from web code. If someone is expecting the source code, they can make a mode to get it.
@@ -723,6 +736,7 @@ JH: I think in the current spec in the crossed out lines... if the implementatio
 
 SM: I think there's a pretty strong argument that bound functions have been an exact string for a long time that this issue would have happened in the ecosystem anyway that it's not going to be a concern.
 
+[Value:Interop Tension:FutureCompat]
 WH: I am a bit concerned what happens when the user starts using the functionality of this thing to determine native or not. The whole point of this proposal to reduce the divergence in implementations. Let me give an example: currently a built in function must not show the source code. How would you polyfill that?
 
 MF: Replace Function.prototype.toString
@@ -735,15 +749,15 @@ JHL (??): Oh I see it now... source code to native function.
 
 WH: Do we want to forbid implementations from showing the source code of any built-in functions?
 
-BT: We have some self-hosted code, but I can't imagine we ... 
+BT: We have some self-hosted code, but I can't imagine we ...
 
 JHL: Similar to how one could provide more helpful error messages, you could have a native function return a reasonable polyfill implementation when `toString`'d.
 
 MB: Noooo! Nothing good can come from exposing either implementation details or polyfills that may or may not match the exact implementation like that.
 
-??: It's covered in custom engine... goo.. 
+??: It's covered in custom engine... goo..
 
-TLY: I am getting the impression this is intentional ingenuous to mark things as native code when they are native code. 
+TLY: I am getting the impression this is intentional ingenuous to mark things as native code when they are native code.
 
 MF: We've done that with bound functions
 
@@ -771,9 +785,10 @@ Shane Carr (SCR)
 
 - [proposal](https://github.com/sffc/proposal-unified-intl-numberformat)
 
-SCR: This is an update proposal I showed in July to stage 2 and now we want to go to stage 3. Most of the slides are the same but wanted to give it again for newcomers. 
+SCR: This is an update proposal I showed in July to stage 2 and now we want to go to stage 3. Most of the slides are the same but wanted to give it again for newcomers.
 
-SCR: Motivation for this format is to add more number formatting features to ECMA-402. Feature and important to Google because locale data footprint and barrier to entry. Adding features as opposed to 
+[Value:NewCap]
+SCR: Motivation for this format is to add more number formatting features to ECMA-402. Feature and important to Google because locale data footprint and barrier to entry. Adding features as opposed to
 
 SCR: 4 sections: Spec clean up
 

@@ -11,7 +11,7 @@ Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), 
 
 - [Agenda](https://github.com/tc39/agendas/blob/master/2018/11.md)
 
-[Discussion:MemoryModel]
+[Discussion]
 ## Memory Model bug DRF-SC bug
 
 (Shu-yu Guo)
@@ -170,7 +170,7 @@ SYG: That seems totally fine -- adding APIs to atomics that give you stronger gu
 - Weak fix
 
 
-[Discussion:Hashbang]
+[Discussion]
 ## Hash Bang grammar
 
 (Bradley Farias)
@@ -200,7 +200,7 @@ BFS: Sounds good.
 - Stage 3 acceptance
 
 
-[Discussion:Decorators]
+[Discussion]
 ## Decorators Stage 2 update
 
 (Daniel Ehrenberg)
@@ -217,7 +217,7 @@ DE: You might not want to use this when you are using a backing store i.e. in Mo
 [Value:Expressiveness Tension:JITCompilation]
 DE: previous solution in decorators which didn't come up before in TC39 which is use a throwaway field, run the side-effect... I don't want to encourage this idiom. Unclear how JITs should reliably detect dead fields. This would encourage anti-patterns. This wasn't an issue in stage 0 because they were not about thinking the initializer.
 
-[Value:Expressiveness Tension:JITCompilation PResolution:NewCapability]
+[Value:Expressiveness Tension:JITCompilation]
 DE: Instead, we could run a side effect outside of the decorator. Semantics decorators output can refrain from defining a field. We heard from the discussion of set and mobx that once the stage 2 was in babel, many people ran into this issue and proposed the mitigation and realized the flaws.
 
 DE: Decoratator descriptor can have a `kind`: `"initializer"`. See semantics slide. Any thoughts on the initializer feature? PR in babel and wanted feedback from the committee. Thank you to everyone who participated in threads and reviews for this.
@@ -333,10 +333,10 @@ KS: It's clear people want to use it but you also have to ask if we had a simila
 
 DE: I have arguments why decorators > JSX.
 
-[Value:Expressiveness PResolution:Userland]
+[Value:Expressiveness]
 JRL: One option we have is to leave it for babel and typescript. This can just become a syntax reservation for compilers to work on. If you shipped a decorator to a browser, it would throw because there's no runtime meaning to the decorator.
 
-[PResolution:Userland Tension:Interop]
+[Value:Expressiveness Tension:Interop]
 DE: I originally proposed that and we wanted to promote the unification so that we had interoperable code.
 
 Diego: Yeah we talked about everyone would implement their own thing and we would have lots of interoperability.
@@ -375,7 +375,7 @@ DE: I share MM's interest. I'm presenting on it now.
 - Withdrawn
 
 
-[Discussion:Distinguishing Templates]
+[Discussion]
 ## Distinguishing templates: PR Phase 1, Spec Phase 2
 
 (Daniel Ehrenberg)
@@ -415,8 +415,8 @@ JH: It sounds like you are trying to verify if a tag is from source code. Since 
 
 DE: There are further properties that would be nice but this matches the original request and isn't that bad.
 
-[Value:Integrity Resolution:NewCapability]
-[Value:Integrity Resolution:Expressiveness]
+[Value:Integrity]
+[Value:Integrity]
 KG: You mentioned JavaScript API which I think would be nice. API only useful if it's unforgeable... there are 3 things are not virtualizable -- Nan, undefined, infinity. Would the idea be introduce an unforgeable function?
 
 DE: I like the import module. Regardless if we go with the Apple proposal to freeze modules, at least if we go... import map give you a place to virtualize built in modules.
@@ -540,7 +540,7 @@ KG: Let's take it offline.
 (Lunch break)
 
 
-[Discussion:DateStyle]
+[Discussion]
 ## dateStyle/timeStyle for Stage 2
 
 (Daniel Ehrenberg)
@@ -605,7 +605,7 @@ MF: Satisfies me.
 - Stage 3 reviewers: FTG, NHD
 
 
-[Discussion:Optional Chaining]
+[Discussion]
 ## Update on Optional Chaining
 
 (Dustin Savery)
