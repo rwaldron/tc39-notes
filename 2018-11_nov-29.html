@@ -605,6 +605,123 @@ MHK: At Apple we have an internal one, so also we want to avoid conflicts with t
 <p>MF: Apparently idea behind get originals has changed. Can't explain it very well though... Kevin knows the answer to this, he spoke to Dominic.</p>
 <a href="#conclusionresolution-standard-libraries-1pm-breakout"><h4 id="conclusionresolution-standard-libraries-1pm-breakout">Conclusion/Resolution</h4></a><p>– NHD to get in touch with J Chung
 – Resync with get originals and Luke Wagner</p>
+<a href="#weakref-session"><h2 id="weakref-session">WeakRef Session</h2></a><p>TST: I talked with the other co-champions and even we have some catching up to do.</p>
+<p>TST: Briefly on the state of discussions, there are uncertanities around what exactly is a turn of GC, when exactly cleanup could happen, what does strong reference within a turn means. Is it after a script job has finished? After a Promise queue has been emptied? To my surprise, the spec pretends this doesn't have any ordering reqs.</p>
+<p>MM: Let me be precise but I agree with the sense. The spec is written in such a way the ordering policy decisions are left to the host. There is some arbitrary set of named job queues, each queue is FIFO. All promises use one of those job queues. All promise operations within an agent are fully deterministic ordered within that queue. However, the mechanism the spec uses to leave a lot of policy choices to the host is to say: at the end of a job, it's up to the host to take a look at the existing job queues. And of the ones that are non-empty and has a job that's ready, the host is completely free to determine which queue to service next. As far as the spec is concerned, the async things caused by async loading, script execution, etc, all could be interleaved between any queue operations between diff queues. I <em>believe</em> it's the case on all hosts as long as anything is ready on promise queue, the other queues are only serviced when the promise queue is drained.</p>
+<p>SGN: What are the other queues.</p>
+<p>TST: The HTML spec specs some other queues. The JS spec specs 2 queues: the promise queue and script queue, equiv to microtasks and tasks. The JS spec gives freedom to drain these in arbitrary order. The HTML spec is explicit about the microtasks being drained before the task. In practice, any JS env that wants to be able to run normal JS without being reworked for an env, and wants to support async/await, needs to keep the HTML guarantees. The freedom doesn't matter except for weak refs since weak refs spec say something about in-turn stability. We just need to define what it means.</p>
+<p>MM: Original definition of turn (which committee unfortunately renamed job) is that computation that is bracketed by empty user stack.</p>
+<p>KM: So doing a promise is a turn.</p>
+<p>MM: Right, between two promises there are no user stack frames. That's the defining bracket.</p>
+<p>KM: How would you even know... when do you know when the weakref finalizer runs anyways? I mean at the end of which turn?</p>
+<p>MM: There're 2 issues that depend on turns. 1 is when finalizer runs, and 2 is nature of stability guarantee. The alternate proposal is that we recognize in the spec that the promise job queue is treated -- we make it normative -- as strictly higher priority, so that a seq of promise job is an atomic thing we can talk about. I don't want to call it a &quot;turn&quot; or past terminology that's browser-specific. We need a term nevertheless. That would give us less non-determinism that all platforms have anyways. It gives us something we can count on for all platforms. I'll just call it a macro-turn for the moment. For the first part, the proposal that the scheduling of finalization schedules jobs on some job queue is necessarily of lower priority than promise job queue, so no finalizer will ever get called while there are ready promise jobs.</p>
+<p>SGN: Why does this need to be in the ES spec?</p>
+<p>MM: You <em>could</em> do that, that's a viable alternative and nothing would break. However, it means that a correct JS program (vs a correct web program), in that a correct JS program is trying to be correct in a host-independent way can only depend on the JS spec. Even thogh there's regularity that all hosts admit the promise queue priority, a JS program cannot depend on those.</p>
+<p>SYG: What do you get out of not having it in the JS spec?</p>
+<p>SGN: The web spec has a proper place, it seems like.</p>
+<p>MM: The HTML spec would not change in the place where this needs to be specified if we make this change. But this means JS programs can depend on this behavior for their correctness.</p>
+<p>TST: One reason to do this in the JS spec that envs like node don't follow the HTML spec, but still have the implement the same behavior.</p>
+<p>TST: This is relevant for this discussion because of stability and finalization time. We can introduce the same fictional freedom about job queue but I don't think that we should...</p>
+<p>MM: ...because it makes writing correct portable programs harder.</p>
+<p>TST: In practice I don't think it wouldn't...</p>
+<p>MM: A correct JS program can only depend on the JS spec.</p>
+<p>TST: What I'm saying is the spec should be all you need.</p>
+<p>KM: So is there any concern that because we're only doing this at the microtask checkpoint boundary that you can write a program that was entirely async, thinking that, like, everytime I am effectively yielding to the run loop by promise chaining forever, that the finalizers will never run.</p>
+<p>MM: So I have a questoin about node. I've seen a discussion about a possible scheduling policy for node but don't know what was decided. The other event on scheduling is external IO events -- IO events generating callbacks. The policy change we're talking about only makes sense if servicing IO events is <em>also</em> strictly lower priority than promise events. If those IO events can be interleaved with promise queue work then this policy doesn't make sense.</p>
+<p>MM: If the IO event enqueues a callback, which queue does it enqueue the callback on. The reason I ask is because <em>if</em> it remains the promise queue is strictly higher prio...</p>
+<p>KM: I agree with you. You're going to have a bad time if you're going to keep chaining promises, you'll still get the spinner.</p>
+<p>MM: But even if the larger unit is finite, it won't be a lot longer.</p>
+<p>TST: I want to briefly explain why this is even relevant.</p>
+<pre><code><span class="hljs-keyword">if</span> <span class="hljs-comment">(wr.deref()</span>) {
+  await immediatelyResolvedPromise;
+  wr.deref<span class="hljs-comment">()</span>.foo<span class="hljs-comment">()</span>;
+}
+</code></pre>
+<p>This is the classical double deref issue that Dean presented on, and that's why we have in-turn stabliity. Engines will optimize the immediately resolved promise out. It'll be as if it's a block.</p>
+<p>MM, SGN: No, there has to be a turn.</p>
+<p>TST: <em>If</em> it's observable yes, but if not it gets optimized out.</p>
+<p>MM: So, I agree this can be optimized out. But I don't see the point of the example.</p>
+<p>TST: The point is at that point it's back to double-deref and it leads to a situation where you're very likely to have completely stable behavior in engines, but in the future GC changes will perturb and lose stability.</p>
+<p>MM: I'm worried about await patterns people using. They're making bad assumptions about the await points that're making their programs bad.</p>
+<p>TST: I think the immediate assumption for the example I gave is a very common occurrence. Await's often used in a way that there <em>might</em> be not necessarily is async behavior here.</p>
+<p>KM: For file and cache, immediately resolved is common.</p>
+<p>MM: But to help the programmer reason and to give predictibility? Programmers need to learn double-deref over an await is bad.</p>
+<p>SYG: Isn't this like GC hazard analysis?</p>
+<p>TST: This is probably something devtools can do as a best-effort.</p>
+<p>MM: We're trying to reduce the non-determinism as much as we can. People <em>will</em> write programs that <em>happen</em> to work and will continue to happen to work under intense testing, that an innocent change wil cause those programs to stop working.</p>
+<p>TST: One thing that might help is if you have a debugger open, the debugger could switch at random between 2 different behaviors. 1 is very aggressively GC and clear weakrefs, and the other is do as little finalization behavior as possible. If you switch between these randomly you're likely to get bugs from both of these behaviors. We should recommend engines do this but we cannot spec this.</p>
+<p>KM: And also it's only so useful to diagnose. When a dev is just writing the app you think they'll actually do this?</p>
+<p>TST: Given the chances that this code runs in the course of debugging...</p>
+<p>KM: Maybe headless mode.</p>
+<p>TST: Go ahead.</p>
+<p>KM: Uhh we don't have a headless mode.</p>
+<p>MM: One can imagine devtools has a GC fuzzer.</p>
+<p>TST: More like a quality of impl thing. We should make specific recommendations about this. Impls should do this from the get-go.</p>
+<p>SGN: I think the biggest thing is the API. Right now we nede to create a WeakFactory does makeWeakCell. Puts the Java in JavaScript. We should use the constructors with new WeakRef, new WeakCell.</p>
+<p>KM: I agree.</p>
+<p>MM: We were scared of the constructor and put a correctness condition: we're willing to use the constructor if we're willing to make a change to the normal class pattern, because normal class pattern has a .constructor property. So anyone has an instance has the power to create new instances. For weak refs, that would be a gross violation of least authority. I should be able to give you the ability to observe that a particular weak ref becomes null, or to deref it until it becomes null, without giving you ability to create new weak refs.</p>
+<p>SGN, KM: Just delete the .constructor prop?</p>
+<p>MM: If we can agree that WeakRef.prototype.constructor does not point. If we the spec writers delete it then it's okay.</p>
+<p>KM: Why in the spec instead of let the user do it?</p>
+<p>MM: We want the safe way to be the easy way. That's also why the weak factory is also on the system object. System object gives you special powers and can be censored.</p>
+<p>SGN: Why does it matter the initial state is spec compliant?</p>
+<p>MM: This is why we put Error.p.stack in Annex B so that a framework that removes it is still spec compliant even if a framework removes it from the initial state.</p>
+<p>SGN: Do we want to make that ergonomic tradeoff?</p>
+<p>MM: Yes, if we're going to introduce these magic powers so that when we introduce the new powers...</p>
+<p>KM: Are you okay with putting the WeakRef constructor on Annex B then?</p>
+<p>MM: Yes, actually.</p>
+<p>All: Okay, haha.</p>
+<p>MM: To be clear what this means it that a test262 test, that property has to be in Annex B...</p>
+<p>All: Acceptable tradeoff for me.</p>
+<p>TST: Excellent, this allows us to do something more ergonomic while keeping the invariants. There are still other things about the API. Dean and I talked extensively. One thing is the name WeakFactory is in there in part because it's hard to name as it services multiple purposes. It's a mechanism for grouping lifetimes for finalization purpoess <em>and</em> something to hang the ability to create weak refs off of. I want to disentangle these two. If you want to have a weak ref, say new WeakRef, and WeakRefs have nothing to do with finalization. If you want to do finalization, register your object with something called e.g. FinalizationGroup. You create FinalizationGroup same way as you create a WeakFactory, passing it a cleanup method. Then you pass it object and holdings pairs with a registration API.</p>
+<p>MM: The reason for adding the registration API so we can remove the weak cell.</p>
+<p>TST: Exactly. If you need both finalization and weak refs, you'd use FinalizationGroup.</p>
+<p>MM: How do individual weak refs become associated with a weak ref group?</p>
+<p>TST: They don't, you separate concerns.</p>
+<p>MM: I see.</p>
+<p>SGN: The problem is you need to have the target and holdings to do the unregistration. Seems limiting but I can't think of a problem right now.</p>
+<p>MM: Let me understand, the weak ref no longer has holdings at all.</p>
+<p>TST: Exactly, only when you register the weak ref for finalization.</p>
+<p>MM: I see. This is clean, I like this.</p>
+<p>KM: To unregister you need the strong ref also? When you want to unregister, provide it with just the holdings. If it hasn't been finalized yet...</p>
+<p>TST: I hadn't considered unregistering with just the holdings.</p>
+<p>SGN: But you can register the same obj with multiple holdings. Common use case.</p>
+<p>KM: Why is that common?</p>
+<p>SGN: Shared state.</p>
+<p>KM: But your holdings can just be a collections of a bunch of things that distinguish.</p>
+<p>SGN: Okay, but that seems arbitrary to have that restriction.</p>
+<p>KM: It's not that you can't have separate ones, just if you want to be able to unregister with just the holdings. Otherwise you have to have the object to unregister, which is very difficult if I don't care about it anymore.</p>
+<p>SGN: Or you get a handle, that's the weak cell. That seems better.</p>
+<p>KM: Or an optional 3rd argument like a key to unregister, then you get to choose it.</p>
+<p>TST: Could provide an overload of WeakRef ctor that passes in holdings and a group that does both. WeakRef would just WeakRef, WeakRef(t, holdings, group) combines the registration, passing the holdings to group. One way could be unregister just based on the holdings.</p>
+<p>KM: Could have on the group a way to register with the holdings.</p>
+<p>TST: I think we can discuss the alternatives.</p>
+<p>MM: I like that the registration might take an optional key, and it's if you provide the key, it's the key you use to unregister.</p>
+<p>TST: Assume you're using an object as your key. Nothing prevents you from creating a weak ref using that object as your target. Then when you call unregister it's ambiguous.</p>
+<p>KM: But th eonly thing you can pass is the key.</p>
+<p>TST: Oh so if you want to unregister <em>at all</em> you have to pass the key.</p>
+<p>KM: Yes. If you want to use holdings, pass holdings. If you want to use the same group you could do that.</p>
+<p>MM: Makes it orthogonal, yes.</p>
+<p>All: We like that, yes.</p>
+<p>SGN: I have another concern. The register has a strong ref to holdings, which means we can't GC the holdings, which means weak refs have stronger GC guarantees than anything else in the language.</p>
+<p>MM: It's the group that has the ref to the holdings. If the group as a whole is garbage...</p>
+<p>KM: Does the finaliezr for a group run if the group isn't reachable.</p>
+<p>TST: If the whole subsystem goes away in one go then no finalizer will run.</p>
+<p>SGN: But if the group does a lot of registrations and we want to do some cleanup we can't, because holdings are strong.</p>
+<p>TST: The entire point is that you want to be able to pass something to the finalizer that is guaranteed to not be collected.</p>
+<p>SGN: If the target is not GCed. If the target is GCed, we have to call the finalizers.</p>
+<p>MM, TST: <em>After</em> the finalizer's run the holdings aren't held anymore.</p>
+<p>SGN: You could not run the finalizer...</p>
+<p>All: That's not desirable, so they have to be held onto strongly.</p>
+<p>KM: What's the seantics if the group itself is dead?</p>
+<p>TST: Then nothing gets run anymore.</p>
+<p>KM: If you have a socket that socket won't be closed...</p>
+<p>TST: Yes, you should strongly associate the group with the socket. Consider a wasm module where you have JS reflectors for some state in linear memory. You want to pass those out weak refs so you can clean up memory state, but if the whole memory goes away, then the group goes away, and you don't want to waste time doing the finalization work.</p>
+<p>KM: I see.</p>
+<p>SGN: The next one is the finalizer gets an iterator and can iterate all the weak cells. What if you don't finish iterating?</p>
+<p>TST: Arbitrary future time and the rest will be yielded.</p>
+<p>KM: Previously you get the weak refs/weak cells, and if you want the holdings you call the getter. Those things are gone now so you just iterate through holdings.</p>
+<a href="#conclusionresolution-weakref-session"><h4 id="conclusionresolution-weakref-session">Conclusion/Resolution</h4></a><p>See summary session.</p>
 <a href="#summary-session-330pm"><h2 id="summary-session-330pm">Summary Session 3:30pm</h2></a><a href="#least-authority-libraries"><h3 id="least-authority-libraries">Least-Authority Libraries</h3></a><p>MM: Modules have top level state, to import shared modules into a frozen realm, we need modules that are known to have frozen top level state. This can bootstrap importing other modules that have least authority. This would have prevented the recent NPM exploit.</p>
 <a href="#implementation-security-and-correctness"><h3 id="implementation-security-and-correctness">Implementation Security and Correctness</h3></a><p>MF: We had 2 major takeaways. They are recorded in the tc39 security repo. (1) Have guidelines for Stage 3 reviewers, and include security as a guideline. Natalie offered to put together a PR to the process document and present it at a future meeting. (2) It might be valuable to create a list of exotic JS values. If would be useful for proposal champions could provide how exotic JavaScript values could interact with their library. We should start with values that have caused errors in the past.</p>
 <a href="#source-text-ness-of-template-literals"><h3 id="source-text-ness-of-template-literals">Source Text-ness of Template Literals</h3></a><p>JRL: We discussed what the implicit call site that could call to a decorator function, pipeline, etc., that would allow us to determine if a call could have been forged: a call expression and not source text in your JS file. There's a few issues that come up with tail call invocation. You could look at the stack, which is zero cost, but with tail call invocations, it's difficult, because the stack gets pushed off and replaced with the tail. So we'd need to figure out that problem. We could still move forward with Dan's proposal to add an internal slot to tag template strings, and allow hosts to build on top of that to give them the easiest path forward to tell if a tagged template literal was source text.</p>
