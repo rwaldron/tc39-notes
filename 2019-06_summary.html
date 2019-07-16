@@ -1,0 +1,94 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="manifest" href="img/site.webmanifest">
+<link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<title>Summary for the 70th meeting of Ecma TC39</title>
+<body class="markdown-body">
+<a href="javascript:history.back()">Back</a>
+<a href="#summary-for-the-70th-meeting-of-ecma-tc39"><h1 id="summary-for-the-70th-meeting-of-ecma-tc39">Summary for the 70th meeting of Ecma TC39</h1></a><p>Ecma Technical Committee 39 held a three day meeting hosted by Stripe in Berlin, Germany on June 4th to June 6th, 2019. <a href="https://github.com/tc39/agendas/blob/master/2019/06.md">Agenda can be found here</a>.</p>
+<ul>
+<li><a href="2019-06_june-26.html#june-4-2019-meeting-notes">June 4, 2019 Meeting Notes</a></li>
+<li><a href="2019-06_june-27.html#june-5-2019-meeting-notes">June 5, 2019 Meeting Notes</a></li>
+<li><a href="2019-06_june-28.html#june-6-2019-meeting-notes">June 6, 2019 Meeting Notes</a></li>
+</ul>
+<a href="#new-proposals"><h2 id="new-proposals">New Proposals</h2></a><p>TC39 advanced 3 new proposals to Stage 1, and one proposal went straight to Stage 2.</p>
+<a href="#advanced-to-stage-1"><h3 id="advanced-to-stage-1">Advanced to Stage 1</h3></a><ul>
+<li><a href="2019-06_june-5.html#emitter-for-stage-1">Emitter</a></li>
+<li><a href="2019-06_june-5.html#evalable-for-stage-1-or-2">evalable</a></li>
+<li><a href="2019-06_june-5.html#host-compile-value-adjustment-for-stage-1-or-2">Host compile value adjustment</a> (combined with evalable)</li>
+</ul>
+<a href="#advanced-from-stage-0-to-2"><h3 id="advanced-from-stage-0-to-2">Advanced from Stage 0 to 2</h3></a><ul>
+<li><a href="2019-06_june-5.html#arrayistemplateobject-for-stage-1-or-2">Array.isTemplateObject</a></li>
+</ul>
+<a href="#existing-proposals"><h2 id="existing-proposals">Existing Proposals</h2></a><p>TC39 discussed 11 proposals for stage advancement and had updates presentations on 4 proposals</p>
+<a href="#advanced-to-stage-2-from-stage-1"><h3 id="advanced-to-stage-2-from-stage-1">Advanced to Stage 2 from Stage 1</h3></a><ul>
+<li><a href="2019-06_june-4.html#for-in-enumeration-order-for-stage-2">For-in enumeration order</a></li>
+<li><a href="2019-06_june-5.html#ecma-402-intldisplaynames">ECMA-402: Intl.DisplayNames</a></li>
+<li><a href="2019-06_june-5.html#optional-chaining-for-stage-2">Optional Chaining for Stage 2</a></li>
+<li><a href="2019-06_june-5.html#nullish-coalescing-for-stage-2">Nullish Coalescing for Stage 2</a></li>
+</ul>
+<a href="#advanced-to-stage-3-from-stage-2"><h3 id="advanced-to-stage-3-from-stage-2">Advanced to Stage 3 from Stage 2</h3></a><ul>
+<li><a href="2019-06_june-6.html#top-level-await-for-stage-3">Top-level await</a></li>
+<li><a href="2019-06_june-6.html#weakrefs">WeakRefs</a></li>
+</ul>
+<a href="#advanced-to-stage-4-from-stage-3"><h3 id="advanced-to-stage-4-from-stage-3">Advanced to Stage 4 from Stage 3</h3></a><ul>
+<li><a href="2019-06_june-4.html#dynamic-import-for-stage-4">Dynamic import()</a></li>
+<li><a href="2019-06_june-4.html#bigint-to-stage-4">BigInt</a></li>
+</ul>
+<a href="#needs-more-discussioninformation"><h3 id="needs-more-discussioninformation">Needs more discussion/information</h3></a><p>Following proposals did not reach consensus for stage advancement.</p>
+<ul>
+<li><a href="2019-06_june-4.html#annex-b-reform">Annex B reform</a></li>
+<li><a href="2019-06_june-4.html#javascript-standard-library-for-stage-2">JavaScript Standard Library for Stage 2</a>
+<ul>
+<li><a href="2019-06_june-5.html#javascript-standard-library-for-stage-2--part-2-">JavaScript Standard Library for Stage 2 [ part 2? ]</a></li>
+</ul></li>
+<li><a href="2019-06_june-5.html#a-javascript-commons">A JavaScript Commons</a></li>
+</ul>
+<a href="#updates"><h3 id="updates">Updates</h3></a><p>Updates on proposals that are not seeking stage advancement</p>
+<ul>
+<li><a href="2019-06_june-4.html#atomicswaitasync-asking-for-stage-3-reviewers">Atomics.waitAsync asking for stage 3 reviewers</a></li>
+<li><a href="2019-06_june-4.html#how-should-we-specify-jobs-precisely">How should we specify Jobs precisely?</a>
+<ul>
+<li><a href="2019-06_june-6.html#continuation-of-layering-job-queue">Continuation of Layering Job Queue</a></li>
+</ul></li>
+<li><a href="2019-06_june-4.html#trusted-types">Trusted types</a></li>
+<li><a href="2019-06_june-5.html#promiseany">Promise.any</a></li>
+</ul>
+<a href="#changes-to-existing-specification"><h2 id="changes-to-existing-specification">Changes to existing specification</h2></a><p>TC39 discussed 7 Pull Requests to the existing specification</p>
+<a href="#consensus-reached-pull-requests"><h3 id="consensus-reached-pull-requests">Consensus Reached Pull Requests</h3></a><ul>
+<li><a href="2019-06_june-4.html#let-all-early-errors-be-syntax-errors">Let all early errors be Syntax Errors</a></li>
+<li><a href="2019-06_june-4.html#evalnonstring-should-not-side-effect">eval(nonString) should not side effect</a></li>
+<li><a href="2019-06_june-4.html#set-name-property-for-anonymous-functions">Set &quot;name&quot; property for anonymous functions</a></li>
+<li><a href="2019-06_june-5.html#ecma-402-add-quarter-option">ECMA-402: Add quarter option</a></li>
+<li><a href="2019-06_june-5.html#ecma-402-add-dayperiod-option">ECMA-402: add dayPeriod option</a></li>
+<li><a href="2019-06_june-5.html#ecma-402-add-millisecondsdigits-option">ECMA-402: add millisecondsDigits option</a></li>
+<li><a href="2019-06_june-6.html#lookup-constructorresolve-only-once-in-performpromiseall-race">Lookup constructor.resolve only once in PerformPromise{All, Race}</a></li>
+</ul>
+<a href="#needs-more-discussioninformation"><h3 id="needs-more-discussioninformation">Needs more discussion/information</h3></a><ul>
+<li>none</li>
+</ul>
+<a href="#open-discussions"><h2 id="open-discussions">Open Discussions</h2></a><p>Topics related to ECMAScript specification activities that were presented at the meeting.</p>
+<ul>
+<li><a href="2019-06_june-5.html#status-update-on-non-js-module-types-eg-json-css-webidl">Status update on non-JS module types (e.g., JSON, CSS, WebIDL)</a></li>
+<li><a href="2019-06_june-6.html#empirical-evidence-for-programming-language-design">Empirical Evidence for Programming Language Design</a></li>
+<li><a href="2019-06_june-6.html#javascript-and-syntax-research-methods">JavaScript and Syntax Research Methods</a></li>
+<li><a href="2019-06_june-6.html#note-taking">Note taking</a></li>
+<li><a href="2019-06_june-6.html#how-we-work">How we work</a></li>
+</ul>
+<a href="#organizational-updates"><h2 id="organizational-updates">Organizational updates</h2></a><ul>
+<li><a href="2019-06_june-4.html#7-report-from-the-ecma-secretariat">Report from the ECMA Secretariat</a></li>
+<li><a href="2019-06_june-4.html#5-next-meeting-host-and-logistics">Next meeting host and logistics</a></li>
+<li><a href="2019-06_june-4.html#updates-from-the-coc-committee">Updates from the CoC Committee</a></li>
+<li><a href="2019-06_june-4.html#8i-ecma-262-status-update">ECMA-262 Status Updates</a></li>
+<li><a href="2019-06_june-4.html#8ii-ecma-402-internationalization-status-updates">ECMA-402 (Internationalization) Status Updates</a></li>
+<li><a href="2019-06_june-4.html#test262-status-updates">Test262 Status Updates</a></li>
+</ul>
+
+</body>
