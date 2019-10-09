@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#march-20-2018-meeting-notes"><h1 id="march-20-2018-meeting-notes">March 20, 2018 Meeting Notes</h1></a><hr>
-<p>István Sebestyén (IS), Waldemar Horwat (WH), Dean Tribble (DT), Brian Warner (BWR), Mark Miller (MM), Till Schneidereit (TST), Michael Saboff (MS), Robin Morisset (RMT), Keith Miller (KM), Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Kevin Gibbons (KG), Mariko Kosaka (MKA), Myles Borins (MBS), Jordan Harband (JHD), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Patrick Soquet (PST), Adam Klein (AK), Sathya Gunasekaran (SGN), Sam Goto (SGO), Gabriel Isenberg (GI), Dave Herman (DH), Brendan Eich (BE), Rob Palmer (RPR), Bradley Farias (BFS), Thomas Wood (TW), Mathias Bynens (MB), Alan Schmitt (AS), Sven Sauleau (SSA), Chris Needham (CNM), Edd Yerburgh (EYH), Jason Williams (JWS), Pieter Ouwerkerk (POK), Kat Z. Marchán (KZM), Yulia Startsev (YSV), Conrad Watt (CWT), Philippa Gardner (PGR), Godfrey Chan (GCN), Chris Hyle (CHE), Lin Clark (LCK), Ben Newman (BN), Jake Archibald (JAD)</p>
+<p>István Sebestyén (IS), Waldemar Horwat (WH), Dean Tribble (DT), Brian Warner (BWR), Mark Miller (MM), Till Schneidereit (TST), Michael Saboff (MLS), Robin Morisset (RMT), Keith Miller (KM), Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Kevin Gibbons (KG), Mariko Kosaka (MKA), Myles Borins (MBS), Jordan Harband (JHD), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Patrick Soquet (PST), Adam Klein (AK), Sathya Gunasekaran (SGN), Sam Goto (SGO), Gabriel Isenberg (GI), Dave Herman (DH), Brendan Eich (BE), Rob Palmer (RPR), Bradley Farias (BFS), Thomas Wood (TWD), Mathias Bynens (MB), Alan Schmitt (AS), Sven Sauleau (SSA), Chris Needham (CNM), Edd Yerburgh (EYH), Jason Williams (JWS), Pieter Ouwerkerk (POK), Kat Z. Marchán (KZM), Yulia Startsev (YSV), Conrad Watt (CWT), Philippa Gardner (PGR), Godfrey Chan (GCN), Chris Hyle (CHE), Lin Clark (LCK), Ben Newman (BN), Jake Archibald (JAD)</p>
 <p>Remote:
 Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
@@ -85,7 +85,7 @@ Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <li><a href="https://github.com/tc39/ecma262/pull/1131">Restore original definition of DataView.length #1131</a></li>
 </ul>
 <p>DE: DataView constructor view was noted as 3 even though ... ( ? ).. to give it a more comprehensive memory model. There are two different proposals. A minimal one and another more complex unification. It seems like given implementation and Test262 converged on 3 as ? .... any other thoughts on this proposal?</p>
-<p>MS: Can you show Leo Balter's table?</p>
+<p>MLS: Can you show Leo Balter's table?</p>
 <p>??: So you want to change DataView?</p>
 <p>JHD: The original post from andre here is that the implementation is 3, but the spec says 1. Because conceptually one of the arguments is required, and two are optional. So my preference is, even if all four browsers agree, that the length is 3, then ..?</p>
 <p>JHD: Function lengths are one of the things that we found to be web compatible to change. Is there any reason why we shouldn't consider changing the length to 1?</p>
@@ -98,7 +98,7 @@ Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <p>BT: That doesn't change the answer. If you wanted to be pedantic, 1 would be the correct choice, I think.</p>
 <p>BT: Would anyone object to any of the options here? Raise your hands if you have any objections for any options here.</p>
 <p>WH: Let's split the difference and make it 2 (everyone laughs).</p>
-<p>MS: Since there's not much controversy. Let's just keep it 1, since that's the right answer.</p>
+<p>MLS: Since there's not much controversy. Let's just keep it 1, since that's the right answer.</p>
 <p>DE: My understanding from this thread, it was typo accidentally?</p>
 <p>BT: Your implementations have said that no one really notices this. If we leave it as is that's less spec work.</p>
 <p>DE: Tie breaker here could be &quot;does anything have web compatibility risk&quot;. If we have a strong compatibility(?) of browsers ...</p>
@@ -319,9 +319,9 @@ Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <p>API: Its kind of short timing for us, we are hosting in May, but we have a big office here.</p>
 <p>BFS: I know that GoDaddy has offered, but we're not on a coast...</p>
 <p>DE: Some people want direct flights from the big cities. (out of time) Do we want to adopt this template?</p>
-<p>MS: I don't want to adopt an exact template, but I want one European, two East Coast (perhaps Atlanta) and three West Coast. Places like Atlanta have good connections which could make it less expensive, the problem is finding a host for such a location.</p>
+<p>MLS: I don't want to adopt an exact template, but I want one European, two East Coast (perhaps Atlanta) and three West Coast. Places like Atlanta have good connections which could make it less expensive, the problem is finding a host for such a location.</p>
 <p>DE: Why would you not adopt this template?</p>
-<p>MS: Don't want to preclude a perspective host for a particular meeting date whose company doesn't fit the template.</p>
+<p>MLS: Don't want to preclude a perspective host for a particular meeting date whose company doesn't fit the template.</p>
 <p>DE: This can be a first draft and it's subject to change, can we have a two minutes extensions?</p>
 <a href="#conclusionresolution-10ib-meeting-planning-for-2019"><h4 id="conclusionresolution-10ib-meeting-planning-for-2019">Conclusion/Resolution</h4></a><ul>
 <li>Revisit on Thursday</li>

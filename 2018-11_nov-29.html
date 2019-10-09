@@ -13,9 +13,9 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-29-2018-meeting-notes"><h1 id="november-29-2018-meeting-notes">November 29, 2018 Meeting Notes</h1></a><hr>
-<p>Mattijs Hoitink (MHK), Michael Saboff (MS), Keith Miller (KM), Tadeu Zagallo (TZO), Natalie Silvanovich (NSH), Waldemar Horwat (WH), Daniel Ehrenberg (DE), Jean Francois Paradis (JFP), Chip Morningstar (CM), Alan Schmitt (AS), Ross Kirsling (RKG), Jordan Harband (JHD), Brian Terlson (BT), Kevin Smith (KS), Eric Faust (EFT), Sathya Gunasekaran (SGN), Till Schneidereit (TST), Lin Clark (LCK), Godfrey Chan (GCN), Kevin Gibbons (KG), Pieter Ouwerkerk (POK), Randy Luecke (RLE), Devin Rousso (DRO), Reefath Rajali (RRI), Adam Klein (AK), Rex Jaeschke (RJE), Mark Miller (MM), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE), Emily Huynh (EHH), Michael Ficarra (MF), Ilias Tsangaris (IT), Thomas Levy (TLY), Augustus Yuan (AYN), Nathan Hammond (NHD), Sebastian Markbage (SM), Justin Ridgewell (JRL), Shane Carr (SCR), Dustin Savery (DSY), Frank Yung-Fong Tang (FTG), Mariko Kosaka (MKA), Peter Hoddie (PHE), Patrick Soquet (PST), Felipe Balbontin (FAB), Dave Herman (DH), Shu-yu Guo (SYG), Yehuda Katz (YK), Yulia Startsev (YSV), Sebastian McKenzie (SMK), Aki Rose (AKI), Tab Atkins (TAB), Mathias Bynens (MB), Scott Myers (SMS)</p>
+<p>Mattijs Hoitink (MHK), Michael Saboff (MLS), Keith Miller (KM), Tadeu Zagallo (TZO), Natalie Silvanovich (NSH), Waldemar Horwat (WH), Daniel Ehrenberg (DE), Jean-Francois Paradis (JFP), Chip Morningstar (CM), Alan Schmitt (AS), Ross Kirsling (RKG), Jordan Harband (JHD), Brian Terlson (BT), Kevin Smith (KS), Eric Faust (EFT), Sathya Gunasekaran (SGN), Till Schneidereit (TST), Lin Clark (LCK), Godfrey Chan (GCN), Kevin Gibbons (KG), Pieter Ouwerkerk (POK), Randy Luecke (RLE), Devin Rousso (DRO), Reefath Rajali (RRI), Adam Klein (AK), Rex Jaeschke (RJE), Mark Miller (MM), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE), Emily Huynh (EHH), Michael Ficarra (MF), Ilias Tsangaris (IT), Thomas Levy (TLY), Augustus Yuan (AYN), Nathan Hammond (NHD), Sebastian Markbåge (SME), Justin Ridgewell (JRL), Shane Carr (SCR), Dustin Savery (DSY), Frank Yung-Fong Tang (FTG), Mariko Kosaka (MKA), Peter Hoddie (PHE), Patrick Soquet (PST), Felipe Balbontín (FBN), Dave Herman (DH), Shu-yu Guo (SYG), Yehuda Katz (YK), Yulia Startsev (YSV), Sebastian McKenzie (SMK), Aki Rose (AKI), Tab Atkins (TAB), Mathias Bynens (MB), Scott Myers (SMS)</p>
 <p>Remote:
-Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), Istvan Sebestyen (IS), Richard Gibson (RG), Guy Bedford (GB), Conrad Watts (CWS)</p>
+Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), István Sebestyén (IS), Richard Gibson (RGN), Guy Bedford (GB), Conrad Watts (CWS)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2018/11.md">Agenda</a></li>
@@ -203,14 +203,14 @@ import { bar } from <span class="hljs-string">"c3.js"</span>
 
 <span class="hljs-comment">// c1</span>
 <span class="hljs-function"><span class="hljs-title">require</span><span class="hljs-params">(<span class="hljs-string">"e2.mjs"</span>)</span></span>
-exports<span class="hljs-selector-class">.foo</span> = ... 
+exports<span class="hljs-selector-class">.foo</span> = ...
 
 <span class="hljs-comment">// e2</span>
 import { bar } from <span class="hljs-string">"c3.js"</span>
 
 <span class="hljs-comment">// c3</span>
 <span class="hljs-function"><span class="hljs-title">require</span><span class="hljs-params">(<span class="hljs-string">"e0.mjs"</span>)</span></span>
-exports<span class="hljs-selector-class">.bar</span> = ... 
+exports<span class="hljs-selector-class">.bar</span> = ...
 </code></pre>
 <p>DH: I'm trying to demonstrate a cyclic graph in which there are deferred checks imposed across multiple crossings. So we have a type crossing between all four files. I'm trying to demonstrate that you can't partition the graph and run all the cjs first. Because if you could partition the graph, that would be nice, but that's impossible. So therefore, the only options I can see is that either you do some of those deferred checks before you finish execution of cjs, in which case you could get errors for things that could have been there if you waited longer, or you do the checks after everyone has executed.</p>
 <p>AK: What happens if you need to start evaluating a module that depends on a cjs module that hasn't executed yet?</p>

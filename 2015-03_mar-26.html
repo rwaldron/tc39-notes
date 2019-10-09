@@ -33,7 +33,7 @@
 <p>KS: so you're talking about this kind of setup</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
   @x() {
-    C.@x(); 
+    C.@x();
   }
   <span class="hljs-keyword">static</span> @x() {
 
@@ -78,10 +78,10 @@
   m() {
     <span class="hljs-keyword">let</span> somethingElse = C;  <span class="hljs-comment">// &lt;--</span>
     somethingElse.@x();
-    
+
   }
   @x() {
-    C.@x(); 
+    C.@x();
   }
   <span class="hljs-keyword">static</span> @x() {
 
@@ -100,7 +100,7 @@
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">xHelper</span>(<span class="hljs-params">obj</span>) </span>{
     obj.@a;
   }
-  
+
   m() {
     xHelper(<span class="hljs-keyword">this</span>);
   }
@@ -115,7 +115,7 @@
 <p>DD: Not intuitive to programmers coming from other languages. People already use external helper functions.</p>
 <p>KS: Feedback has not been too positive. The external helper function is used in Python for example.</p>
 <p>ARB: fear that most programmers will want to use method syntax and will make helpers public just to get that</p>
-<a href="#immutable-records-tuples-maps-and-sets"><h2 id="immutable-records-tuples-maps-and-sets">Immutable Records, Tuples, Maps and Sets</h2></a><p>(Sebastian Markbage and Lee Byron)</p>
+<a href="#immutable-records-tuples-maps-and-sets"><h2 id="immutable-records-tuples-maps-and-sets">Immutable Records, Tuples, Maps and Sets</h2></a><p>(Sebastian Markbåge and Lee Byron)</p>
 <p><a href="https://github.com/sebmarkbage/ecmascript-immutable-data-structures">https://github.com/sebmarkbage/ecmascript-immutable-data-structures</a></p>
 <p>LB: ImmutableMap reutrns a new Map when you mutate them.</p>
 <p>LB: Wants value semantics. Especially for <code>==</code> and <code>===</code>.</p>

@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#july-28-2015-meeting-notes"><h1 id="july-28-2015-meeting-notes">July 28, 2015 Meeting Notes</h1></a><hr>
-<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Waldemar Horwat (WH), István Sebestyén (IS), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Jonathan Turner (JT), Paul Leathers (PL), Chip Morningstar (CM), Vladimir Matveev (VM), Ron Buckton (RBN), Brian Terlson (BT), Alan Schmitt (AS), Ben Newman (BN), Mohamed Hegazy (MH), Abhijith Chatra (AC), Tom Care (TC), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Mike Pennisi (MP)</p>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Waldemar Horwat (WH), István Sebestyén (IS), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Jonathan Turner (JT), Paul Leathers (PL), Chip Morningstar (CM), Vladimir Matveev (VM), Ron Buckton (RBN), Brian Terlson (BT), Alan Schmitt (AS), Ben Newman (BN), Mohamed Hegazy (MDH), Abhijith Chatra (AC), Tom Care (TC), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Mike Pennisi (MP)</p>
 <hr>
 <a href="#introduction"><h2 id="introduction">Introduction</h2></a><p>BT: (logistics)</p>
 <p>AWB: I will chair until John N. arrives.</p>
@@ -486,7 +486,7 @@ This practice should satisfy both the requirements of Ecma as an SDO as well as 
 <p>AWB: The body isn't run as part of the constructor, it's run as &quot;next&quot;</p>
 <p>DH: A generator used with new is weird. (giving an example)</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">Thing</span>(<span class="hljs-params">x</span>) </span>{
-  <span class="hljs-keyword">this</span>.x = x    
+  <span class="hljs-keyword">this</span>.x = x
 }
 
 Thing.prototype.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{};
@@ -511,7 +511,7 @@ thing.y <span class="hljs-comment">// 39</span>
 <p>AWB: Generator method</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
   *foo() {
-    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>;    
+    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>;
   }
 };
 
@@ -527,14 +527,14 @@ thing.y <span class="hljs-comment">// 39</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyCollection</span> </span>{
   <span class="hljs-keyword">constructor</span>() {
     <span class="hljs-comment">// ...</span>
-  }  
+  }
   * values() {
     <span class="hljs-keyword">let</span> k = <span class="hljs-number">0</span>;
     <span class="hljs-keyword">let</span> length = <span class="hljs-keyword">this</span>.length;
     <span class="hljs-keyword">while</span> (k &lt; length) {
-      <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>[k++];    
+      <span class="hljs-keyword">yield</span> <span class="hljs-keyword">this</span>[k++];
     }
-  }    
+  }
 }
 
 <span class="hljs-keyword">let</span> collection = <span class="hljs-keyword">new</span> MyCollection();
@@ -545,7 +545,7 @@ thing.y <span class="hljs-comment">// 39</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyCollection</span> </span>{
   <span class="hljs-keyword">constructor</span>() {
   <span class="hljs-comment">//</span>
-  }    
+  }
 }
 
 <span class="hljs-keyword">let</span> collection = <span class="hljs-keyword">new</span> MyCollection();
@@ -562,7 +562,7 @@ collection.values = <span class="hljs-function"><span class="hljs-keyword">funct
 <p>AWB: Cannot re-enter</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> * <span class="hljs-title">Thing</span>(<span class="hljs-params">x, y</span>) </span>{
   <span class="hljs-keyword">this</span>.x = x  <span class="hljs-comment">// current ES6: throw here.</span>
-  <span class="hljs-keyword">yield</span>;   
+  <span class="hljs-keyword">yield</span>;
   <span class="hljs-keyword">this</span>.y = y;
 }
 

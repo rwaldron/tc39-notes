@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#july-28-2016-meeting-notes"><h1 id="july-28-2016-meeting-notes">July 28, 2016 Meeting Notes</h1></a><hr>
-<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff(phone) (MS), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD), Rick Waldron (RW), Stefan Penner (SP), Jonathan Sampson (JSN), Caridy Patiño (CP), Sam Tobin-Hochstadt (STH), John Buchanan (JB), Kevin Gibbons (KG), Lars Hansen (LHN), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Kris Gray (KGY), Adam Klein (AK), Dean Tribble (DT), Eric Faust (EFT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Ben Newman (BN), Morgan Phillips (MPS), Shu-yu Guo (SYG), Paul Leathers (PL), Ben Smith (BS), Zibi Braniecki (ZB)</p>
+<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (phone) (MLS), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD), Rick Waldron (RW), Stefan Penner (SP), Jonathan Sampson (JSN), Caridy Patiño (CP), Sam Tobin-Hochstadt (STH), John Buchanan (JB), Kevin Gibbons (KG), Lars Hansen (LHN), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Kris Gray (KGY), Adam Klein (AK), Dean Tribble (DT), Eric Faust (EFT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Ben Newman (BN), Morgan Phillips (MPS), Shu-yu Guo (SYG), Paul Leathers (PL), Ben Smith (BS), Zibi Braniecki (ZB)</p>
 <hr>
 <a href="#10iia-shared-memory-and-atomics"><h2 id="10iia-shared-memory-and-atomics">10.ii.a Shared Memory And Atomics</h2></a><p>Lars Hansen</p>
 <p><a href="https://github.com/tc39/ecmascript_sharedmem">https://github.com/tc39/ecmascript_sharedmem</a></p>
@@ -144,7 +144,7 @@
 <li>Merge it</li>
 <li>Implement in canary and report what happens</li>
 </ul>
-<a href="#10iiid-objectshallowequal"><h2 id="10iiid-objectshallowequal">10.iii.d Object.shallowEqual</h2></a><p>(Sebastian Markbage)</p>
+<a href="#10iiid-objectshallowequal"><h2 id="10iiid-objectshallowequal">10.iii.d Object.shallowEqual</h2></a><p>(Sebastian Markbåge)</p>
 <ul>
 <li><a href="https://github.com/sebmarkbage/ecmascript-shallow-equal">proposal</a></li>
 </ul>
@@ -604,12 +604,12 @@ Still unsure what the exact use cases are, but it seems plausible.</p>
 <p>YK: <code>[some ambiguous token]</code> is the machinery that represents the longhand that Domenic showed</p>
 <pre><code class="language-js">
 <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">new</span> CancelToken(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">c</span>) </span>{
-  
+
 });
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetch</span>(<span class="hljs-params">
 
-@Yehuda, can you fill in this example with some code that illustrates whatever you were going to write, 
+@Yehuda, can you fill in this example with some code that illustrates whatever you were going to write,
 
 </span></span></code></pre>
 <p>DD: What I'm hearing is that people are not heavily concerned. Sounds like this might be worth pursuing. Cancelation already has a lot of stuff in it, and it's hard to get a read on how many people are going to have objections. Dean already raised several objections and we didn't have time in the timebox to raise all of them.</p>

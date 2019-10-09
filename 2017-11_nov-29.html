@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-29-2017-meeting-notes"><h1 id="november-29-2017-meeting-notes">November 29, 2017 Meeting Notes</h1></a><hr>
-<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CPO), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
+<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MLS), Caridy Patiño (CP), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
 <p>Remote:
 István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
@@ -337,9 +337,9 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>MM: What about accessors for public?</p>
 <p>KG: It wouldn't be worth it as it doesn't fix private static.</p>
 <p>DE: We could ban just static private fields and methods while permitting static public fields with current semantics.</p>
-<p>MS: I'm channeling chip with the term &quot;piecemeal&quot;.</p>
+<p>MLS: I'm channeling chip with the term &quot;piecemeal&quot;.</p>
 <p>CM: Yes, but the ship has already sailed. In my opinion everything within classes is a clusterfuck. Thats just how it is. We keep tying ourselves in nots trying to get these twisted paths. Taking a step back and looking at a whole might be worthwhile but I feel we're no longer in a position to do that.</p>
-<p>MS: So my feeling here is we can incrementally make it worse to make it better later on.</p>
+<p>MLS: So my feeling here is we can incrementally make it worse to make it better later on.</p>
 <p>KM: I'd like to avoid entering to a place where things don't interact well together.</p>
 <p>DE: So the third method is <code>{classname}.#{field}</code> to get an element. Allow public static, fields with <code>this</code> but private static only be accessed via the class name.</p>
 <p>MM: Yehuda's point is the functionality is equivalent to lexical variables in scope. Theres no point in adding this. Omitting static private completely is the superior solution.</p>
@@ -354,15 +354,15 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>JRL: Yes, we had multiple problems with Backbone. It'll crop up again.</p>
 <p>YK: Multiple people in the room are deeply concerned about private static now. It's weird we feel the need to go forward.</p>
 <p>DE: I want to bring back the idea of leaving out static fields and private static. We could split this into two proposals. Work out the remaining issues and ship the working parts. I understand its critical for users to have these features - but for now this can be done with transpilers.</p>
-<p>MS: Didn't we bring them together to solve this?</p>
+<p>MLS: Didn't we bring them together to solve this?</p>
 <p>KG: The issues for why we brought them together have been resolved. They had cross cutting concerns, those are now solved. Are we are all comfortable with instance fields, private and public?</p>
 <p>JHD: One of the main arguments for merging proposals was they all had similar semantics. Splitting them up is fine if we can keep them all looking similar.</p>
-<p>MS: Do we solve new problems by splitting them?</p>
+<p>MLS: Do we solve new problems by splitting them?</p>
 <p>DE: No but we signal that instance fields are stable and ready to strip.</p>
 <p>MM: Also the previous split was public/private, the new suggestion is static/instance.</p>
-<p>MS: I just have an inkling we'll end up with something worse if we split them now.</p>
+<p>MLS: I just have an inkling we'll end up with something worse if we split them now.</p>
 <p>YK: Are people happy with keeping it together will slow down the whole feature? We cant keep moving with it as a whole.</p>
-<p>MS: Do you think it'd delay <em>past</em> ES2019? A delay of 3 or 4 meetings wont matter for the spec.</p>
+<p>MLS: Do you think it'd delay <em>past</em> ES2019? A delay of 3 or 4 meetings wont matter for the spec.</p>
 <p>DE: I don't think the annual cutoffs are as important as the actual time when we reach Stage 4; 3 or 4 meetings is that many months of delay. Anyway, it seems we've lost consensus for stage 3, it seems appropriate to demote to stage 2.</p>
 <p>AK: The option is to be clearer about what is up in the air.</p>
 <p>YK: Why isn't that identical to just demoting the <em>part</em> that is up in the air?</p>

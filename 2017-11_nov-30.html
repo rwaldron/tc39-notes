@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-30-2017-meeting-notes"><h1 id="november-30-2017-meeting-notes">November 30, 2017 Meeting Notes</h1></a><hr>
-<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CP), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
+<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MLS), Caridy Patiño (CP), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM), Sebastian Markbåge (SM), Dean Tribble (DT), Jafar Husain (JH)</p>
 <p>Remote:
 István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
@@ -60,9 +60,9 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>YK: This is a bit much, when it's basically a type system feature. A new feature has to be significantly worth it.</p>
 <p>KCL: I feel this isn't making it a slightly more convenient API. There are plenty of things that are difficult to do, and this helps.</p>
 <p>YK: A lot of times an API would work, and other times tools would work. I'm uneasy about using syntax for this when it could be handled otherwise.</p>
-<p>MS: I'd like to separate object literals and arguments as two separate things because of the runtime overhead of the arguments checks. I'm not sure we need to solve that argument when linters could take care of it.</p>
+<p>MLS: I'd like to separate object literals and arguments as two separate things because of the runtime overhead of the arguments checks. I'm not sure we need to solve that argument when linters could take care of it.</p>
 <p>KCL: You need a type checker for many of these things, and programmers I work with hate dealing with type system errors.</p>
-<p>MS: I'm not sure freezing argument bindings is worth it, with how they become const bindings; it seems odd.</p>
+<p>MLS: I'm not sure freezing argument bindings is worth it, with how they become const bindings; it seems odd.</p>
 <p>DE: I like this proposal a lot; it matches other programming language concepts and decomposes to existing JavaScript concepts. Just like with classes, new syntax does not need to be used for new semantics.</p>
 <p>JHD: Type systems can do a lot more. This for me holds its weight for syntactic space</p>
 <p>KCL: Anything Babel can transpile is sort of not a new capability. I am not stuck on object literals.</p>
@@ -156,9 +156,9 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>DE: (Presenting)</p>
 <p>AK: This meets my criteria - we seem to be happy with instance fields but static fields are the ones causing problems.</p>
 <p>YK: Likewise.</p>
-<p>MS: Are these already split?</p>
+<p>MLS: Are these already split?</p>
 <p>DE: Yes but along different lines.</p>
-<p>MS: Are you happy if static fields are unable to progress and an end state is that we only have instance fields?</p>
+<p>MLS: Are you happy if static fields are unable to progress and an end state is that we only have instance fields?</p>
 <p>DE: I would be okay with that, happy is the wrong word.</p>
 <p>JRL: If we leave them both exactly as they are today that would be acceptable, but I would like to consider other options.</p>
 <p>DE: I want to split them so we can use this as an opportunity to clarify and problems with statics. Any objections?</p>

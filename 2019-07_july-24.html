@@ -1,0 +1,575 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="manifest" href="img/site.webmanifest">
+<link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.6.0/github-markdown.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/javascript.min.js"></script>
+<title>July 24, 2019 Meeting Notes</title>
+<body class="markdown-body">
+<a href="javascript:history.back()">Back</a>
+<a href="#july-24-2019-meeting-notes"><h1 id="july-24-2019-meeting-notes">July 24, 2019 Meeting Notes</h1></a><hr>
+<p>Daniel Rosenwasser (DRR), Andrew Paprocki (API), Adam Klein (AK), Shu-yu Guo (SYG), Michael Ficarra (MF), Jordan Harband (JHD), Alex Rattray (ARY), Pieter Ouwerkerk (POK), Michael Saboff (MLS), Keith Miller (KM), Aki Braun (AKI), Brian Terlson (BT), Ron Buckton (RBN), Till Schneidereit (TST), Yehuda Katz (YK), Aaron Davis (ADS), Sebastian Markbåge (SM), Andrew Burgess (ABS), Jonathan Keslin (JKN), Ashley Hauck (AEH), Peter Hoddie (PHE), Patrick Soquet (PST), Ben Coe (BCE), Waldemar Horwat (WH), Mark Miller (MM), Chip Morningstar (CM), Erica Pramer (EPR), Kevin Smith (KS), Adrian Hall (AHL), Caio Lima (CLA), Ben Lichtman (BLN), Tierney Cyren (TCN), Shelley Vohr (SVR), Michal Hollman (MHN), Bill Ticehurst (BTT), Dean Tribble (DT), Godfrey Chan (GCN), Guilherme Hermeto (GHO), Jordan Gensler (JGR), Leo Balter (LBR), Dale Bustad (DBD), Joffrey Richten (JRN), Shane Carr (SFC)</p>
+<p>Remote:
+Bradley Farias (BFS), Gus Caplan (GCL), Kevin Gibbons (KG), Pedram Emrouznejad (PED), Yulia Startsev (YSV), Mattijs Hoitink (MHK), Ross Kirsling (RKG), Justin Ridgewell (JRL), Caridy Patiño (CP), John-David Dalton (JDD), Paolo Severini (PSI), Benjamin Georges (BGS), Paul Leather (PLR), Mathias Bynens (MB), Aliaksander Palpko (APO), Shi-jun He (JHX), Ravi Jayaramappan (RJN), Sanket Joshi (SJI), Jose David Rodrigues Veloso (JVO), Mike Samuel (MSL), Frank Yung-Fong Tang (FTG), Rob Palmer (RPR), Diego Ferreiro Val (DFV), István Sebestyén (IS), Jason Williams (JWS), Richard Gibson (RGN), Seth Brenith (SBH), Suraj Sharma (SUS), Steve Faulkner (SFR), Chris Anderson (CAN), Michael Fig (MFG), Valerie Young (VYG)</p>
+<hr>
+<a href="#agenda"><h1 id="agenda">Agenda</h1></a><ul>
+<li><a href="https://github.com/tc39/agendas/blob/master/2019/07.md">Agenda</a></li>
+</ul>
+<a href="#promiseallsettled"><h2 id="promiseallsettled">Promise.allSettled</h2></a><p>Mathias Bynens, MB</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-promise-allSettled">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1qhYDRlsvyVUtveT2tS0mJtzG-xe9islO6-t2wMQUJso/edit">slides</a></li>
+</ul>
+<blockquote>
+<p>Seeking stage 4</p>
+</blockquote>
+<p>MB: (Presents slides) Are we ready for Stage 4?</p>
+<p>LBR: I have a meta question—what happens if an editor finds something (i.e. has feedback) and it’s in Stage 4?</p>
+<p>MB: Then we change the PR and address the feedback. If the feedback is significant, in that rare case, we could bring back to Stage 3, but I think that should be rare because normally Stage 3 already has a rigorous review.</p>
+<p>LBR: Thanks—just wanted to ask for TC39 in general, what should our plan be if there is some feedback at the late stage. Thank you for this great feature.</p>
+<p>YK: I was noticing that the name for <code>Promise.allSettled</code> is long, which is not problematic necessarily, just strange.</p>
+<p>MB: <code>Promise.race</code> in hindsight should have been called <code>Promise.anySettled</code>. We could add an alias.</p>
+<p>YK: I don't want to make that have to depend on this at all.  Is there interest in that?</p>
+<p>MB: There is interest, we happened to discuss this in a previous TC39 meeting. Domenic, myself, and a few others seemed to be in favor. But either way that should be a separate proposal or PR.</p>
+<p>MB: Thanks to Jase Williams &amp; Robert Pamely for their work on writing the spec text for this feature!</p>
+<a href="#conclusionresolution-promiseallsettled"><h4 id="conclusionresolution-promiseallsettled">Conclusion/Resolution</h4></a><ul>
+<li>Stage 4 reached</li>
+</ul>
+<a href="#promiseany"><h2 id="promiseany">Promise.any</h2></a><p>Mathias Bynens, MB</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-promise-any/">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1WbE3squBN76_4SIHRmOQKrzglaQAVizMQZ8MqipoM4U/edit">slides</a></li>
+</ul>
+<blockquote>
+<p>Seeking stage 2 or 3</p>
+</blockquote>
+<p>MB: (Presents slides).</p>
+<p>MB: I'd like to resolve if the <code>errors</code> property on the <code>Error</code> object is enumerable or not.  The <code>message</code> errors property is not enumerable, so I feel like we should follow that.</p>
+<p>?? (on phone): Consistency seems good.</p>
+<p>MM: Consistency gives you what answer?</p>
+<p>MB: The message property is not enumerable, so we would make the <code>errors</code> property not-enumerable as well.</p>
+<p>YK: Not a blocking concern, but I don’t think consistency is necessarily the overriding concern. I suppose things that generally are enumerable are iterable, which could be useful?</p>
+<p>MB: No, if you to <code>Object.keys</code>, for example.</p>
+<p>YK: I find it annoying as a user if I can't figure it out quickly.  I find it annoying if we don't include utilities that would otherwise be useful just for some strange historical consistency reason.</p>
+<p>MB: I’d like to resolve this today.</p>
+<p>MM: I didn't know about <code>Error.message</code> not being enumerable.  But in addition to that, built-in properties across the ECMAScript standard are not enumerable.  If there are enumerable properties, that's an inconsistency to that pattern.</p>
+<p>BFS: There's a difference here I feel. When we’re talking about the enumerability of properties, most of the non-enumerable things are defined (except for symbols) in their own way.</p>
+<p>JHD: Symbols are enumerable too, by the way, just not in the same way.</p>
+<p>BFS: <code>.errors</code> is something I feel, if we include it, is something that is intended to be accessed.  Is there an argument for consistency either way?  Because most &quot;own&quot; properties appear to be enumerable.</p>
+<p>YK: This is just talking about the foreign operator, <code>Object.keys</code>, etc.  This doesn't affect debugging tools, etc.  This doesn't reflect reflection, right?</p>
+<p>MB: Yeah.  Tools can still detect that properties exist.</p>
+<p>YK: So, in particular, it would mean that people who try to use sloppy copying would see it. But it wouldn’t affect more robust tools.</p>
+<p>MB: Yes.</p>
+<p>SLN:  So the error argument that comes from the <code>catch</code>, is that an array?</p>
+<p>MB: It has to be an <code>AggregateError</code> instance.  Errors are always an instance of an <code>Error</code> subclass.  It would be weird to start throwing regular arrays.  So we wrap it in an <code>Error</code>. This is explained in more detail in the proposal README.</p>
+<p>DT: Quick question on the <code>errors</code> property. Do you expect that developers to check the type of the error object (<code>AggregateError</code> or otherwise)? Does that affect enumerability?</p>
+<p>BT: Does the question of enumerable or not affect the user's ability to detect an error?</p>
+<p>MB: It wouldn't impact feature detection through simple property detection.  At least if you do, <code>if (error.errors)</code>, that is not affected by whether or not this is enumerable.</p>
+<p>JHD: The only thing it affects is <code>for .. in</code>, spread operator, <code>Object.keys</code>, <code>Object.assign</code>, etc., none of which affects people trying to check for an aggregate error.</p>
+<p>JHD: If you spread the entire <code>errors</code> instance, it would not copy the array.</p>
+<p>MB: That same problem already exists for message.</p>
+<p>JHD: I just tried enumerating properties of an Error instance and I found inconsistencies between browsers.  So I think anyone who would be doing this already has to use a hacky workaround to browser differences.  So I don't think it's important to make the new property enumerable.</p>
+<p>YK: I think what JHD just said is persuasive to me. I think it’s probably not true that <code>...errors</code> is uncommon. But I think the fact that some of the properties on <code>Error</code> are not enumerable today makes it fine for it to continue to be inconsistent in the future.</p>
+<p>MB: Any objections to Stage 2?</p>
+<p>BT: Let’s take this one proposal at a time? Any objections to Stage 2 for <code>Promise.any</code>?</p>
+<p>(no objections to Stage 2)</p>
+<p>MB: I'll work for Stage 3 next, but not today.</p>
+<p>LBR: Why aren't you asking for Stage 3 today?</p>
+<p>MB: Not everyone has done their full review.  There have been recent changes landing to the spec.  I think it would be better to wait for the next meeting.  But I appreciate the review work you've done.</p>
+<a href="#conclusionresolution-promiseany"><h4 id="conclusionresolution-promiseany">Conclusion/Resolution</h4></a><ul>
+<li>The <code>.errors</code> property need not be enumerable.</li>
+<li>Consensus reached for Stage 2.</li>
+</ul>
+<a href="#stringprototypereplaceall"><h2 id="stringprototypereplaceall"><code>String.prototype.replaceAll</code></h2></a><p>Mathias Bynens (MB)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-string-replace-all">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/194gQ-GRfb9r17Vva9nevePkFUfPck1o_pXHM25LlVKs/edit">slides</a></li>
+</ul>
+<blockquote>
+<p>Seeking stage 3</p>
+</blockquote>
+<p>MB: (Presents slides). I want to resolve what happens when you pass a non-global regex to <code>.replaceAll()</code>.</p>
+<p>WH: Can you explain the background of what's up with <code>matchAll</code> and why it behaves it does?</p>
+<p>JHD: <code>matchAll</code> auto-g'd for the intuition that &quot;all&quot; means &quot;all&quot;.  It would be weird that you have to pass the <code>g</code> flag when you already have &quot;all&quot;.  But the committee didn't like that because, for example, you had to clone the regex.  Another intuition point is that in an IDE, if you do replace-all on a regex, there's no need to set a <code>g</code> flag.  You could argue in JS that maybe the global flag was a mistake, and it should be only up to the method names to decide.  But we're not in that world.  Regular expressions hold the state of whether it's global or not.  So, if you make your regex non-global, it means that you only match exactly one instance. You’ve explicitly made it non-global. So if you've passed that non-global expression in there, and it matches more than 1 thing, I think that would be confusing? And that's not a situation we want to be in. Effectively, this means that <code>matchAll</code> replaces the need for <code>match</code>, which I think is a good thing—it’s how <code>match</code> should have always been. If, for some reason, I don't know if my regex is global or not, I can do <code>.global</code> on it. <strong>Summary:</strong> It would be contrary to the design of regexps if we auto-<code>g</code>.  And if we wanted to do something different, we should also change matchAll.</p>
+<p>WH: So you said that you don’t want <code>matchAll</code> to clone, but it looks like it does anyway.</p>
+<p>JHD: It does not do that now. Because regex’s have a <code>lastIndex</code>, we don’t want to observably mutate the passed-in RegExp.</p>
+<p>WH: I’m looking at RegExp.prototype [ @@matchAll ], and it clones.</p>
+<p>JHD: Thank you for clarifying.</p>
+<p>RBN: One of the things I noticed was with the <code>split</code> implementation that we also clone and add the <code>y</code> flag. I don’t see how, if we do this for <code>split</code>, and have since ES2015, why is this an issue for <code>matchAll</code>?</p>
+<p>JHD: I assume that the <code>y</code> flag was added in ES2015.  I assume that was done to handle the legacy behavior of <code>split</code></p>
+<p>YK: I originally quoted JHD for explicitly making it non-global by not putting <code>g</code> there, but I think we need to take a close look at the plain-English meaning of these APIs, and that <code>matchAll</code> is just a new version of <code>match</code>, if you look at the plain english meaning of <code>match</code>. Maybe we are stuck because <code>matchAll</code> doesn't already auto <code>g</code>. I would think that people using this API should use a linter to check that you put the <code>g</code> in there.  I don't like option 6.</p>
+<p>MB: Yeah, the vast majority of people seem to agree on the part (it's weird for the regex to match only one position).  JHD seems to be the only one in favor of that.</p>
+<p>JRL: (queue topic: &quot;all&quot; in method name has higher precedence than <code>g</code> flag (<code>str.replaceAll(r)</code>))</p>
+<p>MLS: Are you suggesting that we throw or auto-<code>g</code>?</p>
+<p>JRL: I prefer we auto-<code>g</code>.  But if we throw, that's fine as well.  But accepting a non-global regex and replacing only one match is the worst option here.</p>
+<p>YK: To the extent that <code>matchAll</code> is changeable, we should do it now.</p>
+<p>JHD: I want to reiterate that regardless of what my intuition is about the behavior, it's very important that <code>matchAll</code> has the same behavior of <code>replaceAll</code>.</p>
+<p>YK: If we think Option 6 is bad, then that means that we have to change <code>matchAll</code>.  Is there a compatibility difference between the <code>TypeError</code> option or the auto-<code>g</code> option?  If there is a compatibility difference, then people are relying on the behavior of <code>matchAll</code>.</p>
+<p>MB: We would have to do an investigation.</p>
+<p>SLN: Is there any performance impact on any of these options? If an implementer tries to implement this, which is the least costly?</p>
+<p>MB: Not much difference between any of them.</p>
+<p>SLN: if we went option 1 it would be the fastest path or the most performant path?</p>
+<p>MB: I didn't say that but yeah sure.</p>
+<p>MLS: From a JavaScriptCore perspective, I don't think there's a performance difference.  Even auto-<code>g</code>.  (We already have a utility in JavaScript for changing global?)</p>
+<p>MB: Yeah, same for V8. Performance is not a concern when making this decision.</p>
+<p>CM: I find this whole discussion a little odd. If we look at the function definition, it says take the string, find the occurrences of the first arg and replace with second. If the first arg is not a string, it should still be replaced everywhere. I find using the <code>g</code> flag really strange. The global flag finds every use of the pattern, but we’re already implying that here. It’s an iterative replacement. Why is this even an argument?</p>
+<p>JHD: Most of the people in the room decided to not auto-<code>g</code> on <code>matchAll</code>.  That was not my original spec design and preference, and this room overrode me.</p>
+<p>CM: I don't remember that discussion.  We could look up the notes.</p>
+<p>JHD: Many of the people in this room were party to that discussion</p>
+<p>YK: I remember the discussion being long and very &quot;in the weeds&quot;.</p>
+<p>(JHD will hunt for the notes while we continue)</p>
+<p>WH: We already have <code>matchAll</code> weirdness.  If only one of <code>matchAll</code> and <code>replaceAll</code> is weird, given some time, it will be hard to remember which one is the weird one.  We should either match the weirdness, fix <code>matchAll</code>, or name <code>replaceAll</code> something else.</p>
+<p>MB: Unless we can change both, but we won't be able to do that until we do a web-compat investigation. Unless the committee decides that Option 6 is the way to go, which would be case closed.  Also, the battle of keeping replaceAll simple was lost when we decided that we accept regex.</p>
+<p>MLS: About this being the reflecting point that we change matchAll, I reluctantly agree that they should have the same semantics here.</p>
+<p>GHO: If replaceAll accepts regular expressions, and it doesn't auto-<code>g</code>, then do we really need to add it to the <code>String</code> prototype?</p>
+<p>MB: The committee did previously agree that this is a problem developers were having.  We discussed that when we went for Stage 2 or Stage 3.</p>
+<p>GHO: For substrings, not for regular expressions.</p>
+<p>MB: Yeah.  The main feature we are trying to add is global substring replacement. (continues discussing the history of the proposal)</p>
+<p>YK: I think the <code>/g</code> flag is pretty esoteric in all forms, the nice thing about <code>replaceAll</code> is that it replaces an esoteric feature with a non-esoteric feature</p>
+<p>JKN: I agree <code>/g</code> is esoteric.  But people had to learn it. So I think <code>TypeError</code> for non-globals is most direct and safe.</p>
+<p>YK: I don't think <code>TypeError</code> is safe. Option 2 only makes sense as a solution if we also to it do <code>matchAll</code> right now.</p>
+<p>MPT: Would using a very explicit error message help get around the 'weirdness' of the API mismatch? A very explicit error message saying &quot;you must provide a global regular expression to use a global regular expression here&quot;, there are 2 reasons you want APIs to match, (1) Developer overhead, (2) elegance. If the APIs mismatch but you get immediate developer feedback, that gets around 90% of the developer toil, so I think it’s worth it.</p>
+<p>WH: What happens if you run <code>matchAll</code> with a non-<code>g</code> regex?</p>
+<p>JHD: Currently you get 1 match.</p>
+<p>WH: So currently you get silent bad behavior...</p>
+<p>MPT: loud bad behaviour in my opinion being preferable</p>
+<p>YK: I agree option 2 could be fine from an intuition perspective.  But, I still don't think option 2 is forwards compatible.</p>
+<p>MPT: If there's code running in the wild relying on <code>matchAll</code> not actually matching all right now, it ain't great code.</p>
+<p>MB: Is that the committee's decision? We need to do a web compatibility investigation before we proceed here?</p>
+<p>If you say &quot;ok these are good options, but we only want to do them if we know we want to change <code>matchAll</code> without breaking the web.”</p>
+<p>WH: I’d be interested in pursuing this to see if it’s feasible. For web-compat, the two are semi-equivalent, the only difference being you run <code>matchAll</code> and don’t care what it returns.</p>
+<p>MB: So just get data on how often (or if ever) <code>matchAll</code> is called with a non-global regular expression in real world code?</p>
+<p>WH: Yep. If by some miracle it’s not called with non-global regular expressions, we could fix <code>matchAll</code> and live happily ever after.</p>
+<p>JHD: It would also be useful if <code>matchAll</code> is used with a non-global regex, how the return value is used is also important.  It could be a web-compatible change.</p>
+<p>DD: I think picking option 1 or 2 seem great to me because they’re forward compatible; we could then do research later on whether we can change matchAll.</p>
+<p>YK, I’d like to hear his opinions.</p>
+<p>YK: If we want to have a good chance to fix <code>matchAll</code> in the future, we should start now. I actually don’t think that it’s mandatory—there are options if we can’t. The bulk of the room seems to think we should change the semantics if we can, but it seems difficult to do without a web-compat audit. What am I missing?</p>
+<p>DD: I guess, maybe if you take out the &quot;later&quot; from my thing.</p>
+<p>YK: Happy to do option 2 now, and fix this later. Possibly with doing a web-compat audit.</p>
+<p>DD: Ok.</p>
+<p>MB: So the consensus seems to be to move forward with option 2, with the suggestion to investigate.</p>
+<p>DD: Correction, we must investigate.</p>
+<p>AK: Any objections to moving forward with option 2 for now?</p>
+<p>AK: I am not excited for Stage 3 to be used to determine what effect this will have.</p>
+<p>MPT: Option 2 could become Option 1 or Option 3 later.</p>
+<p>YK: It feels like this is ready to implement, like, you could implement this with the error and it would not be much cost to implementers to change it. I was saying that if you implement with an error thats a thing you have to fill in later.</p>
+<p>WH: It’s not the situation I want to end up in, but I’m not going to block things. I’d like <code>matchAll</code> and <code>replaceAll</code> to match or consider renaming if they’re not.</p>
+<p>MLS:  I’m not sure it’s ready for Stage 3 if we haven’t decided between Option 2 and 3.</p>
+<p>JHD: It would be nice to start the clock on this, if that’s an option.</p>
+<a href="#conclusionresolution-stringprototypereplaceall"><h4 id="conclusionresolution-stringprototypereplaceall">Conclusion/Resolution</h4></a><ul>
+<li>No consensus for stage 3</li>
+<li>Committee preference for option 2 (i.e. throw for non-global RegExp <code>searchValue</code>s)</li>
+<li>Remain at stage 2 until we can finalize regex <code>/g</code> behavior, based on <a href="https://bugs.chromium.org/p/v8/issues/detail?id=9551">web compat investigation of changing <code>matchAll</code></a></li>
+</ul>
+<a href="#reduce-the-amount-of-implementation-defined-behavior-in-arrayprototypesort"><h2 id="reduce-the-amount-of-implementation-defined-behavior-in-arrayprototypesort">Reduce the amount of implementation-defined behavior in <code>Array.prototype.sort</code></h2></a><p>Mathias Bynens (MB)</p>
+<ul>
+<li><a href="https://github.com/tc39/ecma262/pull/1585">PR</a></li>
+<li><a href="https://docs.google.com/presentation/d/1eFvK__9kRwHnkzZfNEL9FS3d9TJSRtxlXe3NVGmVVAU/edit">slides</a></li>
+</ul>
+<p>MB: (Presents slides).</p>
+<p>MB: Currently, the <code>Array.prototype.sort</code> leaves a lot of behaviour of implementation-defined.</p>
+<p>We want to give engines the freedom to use whatever they want so long as it aligns with the specification.</p>
+<p>MB: (continues presenting slides)</p>
+<p>YK: Great slides, thanks. And I agree with this change.</p>
+<p>KG: Do you have other test cases? I’d definitely be interested in test cases that cover accessors on the array itself, non-configurable properties on the Array. I’d be interested in if the length is changed during sorting. I wouldn’t really be okay with moving forward on this proposal before we come up with all these test cases. It would be really helpful to know what agreement (if any) there is today. [Listed on GitHub now: <a href="https://github.com/tc39/ecma262/pull/1585#issuecomment-514752423]">https://github.com/tc39/ecma262/pull/1585#issuecomment-514752423]</a></p>
+<p>MB: Thanks for listing these examples. It would be great if you make sure these issues are listed on GitHub or in the meeting notes.</p>
+<p>WH: If <em>length</em> = 1, an implementation of <code>sort</code> doesn’t have to do anything. What do the implementations currently do, and what does the proposal spec for that case?</p>
+<p>KM: Implementations currently immediately return if <em>length</em> &lt; 2.</p>
+<p>WH: And what does the proposal do?</p>
+<p>MB: That special case is not currently in the proposal.</p>
+<p>WH: More generally, I second KG’s point.  There may be various other special cases where implementations don’t do what you're trying to spec, and we should be aware of those are before making decisions.</p>
+<p>SFR: Shortly after stable sort was introduced, we got a lot of end-user reports of inconsistencies. Let me register my concern.</p>
+<p>YK: The thesis of the change is that because browsers are already incompatible and that stability is hard to rely on in such an environment it sounds like making the browsers stable caused problems, so I’m curious how that played out.</p>
+<p>SFR: I’ve heard direct customer issues that it works in Node 8 but not 10, and we’ve had API/SDK compatibility issues which require us to special case around that. Certainly we shouldn’t be using sort in ways it shouldn’t be used, but we have to deal with legacy code.</p>
+<p>YK: The cases where that happens are when people are trying to tailor to a certain browser engine.</p>
+<p>MB: It sounds like this isn’t necessarily related to sort suddenly becoming stable, but rather because of the underlying sorting algorithm changing (which is observable in various ways). It doesn’t sound like that’s the fault of sort becoming stable, so much as people relying on old implementation decisions.</p>
+<p>YK: MB, are you saying, if browsers are already free to make the decision on the sorting algorithm, and you're relying on that behavior, then it's your problem if the behavior changes? (?)</p>
+<p>MB: If you write code that depends on unspecified implementation details, that can bite you at any time, with or without this proposal. This PR reduces the amount of unspecified behavior, making the situation SFR describes less likely to occur in the future.</p>
+<a href="#conclusionresolution-reduce-the-amount-of-implementation-defined-behavior-in-arrayprototypesort"><h4 id="conclusionresolution-reduce-the-amount-of-implementation-defined-behavior-in-arrayprototypesort">Conclusion/Resolution</h4></a><ul>
+<li>Continue discussions offline on GitHub.</li>
+</ul>
+<a href="#regexp-match-offsets-update"><h2 id="regexp-match-offsets-update">RegExp Match Offsets Update</h2></a><p>Ron Buckton (RBN)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-regexp-match-offsets">proposal</a></li>
+<li><a href="https://1drv.ms/p/s!AjgWTO11Fk-TkdY-MYw52uP-lJjreA">slides</a></li>
+</ul>
+<p>RBN: (presents slides)</p>
+<p>YK: If you are trying to make a Spanned version of this, which it seems like the point of this change, … it's not absurd to add the mapping functionality.</p>
+<p>RBN: Since it's an options object, we could add more options later to do things like that.</p>
+<p>YK: I'm happy with this API, but I just think we should continue to go in that direction.</p>
+<p>MB: I want to voice strong support for the non-option-bag option. We should follow the priority of constituencies: developer convenience and API simplicity is much more important than the very minimal memory overhead.</p>
+<p>SFC: I have gotten pushback before from working with APIs in string libraries (ICU) about using &quot;indices&quot; rather than &quot;indexes&quot;. I looked in ECMA-262 and ECMA-402 and it looks like this is the first time we are exposing this string in public API. I want to make clear that we’re moving forward with “indices” with the knowledge that some developers might expect the spelling to be “indexes”.</p>
+<p>RBN: I looked at prior art.  &quot;Indices&quot; is frequently used for the plural of the noun &quot;index&quot; especially in the engineering context,  &quot;Indexes&quot; is more of a verb form. Onigurama uses <code>captureIndicies</code></p>
+<p>WH: I much prefer the simplest solution with the smallest API surface. Here it is the “indices” approach, which avoids the complexity of passing options or worrying about the order in which callbacks are called and what happens if they start mutating things.</p>
+<p>WH: I’m curious, is the act of creating the indices observable?</p>
+<p>RBN: Only if you mutate the <code>Array</code> prototype. We use the same information that is used with the regular expression evaluation pass. If you have mutated <code>Array.prototype</code>, you might see this during the assignment of the values in the array.</p>
+<p>WH: Since it is observable, doing it lazily as in the spec is the right way to do it.</p>
+<p>YK: Callback is the actual primitive. You can think about getting start, end, and value, and that seems sufficient to support everything.</p>
+<p>RBN: If you have the callback primitive and don't have options to get the indices, then you have to use the callback function for this case, which is a common (second most common) use case.</p>
+<p>YK: Creating a bunch of secondary arrays that you have to map separately doesn't seem ergonomic to me.  It would be good to have a conversation with someone who works on parsers.  That's not an objection.</p>
+<p>RBN: Would anyone be opposed to the simpler implementation despite the memory overhead, or is the memory overhead a blocker?</p>
+<p>AK: It sounds like the implement feedback was that the memory overhead was problematic?</p>
+<p>RBN: V8 opened the issue originally, but then they asked that it be closed.</p>
+<p>MB: Jakob Gruber and Yang Guo from the V8 team initially had concerns that there <em>may</em> be memory issues early on, when this proposal was Stage 1. However, now we did a detailed investigation, and found that for V8 the overhead would be equivalent to having all substring matches be 8 ASCII characters longer, which is very minimal overhead that is worth it for the simpler API.</p>
+<p>BT: It sounds like we have consensus on the simpler API.</p>
+<p>(<strong>Ron is happy</strong>)</p>
+<p>BT: Let the notes reflect that RBN is happy.</p>
+<p>RBN: (goes back to slides)</p>
+<p>RBN: Stage 3?</p>
+<a href="#conclusionresolution-regexp-match-offsets-update"><h4 id="conclusionresolution-regexp-match-offsets-update">Conclusion/Resolution</h4></a><ul>
+<li>The simpler API reaches consensus</li>
+<li>Proceeds to Stage 3</li>
+</ul>
+<a href="#iterator-methods-update--stage-2"><h2 id="iterator-methods-update--stage-2">Iterator Methods Update / Stage 2</h2></a><p>Domenic Denicola (DD)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-iterator-helpers">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/16Abs2Terjd2J9VJW3HZHNcp7SYdhDmpVH6DR86TxYF4/edit">slides</a></li>
+</ul>
+<p>DD: (Presents slides)</p>
+<p>JHD: Add Iterator.from()?</p>
+<p>DD: I’m open to it. I feel like the current mechanisms are reasonable (<code>.values</code> and <code>.entries</code>). If you call <code>Iterator.from</code> you don't know if you’re getting entries/values/keys. Whereas calling <code>.values</code> and <code>.entries</code> is explicit.</p>
+<p>JHD: What about some kind of <code>Iterator.from(iterable)</code> to start the chain?</p>
+<p>DD: One thing to keep in mind is that changes the design, with Iterator.syncPrototype/asyncPrototype. You'd probably then want Iterator.{prototype, from}, AsyncIterator.{prototype, from}.</p>
+<p>KM: What is <code>Iterator</code> here? Is it your own class?</p>
+<p>DD: It’s a namespace in this proposal.</p>
+<p>BFS: Do we have any collections that are missing symbol iterator</p>
+<p>DD: Across 262 and the web, no. All collections have Symbol.iterator. In particular on the web anything with indexed property access + a length automatically gets it.</p>
+<p>JHD: I use <code>Array.from</code> for this purpose.  Then I have to reify an array to use these items.</p>
+<p>DD: It's like, change this one word and your code will be lazy instead of eager</p>
+<p>DT: This set of features is very attractive …</p>
+<p>DD: Emitter lands in the push quadrant.  …</p>
+<p>DT: In some systems, push and pull are the same thing …</p>
+<p>DD: We made a pretty clear decision to make iterator/async iterator pull.  The emitter proposal allows them to be converted to an emitter, which is push.</p>
+<p>Shu: We want our combinator semantics across collections to be consistent. How do we spec this such that we don’t open ourselves to observable differences.</p>
+<p>DD: I agree that treating this as a stack layering issue might be a preferred outcome.  Methods on arrays should return arrays.  Methods on sets should return sets.</p>
+<p>Shu: Yeah.  But we have some intuitive understanding of what Map does, and we don't want to duplicate that in the spec 8 times.</p>
+<p>DD: Agreed. We can look in to factoring the spec such that the core shared logic is shared in the spec, not just in our heads.</p>
+<p>Shu: (Usability question re: setting prototype; refers to &quot;Refresher&quot; slide)</p>
+<p>DD: I'm open to two ideas here.  We have two bad options.  The first is to create a class that you can subclass from.  That seems weird.  I don't think instanceof would work, and there wouldn't be a reasonable constructor.  The other is what we have here, calling <code>setPrototypeOf</code>.  In the 90% case, you use generators; 9%, you chain off other iterators; and this is in the 1% case, that you have to use this power tool. So requiring setPrototypeOf when using power tools seems OK to me.</p>
+<p>Shu: In relation to DT's question earlier.  The current thinking is that they should be complementary, since they both support push and pull.  But for performance and ergonomic reasons, you don't really want to do that.</p>
+<p>YK: Im generally a fan. No objections. One thing I want to say. I think these conveniences are a close call in terms of how often you want to use them. If the methods are ergonomic you want to use them. If the way to use the helpers is to figure out some import and change my code style from array methods to standalone functions, I would not use it and end up with my own library.  It's a hunch, but how usable this thing is, is on the edge…</p>
+<p>DD: Let me repeat.  The methods make this possible to be useful.  Whereas if this were functional, it's more wishy-washy to be useful.</p>
+<p>LBR: This matches the use case I had for the reverse iterator.  The same thing that got me motivated for the reverse iterator is that you could put these methods in the method chain. Basically like this, having a mapper with a map function. You're showing my use case. I support that and want it to move forward.</p>
+<p>DD: Agreed. Reverse iterator becomes more useful when forward iterators also become more useful.</p>
+<p>MF: While I don't think <code>flatMap</code> needs to be part of this core set, I might be interested in bringing <code>flatMap</code> as a follow-up proposal.</p>
+<p>DD: There were some interesting design questions which is why we didn't include it here.</p>
+<p>MF: I understand, it would be nice if it were in the same proposal, but if it's not, I'd like to see a follow-up proposal.</p>
+<p>YK: What’s great about <code>flatMap</code> is that you get back out the thing you put in. If you have collect and a polymorphic version of <code>flatMap</code> then I think it will work</p>
+<p>DT: You had a particular list of operations there.  What's your process for locking this down as you get toward Stage 3?</p>
+<p>DD: The usual champion process: take a bunch of input, find something that meets the constraints, etc.  asIndexedPairs is already identified as needing more input.  Then we'll get reviewers, and we'll discuss with them the reasoning.  So this is the time; get involved on the issue tracker.</p>
+<p>DD: Stage 2?</p>
+<p>(silence)</p>
+<a href="#conclusionresolution-iterator-methods-update--stage-2"><h4 id="conclusionresolution-iterator-methods-update--stage-2">Conclusion/Resolution</h4></a><ul>
+<li>Proceeding to Stage 2</li>
+<li>Stage 3 reviewers: Michael Ficarra (MF) and Dean Tribble (DT)</li>
+</ul>
+<a href="#built-in-modules-aka-javascript-standard-library"><h2 id="built-in-modules-aka-javascript-standard-library">Built-In Modules aka JavaScript Standard Library</h2></a><p>Michael Saboff (MLS)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-javascript-standard-library">proposal</a></li>
+<li><a href="https://github.com/tc39/proposal-javascript-standard-library/blob/master/slides/JSL-TC39-July-2019.pdf">slides</a></li>
+</ul>
+<p>MLS: (presents slides) Focusing on the two objections to advancement from June meeting, will pause after each for responses</p>
+<p>JHD: During the last meeting, I was remote and it was a hard time difference. I want to clarify my concerns. Script is not “legacy”, Module is not the only future. I certainly hope people write Modules, but that is my code review position only, not my language designer position. Everything new that we've added has been equally usable in Modules and Scripts, except for the specific module-related differences like <code>import</code>/<code>export</code>. So the precedent in the language is clear: new language features should be added to both. This proposal itself is not a problem, but consider Temporal: it would not be available in current Scripts in the current proposal if Built-in Modules progresses. Users could use dynamic import, but then they have to wait until the promise is resolved.  If we decided that Temporal were available both via global and modules, that would be fine - but it seems that the point of built-in modules is to stop adding globals for new API. This is existential and it is troubling and we really have to decide on it in this proposal. I don't want to look back in 5 years and think we made a mistake. The best way imo to make people migrate from one thing to another is to make the transition as easy as possible. Removing features from Scripts does not make the transition easier, it makes it harder.</p>
+<p>So to be clear, I'm not asking necessarily to add a way to import built-in modules in Scripts. I’m asking for a similar way in both Script and Module to get similar access to the same features. I wanted to explain my motivations more. I don’t want to consign Script to a legacy bucket when that’s not how I see it, or how I believe the committee does.</p>
+<p>YK: I agree with JHD’s general philosophy. We should not add features to the language and then arbitrarily scrub them from the language. We have <code>import()</code> in Script, which means you really need to have a blocking import in your script on your HTML page which must be resolved before the rest of your page is functional. If you want to use jQuery, you must do this async thing, I think that’s inline with things in use today. When people use import they really want it to affect the subsequent parse. Basically, <code>document.write</code> and built-in modules not being compatible, I think, is fine.</p>
+<p>BF: I want to harken the same idea YK was talking about.  We have patterns for sync loading with script tags in HTML.  But we also have other patterns like <code>defer</code> and <code>async</code> on script tags that move loading to a different tick than when they are parsed. If people are doing things like <code>jQuery.ready</code>, or <code>defer</code>, they need to do this in the same parse, rather than wrap their scripts in an async function and then calling their async function to guarantee the parse ordering. I don’t find it compelling to have a very, very (what I consider) niche thing to do it in the same tick, which would require major alterations to the language.</p>
+<p>JHD: The other use case, as well as polyfilling, it is critical that built-in functionality is addable and removable. This is essential for security reasons. es6-shim has to overwrite the entire <code>Number</code> and <code>RegExp</code> constructor, for example. I don't want to have to write one bootstrapping script for Modules, and one for Scripts. We have non-module browsers, module with import map browsers, and module without import map browsers.</p>
+<p>BF: I’m not convinced this is a concern, personally. I’m not sure this warrants adding synchronous import to scripts over this.</p>
+<p>WH: I thought I heard that the proposal was for only supporting built-in modules within scripts — general modules would not be supported within scripts. Is that right?</p>
+<p>JHD: Yes</p>
+<p>WH: So then how would polyfilling work?</p>
+<p>JHD: We were thinking about an initial loading phase.  In Node, you would pass a command-line flag to set up the built-ins as you want.  In JavaScript, you could have an import map, etc.  You wouldn't want to alter (different than mutate) built-in modules in the runtime.  Import map is a mechanism, but unless we have that mandate, we don't have that guarantee, which is important to me.</p>
+<p>SLN: Exclusion from scripts would hurt tooling/bundlers across the ecosystem.  You exclude WebPack, for example; we use script until we are able to move to WASM.  From our standpoint, we don't care what the semantics are to get a built-in module from a script tag, but the point here is, it's a hard blocker from our standpoint as a bundler.</p>
+<p>MLS: If you don't need to polyfill the module, you could just use an async import.</p>
+<p>SLN: We could in theory add what we think is necessary.</p>
+<p>MLS: Even if you do some polyfilling, you still need to do some async function generation.</p>
+<p>SLN: Exactly, and then we’re in a code-generation state…</p>
+<p>AK: Are you saying that accessing modules via dynamic import works for your bundling case?</p>
+<p>SLN: Whatever the syntax is, we need to generate the code.  This isn't about async.  The concern is about having access inside of a script.</p>
+<p>MLS: What you have to do right now is dynamic import.</p>
+<p>JHD: Yeah, you can do it today with dynamic import, I’m asking for not requiring that asynchronous step.</p>
+<p>JHD: So, There are concerns like, for example, you lose the order if you import multiple scripts if the scripts execute asynchronously.</p>
+<p>AK:  There’s acceptable burden, and then there’s also some technical blockers and we need to separate those</p>
+<p>BFS: Is it a problem?</p>
+<p>SLN: There would be concerns with sync access, but essentially, not.</p>
+<p>MLS: Is this a Stage 1 concern, or Stage 2?</p>
+<p>JHD: It’s a major semantic. That would make it a Stage 1.</p>
+<p>MLS: I’m essentially asking, does that make it a blocking concern for proceeding to Stage 2.</p>
+<p>JHD: I’m saying, yes, this needs to be resolved before Stage 2.</p>
+<p>MM: Top-level await only exists in modules, not scripts.  Would top-level await in scripts address enough of the pain that it goes away?</p>
+<p>AK: Browsers are really unlikely to implement a top-level await in scripts that would block other script loading.</p>
+<p>MM: The only thing I would advocate would be equivalent to the syntactic sugar.</p>
+<p>YK: The fundamental reason why whether it works in a non-parentheses form in their script tag is important is because, today’s bundlers expect that to work. This doesn’t mean you cannot have a script tag, I’m just still trying to understand why that is.</p>
+<p>SM: Some of these modules are expected to be pretty large, and we want to polyfill them.  One of the semantics is that you can asynchronously load the modules as you need them.  If you allow the built-in modules to load synchronously, that seems unfortunate for polyfills.</p>
+<p>JHD: That's the status quo.</p>
+<p>SM: Yes, but one of the nice things about this proposal is that you no longer need to block to load polyfills.</p>
+<p>JHD: With this proposal, and with built-in modules, it will be impossible to polyfill things outside of the browser unless the engine implements something similar to import maps.</p>
+<p>MLS: Import maps is one way to use the chain-loading process.  We could add something to the spec to allow load …</p>
+<p>JHD: And then you've changed the requirement that …</p>
+<p>(MS and JHD exchange a bit more… not recorded)</p>
+<p>BF: We're talking about, if polyfill code runs sync at the top of the page, and if it tries to access async-only code, it could install the very first reaction handler, it could do whatever it wants before any user code runs.  I don't know how user code could act on a built-in module before the first thing to act on it.  If a polyfill can always act before user code, what's preventing it from using its job?</p>
+<p>MLS: Assuming the built-in module is async loaded.</p>
+<p>BF: A polyfill can be guaranteed to be the first to access the built-in module if it is at the top of the page. Therefore it can be assured that it can modify the module prior to user code.</p>
+<p>JHD: There's no runtime mechanism to polyfill module specifiers right now.  You can mutate something but you cannot alter what modules are loaded by what specifiers…</p>
+<p>BF: With being able to do mutation/running prior to user code is this about missing an API for replacing specifiers? I do not believe altering resolution of specifiers is in scope for this proposal. See environment specific solutions to this such as import maps.</p>
+<p>JHD: Import maps are a browser-specific API and should not be considered a solution. A solution to this problem would be one standardized by TC39.</p>
+<p>BF: The problem of synchronous imports is based upon browser-based concerns, therefore the usage of browser-based solutions for browser specific problems is appropriate.</p>
+<p>JHD: The browser specific solutions are insufficient without a language-based solution that can be used across environments.</p>
+<p>BF: Problems caused by environment-specific situations can be solved by environment-specific solutions.</p>
+<p>JHD: If I want to polyfill a missing module like <code>js:temporal</code> there should be a universal solution rather than having different workflows in different environments.</p>
+<p>… Continued disagreement on scope of environment responsibility vs language …</p>
+<p>POINT OF ORDER, no longer on topic.</p>
+<p>MLS: I would like to move on to the second part of the presentation.  (continues presentation)</p>
+<p>YK: What exactly are the requirements that TC39 would put on namespaces, formally?</p>
+<p>MLS: The modules in the <code>js</code> namespace would be formally standardized by TC39.</p>
+<p>YK: If we added modules in the <code>js</code> namespace, it's not clear how we could stop a third-party from adding modules.  It seems like we'd need to put in the spec to forbid that.</p>
+<p>MLS: It seems like other implementers wouldn't want to use the <code>js</code> namespace.  We can't stop people from adding things to the syntax language now.</p>
+<p>YK: If we can't disallow it, what do we do?</p>
+<p>MLS: If we could disallow it, great, but …</p>
+<p>MM: It's important to remember what power standards body does and doesn't have.  We're writing a spec that makes normative requirements.  Being in the <code>js</code> namespace is a claim about what process it went through.  They can put things there but then they won't be compliant with our spec.</p>
+<p>SLN: (No matter the namespace, shared or adhoc. Can there be a statically analyzable token in the specifier?) Something in the specifier, like colon, can a tool guarantee that if we see a colon, can we guarantee that it's a built-in module?  Are there more restrictions on whether people can write module names or paths with colons?</p>
+<p>MB: No: URLs would “work”, e.g. <code>http:foo</code> normalizes to <code>http://foo/</code>. Just maintain a list of known namespaces.</p>
+<p>(SLN and others continue discussing this topic)</p>
+<p>DD: I'm trying to figure out SLN's constraint.  If you see js:foo, you don't know if that's built-in or mapped to a polyfill.  So I don't see how you can allow this while also enabling polyfills to work.</p>
+<p>SLN: Tooling is interested in easy ways to tell whether something is <em>intended</em> to be a built-in module, instead of trying to resolve it.</p>
+<p>MM: I’m glad I finally understand the question. It seems to me that the answer is in the absence of special config, in terms of what default behavior of bundler is, the default behavior should be that any import for js:whatever or whatever target platform,  - in the absence of specific config - (I fell behind in note taking… help.)</p>
+<p>SLN: Most tools try to be as automatic as possible.  We want to be able to skip things when possible.  Because I see this specific symbol or keyword, that would be ideal.</p>
+<p>MM: That would be what you should do in the default case.</p>
+<p>SLN: Can there be a specific way to signify built-in module?</p>
+<p>MM: You could check <code>js:</code></p>
+<p>SLN: But that only covers <code>js:</code>, not other built-in module namespaces.  We want to know, somehow, whether this is or is not a built-in module.</p>
+<p>YK: It makes sense that <code>js:</code> means pass-through, but … I don't think it helps us a lot to say that <code>js:</code> is reserved.</p>
+<p>DD: I tried to give clear feedback last time that a single namespace is required from our perspective.  It could be accomplished by deferring this to other proposals, but as of now, separate namespaces is something that we object to, requiring everything in the ecosystem to go through the staging process.</p>
+<p>MLS: I understand you want one namespace for the browser, and that is a blocking concern.  This committee supports platforms besides just the browser.  We don't talk to W3C about what we put into that.</p>
+<p>DD: We share the global object, which benefits web developers, etc.  I want to see that model for built-in modules, like we have for built-in globals.  If we can alias everything in <code>js:</code> to a shared namespace like lib:, and prevent js: from resolving in browsers, that would be OK.</p>
+<p>MLS: Chrome is allowed to have a <code>chrome:</code> namespace that aliases everything from all the other namespaces.</p>
+<p>DD: We should not proceed with this proposal as it is if the intention is to have a separate <code>js:</code> namespace.</p>
+<p>YK: Generally, developers have a distinction in their heads between what’s in the browser and what’s not. I agree there are cases like URL that are not clear.  As a user, the idea that there are things that are on the web but not in Node is (not?) easy to understand.  Today, you have to look at docs.  A single namespace that includes things that are in Node versus not is confusing.</p>
+<p>DD: Developers shouldn't have to think about where this is standardized.</p>
+<p>YK: In Deno (?), they are already doing this.</p>
+<p>MLS: My high-order bit for different namespaces is about functionality.  Just like every other language that has a shared library, the functionality is delivered in a broad functional grouping.  Core language, web-based, JSON-based, and so forth.  That is the same model that JS programmers would like to have.  There may be overlap.  But my high-order bit is that if the user has <code>js:</code>, they can use that anywhere, web, node, embedded, blockchain.  But if you have <code>dom:</code>, they can't use that in the other environments.</p>
+<p>DD: Not having a unified namespace is a blocking concern for Stage 2 for us.</p>
+<a href="#conclusionresolution-built-in-modules-aka-javascript-standard-library"><h4 id="conclusionresolution-built-in-modules-aka-javascript-standard-library">Conclusion/Resolution</h4></a><ul>
+<li>No Stage 2.</li>
+</ul>
+<a href="#collection-normalization-update"><h2 id="collection-normalization-update">Collection Normalization update</h2></a><p>Bradley Farias (BFS)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1xxkHqtScIvdCBI4IZOpWHh7AKCJs6s5edQQu06wnZYc/edit">slides</a></li>
+</ul>
+<p>BF: (presents slides)</p>
+<p>JHD: I thought the naming of keys and values was in ES6.  The observable name for Sets is that they only have values, not keys.  So I strongly endorse the decision you've made here.</p>
+<p>WH: Regardless of what we call these things in the spec, you want to be able to write generic code that works with keys consistently across sets and maps.  That's why languages that support such cross-container genericity use &quot;keys&quot; as the name.  I would object to anything that doesn't let you work generically across sets and maps.</p>
+<p>BF: Can you clarify what you mean by that? I don’t understand because you <em>can</em> use toValue on a map as well.</p>
+<p>WH: In languages which let you work with keys and values, things in a set are keys. Keys are compared, values are not. Keys must be unique (unless you’re talking about a multimap), values need not be. Keys are hashed, values are not. You can mutate a value in-place, but not its key.</p>
+<p>BF: Auditing documentation on other languages, this does not appear to be true.</p>
+<p>WH: A lot of them don't support genericity across sets and maps very well.  It's not relevant to this discussion.</p>
+<p>BF: I would rather withdraw this proposal than use the name &quot;keys&quot;.</p>
+<p>JHD: Which prior art language are you looking at?</p>
+<p>WH: C++</p>
+<p>JHD: Anything beyond C++? BFS just listed a bunch of languages that don’t do that.</p>
+<p>WH: I might not be remembering correctly, but lisp seem to do that as well.</p>
+<p>BF: C++ calls them lots of things: elements, items, keys, values.</p>
+<p>JHD: Are you concerned about generic code that has to consume both sets and maps?</p>
+<p>WH: Using sets and maps generically: instantiating, constructing, accessing, etc. This does not include subclassing them.</p>
+<p>JHD: Given that BF's proposal here is about creating a subclass, how does that affect what BF is discussing here?</p>
+<p>WH: Let's take it offline.</p>
+<p>BF: Would you seek to block this proposal based on other languages?</p>
+<p>WH: Not based on other languages. I would object if this thing is unsuitable for generic code working across maps and sets, whether you are working with map keys and set keys.</p>
+<p>BF: Then we would remove the ability to affect sets.  Would that be ok?</p>
+<p>WH: I don't see what the point of the proposal would be if we do that.</p>
+<p>BF: Then you could instrument maps, and maps are a fairly sizeable use case.  If I cannot move forward with sets, I would still like to move forward for maps.</p>
+<p>WH: I don't want to go just for maps.</p>
+<p>BF: Then we can withdraw this proposal.  I'm very serious.  I would rather withdraw this proposal.  We did an audit of other languages, as requested by the committee.</p>
+<p>YK: We should not split the proposal; that's shaky procedurally.</p>
+<p>MM: WH, do you have a concrete alternative suggestion in mind?</p>
+<p>WH: I want to use generic code across sets and maps.  If you use &quot;keys&quot; consistently, like in the version of this proposal that we agreed to in January, it would just work.</p>
+<p>BF: We also had objection at the last meeting about using &quot;keys&quot;.  That's why we did the audit.</p>
+<p>KG: I continue to feel that it's weird that this mapping is not bidirectional.  That is to say, when you iterate the collection, then thing you get out is the result of the toKey function.  It seems like that's not how anyone else does it.  I'm aware there are these cases in the DOM that do this unidirectional normalization.  In Java, C++, Rust, Python, you get the original thing back out, not the conversion.  It's weird that we're inconsistent with every other language's type.</p>
+<p>BF: I'm not sure if that's true.  In Java, the array mapping function doesn't allow bidirectional.</p>
+<p>KG: Hmm?</p>
+<p>BF: If you use compute, that's Java's way of normalizing data when it comes in.</p>
+<p>DD: The thing to keep in mind is that there are multiple use cases.  We're not changing the notion of equality.  This is about controlling what values go into your set.  This is especially important in an untyped language.  This enables you to reject what goes into your set or map.  So there's separate value with looking at equality, but that's beyond the scope.</p>
+<p>BF: Correct we are not seeking any sort of equality hook.</p>
+<p>KG: It's very similar to having equality.  The only difference is (?)</p>
+<p>DD: If you call <code>.get</code>!  If you have your normalization, and it returns a string.  It changes the values inside the map.</p>
+<p>BF: I want to present a different example. We have two user objects that are equal in Java via identity. If you put those in the set they’d replace each other. However this is akin to having two different user objects that may be equal but with a different value for a specific field. If you have two equal user objects with different emails, you could have a set with two different emails of these users even though they were equal. That’s what goes on with these normalization sets. Overriding equality is not what I’m seeking to do.</p>
+<p>KG: Sure.  I'm proposing that for this proposal, it's weird that iterating gives you the normalized things out.  This is very close to what other languages provide, it's just that it differs in this one way.</p>
+<p>BF: This compute in Java doesn't apply like you're talking about.</p>
+<p>KG: For keys and things, people are doing different methods of conversion.</p>
+<p>JHD: If the key normalization is, take every JS value and spit out the key &quot;foo&quot;, what would you expect the normalization you produce?</p>
+<p>KG: The first object you put in.</p>
+<p>DD: Do you see value in the use case of having a set that contains only one type?</p>
+<p>BF: The DOM APIs do coercion.</p>
+<p>DD: Every API in 262 does coercion. If you look at the keys of an array, they are coerced to a string.</p>
+<p>KG: This is a very different kind of coercion than the 262 APIs do.</p>
+<p>DD: The use case is normalization!  That's the title of the proposal.</p>
+<p>KG: I don't expect most use cases are capped to a string.  It will be very surprising to people that the thing they get out is not the same as the thing they put in.</p>
+<p>YK: (question)</p>
+<p>BF: I don’t think this prohibits us from adding an equality hook to my knowledge.</p>
+<p>YK: If we add this feature and later on do we have to add a hasher thing, what happens?</p>
+<p>BF: I'll have to check.</p>
+<p>MF: The kind of behavior KG's behavior is expecting here can be used to implement the behavior BFS is proposing.  Can't a user of the API apply the mapping function to the value of an API to get what BFS was expecting.  So isn't what KG is expecting more general?</p>
+<p>BF: I don’t believe that one can implement the other.</p>
+<p>MF: What was wrong with my reasoning there?</p>
+<p>BF: Let's say we have two fundamentally equal objects (users) but with a different value for a specific field (email address).  You have a set of emails to users.  If the two objects are equal, you have a collision. (1) you have a set of users, not a set of emails, and (2) you have them keyed so that you don't get all the emails, just 1 per user.  All this proposal does is, if you put data into a collection, it maps the data prior to being put in the backing store …  So if you have String for toValue on a set, and if I put in an Object, it calls toString before putting it in the backing store of that set.</p>
+<p>MF: It does but I’m still failing to see how it can be implemented. All I was proposing that you would then apply that same mapping function on the way out.</p>
+<p>YK: That might not be possible. There are lossy normalizations.  That's the point.</p>
+<p>RBN: I've spoken with BT and others in the past.  I would be interested in putting equality customization to map and set, so that you can customize how objects compare and how hashes work.  Most implementations use hash tables internally, I believe.  That is a different case than what BFS is proposing.  My only concern is that, if these two proposals move forward, there will be issues with how this object works.  In C# and .NET, they have pre-defined … my concern is with the options object being passed in.  If we wanted to include the ability to control how things are equal, it's not just an equals and hash method on those.  Maybe we need to move toKey/toValue to a property of the options object, such that you can have reusable options object along with equals and hash.</p>
+<p>BF: Why aren’t they reusable right now?</p>
+<p>RBN: If I have a class that uses private state.  (gives example)</p>
+<p>BF: other languages have the ability to put your hasher in the options bag. They don’t suffer the problem you’re having so we can talk offline about how they do that.</p>
+<p>RBN: I definitely see the use-case for this. Eventually having both equality customization and the ability to map keys and values is very useful.</p>
+<a href="#conclusionresolution-collection-normalization-update"><h4 id="conclusionresolution-collection-normalization-update">Conclusion/Resolution</h4></a><ul>
+<li>Not seeking stage advancement</li>
+<li>BF: There’s an indefinite blocker, so I'm preparing to withdraw this proposal</li>
+</ul>
+<a href="#update-on-function-implementation-hiding"><h2 id="update-on-function-implementation-hiding">Update on function implementation hiding</h2></a><p>Michael Ficarra (MF)</p>
+<ul>
+<li><a href="https://github.com/tc39/proposal-function-implementation-hiding">proposal</a></li>
+<li><a href="https://docs.google.com/presentation/d/1lWH97DxTLU3_1EJA-F19uIzagZQx7PZmys7WyNXw3cY/edit">slides</a></li>
+</ul>
+<p>MF: (presents slides)</p>
+<p>MF: Any clarifications on the use cases?</p>
+<p>SYG: What does &quot;not necessarily based on&quot; mean?</p>
+<p>MF: When you create a function, and it has a parameter list, the property gets set at the end for how many parameters it was.</p>
+<p>MF: (continues presenting)</p>
+<p>YK: I don’t know how much it matters that it doesn’t affect debugging tools, but I’d like to point out that framework debugging tools might want to show more internals, and if you want  that  you wouldn’t be able to use this feature. Imagine that Ember wants to use a directive, like add a checkbox that says show me the framework internals, you would not be able to do this.</p>
+<p>DD: It could be something you change in the build steps.</p>
+<p>YK: Yes, that’s satisfactory.</p>
+<p>GHO: I'm worried about application builders that need to use logs, etc.  How does this affect core dumps?  Because we have to look at lots of logs and postmortems.  If it's not on the stack trace, it makes our life harder.</p>
+<p>DD: Those debugging tools are not affected.  This affects the Error.prototype.stack runtime getter.  But debugging tools have much more than that.</p>
+<p>MF: If the tool is in a less powerful position, it would be affected by this.</p>
+<p>GHO: Did you consider adding something to the stack trace that something was skipped?</p>
+<p>DD: It's okay to expose its existence, but not its innards.  So you have a conflict between security and debugging.  That can be solved by debugging at a higher level of privilege.</p>
+<p>YD: My use case is similar to GHO's use case.  Sentry is popular for good reasons…</p>
+<p>YD: For example, I'm Twitch, and people are hacking around making Chrome extensions, and I want to hide the code from them.  People are running code in the main window to figure out how they can modify my code.</p>
+<p>WH: My preference is for the Proposal from the slide deck and not for Alternatives 1-4. In fact, I’d be even happier if we had only the “hide implementation” part of the Proposal. On the other hand, things like Alternative 4 — hiding only the functions <em>called</em> by the function annotated with a directive — appear too weird to me.</p>
+<p>(LBR comment missed)</p>
+<p>(another comment missed)</p>
+<p>MM: Does this apply to modules, classes, and scripts, in addition to functions, and does it nest?  It makes sense for a nested scope to opt back in.  An important use case of Error.prototype.toString() is to stringify functions to evaluable strings, which are sent remotely and evaluated. For this use case, we would mark only specific functions are needing to stringify to evaluable sources. If we had such a mark, everything else could omit sources without affecting this use case.</p>
+<p>MF: Could you move those out of the scope and put them in a separate module?</p>
+<p>MM: No, there's an important case where that's no.</p>
+<p>WH: (answering the same question) No.</p>
+<p>DD: This has come up in previous stages, and we were like, well, we can add it later.  We should dig in more to your use case.</p>
+<p>MM: You can add it later.</p>
+<p>MF: Is there anyone who feels the opposite way?</p>
+<p>(silence)</p>
+<p>DT: This may be more operationally.  I’m not opposed to having an attribute, but if the things exported from modules are frozen by default, having a symbol that says hide this attached to what you export, that mechanism might make sense that people have looked at for other things.</p>
+<p>MF: Let's talk offline</p>
+<p>DD: The README mentions using a symbol.</p>
+<p>API: Is there anything precluding an engine from eliminating source code entirely?</p>
+<p>DD: There’s nothing precluding it other than engineering will.</p>
+<p>API: That implies then that would hold in the future.</p>
+<p>MM: Modable guys: could you omit the source text and have it be useful?</p>
+<p>PST: We (XS) always remove the source text.</p>
+<a href="#conclusionresolution-update-on-function-implementation-hiding"><h4 id="conclusionresolution-update-on-function-implementation-hiding">Conclusion/Resolution</h4></a><ul>
+<li>MF: We want to follow down these two paths, follow up with MM, and go for Stage 3 at the next meeting.</li>
+</ul>
+<a href="#casing-conventions"><h2 id="casing-conventions">Casing Conventions</h2></a><p>Shane Carr (SFC)</p>
+<ul>
+<li><a href="https://docs.google.com/presentation/d/1PK01F6mkHLycz9jN8jQZrrg0Rvne4d2Sv-R-uGApYqA/edit">slides</a></li>
+</ul>
+<p>SFC: (presents slides)</p>
+<p>YK: I found DD’s argument to be mildly persuasive and “it’s camel case unless it came from a different spec body” does not result in it being consistent.</p>
+<p>SFC: (referring to slide) Can we use option 3 (i.e. use camel case everywhere) as the recommended style for ecma 402 that have similar situations going forward? There are not a lot of identifiers that are more than one word long that triggered this edge case.</p>
+<p>YK: I have no objections.</p>
+<p>LBR: Would it be fine for TC39 to recommend camelCase?</p>
+<p>YK: My expected result from this whole thing is that web specs will use kebab case and some subset of JavaScript will use camel case.</p>
+<p>DD: I  am generally in  favor  of consistency across ecosystems,but I want more clarity about people using strings both as outputs and inputs. Is this something people actually do?</p>
+<p>SFC: (referring to slide titled “Kebab Case Problem 1”) this is an example of a date, timezone is PST, this would be passed into intl display</p>
+<p>DD: Would you take return value.type and feed that into the key?</p>
+<p>SFC: That’s a place where a reasonable person could do that. An argument could be made that this case is not convincing enough and we should still use kebab.</p>
+<p>DD: It’s really troubling that there will be inconsistencies with unicode specifiers in kebab-case. I do find the case where you feed the output of one case into another, I find that compelling enough to make an objection for those particular strings and use camel case. But otherwise sticking with kebab case across the ecosystem of web/Atomics.wait/Unicode specs seems much preferable.</p>
+<p>SFC: Sounds like DD favors Option 2.</p>
+<p>DD: Like YK I’m willing to let the intl committee decide here. It's just my input that this would be much better to be consistent when possible, especially if you're already going to use kebab case for Unicode locale identifiers.</p>
+<p>SFC: In general, locale identifiers are widely used across all languages, however Unicode identifiers will probably be written as literals.</p>
+<p>YK: I agree with DD. I agree with option two. If the string is referring to something in another part of the API, you let the ergonomics of the other API dominate. Other than that, it should follow the ecosystem style.</p>
+<p>SFC: I want to raise one more con for opt 2. If we introduce kebab now but in the future want to use them as fields of an object literal. If we use kebab we restrict ourselves</p>
+<p>YK: You do  expect DateTime field (??) to use a different API?</p>
+<p>LBR: There’s one point missing here. We’ve got an extensive offline discussion in the display names proposal repo (issues 29/32) that is very valuable. My first sentiment was to follow option 2. Shane and Daniel also +1’d. At the end, though, we couldn’t recommend kebab case.</p>
+<p>SFC: 3 concrete outcomes possible for today: 1. recommend option 3 officially, 2. Say we’re not ready to recommend across the standard. 3. Roll back and use kebab case more frequently.</p>
+<p>SFC: We could say camelCase is our official recommendation, but [not captured] We could say that This is not what we want to recommend but the intl people ??? (can retain the decision they made?).</p>
+<p>YK: I feel like this is going in circles. You have to decide what you’re asking, if you’re asking for feedback let’s allow  feedback.</p>
+<p>WH: It’s been proposed here that if things are both inputs and outputs, they should be camelCase. I don’t understand that — why does something being an output justify camelCase? Lots of kebab things can also be used as inputs and outputs.</p>
+<p>WH: Speaking more generally, I feel that I don’t have enough information to try to pick a blanket policy here. We can continue deciding these things on a case-by-case basis. We could try to make a decision on a general policy, but I’m afraid there is a significant risk we’d regret it later because we don’t know all the places in the ECMAScript language and ecosystem such a policy would impact.</p>
+<p>DD: I think to WH’s point, we should ideally as committee not go as option three. If we do, we should figure out what that means for the rest of the language. (cites various examples of where this could be impactful) We need to do this.</p>
+<p>This is not something that is very common. There are a handful of examples that are multiple words long. That’s a very small handful right now. In ECMA 402, we want to recommend this going forward, but we’re not in the business of retroactively changing what we’ve done and are not in the business of advising other specs we rely on.</p>
+<p>KM: I could be missing some context – correct me if I’m wrong – but is it possible to have both cases with a canonicalization of the two?</p>
+<p>SFC: That was an option but I did not include it in these slides. It introduces multiple ways to do the same thing and that was not necessarily a good thing when it was brought up.</p>
+<p>SFC: Based on what I’ve heard, it doesn’t seem like TC39 is ready to make a strong stance (like Option 2) on a particular casing.</p>
+<p>AKI: When talking about consistency, it’s what TAG recommends and what users expect. When it’s a string it’s kebab case and when it’s an identifier it’s camel case.</p>
+<p>SFC: I think it’s hard to make that argument without more data.</p>
+<p>YK: I can conflate both of these. Calling it TAG’s rec is a red herring. It means it’s what the web specs do. What would be decisive for me is if you go back to 402 would they learn anything from this or are we wasting their time.</p>
+<p>SFC: If I went back to 402, and said the committee weights this [...].</p>
+<p>YK: my preference is that you should do that.</p>
+<p>AKI: Would you like to ask for consensus on one of these options?</p>
+<p>SFC: Do we have consensus for  one of these options?</p>
+<p>WH: I’m not going to support or oppose any of these options because I don’t know what the consequences of these decisions would be.</p>
+<p>AKI: You were looking for two scenarios. Just what 402 should do and what we as TC39 and 402 should do. Let’s just focus on 402, would that make you more comfortable?</p>
+<p>WH: I don’t have enough information to make an informed decision. I am not opposed or in favor of any of these things, I just simply don’t have enough information.</p>
+<p>WH: When it comes up, do something reasonable. The places that seem to be causing trouble are the ones where something that’s a “type” (i.e. field name, type, kind) in one context is also used as a value in another. 402 can look for those.</p>
+<p>SFC: Does this decision impact the possibility of advancement of the proposals this affects?</p>
+<p>WH: To clarify: I’m not interested in making this into a gating requirement for any other proposals, my goal is to do something reasonable for things that are used as both values and types, that’s where camelCase shows up. For other proposals, if you can figure out what’s happening, that may guide a solution of the problem?</p>
+<p>YK: Can I call for consensus?</p>
+<p>YK: Is there consensus that 402 should weight the W3C precedent more?</p>
+<p>WH: I don't know what “weight the W3C precedent more” means.</p>
+<p>YK: I think there’s general consensus that 402 could have thought a bit more about the W3C precedent. The fact that we would accept whatever conclusion doesn’t mean we wouldn't want them to think about it.</p>
+<p>LBR: Just for extra information, this immediately affects two active proposals displayNames and format.</p>
+<p>YK: I think what im saying is that 402 can do whatever it wants here, there is a sense in the room that 402 should think about the recommendation</p>
+<p>LBR: Yes, we’ve got a lot of wait. One of the most important motivations for kebab case was consistency in the recommendation document from the W3C. I really tried to bring that in, but one thing that’s important here—if we stick with it for 402, and as proposals are being implemented, it will be impossible to change after the fact. We cannot break the web. This is why we’ve decided not to change what’s already been implemented. We can’t go back and we can’t break the web.</p>
+<p>YK: It sounds like there’s no possibility 402 would change their mind.</p>
+<p>LBR: There is a possibility. We want to follow through on TC39’s recommendation. I believe 402 is asking for acceptance to follow through on this proposal.</p>
+<p>AKI: Can we get consensus that 402 can do what they think is right and if affects anything outside of that scope, it must require consensus from this committee?</p>
+<p>LBR: In the scope of casing [yes].</p>
+<p>YK: I will take this offline</p>
+<p>------- Later discussion ------</p>
+<p>LBR: I  just had a conversation with YK offline, and I want to make sure I apologize if anyone felt bad or not included. As the editor of Ecma402, we want to be respectful for everyone. We also meet privately monthly, and I recognize that can sometimes feel not inclusive, but I want to emphasize that we are always open to anyone to attend these monthly meetings.</p>
+<p>WH: I’m so glad that you brought the Casing Convention item here, it was <em>very</em> interesting! You brought up a design aspect I had not thought about much before and is an important cross-cutting concern throughout the language.</p>
+<p>LBR: Does the committee think it useful to bring changes for unified numberFormat?</p>
+<p>(Silence)</p>
+<p>LBR: If you have any concerns, please let me know.</p>
+<a href="#conclusionresolution-casing-conventions"><h4 id="conclusionresolution-casing-conventions">Conclusion/Resolution</h4></a><ul>
+<li>Recommendation is not made on Option 3.</li>
+<li>Discussion will be taken offline.</li>
+</ul>
+<a href="#web-built-in-module-convention-guidance-from-tc39"><h2 id="web-built-in-module-convention-guidance-from-tc39">Web built-in module convention guidance from TC39</h2></a><p>Domenic Denicola, DD</p>
+<ul>
+<li><a href="https://github.com/heycam/webidl/issues/755">issue</a></li>
+</ul>
+<p>DD: On  the web, as in TC39, we’re working on adding built-in modules. We thought it would  be an interesting  opportunity to work on aligning some of the conventions that are currently different and those that we wished were better. A few things that have been brought up</p>
+<p>MLS:  I respectfully submit that this is an out of order discussion. I don’t believe this is a Stage 1 concern, or relevant for TC39.</p>
+<p>DD: On the web we’re also working on built-in modules.</p>
+<p>MLS: We typically don’t want to shop between multiple standards bodies. I don’t think that you brought this to the built-in module committee.</p>
+<p>DD: [too fast, not captured]</p>
+<p>MLS: Like I said, I think it’s out of order and it’s not a Stage 1 issue.</p>
+<p>DD: This isn’t about the built-in module proposal that’s in this committee.</p>
+<p>MLS: Then what’s it about?</p>
+<p>DD: TC39 typically gives good API design advice, so we want to get that advice. The web has built in globals and TC39 has built in globals. As we move into the web having built-in modules, as with JavaScript having built-in modules, we want alignment.</p>
+<p>KM: I think what Michael might be trying to say is that TC39 is not prepared to make a statement since TC39 has not yet made a decision on this and it is out of order to present this.</p>
+<p>DD: OK, if that’s how the room feels, I guess individual delegates…(interrupted by YK)</p>
+<p>YK: I do not feel that way. DD hasn't said what he intends to get formally out of this.  If DD wants to show us how another group is working on built-in modules, I would like to see that. A priori, I have not seen them. It seems very hostile to silence that discussion.</p>
+<p>JHD: I made a presentation a year or two ago about this. The dangers of TC39 ignoring layered specs and what they’re building. I think it is delightful to see the web ask TC39 for advice on what is coming. I think that because of the Stage 1, we wouldn’t be able to make a consensus or recommendation, but hearing what DD has to say is important for informing the proposal. I’m very interested in hearing his presentation, even if we cannot give any advice.</p>
+<p>DD: To be clear, this is contextualized by the presentation that DE gave in Berlin presenting all the work on modules, such as those in Wasm modules, JSON modules, HTML modules, WebIDL modules, etc. We think it would be good to collaborate.</p>
+<p>MLS: I think this is disrespectful, I think this is out of bounds</p>
+<p>DD:  I really don’t want to be disrespectful, so maybe it would be best for delegates to have such  conversations with the other standards bodies, if them coming here is not OK.</p>
+<p>WH: I don’t understand MS’s comment, what is disrespectful here?</p>
+<p>MLS: As one of the champions of the built-in module proposal, I think it would have been good to discuss rules about how to build a module. I think that is a good thing to discuss. The point I’m trying to make is that it’s a little premature. Very similar to what happened in Berlin when several delegates made a proposal. I look at our CoC and I find the first point is to be respectful.</p>
+<p>JHD: I’m terrified that DD or anyone else walks away discouraged about getting TC39 feedback.</p>
+<p>TST: I think the elephant in the room is disagreement on DD's representation of built-in modules (missed…) I agree with the Apple position that they are not independent and that there is a need to coordinate. It is <em>not</em> ok to pretend they are entirely separate. I do believe that you understand this position, to make it sound like this just doesn’t exist, is maybe what MS is reacting to.</p>
+<p>DD: I'd like to shut this down.  It seems my intentions have been misconstrued.  It seems this is not the right venue; let's establish more trust.  I agree that it has been discouraging.  I was hoping for more collaboration but that doesn’t seem to be possible.</p>
+<p>YK: I’ll just say, though I have no idea what is going on here, (for once I’m out of the drama here!), it may be a good opportunity to use the presentation to air some of their grievances here. For people who were not in Berlin, it seems a tremendous amount was missed.</p>
+<p>WH: I agree with YK. I’m very confused about what just happened here. I have no idea what the backstory is and now I’m afraid to ask.</p>
+<p>MLS: I think I’m being pretty clear about what my concern is. This was not shared ahead of time with the champions of the built-in modules proposal</p>
+<p>YK: It sounds like you think that the existence of this presentation is dangerous?</p>
+<p>MLS: It seems like a shadow proposal—clearly we need to have guidelines about how built-in modules are written.</p>
+<p>DD: I would rather discuss this one-on-one offline with you. We do not have a foundation of mutual trust needed for this to be a productive discussion.</p>
+<a href="#conclusionresolution-web-built-in-module-convention-guidance-from-tc39"><h4 id="conclusionresolution-web-built-in-module-convention-guidance-from-tc39">Conclusion/Resolution</h4></a><ul>
+<li>discuss offline between DD, MS</li>
+</ul>
+
+</body>

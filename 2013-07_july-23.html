@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#july-23-2013-meeting-notes"><h1 id="july-23-2013-meeting-notes">July 23, 2013 Meeting Notes</h1></a><hr>
-<p>John Neumann (JN), Luke Hoban (LH), Rick Hudson (RH), Allen Wirfs-Brock (AWB), Yehuda Katz (YK), Anne van Kesteren (AVK), Jeff Morrrison (JM), Sebastian Markage (SM), Paul Leathers (PL), Avik Chaudhuri (AC), Ian Halliday (IH), Alex Russell (AR), Dave Herman (DH), István Sebestyén (IS), Mark S. Miller (MM), Norbert Lindenberg (NL), Erik Arvidsson (EA), Waldemar Horwat (WH), Eric Ferraiuolo (EF), Matt Sweeney (MS), Doug Crockford (DC), Rick Waldron (RW)</p>
+<p>John Neumann (JN), Luke Hoban (LH), Rick Hudson (RH), Allen Wirfs-Brock (AWB), Yehuda Katz (YK), Anne van Kesteren (AVK), Jeff Morrison (JM), Sebastian Markage (SM), Paul Leathers (PL), Avik Chaudhuri (AVC), Ian Halliday (IH), Alex Russell (AR), Dave Herman (DH), István Sebestyén (IS), Mark S. Miller (MM), Norbert Lindenberg (NL), Erik Arvidsson (EA), Waldemar Horwat (WH), Eric Ferraiuolo (EF), Matt Sweeney (MS), Doug Crockford (DC), Rick Waldron (RW)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><p>JN: Brendan will be here tomorrow</p>
 <p>Introductions.</p>
@@ -113,7 +113,7 @@ However, we have changed for-in to disallow left side initializers. Given that, 
 <p>RW: In non-strict mode, a program can create an object with all duplicate keys and never fail in production</p>
 <p>...</p>
 <p>MM:</p>
-<p>AC: Creation can be what is the least requirement for what it takes to create a map. Taking an arbitrary structure and make a map and it's perfectly good semantics to</p>
+<p>AVC: Creation can be what is the least requirement for what it takes to create a map. Taking an arbitrary structure and make a map and it's perfectly good semantics to</p>
 <p>LH/MM: Offline conversation about what qualifies for extra defense.</p>
 <p>DH: Select cases where there is easy to argue that there few legitimate uses, ok to have occassion sanity tests. In general, JavaScript does not go out of it's way to provide you with defensive mechanisms. It's hard to predict where people are going to get hurt, better to allow them to decide.</p>
 <p>WH: Paying for consequences where <code>with</code> doesn't protect against collisions.</p>
@@ -339,7 +339,7 @@ aUint8Array(<span class="hljs-number">0xff</span>, <span class="hljs-number">-2<
 <p>DH: Are you sure?</p>
 <p>Current spec is fail soft</p>
 <p>As long as Brendan and Andreas are ok with it, we can fall back to fail soft.</p>
-<p>AC: The fail soft is consistent with JS behaviour. If you want something stricter, then the problem should be on the right side, not the left side. Otherwise you need to introduce an operator for the left.</p>
+<p>AVC: The fail soft is consistent with JS behaviour. If you want something stricter, then the problem should be on the right side, not the left side. Otherwise you need to introduce an operator for the left.</p>
 <p>AWB: (reads back conversation from Andreas)</p>
 <p>DH/YK: He doesn't seem to say anything about returning to fail soft.</p>
 <p>LH: I think we've exhausted the conversation</p>

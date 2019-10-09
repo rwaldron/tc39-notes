@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-27-2016-meeting-notes"><h1 id="september-27-2016-meeting-notes">September 27, 2016 Meeting Notes</h1></a><hr>
-<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (MS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Domenic Denicola (DD), Rick Waldron (RW), John Buchanan (JB), Kevin Gibbons (KG), Peter Jensen (PJ), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Dean Tribble (DT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Daniel Rosenwasser (DRR), Mikeal Rogers (MRS), Jean-Francis Paradis (JFP), Sathya Gunasekasan (SGN), Juan Dopazo (JDO), Bert Belder (BBR), James Snell (JSL), Shu-yu Guo (SYG), Eric Ferraiuolo (EF), Caridy Patiño (CP), Allen Wirfs-Brock (AWB), Brendan Eich (BE)</p>
+<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (MLS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Domenic Denicola (DD), Rick Waldron (RW), John Buchanan (JB), Kevin Gibbons (KG), Peter Jensen (PJ), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Dean Tribble (DT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Daniel Rosenwasser (DRR), Mikeal Rogers (MRS), Jean-Francis Paradis (JFP), Sathya Gunasekasan (SGN), Juan Dopazo (JDO), Bert Belder (BBR), James Snell (JSL), Shu-yu Guo (SYG), Eric Ferraiuolo (EF), Caridy Patiño (CP), Allen Wirfs-Brock (AWB), Brendan Eich (BE)</p>
 <hr>
 <a href="#introduction"><h2 id="introduction">Introduction</h2></a><p>Template link: <a href="https://github.com/tc39/Reflector/issues/19#issuecomment-234276510">https://github.com/tc39/Reflector/issues/19#issuecomment-234276510</a></p>
 <p>AWB: Will ne sitting in for John Neumann</p>
@@ -139,7 +139,7 @@ István Sebestyén (sitting in CH...): No, that was a mistake on my side... Sorr
 <li>bug: anything with setPrototypeOf</li>
 </ul>
 <p>MM: Does this allow users to detect whether an object is a Proxy?</p>
-<p>MS: Let's discuss the feature first</p>
+<p>MLS: Let's discuss the feature first</p>
 <p>SBI: Maybe, we'll have to think about this</p>
 <p>SBI: The general motivation is to make Window or Location, which use the ordinary get/set prototype methods, but still make sense to have cycle checks for.</p>
 <p>EFT: We ran into this in Firefox as well</p>
@@ -190,7 +190,7 @@ Remove the comment in section 6 of the possibility of prototype loops.</p>
 <ul>
 <li>issue is non-Proxy</li>
 </ul>
-<p>MS: The catch is too broad and catches the wrong things</p>
+<p>MLS: The catch is too broad and catches the wrong things</p>
 <p>KG: (Kevin, you had a point here and I missed it, please fill in if you can)</p>
 <p>MM: only w/r to the cycle check. Anyway, I see that my proposal does not add value. I withdraw the objections.</p>
 <p>YK: I assume you don't want to be able to detect whether something is a Proxy.</p>
@@ -208,10 +208,10 @@ Remove the comment in section 6 of the possibility of prototype loops.</p>
 <p>SBI: This proposal, with respect to Proxies, is indistinguishable from current behavior</p>
 <p>YK: if possible to demonstrate that a proxy can evade, then we need to be aware of that</p>
 <p>MM: if proxy chooses to evade, then it always evades. Not all proxies evade, just those that already.</p>
-<p>MS: I agree that we don't want to change the observability of whether something is a Proxy. I don't want to go down the rabbit hole of whether we have that or not. We can just discuss whether we change that observability.</p>
+<p>MLS: I agree that we don't want to change the observability of whether something is a Proxy. I don't want to go down the rabbit hole of whether we have that or not. We can just discuss whether we change that observability.</p>
 <p>MM: Agree</p>
 <p>AWB: host objects allowed to define GetPrototypeOf behavior, but doing it in SetPrototypeOf</p>
-<p>MS: Discussion is to change on the [[Set]] side</p>
+<p>MLS: Discussion is to change on the [[Set]] side</p>
 <p>DD: Some mechanism to allow host objects to &quot;opt-in&quot; to this check</p>
 <p>BT: an opt-in seems better</p>
 <ul>
@@ -274,7 +274,7 @@ Remove the comment in section 6 of the possibility of prototype loops.</p>
 <p>MM: I'm proposing that we leave these on for Unicode RegExps, as per Claude's proposal, which just cuts things off for subclassing</p>
 <p>DE: Claude's proposal stashes the Realm on the RegExp in RegExpAlloc, and checks it from RegExpBuiltinExec</p>
 <p>MM: We should revisit this mechanism after Stage 1</p>
-<p>MS: How should we discourage people from using it?</p>
+<p>MLS: How should we discourage people from using it?</p>
 <p>EF: How about we put that language on MDN?</p>
 <p>JHD: Annex B says that programmers should not use the features</p>
 <p>YK: In some ways, Annex B is necessary, actually.</p>
@@ -282,7 +282,7 @@ Remove the comment in section 6 of the possibility of prototype loops.</p>
 <p>YK: Can we discourage?</p>
 <p>JHD: Yes, we already do</p>
 <p>WH: The proposed spec has headings such as &quot;get RegExp.$+&quot;. I assume that this means that the RegExp object has a property named &quot;$+&quot;, but &quot;get RegExp.$+&quot; doesn't really parse as spec text because + is an operator. What formalism should the spec use for referring to these?</p>
-<p>MS: is this list the intersection or the union of what browsers already ship?</p>
+<p>MLS: is this list the intersection or the union of what browsers already ship?</p>
 <p>JHD: based on my previous testing, the intersection</p>
 <p>AWB/MM/MS all agree that with verification, intersection is best</p>
 <a href="#conclusionresolution-102a-legacy-regexp-features"><h4 id="conclusionresolution-102a-legacy-regexp-features">Conclusion/Resolution</h4></a><ul>

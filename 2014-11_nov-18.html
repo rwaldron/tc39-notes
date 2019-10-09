@@ -129,7 +129,7 @@ x = <span class="hljs-number">32</span>; <span class="hljs-comment">// early err
   f = <span class="hljs-literal">undefined</span>;
   <span class="hljs-comment">// silently skips assignment</span>
   <span class="hljs-literal">undefined</span> = <span class="hljs-number">42</span>;
-  <span class="hljs-literal">Infinity</span> = <span class="hljs-number">0</span>;  
+  <span class="hljs-literal">Infinity</span> = <span class="hljs-number">0</span>;
 };
 func(); <span class="hljs-comment">// no exception thrown</span>
 </code></pre>
@@ -235,12 +235,12 @@ Runtime error when instantiating a script if a lexical declaration shadows a non
 <p>AWB: Spec text that breaks Zepto:</p>
 <pre><code><span class="hljs-number">4.</span> <span class="hljs-keyword">If</span> O <span class="hljs-keyword">is</span> an exotic Array <span class="hljs-built_in">object</span>, <span class="hljs-keyword">then</span>
    a. <span class="hljs-keyword">Let</span> C be <span class="hljs-keyword">Get</span>(O, <span class="hljs-string">"constructor"</span>).
-   b. ReturnIfAbrupt(C). 
-   c. <span class="hljs-keyword">If</span> IsConstructor(C) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>     
-i. <span class="hljs-keyword">Let</span> thisRealm be the running execution context<span class="hljs-comment">'s Realm. </span>
-ii. <span class="hljs-keyword">If</span> SameValue(thisRealm, GetFunctionRealm(C)) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>     
-iii. <span class="hljs-keyword">Let</span> A be the result <span class="hljs-keyword">of</span> calling the [[Construct]] internal method <span class="hljs-keyword">of</span> C <span class="hljs-keyword">with</span> argument (<span class="hljs-number">0</span>). 
-<span class="hljs-number">5.</span> <span class="hljs-keyword">If</span> A <span class="hljs-keyword">is</span> undefined, <span class="hljs-keyword">then</span>   
+   b. ReturnIfAbrupt(C).
+   c. <span class="hljs-keyword">If</span> IsConstructor(C) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>
+i. <span class="hljs-keyword">Let</span> thisRealm be the running execution context<span class="hljs-comment">'s Realm.</span>
+ii. <span class="hljs-keyword">If</span> SameValue(thisRealm, GetFunctionRealm(C)) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>
+iii. <span class="hljs-keyword">Let</span> A be the result <span class="hljs-keyword">of</span> calling the [[Construct]] internal method <span class="hljs-keyword">of</span> C <span class="hljs-keyword">with</span> argument (<span class="hljs-number">0</span>).
+<span class="hljs-number">5.</span> <span class="hljs-keyword">If</span> A <span class="hljs-keyword">is</span> undefined, <span class="hljs-keyword">then</span>
 a. <span class="hljs-keyword">Let</span> A be ArrayCreate(<span class="hljs-number">0</span>).
 </code></pre>
 <p>AWB: Forced me to revisit &quot;species&quot;.</p>
@@ -250,13 +250,13 @@ a. <span class="hljs-keyword">Let</span> A be ArrayCreate(<span class="hljs-numb
 <pre><code><span class="hljs-number">4.</span> <span class="hljs-keyword">Let</span> C be <span class="hljs-keyword">Get</span>(O, <span class="hljs-string">"constructor"</span>)
 <span class="hljs-number">5.</span> ReturnIfAbrupt(C)
 <span class="hljs-number">6.</span> <span class="hljs-keyword">If</span> IsConstructor(C) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>
-a. <span class="hljs-keyword">Let</span> thisRealm be the running execution context<span class="hljs-comment">'s Realm. </span>
-b. <span class="hljs-keyword">If</span> SameValue(thisRealm, GetFunctionRealm(C)) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span> 
+a. <span class="hljs-keyword">Let</span> thisRealm be the running execution context<span class="hljs-comment">'s Realm.</span>
+b. <span class="hljs-keyword">If</span> SameValue(thisRealm, GetFunctionRealm(C)) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>
 i. <span class="hljs-keyword">Let</span> species be <span class="hljs-keyword">Get</span>(C, @@species);
 ii. ReturnIfAbrupt(species)
-iii. <span class="hljs-keyword">If</span> IsConstructor(species) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span> 
-<span class="hljs-number">1.</span> <span class="hljs-keyword">Let</span> A be the resu;t <span class="hljs-keyword">of</span> calling the [[Construct]] internal method <span class="hljs-keyword">of</span> species <span class="hljs-keyword">with</span> argument O. 
-<span class="hljs-number">7.</span> <span class="hljs-keyword">If</span> A <span class="hljs-keyword">is</span> undefined, <span class="hljs-keyword">then</span>   
+iii. <span class="hljs-keyword">If</span> IsConstructor(species) <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>, <span class="hljs-keyword">then</span>
+<span class="hljs-number">1.</span> <span class="hljs-keyword">Let</span> A be the resu;t <span class="hljs-keyword">of</span> calling the [[Construct]] internal method <span class="hljs-keyword">of</span> species <span class="hljs-keyword">with</span> argument O.
+<span class="hljs-number">7.</span> <span class="hljs-keyword">If</span> A <span class="hljs-keyword">is</span> undefined, <span class="hljs-keyword">then</span>
 a. <span class="hljs-keyword">Let</span> A be ArrayCreate(<span class="hljs-number">0</span>).
 </code></pre>
 <p>WH: If @@species is intended to create copies of the current object, then why wouldn't Object.constructor have a @@species? Wanting to create copies of Objects is perfectly natural, but then we'd be back to the same Zepto problem. What you'd want is a @@speciesButDoNotDefineMeOnObjectConstructorUnderPentaltyOfBreakingZepto.</p>
@@ -435,7 +435,7 @@ Any exotic object that inherits from Array | ?!@#</p>
 <span class="hljs-built_in">Array</span>.isArray(p) === <span class="hljs-literal">true</span>;
 
 <span class="hljs-keyword">var</span> o = {
-  <span class="hljs-attr">a</span>: p    
+  <span class="hljs-attr">a</span>: p
 };
 
 <span class="hljs-built_in">JSON</span>.stringify(o); === <span class="hljs-string">'"{"a":[]}"'</span>;
@@ -531,7 +531,7 @@ re.??? === <span class="hljs-string">'mi'</span>
 <a href="#conclusionresolution-413-add-async-as-futurereservedword"><h4 id="conclusionresolution-413-add-async-as-futurereservedword">Conclusion/Resolution</h4></a><ul>
 <li>Will not reserve <code>async</code> as FutureReserveWord</li>
 </ul>
-<a href="#411-performance-issue-objectdefineproperties-objectcreate-objectassign"><h2 id="411-performance-issue-objectdefineproperties-objectcreate-objectassign">4.11 Performance issue: <code>Object.defineProperties</code>, <code>Object.create</code>, <code>Object.assign</code>.</h2></a><p>(Brian Terlson, John David Dalton)</p>
+<a href="#411-performance-issue-objectdefineproperties-objectcreate-objectassign"><h2 id="411-performance-issue-objectdefineproperties-objectcreate-objectassign">4.11 Performance issue: <code>Object.defineProperties</code>, <code>Object.create</code>, <code>Object.assign</code>.</h2></a><p>(Brian Terlson, John-David Dalton)</p>
 <p>BT: The performance issue arises when no error occurs, despite being specified that the first error thrown is to be held onto until the end of the operation.</p>
 <p>MM/AWB: Hard to accept that this is specification related.</p>
 <p>MM: Implementation effort should be spent, not spec change and user pain.</p>

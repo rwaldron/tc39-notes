@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-26-2017-meeting-notes"><h1 id="september-26-2017-meeting-notes">September 26, 2017 Meeting Notes</h1></a><hr>
-<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (AKI), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD),</p>
+<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MLS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (AKI), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD),</p>
 <p>Remote:
 István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM), Gabriel Isenberg (GI), Zibi Braniecki (ZB)</p>
 <hr>
@@ -185,14 +185,14 @@ Ecma/TC39/2017/041,  Disposition of comments regarding ISO/IEC DIS 22275 complet
 <p>DH: Brendan had thought about introducing a staging system, which has downsides. The benefit is that this is a bunch of pre-computation that you could pull out. No sound way to precompute this way. User land compilers can do unsound pre-computation to compile away suffixes, which is good enough for us. The particular path for this design precludes that kind of staging.</p>
 <p>DE: Good point. Template literals have facility for caching but might be too heavyweight.</p>
 <p>DH: Hard for any solution to meet reasonable requirements.</p>
-<p>MS: Concerns this is creating a bigger problem that this is solving. Automagic calling of some constructor to get some object - with a literal what works and what doesn't? It's a pandoras box of overloading operators. If this was a reservation of syntax for future extensions I'd be comfortable with this. Makes sense to reserve syntax for integers, decimal. As Dave says some of this is unsolvable arbitrarily.</p>
+<p>MLS: Concerns this is creating a bigger problem that this is solving. Automagic calling of some constructor to get some object - with a literal what works and what doesn't? It's a pandoras box of overloading operators. If this was a reservation of syntax for future extensions I'd be comfortable with this. Makes sense to reserve syntax for integers, decimal. As Dave says some of this is unsolvable arbitrarily.</p>
 <p>WH: The syntax is already reserved. You don't need the proposal for that.</p>
 <p>DE: Currently the syntax is invalid.</p>
-<p>MS: Sure, but we could reserve the syntax space as a forbidden extension. I could go with that. The automagic calling of functions is my concern.</p>
+<p>MLS: Sure, but we could reserve the syntax space as a forbidden extension. I could go with that. The automagic calling of functions is my concern.</p>
 <p>DE: This was a specific request from Brendan, that if we add specific literals such as BigInt then the mechanism should be open for user-defined literals as well. As far as Operator Overloading it is much more complicated at runtime. May or may not be something we ever want to add. On extensibility, I don't think we would ever want JS to have a pixel value type; but web platform would, so I'm not sure if you would want to support only built-in things.</p>
-<p>MS: So what even happens when you return +?</p>
+<p>MLS: So what even happens when you return +?</p>
 <p>DE: In this proposal, return an object. However, seems like for some people extensible literals only make sense in conjunction with operator overloading, is that right?</p>
-<p>MS: Which is a much harder problem to solve. So maybe we should just reserve the syntax?</p>
+<p>MLS: Which is a much harder problem to solve. So maybe we should just reserve the syntax?</p>
 <p>DE: Interesting proposal. Should this be a needs-consensus PR to reserve syntax ahead of time?</p>
 <p>YK: In what sense is it not reserved?</p>
 <p>DE: It's not reserved, a syntax error. Section 16 reserves for extensions beyond spec.</p>
@@ -437,9 +437,9 @@ Ecma/TC39/2017/041,  Disposition of comments regarding ISO/IEC DIS 22275 complet
 <p>MPT: But the careful convention is, singular for date, plural for duration. This is like a duration.</p>
 <p>DE: Oh, I see your point.</p>
 <p>DE: For style, we are sticking with the CLDR convention, following feedback from the ECMA-402 working group.</p>
-<p>MS: Medium seems to be used in Date formatters for macOS and Windows APIs.</p>
+<p>MLS: Medium seems to be used in Date formatters for macOS and Windows APIs.</p>
 <p>DE: What about for duration formatters?</p>
-<p>MS: Not sure...</p>
+<p>MLS: Not sure...</p>
 <p>DE: Can anyone sign up to review this for stage 3?</p>
 <p>MPT: I'll be a reviewer.</p>
 <p>MB: Me too</p>
@@ -517,15 +517,15 @@ Ecma/TC39/2017/041,  Disposition of comments regarding ISO/IEC DIS 22275 complet
 <ul>
 <li><a href="https://github.com/tc39/ecma262/pull/988">Explainer</a></li>
 </ul>
-<p>MS: (Presenting Explainer)</p>
+<p>MLS: (Presenting Explainer)</p>
 <p>SYG: I'm onboard but this is shipped. What is the issue with webcompat?</p>
 <p>BT: Was this considered before?</p>
-<p>MS: We had no answer as to why it was originally done this way.</p>
+<p>MLS: We had no answer as to why it was originally done this way.</p>
 <p>YK: I feel confident we did not discuss this before.</p>
 <p>DE: I would suggest it ended up being a cleaner spec by writing it this way.</p>
 <p>DE: (Quotes Reference) from Allen Wirfs-Brock &quot;So I did the obvious optimizations at the spec. levels. I probably didn't do it for next because it would have required inlining two levels of iterator-related abstract operations which would have generally obscured what was going on.&quot;</p>
 <p>TS: A similar thing came up in WHATWG Streams, where an options object is passed in. It would be good to establish a precedent that configuration arguments for iteration are evaluated eagerly.</p>
-<p>MS: Consensus, and also that we will continue to do this kind of optimisation within the spec?</p>
+<p>MLS: Consensus, and also that we will continue to do this kind of optimisation within the spec?</p>
 <p>YK: It's not an optimisation in as much as it is semantic change that allows for optimisation.</p>
 <p>DE: We have agreement on this particular case, right?</p>
 <a href="#conclusionresolution-12im-iteration-protocol-change"><h4 id="conclusionresolution-12im-iteration-protocol-change">Conclusion/Resolution</h4></a><ul>
@@ -550,13 +550,13 @@ Ecma/TC39/2017/041,  Disposition of comments regarding ISO/IEC DIS 22275 complet
 <p>?: Is normalisation like upper or lowercase specifiied by ICU?</p>
 <p>DE: If you pass a locale into Intl.DateTimeFormat, for example, and read it back out it should comeback normalised. The input format is case insensitive but output is normalised.</p>
 <p>DE: So are we ready for Stage 2?</p>
-<p>MS: Is it stage 0 right now? Should it go to stage 1 first? There's no rush right?</p>
+<p>MLS: Is it stage 0 right now? Should it go to stage 1 first? There's no rush right?</p>
 <p>DE: Stage 2 doesn't need all of the details right</p>
 <p>ZB: This has been evaluated for over a year.</p>
 <p>YK: The question is: does it satisfy everything for stage 2</p>
 <p>DE: I can go back to experts to get more reviews and clarify things</p>
 <p>YK: This seems like a process for stage 2. Stage 2 is draft level of quality.</p>
-<p>MS: This wont make it for ES2018 so why rush through stages?</p>
+<p>MLS: This wont make it for ES2018 so why rush through stages?</p>
 <p>DE: Stage 1 or Stage 2 doesn't change anything.</p>
 <p>BT: Let's push it to stage 1.</p>
 <a href="#conclusionresolution-12iia-introducing-intllocale-for-stage-2"><h4 id="conclusionresolution-12iia-introducing-intllocale-for-stage-2">Conclusion/Resolution</h4></a><ul>

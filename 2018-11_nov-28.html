@@ -13,9 +13,9 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-28-2018-meeting-notes"><h1 id="november-28-2018-meeting-notes">November 28, 2018 Meeting Notes</h1></a><hr>
-<p>Mattijs Hoitink (MHK), Michael Saboff (MS), Keith Miller (KM), Tadeu Zagallo (TZO), Natalie Silvanovich (NSH), Waldemar Horwat (WH), Daniel Ehrenberg (DE), Jean Francois Paradis (JFP), Chip Morningstar (CM), Alan Schmitt (AS), Ross Kirsling (RKG), Jordan Harband (JHD), Brian Terlson (BT), Kevin Smith (KS), Eric Faust (EFT), Sathya Gunasekaran (SGN), Till Schneidereit (TST), Lin Clark (LCK), Godfrey Chan (GCN), Kevin Gibbons (KG), Pieter Ouwerkerk (POK), Randy Luecke (RLE), Devin Rousso (DRO), Reefath Rajali (RRI), Adam Klein (AK), Rex Jaeschke (RJE), Mark Miller (MM), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE), Emily Huynh (EHH), Michael Ficarra (MF), Ilias Tsangaris (IT), Thomas Levy (TLY), Augustus Yuan (AYN), Nathan Hammond (NHD), Sebastian Markbage (SM), Justin Ridgewell (JRL), Shane Carr (SCR), Dustin Savery (DSY), Frank Yung-Fong Tang (FTG), Mariko Kosaka (MKA), Peter Hoddie (PHE), Patrick Soquet (PST), Felipe Balbontin (FAB), Dave Herman (DH), Shu-yu Guo (SYG), Yehuda Katz (YK), Yulia Startsev (YSV), Sebastian McKenzie (SMK), Aki Rose (AKI), Tab Atkins (TAB), Mathias Bynens (MB), Scott Myers (SMS)</p>
+<p>Mattijs Hoitink (MHK), Michael Saboff (MLS), Keith Miller (KM), Tadeu Zagallo (TZO), Natalie Silvanovich (NSH), Waldemar Horwat (WH), Daniel Ehrenberg (DE), Jean-Francois Paradis (JFP), Chip Morningstar (CM), Alan Schmitt (AS), Ross Kirsling (RKG), Jordan Harband (JHD), Brian Terlson (BT), Kevin Smith (KS), Eric Faust (EFT), Sathya Gunasekaran (SGN), Till Schneidereit (TST), Lin Clark (LCK), Godfrey Chan (GCN), Kevin Gibbons (KG), Pieter Ouwerkerk (POK), Randy Luecke (RLE), Devin Rousso (DRO), Reefath Rajali (RRI), Adam Klein (AK), Rex Jaeschke (RJE), Mark Miller (MM), Shaheer Shabbir (SSR), Mrelita Tiwari (MTI), Jonathan Dallas (JDS), Brendan Eich (BE), Emily Huynh (EHH), Michael Ficarra (MF), Ilias Tsangaris (IT), Thomas Levy (TLY), Augustus Yuan (AYN), Nathan Hammond (NHD), Sebastian Markbåge (SM), Justin Ridgewell (JRL), Shane Carr (SCR), Dustin Savery (DSY), Frank Yung-Fong Tang (FTG), Mariko Kosaka (MKA), Peter Hoddie (PHE), Patrick Soquet (PST), Felipe Balbontín (FBN), Dave Herman (DH), Shu-yu Guo (SYG), Yehuda Katz (YK), Yulia Startsev (YSV), Sebastian McKenzie (SMK), Aki Rose (AKI), Tab Atkins (TAB), Mathias Bynens (MB), Scott Myers (SMS)</p>
 <p>Remote:
-Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), Istvan Sebestyen (IS), Richard Gibson (RG), Guy Bedford (GB), Conrad Watts (CWS)</p>
+Ron Buckton (RBN), Bradley Farias (BFS), Robert Pamely (RPY), Leo Balter (LBR), István Sebestyén (IS), Richard Gibson (RGN), Guy Bedford (GB), Conrad Watts (CWS)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2018/11.md">Agenda</a></li>
@@ -176,7 +176,7 @@ BFS: Sounds good.</p>
 <p>DE: In transpiled decorated classes, we don't have any static analysis. Do you count decorated classes as the baseline? Or code that uses classes as the baseline.</p>
 <p>SGN: The baseline should be non decorated classes.</p>
 <p>AK: I have these concerns especially since we're talking about frameworks... I am not sure this is more of a footgun compared to using a framework.</p>
-<p>MS: We have similar concerns in that static analysis will be difficult. We have to change the object model to account for decorators. I personally don't like it, users want it... startup cost i have concerns but not super huge.</p>
+<p>MLS: We have similar concerns in that static analysis will be difficult. We have to change the object model to account for decorators. I personally don't like it, users want it... startup cost i have concerns but not super huge.</p>
 <p>EFT: My intuition is that when you codify this a first class language thing</p>
 <p>DE: Because they are not able to use classes, they use an object literal. Decorators might be able to help with those and those aren't able to be static analyzed anyways.</p>
 <p>Diego: We prefer these ergonomics of using decorators vs the current patterns. From a performance perspective, we have done our own tests with 10K-15K components, we have reached reasonable performance. For me the ergonomics outweigh the static analysis.</p>
@@ -381,7 +381,7 @@ Dave did lot's of outreach about this issue. Majority prefers <code>a?.</code> o
 <li>Rules for voting will be posted on Reflector via picture.</li>
 <li>Email Yulia your vote by tomorrow 12 PM</li>
 </ul>
-<a href="#asset-references-for-stage-1"><h2 id="asset-references-for-stage-1">Asset References for Stage 1</h2></a><p>(Sebastian Markbage)</p>
+<a href="#asset-references-for-stage-1"><h2 id="asset-references-for-stage-1">Asset References for Stage 1</h2></a><p>(Sebastian Markbåge)</p>
 <ul>
 <li><a href="https://github.com/sebmarkbage/ecmascript-asset-references">proposal</a></li>
 </ul>

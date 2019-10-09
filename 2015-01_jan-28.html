@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#january-28-2015-meeting-notes"><h1 id="january-28-2015-meeting-notes">January 28, 2015 Meeting Notes</h1></a><hr>
-<p>Brian Terlson (BT), Jonathan Turner (JT), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Jeff Morrison (JM), Erik Arvidsson (EA), Peter Jensen (PJ), Yehuda Katz (YK), Dave Herman (DH), Waldemar Horwat (WH), Dmitry Lomov (DL), Domenic Denicola (DD), Kevin Smith (KS), Andreas Rossberg (ARB), István Sebestyén (IS), Sam Tobin-Hochstadt (STH), Michael Ficarra (MF), Jordan Harband (JHD), Chip Morningstar (CM), Mark S. Miller (MM), Ben Newman (BN), Brendan Eich (BE), Adam Klein (AK), Igor Minar (IM), Miško Hevery (MHY)</p>
+<p>Brian Terlson (BT), Jonathan Turner (JT), Allen Wirfs-Brock (AWB), John Neumann (JN), Rick Waldron (RW), Jeff Morrison (JM), Erik Arvidsson (EA), Peter Jensen (PJ), Yehuda Katz (YK), Dave Herman (DH), Waldemar Horwat (WH), Dmitry Lomov (DL), Domenic Denicola (DD), Kevin Smith (KS), Andreas Rossberg (ARB), István Sebestyén (IS), Sam Tobin-Hochstadt (STH), Michael Ficarra (MF), Jordan Harband (JHD), Chip Morningstar (CM), Mark S. Miller (MM), Ben Newman (BN), Brendan Eich (BE), Adam Klein (AK), Igor Minar (IMR), Miško Hevery (MHY)</p>
 <hr>
 <a href="#report-from-the-ecma-secretariat"><h2 id="report-from-the-ecma-secretariat">Report from the Ecma Secretariat</h2></a><p>(István Sebestyén)</p>
 <p>IS: Strange JSON development: The government of the Netherlands wants to get an EU recognition on IETF's JSON future standard as part of the European Commission's Multi-Stakeholder Platform. Netherlands submitted 27 IETF standards to the Multi-Stakeholder Platform, and IETF's JSON happens to be among them. Normally only long-standing in the market already proved standards should be recognized. Also no &quot;consortium specification&quot; should be recognized where appropriate International Standard (like of ISO, IEC, ITU) exists. JSON in ECMA-262 is already part of ISO/IEC 16262:2011. In addition TC39 has standardized in 2013 ECMA-404 (JSON). We had originally a TC39 decision to fast-track it to JTC1, but after discussion the GA in December 2013 has approved the possibility of a Postal Balot on the JTC1 fast track upon a new request  from TC39. The iisue has been reported to the last Ecma GA and was worried about the situation.</p>
@@ -35,14 +35,14 @@
 <span class="hljs-keyword">for</span>(x <span class="hljs-keyword">of</span> nobreak(nats)) {
   <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;
   ...
-  
+
   for(x <span class="hljs-keyword">of</span> nobreak(nats)) {
-    <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;    
+    <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;
   }
 }
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nobreak</span>(<span class="hljs-params">it</span>) </span>{   
-  <span class="hljs-keyword">return</span> {     
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nobreak</span>(<span class="hljs-params">it</span>) </span>{
+  <span class="hljs-keyword">return</span> {
     next(x) { <span class="hljs-keyword">return</span> it.next(x); },
     <span class="hljs-keyword">throw</span>(x) { <span class="hljs-keyword">return</span> it.throw(x); },
     <span class="hljs-keyword">return</span>(x) { <span class="hljs-keyword">return</span> {<span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>}; }
@@ -63,14 +63,14 @@ nats.return = <span class="hljs-function"><span class="hljs-params">()</span> =&
 <span class="hljs-keyword">for</span>(x <span class="hljs-keyword">of</span> nobreak(nats)) {
   <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;
   ...
-  
+
   for(x <span class="hljs-keyword">of</span> nobreak(nats)) {
-    <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;    
+    <span class="hljs-keyword">if</span>(cond) <span class="hljs-keyword">break</span>;
   }
 }
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nobreak</span>(<span class="hljs-params">it</span>) </span>{   
-  <span class="hljs-keyword">return</span> {     
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nobreak</span>(<span class="hljs-params">it</span>) </span>{
+  <span class="hljs-keyword">return</span> {
     next(x) { <span class="hljs-keyword">return</span> it.next(x); },
     <span class="hljs-keyword">throw</span>(x) { <span class="hljs-keyword">return</span> it.throw(x); },
     <span class="hljs-keyword">return</span>(x) { <span class="hljs-keyword">return</span> {<span class="hljs-attr">done</span>: <span class="hljs-literal">true</span>}; }
@@ -246,20 +246,20 @@ nats.return = <span class="hljs-function"><span class="hljs-params">()</span> =&
 <p>JT: Lets pop the context and get a good overview before we start diving into the details.</p>
 <p>YK: Noted that there are quirks.</p>
 <p>YK: @readonly is a simple example of decorators.</p>
-<p>IM: Annotations doc <a href="http://goo.gl/42o100">http://goo.gl/42o100</a> (requires permissions)
+<p>IMR: Annotations doc <a href="http://goo.gl/42o100">http://goo.gl/42o100</a> (requires permissions)
 Decorators vs. Annotations: <a href="https://docs.google.com/document/d/1QchMCOhxsNVQz2zNvmzy8ibDMPT46MLf79X1QiDc_fU/edit#">https://docs.google.com/document/d/1QchMCOhxsNVQz2zNvmzy8ibDMPT46MLf79X1QiDc_fU/edit#</a> (requires permissions)</p>
-<p>IM: What do we want annotations for? Collected use cases in document. For example for documentation, ORM, DI, tooling aspects</p>
+<p>IMR: What do we want annotations for? Collected use cases in document. For example for documentation, ORM, DI, tooling aspects</p>
 <p>WH: What is the syntax for annotations?</p>
 <p>YK: At this point it is the same as decorators.</p>
-<p>IM: Biggest difference between deocrators and annotations is that annotations support static/ahead of time tooling because it has guarantees you can build on top of.</p>
+<p>IMR: Biggest difference between deocrators and annotations is that annotations support static/ahead of time tooling because it has guarantees you can build on top of.</p>
 <p>WH: Big issue is whether you use a separate sublanguage for static annotations or try to use the same language. Separate language using separate name scopes results in solutions and problems such as C's preprocessor. Using the same language causes severe time-of-evaluation issues, as seen in Lisp's eval-when or C<ins>'s template and class-vs-constexpr gotchas [example: a C</ins>11 class constexpr reference can't use static constexpr functions defined earlier in the same class]. The problem arises in doing compile-time scope lookup and variable resolution in scopes as dynamic as ECMAScripts's.</p>
 <p>MM: Do you expect to be able to have identifier expressions in your annotations? Do you expect that to look up the value in the current scope?</p>
 <p>EA: The original proposal used expressions. There has lately been talk about scaling this back to JSON so that there are no side effects.</p>
 <p>MH: Using JSON only seems like it might not be suitable enough.</p>
 <p>AWB: There is a middle ground here. Classes could expose an extensible meta-object protocol. Essentially dynamic extension points that you can hook in to. So as part of defining a new type of class definition you might add meta properties and other things. Might be quite dynamic but have a static representation in the source code.</p>
 <p>MM: If JSON is almost expressible enough, with the exception of the scope issue, and if you add IdentifierExpression</p>
-<p>IM: We might be happy with that.</p>
-<p>IM: One other reason for having these side effect free annotations is the VM perspective. Decorators needs to be dynamically invoked.</p>
+<p>IMR: We might be happy with that.</p>
+<p>IMR: One other reason for having these side effect free annotations is the VM perspective. Decorators needs to be dynamically invoked.</p>
 <p>DD: The performance impact would not be worse than calling the functions yourself.</p>
 <p>DH: Meta programming is generally the case where you do not need to optimize for performance because you expect there to be some penalty.</p>
 <p>MH: If you only have decorators and the common use case is annotations ????</p>
@@ -278,7 +278,7 @@ Decorators vs. Annotations: <a href="https://docs.google.com/document/d/1QchMCOh
 <p>AWB: Maybe have two different proposals, both at stage 0. Then try to unify them before they can progress to stage 1.</p>
 <p>MM: Having one mechanism that satisifes both needs is preferable to having two different mechanism.</p>
 <p>MM: Maybe you can have a statically verified subset of decorators and if that restriction is fulfilled your tooling can treat it as an annotation. If not it falls back to a dynamic decorator.</p>
-<p>IM: Sounds promising.</p>
+<p>IMR: Sounds promising.</p>
 <a href="#conclusionresolution-63-decorators"><h4 id="conclusionresolution-63-decorators">Conclusion/resolution</h4></a><ul>
 <li>None?</li>
 </ul>

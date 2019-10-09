@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#july-25-2018-meeting-notes"><h1 id="july-25-2018-meeting-notes">July 25, 2018 Meeting Notes</h1></a><hr>
-<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), James Burke (JRB), Maxim Aleksa (MAA),  Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Patrick Soquet (PST), Sam Goto (SGO), Dave Herman (DH), Brendan Eich (BE), Pieter Ouwerkerk (POK), Leo Balter (LBR), Limin Zhu (LZU), Aki Rose (AKI), Ross Kirsling (RKG), Shane Carr (SCR), Kevin Smith (KS), Ron Buckton (RBN), J.F. Paradis (JFP), Peter Hoddie (PHE), Godfrey Chan (GCN), Domenic Denicola (DD), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Gus Caplan (GCL), Felipe Balbontin (FBN), Daniel Rosenwasser (DR), Jonathan Keslin (JKN), Christopher Blappert (CBT), Dean Tribble (DT), Richard Gibson(RGN), Lin Clark (LCK), Allen Wirfs-Brock(AW), Maggie Pint (MPT), Timothy Gu (TGU), Sebastian Markbage(SME), Dustin Savery(DSY), Mike Murry (MMY), Alex Vincent(AVT), John David Dalton (JDD)</p>
+<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MLS), James Burke (JRB), Maxim Aleksa (MAA),  Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Patrick Soquet (PST), Sam Goto (SGO), Dave Herman (DH), Brendan Eich (BE), Pieter Ouwerkerk (POK), Leo Balter (LBR), Limin Zhu (LZU), Aki Rose (AKI), Ross Kirsling (RKG), Shane Carr (SCR), Kevin Smith (KS), Ron Buckton (RBN), Jean-Francois Paradis (JFP), Peter Hoddie (PHE), Godfrey Chan (GCN), Domenic Denicola (DD), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Gus Caplan (GCL), Felipe Balbontín (FBN), Daniel Rosenwasser (DRR), Jonathan Keslin (JKN), Christopher Blappert (CBT), Dean Tribble (DT), Richard Gibson (RGN), Lin Clark (LCK), Allen Wirfs-Brock (AWB), Maggie Pint (MPT), Timothy Gu (TGU), Sebastian Markbåge (SM), Dustin Savery(DSY), Mike Murry (MMY), Alex Vincent(AVT), John-David Dalton (JDD)</p>
 <p>Remote:
 Rick Waldron (RW), Daniel Ehrenberg (DE), Caridy Patiño (CP), Justin Ridgewell (JRL), Brian Warner (BWR), Yulia Startsev (YSV), Jason Williams (JWS), Ron Buckton (RBN), Ross Kirsling (RKG), Ben Newman (BN), Edd Yerburgh (EYH)</p>
 <hr>
@@ -225,7 +225,7 @@ We have this proposal we can alter it in a variety of ways, I don't think we're 
 <ul>
 <li>WH</li>
 <li>JHD</li>
-<li>MS</li>
+<li>MLS</li>
 </ul></li>
 </ul>
 <a href="#cancellation-update"><h2 id="cancellation-update">Cancellation Update</h2></a><p>(Ron Buckton)</p>
@@ -289,7 +289,7 @@ promise.then(onfullfilled, onrejected, controller.signal)</p>
 <p>RBN:</p>
 <p>JH: One of my objections with pipeline operator is that it might kill the bind operator. I hope we have some plan for method extraction.</p>
 <p>RBN:</p>
-<p>DR: Question about the template example...that's not a tagged template, right? Does that require double-parsing?</p>
+<p>DRR: Question about the template example...that's not a tagged template, right? Does that require double-parsing?</p>
 <p>RBN: No, but it would work the same with a tagged template too. The idea is that it returns a function, not another template.</p>
 <p>TST: Not sure if you answered this... if you call button.onclick, it's called with the original receiver. Wouldn't that be the method extraction case?</p>
 <p>RBN: No, because the lookup of <code>onClick</code> happens when the returned function is evaluated.</p>
@@ -308,7 +308,7 @@ promise.then(onfullfilled, onrejected, controller.signal)</p>
 <p>DH: I think for me, maybe I should spend time on your repro. I agree, this is a multiparadigm language (both functional and OO). I think there is room for more syntax, like I proposed yesterday. But I think we want to pick syntaxes that have a &quot;good cognitive/pedagogical cost&quot; to benefit ratio. Is this general enough, or is it syntactic sugar?  Not every functional language is super operator happy.</p>
 <p>RBN: I'll eventually be able to have some more compelling examples. I'm working on a branch of the TypeScript compiler where I've made use of these features to improve the readability of some code involving lots of nested functions.</p>
 <p>BE: I agree, separating from pipeline is a good approach, but we should be careful about &quot;horse before the cart&quot;. We should be super careful about adding new syntax. It doesn't say we shouldn't do pipelines; it seems to me that we should just make this a dependency on pipelines.</p>
-<p>DR: I've enjoyed using this feature in other languages. It may be helpful to come up with more examples where this feature is useful; we can take that offline.</p>
+<p>DRR: I've enjoyed using this feature in other languages. It may be helpful to come up with more examples where this feature is useful; we can take that offline.</p>
 <p>WH: I'm kinda on the fence about this. When the other arguments were delayed, the garden path problem was overwhelming. With eager evaluation, this is better than what the proposal used to be. However, I haven't convinced myself that the syntax is workable due to unwelcome interactions with the async arrow function cover grammar.</p>
 <p>WH: As the proposal currently stands, templates can have only one <code>?</code> placeholder and it must be in the second position.</p>
 <p>RBN: This is still very early, the spec should not be read as complete. The idea is that for any placeholder position in the template, you can put a <code>?</code>.</p>
@@ -341,7 +341,7 @@ promise.then(onfullfilled, onrejected, controller.signal)</p>
 <p>MF: They're symbols, they can be referred to by ProtocolName.fieldName. (continues presenting)</p>
 <p>JHD: Since this was a recap, and since you mentioned a simple thing, it seems like even though you were using string names in all the examples, that's sugar for Symbols with those names?</p>
 <p>MF: That's right.</p>
-<p>DR: You were using an <code>implements</code> operator, why does this need its own operator, could you use <code>Symbol.hasInstance</code> to configure the use of <code>instanceof</code> instead?</p>
+<p>DRR: You were using an <code>implements</code> operator, why does this need its own operator, could you use <code>Symbol.hasInstance</code> to configure the use of <code>instanceof</code> instead?</p>
 <p>MF: That's definitely a possibility, though it might be confusing.</p>
 <p>JHD: <code>Protocol.implement</code> requires that the first argument has all the right fields?</p>
 <p>MF: That's right. And it uses Get, not GetOwnProperty. (continues presenting)</p>
@@ -351,9 +351,9 @@ promise.then(onfullfilled, onrejected, controller.signal)</p>
 <p>MF: Yes</p>
 <p>MF: More committee feedback: relationship to the Mixins proposal. Mixins, in my opinion, is very simple syntax sugar (see slides). They seem to be antithetical to composition, since two mixins which use the same method names collide, whereas protocols' use of symbols allows protocols to use the same &quot;name&quot; (which are symbols) and be used together (see slide).</p>
 <p>MF: Relationship to decorators (slide). Questions?</p>
-<p>DR: If you're familiar with protocols in Haskell, there's a problem where you can have two implementations of a protocol for the same type. Example: applicative. Sometimes you want them to zip, and sometimes you want the cartesian product. It seems in this proposal, the protocols are inherited.</p>
+<p>DRR: If you're familiar with protocols in Haskell, there's a problem where you can have two implementations of a protocol for the same type. Example: applicative. Sometimes you want them to zip, and sometimes you want the cartesian product. It seems in this proposal, the protocols are inherited.</p>
 <p>MF: Protocols here have the same problems. To work around this, newtype it.</p>
-<p>DR: Haskell newtypes have zero overhead.</p>
+<p>DRR: Haskell newtypes have zero overhead.</p>
 <p>MF: Yes, in JS they would have to be lightweight wrappers. You'd have to wrap in something like Product or Sum. I'll look into what can be done about that.</p>
 <p>BFS: We didn't talk about this now, but how about cross-realm protocols. I think it's partially solved by the constructor where you can dynamically construct a protocol and shared the symbols. Sometimes you get to a situation where you have some level of isolation, such as being in a different worker thread, and you want to be sure protocol uses the same symbol in two threads. You can use Symbol.for in different realms and share these keys. It doesn't seem readily apparent how you can do that with the syntactic form of this. I just wanted to express appreciation for this constructor (see &quot;Protocol Constructor&quot; slide).</p>
 <p>MF: Great. Yeah, the Protocol constructor allows you to pass in the Symbol to use for each field.</p>
@@ -369,13 +369,13 @@ promise.then(onfullfilled, onrejected, controller.signal)</p>
 <p>MF: Yes, they need to know about the context in which they are going to be used. It constrains the available names.</p>
 <p>YK: That doesn't mean they don't compose, just that there are restrictions about when they compose well.</p>
 <p>MF: Agreed.</p>
-<p>DR: Other languages that have features like this (traits, type classes) usually have some static type information.</p>
+<p>DRR: Other languages that have features like this (traits, type classes) usually have some static type information.</p>
 <p>MF: The static information is usually used for resolution. So you'll see examples like [referred to slide]. In languages without type systems, either you have to manually carry records around or disambiguate at call sites.</p>
-<p>DR: I think what I'm saying is that in other languages that resolution is carried around implicitly. But here you need to name the protocol everywhere. That's one of the concerns.</p>
+<p>DRR: I think what I'm saying is that in other languages that resolution is carried around implicitly. But here you need to name the protocol everywhere. That's one of the concerns.</p>
 <p>MF: If you look at my previous presentation, I did lay out that this is a downside of this proposal. I also suggested some remedies, such as making a scoped symbol to refer to things, like creating a local &quot;map&quot; function that passes its arguments to the &quot;ProtocolName.map&quot; method.</p>
-<p>DR: So is that like destructuring the protocol or something like that.</p>
+<p>DRR: So is that like destructuring the protocol or something like that.</p>
 <p>MF: Yeah that is another one of the examples listed.</p>
-<p>DR: This proposal seems to address that some of the things that enums could do, that is, unique values on a single record that are known and that you can access. A set of well-known unique variables in a single place (I think Ron Buckton is working on it). This is just some feedback, we can chat afterwards.</p>
+<p>DRR: This proposal seems to address that some of the things that enums could do, that is, unique values on a single record that are known and that you can access. A set of well-known unique variables in a single place (I think Ron Buckton is working on it). This is just some feedback, we can chat afterwards.</p>
 <p>DH: This is related to what you guys were talking about. This is a good exploration so far. One piece of feedback is on the heaviness of the references. Along the lines of your trick of using a local scope, I played with this years ago during the earliest work on Symbols. I looked at whether there was some way to scope a symbol so that there was a short way to refer to it locally, e.g., saying <code>symbol foo</code> then if you said <code>x.foo</code> you were referring to the symbol. It didn't really fly due to spooky action at a distance, but it was an interesting thought experiment. What I liked about it is that it didn't feel like you were adding to the syntax budget; it deals with a thing everyone already understands (&quot;scope&quot;) and then changes the behavior of a certain name within a scope.</p>
 <p>MF: It's like the bind operator. But I really do hope to avoid adding any new calling pattern. And I do hope that this is a feature not everyone has to learn.</p>
 <p>JRL: So I'm just thinking of hypotheticals. At some future point we might have methods or data that I don't want to expose to everyone who implements my protocol. So maybe I could slap private methods on the protocols. But then we hit issues with copying data over to implementers. So have you thought about adding a way to make the protocols have members that don't get copied?</p>

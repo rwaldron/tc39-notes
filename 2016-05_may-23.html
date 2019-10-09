@@ -13,9 +13,9 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#may-23-2016-meeting-notes"><h1 id="may-23-2016-meeting-notes">May 23, 2016 Meeting Notes</h1></a><hr>
-<p>Brian Terlson (BT), Dave Herman (DH), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Shu-yu Guo (SYG), Mark S. Miller (MM), Kevin Smith (KS), Michael Saboff (MS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Andreas Rossberg (ARB), Ben Smith (BS), Thomas Wood (TW), Alan Schmitt (AS), Brad Nelson (BNN), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD)</p>
+<p>Brian Terlson (BT), Dave Herman (DH), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Shu-yu Guo (SYG), Mark S. Miller (MM), Kevin Smith (KS), Michael Saboff (MLS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Andreas Rossberg (ARB), Ben Smith (BS), Thomas Wood (TWD), Alan Schmitt (AS), Brad Nelson (BNN), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD)</p>
 <p>Remote:
-Michael Hablich (MHH), Yang Guo (YGO), Toon Verwaest (TVT), Daniel Clifford DCD), Nikolaus Papaspyrou (NPU), Ben Titzer (BTR)</p>
+Michael Hablich (MHH), Yang Guo (YGO), Toon Verwaest (TVT), Daniel Clifford (DCD), Nikolaus Papaspyrou (NPU), Ben Titzer (BTR)</p>
 <hr>
 <a href="#discussion-of-the-agenda-and-timing"><h2 id="discussion-of-the-agenda-and-timing">Discussion of the agenda and timing</h2></a><p>PTC/STC on Tuesday morning/afternoon for MS employees to call in
 9 hours differences between CET and US Pacific time. Only afternoon works...
@@ -197,7 +197,7 @@ which have this sort of semantics.</p>
 <p>DE: The Test262 tests are parameterized, and there are both positive and negative tests</p>
 <p>DH: Recommendation to Test262: write a routine to experimentally determine the maximum stack size, and run this at the beginning, rather than starting at 100k.</p>
 <p>BT: Isn't it possible for this to come to a variable outcome?</p>
-<p>MS: I wrote this routine, and it's very hard to do it correctly determine the exact outcome. It required growing exponentially, then backing off, etc</p>
+<p>MLS: I wrote this routine, and it's very hard to do it correctly determine the exact outcome. It required growing exponentially, then backing off, etc</p>
 <p>LBR: After a lot of research, this was the best we found. It is not the happiest solution, but we couldn't find anything better. We just wanted to offer some form of tests on Test262 for each feature of the spec, and that's what we did for tail call optimization. You already have to have a $PRINT function that implementations support, and this is similarly parameterized.</p>
 <p>BT: It's a pragmatic solution</p>
 <p>MF: Proper tail calls are unobservable and should not have a Test262 test</p>
@@ -208,52 +208,52 @@ which have this sort of semantics.</p>
 </ul>
 <a href="#w-and-w-semantics-in-case-insensitive-unicode-regexps"><h2 id="w-and-w-semantics-in-case-insensitive-unicode-regexps"><a href="https://github.com/tc39/ecma262/pull/525">\w and \W semantics in case-insensitive Unicode RegExps</a></h2></a><p>(Michael Saboff)</p>
 <p>WH: This is the exact same problem that I solved in ES3 by adding the prohibition to case-canonicalization of non-ASCII Unicode characters into ASCII characters. Without that, the same \W weirdness would have appeared in ES3.</p>
-<p>MS: Recap of very strange semantics caused by Unicode case folding (MS please insert link to slides). \W includes K because the kevin symbol case-folds to something in \w, so K is case-insensitive in the set of things that aren't a letter.</p>
-<p>MS: Proposal: make \W be the inverse of \w, and change \b and \B to be consistent. An alternate proposal would be to stick to ASCII-only as Waldemar did for ES3.</p>
+<p>MLS: Recap of very strange semantics caused by Unicode case folding (MS please insert link to slides). \W includes K because the kevin symbol case-folds to something in \w, so K is case-insensitive in the set of things that aren't a letter.</p>
+<p>MLS: Proposal: make \W be the inverse of \w, and change \b and \B to be consistent. An alternate proposal would be to stick to ASCII-only as Waldemar did for ES3.</p>
 <p>WH: [<em>explaining the rationale for how ES3 regexps were specified</em>]. Character classes evaluate into sets of allowed characters and an invert flag. Used an invert flag to make [^...] be an exact negative of [...]. It would have been tempting to use an invert flag to make \W into an exact negative of \w, but that wouldn't work when combining \W or \w with other things in a character set: [abc\w], etc. That's why \W inverts the set manually instead of using the invert flag.</p>
 <p>YK: Would it be web-compatible to do a change?</p>
 <p>WH: Having k and s match \W is clearly a spec bug.</p>
 <p>YG: Chrome shipped this in 50, with the spec's semantics.</p>
 <p>DE: It should still be web-compatible, though, as it is very recently shipped. The bug reporter was someone who was writing a conformance test, rather than finding this in actual usage.</p>
 <p>BT: Edge actually ships MS's proposal, so we don't need to worry about web compat.</p>
-<p>MS: Should we change \b as well?</p>
+<p>MLS: Should we change \b as well?</p>
 <p>YG: Yes, they should change together?</p>
 <p>WH: Isn't it strange that what's contained in the class is dependent on the i flag?</p>
 <p>YG: But they should change together and be consistent.</p>
-<p>MS: There is currently an inconsistency between \b and \w due to this issue as well. Proposal flips this, and makes \w\W or \W\w be \b. It's necessary for</p>
+<p>MLS: There is currently an inconsistency between \b and \w due to this issue as well. Proposal flips this, and makes \w\W or \W\w be \b. It's necessary for</p>
 <p>YG: I was suggesting bringing in Unicode because it seems ad-hoc to bring in just small long S and kelvin symbol</p>
-<p>MS: Or, we could make it not cross the ASCII boundary, and not do Unicode case folding with respect to the evaluation of this character class.</p>
+<p>MLS: Or, we could make it not cross the ASCII boundary, and not do Unicode case folding with respect to the evaluation of this character class.</p>
 <p>JHD: But seems like we should be aligned with Unicode.</p>
-<p>MS: My proposal just uses UnicodeCaseFolding.txt and will be future-compatible</p>
+<p>MLS: My proposal just uses UnicodeCaseFolding.txt and will be future-compatible</p>
 <p>YG: It seems rather ad-hoc to not follow UnicodeCaseFolding.txt, so let's keep it if possible. This all applies only with /ui, right?</p>
-<p>MS: Yes</p>
+<p>MLS: Yes</p>
 <p>DH: What Unicode changes affect this?</p>
 <p>WH: Unicode defining new characters which case-convert into ASCII letters.</p>
 <p><em>discussion: Good to follow Unicode going forward, as it has changed over time, both in adding new characters and revisions to existing characters</em>.</p>
 <a href="#conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps"><h4 id="conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps">Conclusion/Resolution</h4></a><p>Consensus on MS's pull request, and working out \b and \B as he indicated.</p>
 <a href="#function-names"><h2 id="function-names"><a href="https://github.com/tc39/ecma262/pull/575">Function names</a></h2></a><p>(Michael Saboff)</p>
-<p>MS: Proposal: When the inferred name is a reserved word, use &quot;&quot; rather than the current name. The problem is that the .name property won't eval.</p>
+<p>MLS: Proposal: When the inferred name is a reserved word, use &quot;&quot; rather than the current name. The problem is that the .name property won't eval.</p>
 <p>MM: What is the problem with the .name property being not an identifier?</p>
-<p>MS: The problem is that math.js puts type decorations in the name when they put the property of the function into the object.</p>
+<p>MLS: The problem is that math.js puts type decorations in the name when they put the property of the function into the object.</p>
 <p>DD: Later, they eval it, concatenating the .name onto it</p>
 <p>MM: That's what broke in Chrome 50 on SES, which was wrong due to bound functions and getters/setters.</p>
-<p>MS: but you can't call getters and setters</p>
+<p>MLS: but you can't call getters and setters</p>
 <p>EF: Yes you can; get the property descriptor, find the getter, and call it</p>
 <p>DD: the issue is how should we balance compatibility with the clean semantics of the current spec.</p>
 <p>DE: V8 has shipped this in Chrome 50 and does not see a huge flood of bug reports</p>
 <p>JHD: Function name property is not something that you can eval in general</p>
 <p>DE: There are a lot of ways that we could handle compatibility issues. Collect qualitative or quantitive information, contact large users, etc. Where does this sit when comparing to TypedArray methods (Microsoft contacted Turbulenz; it was fixed and we all managed to ship the methods) and RegExp feature testing (too widespread; made a spec workaround)?</p>
-<p>MS: Seems like this is probably not as bad as the RegExp issue.</p>
-<p>MS: Proposal: &quot;&quot; name only in object literals, when the name is not an identifier</p>
+<p>MLS: Seems like this is probably not as bad as the RegExp issue.</p>
+<p>MLS: Proposal: &quot;&quot; name only in object literals, when the name is not an identifier</p>
 <p>YK: Compatibility is important</p>
 <p>BT: good to have an evidence-based overturning of previous decisions</p>
-<p>MS: Hard to do telemetry for this</p>
+<p>MLS: Hard to do telemetry for this</p>
 <a href="#conclusionresolution-function-names"><h4 id="conclusionresolution-function-names">Conclusion/Resolution</h4></a><p>No change in the spec for now; MS says Safari will likely ship their compat workaround for now, and see if it can get more information for the next meeting or the one after that to consider the decision</p>
 <a href="#typedarrayarraybufferdataview-constructor-changes"><h2 id="typedarrayarraybufferdataview-constructor-changes"><a href="https://github.com/tc39/ecma262/pull/410">TypedArray/ArrayBuffer/DataView constructor changes</a></h2></a><p>(Leo Balter)</p>
 <p>LBR: [<em>Presented bug comment showing behavior across browsers</em>]</p>
 <p>MM: What does n/a mean?</p>
 <p>LBR: not providing that argument</p>
-<p>MS: JSC gives somewhat changed and more standards-compliant behavior for some cases listed here, more in line with all other implementations</p>
+<p>MLS: JSC gives somewhat changed and more standards-compliant behavior for some cases listed here, more in line with all other implementations</p>
 <p>JHD: Seems like some of these have multiple browsers throwing, but your PR makes it not throw, in alignment with only V8. Why?</p>
 <p>LBR: I'm trying to make a canonical approach</p>
 <p>DE: We should consider web compatibility also for things that are not strictly at the intersection</p>
@@ -291,7 +291,7 @@ which have this sort of semantics.</p>
 <p>MM: If the PR is adopted, then for all kinds of arrays, can you make zero-length arrays?</p>
 <p>LBR: You will be able to create empty ArrayBuffers. TypedArrays may have additional checks.</p>
 <p>MM: any objections?</p>
-<p>MS: Were you concerned about compat, DE?</p>
+<p>MLS: Were you concerned about compat, DE?</p>
 <p>DE: No, I was concerned about compat for other proposals. I think this will probably work.</p>
 <a href="#conclusionresolution-typedarrayarraybufferdataview-constructor-changes"><h4 id="conclusionresolution-typedarrayarraybufferdataview-constructor-changes">Conclusion/Resolution</h4></a><p><em>Consensus!</em></p>
 <a href="#revisiting-duplicate-function-declarations-in-blocks"><h2 id="revisiting-duplicate-function-declarations-in-blocks"><a href="https://github.com/tc39/ecma262/pull/453">Revisiting &quot;Duplicate Function Declarations in Blocks&quot;</a> (DE, SG)</h2></a><p>SG: Should our Annex B 3.3 legacy duplicate function in sloppy block behavior do an assignment for each function declaration, or just the last one?</p>

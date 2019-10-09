@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-23-2015-meeting-notes"><h1 id="september-23-2015-meeting-notes">September 23, 2015 Meeting Notes</h1></a><hr>
-<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MLS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
 <hr>
 <a href="#55-decorators-update"><h2 id="55-decorators-update">5.5 Decorators Update</h2></a><p>(Yehuda Katz)</p>
 <p><a href="https://github.com/wycats/javascript-decorators/tree/big-picture">https://github.com/wycats/javascript-decorators/tree/big-picture</a></p>
@@ -178,7 +178,7 @@ addEventListener(<span class="hljs-string">"error"</span>, onerror);
 
 @metadata(<span class="hljs-string">"foo"</span>);
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onerror</span>(<span class="hljs-params">...args</span>) </span>{
-    
+
 }
 </code></pre>
 <p>Unclear what this does.</p>
@@ -239,7 +239,7 @@ addEventListener(<span class="hljs-string">"error"</span>, onerror);
 <p>YK: In the absence of cancelation, if there are no upstream promises to reject...</p>
 <p>DD:</p>
 <pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
-  setup();    
+  setup();
   <span class="hljs-keyword">await</span> delay(<span class="hljs-number">5000</span>);
   cleanup();
 }
@@ -250,8 +250,8 @@ p.cancel();
 
 <span class="hljs-comment">// Would need to be...</span>
 <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
-  setup();    
-  
+  setup();
+
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">await</span> delay(<span class="hljs-number">5000</span>);
   } <span class="hljs-keyword">finally</span> {
@@ -293,10 +293,10 @@ p.cancel();
 </ul>
 <p>Hazard:</p>
 <pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
-  setup();    
+  setup();
   <span class="hljs-keyword">await</span> delay(<span class="hljs-number">5000</span>);
-  cleanup(); <span class="hljs-comment">// &lt;-- not called if canceled. </span>
-}  
+  cleanup(); <span class="hljs-comment">// &lt;-- not called if canceled.</span>
+}
 </code></pre>
 <p>...</p>
 <p>DE: Changes since last update?</p>
@@ -309,8 +309,8 @@ p.cancel();
 <p>YK: <code>finally</code> is a handler, doesn't correspond to a completion record change, but a cluster of completion records</p>
 <p>DD:</p>
 <pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
-  setup();    
-  
+  setup();
+
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">await</span> promise;
   } <span class="hljs-keyword">catch</span> cancel {

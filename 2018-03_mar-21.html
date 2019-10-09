@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#march-21-2018-meeting-notes"><h1 id="march-21-2018-meeting-notes">March 21, 2018 Meeting Notes</h1></a><hr>
-<p>Waldemar Horwat (WH), Dean Tribble (DT), Mark Miller (MM), Till Schneidereit (TST), Michael Saboff (MLS), Robin Morisset (RMT), Keith Miller (KM), Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Kevin Gibbons (KG), Mariko Kosaka (MKA), Myles Borins (MBS), Jordan Harband (JHD), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Patrick Soquet (PST), Adam Klein (AK), Sathya Gunasekaran (SGN),Sam Goto (SGO), Gabriel Isenberg (GI), Dave Herman (DH), Brendan Eich (BE), Rob Palmer (RPR), Bradley Farias (BFS), Thomas Wood (TW), Alan Schmitt (AS), Sven Sauleau (SSA), Chris Needham (CNM), Edd Yerburgh (EYH), Jason Williams (JWS), Pieter Ouwerkerk (POK), Kat Z. Marchán (KZM), Yulia Startsev (YSV), Conrad Watt (CWT), Philippa Gardner (PGR), Godfrey Chan (GCN), Chris Hyle (CHE), Lin Clark (LCK), Ben Newman (BN), Jake Archibald (JAD), István Sebestyén (IS), Brian Warner (BWR), Mathias Bynens (MB), Surma (SSA), Alex Russell (AR), Peter van der Zee (PZE), Maël Nison (MNN), Dan Abramov (DAV), Christoph Nakazawa (CNA)</p>
+<p>Waldemar Horwat (WH), Dean Tribble (DT), Mark Miller (MM), Till Schneidereit (TST), Michael Saboff (MLS), Robin Morisset (RMT), Keith Miller (KM), Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Kevin Gibbons (KG), Mariko Kosaka (MKA), Myles Borins (MBS), Jordan Harband (JHD), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Patrick Soquet (PST), Adam Klein (AK), Sathya Gunasekaran (SGN),Sam Goto (SGO), Gabriel Isenberg (GI), Dave Herman (DH), Brendan Eich (BE), Rob Palmer (RPR), Bradley Farias (BFS), Thomas Wood (TWD), Alan Schmitt (AS), Sven Sauleau (SSA), Chris Needham (CNM), Edd Yerburgh (EYH), Jason Williams (JWS), Pieter Ouwerkerk (POK), Kat Z. Marchán (KZM), Yulia Startsev (YSV), Conrad Watt (CWT), Philippa Gardner (PGR), Godfrey Chan (GCN), Chris Hyle (CHE), Lin Clark (LCK), Ben Newman (BN), Jake Archibald (JAD), István Sebestyén (IS), Brian Warner (BWR), Mathias Bynens (MB), Surma (SUR), Alex Russell (AR), Peter van der Zee (PZE), Maël Nison (MNN), Dan Abramov (DAV), Christoph Nakazawa (CNA)</p>
 <p>Remote:
 Ron Buckton (RBN), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
@@ -390,7 +390,7 @@ We need to be able to say &quot;the process is on the rails&quot;. We have to re
 <p>DE: I wanted to propose the public static field to stage 3. It is syntactic sugar to make data properties on the constructor. In this example it's sort of equivalent.</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span> </span>{
   <span class="hljs-keyword">static</span> myStaticProp = <span class="hljs-number">42</span>;
-  
+
   <span class="hljs-keyword">constructor</span>() {
     <span class="hljs-built_in">console</span>.log(MyClass.myStaticProp);
     <span class="hljs-comment">// prints 42</span>
@@ -426,8 +426,8 @@ alert(D.count) <span class="hljs-comment">// 2</span>
 <p>DE: I'm making sure to say to the committee why I think this is acceptable. We examined several other possible semantics which you can find in the static classes proposal repository. and none of them really seem feasible for how this can works, and none of them seems really feasible. At the same time this is in the context of a proposal that is very well motivated. Again this is more things that people need to learn. In this case I think it's justified, none only because it's following ??? semantics, and not because of the cost of learning it. We previously discussed this behavior in the community, and we decided to advance the proposal based on this discussion. Right now the status of the proposal is that it is at stage 2 and it was retracted for reason that I'll discuss later. One possible mitigation is to make a possible syntactic <code>class.x</code> meta property which is more ergonomic for accessing properties of the class.So one reason why someone might want to write code such as this, is to have a more terse way to refer to the class that they are inside of so when you are within a class:</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
   <span class="hljs-keyword">static</span> count = <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">static</span> inc() { 
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.count++; 
+  <span class="hljs-keyword">static</span> inc() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.count++;
   }
 }
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">D</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">C</span> </span>{ }
@@ -477,14 +477,14 @@ export class B {
 <pre><code class="language-js">const registry = new JSDOMRegistry();
 export class JSDOM {
   #createdBy;
-  
+
   #registerWithRegistry(registry) {
     // ... elided ...
   }
- 
+
   static async fromURL(url, options) {
     url = normalizeFromURLOptions(url, options);
-    
+
     const body = await getBodyFromURL(url);
     return finalizeFactoryCreated(body, options, "fromURL");
   }

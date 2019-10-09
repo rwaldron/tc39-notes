@@ -13,9 +13,9 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#may-23-2018-meeting-notes"><h1 id="may-23-2018-meeting-notes">May 23, 2018 Meeting Notes</h1></a><hr>
-<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), Mattijs Hoitink (MHK), Kyle Verrier (KVR),  Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Kevin Gibbons (KG), Mariko Kosaka (MKA), Myles Borins (MBS), Jordan Harband (JHD), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Patrick Soquet (PST), Sathya Gunasekaran (SGN), Sam Goto (SGO), Gabriel Isenberg (GI), Dave Herman (DH), Brendan Eich (BE), Rob Palmer (RPR), Mathias Bynens (MB), Pieter Ouwerkerk (POK), Kat Z. Marchán (KZM), Yulia Startsev (YSV), Leo Balter (LBR), Caridy Patiño (CP), Jory Burson (JBN), Limin Zhu (LZU), Aki Rose (AKI), Valerie Young (VYG), Henry Zhu (HZU), Ross Kirsling (RKG), Shane Carr (SCR), Mike Samuel (MSL), Tab Atkins-Bittner (TAB), Kevin Smith (KS), Ron Buckton (RBN), Eric Faust (EFT), J.F. Paradis (JFP), Peter Hoddie (PHE), Patrick Soquet (PST), Till Schneidereit (TST), Diego Ferreiro Val (DFV), Godfrey Chan (GCN), Domenic Denicola (DD), Rick Waldron (RW), Tom Dale (TDE), István Sebestyén (IS), Lin Clark (LCK)</p>
+<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MLS), Mattijs Hoitink (MHK), Kyle Verrier (KVR),  Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Kevin Gibbons (KG), Mariko Kosaka (MKA), Myles Borins (MBS), Jordan Harband (JHD), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Patrick Soquet (PST), Sathya Gunasekaran (SGN), Sam Goto (SGO), Gabriel Isenberg (GI), Dave Herman (DH), Brendan Eich (BE), Rob Palmer (RPR), Mathias Bynens (MB), Pieter Ouwerkerk (POK), Kat Z. Marchán (KZM), Yulia Startsev (YSV), Leo Balter (LBR), Caridy Patiño (CP), Jory Burson (JBN), Limin Zhu (LZU), Aki Rose (AKI), Valerie Young (VYG), Henry Zhu (HZU), Ross Kirsling (RKG), Shane Carr (SCR), Mike Samuel (MSL), Tab Atkins-Bittner (TAB), Kevin Smith (KS), Ron Buckton (RBN), Eric Faust (EFT), Jean-Francois Paradis (JFP), Peter Hoddie (PHE), Patrick Soquet (PST), Till Schneidereit (TST), Diego Ferreiro Val (DFV), Godfrey Chan (GCN), Domenic Denicola (DD), Rick Waldron (RW), Tom Dale (TDE), István Sebestyén (IS), Lin Clark (LCK)</p>
 <p>Remote:
-Valerie Young (VYG), Maggie Pint (MPT), Ben Newman (BN), Brendan Eich (BE), Dean Tribble (DT), Robert Pamely (RPY), David Turissini (DTI), Felipe Balbontin (FBN), Pedram Emrouznejad (PED), Tim McClure (TME), Bradley Farias (BFS), Jason Williams (JWS), Trevor Bliss (TBS), Robin Ricard (RRD)</p>
+Valerie Young (VYG), Maggie Pint (MPT), Ben Newman (BN), Brendan Eich (BE), Dean Tribble (DT), Robert Pamely (RPY), David Turissini (DTI), Felipe Balbontín (FBN), Pedram Emrouznejad (PED), Tim McClure (TME), Bradley Farias (BFS), Jason Williams (JWS), Trevor Bliss (TBS), Robin Ricard (RRD)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2018/05.md">Agenda</a></li>
@@ -131,7 +131,7 @@ Valerie Young (VYG), Maggie Pint (MPT), Ben Newman (BN), Brendan Eich (BE), Dean
 <a href="#conclusionresolution-realms"><h4 id="conclusionresolution-realms">Conclusion/Resolution</h4></a><ul>
 <li>Stage 2 acceptance</li>
 </ul>
-<a href="#ecma-secretariat-update"><h2 id="ecma-secretariat-update">ECMA Secretariat Update</h2></a><p>(Istvan SEBESTYEN)</p>
+<a href="#ecma-secretariat-update"><h2 id="ecma-secretariat-update">ECMA Secretariat Update</h2></a><p>(István Sebestyén)</p>
 <p>IS: TC39 dominates downloads of ECMA standards. Even for PDF downloads. We need a solution for converting the HTML to proper PDF. Need solution to archive Github data into TC39 depository. We're working to improve the TC39 webpages. ISO has been fast-tracked. We would like more TC39 delegates to be part of the ECMA GA and ExeCom bodies. We're standardizing &quot;ECMA Fellows&quot; recognition awards for a select few, pending approval by the GA.</p>
 <p>TST: Do we know the referrers for these old version downloads? So we can update them?</p>
 <p>IS: We use Google Analytics, so we've tracked a few back to China, US.</p>
@@ -377,7 +377,7 @@ Implementors cannot optimize proxies because the handler can change over time.</
 <p>RBN: Yup. Both of these were born out of the private field issues. Static fields has already set precedent that the binding exists by the time this runs.</p>
 <p>JHD: Repeating things sucks. I like this.</p>
 <p>BN: What's the difference between class.foo and this.constructor.foo in non-static methods? Doesn't this.constructor avoid repetition and work for anonymous classes, which are the reasons JHD cited for liking class.foo? If they are similar enough, then introducing class.foo may be needlessly counting against our very limited cognitive budget for new syntax.</p>
-<p>MS: I'm not sure what feature should be used. Might be too much, too many ways to do some things.</p>
+<p>MLS: I'm not sure what feature should be used. Might be too much, too many ways to do some things.</p>
 <p>TST: Which receiver is used for property access/sets and method calls? For sets you use lexical? For method calls? What's going on here?</p>
 <p>RBN: That's true. There are two differences with super. Super calls with the subclass as the receiver. This is the same. For property sets, it sets on the <code>this</code>.</p>
 <p>TST: I understand, but I think it's too confusing.</p>

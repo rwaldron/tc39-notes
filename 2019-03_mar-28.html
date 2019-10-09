@@ -13,9 +13,9 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#march-28-2019-meeting-notes"><h1 id="march-28-2019-meeting-notes">March 28, 2019 Meeting Notes</h1></a><hr>
-<p>Istvan Sebestyen (IS), Kevin Smith (KS), Adam Klein (AK), Leo Balter (LBR), Richard Gibson (RGN), Yehuda Katz (YK), Godfrey Chan (GCN), Philipp Dunkel (PDL), Brian Terlson (BT), Aki Rose (AKI), Michael Ficarra (MF), Chip Morningstar (CM), Waldemar Horwat (WH), Kat Marchán (KZM), Tierney Cyren (TCN), Shelley Vohr (SVR), Myles Borins (MBS), Jordan Harband (JHD), Mathias Bynens (MB), Pieter Ouwerkerk (POK), Randy Luecke (RCL), Daniel Ehrenberg (DE), Mike Samuel (MSL), Qiuyi Zhang (QZG), Till Schneidereit (TST), Shane Carr (SFC), Patrick Soquet (PST), Peter Hoddie (PHE), Kyle Verrier (KV), Mattijs Hoitink (MHK), Keith Miller (KM), Michael Saboff (MS), Jordan Gensler (JGR), Mark Miller (MM), Joshua Peek (JPK), Mu-an Chiou (MCU), Guilherme Hermeto (GHO), Sathya Gunasekaran (SGN), Felipe Balbontín (FBN), Jory Burson (JBR), Shu-yu Guo (SYG), Joe Sepi (JSI), Chris Hyle (CHE), Justin Ridgewell (JRL), Rob Palmer (RPR), Keith Cirkel (KCL), Robert Pamely (RPY), Henry Zhu (HZU), Daniel Rosenwasser (DRR), Caridy Patiño (CP), Diego Ferreiro (DF), Domenic Denicola (DD)</p>
+<p>István Sebestyén (IS), Kevin Smith (KS), Adam Klein (AK), Leo Balter (LBR), Richard Gibson (RGN), Yehuda Katz (YK), Godfrey Chan (GCN), Philipp Dunkel (PDL), Brian Terlson (BT), Aki Rose (AKI), Michael Ficarra (MF), Chip Morningstar (CM), Waldemar Horwat (WH), Kat Marchán (KZM), Tierney Cyren (TCN), Shelley Vohr (SVR), Myles Borins (MBS), Jordan Harband (JHD), Mathias Bynens (MB), Pieter Ouwerkerk (POK), Randy Luecke (RLE), Daniel Ehrenberg (DE), Mike Samuel (MSL), Joyee Cheung (JCG), Till Schneidereit (TST), Shane Carr (SFC), Patrick Soquet (PST), Peter Hoddie (PHE), Kyle Verrier (KVR), Mattijs Hoitink (MHK), Keith Miller (KM), Michael Saboff (MLS), Jordan Gensler (JGR), Mark Miller (MM), Joshua Peek (JPK), Mu-an Chiou (MCU), Guilherme Hermeto (GHO), Sathya Gunasekaran (SGN), Felipe Balbontín (FBN), Jory Burson (JBN), Shu-yu Guo (SYG), Joe Sepi (JSI), Chris Hyle (CHE), Justin Ridgewell (JRL), Rob Palmer (RPR), Keith Cirkel (KCL), Robert Pamely (RPY), Henry Zhu (HZU), Daniel Rosenwasser (DRR), Caridy Patiño (CP), Diego Ferreiro Val (DFV), Domenic Denicola (DD)</p>
 <p>Remote:
-Ron Buckton (RBN), Kevin Gibbons (KG), Gus Caplan (GCN), Valerie Young (VYG), John-David Dalton (JDD), Gabriel McAdams (GMS), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Igor Minar (IMR), Misko Hevery (MHY), Brendan Eich (BE), Rick Waldron (RW)</p>
+Ron Buckton (RBN), Kevin Gibbons (KG), Gus Caplan (GCL), Valerie Young (VYG), John-David Dalton (JDD), Gabriel McAdams (GMS), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Igor Minar (IMR), Miško Hevery (MHY), Brendan Eich (BE), Rick Waldron (RW)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2019/03.md">Agenda</a></li>
@@ -128,9 +128,9 @@ Ron Buckton (RBN), Kevin Gibbons (KG), Gus Caplan (GCN), Valerie Young (VYG), Jo
 <p>JHD: There's still a tremendous cost for that.</p>
 <p>TST: We can help with that.</p>
 <p>JHD: I'm not willing to invest my time and money just to find MM and DD's constraints in a deadlock. I'd like to have confirmation from people willing to hash this out so it's not as risky to waste my time, or the committee's time in the future.</p>
-<p>MS: How do the stacks wildly diverge? Can you describe your study?</p>
+<p>MLS: How do the stacks wildly diverge? Can you describe your study?</p>
 <p>MM: I'm not sure what counts as a study, but I wrote code to probe it and ran code on various browsers. It's clear that there is very different information being given.</p>
-<p>MS: Is that available publicly?</p>
+<p>MLS: Is that available publicly?</p>
 <p>MM: It's not available public now, but I'll make what I have available public.</p>
 <p>AK: It's not that, if this fully specified, that I would say this advance. It's if we did work on error stacks, I want it to say what is required, what is implementation-specific.</p>
 <p>JHD: You're not necessarily saying that you want to this concretely defined, you want to see research?</p>
@@ -172,7 +172,7 @@ Ron Buckton (RBN), Kevin Gibbons (KG), Gus Caplan (GCN), Valerie Young (VYG), Jo
 <p>JHD: No, the textual representation was tightly defined. The string would be tightly constrained. The individual string contents, the difference between end line, etc., would be implementation-defined. The idea was to give flexibility to implementations to sometimes have or not have stack frames, just that if they were there, that they follow a format.</p>
 <p>MF: Then I share TST's opinion, that a sharing a textual representation of the frame is unlikely to be possible on the web.</p>
 <p>JHD: My idea would be that we would give a choice of several formats, based on web reality. That's the only way I could invision hardcoding in the spec something that allows for these several formats.</p>
-<p>MS: Wouldn't you want a standard format for the stack frame?</p>
+<p>MLS: Wouldn't you want a standard format for the stack frame?</p>
 <p>JHD: We could make an ideal format, and hope browsers would migrate to that, or we could put the alternative formats in Annex B.</p>
 <p>YK: I think the conversation yesterday about Temporal and Date was useful. Although it would be nice to do patchwork on broken API, it may be better to make a new thing. You should check offline if the implementations would be interested in doing something like that.</p>
 <p>JHD: The thing you're suggesting is the possibility of exploring something that isn't <code>.stack</code>.</p>
@@ -206,10 +206,10 @@ Ron Buckton (RBN), Kevin Gibbons (KG), Gus Caplan (GCN), Valerie Young (VYG), Jo
 <li><a href="https://docs.google.com/presentation/d/1suZ5vfthSnB8mneogiR7Y-5FcXqbQiR9MKEvJUlIRsc/edit#slide=id.p">slides</a></li>
 </ul>
 <p>DE: (presents slides). I'd like to hear if there are any concerns for approaching Stage 4 in June.</p>
-<p>MS: What Stage 4 criteria does Dynamic Import not meet yet?</p>
+<p>MLS: What Stage 4 criteria does Dynamic Import not meet yet?</p>
 <p>DE: MM raised the concerns, so maybe it's best to ask him?</p>
 <p>MM: Stage 3 is the time to give feedback of implementation conflicts. The thing was originally allowed to advance to Stage 3 with the understanding that the virtualization issue would eventually be solved through hooks in the realm API. DE and I talked and the realms group was planning of having a discussion before June to determine whether there was a conflict. I did read the proposal carefully. I think there's an 80% chance that the proposal as written will go to Stage 4. But I want the realm committee to look more carefully.</p>
-<p>MS: It seems to me that this could still advance to Stage 4 and if there are any changes we need to make, we can make them later. Everyone has implemented this already.</p>
+<p>MLS: It seems to me that this could still advance to Stage 4 and if there are any changes we need to make, we can make them later. Everyone has implemented this already.</p>
 <p>MM: There have been many things in the past where everybody's implemented it but there were still things that needed to be changed. Because everything was implemented we knew that we still had an opportunity to fix the edge cases.</p>
 <p>DE: There have been many changes to standards that were already standard and edge cases that were already successful. I'd like to avoid focusing on the standards train. I'm encouraging people to look at the editor's draft, and that has worked well so far.</p>
 <p>KM: Given that this has been shipping in browsers for so long, if there is a problem, there's probably not going to be a way to fix it. If we do find that there's a problem, is the answer going to be that we change this spec?</p>

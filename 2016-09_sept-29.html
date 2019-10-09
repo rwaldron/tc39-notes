@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-29-2016-meeting-notes"><h1 id="september-29-2016-meeting-notes">September 29, 2016 Meeting Notes</h1></a><hr>
-<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (MS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Domenic Denicola (DD), Rick Waldron (RW), John Buchanan (JB), Kevin Gibbons (KG), Peter Jensen (PJ), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Dean Tribble (DT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Daniel Rosenwasser (DRR), Jean-Francis Paradis (JFP), Sathya Gunasekasan (SGN), Juan Dopazo (JDO), Bert Belder (BBR), Shu-yu Guo (SYG), Eric Ferraiuolo (EF), Caridy Patiño (CP), Allen Wirfs-Brock (AWB), Jacob Groundwater (JGR), Adam Klein (AK), István Sebestyén (IS), Tom Van-Cutsem (TVC), Claude Pache (CPE), James Kyle (JK)</p>
+<p>Brian Terlson (BT), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Michael Saboff (MLS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Domenic Denicola (DD), Rick Waldron (RW), John Buchanan (JB), Kevin Gibbons (KG), Peter Jensen (PJ), Tom Care (TC), Dave Herman (DH), Bradley Farias (BFS), Dean Tribble (DT), Jeff Morrison (JM), Sebastian Markbåge (SM), Saam Barati (SBI), Kris Gray (KGY), John-David Dalton (JDD), Daniel Rosenwasser (DRR), Jean-Francis Paradis (JFP), Sathya Gunasekasan (SGN), Juan Dopazo (JDO), Bert Belder (BBR), Shu-yu Guo (SYG), Eric Ferraiuolo (EF), Caridy Patiño (CP), Allen Wirfs-Brock (AWB), Jacob Groundwater (JBG), Adam Klein (AK), István Sebestyén (IS), Tom Van-Cutsem (TVC), Claude Pache (CPE), James Kyle (JK)</p>
 <p>Remote:
 István Sebestyén (IS)</p>
 <hr>
@@ -55,7 +55,7 @@ This is so not true. We need to look how the Chair question develops. Currently 
 <p>A client of the object can assume x always 2 (non-writable, non-configurable), call defineProp on value, set to 3. The proxy was allowed to change the meta property settings:</p>
 <pre><code class="language-js"><span class="hljs-keyword">var</span> target = <span class="hljs-built_in">Object</span>.seal({<span class="hljs-attr">x</span>: <span class="hljs-number">2</span>})
 <span class="hljs-keyword">var</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, {
-  getOwnPropertyDescriptor(o, p) { 
+  getOwnPropertyDescriptor(o, p) {
     <span class="hljs-keyword">var</span> desc = <span class="hljs-built_in">Reflect</span>.getOwnPropertyDescriptor(o, p)
     <span class="hljs-keyword">if</span> (desc &amp;&amp; <span class="hljs-string">'writable'</span> <span class="hljs-keyword">in</span> desc)
       desc.writable = <span class="hljs-literal">false</span>
@@ -71,8 +71,8 @@ This is so not true. We need to look how the Chair question develops. Currently 
 <p>MM: Are the other two bugs analogous?</p>
 <p>TVC: The second is the same (the DefineProperty case). The third is a little different--[[Delete]] for a Proxy of a non-extensible object, which will return true without deleting it from the target. You could then see some kind of adding properties on a non-extensible object, putting them back.</p>
 <pre><code class="language-js"><span class="hljs-keyword">var</span> target = <span class="hljs-built_in">Object</span>.preventExtensions({ <span class="hljs-attr">x</span>: <span class="hljs-number">1</span> })
-<span class="hljs-keyword">var</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, { 
-  deleteProperty() { <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> } 
+<span class="hljs-keyword">var</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, {
+  deleteProperty() { <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> }
 })
 
 <span class="hljs-built_in">Object</span>.isExtensible(proxy) <span class="hljs-comment">// false</span>
@@ -116,8 +116,8 @@ proxy.hasOwnProperty(<span class="hljs-string">'x'</span>) <span class="hljs-com
 <pre><code class="language-js"><span class="hljs-comment">// getters are non-own</span>
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
-  bar = <span class="hljs-number">123</span>;    
-}    
+  bar = <span class="hljs-number">123</span>;
+}
 
 <span class="hljs-keyword">let</span> data = {
   ...new Foo()
@@ -270,7 +270,7 @@ Airbnb: Yes</p>
 <p><a href="https://github.com/tc39/proposal-cancelable-promises">https://github.com/tc39/proposal-cancelable-promises</a></p>
 <p>Status: issues.</p>
 <p>DD: I don't like mics</p>
-<p>MS: What's wrong with Mikes?</p>
+<p>MLS: What's wrong with Mikes?</p>
 <p>DD: The feedback made it in the new spec:</p>
 <ul>
 <li>had await.cancelToken idea. now fully specified. Allows the 'race' convenience semantics</li>
@@ -374,7 +374,7 @@ except(e);
 <span class="hljs-comment">// Calling</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">zalgo</span>(<span class="hljs-params">callback</span>) </span>{
   <span class="hljs-keyword">if</span> (someConditionIsSatifiedNow) {
-    callback();    
+    callback();
   } <span class="hljs-keyword">else</span> {
     doTheTask();
     process.nextTick(<span class="hljs-function"><span class="hljs-params">_</span> =&gt;</span> callback());
@@ -406,7 +406,7 @@ zalgo(<span class="hljs-function"><span class="hljs-params">_</span> =&gt;</span
 </ul>
 <p>BBR: Node.js looks for <code>#</code> on first line. A decorator could be at top level, but private could not</p>
 <p>(Should key on <code>#!</code> anyway)</p>
-<pre><code class="language-js"># IdentifierName 
+<pre><code class="language-js"># IdentifierName
 </code></pre>
 <p>EFT: All other languages use @ for annotation/decorator?</p>
 <p>Generally, this is not the only cultural motivation for design decisions.</p>

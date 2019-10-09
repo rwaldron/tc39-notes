@@ -13,9 +13,9 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#january-31-2019-meeting-notes"><h1 id="january-31-2019-meeting-notes">January 31, 2019 Meeting Notes</h1></a><hr>
-<p>Bradley Farias (BFS), Aki Rose (AKI), Yulia Startsev (YSV), Mariko Kosaka (MKA), Shane Carr (SFC), Richard Gibson (RGN), Brian Terlson (BT), Michael Ficarra (MF), Kevin Gibbons (KG), Kevin Smith (KS), Justin Ridgewell (JRL), Mathias Bynens (MB), Sathya Gunasekaran (SGN), Chip Morningstar (CM), Peter Hoddie (PHE), Waldemar Horwat (WH), Leo Balter (LBR), Shu-yu Guo (SYG), Michael Saboff (MS), Mattijs Hoitink (MHK), Yehuda Katz (YK), Till Schneidereit (TST), Pieter Ouwerkerk (POK), Tom Dale (TDL), Myles Borins (MBS), Sean Larkin (SLA), Godfrey Can (GCN), Rick Markins (RMS), Daniel Rosenwasser (DRR), Mark Miller (MM), Lin Clark (LCK)</p>
+<p>Bradley Farias (BFS), Aki Rose (AKI), Yulia Startsev (YSV), Mariko Kosaka (MKA), Shane Carr (SFC), Richard Gibson (RGN), Brian Terlson (BT), Michael Ficarra (MF), Kevin Gibbons (KG), Kevin Smith (KS), Justin Ridgewell (JRL), Mathias Bynens (MB), Sathya Gunasekaran (SGN), Chip Morningstar (CM), Peter Hoddie (PHE), Waldemar Horwat (WH), Leo Balter (LBR), Shu-yu Guo (SYG), Michael Saboff (MLS), Mattijs Hoitink (MHK), Yehuda Katz (YK), Till Schneidereit (TST), Pieter Ouwerkerk (POK), Tom Dale (TDE), Myles Borins (MBS), Sean Larkin (SLN), Godfrey Chan (GCN), Rick Markins (RMS), Daniel Rosenwasser (DRR), Mark Miller (MM), Lin Clark (LCK)</p>
 <p>Remote:
-Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Jory Burson (JBR), Conrad Watt (CWT), Guy Bedford (GBD), Justin Fagnani (JFI), Robert Pamely (RPY), efaust (EF), Caridy Patiño (CP)</p>
+István Sebestyén (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Jory Burson (JBN), Conrad Watt (CWT), Guy Bedford (GB), Justin Fagnani (JFI), Robert Pamely (RPY), Eric Faust (EFT), Caridy Patiño (CP)</p>
 <hr>
 <a href="#freezing-prototypes-for-stage-1"><h2 id="freezing-prototypes-for-stage-1">Freezing prototypes for stage 1</h2></a><p>(Kevin Gibbons)</p>
 <ul>
@@ -74,26 +74,26 @@ Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenber
 <p>WH: I agree that the problem identified in this proposal is one we need to address, but freezing the <code>__proto__</code> slot is a simpler way of addressing it.</p>
 <p>KG: WH are you OK with this going to Stage 1?</p>
 <p>WH: I'm OK with Stage 1 to explore the solution space.</p>
-<p>MS: Do we expect people will create class hierarchy, modify prototype, etc? Do you think this will be a common pattern?</p>
+<p>MLS: Do we expect people will create class hierarchy, modify prototype, etc? Do you think this will be a common pattern?</p>
 <p>DE: I don't expect that this is a common pattern, no. The way the concern was phrased, this was the way to solve it. I don't know how common this need will be, but I think this is the best way to do it.</p>
-<p>MS: But we're introducing something you can use in a bunch of different contexts. It seems like the fix is worse than the problem.</p>
+<p>MLS: But we're introducing something you can use in a bunch of different contexts. It seems like the fix is worse than the problem.</p>
 <p>DE: How do you want to avoid the problem?</p>
-<p>MS: Don't change the prototype?  if you're using class hierarchy, it seems weird that you'd want to change the prototype.</p>
+<p>MLS: Don't change the prototype?  if you're using class hierarchy, it seems weird that you'd want to change the prototype.</p>
 <p>DE: I agree with WH, where this may not be the best proposal to address this problem.</p>
 <p>KS: One of the use cases for private fields is to allow programmers to express internal slots in JS, and be able to do polyfilling and traditionally CSS-authored things like DOM. But JS is so wide open with prototypes; to serve the case with JSDOM's specific use case, it's unable to address that use case because it's overly restrictive. new.initialize seems like a patch over that after the fact.</p>
-<p>MS: I agree with that, this is a patch.</p>
+<p>MLS: I agree with that, this is a patch.</p>
 <p>DE: I see this as a fundamental primitive, where it makes the common case ergonomic but the extra case something you opt-in to.</p>
 <p>YK: I agree with MS; I am a proponent of return override because of base classes. How do you create a base class that allocates?  Having constructors that return is important. The problem is that you use return override in a non-base class. I want to learn more about the DOM use cases, but I think this may add too much power.</p>
-<p>MS: This is basically a C++ placement new. So even though it seems like a simple addition, it would have to be replaced everywhere where this is called.</p>
+<p>MLS: This is basically a C++ placement new. So even though it seems like a simple addition, it would have to be replaced everywhere where this is called.</p>
 <p>KG: In reply to MS; I think the reason this is relevant for a library who has classes that are consumed by someone else's code. They want to behave in an expected way, regardless of what the user does.</p>
-<p>MS: If the library changes its prototype, it's in control of all its code and can easily work. If the user changes the prototype, the library can simply disallow that. So I'm not entirely sure what the use case is for that.</p>
+<p>MLS: If the library changes its prototype, it's in control of all its code and can easily work. If the user changes the prototype, the library can simply disallow that. So I'm not entirely sure what the use case is for that.</p>
 <p>DE: Yeah, we could say that. That's a design choice.</p>
 <p>SGN: (I will discuss offline)</p>
 <p>BFS: (I will discuss offline)</p>
 <p>KS: I think there is an artifact of the current design. Imagine if you had weak maps; you wouldn't have this problem at all. We're seeing the costs of the ergonomic things we've done previously with private fields in JS.</p>
 <p>DE: This proposal is really about the interaction of field initializers (which are a very popular feature, where Classes 1.1 got significant negative feedback due to its removal) and ES6 dynamic super() semantics (shipping in browsers for years). It doesn't have to do with private or WeakMap semantics.</p>
 <p>JRL: new.initialize is a required step to prevent abusing the constructor override return. If we don't have this, and I have code that I want to attach private state to some foreign object, then I have to make a base class that returns something so that child classes can use it as it's <code>this</code> and attach it's private state to. The whole point of private state is that it is better than weak map. Without this, we having devs use this clunky solution to get the same affect.</p>
-<p>EF: So there is no way to do return override in a subclass constructor?</p>
+<p>EFT: So there is no way to do return override in a subclass constructor?</p>
 <p>(out of time; EF and DE continue discussing)</p>
 <a href="#conclusionresolution-newinitialize-for-stage-1"><h4 id="conclusionresolution-newinitialize-for-stage-1">Conclusion/Resolution</h4></a><ul>
 <li>Stage 1 acceptance</li>
@@ -363,7 +363,7 @@ Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenber
 <p>AKI: Nothing would happen if we do that. There's already a Discourse set up.</p>
 <p>YK: I think interpreting how to use Discourse, like the Hello World tutorial that MM described, are not really accurate descriptions of what normal usage of the product is like. I'm active on multiple Discourses and I don't consider it too &quot;gamified.&quot;</p>
 <p>TST: There are concerns here that we need to carefully consider. Ultimately this will contain some amount of a tradeoff between requirements and candidates, and I think some concerns are valid.</p>
-<p>EF: I'm in favor of finding something besides es-discuss. It is just not moderable. I appreciate what TST has done, but it's a lost cause.</p>
+<p>EFT: I'm in favor of finding something besides es-discuss. It is just not moderable. I appreciate what TST has done, but it's a lost cause.</p>
 <p>SYG: Delegates feel actively disincentivized for engaging with es-discuss. A lot of delegates raised their hand that they would engage with Discourse. Why?</p>
 <p>DE: On what encourages or discourages participation, it discourages me from participating if another TC39 member would write the same response. I think it's important to explain context to people.</p>
 <p>YK: People who know more about TC39 are more empowered to participate in threads. Discourse seems better on this front.</p>

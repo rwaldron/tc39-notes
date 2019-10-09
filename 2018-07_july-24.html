@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#july-24-2018-meeting-notes"><h1 id="july-24-2018-meeting-notes">July 24, 2018 Meeting Notes</h1></a><hr>
-<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), James Burke (JRB), Maxim Aleksa (MAA),  Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Patrick Soquet (PST), Sam Goto (SGO), Dave Herman (DH), Brendan Eich (BE), Pieter Ouwerkerk (POK), Leo Balter (LBR), Limin Zhu (LZU), Aki Rose (AKI), Ross Kirsling (RKG), Shane Carr (SCR), Kevin Smith (KS), Ron Buckton (RBN), J.F. Paradis (JFP), Peter Hoddie (PHE), Godfrey Chan (GCN), Domenic Denicola (DD), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Gus Caplan (GCL), Felipe Balbontin (FBN), Daniel Rosenwasser (DR), Jonathan Keslin (JKN), Christopher Blappert (CBT), Dean Tribble (DT), Richard Gibson(RGN), Lin Clark (LCK), Allen Wirfs-Brock(AW), Maggie Pint (MPT), Timothy Gu (TGU), Sebastian Markbage(SME), Dustin Savery(DSY), Mike Murry (MMY), Alex Vincent (AVT) John-David Dalton (JDD)</p>
+<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MLS), James Burke (JRB), Maxim Aleksa (MAA),  Brian Terlson (BT), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Patrick Soquet (PST), Sam Goto (SGO), Dave Herman (DH), Brendan Eich (BE), Pieter Ouwerkerk (POK), Leo Balter (LBR), Limin Zhu (LZU), Aki Rose (AKI), Ross Kirsling (RKG), Shane Carr (SCR), Kevin Smith (KS), Ron Buckton (RBN), Jean-Francois Paradis (JFP), Peter Hoddie (PHE), Godfrey Chan (GCN), Domenic Denicola (DD), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Gus Caplan (GCL), Felipe Balbontín (FBN), Daniel Rosenwasser (DRR), Jonathan Keslin (JKN), Christopher Blappert (CBT), Dean Tribble (DT), Richard Gibson (RGN), Lin Clark (LCK), Allen Wirfs-Brock (AWB), Maggie Pint (MPT), Timothy Gu (TGU), Sebastian Markbåge (SM), Dustin Savery (DSY), Mike Murry (MMY), Alex Vincent (AVT) John-David Dalton (JDD)</p>
 <p>Remote:
 Rick Waldron (RW), Daniel Ehrenberg (DE), Caridy Patiño (CP), Justin Ridgewell (JRL), Brian Warner (BWR), Yulia Startsev (YSV), Jason Williams (JWS), Ron Buckton (RBN), Ross Kirsling (RKG)</p>
 <hr>
@@ -41,7 +41,7 @@ Rick Waldron (RW), Daniel Ehrenberg (DE), Caridy Patiño (CP), Justin Ridgewell 
 </ul>
 <a href="#dates-for-next-meetings"><h2 id="dates-for-next-meetings">Dates for next meetings</h2></a><p>RJE: September 25-27, 2018 at PayPal in New York</p>
 <p>AKI: Next meeting will be hosted at PayPal in Lower Manhattan. Logistics will be posted as soon as I have them. While I'm talking, I also have a quick CoC update: everyone is expected to uphold the code of conduct, which is <a href="https://tc39.github.io/code-of-conduct/">on GitHub</a>. This explains our expectations as well as how to handle things when they go wrong. Separately, I have stickers for TC39, please let me know if you want one (and didn't already take one at JSConf EU).</p>
-<a href="#report-from-the-ecma-secretariat"><h2 id="report-from-the-ecma-secretariat">Report from the Ecma Secretariat</h2></a><p>(Istvan Sebestyen)</p>
+<a href="#report-from-the-ecma-secretariat"><h2 id="report-from-the-ecma-secretariat">Report from the Ecma Secretariat</h2></a><p>(István Sebestyén)</p>
 <ul>
 <li><a href="https://github.com/tc39/Reflector/files/2215322/tc39-2018-037_R1.pdf">slides</a></li>
 </ul>
@@ -239,7 +239,7 @@ slides in pdf, slides in keynote with light animations</p>
 <p>DH: We're changing the scoping. Break to a label that's not in scope is disallowed. Returning could be disallowed.</p>
 <p>MM: You didn't mention sloppy/strict. I beg you to allow do-expressions only in strict mode. In sloppy mode, you would have to support all sorts of difficult semantics of nested function declarations, which seems difficult and pointless.</p>
 <p>DH: I wouldn't feel that it would be necessary to only do this in strict mode.</p>
-<p>MS: If we're talking footguns, this has a lot of bullets in it. These questionable constructs must be early errors not dynamic errors.</p>
+<p>MLS: If we're talking footguns, this has a lot of bullets in it. These questionable constructs must be early errors not dynamic errors.</p>
 <p>DH: I knew if I went through these difficult edge cases, I would get trolled, but if we over-focus on these ridiculous edge cases, the feature seems more complicated than it is, but I think a lot of these cases are ambiguous enough that people tend to shy away from them. I think this is a lot of very strong indication that people want this, so I wouldn't want some hard cases prevent us from seeing those powerful use cases.</p>
 <p>YK: I want to agree with Mark for a couple of reasons. In general, this feature isn't as scary as other features; you're writing code in your own scope, so I don't think syntax errors make this worse. They would help users avoid footguns.</p>
 <p>WH: I agree that option 1 is off the table for default values in function headers. Initially I was leaning towards option 2, but because of how we treat variable references in function headers — they do not see the braced scope of the function — I'm now much more persuaded to go with option 3 (disallow). I would not want to allow <code>var</code> there either.</p>
@@ -299,7 +299,7 @@ BT: I think what you're saying, that usability studies would be great. But I'd a
 <p>YK: I think it's a great idea to survey users and see what kinds of findings we can get. In an environment where everyone agrees that we're not doing rigorous things, there's nothing about our environment that forces people to do this carefully or correctly.</p>
 <p>SYG: My premise is that we are not experts in designing experiments like this.</p>
 <p>YK: There's an anecdotal structure where using these results can get you useful answers. I think if we treat experiments like this, that would be very helpful.</p>
-<p>DR: So at Microsoft we speak to a lot of customers and try to find their pain-points. I was very skeptical of process, but I've found that occasionally, you do find answers to something else entirely, and you may find trends which are very helpful. So, I think that's one of the key values, there's a lot of anecdotal evidence where you can say definitively, but you can use it for motivation and put it into concrete terms to help people determine users' pain-points.</p>
+<p>DRR: So at Microsoft we speak to a lot of customers and try to find their pain-points. I was very skeptical of process, but I've found that occasionally, you do find answers to something else entirely, and you may find trends which are very helpful. So, I think that's one of the key values, there's a lot of anecdotal evidence where you can say definitively, but you can use it for motivation and put it into concrete terms to help people determine users' pain-points.</p>
 <p>SYG: I think this was a good discussion.</p>
 
 </body>

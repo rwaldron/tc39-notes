@@ -13,9 +13,9 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#january-30-2019-meeting-notes"><h1 id="january-30-2019-meeting-notes">January 30, 2019 Meeting Notes</h1></a><hr>
-<p>Bradley Farias (BFS), Aki Rose (AKI), Yulia Startsev (YSV), Mariko Kosaka (MKA), Shane Carr (SFC), Richard Gibson (RGN), Brian Terlson (BT), Michael Ficarra (MF), Kevin Gibbons (KG), Kevin Smith (KS), Justin Ridgewell (JRL), Mathias Bynens (MB), Sathya Gunasekaran (SGN), Chip Morningstar (CM), Peter Hoddie (PHE), Waldemar Horwat (WH), Leo Balter (LBR), Shu-yu Guo (SYG), Michael Saboff (MS), Mattijs Hoitink (MHK), Yehuda Katz (YK), Till Schneidereit (TST), Pieter Ouwerkerk (POK), Tom Dale (TDE), Myles Borins (MBS), Sean Larkin (SLA), Godfrey Chan (GCN), Rick Markins (RMS), Daniel Rosenwasser (DRR), Mark Miller (MM), Lin Clark (LCK)</p>
+<p>Bradley Farias (BFS), Aki Rose (AKI), Yulia Startsev (YSV), Mariko Kosaka (MKA), Shane Carr (SFC), Richard Gibson (RGN), Brian Terlson (BT), Michael Ficarra (MF), Kevin Gibbons (KG), Kevin Smith (KS), Justin Ridgewell (JRL), Mathias Bynens (MB), Sathya Gunasekaran (SGN), Chip Morningstar (CM), Peter Hoddie (PHE), Waldemar Horwat (WH), Leo Balter (LBR), Shu-yu Guo (SYG), Michael Saboff (MLS), Mattijs Hoitink (MHK), Yehuda Katz (YK), Till Schneidereit (TST), Pieter Ouwerkerk (POK), Tom Dale (TDE), Myles Borins (MBS), Sean Larkin (SLN), Godfrey Chan (GCN), Rick Markins (RMS), Daniel Rosenwasser (DRR), Mark Miller (MM), Lin Clark (LCK)</p>
 <p>Remote:
-Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Jory Burson (JBR), Conrad Watt (CWT), Guy Bedford (GBD), Justin Fagnani (JFI), Robert Pamely (RPY)</p>
+István Sebestyén (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Jory Burson (JBN), Conrad Watt (CWT), Guy Bedford (GB), Justin Fagnani (JFI), Robert Pamely (RPY)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2019/01.md">Agenda</a></li>
@@ -50,7 +50,7 @@ Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenber
 <p>BFS: There is one specific thing where a Dynamic module can return null, which was never possible if CommonJS used a Source Text Module. This PR deals with the case of empty source-text modules. In order to understand what a commonJS module exports, we have to instantiate it, which is why we have the null. People were concerned if this could exist in pure source-text module graphs, and it does not. If you have a pure source-text graph, you will not encounter any changes in behavior. The conditionals are dealing with, if it's null, handle it later.</p>
 <p>BFS: Some people are arguing we should not change source-text modules at all, especially not to weaken the static guarantees. We could alternatively create an additional class of modules, outside the JavaScript spec and instead into a web spec. I am advocating we do it here because it would not affect any graph that is pure source-text.</p>
 <p>BFS: I do think it is valuable to have source text module record in the JS spec. Unlike other module records, which are based on other types of parsing, we've been evolving the syntax around these constructs, so my hope is that we can modify the source text module record (STMR) here.</p>
-<p>GBD: In the November meeting, there was a question about export<em>. Davis said that if we have export</em> support, it might provide a &quot;spilling over&quot; of the reduction in the guarantees of the bindings into source text on the interface where you have the two module formats interacting. So you would inherit the weaker behavior.</p>
+<p>GB: In the November meeting, there was a question about export<em>. Davis said that if we have export</em> support, it might provide a &quot;spilling over&quot; of the reduction in the guarantees of the bindings into source text on the interface where you have the two module formats interacting. So you would inherit the weaker behavior.</p>
 <p>YK: In the last meeting we discussed the merits of the relative static weakening. I am comfortable with the outcome here.</p>
 <p>AK: You mentioned one of the options is for Node to use something other than STMR for its modules. What is the downside of that option?</p>
 <p>BFS: One of the problems with that, is to introduce any module type with null, STMRs would still need to account for this in the environment.</p>
@@ -61,7 +61,7 @@ Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenber
 <p>AK: There are plenty of things you can do in the V8 API that break Node or break the web if you get it into the browser. Do you think it's likely for people to use the module API directly?</p>
 <p>BFS: I do not think. If our module record is insufficient for Node, how do people feel about removing it from the spec, since it is not satisfying a decent-sized portion of host usage.</p>
 <p>YK: What does it mean exactly that it doesn't work for node?</p>
-<p>GBD: We have a current implementation which builds off the V8 Modules implementation. Originally, I was attempting to fully separate it as its own module record type. Because of the closeness of the code dealing with the parser and the source text module, it ended up being a very close implementation.</p>
+<p>GB: We have a current implementation which builds off the V8 Modules implementation. Originally, I was attempting to fully separate it as its own module record type. Because of the closeness of the code dealing with the parser and the source text module, it ended up being a very close implementation.</p>
 <p>YK: Are you saying that if ES6 modules, ESM modules, aren't STMRs or can't be STMRs?</p>
 <p>BFS: If we allow named imports from CommonJS, you cannot currently account for this case.</p>
 <p>YK: I think I agree that if the only way to get modules in Node is to not use STMRs, that seems wrong.</p>
@@ -96,7 +96,7 @@ Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenber
 <p>TDE: If there's any chance that the browsers would have implemented a weaker system of modules, they would have simply used CommonJS. I think this adds a very small amount of complexity and it's worth it for interop.</p>
 <p>YK: In terms of what is likely to happen on the web, peoples' compilers will compile down CJS modules into some output that works the same way as whatever Node says.</p>
 <p>JDD: If the standards body is open to allowing the weakening of source text modules, it would be great to revisit the export* case.</p>
-<p>GBD: At the previous meeting we discussed this as well. Upon further investigation, there were other edge cases that were missed. Like multiple export* statements, we don't know which one is the one we're after. There is currently a path to solve that export* case, but there isn't actually a path forward.</p>
+<p>GB: At the previous meeting we discussed this as well. Upon further investigation, there were other edge cases that were missed. Like multiple export* statements, we don't know which one is the one we're after. There is currently a path to solve that export* case, but there isn't actually a path forward.</p>
 <p>JDD: There is actually a path forward.</p>
 <p>TST: It's only the case if it doesn't weaken the module in unfortunate ways</p>
 <p>Ben Newman: If this proposal is adopted, is there any chance Node would ship an implementation of dynamic modules that forbids <code>export * from &quot;cjs&quot;</code>? I would want to avoid that outcome, and have misgivings about this proposal if it implies that limitation. You could imagine a more limited interop story where CJS modules export only a <code>default</code> object, and then compilers could use the default object to support named imports. Comparing that (limited interop + compiler support) option to a &quot;more complete&quot; interop story where <code>export * from &quot;cjs&quot;</code> is missing, I'm not sure the almost-complete approach is really better, because I worry it will teach developers to avoid <code>export * from ...</code> entirely.</p>
@@ -177,18 +177,18 @@ Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenber
 <p>DRR: Having spoken to authors of libraries like Angular, etc., we would have preferred it this way, we would like to understand why. People assume there's some syntax constraint.</p>
 <p>DE: I regret it if people feel their viewpoints are not being considered. We've had a lot of discussions to consider all viewpoints.</p>
 <p>DRR: I'm fine moving on to other topics.</p>
-<p>MS: I'm not in favor of moving this to Stage 3. We had an internal discussion among programmers who use decorators in their work. The consensus was that this proposal is too complex. That complexity hurts the proposal in several different ways. First, it makes the proposal too hard to use. Decorators are like a swiss army knife. I think this complexity may make this lack adoption, except among hardcore framework authors. The complexity could also make it harder to implement efficiently. I think we need to make sure the proposal is friendly to tooling, but that is not part of this proposal. The complexity goes beyond where the common use cases are for this proposal. To restate, I am in favor of decorators, but I am not in favor of this proposal because the complexity makes it hard for both programmers and implementers.</p>
+<p>MLS: I'm not in favor of moving this to Stage 3. We had an internal discussion among programmers who use decorators in their work. The consensus was that this proposal is too complex. That complexity hurts the proposal in several different ways. First, it makes the proposal too hard to use. Decorators are like a swiss army knife. I think this complexity may make this lack adoption, except among hardcore framework authors. The complexity could also make it harder to implement efficiently. I think we need to make sure the proposal is friendly to tooling, but that is not part of this proposal. The complexity goes beyond where the common use cases are for this proposal. To restate, I am in favor of decorators, but I am not in favor of this proposal because the complexity makes it hard for both programmers and implementers.</p>
 <p>DE: Can you elaborate what people thought was too complex?</p>
-<p>MS: There have been features that have been added, like the whole initializer thing, that go beyond the general use cases of the people I talk to who are using decorators regularly.</p>
+<p>MLS: There have been features that have been added, like the whole initializer thing, that go beyond the general use cases of the people I talk to who are using decorators regularly.</p>
 <p>DE: Initializers were important for frameworks to be able to upgrade from what they were doing before. (Gives an example about Set.)  Now that we have Define semantics, we need a way to insert an extra callback that gets run right after super returns. YK was pushing back against this for awhile, because it doesn't involve a syntactic element, but framework authors, like Polymer, MobX (?), etc., were coming back saying they needed it.</p>
 <p>JFI: I found in practice that decorators tend to do one thing. I found using it was straightforward with this change. The decorator returning a static description is actually tooling friendly.</p>
-<p>MS: One more thing about complexity. You can completely replace a class and have decorators on methods and classes. When does the class get replaced or not?  Do you see the decorated or undecorated class?  Those semantic on timing seem very confusing, much more than originally.</p>
+<p>MLS: One more thing about complexity. You can completely replace a class and have decorators on methods and classes. When does the class get replaced or not?  Do you see the decorated or undecorated class?  Those semantic on timing seem very confusing, much more than originally.</p>
 <p>DE: That's interesting. There are some things that run before initialization. It's been that way for a while.</p>
 <p>TDE: You said you talked to people about decorators; who were they?</p>
-<p>MS: Developers within Apple who use decorators. One surprising comment was someone who uses decorators but doesn't like this proposal.</p>
+<p>MLS: Developers within Apple who use decorators. One surprising comment was someone who uses decorators but doesn't like this proposal.</p>
 <p>DE: I'd like to talk with that person offline.</p>
 <p>WH: I agree this is complex. I'm just trying to understand MS's position of wanting decorators but not with the current complexity. Is there something concrete or actionable you'd like to see changed?</p>
-<p>MS: We'll discuss this within Apple.</p>
+<p>MLS: We'll discuss this within Apple.</p>
 <p>KS: I am also sympathetic with the concern on complexity. I think some people who are more closely involved with the proposal are cognisant that the complexity of the feature has continued to grow over time, even very recent history. Complexity by itself is not a problem, but it begs the question, why does this feature need so much complexity and increase in scope?  What this proposal is trying to do is trying to chase macros and a general purpose syntactic utility. That seems like a noble goal; being able to abstract over syntax is good. Many language have done it. But I wonder whether, if this is a general-purpose syntactic abstraction feature for JS, is that the macro feature that we want, and the macro feature that we want to be stuck with?  Does it work for the rest of the language, or is it just limited to classes?  We have talked about how it extends to functions or object literals, and there are potential problems with that. I fear that by the time we reach the end of the road, we won't like this macro feature we created.</p>
 <p>DE: That's an interesting point. I have another presentation later about decorator syntax that relates to this. I think it can all fit together.</p>
 <p>DRR: About this concern on complexity, compared with what decorators are trying to accomplish, it seems this is basically what libraries are already doing and have been doing for 3 years. This is just standardizing it.</p>
@@ -218,14 +218,14 @@ Istvan Sebestyen (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenber
 <p>SGN: I'm saying that we should have a discussion about whether decorators are build-time.</p>
 <p>SYG: I see, so a completely different approach than the current decorators.</p>
 <p>YK: I agree with that as a possible approach.</p>
-<p>MS: Personally, I am in favor of decorators. The complexity is the sum of the whole part. About optimization, I think it's okay if tooling optimizes decorators more than the engine can, as long as the same code runs either place. Developers will know that if they really care about performance, tooling can fix it.</p>
+<p>MLS: Personally, I am in favor of decorators. The complexity is the sum of the whole part. About optimization, I think it's okay if tooling optimizes decorators more than the engine can, as long as the same code runs either place. Developers will know that if they really care about performance, tooling can fix it.</p>
 <p>RB: ...</p>
 <p>JFI: I wanted to point out that this proposal is tooling-friendly, Stage 2 better than Stage 1. There are parts of this proposal that can be run in a transform, e.g., properties to accessors. This proposal strongly leans in MS's direction already.</p>
 <p>JFI: That was my reply to the version proposal, but we can get to it in a minute.</p>
 <p>SGN: I think more of a process point... I think the spec has changed quite a bit in the last two weeks. I don't know if this is really ready to ship. Why are we going to Stage 3?</p>
 <p>DE: There have been some changes. We tried to get in the substantial ones in advance of the 2-week deadline. We ended up having to make these changes based on feedback. My impression is that the most recent changes shouldn't have much implementation impact. Another reason for proposing for Stage 3 was to get the opinions from the committee, which isn't possible if I just say &quot;what do you think about decorators&quot;.</p>
 <p>SGN: I'm not convinced I should implement and ship the currently specified proposal in Chrome. What do other implementers think?</p>
-<p>MS: Probably not.</p>
+<p>MLS: Probably not.</p>
 <p>SGN: This will signal the community that this is concrete and stable. Is this why you want to go to Stage 3?</p>
 <p>DE: Speaking as a member of the champion group, the impact we're imagining is stability in tooling and getting tooling ecosystem onboard. Right now there are 3 notions of decorators. We believe TC39 is the coordination point. That's the motivation for Stage 3.</p>
 <p>TDE: We were talking about this at lunch; I refer to YK, but it seems that there's a bit of a disagreement about what exactly Stage 3 means. Browser vendors are reluctant to implement, understandably, but at the same time, TypeScript wants a signal from TC39 on what a stable decorator looks like so they can move in that direction and start using it. For Ember, based on our own rules, we're not allowed to ship features until we hit Stage 3. We are in a deadlock where we need feedback and tooling to test these things. We've been using this as &quot;stage 3 is ready for testing&quot; we need some stability from the committee that now is the time.</p>
@@ -253,11 +253,11 @@ I don't really care which thing we do, as long as the committee agrees. If we go
 <p>SGN: YK, to understand the options better, can you clarify what are the differences?</p>
 <p>DE: I think YK is jumping to a lot of conclusions. We should discuss in the next champions' meeting.</p>
 <p>YK: I agree that I'm jumping to conclusion, but the community is waiting for us to decide what the implementation is look like.</p>
-<p>MS: If decorators are standardized in a different venue, implementers might never implement it.</p>
+<p>MLS: If decorators are standardized in a different venue, implementers might never implement it.</p>
 <p>YK: you are speculating that implementers got together....</p>
-<p>MS: No, I'm saying that if we take it to another venue, implementers don't have a voice. And if we keep it here and keep a proposal that implementers are happy with, that's a better end result.</p>
+<p>MLS: No, I'm saying that if we take it to another venue, implementers don't have a voice. And if we keep it here and keep a proposal that implementers are happy with, that's a better end result.</p>
 <p>YK: I just don't know what the actionable thing is there.</p>
-<p>MS: I think that one of the action items I'm taking away from here is that we need to get users and implementers involved with the champions group.</p>
+<p>MLS: I think that one of the action items I'm taking away from here is that we need to get users and implementers involved with the champions group.</p>
 <p>BT: Time box is up again.</p>
 <p>(DE, WH, BT, and AKI discuss logistics)</p>
 <p>DE: anyone who have comment on this I'd like you to contact me via email</p>
@@ -383,7 +383,7 @@ I'm concerned this is ...</p>
 <p>WH: From the C++ world, there's a well-defined concept of keys and values. Values do not need to even have a comparison operation defined, whereas keys must be comparable with each other. C++ array elements are values. In C<ins>, sets are a collection of keys; C</ins> maps are collections of key-value pairs.</p>
 <p>BFS: It sounds like we should collect more data on other languages.</p>
 <p>RBN: I agree; we should discuss offline whether to make the change.</p>
-<p>SLA: According to the spec, Set() is a collection of ECMAScript Values.</p>
+<p>SLN: According to the spec, Set() is a collection of ECMAScript Values.</p>
 <p>MF: I think we should split the proposal. I have a hard time seeing the use case for toValue.</p>
 <p>DD: I still think we should keep both parts. (Gives an example on why <code>toValue</code> is useful.)</p>
 <a href="#conclusionresolution-richer-keys-for-stage-2"><h4 id="conclusionresolution-richer-keys-for-stage-2">Conclusion/Resolution</h4></a><ul>
@@ -422,7 +422,7 @@ I'm concerned this is ...</p>
 <p>RGN: I dislike name mangling.</p>
 <p>KS: DE, I think you undersold it a bit by <code>__</code>. C# has something similar for attributes. C# attributes are like annotations above your class. By convention, attributes end with an attribute suffix, but in the source code, you don't have to include the attribute suffix. So there are options that don't look so mangly.</p>
 <p>YS: I agree we should put this question to the educators group.</p>
-<p>SLA: I'm concerned about optimizations that are concerned with JavaScript size. Name mangling requires minifiers to avoid mangling names theirselves.</p>
+<p>SLN: I'm concerned about optimizations that are concerned with JavaScript size. Name mangling requires minifiers to avoid mangling names theirselves.</p>
 <p>LBR: I really want to see numeric separators for Stage 3. I hope this means we can finally unblock it.</p>
 <p>JRL: It sounds like there is C# precedent. If there is lots of precedent, let's do name mangling.</p>
 <p>DE: It sounds like we don't have concerns with name mangling yet.</p>

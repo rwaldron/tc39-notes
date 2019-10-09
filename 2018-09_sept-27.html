@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-27-2018-meeting-notes"><h1 id="september-27-2018-meeting-notes">September 27, 2018 Meeting Notes</h1></a><hr>
-<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MS), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Dave Herman (DH), Pieter Ouwerkerk (POK), Leo Balter (LBR), Aki Rose (AKI), Kevin Smith (KS), Peter Hoddie (PHE), Godfrey Chan (GCN), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Richard Gibson (RGN), Maggie Pint (MPT), Mike Murry (MMY), Mathias Bynens (MB), Keith Miller (KM), Mattijs Hoitink (MHK), Kyle Verrier (KV), Justin Ridgewell (JRL), Katie Broida (KBA), Randy Luecke (RLE), Daniel Ehrenberg (DE), Sathya Gunasekaran (SGN), Rob Palmer (RPR), Kevin Gibbons (KG), Myles Borins (MBN), Tom Dale (TOD), Daniel Rosenwasser (DW), Henry Zhu (HZ), Lin Clark (LCK), Matt Johnson (MJN)</p>
+<p>Waldemar Horwat (WH), Mark Miller (MM), Till Schneidereit (TST), Michael Ficarra (MF), Michael Saboff (MLS), Shu-yu Guo (SYG), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Chip Morningstar (CM), Mariko Kosaka (MKA), Jordan Harband (JHD), Dave Herman (DH), Pieter Ouwerkerk (POK), Leo Balter (LBR), Aki Rose (AKI), Kevin Smith (KS), Peter Hoddie (PHE), Godfrey Chan (GCN), István Sebestyén (IS), Bradley Farias (BFS), Adam Klein (AK), Richard Gibson (RGN), Maggie Pint (MPT), Mike Murry (MMY), Mathias Bynens (MB), Keith Miller (KM), Mattijs Hoitink (MHK), Kyle Verrier (KVR), Justin Ridgewell (JRL), Katie Broida (KBA), Randy Luecke (RLE), Daniel Ehrenberg (DE), Sathya Gunasekaran (SGN), Rob Palmer (RPR), Kevin Gibbons (KG), Myles Borins (MBS), Tom Dale (TDE), Daniel Rosenwasser (DRR), Henry Zhu (HZU), Lin Clark (LCK), Matt Johnson (MAJ)</p>
 <p>Remote:
 Brian Terlson (BT), Rick Waldron (RW), Caridy Patiño (CP), Brian Warner (BWR), Yulia Startsev (YSV), Jason Williams (JWS), Ron Buckton (RBN), Ross Kirsling (RKG)</p>
 <hr>
@@ -91,18 +91,18 @@ Brian Terlson (BT), Rick Waldron (RW), Caridy Patiño (CP), Brian Warner (BWR), 
 <p>TST: I also want to see this go to stage 2, though I would like to see a solid comparison to other languages. Python, for example has two versions for Date, Time, and DateTime which are time-zone aware and not.</p>
 <p>MPT: That's really just the naming convention of that case.</p>
 <p>TST: Yes, I'm really not an expert.</p>
-<p>MJN: I'm working with MPT on this proposal, and studied Python, Java, C#, Elixir, etc.'s implementations. I absolutely agree with you that there should be guidance—JS is one of those languages that developers who primarily use other languages also use, so I think it's very important.</p>
+<p>MAJ: I'm working with MPT on this proposal, and studied Python, Java, C#, Elixir, etc.'s implementations. I absolutely agree with you that there should be guidance—JS is one of those languages that developers who primarily use other languages also use, so I think it's very important.</p>
 <p>TST: That's great, I'd love to see that and also the comparisons to other languages and why you made these decisions.</p>
-<p>MJN: Absolutely, and we definitely don't want to pander to other language design just because that's what has already be done.</p>
+<p>MAJ: Absolutely, and we definitely don't want to pander to other language design just because that's what has already be done.</p>
 <p>WH: For leap seconds, I agree that the POSIX behavior should be the default, but can we provide advanced users the option to upgrade to full leap second support if the OS supports it? Yes, they're unpredictable until they happen and nondeterminism is annoying, but we already have to deal with such nondeterminism when supporting time zones, for which rules change all the time. I actually cannot tell you what the time zone of Los Angeles will be 2 years from now.</p>
 <p>MPT: I can illustrate that the fundamental issue with leap second support is that ultimately when you go to the file system time, the computer's lowest level time, then all your calls to system-level can be extremely tricky to correlate with the engine's time.</p>
 <p>WH: It's a solved problem. I know how GPS does it. A simple alternative is to use TAI and a UTC offset from TAI. For those who do care about this, we should provide an option to support them if the OS does.</p>
 <p>RGN: I want to emphasize that there are two global timelines—there's TAI/GPS/UTC/etc., which count seconds since an epoch (UTC having discontinuities in the form of leap seconds), and then there's POSIX, which counts 86400-second days. To talk about leap second support means either using e.g. TAI instead of POSIX, or defining new API surface area.</p>
-<p>MJN: First is is possible to have an API that works with leap seconds? Yes. Where does the information about leap seconds come from?</p>
+<p>MAJ: First is is possible to have an API that works with leap seconds? Yes. Where does the information about leap seconds come from?</p>
 <p>WH: The same place where time zone change information comes from.</p>
-<p>MJN: Right, but IANA creates a table but it's not authoritative about leap seconds. It would be possible for a leap second library author to build on top of Temporal, using IANA, but it is not possible.</p>
+<p>MAJ: Right, but IANA creates a table but it's not authoritative about leap seconds. It would be possible for a leap second library author to build on top of Temporal, using IANA, but it is not possible.</p>
 <p>WH: The windows API does that, according to Microsoft's blog.</p>
-<p>MJN: It does not. I work with those people and it does not. I believe the one thing we should be able to do is to round-trip the leap second. If someone gives us a leap second, we should give it back to them.</p>
+<p>MAJ: It does not. I work with those people and it does not. I believe the one thing we should be able to do is to round-trip the leap second. If someone gives us a leap second, we should give it back to them.</p>
 <p>MPT: This round-trip solution is the right way, I believe. Developers should get it back if they give it to Temporal.</p>
 <p>YK: As a programmer, it would be nice to access a leap second, if one exists in the OS. That's what Rust does.I'm not sure what the leap seconds programming model is—how does a user use these in a meaningful way.</p>
 <p>BFS: If we're opting-in to this change, can we decide at a later date to use an options bag?</p>
@@ -115,7 +115,7 @@ Do accurate duration calculations on past UTC times.</p>
 <p>MPT: It doesn't exist on the OS.</p>
 <p>KG: Just because it doesn't exist on the OS doesn't mean it doesn't exist.</p>
 <p>MPT: Fair point, anyone want to make a proposal?</p>
-<p>MJN: I also support this, and I have an issue on the Temporal proposal to do this work when the OS supports it, but it's not in scope for Temporal now.</p>
+<p>MAJ: I also support this, and I have an issue on the Temporal proposal to do this work when the OS supports it, but it's not in scope for Temporal now.</p>
 <p>API: If you know your point in the GPS timeline, then you can add in leap seconds after the fact to compute your exact UTC time. I have a question for WH about what you were looking for.</p>
 <p>WH: There's no way to use Date.now to get the current UTC time to millisecond accuracy. It would have to be a new API.</p>
 <p>YK: Some people are forced to care about leap seconds, so we should make sure people trying to comply with regulations should be able to use our APIs. Separately, a long time ago MH asked about the way to talk about this in an education, but I think the term &quot;global timeline&quot; was used, and I think that's a very useful term to talk about Temporal.</p>
@@ -127,7 +127,7 @@ Do accurate duration calculations on past UTC times.</p>
 <p>MPT: I want to point out that it was a life journey for me to use 5 types. I wanted to do just 1 type.</p>
 <p>YK: I think the nondeterminism response was too glib. DD's request was to fully replace the Date API. That's a very broad spectrum of spaces. I think we should not use the nondeterminism issue to cut off exploration.</p>
 <p>MM: There are ways of dealing with the nondeterminism issue.</p>
-<p>MJN: There's two points of nondeterminism in this space. One is in dealing with the Date.now, the other is the current system timezone is one of them. It cannot be returned as a string, so we cannot avoid this.</p>
+<p>MAJ: There's two points of nondeterminism in this space. One is in dealing with the Date.now, the other is the current system timezone is one of them. It cannot be returned as a string, so we cannot avoid this.</p>
 <p>MM: If you carry your computer from one timezone to another, and are running a process, are there any runtimes that get the new timezone?</p>
 <p>KM: Yes. I use it.</p>
 <p>MM: This is indeed dynamic mutable access to the outside world within the primordials. However, it is a much milder violation; it is unlikely to enable computation to read side channels.</p>
@@ -143,7 +143,7 @@ Do accurate duration calculations on past UTC times.</p>
 <p>TST: At the last time, we talked about Intl date format. I was concerned with that and the lack of integration. There's been no update on that. While I'm fine with this going to Stage 2 without this.</p>
 <p>MPT: I'm not either, it needs to be done.</p>
 <p>DE: We discussed this in the Intl meeting. There's some spec editing, but I'm pretty confident that this will work out.</p>
-<p>MJN: While it's great that we're talking about leap seconds and nondeterminism, I think it's more important to focus on the serious errors developers are making all the time for example, HTML Input Type=Date alignment.</p>
+<p>MAJ: While it's great that we're talking about leap seconds and nondeterminism, I think it's more important to focus on the serious errors developers are making all the time for example, HTML Input Type=Date alignment.</p>
 <p>JHD: Plus 1. We had the same bug when I was at Twitter and now Airbnb because on one day of the year midnight doesn't exist. In Brazil, they use midnight instead of 2am for time-zone cutovers (for daylight savings time, for example).</p>
 <p>MPT: A PSA: always, always pick <code>noon</code>.</p>
 <p>MM: TC39 needs a way to add nondeterministic APIs in a controlled manner. I am co-author of two proposals that introduce powers that must not be available on the normal primordials: WeakRefs and getStack/getStackString. WeakRefs introduce genuine non-determinism and enable quite severe reading of side channels. getStack/getStackString may not introduce dynamic non-determinism per se, but they directly provide a violation of object privacy. That's why they would both be on the System object. Old code that confines sources of non-determinism must continue to work after new sources of non-determinism are introduced into the platform. Thus, all sources of non-determinism, present and future, must be introduced gathered together in such a way that old code can protect against new sources of non-determinism or other rule breakage.</p>
@@ -315,7 +315,7 @@ Do accurate duration calculations on past UTC times.</p>
 <p>MM: You should generally define your APIs that you can use internal access only on yourself, and use public access on other instances. This was object best practice for dynamic object languages going back to smalltalk, which only had instance encapsulation not class encapsulation. By structuring APIs to only use the public APIs of arguments, you enable these arguments to be virtualized in other ways --- substituting other implementations of the same interface --- resulting in more flexible APIs. We should keep this best practice in mind in general as we proceed to define new APIs.</p>
 <a href="#matchall-issue"><h2 id="matchall-issue">Matchall issue</h2></a><p>DE: Still no consensus. I'm opposed to adding new behavior when analogous cases throw exceptions.</p>
 <p>JHD: I feel my approach is easier for the user.</p>
-<a href="#modules"><h2 id="modules">Modules</h2></a><p>MBN: Talking about package name map proposal, how it can affect node and web. We dug into loaders, and what kind of loaders we could implement, and how we could expose hooks to the loader to extend things. What defaults should we have for specifier loading, etc?</p>
+<a href="#modules"><h2 id="modules">Modules</h2></a><p>MBS: Talking about package name map proposal, how it can affect node and web. We dug into loaders, and what kind of loaders we could implement, and how we could expose hooks to the loader to extend things. What defaults should we have for specifier loading, etc?</p>
 <a href="#temporal"><h2 id="temporal">Temporal</h2></a><p>RGN: Covered working model of internal state of two of the core classes. ZoneInstance and CivilDateTime. Also some naming.</p>
 
 </body>

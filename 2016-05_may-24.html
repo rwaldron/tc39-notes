@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#may-24-2016-meeting-notes"><h1 id="may-24-2016-meeting-notes">May 24, 2016 Meeting Notes</h1></a><hr>
-<p>Brian Terlson (BT), Dave Herman (DH), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Shu-yu Guo (SYG), Mark S. Miller (MM), Kevin Smith (KS), Michael Saboff (MS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Andreas Rossberg (ARB), Ben Smith (BS), Thomas Wood (TW), Alan Schmitt (AS), Brad Nelson (BNN), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD), Jeff Morrison (JM), Louis Lafreniere (LL, via Hangouts, part-time), Dean Tribble (DT, via Hangouts, part-time)</p>
+<p>Brian Terlson (BT), Dave Herman (DH), Michael Ficarra (MF), Jordan Harband (JHD), Waldemar Horwat (WH), Tim Disney (TD), Shu-yu Guo (SYG), Mark S. Miller (MM), Kevin Smith (KS), Michael Saboff (MLS), Eric Faust (EFT), Chip Morningstar (CM), Daniel Ehrenberg (DE), Leo Balter (LBR), Yehuda Katz (YK), Jafar Husain (JH), Andreas Rossberg (ARB), Ben Smith (BS), Thomas Wood (TWD), Alan Schmitt (AS), Brad Nelson (BNN), István Sebestyén (IS), John Neumann (JN), Domenic Denicola (DD), Jeff Morrison (JM), Louis Lafreniere (LL, via Hangouts, part-time), Dean Tribble (DT, via Hangouts, part-time)</p>
 <hr>
 <a href="#attendee-update"><h2 id="attendee-update">Attendee Update</h2></a><p>In the morning we've had 22 Face-to-face participants but Hangouts is not switched on yet.</p>
 <p>After 11:00 the Hangouts was on:</p>
@@ -21,7 +21,7 @@
 <li>Louis Lafreniere (LL) from Microsoft Redmond.</li>
 <li>Dean Tribble [<a href="mailto:tribble@e-dean.com">tribble@e-dean.com</a>] also joined part-time</li>
 </ul>
-<p>From Google local experts as observers: Hannes Payer, Jakob Kummerow, Ross McIlroy, Michael Hablich, Yang Guo, Taon Ver Naest, Daniel Clifford, Nikolaos Papaspyrou, Jaroslav Sevcik, Deepti Sharma (all part-time)</p>
+<p>From Google local experts as observers: Hannes Payer, Jakob Kummerow, Ross McIlroy, Michael Hablich, Yang Guo, Toon Verwaest, Daniel Clifford, Nikolaos Papaspyrou, Jaroslav Sevcik, Deepti Sharma (all part-time)</p>
 <a href="#always-update-object-properties-if-property-descriptor-is-applicable-nan-issue"><h2 id="always-update-object-properties-if-property-descriptor-is-applicable-nan-issue"><a href="https://github.com/tc39/ecma262/pull/353">Always update object properties if property descriptor is applicable (NaN issue)</a> (DE)</h2></a><p>DH: Summarizing issue:</p>
 <p>In order to be able to talk about a bit pattern of NaN in a reliable way we need to know where canonicalization. Canonicalization is a chaotic operation. In order to reliably predict the bit pattern of a NaN, we need to know all the places we can go from a known bit pattern to an unknown bit pattern.</p>
 <p>YK: If you would like to assert that if you write a NaN and want to read the same NaN back...?</p>
@@ -104,15 +104,15 @@ But now if someone copies `v → w → f64`, the implementation might want to fa
 <p>YK: I don't think STC is strictly better than PTC. I don't think it has strictly less problems than PTC.</p>
 <p>DH/ARB: I don't think anyone thinks that.</p>
 <p>DH: PTC is one option, STC is one option, and none of the above is on the table.</p>
-<p>MS: Another option is that PTC and STC can coexist.</p>
+<p>MLS: Another option is that PTC and STC can coexist.</p>
 <p>YK: Status quo of reality is none of the above, but there are real world requirements for it.</p>
 <p>ARB: V8 is blocked on decision from this committee to ship.</p>
 <p>YK: PTC/STC or none of the above? If none, there's nothing to ship.</p>
 <p>ARB: I don't think there will be consensus for such an option.</p>
-<p>MS: Can we eliminate no tail calls?</p>
+<p>MLS: Can we eliminate no tail calls?</p>
 <p>DE: it may be that we're not settled on a particular syntax for STC, but that we really see the disadvantages for PTC. v8 is not announcing any particular shipping plans - we want to consider the entirety of this discussion - and we're eager to see consensus.</p>
 <p>YK: I think this claim misses the empirical story. STC requires consensus. In the absense of STC , if any implementation refuse to ship PTC, then reality is that essentially no web reality for PTC.</p>
-<p>MS: I did not sense that this is the case.</p>
+<p>MLS: I did not sense that this is the case.</p>
 <p>ARB: We want a decision, whatever the decision is.</p>
 <p>DH: I agree to the consensus to accept PTC, but I don't accept the requirement to ship PTC.</p>
 <p>YK: some implementations are refusing to ship PTC. If vendors agree to ship PTC then this would change my view.</p>
@@ -130,11 +130,11 @@ But now if someone copies `v → w → f64`, the implementation might want to fa
 <p>BT: Thread on Github: <a href="https://github.com/Microsoft/ChakraCore/issues/796">https://github.com/Microsoft/ChakraCore/issues/796</a></p>
 <p>On x64, we currently use windows ABI, has some constraints, if we do not relax them, we wouldn't be able to implement this feature faithfully. We can't grow stack frames, if we can't we have to use call to increase size of stack and there's a pathological case of argument number growth and run out of stack space.</p>
 <p>From a perf standpoint, perf would not be better as JSC has found, maybe slightly worse. You could change callling conventions, but louis can say more about that?</p>
-<p>MS: How does STC solve your problem?</p>
+<p>MLS: How does STC solve your problem?</p>
 <p>BT: it doesnt, but scopes problem to specifically one case.</p>
 <p>YK: In the sense you're not able to implement PTC then you're not able to implement STC.</p>
 <p>DE: One strategy is to implement a large stack frame to allow for it to grow. An intervening return will give more stack space anyway.</p>
-<p>MS: It's the same thing as &quot;is in tail call position&quot;.</p>
+<p>MLS: It's the same thing as &quot;is in tail call position&quot;.</p>
 <p>DE: Explicit tail calls don't exist in existing code that don't intend to recieve a tail call. So you can do more risky things.</p>
 <p>BT: I'm not sure your implementation strategy would work in the progressively growing stack trace.</p>
 <p>DE:: How do yoy know what's big enough. JIT? You can always construct programs to progressively abuse larger stack frames.</p>
@@ -147,7 +147,7 @@ If you can state the way you're not expecting to implement the feature faithfull
 <p>MM: we don't go into the process of proposing things we don't expect to implement.</p>
 <p>DH: We started with the aim to give some perf/space guarantees, but then we decided that's not going to work so we decided to give a syntactic guarantee, but now we've decided we don't want to give that gurantee?</p>
 <p>BT: I want to give the guarantee.</p>
-<p>MS: We should not consider proposal that we don't want to implement.</p>
+<p>MLS: We should not consider proposal that we don't want to implement.</p>
 <p>EFT: But we can't faithfully implement what we've got.</p>
 <p>BT: Our x64 implementation can't grow our stack frames due to the Windows ABI. Performance is not good, and syntax help in that case.</p>
 <p>LL: The main thing on perf is the only case it could be a perf win is tail recursive case, in all others we have to check a call is a jump to a function with a jump to callback(?) need a test at the bottom for parameter count. In terms of stack space, if calling out with same number or less then fine, but more will cause break, no way to change return address of caller , breaks unwinding mechanism of window. Rely heavily for excp handling , stack locks(?), telemetry etc.</p>
@@ -160,86 +160,86 @@ If you can state the way you're not expecting to implement the feature faithfull
 <p>LL: it does not remove the problem, but it helps a bit. We could allocate some stack space when we see a tail call, and allocate less than required by frames.</p>
 <p>DE: Spec guranrtees asymptotic stack size, so provided the bounds of the growth are better than linear, then it's reasonable.</p>
 <p>MM: if there is no asymptot that is approached, it is not compliant.</p>
-<p>MS: Log growth is not spec compliant, but not useful for the sorts of programs this is intended.</p>
+<p>MLS: Log growth is not spec compliant, but not useful for the sorts of programs this is intended.</p>
 <p>SYG: for the spec, there is no such thing as half compliance.</p>
 <p>DH: has a programmer, are you going to use these features that sometimes work, or will you fall back to a loop?</p>
 <p>SYG: It is useless to talk about anything with space, the spec assumes infinite stack space, is this a well defined spec question?</p>
 <p>DH: Perfect is the enemy of the good. Literature on this requires a complete cost model with a lots of complex formal semantics detail. We don't want this in ECMA-262, too complex. We can specify this morally. We don't have to be mathematical here.</p>
-<p>MS: if the spec is written in such a way that recursion can continue indefinitely and Chakra cannot do it, then it is not compliant.</p>
+<p>MLS: if the spec is written in such a way that recursion can continue indefinitely and Chakra cannot do it, then it is not compliant.</p>
 <p>DH: I agree, there has to be human judgement to do this.</p>
 <p>YK: The alternatives are manual versions of the same thing, stack data structure or tramoline, these things have guaranteed space. I would be happy if these data structures are specced then I would be happy with STC over the engine's choice.</p>
 <p>ARB: Those space gurantees don't apply to the general case.</p>
 <p>YK: Once  I notice I have unbounded input, I do a data structure version of the same problem. In all cases, I do know the cost model. I do not understand the cost model of PTC.</p>
 <p>DE: We heard last tinme that tail calls are hard to implement from SG and Eric, this would be good to recap. (Cross-realm)
 SYG: we reached consensus on this</p>
-<p>MS: A cross realm growth for the stack is fine.</p>
+<p>MLS: A cross realm growth for the stack is fine.</p>
 <p>YK: I assume it is not the case you can observe something from the same realm.</p>
 <p>MM: By construction you can.</p>
 <p>YK: what guarantees am I getting from the implementation?</p>
 <p>MM: if you call something that allocates stack, that itself make a tail call, altogether there is allocation even if I tail call that.</p>
 <p>YK: If i write mutually recursive code, and someone reogranises my code so that some of my functions now in different realm?</p>
 <p>MM: This becomes no longer a tail call.</p>
-<p>MS: if it's cross realm, it's not tail call and it's fine.</p>
+<p>MLS: if it's cross realm, it's not tail call and it's fine.</p>
 <p>YK: Manual techniques vs tail calls, manual are easy to gurantee the cases TC less easy.</p>
 <p>MM: Over cross realms, it is possible to cross a membrane boundry, the fact it is no longer asymptotic space, it is not a problem?</p>
 <p>YK: What is surprising is that if you write a program is TR, and a membrane is introduced is is unsurprising . You need to consider whether someone can introduce a membrane.</p>
 <p>EFT: the difference between proxies and cross-realm is that membranes are actively inserted</p>
 <p>YK: Given the options, the fact that introducing a membrane makes it no longer TR, it makes this technique less appealing.</p>
-<p>MS: this is considered rare. It's not perfect but it's acceptable.</p>
+<p>MLS: this is considered rare. It's not perfect but it's acceptable.</p>
 <p>YK: I am the target audience because TC is a rare benefit, and being uneasy about the choice between TC/manual data structures, I will opt for manual.</p>
 <p>JM: Do we agree that exceptions are cross realms and membranes?</p>
 <p>YK: One also has to structure their program to use TC.</p>
-<p>MS: Lets move on. Slides (Response to PTC Issues)
+<p>MLS: Lets move on. Slides (Response to PTC Issues)
 As the first implementer of tail calls, we think there's lots of invalid fear. BT asked for data, so here it is. (PTC statistics).</p>
 <p>ARB: (Google Search is mostly sloppy mode, hence only 29 TC calls compiled.)</p>
-<p>MS: The reason for showing this, today we're looking at 5% TC. We're talking about 1/20 missing things from stack frames etc. In terms of % of performance loss, my understanding of perf loss is only for TC?</p>
+<p>MLS: The reason for showing this, today we're looking at 5% TC. We're talking about 1/20 missing things from stack frames etc. In terms of % of performance loss, my understanding of perf loss is only for TC?</p>
 <p>LL: That is correct.</p>
-<p>MS: (Three Issues Raised) I'd like to approach each. (PTC Performance Concerns) We have seen no issue with TC perf. Most work was Calling convention changes (6 weeks).</p>
+<p>MLS: (Three Issues Raised) I'd like to approach each. (PTC Performance Concerns) We have seen no issue with TC perf. Most work was Calling convention changes (6 weeks).</p>
 <p>DE: v8 perspective: a lot of optimisations in various compilers, not enough implementing in certain compiler tiers -- all tiers required changes.</p>
-<p>MS: Zero-sum game for general web?</p>
+<p>MLS: Zero-sum game for general web?</p>
 <p>YK: Any time spec chanes compilation tier, there's a significant cost?</p>
 <p>DE: Yes</p>
 <p>CM: you're measuring accidental tail calls, not calls that were meant to be there. If people are aware, this percentage is going to go up.</p>
-<p>MS: In general the concern about tail calls in general web going to hurt .5%? I don't think it's a valid concern, hard to measure that level of perf degredation.</p>
+<p>MLS: In general the concern about tail calls in general web going to hurt .5%? I don't think it's a valid concern, hard to measure that level of perf degredation.</p>
 <p>YK: A 10% slowdown is significant enough to beat with manual code.</p>
-<p>MS: We describe late where we get performance wins.</p>
+<p>MLS: We describe late where we get performance wins.</p>
 <p>YK: What do implementations think the actual slowdown is?</p>
-<p>MS: We think 0%, according to our experience and the Chrome experience.</p>
+<p>MLS: We think 0%, according to our experience and the Chrome experience.</p>
 <p>DE: Except micro-benchmarks.</p>
 <p>YK: 5% of calls are accidentally used? if we made STC opt in, would people use it?</p>
-<p>MS: STC does not resolve the performance issue, and if PTC is used, all browsers will want to optimise it.</p>
+<p>MLS: STC does not resolve the performance issue, and if PTC is used, all browsers will want to optimise it.</p>
 <p>YK: Firefox people: given you have not implemented PTC, would you implement STC optimised to a level equivalent to PTC?</p>
 <p>EFT: yes.</p>
 <p>DE: For v8's part, we have considered whether it was required in all compiler tiers, if it were with explicit syntax then you could say you have opted into a particular compiler tier.</p>
 <p>ARB: But you can do that with PTC too.</p>
 <p>DE: STC has a lower implementation load to ship it.</p>
 <p>DH: If implementers say it's going to be easy, we don't need to optimise, it's going to be competing with loops for developers standpoint. If it's not performing well, then people won't adopt. Since 2 browsers have aggressive optimisation, there'll be competition over it.</p>
-<p>MS: we did not do aggressive optimisation, we just implemented it.</p>
+<p>MLS: we did not do aggressive optimisation, we just implemented it.</p>
 <p>DH: The things to compare are people writing loops manually vs TR, not PTC vs not-PTC. Do you think you'll get compariable perfomance for current TC implementation vs loops?</p>
-<p>MS: we don't know the answer yet.</p>
+<p>MLS: we don't know the answer yet.</p>
 <p>DE: Within an impl, you can do things like alloc registers for a whole extent of a while loop rather than TR loop. Some can, but in a naieve implementation you don't often have enough info at all tiers. Engines prioritise optimisations based on whether we think these will be used.</p>
 <p>DH: it's a relevant concern for developers, they should not think it will slow down their code.</p>
 <p>YK: relevant comparison is with loop + stack. STC feels like a perf regression for me if I switch to it.</p>
-<p>MS: the more relevant concern about TC and performance is whether developers will adopt it.</p>
+<p>MLS: the more relevant concern about TC and performance is whether developers will adopt it.</p>
 <p>YK: I agree that is the goal.</p>
 <p>DH: That's not what got consensus, more ad-hoc, code generators won people over, not styles of programming. Transpilers can do their own data structures if they need.</p>
 <p>ARB: necessary for compiling languages that use this</p>
 <p>DE: the trampoline pattern is already used on the web (js_of_ocaml, closure compiler).</p>
 <p>ARB: ...and its performance generally sucks.</p>
-<p>MS: Lets move on (PTC Performance Concerns, bullet *). We have to swallow loss of perfomance</p>
+<p>MLS: Lets move on (PTC Performance Concerns, bullet *). We have to swallow loss of perfomance</p>
 <p>EFT: we could not implement the feature with cross realm without API changes. Microsoft could not implement this feature with no performance cost.</p>
-<p>MS: Not ability to implement, but how it slows me down.</p>
+<p>MLS: Not ability to implement, but how it slows me down.</p>
 <p>DE: I don't think this will be revisited for much more ES2015 features. All have implemented much of these features. Some ES2015 Compat things such as TypedArrays need revisiting</p>
-<p>MS: if performance is a reason to re-consider something in the spec, it is not a valid concern.</p>
+<p>MLS: if performance is a reason to re-consider something in the spec, it is not a valid concern.</p>
 <p>YK: PTC is targets at making a power-user pattern more ergonomic, and it actually makes it slower is a serious concern.</p>
 <p>EFT: Implementers have been able to bridge Class performance gap with transpilers etc, but we cannot do this with PTC.</p>
 <p>DE: To continue the point of limited features to revisit, those couple of things may. We don't consider S4 until feedback from 2 impls, we shouldn't worry about features going in and being removed, we need to get S4 ratification from implementations.</p>
 <p>BT: There is precedent: we removed Reflect.enumerate for performance reason.</p>
-<p>MS: High bar to remove stuff, I worry the bar is being lowered.</p>
+<p>MLS: High bar to remove stuff, I worry the bar is being lowered.</p>
 <p>YK: Almost everyone has implemented almost everything of ES2015, except PTC, the bar is high here.</p>
 <p>JM: reality leads, not the spec. Nobody shipped TC yet.</p>
 <p>ARB: Can we all agree that performance is not an issue?</p>
-<p>MS: (Last point) 2.6x speedup for some benchmarks, possibly x86 CPU caching/returned stack. We did not expect this, and got this.
+<p>MLS: (Last point) 2.6x speedup for some benchmarks, possibly x86 CPU caching/returned stack. We did not expect this, and got this.
 Implementation perfomance is not an issue.</p>
 <p>DE: Was there other Chakra perf issues raised?
 BT: x64 perf likely not good in many cases, simple mutual case about even, but initial concerns over x86 perf have been addressed. Was that it?
@@ -264,51 +264,51 @@ MM: I wouldn't have suggested it except for Chakra. You're not obligated not to 
 <p>BT: Depending on &quot;ask for&quot;, some people think the point of PTC was this if they use explicit tail call position.</p>
 <p>DH: this is a question of predictability.</p>
 <p><strong><em>LUNCH BREAK</em></strong></p>
-<p>MS: [<em>PTC debugging concerns</em>]</p>
+<p>MLS: [<em>PTC debugging concerns</em>]</p>
 <p>JSC has implemented ShadowChicken, it is enough to create a shadow stack for the developer. We save only the deleted frames in ShadowChicken, we save 128 elided frames. We chose 128 because it is a good balance, users don't want to see all the elided frames. we synthesise the elided frames by reinserting them into the existing stack. This is only in debugging for now, no Error.stack. Not in the tech preview but in nightly.</p>
 <p>MM: I thought there was some GC non-determinism?
 DE: This was only my misunderstanding.</p>
-<p>MS: If we run over 128, we save only the last ones.</p>
+<p>MLS: If we run over 128, we save only the last ones.</p>
 <p>YK: does this apply when the developer tools are not opened when the exception happen</p>
-<p>MS: If the inspector is open, the frames are collected.</p>
+<p>MLS: If the inspector is open, the frames are collected.</p>
 <p>DE: the developer tools have to be open for frames to be collected.</p>
 <p>YK: I think this is probably fine.</p>
 <p>??: Also the webkit remote inspector exists, so streaming of debug is possible.</p>
-<p>MS: Shadow chicken is invoked when remote inspector is connected, not familiar with developer tools internals though. An alternative is to turn off tail call to debug.</p>
+<p>MLS: Shadow chicken is invoked when remote inspector is connected, not familiar with developer tools internals though. An alternative is to turn off tail call to debug.</p>
 <p>YK: Disabling PTC is not an option as you'll then not catch errors at the end of a long TC.</p>
-<p>MS: We don't think that debugging issues are a show stopper, we can do it with tools open.</p>
+<p>MLS: We don't think that debugging issues are a show stopper, we can do it with tools open.</p>
 <p>JM: if we find concerns with dropping frames, then we can compile away the tail call for that code.</p>
 <p>MM: Lets say PTC &amp; STC, if the syntactic marker is taken to do 2 things: static error if not a tail position, in addition I'm not interested in accumulating the tail stack frame for debugging purposes. Say the ShadowChicken elided frames are only for PTC and not the marked STC, then we get close to the reliable stack frame that people are expecting.</p>
 <p>WH: Difference with plain STC?</p>
 <p>MM: you get stack frames up to 128 only for PTC.</p>
 <p>DE: What's the advantage over doing this for both? Once we have syntax there seems no advantage in not using syntax.</p>
-<p>MS: you still need to save the frames in STC for the error stack or for debugging.</p>
+<p>MLS: you still need to save the frames in STC for the error stack or for debugging.</p>
 <p>MM: The kind of stack traces you're collecting for promise, is that only after 128 frames you loose elided tail calls, which seems good to me.</p>
-<p>MS: are you assuming you would not lose any frame with STC?</p>
+<p>MLS: are you assuming you would not lose any frame with STC?</p>
 <p>MM: they would always be lost. The PTC tail frames that are not STC marked would be all kept in a pure STC system, and only the 128 more recent frames would be kept in a PTC + STC system.</p>
-<p>MS: Our intention is to never use ShadowChicken when the webinspector is closed. Performance overhead of 8-10%, also a memory user. Scope chain copies keep live locals that could be collected.</p>
+<p>MLS: Our intention is to never use ShadowChicken when the webinspector is closed. Performance overhead of 8-10%, also a memory user. Scope chain copies keep live locals that could be collected.</p>
 <p>MM: I'm only concerned about PC rather than variables.</p>
-<p>MS: Main advantage of tailcalls is that locals can be collected after the call.</p>
+<p>MLS: Main advantage of tailcalls is that locals can be collected after the call.</p>
 <p>YK: any modern testing framework will report the stack frame when there is an error. It is important to understand the path taken through the code at the error. You don't want to lose frames, even with STC.</p>
 <p>EFT: comment about debugging intent for code authors vs code users: user may need stack frames when author doesn't.</p>
 <p>MM: Just in the same way the author of the code makes the decision to use a loop rather than a call without considering the user.</p>
 <p>WH: If you write a while loop, you'll always have one frame of your library. If the library uses tail calls to callbacks, it's possible for the library to wipe itself off the stack completely.</p>
-<p>MS: Error.stack is not dependable. It is inadequate if we're arguing about telemetry concerns today.</p>
+<p>MLS: Error.stack is not dependable. It is inadequate if we're arguing about telemetry concerns today.</p>
 <p>[<em>Simple Error.stack test</em>] There are already concerns about using Error.stack for telemetry today.</p>
 <p>DE: we should see about improving these things.</p>
-<p>MS: So, we shouldn't be using this as an argument to not implement TC.</p>
+<p>MLS: So, we shouldn't be using this as an argument to not implement TC.</p>
 <p>MM: the current behavior of Error.stack is non deterministic, it differs between browsers.</p>
-<p>MS: And between releases too.</p>
+<p>MLS: And between releases too.</p>
 <p>MM: It is good to have in mind what we want Error.stack to be for the co-design for TC.</p>
-<p>MS: It is telemetry in general, not just Error.stack. It may be worth considering speccing something especially for telemetry. Not just who-called-who.</p>
+<p>MLS: It is telemetry in general, not just Error.stack. It may be worth considering speccing something especially for telemetry. Not just who-called-who.</p>
 <p>DE: I would rather not have to regress what we have, because we already shipped these different methods to get information about the stack frames.</p>
-<p>MS: [<em>PTC Telemetry concerns, last point</em>] Just speculation that telemetry will be broken if TC are implemented.</p>
+<p>MLS: [<em>PTC Telemetry concerns, last point</em>] Just speculation that telemetry will be broken if TC are implemented.</p>
 <p>YK: Don't use TC is not suitable answer for broken telemetry with TC.</p>
 <p><em>General agreement.</em></p>
-<p>MS: But, we have no known breakage.</p>
+<p>MLS: But, we have no known breakage.</p>
 <p>YK: Error.stack used in a bunch of ways, one is telemetry, reporting errors to console when promise rejected or async, stack trace for thing that has happened. One problem that will happen is when you have a library that uses STC and then the library will be hidden from the stack trace.</p>
 <p>DE: Error.stack used by Google in application frameworks, collected and bucketed, looked at by devs to resolve bugs. Not a website breakage concern.</p>
-<p>MS: you won't be able to aggregate.</p>
+<p>MLS: you won't be able to aggregate.</p>
 <p>YK: Native frames are never the source of your bugs.</p>
 <p>Multiple: Not true</p>
 <p>YK: Are we adding more cases to when frames are elided. It is not speculative that a developer does not want more elided frames in their stack traces. Some companies may begin to avoid using libraries with STC because they need the telemetry from calls.</p>
@@ -316,15 +316,15 @@ DE: This was only my misunderstanding.</p>
 <p>SYG: Do people who put apps on the app store always opt for the telemetry? Or is this thing just that exists?</p>
 <p>BT: We have sufficient evidence that telemetry is impacted by eliding frames.</p>
 <p>MM: VMs have a very minimalistic instruction set, explicit loop construct which is the only difference from a normal set. The designers wanted a very explicit contract with the user when they want to see stack frames. Calls should always generate frames, loops not, they wanted to be explicit about this. User experience through the debugger is an important part of language design.</p>
-<p>MS: there is tail call in C++. We get telemetry with frames elided, we deal with these.</p>
+<p>MLS: there is tail call in C++. We get telemetry with frames elided, we deal with these.</p>
 <p>EFT: By turning off the optimisers.</p>
-<p>MS: Even so, we are able to just from the telemetry, without necessarily recompiling.</p>
+<p>MLS: Even so, we are able to just from the telemetry, without necessarily recompiling.</p>
 <p>DE: you reason about which things are inline, and which things are tail called.</p>
-<p>MS: typically you care about the last 5 frames. That is sufficient to get the job done.</p>
+<p>MLS: typically you care about the last 5 frames. That is sufficient to get the job done.</p>
 <p>YK: we dont necessarily want the c++ debug experience to be that for Js developers. You aren't necessarily able to do this reasoning all the time.</p>
 <p>WH: Lots of experience with lisp debugging, and in most cases turning off TC worked. However, it didn't work when I was using libraries that were deeply recursive. In those cases getting the last 128 shadow chicken frames is not enough — it shows all the frames near the leaves, but I often needed the information elided in the base frames.</p>
 <p>YK: Sometimes the error occurs in the base frames, sometimes in the middle, sometimes in the leaves.</p>
-<p>MS: (Summary slide) In nightly since October.</p>
+<p>MLS: (Summary slide) In nightly since October.</p>
 <p>BT: Regularly open the dev tools after error occurs, not always able to refresh to reproduce bug - don't want to lose state.</p>
 <p>JHD: JSC used to have different optimisation levels with debugger open or closed. Very awkward to debug in this circumstance.</p>
 <p><em>Etherpad went down for a ~minute</em></p>
@@ -335,14 +335,14 @@ DE: This was only my misunderstanding.</p>
 <p>DE: I would encourage library authors not to do a tail call into a callback provided by the user.</p>
 <p>YK: Some coordination about turning on ShadowChicken is something that everyone has to consider, whether QUnit does it, or telemetry apis do it etc.</p>
 <p>DE: does shadow chicken change the behavior of Error.stack?</p>
-<p>MS: not implemented yet.</p>
+<p>MLS: not implemented yet.</p>
 <p>YK: 128 frames not sufficient</p>
-<p>MS: arbitrary chosen constant, can be changed. no implementor wants shadowchicken on all the time due to overheads.</p>
+<p>MLS: arbitrary chosen constant, can be changed. no implementor wants shadowchicken on all the time due to overheads.</p>
 <p>MM: Regarding Error.stack and telemetry, the only thing relevant is the program counter. If you had a 128 cycle buffer with just the PC in it, it may have little overhead. Depending on the detail of Error.stack</p>
 <p>YK: how can the user decide whether to use the feature, if they're not sure it's going to work as expected. This is more the case for PTC than for STC.</p>
-<p>MS: Last two points on slide are the crux of it for me and JSC.</p>
+<p>MLS: Last two points on slide are the crux of it for me and JSC.</p>
 <p>YK: there are at least two implementations with problems.</p>
-<p>MS: If we are willing to say the spec has less value because of the process in place at the time stuff went into the spec it is disconcerting. JSC didn't get the memo saying that other implementations weren't doing this. We implemented this because it was in the spec.</p>
+<p>MLS: If we are willing to say the spec has less value because of the process in place at the time stuff went into the spec it is disconcerting. JSC didn't get the memo saying that other implementations weren't doing this. We implemented this because it was in the spec.</p>
 <p>EFT: It is not my motivation to state that we're trying to ditch this feature because we're not planning to implement this.</p>
 <p>YK: Why did you say that cross realm does not require a state change?</p>
 <p>MM: I don't believe the spec change that cross-realm requires has the controversy that others do.</p>
@@ -352,11 +352,11 @@ DE: This was only my misunderstanding.</p>
 <p>ARB: there are many other things that do not work across realms.</p>
 <p>KS: I think there's consensus to changing the spec regarding cross-realm, the spec should not change from PTC to STC, or to remove PTC.</p>
 <p>YK: Basically this feature cannot make stage 4 because it cannot be implemented by 2 browsers.</p>
-<p>MS: It is.</p>
+<p>MLS: It is.</p>
 <p>CM: v8 has it behind a flag. Chakra have not started it, but they have a strategy that could work for me as a user.</p>
 <p>YK: they cannot implement it in SpiderMonkey because of cross realms issues. A serious change is needed no matter what.</p>
 <p>BT: Why was the PR rejected then?</p>
-<p>MS: The reason the standard exists is to agree on behavior. I agreed on Firefox request because it allows them to participate.</p>
+<p>MLS: The reason the standard exists is to agree on behavior. I agreed on Firefox request because it allows them to participate.</p>
 <p><em>etherpad down, 30s</em></p>
 <p>YK: I think that if people use realms/membranes much more then I find that it does damage to STC/PTC, and this is not good.</p>
 <p>CM: motivation to get tail call and motivation to get cross realm are orthogonal to each others.</p>
@@ -382,16 +382,16 @@ DE: This was only my misunderstanding.</p>
 <p>YK: Is there a production implementation of something where someone would use STC in preference over PTC?</p>
 <p>DE: are there cases where STC would not work?</p>
 <p>YK: I agree that STC satisfies transpilers, but there are questions about the syntactic cost.</p>
-<p>MS: STC doesn't really solve the issues that have been raised. It doesn't take care of the telemetry and debugging issues.</p>
+<p>MLS: STC doesn't really solve the issues that have been raised. It doesn't take care of the telemetry and debugging issues.</p>
 <p>These issues have already been tackled though?</p>
 <p>EFT: Broken realms worse with STC due to intent, but the brokennes is also horrific due to PTC.</p>
 <p>YK: I don't have a mental model to write a PTC program. I can imagine how to do it with STC.</p>
 <p>DE: To respond to performance of debug not being resolved by STC: when user expresses STC intent, user doesn't want to see elided frames as they're looping. &quot;return contunue&quot; doesn't expect a shadowchicken stack. I would advise against calling out to user code with STC.</p>
-<p>ARB, MS: I disagree with that, there are libraries that need to do exactly that.</p>
+<p>ARB, MLS: I disagree with that, there are libraries that need to do exactly that.</p>
 <p>ARB: for instance when you have a continuation as a parameter</p>
 <p>EFT: I'm unhappy about implementation specific type errors, MM says he is unhappy with implementations that are being forced to throw implementation specific type errors.</p>
 <p>DE: for debugging and telemetry, the intent to do a loop or continuation means that we don't have to implement shadow chicken. It doesn't affect existing code that didn't intend to use PTC.</p>
-<p>MS: The point about STC, the user wants it but I can't do it, do I throw an exception?</p>
+<p>MLS: The point about STC, the user wants it but I can't do it, do I throw an exception?</p>
 <p>EFT: If someone wrote a module loader with each module in its own realm. This would impose problems.</p>
 <p>SYG: what things do not work cross realms?</p>
 <p>MM: For identity of continuity, I would like cross realms to be as little surprising as possible.</p>
@@ -407,7 +407,7 @@ DE: This was only my misunderstanding.</p>
 <p>YK: I am skeptical that you can do this and it is an easy change.</p>
 <p>WH: But we solved those problems already in the existing spec, which allows a strict function to tail-call into a sloppy function.</p>
 <p>BT: Strict calling sloppy gets a normal sloppy arguments object.</p>
-<p>MS: what is arguments.caller going to be?</p>
+<p>MLS: what is arguments.caller going to be?</p>
 <p>BT: arguments.caller in sloppy mode when called with Tail Calls in sloppy mode, null. The mental model is that: Tail Call to a function is equivalent to Strict function calling a sloppy function, regardless of mode of the calling function.</p>
 <p>BT: if it's trivial to do (enabling tail call in sloppy mode), what would we not do it?</p>
 <p>MM: I don't want any more investment into sloppy mode where it is not required.</p>
@@ -421,15 +421,15 @@ DE: This was only my misunderstanding.</p>
 <p>DH: my current opinion of STC is that we're better off without it. If we want to advance something to stage 1 even with several members disagreeing, I'm fine with it.</p>
 <p>FSC: Do you think we could get stage 1 for proposing to remove PTC?</p>
 <p>YK: I don't think that's unavoidable. Considering that we've heard a lot of concerns regarding STC, I think we still need to discuss this parallel proposal for revising/removing PTC.</p>
-<p>MS: I will not support further stages for STC and do not want to waste time by not stating it.</p>
+<p>MLS: I will not support further stages for STC and do not want to waste time by not stating it.</p>
 <p>JHD: there is no point to moving it to stage 1 as we don't seem to want to discuss it further at the moment.</p>
 <p>WH: The thing that flipped STC for me was it not working cross-realm. I was interested in it but not if it sometimes doesn't work.</p>
-<p>MS: there is no proposal to remove PTC.</p>
+<p>MLS: there is no proposal to remove PTC.</p>
 <p>DE: I think we have spec materials for the issues with PTC and spec text is quick to produce.</p>
 <p>CM: Removing PTC for the way it was before, or to adapt to address the implementation concerns?</p>
 <p>DE: totally removing all mentions of tail call from the spec</p>
 <p>CM: I would be completely opposed to that</p>
-<p>MS: I would be opposed to that. (inferred)</p>
+<p>MLS: I would be opposed to that. (inferred)</p>
 <p>DH: We know we would need some changes to fix the cross-realm issue and arguments issue. Either eliminate it, or make fixes to make it implementable in the real implementations.</p>
 <p>DE: What are the fatal flaws? Cross-realms or others? Make the cross-realm a silent failure or exception?</p>
 <p>DH: hearing from Microsoft that they won't be able to implement it ... you're eliding the difference between syntactic opt in and syntactic guarantees.</p>
@@ -438,7 +438,7 @@ DE: This was only my misunderstanding.</p>
 <p>EFT: there are many reasons why calls are not in tail position</p>
 <p>DE: STC is simpler to use than PTC because you get an early error if you request a tail call at a place where it's not possible</p>
 <p>WH: Removal of PTC would have to go through all of the stages.</p>
-<p>MS: the consensus is not about whether we want to keep PTC but if we want to remove it</p>
+<p>MLS: the consensus is not about whether we want to keep PTC but if we want to remove it</p>
 <p>MM: discussion needs to continue, and to change we need a consensus to change</p>
 <p>YK: Can't lean on the process without it blowing up in our face.</p>
 <p>KS: If debugabillity of the language in the future is put at risk by this feature, then we should be careful about this change.</p>
@@ -486,14 +486,14 @@ DE: This was only my misunderstanding.</p>
 <p>DE: I don't see how PTC vs STC changes anything regarding the cross realm issue.</p>
 <p><em>discussion about putting STC back on the table</em></p>
 <p>YK: procedural remark: STC has to gain consensus to be on the table.</p>
-<p>MS: I don't want both PTC and STC, as it makes PTC optional. We would have compatibility issues.</p>
+<p>MLS: I don't want both PTC and STC, as it makes PTC optional. We would have compatibility issues.</p>
 <p>DD: If the limits are not made explicit, then there will be compatibility issues.</p>
 <p>YK: there are other concerns, like Error.stack.</p>
 <p>DE: The spec is a place to have behaviour consistent across browsers.</p>
 <p>YK: this is true. Apple is saying is they have shipped PTC, and if V8 does not have to ship PTC there will be compatibility/functionality issues with Error.stack. The converse argument could be made: by shipping PTC there could be loss of functionality of Error.stack.</p>
-<p>MS: I don't think there is consent for STC to reach stage 2, and I don't think it's worth the committee's time to progress it to stage 1.</p>
+<p>MLS: I don't think there is consent for STC to reach stage 2, and I don't think it's worth the committee's time to progress it to stage 1.</p>
 <p>YK: there is a norm question here.</p>
-<p>MS: there isn't support for STC, so I would like to remove that from the table.</p>
+<p>MLS: there isn't support for STC, so I would like to remove that from the table.</p>
 <p>DH: we haven't even talked about the syntax. Adding syntax for this feature is not warranted. Introducing syntax comes at a high cost, for the cognitive model of the language, for the ecosystem. I do not believe that tailcalls are common enough to deserve syntax.</p>
 <p>WH: full agreement with DH. Don't want to subject users to constant style wars about whether they should be writing <code>return f()</code> or <code>return continue f()</code>.</p>
 <p>EFT: Can we make progress in the last minutes?</p>
@@ -520,11 +520,11 @@ DE: This was only my misunderstanding.</p>
 <p>CM: as someone who wants to keep the feature, I'm still open to discussion. We tend to emphasize arguments that talk about benefits instead of cost. Many arguments about cost went beyond the implementation and were about the feature itself.</p>
 <p>DH: the main issue is predictability.</p>
 <p>EFT: where is the bar to continue the debate</p>
-<p>MS: we have not heard anything compelling to remove the feature. Web compatibility would be a compelling reason.</p>
+<p>MLS: we have not heard anything compelling to remove the feature. Web compatibility would be a compelling reason.</p>
 <p>YK: if you leave PTC in and others don't put it in, there will be a web compat issue</p>
-<p>MS: if we leave it in, other vendors will end up implementing it.</p>
+<p>MLS: if we leave it in, other vendors will end up implementing it.</p>
 <p>EFT/YK: you're strong arming the committee</p>
-<p>MS: I'm not the only one who wants to keep PTC</p>
+<p>MLS: I'm not the only one who wants to keep PTC</p>
 <p>CM: I'm agnostic on STC, it's the underlying language semantics that I care about</p>
 <p>DE: which issues should we reconsider?</p>
 <p>YK: What the stack trace looks like in PTC, What happens in the dev experience? I agree apple has done good work on the second issue. Nothing done to nullify concerns about the first.</p>

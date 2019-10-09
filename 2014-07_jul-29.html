@@ -125,7 +125,7 @@ WH: I wrote this wording in ES3 and I'm fine with this change. It will fix the b
 <p>(<a href="https://bugs.ecmascript.org/show_bug.cgi?id=1908#c14">https://bugs.ecmascript.org/show_bug.cgi?id=1908#c14</a>)</p>
 <p><strong>Object instead of Array</strong></p>
 <pre><code class="language-js"><span class="hljs-built_in">Array</span>.prototype[<span class="hljs-built_in">Symbol</span>.unscopables] = {
-  ... 
+  ...
 };
 </code></pre>
 <p>(with null prototype)</p>
@@ -194,7 +194,7 @@ WH: I wrote this wording in ES3 and I'm fine with this change. It will fix the b
 <li>if found continue up to the next scope level</li>
 </ol></li>
 </ul>
-<a href="#48-consider-if-objectassign-should-silently-ignore-nullundefined-sources"><h2 id="48-consider-if-objectassign-should-silently-ignore-nullundefined-sources">4.8 Consider if Object.assign should silently ignore null/undefined sources</h2></a><p>(Sebastian Markbage)</p>
+<a href="#48-consider-if-objectassign-should-silently-ignore-nullundefined-sources"><h2 id="48-consider-if-objectassign-should-silently-ignore-nullundefined-sources">4.8 Consider if Object.assign should silently ignore null/undefined sources</h2></a><p>(Sebastian Markbåge)</p>
 <p>(Request slides)</p>
 <p>SM:</p>
 <pre><code class="language-js"><span class="hljs-built_in">Object</span>.assign({}, <span class="hljs-literal">undefined</span>);
@@ -248,7 +248,7 @@ WH: I wrote this wording in ES3 and I'm fine with this change. It will fix the b
 <span class="hljs-keyword">let</span> it = g();
 
 it.next();  <span class="hljs-comment">// returns {value: 0, done: false}</span>
-it.throw(); <span class="hljs-comment">// </span>
+it.throw(); <span class="hljs-comment">//</span>
 
 </code></pre>
 <p>AWB: If <code>it.return()</code> we would send a return to the <code>h</code> instance.</p>

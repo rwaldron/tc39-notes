@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-24-2015-meeting-notes"><h1 id="september-24-2015-meeting-notes">September 24, 2015 Meeting Notes</h1></a><hr>
-<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MLS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
 <p>Remote:
 Mark S. Miller (MM), István Sebestyén (IS)</p>
 <hr>
@@ -25,7 +25,7 @@ Mark S. Miller (MM), István Sebestyén (IS)</p>
 <span class="hljs-comment">// No Ok</span>
 <span class="hljs-keyword">let</span> z = -x ** y; <span class="hljs-comment">// Syntax Error</span>
 
-<span class="hljs-comment">// Must be: </span>
+<span class="hljs-comment">// Must be:</span>
 -(x ** y)
 
 <span class="hljs-comment">// Enforced by grammar change, just a SyntaxError</span>
@@ -60,7 +60,7 @@ Mark S. Miller (MM), István Sebestyén (IS)</p>
 <p>DH: Oh, python has the same error... -1**2 == -1</p>
 <p>AWB: maybe Matlab...</p>
 <p>RW: concerns enough to block consensus?</p>
-<p>MS: i agree with AK; i don't like option 4. we'll implement the spec but I think it's unnecessary complications given other languages.</p>
+<p>MLS: i agree with AK; i don't like option 4. we'll implement the spec but I think it's unnecessary complications given other languages.</p>
 <p>BT: I think it is unnecessary, but I don't care</p>
 <p>YK: Do you agree, if we pick 2 or 3 there are some users who will pick the wrong one</p>
 <p>BT: yes, but that's true for everything that includes precedence. We don't make all things an error where precedence is ambiguous.</p>
@@ -162,7 +162,7 @@ implement a reliable callable constructor in ES6.</p>
   }
 }
 </code></pre>
-<p>This works fine, but it has two problems:</p>
+<p>This works fine, but it has two problemLs:</p>
 <ol>
 <li>It requires the use of ES5 function as constructors. In an ideal world, new classes would be written using class syntax.</li>
 <li>It uses a meta-property, <code>new.target</code> to disambiguate the two paths, but its meaning is not apparent to those not familiar with the meta-property.</li>
@@ -241,7 +241,7 @@ b.bProp === <span class="hljs-number">1</span>; <span class="hljs-comment">// tr
 <p>DH: only thing that gives me pause is Stroustrup's principle: new stuff, people want long syntax; later, people want short syntax.</p>
 <p>MF: May want a decorator augmenting a call constructor (Michael, I missed the tail end of this, can you fill in?)</p>
 <p>YK:</p>
-<p>MS: would this allow you to omit the <code>constructor</code>?</p>
+<p>MLS: would this allow you to omit the <code>constructor</code>?</p>
 <p>YK: class would create a default <code>constructor</code>, but otherwise behave like a function</p>
 <p><em>discussion about callable non-constructable classes; general consensus is that you should use a function for this</em></p>
 <p>DH: Like this b/c it matches built-ins and defines a clear separation of semantics</p>
@@ -301,7 +301,7 @@ b.bProp === <span class="hljs-number">1</span>; <span class="hljs-comment">// tr
 <li>Need to confirm Munich in May</li>
 <li>Rick, Dave will figure out March</li>
 </ul>
-<a href="#513-updates-on-rest-properties-proposal"><h2 id="513-updates-on-rest-properties-proposal">5.13 Updates on rest properties proposal</h2></a><p>(Sebastian Markbage)</p>
+<a href="#513-updates-on-rest-properties-proposal"><h2 id="513-updates-on-rest-properties-proposal">5.13 Updates on rest properties proposal</h2></a><p>(Sebastian Markbåge)</p>
 <p><a href="https://github.com/sebmarkbage/ecmascript-rest-spread">https://github.com/sebmarkbage/ecmascript-rest-spread</a></p>
 <p>SM:</p>
 <p><a href="https://github.com/sebmarkbage/ecmascript-rest-spread/commit/f4cb9c0ff9f4509854d5d30f4517a23b1a7d7e98">https://github.com/sebmarkbage/ecmascript-rest-spread/commit/f4cb9c0ff9f4509854d5d30f4517a23b1a7d7e98</a></p>
@@ -483,7 +483,7 @@ configButton.onclick = <span class="hljs-keyword">async</span> <span class="hljs
 <p>MM: could be closed over the data from import.context</p>
 <p><em>discussion about ambiguity of syntax</em></p>
 <p>DH: syntax needs work, not complete/final</p>
-<p>MS: because dynamic, needs a new API. Don't like the properties on keywords.</p>
+<p>MLS: because dynamic, needs a new API. Don't like the properties on keywords.</p>
 <p>DH: <em>re-explains everything that lead to current design</em></p>
 <p><em>Discussion re: <code>import(...</code></em></p>
 <p>DH: &quot;out of band&quot; in a subexpression and need additional data</p>

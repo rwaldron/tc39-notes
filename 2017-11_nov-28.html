@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#november-28-2017-meeting-notes"><h1 id="november-28-2017-meeting-notes">November 28, 2017 Meeting Notes</h1></a><hr>
-<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MS), Caridy Patiño (CPO), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM)</p>
+<p>Jordan Harband (JHD), Rex Jaeschke (RJE), Michael Saboff (MLS), Caridy Patiño (CP), Peter Jensen (PJ), Sebastian McKenzie (SMK), Fabio Rocha (FRA), Till Schneidereit (TST), Peter Hoddie (PHE), Michael Ficarra (MF), Kat Z. Marchán (KZM), Bradley Farias (BFS), Daniel Ehrenberg (DE), Kevin Gibbons (KG), Chip Morningstar (CM), Dave Herman (DH), Aki Rose (AKI), Godfrey Chan (GCN), Yehuda Katz (YK), Natalie Silvanovich (NSH), Adam Klein (AK), Alan Schmitt (AS), Andrew Paprocki (API), Chris Hyle (CHE), Mattijs Hoitink (MHK), Mark S. Miller (MM), Mathias Bynens (MB), Keith Cirkel (KCL), Justin Ridgewell (JRL), Shu-yu Guo (SYG), Zibi Braniecki (ZB), Mariko Kosaka (MKA), Sam Goto (SGO), Keith Miller (KM)</p>
 <p>Remote:
 István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)</p>
 <hr>
@@ -117,7 +117,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>MF: What does DirectivePrologue have to do with HashBang?</p>
 <p>....</p>
 <p>BFS: No objections? Stage 1?</p>
-<p>MS: Is it a syntax error for private fields?</p>
+<p>MLS: Is it a syntax error for private fields?</p>
 <p>BFS: Yes currently.</p>
 <p>MM: Negation of a private field is !# not #!</p>
 <p>BFS: Stage 1? Stage 1 yay!</p>
@@ -136,16 +136,16 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>BE: I was going to approach it differently, if you want a flat string replacer function don't use &quot;replace&quot; in the name. The function has room to diverge semantics then. Also we have the same problem with matchAll right?</p>
 <p>JHD: It's notable that the original plan for matchAll was your option 3: cloning the regex and forcing the &quot;g&quot; flag, but we moved away from that so matchAll could delegate full responsibility to the regex.</p>
 <p>MB: So if we change the method we can get away with just using simple strings?</p>
-<p>MS: I agree with that. If we can simplify the method then that's preferred. We should change the name.</p>
+<p>MLS: I agree with that. If we can simplify the method then that's preferred. We should change the name.</p>
 <p>MB: So substituteAll or something? We can bikeshed the name.</p>
 <p>YK: I am missing this cognitive load point, what's the point?</p>
 <p>MM: Well replaceAll should match semantics for replace in terms of the supported arguments and features</p>
 <p>DE: I disagree with the cognitive load point. replace is really complex, I'd wager no one in this room can describe the specs of replace, for example all of the $ patterns you can put in the replacement string.</p>
-<p>MS: But someone schooled in replace knows what they expect and so it does carry over.</p>
+<p>MLS: But someone schooled in replace knows what they expect and so it does carry over.</p>
 <p>DE: It would not be more cognitive load if we left out obscure features of replace in replaceAll; it would only be less load.</p>
 <p>BE: No one uses Perl these days!</p>
 <p>ZB: We can optimise for fast passes if the arguments are strings so performance isn't a concern. Im not concerned of cognitive load but I am around principle of least surprise which should prevent us from reusing <code>replace*</code> if we change the signature. On the other hand bringing <code>replace</code> and <code>substiute</code> into JS feels an inconsistent large-scale language API.</p>
-<p>MS: Yeah the issue with replaceAll is that if it has the same semantics, whats the use? Just tack on a <code>g</code> to the RegExp flags.</p>
+<p>MLS: Yeah the issue with replaceAll is that if it has the same semantics, whats the use? Just tack on a <code>g</code> to the RegExp flags.</p>
 <p>BE: Having simple methods that just work on strings is useful, but replace/replaceAll is something to think about.</p>
 <p>MB: Okay, so I guess this isn't a concern for Stage 1 - I'm after Stage 1 so can we push this to Stage 1?</p>
 <p>MF: RegExp escape might be a better option - when this last came up I was the main objector, but perhaps we could reinvestigate this.</p>
@@ -160,7 +160,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>MB: So can we say stage 1 still though?</p>
 <p>MM: It certainly qualifies, and I won't object. But my preference is we drop it. One of the functions of the committee is to be the guardian of the overall language complexity. We lose sight when we look at each proposal in isolation. We should ask ourselves if the benefit this brings is worth the extra surface. My opinion is no.</p>
 <p>MB: My opinion is different. Whether it's worth it depends on the exact shape of the solution.</p>
-<p>MS: To counter Mark, there is no good way to do a global string search of another string without regular expressions.</p>
+<p>MLS: To counter Mark, there is no good way to do a global string search of another string without regular expressions.</p>
 <p>MM: Hmm, this is a significant point I hadn't considered.</p>
 <p>YK: This case and others from earlier is making the case that a better API for &quot;just use /g&quot; is important.</p>
 <p>MB: So stage 1?</p>
@@ -250,9 +250,9 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 </ul>
 <p>DE: (Presenting)</p>
 <p>KM: A lot of proposals make it to stage 3, get implemented by 1 or 2 engines, and for whatever reason they die. For example SIMD. If it had shipped, they'd be locked into it - but it would never make it into the standard. The problem is shipping features that - beyond a reasonable doubt - wont make it into the spec locks us into shipping non-spec features.</p>
-<p>MS: Keith and I are in alignment. SIMD sat at stage 3 for a long time.</p>
+<p>MLS: Keith and I are in alignment. SIMD sat at stage 3 for a long time.</p>
 <p>DE: It's not at Stage 3 anymore.</p>
-<p>MS: No, but it did stay there. Also sometimes things change in stage 3 that are significant changes, if we ship prior to these changes, we end up with web compat issues. The intent here is to kick the tires. Historically, Apple can't help in this process though; historically we ship one stable version of Safari per year, this year we shipped two. I don't know if we'll dramatically change that. It doesn't make sense for the committee to wait for us to ship. Its unlikely we'll ever have a stage 3 feature sitting in Safari stable.</p>
+<p>MLS: No, but it did stay there. Also sometimes things change in stage 3 that are significant changes, if we ship prior to these changes, we end up with web compat issues. The intent here is to kick the tires. Historically, Apple can't help in this process though; historically we ship one stable version of Safari per year, this year we shipped two. I don't know if we'll dramatically change that. It doesn't make sense for the committee to wait for us to ship. Its unlikely we'll ever have a stage 3 feature sitting in Safari stable.</p>
 <p>YK: Is the goal that users are happy with the feature or is it a case of finding out web compatibility issues. I also want to strongly disagree with what the criteria for an implementation is. I understand that people think asm/JIT is a privileged implementation, personally I think we'd be better served amount making requirements on testing - for example C++ committee doesn't require a running version over tests. It should be a case that we can run an implementation against tests.</p>
 <p>DE: If we accept javascript to javascript compilers, what happens if browsers were to disappear from this group? We want to stay in alignment as a group - and this should be a rate limiting step. Some committee members were concerned about the bar for approval being way to low. We need to have a criteria that validates the features.</p>
 <p>YK: So are we saying just browsers should be this?</p>
@@ -266,11 +266,11 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>DE: I still think we require implementations for stage 4. Implementors give really strong feedback because they look at the proposals differently to others.</p>
 <p>JHD: If a proposal is determined to have no web-compat concerns, could we just allow this - as a comittee - to have looser criteria. I'm hoping we can come to a codified decision tree where some proposals fall down the strict route and some fall down the loose route.</p>
 <p>TST: The two most prominent examples of things being unshipped: Array.prototype.values and Array.prototype.contains which turned out to not be web compatible. We shipped them in Firefox up to beta, but not stable. I can't think of an example with the new staging process where things like this <em>weren't caught</em> so maybe this is just discussing theoretical things which will be caught anyway.</p>
-<p>MS: Its the duty of this committee to tell the world what the 1 JS is that people use. For an implementation to say its compliant, we want to make sure it implements what this comittee produces. So they need to count towards saying what is in the standard. Any engine - in my mind - that says it is ECMAScript compliant needs to have a say as to what gets standardised. Predominantly this is browsers but we shouldn't leave out other engines. Yehuda brought up a JS to JS implementation. People use this for their daily work - we'd get more feedback from these because websites wait for critical mass support from browsers. If a browser implementor says: &quot;I implemented it and its good&quot; and we ship it - but its not ergonomically compliant or maybe some tweaks would improve it - we won't get this feedback at the browser, we get this from Babel though. We can't discount that feedback.</p>
+<p>MLS: Its the duty of this committee to tell the world what the 1 JS is that people use. For an implementation to say its compliant, we want to make sure it implements what this comittee produces. So they need to count towards saying what is in the standard. Any engine - in my mind - that says it is ECMAScript compliant needs to have a say as to what gets standardised. Predominantly this is browsers but we shouldn't leave out other engines. Yehuda brought up a JS to JS implementation. People use this for their daily work - we'd get more feedback from these because websites wait for critical mass support from browsers. If a browser implementor says: &quot;I implemented it and its good&quot; and we ship it - but its not ergonomically compliant or maybe some tweaks would improve it - we won't get this feedback at the browser, we get this from Babel though. We can't discount that feedback.</p>
 <p>DE: Sure - I wasn't discounting that feedback, I'm saying that we can have early babel feedback but stage 4 should require actual implementations. In this PR it doesn't say the feature has to be shipped unflagged.</p>
-<p>MS: I'm just saying we should say non browser implementations</p>
+<p>MLS: I'm just saying we should say non browser implementations</p>
 <p>DE: It doesn't say browser here, it says native.</p>
-<p>MS: I'm not sure we want all implementations from stage 3 to 4 have to have implementations be native.</p>
+<p>MLS: I'm not sure we want all implementations from stage 3 to 4 have to have implementations be native.</p>
 <p>ZB: Depending on the feature we worried about different things, as Jordan was saying. We don't want to end up at a stage where edge and chrome have it and safari doesn't or something. We try to cover this with the stage process but we're not looking at each case. An example of global vs something else... we should have the proposal include concerns for stage 4 - in some cases we're concerned around web compat, in others we'll get more feedback from a polyfill where people can use it and give us feedback. We shipped PluralRules in firefox - we proved its implementable but no one uses it, we dont know if its useful or not. global though - we know its useful, but we want to make sure implementors can implement and there are no web compat issues. We need to ensure we're writing proposals that are useful for people. I don't think we can hardcode this in a document, I think the comittee and champions should work through this in their proposals.</p>
 <p>DE: It seems good to allow champions to identify problems in their proposals. But the browser implementation thing also records buy in from the browsers. Not just web compat or implementability. Sometimes standards bodies get into modes where they end up producing specs and features that never get shipped. The two implementations thing gives us a barrier to ensure we're shipping things that people want and engines want and can do.</p>
 <p>ZB: I'm not saying we drop the two engines thing, just we identify issues per proposal.</p>
@@ -291,7 +291,7 @@ István Sebestyén (IS), Brian Terlson (BT), Leo Balter (LBR), Rick Waldron (RW)
 <p>JHD: Why don't we come up with a concrete list of the categories of concerns from promoting to a stage? Then we can as a committee agree to what categories a proposal fall into. So we can say a proposal needs browser buy in, then theres an actionable thing for the proposal to do. We then don't end up doing this process-lawyering by stonewalling proposals or using the proposal wording to push proposals through.</p>
 <p>YK: This happens informally which I like. We often say &quot;I agree to stage 1 but for stage 2 you best do a b and c&quot;. This gives clear indications for what a proposal should come back with. I know there's strong norms against objecting - but it would be problematic if stage 4 was a list of checkboxes - you check them off and boom you win. We should have proposals where browsers can say they don't want to advance it and thats okay. People should feel comfortable - with rationalises - to say they don't like a proposal.</p>
 <p>DE: Do you think the current process document specifies implicitly that 2 vendors are shipping?</p>
-<p>MS: I don't think the current criteria is clear. We're arguing over Domenic's vs other interpretations of this. I'm going to read this spec verbatim. The term &quot;significant&quot; - I don't know how to qualify that. &quot;such as&quot; - is that really &quot;such as&quot;?</p>
+<p>MLS: I don't think the current criteria is clear. We're arguing over Domenic's vs other interpretations of this. I'm going to read this spec verbatim. The term &quot;significant&quot; - I don't know how to qualify that. &quot;such as&quot; - is that really &quot;such as&quot;?</p>
 <p>YK: Point of order - I wanted &quot;such as&quot; added because Domenic wanted concrete browser list and I wanted to keep things open</p>
 <p>BE: Yes, I was advocating for this too. The ambiguity was a feature not a bug. It allows us to have a conversation on a feature by feature basis. Maybe this was a bad idea though.</p>
 <p>MB: The problem is it makes no distinction of stable vs not, or flagged vs unflagged. That's the problem right?</p>

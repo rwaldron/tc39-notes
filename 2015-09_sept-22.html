@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-22-2015-meeting-notes"><h1 id="september-22-2015-meeting-notes">September 22, 2015 Meeting Notes</h1></a><hr>
-<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
+<p>Allen Wirfs-Brock (AWB), Sebastian Markbåge (SM), Jafar Husain (JH), Eric Ferraiuolo (EF), Caridy Patiño (CP), Mark S. Miller (MM), Adam Klein (AK), Michael Ficarra (MF), Peter Jensen (PJ), Domenic Denicola (DD), Jordan Harband (JHD), Chip Morningstar (CM), Brian Terlson (BT), John Neumann (JN), Dave Herman (DH), Brendan Eich (BE), Rick Waldron (RW), Yehuda Katz (YK), Jeff Morrison (JM), Lee Byron (LB), Daniel Ehrenberg (DE), Ben Smith (BS), Lars Hansen (LHN), Nagy Hostafa (NH), Michael Saboff (MLS), John Buchanan (JB), Gorkem Yakin (GY), Stefan Penner (SP)</p>
 <p>Remote:
 Mark S. Miller (MM), Dan Gohman (DGN), John McCutchan (JMC)</p>
 <hr>
@@ -545,7 +545,7 @@ m.get(Float32(<span class="hljs-number">-0</span>, <span class="hljs-number">-0<
 m.set(<span class="hljs-literal">NaN</span>, <span class="hljs-number">1</span>);
 m.has(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// true</span>
 m.get(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// 1</span>
-<span class="hljs-comment">// even though NaNs are not `===` equal. </span>
+<span class="hljs-comment">// even though NaNs are not `===` equal.</span>
 </code></pre>
 <p>DE: we assume that SIMD users are more clever and will not be confused by this?</p>
 <p>MM: we all agree that SameValue recursively does SameValue. My preference is that all of them recur with SameValue. Next... (missed the specifics here, sorry)</p>
@@ -566,7 +566,7 @@ m.get(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// 1</s
 <p>JMC: confirms that IEEE754 defines min num, max num</p>
 <p>AWB:</p>
 <p>discussion about including length in SIMD operations</p>
-<p>MS: Resolution on built-in module?</p>
+<p>MLS: Resolution on built-in module?</p>
 <p>DH: Need module loading completed</p>
 <p>AWB: Don't need this</p>
 <p>YK: Signed up for this previously, can restart work on it.</p>
@@ -628,7 +628,7 @@ m.get(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// 1</s
 <p>YK: Mark suggests that these go in the constructor</p>
 <p>BE: Problematic:</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> </span>{
-  ha = <span class="hljs-built_in">eval</span>(args)    
+  ha = <span class="hljs-built_in">eval</span>(args)
 }
 
 <span class="hljs-keyword">var</span> args = <span class="hljs-string">"arguments"</span>;
@@ -663,7 +663,7 @@ m.get(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// 1</s
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
   public <span class="hljs-keyword">this</span>.x = x;
   public <span class="hljs-keyword">this</span>.y = y;
-    
+
   <span class="hljs-keyword">constructor</span>(x, y) {
     <span class="hljs-comment">// ...</span>
   }
@@ -675,7 +675,7 @@ m.get(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// 1</s
   autoBound = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>);
   };
-  
+
   id = getId();
 }
 </code></pre>
@@ -686,7 +686,7 @@ m.get(<span class="hljs-literal">NaN</span>); <span class="hljs-comment">// 1</s
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>);
   };
   b() {
-      
+
   }
 }
 </code></pre>

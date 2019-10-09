@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-27-2017-meeting-notes"><h1 id="september-27-2017-meeting-notes">September 27, 2017 Meeting Notes</h1></a><hr>
-<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (AKI), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD), Caio Gondim (CGM), Brittany Storoz (BSZ), Sathya Gunasekaran (SGN), Domenic Denicola (DD), Richard Gibson (RGN)</p>
+<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MLS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (AKI), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD), Caio Gondim (CGM), Brittany Storoz (BSZ), Sathya Gunasekaran (SGN), Domenic Denicola (DD), Richard Gibson (RGN)</p>
 <p>Remote:
 István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM), Gabriel Isenberg (GI), Zibi Braniecki (ZB)</p>
 <hr>
@@ -32,7 +32,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>DE: Writes into a Float64Array are also torn</p>
 <p>SYG: Why do we want only 64 bit operations?</p>
 <p>WH: What important architectures do not support atomic 64-bit operations? Even 32-bit architectures often support 64-bit atomic operations.</p>
-<p>MS: 32 bit operations are being deprecated but they're still around. MIPS is still being used.</p>
+<p>MLS: 32 bit operations are being deprecated but they're still around. MIPS is still being used.</p>
 <p>DE: Yeah, set top boxes use MIPS</p>
 <p>RW: Router chipsets, eg. MediaTek, etc</p>
 <p>WH: Are there 64 bit atomics?</p>
@@ -50,7 +50,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>WH: This is not a big issue, but it is annoying.</p>
 <p>DE: Should we proceed?</p>
 <p>WH: There should be a way for users to find out if 64-bit operations are tear-free or not. I was hoping there would be no important platforms left that don't offer 64-bit reads and writes, but it seems there are some still.</p>
-<p>MS: ARMv7 has load-store of pairs operations. ARMv6 does not have a load-store of pairs so it is another platform that does needs support.</p>
+<p>MLS: ARMv7 has load-store of pairs operations. ARMv6 does not have a load-store of pairs so it is another platform that does needs support.</p>
 <p>DE: ARMv6 is not just a theoretical platform, e.g., Igalia is porting JSC to ARMv6. This is a longer conversation. I'll merge this PR as it seems we're in accordance - we will investigate around Atomics and non-64-bit.</p>
 <p>DE: (Presenting Slides)</p>
 <p>DE: Should we allow BigInts be property keys?</p>
@@ -58,11 +58,11 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>DE: It'll coerce to a string. Genuinely useful if you want to put together a string of stuff - like a template string.</p>
 <p>WH: If it has toString in one place it should in the other; so property keys are acceptable here.</p>
 <p>BT: So we want equivalency in all cases?</p>
-<p>MS: if you allow bigints as indexes then how do we handle the case of passing a bigint &gt; 32-1 bits as the index?</p>
+<p>MLS: if you allow bigints as indexes then how do we handle the case of passing a bigint &gt; 32-1 bits as the index?</p>
 <p>DE: The 2^32 - 1 number only comes up in the specification is for the Array length. Implementations can optimize in a shorter or longer range already. I believe some implementations only bother optimizing for a shorter length.</p>
 <p>WH: Don't you have the same problem with doubles or strings?</p>
 <p>DE: If users expect this to be usable heavily optimized and ship code using it, then implementations may decide to optimize it. Eventually either everyone will learn its slow to use bigints for arrays or we'll end up supporting it in an optimized way. A fair summary?</p>
-<p>MS: Yeah. Important to be cognizant of what we're doing.</p>
+<p>MLS: Yeah. Important to be cognizant of what we're doing.</p>
 <p>YK: Are we dismissing the idea of banning it in these cases? We rejected a lot of use cases for example [Double] == [BigInt].</p>
 <p>WH: What you said is not true, we <em>do</em> allow == to work to compare a Number with a BigInt.</p>
 <p>DE: Property access and operators are not quite the same.</p>
@@ -248,24 +248,24 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>JHD: Does anyone have a suggestion to how to make this an option?</p>
 <p>DD: Boolean options are bad.</p>
 <p>JHD: I agree, let's come up with something then.</p>
-<p>MS: Calling it <code>matchIterator</code> would solve the problem.</p>
+<p>MLS: Calling it <code>matchIterator</code> would solve the problem.</p>
 <p>JHD: Does the room think this would be preferable?</p>
 <p>DE: Do we really want to set up a convention where methods that return iterators end in &quot;iterator&quot; ?</p>
-<p>MS: you could call it scan instead</p>
+<p>MLS: you could call it scan instead</p>
 <p>JHD: Is everyone happy with scan?</p>
 <p>MF: Why don't we set up a github issue?</p>
 <p>JHD: Right. I will set up a github issue. Can everyone who is interested please comment on that issue.</p>
-<p>MS: It seems you really want a sticky that doesn't start at lastindex. I'm not sure what sticky means with what your proposing.</p>
+<p>MLS: It seems you really want a sticky that doesn't start at lastindex. I'm not sure what sticky means with what your proposing.</p>
 <p>JHD: Sticky provides an iterator for one match.</p>
-<p>MS: You want an iterator that gives you all the captures - a &quot;sticky plus&quot; could do that.</p>
+<p>MLS: You want an iterator that gives you all the captures - a &quot;sticky plus&quot; could do that.</p>
 <p>JHD: Like an alternative flag?</p>
-<p>MS: Yes. I share Waldemar's concern. What flag should I give the regexp? What do I get back? And so forth. Having something like this with all captures for every single match is good.</p>
+<p>MLS: Yes. I share Waldemar's concern. What flag should I give the regexp? What do I get back? And so forth. Having something like this with all captures for every single match is good.</p>
 <p>JHD: I feel more hesistant about adding a flag over naming this <code>scan</code>.</p>
-<p>MS: It gives you more power though - adding a flag allows you to use that semantic with all regexp operations. This is probably the main usecase but would a flag be more valuable?</p>
+<p>MLS: It gives you more power though - adding a flag allows you to use that semantic with all regexp operations. This is probably the main usecase but would a flag be more valuable?</p>
 <p>JHD: By having matchAll we have a consistent interface; while a flag requires introspection in userland code.</p>
-<p>MS: With matchAll do I have to change my regular expression to remove <code>g</code>?</p>
+<p>MLS: With matchAll do I have to change my regular expression to remove <code>g</code>?</p>
 <p>JHD: No, you get all match groups with <code>g</code>. It works the same.</p>
-<p>MS: So you're changing how exec works?</p>
+<p>MLS: So you're changing how exec works?</p>
 <p>JHD: No, exec doesn't change. match and exec work differently. I'll file a few github issues to chat about. I may or may not come back in November for Stage 2. Any other concerns?</p>
 <a href="#conclusionresolution-12iiia-stringprototypematchall"><h4 id="conclusionresolution-12iiia-stringprototypematchall">Conclusion/Resolution</h4></a><ul>
 <li>Does not progress to Stage 2 today</li>

@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#september-28-2017-meeting-notes"><h1 id="september-28-2017-meeting-notes">September 28, 2017 Meeting Notes</h1></a><hr>
-<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (AKI), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD), Caio Gondim (CGM), Brittany Storoz (BSZ), Sathya Gunasekaran (SGN), Domenic Denicola (DD), Richard Gibson (RGN), Michael Z Goddard (MZG)</p>
+<p>Andrew Paprocki (API), Brian Terlson (BT), Chip Morningstar (CM), Claude Pache (CPE), Godfrey Chan (GCN), Jordan Harband (JHD), Leo Balter (LBR), Maggie Pint (MPT), Michael Ficarra (MF), Michael Saboff (MLS), Patrick Soquet (PST), Peter Hoddie (PHE), Rex Jaeschke (RJE), Rob Palmer (RPR), Ron Buckton (RBN), Sam Goto (SGO), Sebastian Markbåge (SM), Shu-yu Guo (SYG), Waldemar Horwat (WH), Yehuda Katz (YK), Mathias Bynens (MB), Justin Ridgewell (JRL), Kyle Verrier (KVR), Keith Cirkel (KCL), Till Schneidereit (TST), Aki Rose (AKI), Daniel Ehrenberg (DE), Valerie Young (VYG), Rick Waldron (RW), Dave Herman (DH), Henry Zhu (HZU), Tim Disney (TD), Caio Gondim (CGM), Brittany Storoz (BSZ), Sathya Gunasekaran (SGN), Domenic Denicola (DD), Richard Gibson (RGN), Michael Z Goddard (MZG)</p>
 <p>Remote:
 István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM), Gabriel Isenberg (GI), Zibi Braniecki (ZB), James M Snell (JSL)</p>
 <hr>
@@ -123,7 +123,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>YK: &quot;null or undefined&quot; well motivated. Especially to check whether or not could be used to dot index.</p>
 <p>DE: Stage 2 was the concern about syntax, which is about relationship with the optional chaining &quot;?.&quot; syntax</p>
 <p>JHD: Operators in optional chaining proposal should be considered at the same time as this. Both should be considered in stage 2.</p>
-<p>MS: &quot;?|&quot; makes sense to me</p>
+<p>MLS: &quot;?|&quot; makes sense to me</p>
 <p>WH: We keep bikeshedding the optional chaining proposal. But none of that affects the use of <code>??</code> here.</p>
 <p>DE: &quot;??.&quot; or &quot;??[&quot; in optional chaining would mean we can't consider &quot;??&quot; here. Stage 2 things should have a moderate level of stability.</p>
 <p>WH: <code>??.</code>, <code>??[</code>, and <code>??(</code> in optional chaining does <em>not</em> mean that we can't use <code>??</code> here if we ship the proposals at the same time.</p>
@@ -180,7 +180,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>MB: The proposal is about adding partial application to the language in one way or another. Advancing to Stage 1 does not prevent us from changing the syntax.</p>
 <p>DD: I don't think we should block stage 1 - but I do think this is a worrying trend of presenting full code and semantics and asking for stage 1 where the syntax and semantics aren't sensible. Present an idea to push an idea to stage 1, not syntax and semantics to get the idea to stage 1.</p>
 <p>RBN: The syntax and semantics are flexible but without syntax and semantics there is nothing to present.</p>
-<p>MS: This proposal meets stage 1, given the policy document.</p>
+<p>MLS: This proposal meets stage 1, given the policy document.</p>
 <p>WH: I'm happy to advance to stage 1 — I think the general closure capture this does is useful but have strong concerns about the garden path syntax.</p>
 <a href="#conclusionresolution-13i-partial-application"><h4 id="conclusionresolution-13i-partial-application">Conclusion/Resolution</h4></a><ul>
 <li>Stage 1 acceptance</li>
@@ -262,7 +262,7 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>MB: It's also not true for exponents, e.g. <code>x[1e3] = 5</code>. The same thing applies for the example in the slide: <code>x = { 3n: 'a' }</code> should work the way <code>x = { 1e3: 'a' }</code> does.</p>
 <p>DE: But your intuition won't follow for variables, e.g. <code>x[foo] = 5</code> isn't <code>x['foo'] = 5</code>.</p>
 <p>DD: I suppose the issue could be that developers may see an array index as an integer and using bitint as it is an integer type</p>
-<p>MS: We just spoke about adding underscores as numeric separators - we're not tostringing those, so this point doesn't follow.</p>
+<p>MLS: We just spoke about adding underscores as numeric separators - we're not tostringing those, so this point doesn't follow.</p>
 <p>YK: I share Domenic's intuition that it is a foot gun. On the other hand, we're happy with toString, we're happy with string keys - we're just maybe banning the combination of those two, which seems more in the province of linting. Unlike binary <code>+</code>, there are well-defined semantics for what this operation does.</p>
 <a href="#conclusion--resolution-bigint-topropertykey"><h4 id="conclusion--resolution-bigint-topropertykey">Conclusion / Resolution</h4></a><ul>
 <li>Allow BigInt as a property key</li>
@@ -300,13 +300,13 @@ István Sebestyén (IS), Ben Newman (BN), Caridy Patiño (CP), Keith Miller (KM)
 <p>DE: Have you discussed this with WebGL folks? Do they have interest?</p>
 <p>MZG: I haven't discussed this with them no.</p>
 <p>DE: It could be worthwhile to do this, I can introduce you to some people for this.</p>
-<p>MS: X86 and ARMv8 don't have native 16 bit float - so there'd have to be manual conversion.</p>
+<p>MLS: X86 and ARMv8 don't have native 16 bit float - so there'd have to be manual conversion.</p>
 <p>RW: I suspect that might be why they weren't in the original Chronos TypedArray spec.</p>
-<p>MS: To me without instruction support it'd be slower or just as slow to do this as it is currently.</p>
+<p>MLS: To me without instruction support it'd be slower or just as slow to do this as it is currently.</p>
 <p>DH: If its just Arrays and not value typed theres not much you're doing much with instructions. If you're just passing to GPU thats fine right?</p>
-<p>MS: Correct, GPUs bread and butter is 8 and 16 bit floats.</p>
+<p>MLS: Correct, GPUs bread and butter is 8 and 16 bit floats.</p>
 <p>DH: So float 16 arrays allow you to store which you can ship through GLSL. We're essentially talking about loads and stores in the JS side, and instructions done on GLSL.</p>
-<p>MS: Loads and stores would be groups of integer 16 bit values in CPUs for passing throughs, just buckets of bits for passing through. If one of the use cases of this is loading an Array with data - what does that look like?</p>
+<p>MLS: Loads and stores would be groups of integer 16 bit values in CPUs for passing throughs, just buckets of bits for passing through. If one of the use cases of this is loading an Array with data - what does that look like?</p>
 <p>DH: Yes, is this even useful for JS if you cant compute without GLSL? The question is can you write the programs you want to write? Float16 array would satisfy use cases without going all the way to value types?</p>
 <p>MZG: Yeah</p>
 <p>LBR: I'll bring a draft spec next meeting.</p>

@@ -13,7 +13,7 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#january-24-2017-meeting-notes"><h1 id="january-24-2017-meeting-notes">January 24, 2017 Meeting Notes</h1></a><hr>
-<p>Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MS), James Kyle (JK), Franziska Hinkelmann (FHN), Anna Henningsen (AH), John Lenz (JLZ), Sebastian Markbåge (SM), Bradley Farias (BFS), Jeff Morrison (JM), Tyler Kellen (TKN), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CH), Gabriel Isenberg (GI), Bert Belder (BB), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Mathias Bynens (MB), Leo Balter (LB), István Sebestyén (IS)</p>
+<p>Allen Wirfs-Brock (AWB), Waldemar Horwat (WH), Jordan Harband (JHD), Brian Terlson (BT), Michael Ficarra (MF), Adam Klein (AK), Chip Morningstar (CM), Dave Herman (DH),  Kent C. Dodds (KCD), Kevin Gibbons (KG), Tim Disney (TD), Daniel Ehrenberg (DE), Shu-yu Guo (SYG), Michael Saboff (MLS), James Kyle (JK), Franziska Hinkelmann (FHN), Anna Henningsen (AHN), John Lenz (JLZ), Sebastian Markbåge (SM), Bradley Farias (BFS), Jeff Morrison (JM), Tyler Kellen (TKN), Gabriel Isenberg (GI), James Snell (JSL), Maggie Pint (MPT), Chris Hyle (CHE), Gabriel Isenberg (GI), Bert Belder (BBR), Zibi Braniecki (ZB), Jamund Ferguson (JXF), Mathias Bynens (MB), Leo Balter (LBR), István Sebestyén (IS)</p>
 <hr>
 <a href="#adopting-the-agenda"><h2 id="adopting-the-agenda">Adopting the agenda</h2></a><ul>
 <li>Start with István's items to get them out of the way</li>
@@ -198,9 +198,9 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>AWB: I think spidermonkey is the right error. Super was called twice and that's an error.</p>
 <p>JHD: You can call it twice. You just can't call it successfully twice and bind this. Are you going to put that into an error message and say it's going to be less confusing? If one of them throws you can call it as many times as you wan't, you can only call it successfully once.</p>
 <p>SYG: I don't think the performance cost here is too bad.</p>
-<p>MS: I haven't looked at the implementation.</p>
+<p>MLS: I haven't looked at the implementation.</p>
 <p>BT: Do you think there is a problem here?</p>
-<p>MS: For me it's a cost benefit analysis. There is performance implications to make the check earlier, I don't care that it got called twice. You did something wrong, we're not likely to see this in real life. I disagree with Allen, at least three of those errors seem reasonable.</p>
+<p>MLS: For me it's a cost benefit analysis. There is performance implications to make the check earlier, I don't care that it got called twice. You did something wrong, we're not likely to see this in real life. I disagree with Allen, at least three of those errors seem reasonable.</p>
 <p>AK: I fixed this. I can't remember what ours says. It used to use the same error as let in a TDZ . It was bad. I agree this shouldn't be timeboxed. We've put a lot of time here, can we push this somehwere?</p>
 <p>BT: Let me ask you this. If you investigate and find that the perf implications are neglible, which I suspect will happen, would you support this change or would you still be against it?</p>
 <p>AK: I would actually be OK with it was easy to see. I feel like it might be easy for us to detect. I'm not as worried about someone moving that super call into an error function I don't think that's a thing people do unless they are intentionally messing with the interpreter.</p>
@@ -211,7 +211,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>WH: Yes. The check after can be optimized out in most practical cases.</p>
 <p>BT: I think we should do due diligence though. If you can check in advance of the next meeting or next couple of days.</p>
 <p>AK: I can set aside 15 minutes to look into this</p>
-<p>MS: This needs to be resolved by March</p>
+<p>MLS: This needs to be resolved by March</p>
 <p>AK/BT: It's been there for a long time</p>
 <p>BT: Interop isn't a big concern here, we're getting an error</p>
 <p>AK: Nobody should be wrapping their super calls in try/catches</p>
@@ -222,7 +222,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>AWB: The goal right now is what goes into the cutoff. We do have these checkpoints every year. People do pay attention to this in the outside world.</p>
 <p>BT: It's important what goes into that document. Everyone in this room only cares about the edge version of the spec but it's not true for everyone. We should just be intentional about this.</p>
 <p>BT: Skipping PR 641 for ES2017, are we okay with this?</p>
-<p>MS: Yes, I'm fine with that</p>
+<p>MLS: Yes, I'm fine with that</p>
 <p>BT: I have some talking to on 673 so that wrap this.</p>
 <p>DH: Would it be possible after this session would it be possible to take a few minutes for face to face scheduling conversation?</p>
 <p>BT: We still need to work on a few layering fixes #673 and #688, which we should leave for later</p>
@@ -280,7 +280,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>SYG: It's also not all functionality; wait and wake need agents, but other atomics can be tested on one thread.</p>
 <p>AWB: We don't have any strict requirements for what the Stage 4 tests consist of</p>
 <p>DE: In this case, you're working with V8 to make sure the tests are compatible with the harness, so it should be especially not a problem.</p>
-<p>LB: I have been reviewing the tests. They seem to have reasonable coverage so far. About the harness support, this is not the first time that the harnesses are expected to provide functionality (also for TypedArray detach). As far as reviewed the PR, this has my +1.</p>
+<p>LBR: I have been reviewing the tests. They seem to have reasonable coverage so far. About the harness support, this is not the first time that the harnesses are expected to provide functionality (also for TypedArray detach). As far as reviewed the PR, this has my +1.</p>
 <p>AWB: Any objections to Stage 4?</p>
 <a href="#conclusionresolution-13if-seeking-stage-4-for-sharedarraybuffer"><h4 id="conclusionresolution-13if-seeking-stage-4-for-sharedarraybuffer">Conclusion/Resolution</h4></a><ul>
 <li>Stage 4 acceptance
@@ -768,7 +768,7 @@ After a second super call, an error will always be thrown, it'll be called, but 
 <p>DE: OK; we'll disable the <code>\k</code> identity production in <code>+N</code> mode in Annex B.</p>
 <p>WH: That would work.</p>
 <p>AWB: What if we just kick the regular expression to the non-Annex B if named capture groups are present?</p>
-<p>MS: It makes implementation very difficult. I have existing regexps, Unicode ones, named I'm going to go partially into, but if I'm not in Unicode mode, then this other behavior is invoked</p>
+<p>MLS: It makes implementation very difficult. I have existing regexps, Unicode ones, named I'm going to go partially into, but if I'm not in Unicode mode, then this other behavior is invoked</p>
 <p>AWB: The biggest issue could be that you may be way at the end of a parse before you realize you need to change.</p>
 <p>DE: That's already going to be the case in some places. (NB: See related blog post <a href="https://hackernoon.com/the-madness-of-parsing-real-world-javascript-regexps-d9ee336df983#.kup9nqgd8">https://hackernoon.com/the-madness-of-parsing-real-world-javascript-regexps-d9ee336df983#.kup9nqgd8</a>)</p>
 <a href="#conclusionresolution-13iic-seeking-stage-2-for-named-capture-groups"><h4 id="conclusionresolution-13iic-seeking-stage-2-for-named-capture-groups">Conclusion/Resolution</h4></a><ul>

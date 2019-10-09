@@ -13,8 +13,8 @@
 <body class="markdown-body">
 <a href="javascript:history.back()">Back</a>
 <a href="#january-23-2018-meeting-notes"><h1 id="january-23-2018-meeting-notes">January 23, 2018 Meeting Notes</h1></a><hr>
-<p>Sebastian Markbåge (SM), Lin Clark (LCK), Waldemar Horwat (WH), Dean Tribble (DT), Chip Morningstar (CM), Brian Warner (BWR), Mark S. Miller (MM), Till Schneidereit (TST), Michael Saboff (MS), JF Bastien (JFB), Mattijs Hoitink (MHK), Kyle Verrier (KVR), Brian Terlson (BT), Shu-yu Guo (SYG), Ron Buckton (RBN), Michael Ficarra (MF), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Tab Atkins-Bittner (TAB), Kevin Gibbons (KG), Domenic Denicola (DD), Mariko Kosaka (MKA), Myles Borins (MBS), Peter Hoddie (PHE), Jordan Harband (JHD), Justin Fagniani (JFI), Caridy Patiño (CP), Zibi Braniecki (ZB), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Mathias Bynens (MB), Patrick Soquet (PST), Nathan Hammond (NHD), Stephen Murphy (SMY), Adam Klein (AK), Sathya Gunasekaran (SGN), Gabriel Isenberg (GI), John Lenz (JLZ), Diego Ferreiro Val (DFV), Maggie Pint (MPT), Thomas Nattestad (TND), Isabelle Valet-Harper (IVH), Peter Jensen (PJ), Brad Nelson (BNN), Godfrey Chan (GCN), Sri Pillalamarri (SPI), Eric Holk (EHK), Reefath Rajali (RRI), Rebecca Turner (RTR), Natalie Silvanovich (NSH), Sam Mussell (SML), Sebastian McKenzie (SMK), Daniel Rosenwasser (DRR), Qiuyi Zhang (QZG), Rob Palmer (RPR), Sean Larkin (SLN)</p>
-<p>Remote: Bradley Farias (BFS), Thomas Wood (TW), Ben Newman (BN), Rick Waldron (RW), Valerie Young (VYG), David Turissini (DTI)</p>
+<p>Sebastian Markbåge (SM), Lin Clark (LCK), Waldemar Horwat (WH), Dean Tribble (DT), Chip Morningstar (CM), Brian Warner (BWR), Mark S. Miller (MM), Till Schneidereit (TST), Michael Saboff (MLS), JF Bastien (JFB), Mattijs Hoitink (MHK), Kyle Verrier (KVR), Brian Terlson (BT), Shu-yu Guo (SYG), Ron Buckton (RBN), Michael Ficarra (MF), Rex Jaeschke (RJE), Yehuda Katz (YK), Andrew Paprocki (API), Tab Atkins-Bittner (TAB), Kevin Gibbons (KG), Domenic Denicola (DD), Mariko Kosaka (MKA), Myles Borins (MBS), Peter Hoddie (PHE), Jordan Harband (JHD), Justin Fagnani (JFI), Caridy Patiño (CP), Zibi Braniecki (ZB), Daniel Ehrenberg (DE), Keith Cirkel (KCL), Justin Ridgewell (JRL), Mathias Bynens (MB), Patrick Soquet (PST), Nathan Hammond (NHD), Stephen Murphy (SMY), Adam Klein (AK), Sathya Gunasekaran (SGN), Gabriel Isenberg (GI), John Lenz (JLZ), Diego Ferreiro Val (DFV), Maggie Pint (MPT), Thomas Nattestad (TND), Isabelle Valet-Harper (IVH), Peter Jensen (PJ), Brad Nelson (BNN), Godfrey Chan (GCN), Sri Pillalamarri (SPI), Eric Holk (EHK), Reefath Rajali (RRI), Rebecca Turner (RTR), Natalie Silvanovich (NSH), Sam Mussell (SML), Sebastian McKenzie (SMK), Daniel Rosenwasser (DRR), Joyee Cheung (JCG), Rob Palmer (RPR), Sean Larkin (SLN)</p>
+<p>Remote: Bradley Farias (BFS), Thomas Wood (TWD), Ben Newman (BN), Rick Waldron (RW), Valerie Young (VYG), David Turissini (DTI)</p>
 <hr>
 <a href="#welcome"><h2 id="welcome">Welcome</h2></a><p>RJE: Welcome</p>
 <p>SGN: New member get-together at 5 PM on Tuesday, dinner Wednesday at 6:30 PM</p>
@@ -292,7 +292,7 @@ engine implementor's feature tests
 <p>WH: There are some real fundamental problems.</p>
 <p>DD: We'll get there.</p>
 <p>MB: The idea is that anything that can be produced by toString with some radix is accepted by fromString with that radix. Easy to say, hard to spec, but here are some examples.</p>
-<p>MS: Do you expect BigInt.fromString to accept the trailing <code>n</code>?</p>
+<p>MLS: Do you expect BigInt.fromString to accept the trailing <code>n</code>?</p>
 <p>MB: I have a slide on that later, and the answer is no.</p>
 <p>(slides)</p>
 <p>MB: We can avoid all these problems in fromString by throwing an error for anything that can't be produced by toString.</p>
@@ -478,7 +478,7 @@ engine implementor's feature tests
 <p>JHD: the hope is that it adds extra information to the process, to let things go through the process quicker when appropriate, and slower when appropriate</p>
 <p>AK: I'd like this better if it was non-normative, sounds like good advice for champions, to identify risk areas and show that they've been addressed. Kinda the champion's job already. Adding new things to entrance criteria opens the door to long discussions: have we identified all the risk areas for stage 2? Having the same &quot;what risks are there&quot; conversation multiple times</p>
 <p>JHD: not expected to be an exhaustive list at stage 2 time, committee at any time can add/remove risk areas</p>
-<p>MS: if there are risk areas that can be identified, they should be tracked. Stage 2 and stage 4 are very far apart. These should be implementation risk areas, not other kinds of risk. Maybe during stage 3 more risks are added.</p>
+<p>MLS: if there are risk areas that can be identified, they should be tracked. Stage 2 and stage 4 are very far apart. These should be implementation risk areas, not other kinds of risk. Maybe during stage 3 more risks are added.</p>
 <p>JHD: making it a stage-2 entrance criteria means to me that it's being tracked. Making it clear that these are implementation risks sounds good to me.</p>
 <p>YK: most of my concerns have to do with usability, so e.g. &quot;I'd like to see more feedback from Babel users&quot;, doesn't sound like an implementation risk, but I'd like to see it get tracked. General desire to see more concerns raised earlier in the process, so folks don't get blindsided by it later.</p>
 <p>JHD: specific debate is whether it must be in two unflagged web browsers, we have this debate a lot. For some issues this is unnecessary.</p>
@@ -544,7 +544,7 @@ engine implementor's feature tests
 <p>WH: it's unfortunate, but match and matchAll should probably match. It'd be very confusing to remember which has which behavior on strings if they diverge</p>
 <p>?: I don't want it to require the unicode flag. matchAll makes it hard to say what the &quot;global&quot; flag means</p>
 <p>JHD: if we say that consistency with match() is most important, so coerce into regexp, with no global flag, then you get an iterator which can only fire once</p>
-<p>MS: implicitly adding the global flag seems like a reasonable way to handle this</p>
+<p>MLS: implicitly adding the global flag seems like a reasonable way to handle this</p>
 <p>JHD: if we agree to coerce to regexp and add global flag, then I <em>am</em> comfortable asking for stage-3 now, since the rest of the spec text has been reviewed.</p>
 <p>YK: I thought there was more momentum behind using a new name last time. If we call it matchAll then it should be like match, but we could use a new name to avoid that</p>
 <p>JHD: committee had talked about that</p>
