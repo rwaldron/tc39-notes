@@ -70,7 +70,7 @@
 </ul>
 <a href="#stringprototypepadstartpadend"><h2 id="stringprototypepadstartpadend">String.prototype.padStart/padEnd</h2></a><p>(JHD)</p>
 <p>JHD: will ship in stable behind a flag. Not currently trying to get to stage 4 today (currently at Stage 3). Just wanted to update because of recent discussion. there is not enough implementations to move it forward in stage.</p>
-<p>MS: It's now in WebKit Nightly</p>
+<p>MLS: It's now in WebKit Nightly</p>
 <p>JHD: Small number of people have asked about the fill string (the second argument). If you pass anything that is not a non-empty string it defaults to a space character. Ascii space is maybe English-centric.</p>
 <p>MM: does anyone here know the I18l to comment?</p>
 <p>JHD: Japanese uses a different space (other agreed)</p>
@@ -302,7 +302,7 @@
 <p>*unrelated promise discussion happened and various morasses were narrowly avoided.</p>
 <a href="#tco"><h2 id="tco">TCO</h2></a><p>SG, EF: Cross realm proper tail calls conflict with the SpiderMonkey security model, which needs to allocate memory (either on the stack or the heap) in order to do something on function return. You can tail call into the membrane thing, but it will take some space</p>
 <p>BT, DE: Explicit syntax could be part of addressing this</p>
-<p>MS: We'll have fixed stack space anyway; we already implemented it.</p>
+<p>MLS: We'll have fixed stack space anyway; we already implemented it.</p>
 <p>SG, EF: Let's make that a separate question, and discuss it Thursday. What if we start with a pull request which encodes that cross-realm calls don't to make cross-realm tail calls not have fixed stack space, while also allowing that it <em>may</em> have fixed stack space</p>
 <p>(General consensus on at least allowing non-tail-call behavior)</p>
 <p>MM: What shows up in a stack trace? This becomes observable.</p>

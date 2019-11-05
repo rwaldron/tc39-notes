@@ -15,7 +15,7 @@
 <a href="#january-31-2019-meeting-notes"><h1 id="january-31-2019-meeting-notes">January 31, 2019 Meeting Notes</h1></a><hr>
 <p>Bradley Farias (BFS), Aki Rose (AKI), Yulia Startsev (YSV), Mariko Kosaka (MKA), Shane Carr (SFC), Richard Gibson (RGN), Brian Terlson (BT), Michael Ficarra (MF), Kevin Gibbons (KG), Kevin Smith (KS), Justin Ridgewell (JRL), Mathias Bynens (MB), Sathya Gunasekaran (SGN), Chip Morningstar (CM), Peter Hoddie (PHE), Waldemar Horwat (WH), Leo Balter (LBR), Shu-yu Guo (SYG), Michael Saboff (MLS), Mattijs Hoitink (MHK), Yehuda Katz (YK), Till Schneidereit (TST), Pieter Ouwerkerk (POK), Tom Dale (TDE), Myles Borins (MBS), Sean Larkin (SLN), Godfrey Chan (GCN), Rick Markins (RMS), Daniel Rosenwasser (DRR), Mark Miller (MM), Lin Clark (LCK)</p>
 <p>Remote:
-István Sebestyén (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Jory Burson (JBN), Conrad Watt (CWT), Guy Bedford (GB), Justin Fagnani (JFI), Robert Pamely (RPY), Eric Faust (EFT), Caridy Patiño (CP)</p>
+István Sebestyén (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FYT), Jory Burson (JBN), Conrad Watt (CWT), Guy Bedford (GB), Justin Fagnani (JFI), Robert Pamely (RPY), Eric Faust (EFT), Caridy Patiño (CP)</p>
 <hr>
 <a href="#freezing-prototypes-for-stage-1"><h2 id="freezing-prototypes-for-stage-1">Freezing prototypes for stage 1</h2></a><p>(Kevin Gibbons)</p>
 <ul>
@@ -83,9 +83,9 @@ István Sebestyén (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenb
 <p>KS: One of the use cases for private fields is to allow programmers to express internal slots in JS, and be able to do polyfilling and traditionally CSS-authored things like DOM. But JS is so wide open with prototypes; to serve the case with JSDOM's specific use case, it's unable to address that use case because it's overly restrictive. new.initialize seems like a patch over that after the fact.</p>
 <p>MLS: I agree with that, this is a patch.</p>
 <p>DE: I see this as a fundamental primitive, where it makes the common case ergonomic but the extra case something you opt-in to.</p>
-<p>YK: I agree with MS; I am a proponent of return override because of base classes. How do you create a base class that allocates?  Having constructors that return is important. The problem is that you use return override in a non-base class. I want to learn more about the DOM use cases, but I think this may add too much power.</p>
+<p>YK: I agree with MLS; I am a proponent of return override because of base classes. How do you create a base class that allocates?  Having constructors that return is important. The problem is that you use return override in a non-base class. I want to learn more about the DOM use cases, but I think this may add too much power.</p>
 <p>MLS: This is basically a C++ placement new. So even though it seems like a simple addition, it would have to be replaced everywhere where this is called.</p>
-<p>KG: In reply to MS; I think the reason this is relevant for a library who has classes that are consumed by someone else's code. They want to behave in an expected way, regardless of what the user does.</p>
+<p>KG: In reply to MLS; I think the reason this is relevant for a library who has classes that are consumed by someone else's code. They want to behave in an expected way, regardless of what the user does.</p>
 <p>MLS: If the library changes its prototype, it's in control of all its code and can easily work. If the user changes the prototype, the library can simply disallow that. So I'm not entirely sure what the use case is for that.</p>
 <p>DE: Yeah, we could say that. That's a design choice.</p>
 <p>SGN: (I will discuss offline)</p>

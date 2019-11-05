@@ -15,7 +15,7 @@
 <a href="#june-5-2019-meeting-notes"><h1 id="june-5-2019-meeting-notes">June 5, 2019 Meeting Notes</h1></a><hr>
 <p>István Sebestyén (IS), Valerie Young (VYG), Pieter Ouwerkerk (POK), Noah Tye (NTE), Till Schneidereit (TST), Logan Smyth (LSH), Yulia Startsev (YSV), Ben Coe (BCE), Guy Bedford (GB), Myles Borins (MBS), Domenic Denicola (DD), Jack Steinberg (JBS), Sven Sauleau (SSA), Clark Sampson (CSN), Pedram Emrouznejad (PED), Sergey Rubanov (SRV), Henry Zhu (HZU), Alan Schmitt (AS), Justin Ridgewell (JRL), Patrick Soquet (PST), Peter Hoddie (PHE), Caio Lima (CLA), Daniel Ehrenberg (DE), Anne van Kesteren (AVK), Shu-yu Guo (SYG), Ross Kirsling (RKG), Keith Miller (KM), Mattijs Hoitink (MHK), Michael Saboff (MLS), Guilherme Hermeto (GHO), Rob Palmer (RPR), Philipp Dunkel (PDL), Szabolcs Szabolcsi-Toth (SZT), Nicolò Ribaudo (NRO), Joyee Cheung (JCG), Kevin Gibbons (KG), Aki Rose (AKI), Tierney Cyren (TCN), Amal Hussein (AHN), Julien Gilli (JGI), Sean Larkin (SLN), Sathya Gunasekaran (SGN), Daniel Rosenwasser (DRR), Randy Luecke (RLE), Kat Marchán (KZM), Andrew Paprocki (API), Mark Miller (MM), Joe Sepi (JSI)</p>
 <p>Remote:
-Brian Terlson (BT), Ron Buckton (RBN), Jordan Harband (JHD), Leo Balter (LBR), Frank Yung-Fong Tang (FTG), Mike Samuel (MSL), Shane Carr (SFC), Jordan Gensler (JGR), Robert Pamely (RPY)</p>
+Brian Terlson (BT), Ron Buckton (RBN), Jordan Harband (JHD), Leo Balter (LBR), Frank Yung-Fong Tang (FYT), Mike Samuel (MSL), Shane Carr (SFC), Jordan Gensler (JGR), Robert Pamely (RPY)</p>
 <hr>
 <a href="#agenda"><h1 id="agenda">Agenda</h1></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2019/06.md">Agenda</a></li>
@@ -25,21 +25,21 @@ Brian Terlson (BT), Ron Buckton (RBN), Jordan Harband (JHD), Leo Balter (LBR), F
 <ul>
 <li><a href="https://docs.google.com/presentation/d/131l-GAqhs7SRsjsa2MmOLdou7gr2_Vl_0dTl1MhyTb0">slides</a></li>
 </ul>
-<p>FTG: 3 PRs depend on each other and are fairly small, no separate proposal and addressing them one by them.</p>
-<p>FTG. Int.DateTimeFormat, three different things: adding support for formatting period, dayPeriod and controlling millisecondsdigit..</p>
-<p>FTG: Format Quarter, allow datetime format to support a quarter formatting [see slides]</p>
-<p>FTG: New type for quarter returned by formatToParts.</p>
+<p>FYT: 3 PRs depend on each other and are fairly small, no separate proposal and addressing them one by them.</p>
+<p>FYT. Int.DateTimeFormat, three different things: adding support for formatting period, dayPeriod and controlling millisecondsdigit..</p>
+<p>FYT: Format Quarter, allow datetime format to support a quarter formatting [see slides]</p>
+<p>FYT: New type for quarter returned by formatToParts.</p>
 <p>MBS: Can we have a consensus with the PR process?</p>
 <p>DE: when we're adding features like this that require implementation work, I encourage us to go through something analogous to our (missed) process. Something Frank and I talked about offline. At least one implementation and buy in from another one, ideal 2 implementations and tests before landing. If we came to consensus today there would still be things I'd like to see from a PR. Also want to mention that Jordan asked it to be a stage proposal. As long as we hold real requirements similar, I don't think requiring a formal stage process is not necessarily required.</p>
 <p>SFC: Wanted to discuss where do we draw the line between what requires a proposal and what requires a PR. The current change proposed is completely consistent with the way Intl.DateTimeFormat currently works. No new design is being added, so there is no really serious design question. These PRs don't really set any precedent.</p>
 <p>SGN: what's the binary size increase?</p>
-<p>FTG: This is already included in the data for use with the datetimeformat</p>
+<p>FYT: This is already included in the data for use with the datetimeformat</p>
 <p>SGN: V8 doesn't strip it out?</p>
-<p>FTG: No it doesn't</p>
+<p>FYT: No it doesn't</p>
 <p>DE: Support it being a PR because it's pretty small and as he says it ties into existing things. Still want to require we have broad support for things in PR. I think we do have buy-in in this case, or at least we can ask for it. Don't want to say that because something is small we don't have the normal proposal staging process.</p>
 <p>DE: Can we ask the implementers here what they think about implementing this feature?</p>
 <p>MBS: Do we have any implementor have concerns?</p>
-<p>FTG: In V8 it's already implemented behind a flag, and I do plan to submit tests to Test262. I do support Dan's position having those requirements.</p>
+<p>FYT: In V8 it's already implemented behind a flag, and I do plan to submit tests to Test262. I do support Dan's position having those requirements.</p>
 <a href="#conclusionresolution-ecma-402-add-quarter-option"><h4 id="conclusionresolution-ecma-402-add-quarter-option">Conclusion/Resolution</h4></a><ul>
 <li>needs to meet stage 4 similar requirements Test262 tests should be merged first</li>
 </ul>
@@ -48,12 +48,12 @@ Brian Terlson (BT), Ron Buckton (RBN), Jordan Harband (JHD), Leo Balter (LBR), F
 <ul>
 <li><a href="https://docs.google.com/presentation/d/131l-GAqhs7SRsjsa2MmOLdou7gr2_Vl_0dTl1MhyTb0">slides</a></li>
 </ul>
-<p>FTG: In the past we can format day in 12 hours system, cldr actually have a concept called [missed, dayPeriod?]. It makes it more readable. Some language you may have four different kinds of periods during the day. In other languages they have only 2 or 3 or 5. And mapping between hours and period can be different.</p>
-<p>FTG: [Referring to slides for examples]</p>
-<p>FTG: Two different types of issues: mapping from the hour to the set of day periods. And mapping to the set of day period to a set of localized strings.</p>
-<p>FTG: Any question?</p>
+<p>FYT: In the past we can format day in 12 hours system, cldr actually have a concept called [missed, dayPeriod?]. It makes it more readable. Some language you may have four different kinds of periods during the day. In other languages they have only 2 or 3 or 5. And mapping between hours and period can be different.</p>
+<p>FYT: [Referring to slides for examples]</p>
+<p>FYT: Two different types of issues: mapping from the hour to the set of day periods. And mapping to the set of day period to a set of localized strings.</p>
+<p>FYT: Any question?</p>
 <p>MBS: Doesn't appear we have any question and there is nothing in the queue.</p>
-<p>FTG: We'll go through the same process as for the previous proposal</p>
+<p>FYT: We'll go through the same process as for the previous proposal</p>
 <a href="#conclusionresolution-ecma-402-add-dayperiod-option"><h4 id="conclusionresolution-ecma-402-add-dayperiod-option">Conclusion/Resolution</h4></a><ul>
 <li>needs to meet stage 4 similar requirements Test262 tests should be merged first</li>
 </ul>
@@ -62,15 +62,15 @@ Brian Terlson (BT), Ron Buckton (RBN), Jordan Harband (JHD), Leo Balter (LBR), F
 <ul>
 <li><a href="https://docs.google.com/presentation/d/131l-GAqhs7SRsjsa2MmOLdou7gr2_Vl_0dTl1MhyTb0">slides</a></li>
 </ul>
-<p>FTG: Currently date object itself has precision up to milliseconds, but formatting can only format up to precision of a second. People require us to format to a precision up to a millisecond. Proposal to add a new option, where value can be 0 to 3. 0 not formatting anything about milliseconds part. 1 to 3 indicates number of digits to include in format of milliseconds.</p>
+<p>FYT: Currently date object itself has precision up to milliseconds, but formatting can only format up to precision of a second. People require us to format to a precision up to a millisecond. Proposal to add a new option, where value can be 0 to 3. 0 not formatting anything about milliseconds part. 1 to 3 indicates number of digits to include in format of milliseconds.</p>
 <p>(referring to slides for example)</p>
-<p>FTG: That's it, that's the gist of the PR.</p>
+<p>FYT: That's it, that's the gist of the PR.</p>
 <p>MBS: We have a topic on the queue from Philipp: rename to subsecondDigits (nano seconds)</p>
 <p>PDL: Potential future increases in precision specifically with temporals we're thinking about going to nanoseconds precision. Not thinking of using datetimeformat but having another one. Wonder if we'd be better off how many digits of subseconds do I want rather than tying it to milliseconds.</p>
-<p>FTG: Interesting point, any suggestion about what that would be called.</p>
+<p>FYT: Interesting point, any suggestion about what that would be called.</p>
 <p>PDL: I'd call it <code>subsecondDigits</code>, but open to different name.</p>
 <p>MBS: I think that's a great suggestion.</p>
-<p>FTG: I can get this discussed on the PR</p>
+<p>FYT: I can get this discussed on the PR</p>
 <p>DE: great proposal excited to see it moving forward. Each of these 3 corresponding to use cases that engineers find useful. Also submitted as issues in ECMA-402 repository. They are real use cases that were submitted. We love seeing people reporting use cases.</p>
 <p>MBS: I assume we want it to go through a similar process as the last two PRs, any concern with that?</p>
 <p>MBS: We can move to the next item as long as anyone else has nothing to bring up.</p>
@@ -82,43 +82,43 @@ Brian Terlson (BT), Ron Buckton (RBN), Jordan Harband (JHD), Leo Balter (LBR), F
 <li><a href="https://github.com/tc39/proposal-intl-displaynames">proposal</a></li>
 <li><a href="https://goo.gl/ZAaVds">slides</a></li>
 </ul>
-<p>FTG: Proposal not a PR. currently in stage 1 already. Would like to advance it to stage 2. New api we propose to adding tointl library. [referring to slide].</p>
-<p>FTG: We do not want it to be a general purpose thing but rather something that browser (missed)</p>
+<p>FYT: Proposal not a PR. currently in stage 1 already. Would like to advance it to stage 2. New api we propose to adding tointl library. [referring to slide].</p>
+<p>FYT: We do not want it to be a general purpose thing but rather something that browser (missed)</p>
 <p>(referring to slides for benefits)</p>
-<p>FTG: Current status is stage 1 in January tc39. Spec has been drafted. Propose to advance to Stage 2, and show what changed since then</p>
-<p>FTG: Locale, region and (missed)</p>
-<p>FTG: Hard to extend, lot of time when the caller try to construct this object to pass this one Try to simplify and try to have one method of . Recently having people suggest adding a (control?) fallback.</p>
-<p>FTG: Yellow one in slides are the new ones after stage 1. (referring to slide &quot;Proposal&quot;)</p>
-<p>FTG: Other methods that support locales of, options of Intl API are still there.</p>
-<p>FTG: (showing examples slide with title &quot;Examples: Get Region Names in English&quot;)</p>
-<p>FTG: We expect the key to pass in to be either ISO region or UN M.49 numeric code in the type of string. For example '419' for Latin America.</p>
+<p>FYT: Current status is stage 1 in January tc39. Spec has been drafted. Propose to advance to Stage 2, and show what changed since then</p>
+<p>FYT: Locale, region and (missed)</p>
+<p>FYT: Hard to extend, lot of time when the caller try to construct this object to pass this one Try to simplify and try to have one method of . Recently having people suggest adding a (control?) fallback.</p>
+<p>FYT: Yellow one in slides are the new ones after stage 1. (referring to slide &quot;Proposal&quot;)</p>
+<p>FYT: Other methods that support locales of, options of Intl API are still there.</p>
+<p>FYT: (showing examples slide with title &quot;Examples: Get Region Names in English&quot;)</p>
+<p>FYT: We expect the key to pass in to be either ISO region or UN M.49 numeric code in the type of string. For example '419' for Latin America.</p>
 <p>(showing slide for traditional chinese example)</p>
-<p>FTG: We can call this API to get a string without sending the translation across the web. All browsers have it built-in, because their own UI need to display those.</p>
-<p>FTG: Script referring to writing system. If it's not syntactically correct code it will throw an exception. All data is from CLDR unicode consortium Can also use type 'language'. Can be language code, language with region, language with (missed) and region.</p>
-<p>FTG: Any question so far about what I presented?</p>
-<p>FTG: New concept, new option I added after stage 1 which is currency. We already had currency through number format. We also need the name of the currency, not trying to format the currency. You want to allow e.g. the user to select that in a UI.</p>
+<p>FYT: We can call this API to get a string without sending the translation across the web. All browsers have it built-in, because their own UI need to display those.</p>
+<p>FYT: Script referring to writing system. If it's not syntactically correct code it will throw an exception. All data is from CLDR unicode consortium Can also use type 'language'. Can be language code, language with region, language with (missed) and region.</p>
+<p>FYT: Any question so far about what I presented?</p>
+<p>FYT: New concept, new option I added after stage 1 which is currency. We already had currency through number format. We also need the name of the currency, not trying to format the currency. You want to allow e.g. the user to select that in a UI.</p>
 <p>(showing examples slide)</p>
-<p>FTG: Another new one we considered is datefield. Datefield is the name of a date field. Don't have a particular iso standard to define a key. We define a (missed) in the spec to define what can be accessed.</p>
+<p>FYT: Another new one we considered is datefield. Datefield is the name of a date field. Don't have a particular iso standard to define a key. We define a (missed) in the spec to define what can be accessed.</p>
 <p>(Showing date field names examples slide)</p>
-<p>FTG: If you have any web page that tries to have some kind of calendar related UI, you can access this to get a string back and display there. Instead of having the application itself handle it.</p>
-<p>FTG: Another one is dateSymbol. Reason to provide is because in the past what happened is we see. We're forcing the caller to know a particular day is a monday, then try to format that particular date with. This way the caller can just say I want english, give me a sunday, give me a saturday. Calls the lower level API to return these.</p>
+<p>FYT: If you have any web page that tries to have some kind of calendar related UI, you can access this to get a string back and display there. Instead of having the application itself handle it.</p>
+<p>FYT: Another one is dateSymbol. Reason to provide is because in the past what happened is we see. We're forcing the caller to know a particular day is a monday, then try to format that particular date with. This way the caller can just say I want english, give me a sunday, give me a saturday. Calls the lower level API to return these.</p>
 <p>You can change the style, change it to short, and you can show the string in different contexts of UI. Let's say you're using it on mobile, mobile screen size can be pretty small, caller can say hey I want short. Or it can be narrow, for example for a calendar widget. instead of three letters it'd have only one. Style allows caller to decide the style.</p>
-<p>FTG: Another example for using that with a locale example.</p>
-<p>FTG: Another option is fallback. Lots of discussion in the committee when we have. We have two kinds of level: language code, two letters, if it's not right we throw an exception.What should we do when we don't have the resources for a given code. Some argue we should throw exception, some argue we should return undefined, some that we should return the code.</p>
-<p>FTG: We should have default: if don't have the resource for the code we should just return the code passed in. If none, in that case we return undefined. One case is for caller to use for the UI. Maybe library will (missed) from somewhere else.</p>
-<p>FTG: Secondary functions which is already defined. Trying to support those. Following the same semantics. Prototype is in the CL by me. Depends on ICU to provide data. Depending on three different libraries to implement several types.</p>
-<p>FTG: Any question or comment?</p>
+<p>FYT: Another example for using that with a locale example.</p>
+<p>FYT: Another option is fallback. Lots of discussion in the committee when we have. We have two kinds of level: language code, two letters, if it's not right we throw an exception.What should we do when we don't have the resources for a given code. Some argue we should throw exception, some argue we should return undefined, some that we should return the code.</p>
+<p>FYT: We should have default: if don't have the resource for the code we should just return the code passed in. If none, in that case we return undefined. One case is for caller to use for the UI. Maybe library will (missed) from somewhere else.</p>
+<p>FYT: Secondary functions which is already defined. Trying to support those. Following the same semantics. Prototype is in the CL by me. Depends on ICU to provide data. Depending on three different libraries to implement several types.</p>
+<p>FYT: Any question or comment?</p>
 <p>MBS: First topic is from Shane</p>
 <p>SFC: Just wanted to say this has been one of the primary topics of the ecma 402 over the last 2 or 3 months there's been a lot of good questions raised from main stakeholders. How we handled fallbacks and substitutions. Where do we draw the line for what types of strings we add to this API and what strings we support. Good example of how we addressed a few questions and how we came to TC39 with a mature proposal. Proposing for stage 2 so still a lot of time to excited to continue iterating on this. Already one issue about the casing of the enum option. Excited to see where this goes next.</p>
 <p>MBS: Next up we have Daniel Ehrenberg.</p>
 <p>DE: Been really happy for this proposal to move forward. Wanted to mention that we had a lengthy discussion about motivation for this proposal and the scope of it. Concluded that it's well motivated. Webkit raised the issue: what things do we put in this. Where do we draw the line. Do we put all the strings? It's really for applications without increasing bundle size. More lengthy description of scope in the explainer. Been working on this as part of prep for stage 2, I hope we can all buy into that.</p>
 <p>AKI: Notes doesn't need to be verbatim. Notetakers can stop the discussion if needed to ensure we can get notes as accurate as possible.</p>
 <p>MBS: Seems like queue is empty. Frank particular ask or conclusion for this discussion?</p>
-<p>FTG: Two asks from me: ask for advance to stage 2, other is stage 3 reviewers if that happens.</p>
+<p>FYT: Two asks from me: ask for advance to stage 2, other is stage 3 reviewers if that happens.</p>
 <p>MBS: Do we have consensus to move this proposal to stage 2? No objections.</p>
 <p>MBS: Any reviewers for stage 3?</p>
 <p>LBR: Really excited with this one, I think I'm already in.</p>
-<p>FTG: Good enough to have just 2, do we need from other companies?</p>
+<p>FYT: Good enough to have just 2, do we need from other companies?</p>
 <p>MBS: 2 editors and reviewers sign off. Seems like need one more reviewer than what you have today.</p>
 <p>LBR: We can someone from another company to sign up for this.</p>
 <p>DE: Can try to get more reviewers async. We do lots of reviews for ECMA-402. Ask this committee if I'm reviewing and you're reviewing for ECMA-402. We've had a tradition of multiple reviewers, not sure if it's required, We can try to have more reviewers offline.</p>

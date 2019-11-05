@@ -783,7 +783,7 @@ KCL: me too</p>
 <p>JHD: my proposal doesn't yet have a way to censor function names for specific stack frames, must address this before stage-2. Should we censor entire stack frames? Kinda requires per-function pragma control. Hiding internal helper functions. Pragma approach seems likely to handle this. Seems like there's some overlap between these proposals. Call it a potential cross-cutting concern to be addressed in stage 1.</p>
 <p>TST: We added support for essentially this in spidermonkey based on memory concerns in FxOS, could have disabled it in more places if we could have done it in a more granular level, there were extensions that depended upon toSource that we didn't want to break. This was before lazy parsing of functions and &quot;relazification&quot; (unparse a function and discard bytecode after it hasn't been used for a while).</p>
 <p>DD: I was talking to Adam and he said it wouldn't be a quick change because of similar issues. But given how much memory it involves, this is worth pursuing.</p>
-<p>MS?: maybe pass a function <em>into</em> some feature to ask for its source code (?)</p>
+<p>MLS?: maybe pass a function <em>into</em> some feature to ask for its source code (?)</p>
 <p>DD: seems isomorphic. Hard to mass-censor a lot of functions if you use a runtime <code>f.censor()</code>.</p>
 <p>Andrew: we globally enable CSP, so there is no eval(), the only reason we don't censor functions is because we get it for free with spidermonkey's disassembler (we don't need the original source), we'd like a global switch since we don't need/want it</p>
 <p>BFS (via ?): node should be fine with a per-package switch</p>

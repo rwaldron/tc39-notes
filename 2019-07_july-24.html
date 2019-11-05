@@ -15,7 +15,7 @@
 <a href="#july-24-2019-meeting-notes"><h1 id="july-24-2019-meeting-notes">July 24, 2019 Meeting Notes</h1></a><hr>
 <p>Daniel Rosenwasser (DRR), Andrew Paprocki (API), Adam Klein (AK), Shu-yu Guo (SYG), Michael Ficarra (MF), Jordan Harband (JHD), Alex Rattray (ARY), Pieter Ouwerkerk (POK), Michael Saboff (MLS), Keith Miller (KM), Aki Braun (AKI), Brian Terlson (BT), Ron Buckton (RBN), Till Schneidereit (TST), Yehuda Katz (YK), Aaron Davis (ADS), Sebastian Markbåge (SM), Andrew Burgess (ABS), Jonathan Keslin (JKN), Ashley Hauck (AEH), Peter Hoddie (PHE), Patrick Soquet (PST), Ben Coe (BCE), Waldemar Horwat (WH), Mark Miller (MM), Chip Morningstar (CM), Erica Pramer (EPR), Kevin Smith (KS), Adrian Hall (AHL), Caio Lima (CLA), Ben Lichtman (BLN), Tierney Cyren (TCN), Shelley Vohr (SVR), Michal Hollman (MHN), Bill Ticehurst (BTT), Dean Tribble (DT), Godfrey Chan (GCN), Guilherme Hermeto (GHO), Jordan Gensler (JGR), Leo Balter (LBR), Dale Bustad (DBD), Joffrey Richten (JRN), Shane Carr (SFC)</p>
 <p>Remote:
-Bradley Farias (BFS), Gus Caplan (GCL), Kevin Gibbons (KG), Pedram Emrouznejad (PED), Yulia Startsev (YSV), Mattijs Hoitink (MHK), Ross Kirsling (RKG), Justin Ridgewell (JRL), Caridy Patiño (CP), John-David Dalton (JDD), Paolo Severini (PSI), Benjamin Georges (BGS), Paul Leather (PLR), Mathias Bynens (MB), Aliaksander Palpko (APO), Shi-jun He (JHX), Ravi Jayaramappan (RJN), Sanket Joshi (SJI), Jose David Rodrigues Veloso (JVO), Mike Samuel (MSL), Frank Yung-Fong Tang (FTG), Rob Palmer (RPR), Diego Ferreiro Val (DFV), István Sebestyén (IS), Jason Williams (JWS), Richard Gibson (RGN), Seth Brenith (SBH), Suraj Sharma (SUS), Steve Faulkner (SFR), Chris Anderson (CAN), Michael Fig (MFG), Valerie Young (VYG)</p>
+Bradley Farias (BFS), Gus Caplan (GCL), Kevin Gibbons (KG), Pedram Emrouznejad (PED), Yulia Startsev (YSV), Mattijs Hoitink (MHK), Ross Kirsling (RKG), Justin Ridgewell (JRL), Caridy Patiño (CP), John-David Dalton (JDD), Paolo Severini (PSI), Benjamin Georges (BGS), Paul Leather (PLR), Mathias Bynens (MB), Aliaksander Palpko (APO), Shi-jun He (JHX), Ravi Jayaramappan (RJN), Sanket Joshi (SJI), Jose David Rodrigues Veloso (JVO), Mike Samuel (MSL), Frank Yung-Fong Tang (FYT), Rob Palmer (RPR), Diego Ferreiro Val (DFV), István Sebestyén (IS), Jason Williams (JWS), Richard Gibson (RGN), Seth Brenith (SBH), Suraj Sharma (SUS), Steve Faulkner (SFR), Chris Anderson (CAN), Michael Fig (MFG), Valerie Young (VYG)</p>
 <hr>
 <a href="#agenda"><h1 id="agenda">Agenda</h1></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2019/07.md">Agenda</a></li>
@@ -311,7 +311,7 @@ Bradley Farias (BFS), Gus Caplan (GCL), Kevin Gibbons (KG), Pedram Emrouznejad (
 <p>JHD: With this proposal, and with built-in modules, it will be impossible to polyfill things outside of the browser unless the engine implements something similar to import maps.</p>
 <p>MLS: Import maps is one way to use the chain-loading process.  We could add something to the spec to allow load …</p>
 <p>JHD: And then you've changed the requirement that …</p>
-<p>(MS and JHD exchange a bit more… not recorded)</p>
+<p>(MLS and JHD exchange a bit more… not recorded)</p>
 <p>BF: We're talking about, if polyfill code runs sync at the top of the page, and if it tries to access async-only code, it could install the very first reaction handler, it could do whatever it wants before any user code runs.  I don't know how user code could act on a built-in module before the first thing to act on it.  If a polyfill can always act before user code, what's preventing it from using its job?</p>
 <p>MLS: Assuming the built-in module is async loaded.</p>
 <p>BF: A polyfill can be guaranteed to be the first to access the built-in module if it is at the top of the page. Therefore it can be assured that it can modify the module prior to user code.</p>
@@ -557,10 +557,10 @@ Bradley Farias (BFS), Gus Caplan (GCL), Kevin Gibbons (KG), Pedram Emrouznejad (
 <p>DD: To be clear, this is contextualized by the presentation that DE gave in Berlin presenting all the work on modules, such as those in Wasm modules, JSON modules, HTML modules, WebIDL modules, etc. We think it would be good to collaborate.</p>
 <p>MLS: I think this is disrespectful, I think this is out of bounds</p>
 <p>DD:  I really don’t want to be disrespectful, so maybe it would be best for delegates to have such  conversations with the other standards bodies, if them coming here is not OK.</p>
-<p>WH: I don’t understand MS’s comment, what is disrespectful here?</p>
+<p>WH: I don’t understand MLS’s comment, what is disrespectful here?</p>
 <p>MLS: As one of the champions of the built-in module proposal, I think it would have been good to discuss rules about how to build a module. I think that is a good thing to discuss. The point I’m trying to make is that it’s a little premature. Very similar to what happened in Berlin when several delegates made a proposal. I look at our CoC and I find the first point is to be respectful.</p>
 <p>JHD: I’m terrified that DD or anyone else walks away discouraged about getting TC39 feedback.</p>
-<p>TST: I think the elephant in the room is disagreement on DD's representation of built-in modules (missed…) I agree with the Apple position that they are not independent and that there is a need to coordinate. It is <em>not</em> ok to pretend they are entirely separate. I do believe that you understand this position, to make it sound like this just doesn’t exist, is maybe what MS is reacting to.</p>
+<p>TST: I think the elephant in the room is disagreement on DD's representation of built-in modules (missed…) I agree with the Apple position that they are not independent and that there is a need to coordinate. It is <em>not</em> ok to pretend they are entirely separate. I do believe that you understand this position, to make it sound like this just doesn’t exist, is maybe what MLS is reacting to.</p>
 <p>DD: I'd like to shut this down.  It seems my intentions have been misconstrued.  It seems this is not the right venue; let's establish more trust.  I agree that it has been discouraging.  I was hoping for more collaboration but that doesn’t seem to be possible.</p>
 <p>YK: I’ll just say, though I have no idea what is going on here, (for once I’m out of the drama here!), it may be a good opportunity to use the presentation to air some of their grievances here. For people who were not in Berlin, it seems a tremendous amount was missed.</p>
 <p>WH: I agree with YK. I’m very confused about what just happened here. I have no idea what the backstory is and now I’m afraid to ask.</p>
@@ -569,7 +569,7 @@ Bradley Farias (BFS), Gus Caplan (GCL), Kevin Gibbons (KG), Pedram Emrouznejad (
 <p>MLS: It seems like a shadow proposal—clearly we need to have guidelines about how built-in modules are written.</p>
 <p>DD: I would rather discuss this one-on-one offline with you. We do not have a foundation of mutual trust needed for this to be a productive discussion.</p>
 <a href="#conclusionresolution-web-built-in-module-convention-guidance-from-tc39"><h4 id="conclusionresolution-web-built-in-module-convention-guidance-from-tc39">Conclusion/Resolution</h4></a><ul>
-<li>discuss offline between DD, MS</li>
+<li>discuss offline between DD, MLS</li>
 </ul>
 
 </body>

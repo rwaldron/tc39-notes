@@ -112,7 +112,7 @@ Taking on an intellectual property obligation as a part of an open standards com
 - Provide a model for what compiler optimizations are valid</p>
 <p>SYG: Complicated math, but helps implementations decide what to do</p>
 <p>SYG: Memory model could have a lot of undefined behavior, but this tries to be fully defined, to provide interoperability and security. Also need to work with WebAssembly with a common model.</p>
-<p>MS: Will WebAssembly use this?</p>
+<p>MLS: Will WebAssembly use this?</p>
 <p>JFB: Yes</p>
 <p>SYG: Goal: Strong enough for programmers to reason</p>
 <ul>
@@ -271,7 +271,7 @@ SYG: Weak enough for hardware and compiler reality.</li>
 <p>AK: Certainly significant implementation burden. There are a lot of things we do with the source text; storing two copies would be worse than storing one. V8 stores the text that came off the wire.</p>
 <p>AWB: Do you return a string which literally points at the input?</p>
 <p>AK: Yes, it's just pointing at the original memory.</p>
-<p>MS: JSC does the same thing.</p>
+<p>MLS: JSC does the same thing.</p>
 <p>AWB: When you originally parse the thing, you can determine whether it was already normalized.</p>
 <p>AK: OK, so now your program takes twice the memory when you check it out the wrong way in Git?</p>
 <p>SYG: It's not that there doesn't exist a possible fast implementation. There's enough mechanism, other than toString, that requires you to directly index the original source buffer (every engine does lazy parsing), memory is too much of a concern to keep two copies. If you don't keep two copies, doing the conversion at Function.prototype.toString() time would be a pretty big expense.</p>
@@ -287,7 +287,7 @@ SYG: Weak enough for hardware and compiler reality.</li>
 <p>AK: It's reasonable to find objections at this stage, as Stage 3 is when implementations are starting to look at this and go through with a finer eye.</p>
 <p>MM: I want to move forward here; I would be OK with either way, though I'd prefer normalization.</p>
 <p>AWB: What percentage of source text is already normalized? Maybe the cost here is not so big.</p>
-<p>MS: That would require introducing an extra scan, or a lot of extra complexity in the scanner. When we're scanning, we're looking for other things, and just ignore whitespace.</p>
+<p>MLS: That would require introducing an extra scan, or a lot of extra complexity in the scanner. When we're scanning, we're looking for other things, and just ignore whitespace.</p>
 <p>CM: Just normalize the source text as you read it.</p>
 <p>DD: You can't do that with HTML. HTML preserves line break types. You can observe this from the DOM.</p>
 <p>YK: Could we defer to implementers here, given that we have two valid options?</p>
@@ -295,7 +295,7 @@ SYG: Weak enough for hardware and compiler reality.</li>
 <p>DD: I am wrong; Chip was right</p>
 <p>BT: We use source text for all sorts of things, e.g., debugging. Maintaining the mapping between the normalized and non-normalized string would be a nightmare.</p>
 <p>AWB: Or, you could normalize way at the beginning, so you don't need the</p>
-<p>MS: Our parser is really performance-sensitive</p>
+<p>MLS: Our parser is really performance-sensitive</p>
 <p>KM: Recovering parser performance from async/await parsing took weeks of work</p>
 <p>AK: A slower version of Function.prototype.toString() would be bad for users as well as developers, serving no one.</p>
 <p>BT: I just don't see a lot of value for this. I go out of my way to avoid tools that use CRLF</p>
@@ -308,7 +308,7 @@ SYG: Weak enough for hardware and compiler reality.</li>
 <p>DD: It's clearly used a lot in Angular</p>
 <p>BT: How many people saw painful regressions for @@toStringTag? (All implementers raised hands.)</p>
 <p>AK: To answer the question, I'm not likely to want to ship this with normalization.</p>
-<p>MS: What's the compelling use case for fast, normalized strings?</p>
+<p>MLS: What's the compelling use case for fast, normalized strings?</p>
 <p>AK: Storing another copy of the normalized string is a non-starter.</p>
 <p>WH: It's clear that efficient implementations are possible. We've already demonstrated some earlier in this discussion. Arguing the details of implementation strategies is not a productive use of this meeting.</p>
 <p>AWB: I am flabergasted if people are writing JavaScript programs which depend on efficient Function.prototype.toString()</p>
@@ -375,7 +375,7 @@ SYG: Weak enough for hardware and compiler reality.</li>
 <p>BE: The shifts are heterogeneous. Note that they take Numbers rather than Int64/Uint64 as the right operand.</p>
 <p>YK: Rust does some things differently, like suffixes and overflows, so we should consider all choices carefully</p>
 <p>MM: sidestepping all the hard problems by requiring homogeneous operands is a great idea</p>
-<p>MS: I'd like to see Int32, and Float32, etc, it seems like a wart on the side. It would be great if we had proper types for all of these things, which would be a better way to do things for numbers that makes sense, e.g., for asm.js.</p>
+<p>MLS: I'd like to see Int32, and Float32, etc, it seems like a wart on the side. It would be great if we had proper types for all of these things, which would be a better way to do things for numbers that makes sense, e.g., for asm.js.</p>
 <p>BE: I'd like to keep it limited to just these for now. Scope creep is the enemy.</p>
 <p>WH: Historically, this is the right move; we have over the past 16 years created many int64 proposals that got expanded in scope and then collapsed under the increased weight. On the other hand, int32 is so similar to int64 that I'd like to just do it as well.</p>
 <a href="#conclusion--resolution-13v-progress-report-and-request-for-comments-on-64-bit-int-support"><h4 id="conclusion--resolution-13v-progress-report-and-request-for-comments-on-64-bit-int-support">Conclusion / Resolution</h4></a><ul>
@@ -408,7 +408,7 @@ SYG: Weak enough for hardware and compiler reality.</li>
 <p>BT: C# capture groups still numbered forward</p>
 <p>WH: should be numbered forward</p>
 <p>BT: Should, but confirm</p>
-<p>MS: what about negative look ahead/look behind?</p>
+<p>MLS: what about negative look ahead/look behind?</p>
 <ul>
 <li>When doesn't match</li>
 <li>Instead of <code>=</code>? Can do all at once</li>

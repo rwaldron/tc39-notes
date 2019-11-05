@@ -15,7 +15,7 @@
 <a href="#january-29-2019-meeting-notes"><h1 id="january-29-2019-meeting-notes">January 29, 2019 Meeting Notes</h1></a><hr>
 <p>Bradley Farias (BFS), Aki Rose (AKI), Yulia Startsev (YSV), Mariko Kosaka (MKA), Shane Carr (SFC), Richard Gibson (RGN), Brian Terlson (BT), Michael Ficarra (MF), Kevin Gibbons (KG), Kevin Smith (KS), Justin Ridgewell (JRL), Mathias Bynens (MB), Sathya Gunasekaran (SGN), Chip Morningstar (CM), Peter Hoddie (PHE), Waldemar Horwat (WH), Leo Balter (LBR), Shu-yu Guo (SYG), Michael Saboff (MLS), Mattijs Hoitink (MHK), Yehuda Katz (YK), Till Schneidereit (TST), Pieter Ouwerkerk (POK), Tom Dale (TDE), Myles Borins (MBS), Sean Larkin (SLN), Godfrey Chan (GCN), Rick Markins (RMS), Daniel Rosenwasser (DRR), Mark Miller (MM)</p>
 <p>Remote:
-István Sebestyén (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FTG), Jory Burson (JBN)</p>
+István Sebestyén (IS), John-David Dalton (JDD), Adam Klein (AK), Daniel Ehrenberg (DE), Jordan Harband (JHD), Domenic Denicola (DD), Ben Newman (BN), Ross Kirsling (RKG), Frank Tang (FYT), Jory Burson (JBN)</p>
 <hr>
 <a href="#agenda"><h2 id="agenda">Agenda</h2></a><ul>
 <li><a href="https://github.com/tc39/agendas/blob/master/2019/01.md">Agenda</a></li>
@@ -186,7 +186,7 @@ Author: Andre Bargull</p>
 <p>JHD: The intention of the PR I have open against the process document is to clarify the Stage 4 requirements. I'm planning on updating that PR later today,</p>
 <p>BFS: Earlier, we were saying that running code in Node and browser are different. But often you don't actually control your Node version. So there is a similarity there.</p>
 <p>YK: I agree, but I think there's a difference in extent.</p>
-<p>YK: With regard to MS's comment, what can we as a committee do to ensure that your situation doesn't happen?  I think it depends on how much V8 values this standards committee. If we're too heavy-handed, then V8 might flex its power more.</p>
+<p>YK: With regard to MLS's comment, what can we as a committee do to ensure that your situation doesn't happen?  I think it depends on how much V8 values this standards committee. If we're too heavy-handed, then V8 might flex its power more.</p>
 <p>MM: Another hosting environment is blockchain running either JS or wasm. They need a standard deterministic profile specification. This has already appeared in the wasm committee. A deterministic profile is one that specifies disambiguations for every issue purposely left ambiguous or implementation-defined in the original spec. A system conforming to a deterministic profile is thereby also conformant to the original spec. As we evolve the spec itself, we should keep in mind the need to coordinate with the evolution of the corresponding deterministic profile. For JS, we only need a deterministic profile of the SES subset.</p>
 <a href="#security-implications-of-errorprototypestack"><h2 id="security-implications-of-errorprototypestack">Security Implications of Error.prototype.stack</h2></a><p>(Michael Ficarra (MF))</p>
 <ul>

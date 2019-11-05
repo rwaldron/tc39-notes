@@ -208,14 +208,14 @@ which have this sort of semantics.</p>
 </ul>
 <a href="#w-and-w-semantics-in-case-insensitive-unicode-regexps"><h2 id="w-and-w-semantics-in-case-insensitive-unicode-regexps"><a href="https://github.com/tc39/ecma262/pull/525">\w and \W semantics in case-insensitive Unicode RegExps</a></h2></a><p>(Michael Saboff)</p>
 <p>WH: This is the exact same problem that I solved in ES3 by adding the prohibition to case-canonicalization of non-ASCII Unicode characters into ASCII characters. Without that, the same \W weirdness would have appeared in ES3.</p>
-<p>MLS: Recap of very strange semantics caused by Unicode case folding (MS please insert link to slides). \W includes K because the kevin symbol case-folds to something in \w, so K is case-insensitive in the set of things that aren't a letter.</p>
+<p>MLS: Recap of very strange semantics caused by Unicode case folding (MLS please insert link to slides). \W includes K because the kevin symbol case-folds to something in \w, so K is case-insensitive in the set of things that aren't a letter.</p>
 <p>MLS: Proposal: make \W be the inverse of \w, and change \b and \B to be consistent. An alternate proposal would be to stick to ASCII-only as Waldemar did for ES3.</p>
 <p>WH: [<em>explaining the rationale for how ES3 regexps were specified</em>]. Character classes evaluate into sets of allowed characters and an invert flag. Used an invert flag to make [^...] be an exact negative of [...]. It would have been tempting to use an invert flag to make \W into an exact negative of \w, but that wouldn't work when combining \W or \w with other things in a character set: [abc\w], etc. That's why \W inverts the set manually instead of using the invert flag.</p>
 <p>YK: Would it be web-compatible to do a change?</p>
 <p>WH: Having k and s match \W is clearly a spec bug.</p>
 <p>YG: Chrome shipped this in 50, with the spec's semantics.</p>
 <p>DE: It should still be web-compatible, though, as it is very recently shipped. The bug reporter was someone who was writing a conformance test, rather than finding this in actual usage.</p>
-<p>BT: Edge actually ships MS's proposal, so we don't need to worry about web compat.</p>
+<p>BT: Edge actually ships MLS's proposal, so we don't need to worry about web compat.</p>
 <p>MLS: Should we change \b as well?</p>
 <p>YG: Yes, they should change together?</p>
 <p>WH: Isn't it strange that what's contained in the class is dependent on the i flag?</p>
@@ -230,7 +230,7 @@ which have this sort of semantics.</p>
 <p>DH: What Unicode changes affect this?</p>
 <p>WH: Unicode defining new characters which case-convert into ASCII letters.</p>
 <p><em>discussion: Good to follow Unicode going forward, as it has changed over time, both in adding new characters and revisions to existing characters</em>.</p>
-<a href="#conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps"><h4 id="conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps">Conclusion/Resolution</h4></a><p>Consensus on MS's pull request, and working out \b and \B as he indicated.</p>
+<a href="#conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps"><h4 id="conclusionresolution-w-and-w-semantics-in-case-insensitive-unicode-regexps">Conclusion/Resolution</h4></a><p>Consensus on MLS's pull request, and working out \b and \B as he indicated.</p>
 <a href="#function-names"><h2 id="function-names"><a href="https://github.com/tc39/ecma262/pull/575">Function names</a></h2></a><p>(Michael Saboff)</p>
 <p>MLS: Proposal: When the inferred name is a reserved word, use &quot;&quot; rather than the current name. The problem is that the .name property won't eval.</p>
 <p>MM: What is the problem with the .name property being not an identifier?</p>
@@ -248,7 +248,7 @@ which have this sort of semantics.</p>
 <p>YK: Compatibility is important</p>
 <p>BT: good to have an evidence-based overturning of previous decisions</p>
 <p>MLS: Hard to do telemetry for this</p>
-<a href="#conclusionresolution-function-names"><h4 id="conclusionresolution-function-names">Conclusion/Resolution</h4></a><p>No change in the spec for now; MS says Safari will likely ship their compat workaround for now, and see if it can get more information for the next meeting or the one after that to consider the decision</p>
+<a href="#conclusionresolution-function-names"><h4 id="conclusionresolution-function-names">Conclusion/Resolution</h4></a><p>No change in the spec for now; MLS says Safari will likely ship their compat workaround for now, and see if it can get more information for the next meeting or the one after that to consider the decision</p>
 <a href="#typedarrayarraybufferdataview-constructor-changes"><h2 id="typedarrayarraybufferdataview-constructor-changes"><a href="https://github.com/tc39/ecma262/pull/410">TypedArray/ArrayBuffer/DataView constructor changes</a></h2></a><p>(Leo Balter)</p>
 <p>LBR: [<em>Presented bug comment showing behavior across browsers</em>]</p>
 <p>MM: What does n/a mean?</p>
